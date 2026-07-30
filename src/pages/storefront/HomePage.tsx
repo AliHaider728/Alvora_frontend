@@ -16,7 +16,8 @@ import {
   Gamepad2,
   Gift,
   Flame,
-  Percent
+  Atom,
+  Lightbulb
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { ProductCard } from '../../components/common/ProductCard';
@@ -26,6 +27,8 @@ import { AGE_GROUPS } from '../../data/mockData';
 import { Product } from '../../types';
 import { formatPrice } from '../../utils/formatters';
 import playBimbooVideo from '../../assets/newplaybimboo.mp4';
+import logoImage from '../../assets/images/play_bimboo_logo_1785311841625.jpg';
+import promoToysImage from '../../assets/images/promo_toys.jpg';
 
 export const HomePage: React.FC = () => {
   const { products, categories, settings } = useStore();
@@ -272,41 +275,76 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* Promotional / Sale Banner Section */}
-      <section className="py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative rounded-3xl bg-gradient-to-r from-slate-900 via-purple-950 to-slate-900 text-white p-8 sm:p-12 shadow-2xl overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
-          {/* Background shapes */}
-          <div className="absolute top-0 right-0 w-72 h-72 bg-rose-500/20 rounded-full blur-3xl pointer-events-none" />
+      {/* Brand Discovery Campaign Section */}
+      <section className="py-10 max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative w-full rounded-[28px] md:rounded-[36px] overflow-hidden flex flex-col justify-center min-h-[500px] md:h-[600px] lg:h-[650px] shadow-xl group">
+          {/* Full Background Image */}
+          <img 
+            src={promoToysImage}
+            alt="Magical Learning Toys"
+            className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-1000 group-hover:scale-[1.02]"
+          />
+          
+          {/* Light Readability Overlay */}
+          <div className="absolute inset-0 bg-[#14083c]/15 pointer-events-none" />
+          
+          {/* Mobile-only stronger overlay for readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#14083c]/80 via-[#14083c]/40 to-transparent md:hidden pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#14083c]/40 to-transparent hidden md:block pointer-events-none" />
 
-          <div className="relative z-10 max-w-xl text-center md:text-left space-y-3">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/30 text-rose-300 border border-rose-500/40 text-xs font-bold uppercase tracking-wider">
-              <Percent className="w-3.5 h-3.5" />
-              Limited Time Special Offer
-            </span>
-            <h3 className="font-heading font-black text-3xl sm:text-4xl text-white">
-              Get Up to 25% OFF STEM Coding & Building Kits!
+          {/* Content Overlay */}
+          <div className="relative z-10 w-full md:w-[44%] p-8 sm:p-12 lg:p-16 flex flex-col items-center md:items-start text-center md:text-left space-y-6 md:ml-4 lg:ml-8 mt-auto md:mt-0">
+            
+            {/* Logo */}
+            <div className="bg-white/95   backdrop-blur-sm px-2.5 py-1.5 rounded-2xl shadow-sm border border-white/20 mb-2 flex-shrink-0 animate-fade-in">
+              <img 
+                src={logoImage} 
+                alt="Play Bimboo" 
+                className="w-32 h-auto object-contain"
+              />
+            </div>
+
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-900/40 border border-indigo-400/30 text-white text-xs font-bold tracking-wider backdrop-blur-md animate-fade-in">
+              <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
+              <span>PLAY • LEARN • GROW</span>
+            </div>
+
+            {/* Headline */}
+            <h3 className="font-heading font-black text-3xl sm:text-4xl lg:text-[44px] leading-[1.15] text-white animate-fade-in-up">
+              Discover Toys That <br className="hidden lg:block" />
+              Make Learning <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-orange-400 to-pink-400">Magical</span>
             </h3>
-            <p className="text-xs sm:text-sm text-slate-300 font-sans leading-relaxed">
-              Spark early curiosity with our top-rated STEM robots and magnetic building tiles. Use code <strong className="text-amber-400 font-mono">SUMMERTOYS</strong> at checkout.
+
+            {/* Copy */}
+            <p className="text-sm sm:text-base text-slate-100 font-sans leading-relaxed max-w-[420px] animate-fade-in-up [animation-delay:100ms]">
+              From STEM kits and building sets to creative play essentials, Play Bimboo brings fun, skill-building toys that spark curiosity and joyful learning at every age.
             </p>
 
-            <div className="pt-2">
+            {/* CTA & Pills Container */}
+            <div className="pt-4 w-full flex flex-col items-center md:items-start gap-5 animate-fade-in-up [animation-delay:200ms]">
               <Link
-                to="/category/educational-stem"
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-heading font-extrabold text-sm shadow-lg transition-all hover:scale-105"
+                to="/category/all"
+                className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-[20px] bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-300 hover:to-amber-400 text-slate-900 font-heading font-extrabold text-sm shadow-[0_8px_20px_-6px_rgba(251,191,36,0.6)] transition-all hover:scale-[1.02] active:scale-95"
               >
-                <span>Shop STEM Deals Now</span>
-                <ArrowRight className="w-4 h-4" />
+                <span>Explore Play Bimboo Favorites</span>
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Link>
+              
+              {/* Category Pills */}
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-2.5">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-900/30 border border-blue-400/20 text-blue-100 text-xs font-semibold backdrop-blur-md">
+                  <Atom className="w-3.5 h-3.5 text-blue-300" /> STEM
+                </span>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-pink-900/30 border border-pink-400/20 text-pink-100 text-xs font-semibold backdrop-blur-md">
+                  <Lightbulb className="w-3.5 h-3.5 text-pink-300" /> Creativity
+                </span>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-teal-900/30 border border-teal-400/20 text-teal-100 text-xs font-semibold backdrop-blur-md">
+                  <Sparkles className="w-3.5 h-3.5 text-teal-300" /> Imagination
+                </span>
+              </div>
             </div>
-          </div>
 
-          <div className="relative z-10 flex-shrink-0">
-            <img
-              src="https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&w=500&q=80"
-              alt="STEM Sale Promo"
-              className="w-56 h-56 sm:w-64 sm:h-64 object-cover rounded-2xl border-4 border-white/20 shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500"
-            />
           </div>
         </div>
       </section>
