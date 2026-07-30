@@ -21,6 +21,10 @@ export const Header: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [categoriesOpen, setCategoriesOpen] = useState(false);
+  
+  // Smart Scroll state
+  const [isScrolledDown, setIsScrolledDown] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const searchRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -46,7 +50,28 @@ export const Header: React.FC = () => {
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    
+    // Smart Scroll logic
+    let lastScrollY = window.scrollY;
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      setIsScrolled(currentScrollY > 20);
+      
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsScrolledDown(true);
+      } else if (currentScrollY < lastScrollY) {
+        setIsScrolledDown(false);
+      }
+      lastScrollY = currentScrollY;
+    };
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -58,39 +83,85 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-xs">
+    <header 
+      className={`sticky top-0 z-50 transition-all duration-300 ease-out border-b border-slate-100
+        ${isScrolledDown ? '-translate-y-full' : 'translate-y-0'} 
+        ${isScrolled ? 'bg-slate-50/80 backdrop-blur-lg shadow-sm' : 'bg-slate-50 shadow-xs'}`}
+    >
       {/* Top Announcement Bar */}
-      <div className="bg-gradient-to-r from-amber-500 via-rose-500 to-sky-500 text-white text-xs sm:text-sm font-bold py-2 px-4 text-center tracking-wide flex items-center justify-center gap-2">
-        <Sparkles className="w-4 h-4 text-yellow-200" />
-        <span>🎁 FREE Express Shipping on orders over {formatPrice(settings.freeShippingThreshold || 5000, settings.currency)}! Cash on Delivery (COD) Nationwide</span>
-        <span className="hidden md:inline-block ml-4 text-xs font-normal opacity-90 border-l border-white/30 pl-3">
-          Support: {settings.phone}
-        </span>
+      <div className="bg-white text-slate-600 text-xs sm:text-sm font-medium py-2 px-4 flex flex-col md:flex-row items-center justify-between max-w-[1560px] mx-auto border-b border-slate-100">
+        <div className="flex items-center gap-3">
+          <span className="flex items-center gap-1.5">
+            <span>🚀</span> Free Express Shipping on orders over {formatPrice(settings.freeShippingThreshold || 5000, settings.currency)}
+          </span>
+          <span className="hidden md:inline-block text-slate-300">|</span>
+          <span className="hidden md:flex items-center gap-1.5">
+            <span>💳</span> Cash on Delivery (COD) Nationwide
+          </span>
+        </div>
+        <div className="hidden md:flex items-center gap-1.5 text-slate-500">
+          <span className="text-amber-400">⭐</span> Rated 4.9/5 by 12,000+ happy parents
+        </div>
       </div>
 
       {/* Main Navigation Bar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20 gap-4">
+      <div className="max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8 py-0">
+        <div className="bg-white rounded-b-3xl sm:rounded-3xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] border border-slate-100 px-4 md:px-6 py-3 flex items-center justify-between gap-4 xl:gap-8 mt-0 sm:mt-4 mb-0 relative z-50">
           {/* Logo Component */}
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 mr-2 xl:mr-0">
             <Logo size="lg" />
           </div>
 
+          {/* Consolidated Desktop Nav */}
+          <nav className="hidden lg:flex items-center gap-5 xl:gap-7 text-sm font-heading font-bold text-slate-600 flex-shrink-0">
+            <Link to="/" className="hover:text-rose-500 text-slate-900 transition-colors">
+              Home
+            </Link>
+            <Link to="/shop" className="hover:text-rose-500 transition-colors">
+              Shop
+            </Link>
+            <div className="relative group">
+              <button
+                onClick={() => setCategoriesOpen(!categoriesOpen)}
+                className="flex items-center gap-1.5 hover:text-rose-500 transition-colors py-1"
+              >
+                <span>Shop Categories</span>
+                <ChevronDown className="w-4 h-4" />
+              </button>
+              <div className="absolute top-full left-0 mt-3 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 hidden group-hover:block z-50">
+                <Link to="/category/all" className="block px-3.5 py-2.5 rounded-xl text-slate-800 hover:bg-rose-50 font-bold text-sm">
+                  All Toys & Games
+                </Link>
+                {categories.map(cat => (
+                  <Link key={cat.id} to={`/category/${cat.slug}`} className="block px-3.5 py-2 rounded-xl text-slate-600 hover:text-rose-600 hover:bg-rose-50 transition-colors font-semibold text-sm">
+                    {cat.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+            <Link to="/about" className="hover:text-rose-500 transition-colors">
+              About
+            </Link>
+            <Link to="/contact" className="hover:text-rose-500 transition-colors">
+              Contact
+            </Link>
+          </nav>
+
           {/* Search Bar with Autosuggest */}
-          <div ref={searchRef} className="flex-1 max-w-xl relative">
-            <form onSubmit={handleSearchSubmit} className="w-full relative">
+          <div ref={searchRef} className="flex-1 max-w-[400px] xl:max-w-xl relative mx-auto hidden md:block">
+            <form onSubmit={handleSearchSubmit} className="w-full relative flex items-center">
+              <Search className="w-4 h-4 md:w-5 md:h-5 text-slate-400 absolute left-4 pointer-events-none" />
               <input
                 type="text"
-                placeholder="Search toys..."
+                placeholder="Search toys, sets, and more..."
                 value={searchQuery}
                 onChange={e => {
                   setSearchQuery(e.target.value);
                   setIsSearchFocused(true);
                 }}
                 onFocus={() => setIsSearchFocused(true)}
-                className="w-full pl-9 pr-8 md:pl-11 md:pr-10 py-2 md:py-3 bg-slate-100/90 hover:bg-slate-100 focus:bg-white border border-transparent focus:border-rose-400 rounded-full text-xs md:text-sm font-medium text-slate-800 placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-rose-100 transition-all shadow-inner"
+                className="w-full pl-11 pr-10 py-3 bg-slate-50 hover:bg-slate-100 focus:bg-white border border-slate-200 focus:border-rose-300 rounded-full text-sm font-medium text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-rose-50 transition-all"
               />
-              <Search className="w-4 h-4 md:w-5 md:h-5 text-slate-400 absolute left-3 md:left-4 top-2.5 md:top-3.5 pointer-events-none" />
               {searchQuery && (
                 <button
                   type="button"
@@ -149,114 +220,49 @@ export const Header: React.FC = () => {
           </div>
 
           {/* Quick Actions & Cart / Wishlist */}
-          <div className="flex items-center gap-1.5 sm:gap-4 flex-shrink-0">
-            {/* Admin Dashboard Button */}
-            <Link
-              to="/admin"
-              className="hidden lg:flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-heading font-bold text-sm transition-colors shadow-sm"
-            >
-              <LayoutDashboard className="w-4 h-4 text-amber-400" />
-              <span>Admin Panel</span>
-            </Link>
-
+          <div className="flex items-center gap-3 sm:gap-6 flex-shrink-0">
             {/* Account / User */}
             <Link
               to="/account"
-              className="hidden sm:flex p-2.5 rounded-full hover:bg-slate-100 text-slate-700 transition-colors items-center justify-center"
+              className="hidden sm:flex items-center gap-2 group"
               title="My Account"
             >
-              <User className="w-6 h-6" />
+              <div className="p-2 rounded-full bg-slate-50 group-hover:bg-rose-50 text-slate-600 transition-colors">
+                <User className="w-5 h-5" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-sm font-heading font-bold text-slate-900 leading-tight">Account</span>
+                <span className="text-[10px] font-medium text-slate-500 leading-tight">Sign in / Up</span>
+              </div>
             </Link>
 
             {/* Wishlist */}
             <Link
               to="/wishlist"
-              className="hidden sm:flex relative p-2.5 rounded-full hover:bg-slate-100 text-slate-700 transition-colors items-center justify-center"
+              className="hidden lg:flex items-center gap-2 group"
               title="Wishlist"
             >
-              <Heart className="w-6 h-6" />
-              {wishlist.length > 0 && (
-                <span className="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-rose-500 text-white text-xs font-bold flex items-center justify-center shadow-xs">
-                  {wishlist.length}
-                </span>
-              )}
+              <div className="relative p-2 rounded-full bg-slate-50 group-hover:bg-rose-50 text-slate-600 transition-colors">
+                <Heart className="w-5 h-5" />
+                {wishlist.length > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-rose-500 text-white text-[9px] font-bold flex items-center justify-center shadow-xs">
+                    {wishlist.length}
+                  </span>
+                )}
+              </div>
+              <span className="text-sm font-heading font-bold text-slate-900">Wishlist</span>
             </Link>
 
             {/* Cart Drawer Trigger Button */}
             <button
               onClick={() => setIsCartOpen(true)}
-              className="relative flex items-center gap-1.5 md:gap-2 px-3 md:px-4 py-2 md:py-2.5 rounded-full bg-rose-500 hover:bg-rose-600 text-white shadow-md shadow-rose-200 transition-all duration-200 active:scale-95 text-xs md:text-sm"
+              className="relative flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-full bg-gradient-to-r from-rose-500 to-rose-400 hover:from-rose-600 hover:to-rose-500 text-white shadow-[0_4px_14px_rgba(225,29,72,0.3)] transition-all duration-200 active:scale-95"
             >
-              <ShoppingBag className="w-4 h-4 md:w-5 md:h-5" />
-              <span className="hidden sm:inline font-heading font-bold">Cart</span>
-              {cartTotalItems > 0 && (
-                <span className="px-2 py-0.5 text-[10px] md:text-xs font-heading font-black bg-white text-rose-600 rounded-full">
-                  {cartTotalItems}
-                </span>
-              )}
+              <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="font-heading font-bold text-sm">Cart ({cartTotalItems})</span>
             </button>
           </div>
         </div>
-
-        {/* Desktop Category Navigation Bar */}
-        <nav className="hidden md:flex items-center justify-between border-t border-slate-100 py-3 text-sm font-heading font-bold text-slate-700">
-          <div className="flex items-center gap-7">
-            <Link to="/" className="hover:text-rose-500 transition-colors">
-              Home
-            </Link>
-
-            {/* Category Dropdown */}
-            <div className="relative group">
-              <button
-                onClick={() => setCategoriesOpen(!categoriesOpen)}
-                className="flex items-center gap-1.5 hover:text-rose-500 transition-colors py-1"
-              >
-                <span>Shop Categories</span>
-                <ChevronDown className="w-4 h-4" />
-              </button>
-
-              <div className="absolute top-full left-0 mt-1 w-64 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 hidden group-hover:block z-50">
-                <Link
-                  to="/category/all"
-                  className="block px-3.5 py-2.5 rounded-xl text-slate-800 hover:bg-rose-50 font-bold text-sm"
-                >
-                  All Toys & Games
-                </Link>
-                {categories.map(cat => (
-                  <Link
-                    key={cat.id}
-                    to={`/category/${cat.slug}`}
-                    className="block px-3.5 py-2 rounded-xl text-slate-600 hover:text-rose-600 hover:bg-rose-50 transition-colors font-semibold text-sm"
-                  >
-                    {cat.name}
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            <Link to="/category/building-sets" className="hover:text-rose-500 transition-colors">
-              Building Sets
-            </Link>
-            <Link to="/category/action-figures" className="hover:text-rose-500 transition-colors">
-              Action Figures
-            </Link>
-            <Link to="/category/educational-stem" className="hover:text-rose-500 transition-colors">
-              STEM & Learning
-            </Link>
-            <Link to="/about" className="hover:text-rose-500 transition-colors">
-              About Us
-            </Link>
-            <Link to="/faq" className="hover:text-rose-500 transition-colors">
-              FAQs
-            </Link>
-          </div>
-
-          <div className="flex items-center gap-4 text-slate-500 text-sm font-semibold">
-            <Link to="/contact" className="hover:text-rose-500 transition-colors">
-              Contact Us
-            </Link>
-          </div>
-        </nav>
       </div>
     </header>
   );

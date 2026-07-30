@@ -1,9 +1,9 @@
 /**
  * Formats numeric price into PKR currency string format: "Rs. 2,500"
  */
-export const formatPrice = (amount: number, currency: string = 'Rs.'): string => {
+export const formatPrice = (amount: number, _currency?: string): string => {
   const numericAmount = typeof amount === 'number' && !isNaN(amount) ? amount : 0;
-  return `${currency} ${numericAmount.toLocaleString('en-PK', { maximumFractionDigits: 0 })}`;
+  return `Rs. ${numericAmount.toLocaleString('en-PK', { maximumFractionDigits: 0 })}`;
 };
 
 /**

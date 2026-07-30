@@ -15,7 +15,7 @@ export const AdminDashboardPage: React.FC = () => {
       <SeoHead title="Admin Dashboard Overview" />
 
       {/* Top Welcome Banner */}
-      <div className="bg-gradient-to-r from-slate-900 to-slate-800 rounded-3xl p-6 sm:p-8 text-white shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="bg-linear-to-r from-slate-900 to-slate-800 rounded-3xl p-6 sm:p-8 text-white shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
           <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">Store Analytics</span>
           <h1 className="font-heading font-black text-2xl sm:text-3xl text-white mt-0.5">
@@ -28,7 +28,7 @@ export const AdminDashboardPage: React.FC = () => {
 
         <Link
           to="/admin/products"
-          className="px-5 py-2.5 rounded-2xl bg-rose-500 hover:bg-rose-600 text-white font-heading font-bold text-xs flex-shrink-0 shadow-md transition-all"
+          className="px-5 py-2.5 rounded-2xl bg-rose-500 hover:bg-rose-600 text-white font-heading font-bold text-xs shrink-0 shadow-md transition-all"
         >
           + Add New Product
         </Link>
@@ -38,7 +38,7 @@ export const AdminDashboardPage: React.FC = () => {
       {lowStockProducts.length > 0 && (
         <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-center justify-between text-xs text-amber-900">
           <div className="flex items-center gap-2 font-semibold">
-            <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0" />
+            <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0" />
             <span>Low Stock Alert: {lowStockProducts.length} toy product(s) have fewer than 20 units remaining.</span>
           </div>
           <Link to="/admin/products" className="font-bold underline text-amber-800 hover:text-amber-950">
@@ -140,7 +140,7 @@ export const AdminDashboardPage: React.FC = () => {
                 ${bar.val}
               </span>
               <div
-                className="w-full bg-gradient-to-t from-rose-500 to-amber-400 rounded-t-xl transition-all duration-500 group-hover:brightness-110"
+                className="w-full bg-linear-to-t from-rose-500 to-amber-400 rounded-t-xl transition-all duration-500 group-hover:brightness-110"
                 style={{ height: `${(bar.val / 1200) * 100}%` }}
               />
               <span className="text-xs font-bold text-slate-600">{bar.day}</span>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { X, ShoppingBag, Trash2, Plus, Minus, Tag, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
+import { formatPrice } from '../../utils/formatters';
 
 export const CartDrawer: React.FC = () => {
   const {
@@ -165,7 +166,7 @@ export const CartDrawer: React.FC = () => {
                       </div>
 
                       <span className="font-heading font-extrabold text-sm text-slate-900">
-                        ${(item.product.price * item.quantity).toFixed(2)}
+                        {formatPrice(item.product.price * item.quantity, settings.currency)}
                       </span>
                     </div>
                   </div>
@@ -183,7 +184,7 @@ export const CartDrawer: React.FC = () => {
                   <div className="flex items-center justify-between p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs font-medium text-emerald-800">
                     <span className="flex items-center gap-1.5 font-bold">
                       <Tag className="w-3.5 h-3.5 text-emerald-600" />
-                      Code: {appliedCoupon.code} (-${couponDiscountAmount.toFixed(2)})
+                      Code: {appliedCoupon.code} (-{formatPrice(couponDiscountAmount, settings.currency)})
                     </span>
                     <button
                       onClick={removeCoupon}
@@ -224,13 +225,13 @@ export const CartDrawer: React.FC = () => {
               <div className="space-y-1.5 text-xs text-slate-600">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span className="font-bold text-slate-800">${cartSubtotal.toFixed(2)}</span>
+                  <span className="font-bold text-slate-800">{formatPrice(cartSubtotal, settings.currency)}</span>
                 </div>
 
                 {appliedCoupon && (
                   <div className="flex justify-between text-emerald-600 font-medium">
                     <span>Discount</span>
-                    <span>-${couponDiscountAmount.toFixed(2)}</span>
+                    <span>-{formatPrice(couponDiscountAmount, settings.currency)}</span>
                   </div>
                 )}
 
@@ -241,7 +242,7 @@ export const CartDrawer: React.FC = () => {
 
                 <div className="flex justify-between items-baseline pt-2 border-t border-slate-200 text-slate-900 font-heading font-extrabold text-base sm:text-lg">
                   <span>Total</span>
-                  <span className="text-rose-600">${finalTotal.toFixed(2)}</span>
+                  <span className="text-rose-600">{formatPrice(finalTotal, settings.currency)}</span>
                 </div>
               </div>
 

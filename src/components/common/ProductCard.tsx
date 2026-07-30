@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Star, Heart, ShoppingBag, Eye, Check } from 'lucide-react';
 import { Product } from '../../types';
 import { useStore } from '../../context/StoreContext';
+import { formatPrice } from '../../utils/formatters';
 
 interface ProductCardProps {
   product: Product;
@@ -10,7 +11,7 @@ interface ProductCardProps {
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }) => {
-  const { addToCart, toggleWishlist, isInWishlist } = useStore();
+  const { addToCart, toggleWishlist, isInWishlist, settings } = useStore();
   const [added, setAdded] = useState(false);
   const isWishlisted = isInWishlist(product.id);
 
@@ -130,11 +131,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
           <div className="flex flex-col">
             <div className="flex items-baseline gap-1.5">
               <span className="font-heading font-extrabold text-lg sm:text-xl text-slate-900">
-                ${product.price.toFixed(2)}
+                {formatPrice(product.price, settings.currency)}
               </span>
               {product.originalPrice && product.originalPrice > product.price && (
                 <span className="text-xs text-slate-400 line-through font-medium">
-                  ${product.originalPrice.toFixed(2)}
+                  {formatPrice(product.originalPrice, settings.currency)}
                 </span>
               )}
             </div>
