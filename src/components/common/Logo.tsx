@@ -1,0 +1,34 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useStore } from '../../context/StoreContext';
+import defaultLogoImg from '../../assets/images/play_bimboo_logo_1785311841625.jpg';
+
+interface LogoProps {
+  className?: string;
+  variant?: 'light' | 'dark' | 'footer';
+  size?: 'sm' | 'md' | 'lg';
+}
+
+export const Logo: React.FC<LogoProps> = ({ className = '', size = 'md' }) => {
+  const { settings } = useStore();
+
+  const imageSizes = {
+    sm: 'h-8 md:h-9',
+    md: 'h-11 md:h-13',
+    lg: 'h-14 md:h-18'
+  };
+
+  const logoSrc = settings.logoUrl || defaultLogoImg;
+
+  return (
+    <Link to="/" className={`inline-flex items-center transition-all group ${className}`} title={settings.storeName || 'Play Bimboo'}>
+      {/* Brand Logo Image Only with transparent background */}
+      <img
+        src={logoSrc}
+        alt={settings.storeName || 'PlayBimboo'}
+        referrerPolicy="no-referrer"
+        className={`${imageSizes[size]} w-auto object-contain bg-transparent transition-transform duration-300 group-hover:scale-105`}
+      />
+    </Link>
+  );
+};

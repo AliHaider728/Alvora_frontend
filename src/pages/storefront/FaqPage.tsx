@@ -1,0 +1,74 @@
+import React, { useState } from 'react';
+import { HelpCircle, ChevronDown, ChevronUp, ShieldCheck, Truck, RefreshCw, Gift } from 'lucide-react';
+import { Breadcrumbs } from '../../components/common/Breadcrumbs';
+import { SeoHead } from '../../components/common/SeoHead';
+
+export const FaqPage: React.FC = () => {
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+  const faqs = [
+    {
+      q: 'Are all toys on ToyLand child-safe and non-toxic?',
+      a: 'Yes, 100%! All toys sold on ToyLand undergo strict ASTM F963 and CPSIA testing. They are made with BPA-free, lead-free, non-toxic food-grade plastics or sustainably sourced birch woods.'
+    },
+    {
+      q: 'How fast is your shipping and how do I get FREE shipping?',
+      a: 'We process orders within 1 business day. Standard shipping takes 2-4 business days. All orders over Rs. 5,000 qualify for FREE Express Shipping automatically!'
+    },
+    {
+      q: 'What is your 30-Day Happiness Guarantee return policy?',
+      a: 'If your child is not completely delighted with their toy, you can return it within 30 days of delivery in its original box for a full refund or exchange.'
+    },
+    {
+      q: 'Can I add gift wrapping or a personalized greeting card?',
+      a: 'Absolutely! During checkout, select the "Gift Wrap Option" to include eco-friendly colorful gift paper and a hand-written custom message card.'
+    },
+    {
+      q: 'Do you offer bulk school or daycare discounts?',
+      a: 'Yes, we offer educational STEM discounts for teachers, daycare centers, and schools. Please contact hello@toyland-store.com for a quote.'
+    }
+  ];
+
+  return (
+    <div className="min-h-screen bg-slate-50 font-sans py-8">
+      <SeoHead title="Frequently Asked Questions (FAQ)" />
+
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <Breadcrumbs items={[{ label: 'FAQs' }]} />
+
+        <div className="bg-white p-6 sm:p-10 rounded-3xl border border-slate-100 shadow-sm mb-8 text-center space-y-3">
+          <div className="w-14 h-14 rounded-2xl bg-sky-100 text-sky-500 flex items-center justify-center mx-auto">
+            <HelpCircle className="w-7 h-7" />
+          </div>
+          <h1 className="font-heading font-black text-3xl text-slate-900">Frequently Asked Questions</h1>
+          <p className="text-xs text-slate-500 max-w-md mx-auto">
+            Everything you need to know about ToyLand safety, shipping speeds, gift options, and easy returns.
+          </p>
+        </div>
+
+        <div className="space-y-4">
+          {faqs.map((faq, idx) => {
+            const isOpen = openIndex === idx;
+            return (
+              <div key={idx} className="bg-white rounded-3xl border border-slate-100 shadow-xs overflow-hidden">
+                <button
+                  onClick={() => setOpenIndex(isOpen ? null : idx)}
+                  className="w-full p-6 text-left flex items-center justify-between gap-4 font-heading font-bold text-sm text-slate-900 hover:text-rose-500 transition-colors"
+                >
+                  <span>{faq.q}</span>
+                  {isOpen ? <ChevronUp className="w-5 h-5 text-rose-500" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
+                </button>
+
+                {isOpen && (
+                  <div className="px-6 pb-6 text-xs text-slate-600 leading-relaxed border-t border-slate-50 pt-3">
+                    {faq.a}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
