@@ -3,7 +3,7 @@ import { Plus, Search, Edit2, Trash2, X, Eye, EyeOff, Sparkles, AlertCircle, Tag
 import { useStore } from '../../context/StoreContext';
 import { useToast } from '../../context/ToastContext';
 import { Product, AgeGroupCategory, DeliveryChargeType, ProductVariantGroup, ProductVariantOption } from '../../types';
-import { api } from '../../services/api';
+import { api, API_BASE_URL } from '../../services/api';
 import { SeoHead } from '../../components/common/SeoHead';
 import { AGE_GROUPS } from '../../data/mockData';
 import { formatPrice } from '../../utils/formatters';
@@ -85,7 +85,7 @@ export const AdminProductsPage: React.FC = () => {
   
   const handleExportCSV = () => {
     const token = localStorage.getItem('pb_admin_token') || '';
-    window.open('http://localhost:5000/api/products/export/csv?token=' + token);
+    window.open(`${API_BASE_URL}/products/export/csv?token=${token}`);
   };
 
   const handleImportCSV = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,7 +95,7 @@ export const AdminProductsPage: React.FC = () => {
     formData.append('file', file);
     try {
       const token = localStorage.getItem('pb_admin_token');
-      const res = await fetch('http://localhost:5000/api/products/import/csv', {
+      const res = await fetch(`${API_BASE_URL}/products/import/csv`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
         body: formData
