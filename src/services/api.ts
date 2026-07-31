@@ -1,5 +1,5 @@
 // PlayBimboo Unified Backend API Client
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://play-bimboo-backend.vercel.app/api';
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 // Helper for Token Management
 export const getAuthToken = (): string | null => localStorage.getItem('pb_admin_token');

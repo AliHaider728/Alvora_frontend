@@ -191,7 +191,7 @@ export const ProductDetailPage: React.FC = () => {
           </div>
 
           {/* Right Column: Product Information & Buy Panel */}
-          <div className="lg:col-span-6 flex flex-col justify-between">
+          <div className="lg:col-span-6 flex flex-col">
             <div>
               {/* Category & Brand Header */}
               <div className="flex items-center justify-between mb-2">
