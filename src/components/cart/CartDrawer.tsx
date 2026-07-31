@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { X, ShoppingBag, Trash2, Plus, Minus, Tag, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/formatters';
@@ -49,7 +49,7 @@ export const CartDrawer: React.FC = () => {
       />
 
       <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
-        <div className="w-screen max-w-md bg-white shadow-2xl flex flex-col justify-between rounded-l-3xl overflow-hidden border-l border-slate-100">
+        <div className="w-[85vw] max-w-md bg-white shadow-2xl flex flex-col justify-between rounded-l-3xl overflow-hidden border-l border-slate-100">
           {/* Drawer Header */}
           <div className="p-5 bg-gradient-to-r from-amber-50 via-rose-50 to-sky-50 border-b border-slate-200/60 flex items-center justify-between">
             <div className="flex items-center gap-2.5">
@@ -202,7 +202,7 @@ export const CartDrawer: React.FC = () => {
                         placeholder="Promo code (e.g. PLAYFUL10)"
                         value={couponCodeInput}
                         onChange={e => setCouponCodeInput(e.target.value)}
-                        className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 bg-white font-sans focus:outline-none focus:ring-2 focus:ring-rose-400 uppercase"
+                        className="w-full pl-9 pr-3 py-2 text-base sm:text-xs rounded-xl border border-slate-200 bg-white font-sans focus:outline-none focus:ring-2 focus:ring-rose-400 uppercase"
                       />
                     </div>
                     <button

@@ -20,6 +20,7 @@ export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   
   // Smart Scroll state
@@ -221,6 +222,15 @@ export const Header: React.FC = () => {
 
           {/* Quick Actions & Cart / Wishlist */}
           <div className="flex items-center gap-3 sm:gap-6 flex-shrink-0">
+            {/* Mobile Search Toggle */}
+            <button
+              onClick={() => setMobileSearchOpen(true)}
+              className="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-full transition-colors"
+              aria-label="Open Search"
+            >
+              <Search className="w-5 h-5" />
+            </button>
+            
             {/* Account / User */}
             <Link
               to="/account"
@@ -261,10 +271,82 @@ export const Header: React.FC = () => {
               <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5" />
               <span className="font-heading font-bold text-sm">Cart ({cartTotalItems})</span>
             </button>
+                     {/* Expanding Mobile Search Overlay */}
+            {mobileSearchOpen && (
+              <div className="absolute inset-0 bg-white z-[60] flex items-center px-4 gap-3 rounded-b-3xl sm:rounded-3xl shadow-sm animate-fade-in md:hidden">
+                <Search className="w-5 h-5 text-slate-400 flex-shrink-0" />
+                <form onSubmit={(e) => {
+                  handleSearchSubmit(e);
+                  setMobileSearchOpen(false);
+                }} className="flex-1">
+                  <input
+                    autoFocus
+                    type="text"
+                    placeholder="Search toys, sets..."
+                    value={searchQuery}
+                    onChange={e => {
+                      setSearchQuery(e.target.value);
+                      setIsSearchFocused(true);
+                    }}
+                    onFocus={() => setIsSearchFocused(true)}
+                    className="w-full bg-transparent border-none focus:outline-none text-sm font-medium text-slate-700 placeholder-slate-400 py-3"
+                  />
+                </form>
+                {searchQuery && (
+                  <button onClick={() => setSearchQuery('')} className="p-1 text-slate-400 hover:text-slate-600">
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+                <button onClick={() => { setMobileSearchOpen(false); setSearchQuery(''); setIsSearchFocused(false); }} className="pl-2 text-xs font-bold text-slate-500 border-l border-slate-200">
+                  Cancel
+                </button>
+                
+                {/* Mobile Autosuggest Dropdown */}
+                {isSearchFocused && searchQuery.trim().length > 0 && (
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-slate-100 p-3 z-[70] overflow-hidden">
+                    <div className="text-xs font-bold text-slate-400 uppercase tracking-wider px-2 mb-2">
+                      Top Matching Toys
+                    </div>
+                    {searchResults.length === 0 ? (
+                      <p className="text-sm text-slate-500 p-3 text-center">No matching toys found.</p>
+                    ) : (
+                      <div className="space-y-1">
+                        {searchResults.map(prod => (
+                          <Link
+                            key={prod.id}
+                            to={`/product/${prod.slug}`}
+                            onClick={() => {
+                              setIsSearchFocused(false);
+                              setSearchQuery('');
+                              setMobileSearchOpen(false);
+                            }}
+                            className="flex items-center gap-3 p-2 rounded-xl hover:bg-rose-50/80 transition-colors"
+                          >
+                            <img src={prod.images[0]} alt={prod.name} className="w-10 h-10 object-cover rounded-lg bg-slate-100" />
+                            <div>
+                              <div className="text-xs font-bold text-slate-800 line-clamp-1">{prod.name}</div>
+                              <div className="text-[10px] text-slate-500">{formatPrice(prod.price, settings.currency)}</div>
+                            </div>
+                          </Link>
+                        ))}
+                        <button
+                          onClick={(e) => {
+                            handleSearchSubmit(e);
+                            setMobileSearchOpen(false);
+                          }}
+                          className="w-full text-center text-xs font-bold text-rose-500 hover:text-rose-600 py-2 pt-2 border-t border-slate-100 mt-1"
+                        >
+                          View all results for "{searchQuery}" &rarr;
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
     </header>
   );
 };
-

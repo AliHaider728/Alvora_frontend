@@ -62,7 +62,7 @@ export const AccountPage: React.FC = () => {
               <input
                 type="email"
                 defaultValue="ali.raza@example.com"
-                className="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200"
+                className="w-full px-4 py-2.5 text-base sm:text-sm rounded-xl border border-slate-200"
               />
             </div>
             <div>
@@ -70,7 +70,7 @@ export const AccountPage: React.FC = () => {
               <input
                 type="password"
                 defaultValue="••••••••"
-                className="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200"
+                className="w-full px-4 py-2.5 text-base sm:text-sm rounded-xl border border-slate-200"
               />
             </div>
             <button

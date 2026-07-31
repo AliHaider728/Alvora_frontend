@@ -372,7 +372,7 @@ export const CheckoutPage: React.FC = () => {
                         placeholder="Near landmark, call before arrival, etc."
                         value={orderNotes}
                         onChange={e => setOrderNotes(e.target.value)}
-                        className="w-full px-4 py-2 text-xs rounded-xl border border-slate-200 font-sans focus:outline-none focus:ring-2 focus:ring-rose-400"
+                        className="w-full px-4 py-2 text-base sm:text-sm rounded-xl border border-slate-200 font-sans focus:outline-none focus:ring-2 focus:ring-rose-400"
                       />
                     </div>
                   </div>

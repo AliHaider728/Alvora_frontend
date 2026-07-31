@@ -151,7 +151,7 @@ export const ProductDetailPage: React.FC = () => {
     <div className="min-h-screen bg-slate-50 font-sans py-6">
       <SeoHead product={product} title={product.name} />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
         <Breadcrumbs items={breadcrumbItems} />
 
         {/* Top Detail Section: Gallery + Product Info */}
@@ -366,8 +366,8 @@ export const ProductDetailPage: React.FC = () => {
         </div>
 
         {/* Product Information Tabs */}
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm mb-12">
-          <div className="flex border-b border-slate-200 overflow-x-auto gap-4 sm:gap-8 mb-6">
+        <div className="bg-white rounded-3xl p-4 sm:p-8 border border-slate-100 shadow-sm mb-12">
+          <div className="flex border-b border-slate-200 overflow-x-auto whitespace-nowrap scrollbar-hide gap-4 sm:gap-8 mb-6">
             <button
               onClick={() => setActiveTab('desc')}
               className={`pb-3 font-heading font-bold text-xs sm:text-sm uppercase tracking-wider border-b-2 transition-colors ${

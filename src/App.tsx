@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
-import { StoreProvider } from './context/StoreContext';
+import { StoreProvider, useStore } from './context/StoreContext';
 import { ToastProvider } from './context/ToastContext';
 import { Header } from './components/common/Header';
 import { Footer } from './components/common/Footer';
@@ -36,9 +36,11 @@ import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
 // Scroll to top helper on route change
 const ScrollToTop = () => {
   const { pathname } = useLocation();
+  const { setIsCartOpen } = useStore();
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [pathname]);
+    setIsCartOpen(false); // Ensure cart closes on every route change
+  }, [pathname, setIsCartOpen]);
   return null;
 };
 

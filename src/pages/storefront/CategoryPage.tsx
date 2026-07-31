@@ -108,7 +108,7 @@ export const CategoryPage: React.FC = () => {
         description={currentCategoryObj?.description || 'Browse our complete catalog of action figures, STEM toys, plushies, and family games.'}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
         <Breadcrumbs items={breadcrumbItems} />
 
         {/* Page Header */}

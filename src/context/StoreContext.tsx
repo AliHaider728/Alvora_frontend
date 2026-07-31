@@ -133,6 +133,44 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
+  
+  // Fetch real data from backend API on mount
+  useEffect(() => {
+    const fetchRealData = async () => {
+      try {
+        const [
+          realProducts,
+          realCategories,
+          realOrders,
+          realCustomers,
+          realCoupons,
+          realSettings,
+          realReviews
+        ] = await Promise.all([
+          api.getProducts(),
+          api.getCategories(),
+          api.getOrders(),
+          api.getCustomers(),
+          api.getCoupons(),
+          api.getSettings(),
+          api.getAllReviewsAdmin()
+        ]);
+
+        if (realProducts) setProducts(realProducts);
+        if (realCategories) setCategories(realCategories);
+        if (realOrders) setOrders(realOrders);
+        if (realCustomers) setCustomers(realCustomers);
+        if (realCoupons) setCoupons(realCoupons);
+        if (realSettings) setSettings(realSettings);
+        if (realReviews) setReviews(realReviews);
+      } catch (err) {
+        console.error('Failed to fetch real data from backend', err);
+      }
+    };
+
+    fetchRealData();
+  }, []);
+
   // Sync to localStorage
   useEffect(() => {
     localStorage.setItem('playbimboo_products', JSON.stringify(products));

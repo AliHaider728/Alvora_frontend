@@ -12,13 +12,16 @@ import {
   LogOut,
   ExternalLink,
   Bell,
-  MessageSquare
+  MessageSquare,
+  Menu,
+  X as CloseIcon
 } from 'lucide-react';
 import { getAuthToken, removeAuthToken, api } from '../../services/api';
 
 export const AdminLayout: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   const token = getAuthToken();
 
@@ -52,12 +55,20 @@ export const AdminLayout: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-100 font-sans text-slate-800 flex">
+      {/* Mobile Sidebar Overlay */}
+      {mobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 lg:hidden"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+      
       {/* Sidebar */}
-      <aside className="w-64 bg-slate-900 text-slate-300 flex flex-col justify-between p-4 border-r border-slate-800 flex-shrink-0">
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-slate-300 flex flex-col justify-between p-4 border-r border-slate-800 transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div>
           {/* Logo Header */}
           <div className="flex items-center justify-between pb-6 pt-2 px-2 border-b border-slate-800 mb-4">
-            <Link to="/admin" className="flex items-center gap-2">
+            <Link to="/admin" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2">
               <div className="p-2 rounded-xl bg-amber-400 text-slate-950 font-black">
                 PB
               </div>
@@ -81,6 +92,7 @@ export const AdminLayout: React.FC = () => {
                 <Link
                   key={item.path}
                   to={item.path}
+                  onClick={() => setMobileMenuOpen(false)}
                   className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-colors ${
                     isActive
                       ? 'bg-rose-500 text-white shadow-md'
@@ -119,8 +131,14 @@ export const AdminLayout: React.FC = () => {
       {/* Main Container */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top Header Bar */}
-        <header className="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between sticky top-0 z-30 shadow-xs">
+        <header className="h-16 bg-white border-b border-slate-200 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 shadow-xs">
           <div className="flex items-center gap-4">
+            <button 
+              className="lg:hidden p-2 -ml-2 rounded-xl text-slate-600 hover:bg-slate-100"
+              onClick={() => setMobileMenuOpen(true)}
+            >
+              <Menu className="w-5 h-5" />
+            </button>
             <span className="font-heading font-extrabold text-sm text-slate-900">
               {navItems.find(i => i.path === location.pathname)?.label || 'Admin Management'}
             </span>
