@@ -117,7 +117,7 @@ export const Header: React.FC = () => {
             <Link to="/" className="hover:text-rose-500 text-slate-900 transition-colors">
               Home
             </Link>
-            <Link to="/shop" className="hover:text-rose-500 transition-colors">
+            <Link to="/category/all" className="hover:text-rose-500 transition-colors">
               Shop
             </Link>
             <div className="relative group">

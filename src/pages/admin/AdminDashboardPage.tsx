@@ -1,11 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { DollarSign, ShoppingBag, Package, Users, AlertTriangle, TrendingUp, ArrowUpRight } from 'lucide-react';
-import { useStore } from '../../context/StoreContext';
+import { api } from '../../services/api';
 import { SeoHead } from '../../components/common/SeoHead';
+import { formatPrice } from '../../utils/formatters';
 
 export const AdminDashboardPage: React.FC = () => {
-  const { products, orders, customers } = useStore();
+  const [products, setProducts] = useState<any[]>([]);
+  const [orders, setOrders] = useState<any[]>([]);
+  const [customers, setCustomers] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [pRes, oRes, cRes] = await Promise.all([
+          api.getProducts(),
+          api.getOrders(),
+          api.getCustomers()
+        ]);
+        if (pRes) setProducts(pRes);
+        if (oRes) setOrders(oRes);
+        if (cRes) setCustomers(cRes);
+      } catch (err) {
+        console.error('Failed to fetch dashboard data', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  if (loading) return <div className="p-8 text-center text-slate-500 font-bold">Loading dashboard data...</div>;
 
   const totalRevenue = orders.reduce((sum, o) => sum + o.total, 0);
   const lowStockProducts = products.filter(p => p.stockQuantity < 20);
@@ -55,7 +81,7 @@ export const AdminDashboardPage: React.FC = () => {
               Total Revenue
             </span>
             <span className="font-heading font-black text-2xl text-slate-900 mt-1 block">
-              ${totalRevenue.toFixed(2)}
+              {formatPrice(totalRevenue)}
             </span>
             <span className="text-[11px] font-bold text-emerald-600 flex items-center gap-0.5 mt-1">
               <TrendingUp className="w-3.5 h-3.5" /> +18.4% this month
@@ -137,7 +163,7 @@ export const AdminDashboardPage: React.FC = () => {
           ].map((bar, i) => (
             <div key={i} className="flex-1 flex flex-col items-center gap-2 group">
               <span className="text-[10px] font-bold text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity">
-                ${bar.val}
+                {formatPrice(bar.val)}
               </span>
               <div
                 className="w-full bg-linear-to-t from-rose-500 to-amber-400 rounded-t-xl transition-all duration-500 group-hover:brightness-110"
@@ -176,7 +202,7 @@ export const AdminDashboardPage: React.FC = () => {
                   <td className="p-4 pl-6 font-heading font-bold text-slate-900">{order.id}</td>
                   <td className="p-4 font-medium">{order.customerName}</td>
                   <td className="p-4 text-slate-400">{order.date}</td>
-                  <td className="p-4 font-bold text-slate-900">${order.total.toFixed(2)}</td>
+                  <td className="p-4 font-bold text-slate-900">{formatPrice(order.total)}</td>
                   <td className="p-4">
                     <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
                       order.status === 'Delivered' ? 'bg-emerald-100 text-emerald-800' :

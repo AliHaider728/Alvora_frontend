@@ -54,11 +54,12 @@ export const ProductDetailPage: React.FC = () => {
     );
   }
 
+  const flatRate = settings.flatDeliveryRate ?? settings.standardShippingFee;
   const deliveryFee = product.deliveryChargeType === 'fixed'
-    ? (product.customDeliveryFee ?? settings.flatDeliveryRate)
+    ? (product.customDeliveryFee ?? flatRate)
     : product.deliveryChargeType === 'free'
     ? 0
-    : settings.flatDeliveryRate;
+    : flatRate;
 
   const isWishlisted = isInWishlist(product.id);
   const productReviews = reviews.filter(r => r.productId === product.id);
@@ -66,8 +67,20 @@ export const ProductDetailPage: React.FC = () => {
     .filter(p => p.categorySlug === product.categorySlug && p.id !== product.id)
     .slice(0, 4);
 
-  const handleVariantSelect = (groupName: string, option: string) => {
-    setSelectedVariants(prev => ({ ...prev, [groupName]: option }));
+  // Calculate variant price offset
+  const totalVariantOffset = product.variants
+    ? product.variants.reduce((sum, group) => {
+        const selectedOptName = selectedVariants[group.name];
+        if (!selectedOptName) return sum;
+        const foundOpt = group.options.find(o => o.name === selectedOptName);
+        return sum + (foundOpt?.priceOffset || 0);
+      }, 0)
+    : 0;
+
+  const currentPrice = product.price + totalVariantOffset;
+
+  const handleVariantSelect = (groupName: string, optionName: string) => {
+    setSelectedVariants(prev => ({ ...prev, [groupName]: optionName }));
   };
 
   const formattedVariantString = Object.entries(selectedVariants)
@@ -75,7 +88,8 @@ export const ProductDetailPage: React.FC = () => {
     .join(', ');
 
   const handleAddToCart = () => {
-    addToCart(product, quantity, formattedVariantString || undefined);
+    const productToCart = totalVariantOffset ? { ...product, price: currentPrice } : product;
+    addToCart(productToCart, quantity, formattedVariantString || undefined);
     setAdded(true);
     showToast(`Added ${quantity} x ${product.name} to cart!`, 'success');
     setTimeout(() => setAdded(false), 1500);
@@ -149,92 +163,59 @@ export const ProductDetailPage: React.FC = () => {
               <img
                 src={product.images[activeImageIndex] || product.images[0]}
                 alt={product.name}
-                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 cursor-zoom-in"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
-
-              {/* Badges */}
-              <div className="absolute top-4 left-4 flex flex-col gap-1.5 items-start">
-                {product.discountPercent && product.discountPercent > 0 && (
-                  <span className="px-3 py-1 text-xs font-heading font-black bg-rose-500 text-white rounded-full shadow-md">
-                    -{product.discountPercent}% OFF
-                  </span>
-                )}
-                {product.isBestseller && (
-                  <span className="px-3 py-1 text-xs font-heading font-bold bg-amber-400 text-amber-950 rounded-full shadow-md">
-                    BESTSELLER
-                  </span>
-                )}
-              </div>
-
-              {/* Wishlist Floating Button */}
-              <button
-                onClick={handleToggleWishlist}
-                className={`absolute top-4 right-4 p-3 rounded-full backdrop-blur-md shadow-lg transition-all ${
-                  isWishlisted ? 'bg-rose-500 text-white' : 'bg-white/90 text-slate-700 hover:bg-white hover:text-rose-500'
-                }`}
-              >
-                <Heart className={`w-6 h-6 ${isWishlisted ? 'fill-white' : ''}`} />
-              </button>
+              {product.discountPercent && (
+                <span className="absolute top-4 left-4 bg-rose-500 text-white font-heading font-extrabold text-xs px-3 py-1.5 rounded-full shadow-md">
+                  -{product.discountPercent}% OFF
+                </span>
+              )}
             </div>
 
-            {/* Thumbnail Row */}
+            {/* Gallery Thumbnails */}
             {product.images.length > 1 && (
-              <div className="flex items-center gap-3 overflow-x-auto pb-2">
+              <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-thin">
                 {product.images.map((img, idx) => (
                   <button
                     key={idx}
                     onClick={() => setActiveImageIndex(idx)}
-                    className={`relative w-20 h-20 rounded-2xl overflow-hidden border-2 transition-all flex-shrink-0 ${
-                      activeImageIndex === idx ? 'border-rose-500 ring-2 ring-rose-200' : 'border-slate-200 opacity-70 hover:opacity-100'
+                    className={`relative aspect-square w-20 rounded-2xl overflow-hidden border-2 transition-all flex-shrink-0 ${
+                      activeImageIndex === idx ? 'border-rose-500 scale-95 shadow-sm' : 'border-slate-200 opacity-70 hover:opacity-100'
                     }`}
                   >
-                    <img src={img} alt="" className="w-full h-full object-cover" />
+                    <img src={img} alt={`${product.name} thumbnail ${idx}`} className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>
             )}
           </div>
 
-          {/* Right Column: Product Specs & Actions */}
-          <div className="lg:col-span-6 space-y-6 flex flex-col justify-between">
+          {/* Right Column: Product Information & Buy Panel */}
+          <div className="lg:col-span-6 flex flex-col justify-between">
             <div>
-              {/* Category, Brand & Age Badge */}
-              <div className="flex items-center justify-between gap-2 mb-2">
-                <span className="text-xs sm:text-sm font-heading font-extrabold uppercase tracking-wider text-sky-600">
-                  {product.brand} &bull; {product.category}
+              {/* Category & Brand Header */}
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-rose-500 bg-rose-50 px-3 py-1 rounded-full">
+                  {product.brand}
                 </span>
-                <span className="px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-xs font-bold">
-                  Age: {product.ageGroup} Yrs
-                </span>
+                <div className="flex items-center gap-1 text-amber-400 text-xs font-bold">
+                  <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                  <span className="text-slate-800 font-extrabold">{product.rating}</span>
+                  <span className="text-slate-400">({product.reviewCount} reviews)</span>
+                </div>
               </div>
 
-              {/* Title */}
-              <h1 className="font-heading font-black text-2xl sm:text-3xl text-slate-900 leading-tight mb-3">
+              {/* Product Title */}
+              <h1 className="font-heading font-black text-2xl sm:text-3xl text-slate-900 mb-4 leading-snug">
                 {product.name}
               </h1>
-
-              {/* Star Rating & Reviews */}
-              <div className="flex items-center gap-3 mb-4">
-                <div className="flex items-center text-amber-400">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`w-4 h-4 ${i < Math.floor(product.rating) ? 'fill-amber-400' : 'text-slate-300'}`}
-                    />
-                  ))}
-                </div>
-                <span className="font-heading font-bold text-sm text-slate-800">{product.rating}</span>
-                <span className="text-xs text-slate-500 font-medium">
-                  ({product.reviewCount} verified customer reviews)
-                </span>
-              </div>
 
               {/* Price & Stock */}
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between mb-4">
                 <div>
                   <div className="flex items-baseline gap-3">
                     <span className="font-heading font-black text-3xl text-slate-900">
-                      {formatPrice(product.price, settings.currency)}
+                      {formatPrice(currentPrice, settings.currency)}
                     </span>
                     {product.originalPrice && (
                       <span className="text-base text-slate-400 line-through font-semibold">
@@ -244,7 +225,7 @@ export const ProductDetailPage: React.FC = () => {
                   </div>
                   {product.discountPercent && (
                     <span className="text-xs font-bold text-emerald-600">
-                      You save {formatPrice(product.originalPrice! - product.price, settings.currency)} ({product.discountPercent}% discount)
+                      You save {formatPrice(product.originalPrice! - currentPrice, settings.currency)} ({product.discountPercent}% discount)
                     </span>
                   )}
                 </div>
@@ -286,25 +267,29 @@ export const ProductDetailPage: React.FC = () => {
               {product.variants && product.variants.length > 0 && (
                 <div className="space-y-4 mb-6 pt-4 border-t border-slate-100">
                   {product.variants.map((vGroup) => (
-                    <div key={vGroup.name} className="space-y-2">
+                    <div key={vGroup.id || vGroup.name} className="space-y-2">
                       <label className="text-xs font-heading font-extrabold text-slate-800 uppercase tracking-wider block">
                         Select {vGroup.name}:
                       </label>
                       <div className="flex flex-wrap gap-2">
                         {vGroup.options.map((opt) => {
-                          const isSelected = selectedVariants[vGroup.name] === opt;
+                          const isSelected = selectedVariants[vGroup.name] === opt.name;
+                          const isOptionInStock = opt.inStock !== false;
                           return (
                             <button
-                              key={opt}
+                              key={opt.id || opt.name}
                               type="button"
-                              onClick={() => handleVariantSelect(vGroup.name, opt)}
+                              disabled={!isOptionInStock}
+                              onClick={() => handleVariantSelect(vGroup.name, opt.name)}
                               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                                isSelected
+                                !isOptionInStock
+                                  ? 'bg-slate-100 text-slate-400 cursor-not-allowed opacity-60 line-through'
+                                  : isSelected
                                   ? 'bg-rose-500 text-white ring-2 ring-rose-200 shadow-sm'
                                   : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                               }`}
                             >
-                              {opt}
+                              {opt.name}
                             </button>
                           );
                         })}

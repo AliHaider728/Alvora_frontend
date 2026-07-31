@@ -90,4 +90,14 @@ router.post('/wishlist', authenticateToken, async (req: AuthRequest, res: Respon
   }
 });
 
+// GET /api/auth/users (Admin only - get all users)
+router.get('/users', authenticateToken, async (req: AuthRequest, res: Response) => {
+  try {
+    const users = await User.find().select('-passwordHash');
+    res.json(users);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 export default router;

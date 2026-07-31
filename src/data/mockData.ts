@@ -96,7 +96,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     stockQuantity: 24,
     isVisible: true,
     variants: [
-      { name: 'Color Edition', options: ['Cosmic Red', 'Lunar Silver', 'Deep Space Blue'] }
+      { id: "g" + Math.random().toString(36).substring(7), name: "Color Edition", options: [{ id: 'v' + Date.now() + 0, name: 'Cosmic Red', priceOffset: 0, inStock: true }, { id: 'v' + Date.now() + 1, name: 'Lunar Silver', priceOffset: 0, inStock: true }, { id: 'v' + Date.now() + 2, name: 'Deep Space Blue', priceOffset: 0, inStock: true }] }
     ],
     images: [
       'https://images.unsplash.com/photo-1541185933-ef5d8ed016c2?auto=format&fit=crop&w=800&q=80',
@@ -178,7 +178,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     stockQuantity: 15,
     isVisible: true,
     variants: [
-      { name: 'Color', options: ['Neon Blue', 'Bright Yellow', 'Robo Silver'] }
+      { id: 'g1', name: 'Color', options: [{ id: 'v' + Date.now() + 0, name: 'Neon Blue', priceOffset: 0, inStock: true }, { id: 'v' + Date.now() + 1, name: 'Bright Yellow', priceOffset: 0, inStock: true }, { id: 'v' + Date.now() + 2, name: 'Robo Silver', priceOffset: 0, inStock: true }] }
     ],
     images: [
       'https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&w=800&q=80',
@@ -220,7 +220,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     stockQuantity: 30,
     isVisible: true,
     variants: [
-      { name: 'Color', options: ['Red Monster', 'Green Viper', 'Blue Cyclone'] }
+      { id: "g" + Math.random().toString(36).substring(7), name: "Play", options: [{ id: 'v17854162409740', name: 'Single Player', priceOffset: 0, inStock: true }, { id: 'v17854162409741', name: 'Multiplayer', priceOffset: 0, inStock: true }] },
+      { id: "g" + Math.random().toString(36).substring(7), name: "Color", options: [{ id: 'v' + Date.now() + 0, name: 'Red Monster', priceOffset: 0, inStock: true }, { id: 'v' + Date.now() + 1, name: 'Green Viper', priceOffset: 0, inStock: true }, { id: 'v' + Date.now() + 2, name: 'Blue Cyclone', priceOffset: 0, inStock: true }] }
     ],
     images: [
       'https://images.unsplash.com/photo-1594787318286-3d835c1d207f?auto=format&fit=crop&w=800&q=80',
@@ -280,7 +281,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     isFeatured: true,
     isBestseller: true,
     tags: ['magnetic', 'tiles', 'stem', 'building'],
-    metaTitle: '100-Piece Rainbow Magnetic Building Tiles Set - ToyLand',
+    metaTitle: '100-Piece Rainbow Magnetic Building Tiles Set - Play Bimboo',
     metaDescription: 'Top-rated 100-piece magnetic building tiles for toddlers & kids. Safe, durable STEM toy.'
   },
   {
@@ -317,7 +318,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     isFeatured: false,
     isNewArrival: false,
     tags: ['wooden toy', 'puzzle', 'safari', 'montessori'],
-    metaTitle: 'Safari Quest 3D Wooden Animal Puzzle - ToyLand',
+    metaTitle: 'Safari Quest 3D Wooden Animal Puzzle - Play Bimboo',
     metaDescription: 'Eco-friendly wooden 3D safari animal puzzle for toddlers and kids.'
   },
   {
@@ -355,7 +356,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     isFeatured: true,
     isBestseller: false,
     tags: ['dragon', 'action figure', 'fantasy', 'knights'],
-    metaTitle: 'Mythic Dragon Guardian Action Playset - ToyLand',
+    metaTitle: 'Mythic Dragon Guardian Action Playset - Play Bimboo',
     metaDescription: 'Roaring light-up dragon action figure playset with knight warriors.'
   },
   {
@@ -392,7 +393,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     isFeatured: false,
     isBestseller: true,
     tags: ['board game', 'family', 'cooperative', 'kids game'],
-    metaTitle: 'WonderLand Junior Family Cooperative Board Game - ToyLand',
+    metaTitle: 'WonderLand Junior Family Cooperative Board Game - Play Bimboo',
     metaDescription: 'Fun family cooperative board game for kids 5+. Easy to learn & fast rounds.'
   }
 ];

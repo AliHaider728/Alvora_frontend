@@ -6,7 +6,7 @@ import { SeoHead } from '../../components/common/SeoHead';
 export const AboutPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-50 font-sans py-8">
-      <SeoHead title="About ToyLand Store" />
+      <SeoHead title="About Play Bimboo Store" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Breadcrumbs items={[{ label: 'About Us' }]} />
@@ -22,7 +22,7 @@ export const AboutPage: React.FC = () => {
               Inspiring Young Explorers Every Single Day!
             </h1>
             <p className="text-xs sm:text-base text-white/90 leading-relaxed font-medium">
-              Founded by passionate parents and educators, ToyLand exists to nurture creativity, wonder, and STEM problem-solving skills in children through safe, high-quality toys.
+              Founded by passionate parents and educators, Play Bimboo exists to nurture creativity, wonder, and STEM problem-solving skills in children through safe, high-quality toys.
             </p>
           </div>
         </div>

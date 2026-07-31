@@ -81,7 +81,7 @@ export const CartDrawer: React.FC = () => {
                   {freeShippingNeeded === 0 ? (
                     <span className="text-emerald-700 font-bold">🎉 You qualify for FREE Shipping!</span>
                   ) : (
-                    <span>Add <strong className="text-rose-600">${freeShippingNeeded.toFixed(2)}</strong> more for FREE Shipping</span>
+                    <span>Add <strong className="text-rose-600">{formatPrice(freeShippingNeeded)}</strong> more for FREE Shipping</span>
                   )}
                 </span>
               </div>

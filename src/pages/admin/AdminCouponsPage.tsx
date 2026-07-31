@@ -3,6 +3,7 @@ import { Plus, Tag, Trash2, X, Percent, Check } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { Coupon } from '../../types';
 import { SeoHead } from '../../components/common/SeoHead';
+import { formatPrice } from '../../utils/formatters';
 
 export const AdminCouponsPage: React.FC = () => {
   const { coupons, addCoupon, updateCoupon, deleteCoupon } = useStore();
@@ -61,9 +62,9 @@ export const AdminCouponsPage: React.FC = () => {
 
             <div className="space-y-1 text-xs">
               <span className="font-heading font-black text-xl text-rose-500 block">
-                {coup.discountType === 'percentage' ? `${coup.amount}% OFF` : `$${coup.amount} OFF`}
+                {coup.discountType === 'percentage' ? `${coup.amount}% OFF` : `${formatPrice(coup.amount)} OFF`}
               </span>
-              <p className="text-slate-500 font-medium">Min spend: ${coup.minSpend.toFixed(2)}</p>
+              <p className="text-slate-500 font-medium">Min spend: {formatPrice(coup.minSpend)}</p>
               <p className="text-slate-400 text-[11px]">Used {coup.usedCount} times &bull; Expires {coup.expiryDate}</p>
             </div>
 

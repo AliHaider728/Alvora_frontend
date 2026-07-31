@@ -2,6 +2,7 @@ import React from 'react';
 import { Users, Mail, Phone, Calendar } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { SeoHead } from '../../components/common/SeoHead';
+import { formatPrice } from '../../utils/formatters';
 
 export const AdminCustomersPage: React.FC = () => {
   const { customers } = useStore();
@@ -49,7 +50,7 @@ export const AdminCustomersPage: React.FC = () => {
                   </td>
                   <td className="p-4 text-slate-500">{cust.joinedDate}</td>
                   <td className="p-4 font-bold text-sky-600">{cust.ordersCount} order(s)</td>
-                  <td className="p-4 pr-6 text-right font-heading font-black text-slate-900">${cust.totalSpent.toFixed(2)}</td>
+                  <td className="p-4 pr-6 text-right font-heading font-black text-slate-900">{formatPrice(cust.totalSpent)}</td>
                 </tr>
               ))}
             </tbody>

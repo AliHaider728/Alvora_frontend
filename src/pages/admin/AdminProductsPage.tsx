@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Plus, Search, Edit2, Trash2, X, Eye, EyeOff, Sparkles, AlertCircle, Tag } from 'lucide-react';
+import { Plus, Search, Edit2, Trash2, X, Eye, EyeOff, Sparkles, AlertCircle, Tag, UploadCloud, DownloadCloud, Loader2 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { useToast } from '../../context/ToastContext';
-import { Product, AgeGroupCategory, DeliveryChargeType, ProductVariantGroup } from '../../types';
+import { Product, AgeGroupCategory, DeliveryChargeType, ProductVariantGroup, ProductVariantOption } from '../../types';
+import { api } from '../../services/api';
 import { SeoHead } from '../../components/common/SeoHead';
 import { AGE_GROUPS } from '../../data/mockData';
 import { formatPrice } from '../../utils/formatters';
@@ -27,7 +28,8 @@ export const AdminProductsPage: React.FC = () => {
   const [ageGroup, setAgeGroup] = useState<AgeGroupCategory>('6-8');
   const [brand, setBrand] = useState('PlayBimboo Studios');
   const [stockQuantity, setStockQuantity] = useState(25);
-  const [imageUrl, setImageUrl] = useState('https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=600&q=80');
+  const [images, setImages] = useState<string[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
   const [description, setDescription] = useState('');
   const [isVisible, setIsVisible] = useState(true);
   const [deliveryType, setDeliveryType] = useState<DeliveryChargeType>('store_threshold');
@@ -38,11 +40,11 @@ export const AdminProductsPage: React.FC = () => {
   // Dynamic Product Variants State
   const [variants, setVariants] = useState<ProductVariantGroup[]>([]);
   const [newGroupName, setNewGroupName] = useState('');
-  const [newOptionInputs, setNewOptionInputs] = useState<{ [groupIndex: number]: string }>({});
+  const [newOptionInputs, setNewOptionInputs] = useState<{ [groupIndex: number]: { name: string, priceOffset: number, inStock: boolean } }>({});
 
   const handleAddVariantGroup = () => {
     if (!newGroupName.trim()) return;
-    setVariants(prev => [...prev, { name: newGroupName.trim(), options: [] }]);
+    setVariants(prev => [...prev, { id: 'g-' + Date.now().toString(), name: newGroupName.trim(), options: [] }]);
     setNewGroupName('');
   };
 
@@ -51,20 +53,26 @@ export const AdminProductsPage: React.FC = () => {
   };
 
   const handleAddOptionToGroup = (groupIndex: number) => {
-    const val = (newOptionInputs[groupIndex] || '').trim();
-    if (!val) return;
+    const input = newOptionInputs[groupIndex];
+    if (!input || !input.name.trim()) return;
     setVariants(prev => prev.map((g, idx) => {
       if (idx !== groupIndex) return g;
-      if (g.options.includes(val)) return g;
-      return { ...g, options: [...g.options, val] };
+      if (g.options.some(o => o.name === input.name.trim())) return g;
+      const newOption: ProductVariantOption = {
+        id: 'v-' + Date.now() + Math.random().toString(36).substring(7),
+        name: input.name.trim(),
+        priceOffset: input.priceOffset || 0,
+        inStock: input.inStock
+      };
+      return { ...g, options: [...g.options, newOption] };
     }));
-    setNewOptionInputs(prev => ({ ...prev, [groupIndex]: '' }));
+    setNewOptionInputs(prev => ({ ...prev, [groupIndex]: { name: '', priceOffset: 0, inStock: true } }));
   };
 
-  const handleRemoveOptionFromGroup = (groupIndex: number, optionVal: string) => {
+  const handleRemoveOptionFromGroup = (groupIndex: number, optionId: string) => {
     setVariants(prev => prev.map((g, idx) => {
       if (idx !== groupIndex) return g;
-      return { ...g, options: g.options.filter(o => o !== optionVal) };
+      return { ...g, options: g.options.filter(o => o.id !== optionId) };
     }));
   };
 
@@ -74,6 +82,36 @@ export const AdminProductsPage: React.FC = () => {
     return matchesSearch && matchesCat;
   });
 
+  
+  const handleExportCSV = () => {
+    const token = localStorage.getItem('pb_admin_token') || '';
+    window.open('http://localhost:5000/api/products/export/csv?token=' + token);
+  };
+
+  const handleImportCSV = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || !e.target.files[0]) return;
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+    try {
+      const token = localStorage.getItem('pb_admin_token');
+      const res = await fetch('http://localhost:5000/api/products/import/csv', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+        body: formData
+      });
+      if (res.ok) {
+        alert('Products imported successfully');
+        window.location.reload();
+      } else {
+        alert('Failed to import products');
+      }
+    } catch (err) {
+      alert('Error importing products');
+    }
+    e.target.value = '';
+  };
+
   const openAddModal = () => {
     setEditingProduct(null);
     setName('');
@@ -81,7 +119,7 @@ export const AdminProductsPage: React.FC = () => {
     setOriginalPrice(3499);
     setDescription('Fun and engaging toy designed for hours of creative play.');
     setStockQuantity(25);
-    setImageUrl('https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=600&q=80');
+    setImages([]);
     setIsVisible(true);
     setDeliveryType('store_threshold');
     setCustomDeliveryFee(undefined);
@@ -101,7 +139,7 @@ export const AdminProductsPage: React.FC = () => {
     setAgeGroup(prod.ageGroup);
     setBrand(prod.brand);
     setStockQuantity(prod.stockQuantity);
-    setImageUrl(prod.images[0] || '');
+    setImages(prod.images || []);
     setDescription(prod.description);
     setIsVisible(prod.isVisible !== false);
     setDeliveryType(prod.deliveryType || 'store_threshold');
@@ -144,7 +182,7 @@ export const AdminProductsPage: React.FC = () => {
       brand,
       inStock: Number(stockQuantity) > 0,
       stockQuantity: Number(stockQuantity),
-      images: [imageUrl],
+      images,
       description,
       isVisible,
       deliveryType,
@@ -178,13 +216,27 @@ export const AdminProductsPage: React.FC = () => {
           <h1 className="font-heading font-black text-2xl text-slate-900">Products Catalog</h1>
           <p className="text-xs text-slate-500 font-medium">Manage toys, PKR pricing, inventory stock, visibility, and delivery charge logic.</p>
         </div>
-        <button
-          onClick={openAddModal}
-          className="px-5 py-2.5 rounded-2xl bg-rose-500 hover:bg-rose-600 text-white font-heading font-bold text-xs flex items-center gap-2 shadow-md transition-all"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Add New Toy</span>
-        </button>
+        <div className="flex flex-wrap gap-2">
+            <button
+              onClick={handleExportCSV}
+              className="px-4 py-2.5 rounded-2xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs flex items-center gap-2 shadow-sm transition-all"
+            >
+              <DownloadCloud className="w-4 h-4" />
+              <span>Export CSV</span>
+            </button>
+            <label className="cursor-pointer px-4 py-2.5 rounded-2xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs flex items-center gap-2 shadow-sm transition-all">
+              <UploadCloud className="w-4 h-4" />
+              <span>Import CSV</span>
+              <input type="file" accept=".csv" className="hidden" onChange={handleImportCSV} />
+            </label>
+            <button
+              onClick={openAddModal}
+              className="px-5 py-2.5 rounded-2xl bg-rose-500 hover:bg-rose-600 text-white font-heading font-bold text-xs flex items-center gap-2 shadow-md transition-all"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Add New Toy</span>
+            </button>
+          </div>
       </div>
 
       {/* Filter controls */}
@@ -426,14 +478,48 @@ export const AdminProductsPage: React.FC = () => {
                 )}
 
                 <div className="sm:col-span-2">
-                  <label className="text-xs font-bold text-slate-700 block mb-1">Image URL</label>
-                  <input
-                    type="url"
-                    required
-                    value={imageUrl}
-                    onChange={e => setImageUrl(e.target.value)}
-                    className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200"
-                  />
+                  <label className="text-xs font-bold text-slate-700 block mb-1">Product Images</label>
+                  <div className="flex flex-wrap gap-3 mb-3">
+                    {images.map((img, i) => (
+                      <div key={i} className="relative group w-20 h-20 rounded-xl border border-slate-200 overflow-hidden">
+                        <img src={img} alt="" className="w-full h-full object-cover" />
+                        <button type="button" onClick={() => setImages(images.filter((_, idx) => idx !== i))} className="absolute inset-0 bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                    {isUploading && (
+                      <div className="w-20 h-20 rounded-xl border border-slate-200 flex items-center justify-center bg-slate-50">
+                        <Loader2 className="w-5 h-5 text-rose-500 animate-spin" />
+                      </div>
+                    )}
+                  </div>
+                  <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold text-xs transition-colors">
+                    <UploadCloud className="w-4 h-4" />
+                    <span>Upload Images (Max 5MB)</span>
+                    <input type="file" multiple accept="image/jpeg,image/png,image/webp" className="hidden" onChange={async (e) => {
+                      if (!e.target.files) return;
+                      const files = Array.from(e.target.files);
+                      setIsUploading(true);
+                      try {
+                        const newUrls = [];
+                        for (const file of files) {
+                          if (file.size > 5 * 1024 * 1024) {
+                            showToast(`${file.name} is too large (max 5MB)`, 'error');
+                            continue;
+                          }
+                          const res = await api.uploadImage(file);
+                          newUrls.push(res.url);
+                        }
+                        setImages(prev => [...prev, ...newUrls]);
+                        showToast(`Uploaded ${newUrls.length} images`, 'success');
+                      } catch (err: any) {
+                        showToast(err.message || 'Image upload failed', 'error');
+                      } finally {
+                        setIsUploading(false);
+                      }
+                    }} />
+                  </label>
                 </div>
 
                 <div className="sm:col-span-2">
@@ -491,17 +577,18 @@ export const AdminProductsPage: React.FC = () => {
                       </div>
 
                       {/* Options Chips */}
-                      <div className="flex flex-wrap gap-1.5">
+                      <div className="flex flex-wrap gap-2">
                         {group.options.map((opt, optIdx) => (
                           <span
-                            key={optIdx}
-                            className="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-800 text-[11px] font-bold flex items-center gap-1"
+                            key={opt.id}
+                            className={`px-2.5 py-1 rounded-lg text-[11px] font-bold flex items-center gap-1.5 border ${!opt.inStock ? 'bg-slate-50 text-slate-400 border-slate-200' : 'bg-white text-slate-800 border-slate-200 shadow-sm'}`}
                           >
-                            <span>{opt}</span>
+                            <span>{opt.name}</span>
+                            {opt.priceOffset ? <span className="text-emerald-600">+{opt.priceOffset}</span> : null}
                             <button
                               type="button"
-                              onClick={() => handleRemoveOptionFromGroup(groupIdx, opt)}
-                              className="text-slate-400 hover:text-rose-500"
+                              onClick={() => handleRemoveOptionFromGroup(groupIdx, opt.id)}
+                              className="text-slate-400 hover:text-rose-500 ml-1"
                             >
                               &times;
                             </button>
@@ -510,20 +597,37 @@ export const AdminProductsPage: React.FC = () => {
                       </div>
 
                       {/* Add Option Input */}
-                      <div className="flex gap-2 pt-1">
+                      <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
                         <input
                           type="text"
-                          placeholder={`Add option for ${group.name} (e.g. Red, XL)...`}
-                          value={newOptionInputs[groupIdx] || ''}
-                          onChange={e => setNewOptionInputs({ ...newOptionInputs, [groupIdx]: e.target.value })}
-                          className="flex-1 px-2.5 py-1 text-xs rounded-lg border border-slate-200"
+                          placeholder={`${group.name} Option (e.g. Red)`}
+                          value={newOptionInputs[groupIdx]?.name || ''}
+                          onChange={e => setNewOptionInputs({ ...newOptionInputs, [groupIdx]: { ...(newOptionInputs[groupIdx] || {priceOffset:0, inStock:true}), name: e.target.value } })}
+                          className="flex-1 px-2.5 py-1.5 text-xs rounded-lg border border-slate-200"
                         />
+                        <input
+                          type="number"
+                          placeholder="+Rs."
+                          value={newOptionInputs[groupIdx]?.priceOffset || ''}
+                          onChange={e => setNewOptionInputs({ ...newOptionInputs, [groupIdx]: { ...(newOptionInputs[groupIdx] || {name:'', inStock:true}), priceOffset: Number(e.target.value) } })}
+                          className="w-20 px-2.5 py-1.5 text-xs rounded-lg border border-slate-200"
+                          title="Price Offset"
+                        />
+                        <label className="flex items-center gap-1 text-xs font-bold text-slate-600 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={newOptionInputs[groupIdx]?.inStock ?? true}
+                            onChange={e => setNewOptionInputs({ ...newOptionInputs, [groupIdx]: { ...(newOptionInputs[groupIdx] || {name:'', priceOffset:0}), inStock: e.target.checked } })}
+                            className="rounded border-slate-300 text-rose-500 focus:ring-rose-500"
+                          />
+                          In Stock
+                        </label>
                         <button
                           type="button"
                           onClick={() => handleAddOptionToGroup(groupIdx)}
-                          className="px-3 py-1 rounded-lg bg-rose-500 text-white font-bold text-xs"
+                          className="px-3 py-1.5 rounded-lg bg-rose-500 text-white font-bold text-xs hover:bg-rose-600 transition-colors"
                         >
-                          + Option
+                          Add
                         </button>
                       </div>
                     </div>

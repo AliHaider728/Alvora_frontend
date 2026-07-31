@@ -51,9 +51,10 @@ export const CheckoutPage: React.FC = () => {
   // Calculate highest delivery fee among items or threshold
   let highestDeliveryFee = 0;
   cart.forEach((item) => {
+    const flatRate = settings.flatDeliveryRate ?? settings.standardShippingFee;
     const fee = item.product.deliveryChargeType === 'fixed'
-      ? (item.product.customDeliveryFee ?? settings.flatDeliveryRate)
-      : (item.product.deliveryChargeType === 'free' ? 0 : settings.flatDeliveryRate);
+      ? (item.product.customDeliveryFee ?? flatRate)
+      : (item.product.deliveryChargeType === 'free' ? 0 : flatRate);
     if (fee > highestDeliveryFee) highestDeliveryFee = fee;
   });
 
@@ -91,6 +92,7 @@ export const CheckoutPage: React.FC = () => {
       status: 'Pending',
       shippingAddress: {
         fullName,
+        phone,
         street,
         city,
         state,

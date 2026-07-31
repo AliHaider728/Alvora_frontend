@@ -44,6 +44,7 @@ export const api = {
   getMe: () => fetchJson<any>('/auth/me'),
   syncWishlist: (wishlist: string[]) =>
     fetchJson<any>('/auth/wishlist', { method: 'POST', body: JSON.stringify({ wishlist }) }),
+  getCustomers: () => fetchJson<any[]>('/auth/users'),
 
   // Products
   getProducts: (params?: { category?: string; ageGroup?: string; search?: string; isVisible?: boolean }) => {

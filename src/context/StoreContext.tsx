@@ -19,6 +19,7 @@ import {
   INITIAL_COUPONS
 } from '../data/mockData';
 import { api } from '../services/api';
+import { formatPrice } from '../utils/formatters';
 
 interface StoreContextType {
   // Data
@@ -62,6 +63,7 @@ interface StoreContextType {
   deleteCategory: (id: string) => void;
 
   updateOrderStatus: (orderId: string, status: Order['status'], trackingNumber?: string) => void;
+  updateOrderTracking: (orderId: string, trackingNumber: string) => void;
   placeOrder: (orderData: Omit<Order, 'id' | 'date'>) => Order;
 
   addCoupon: (couponData: Omit<Coupon, 'id' | 'usedCount'>) => Coupon;
@@ -77,47 +79,54 @@ const StoreContext = createContext<StoreContextType | undefined>(undefined);
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // LocalStorage state initialization
   const [products, setProducts] = useState<Product[]>(() => {
-    const saved = localStorage.getItem('toyland_products');
+    const saved = localStorage.getItem('playbimboo_products');
     return saved ? JSON.parse(saved) : INITIAL_PRODUCTS;
   });
 
   const [categories, setCategories] = useState<Category[]>(() => {
-    const saved = localStorage.getItem('toyland_categories');
+    const saved = localStorage.getItem('playbimboo_categories');
     return saved ? JSON.parse(saved) : INITIAL_CATEGORIES;
   });
 
   const [orders, setOrders] = useState<Order[]>(() => {
-    const saved = localStorage.getItem('toyland_orders');
+    const saved = localStorage.getItem('playbimboo_orders');
     return saved ? JSON.parse(saved) : INITIAL_ORDERS;
   });
 
   const [customers, setCustomers] = useState<Customer[]>(() => {
-    const saved = localStorage.getItem('toyland_customers');
+    const saved = localStorage.getItem('playbimboo_customers');
     return saved ? JSON.parse(saved) : INITIAL_CUSTOMERS;
   });
 
   const [coupons, setCoupons] = useState<Coupon[]>(() => {
-    const saved = localStorage.getItem('toyland_coupons');
+    const saved = localStorage.getItem('playbimboo_coupons');
     return saved ? JSON.parse(saved) : INITIAL_COUPONS;
   });
 
   const [reviews, setReviews] = useState<Review[]>(() => {
-    const saved = localStorage.getItem('toyland_reviews');
+    const saved = localStorage.getItem('playbimboo_reviews');
     return saved ? JSON.parse(saved) : INITIAL_REVIEWS;
   });
 
   const [settings, setSettings] = useState<StoreSettings>(() => {
-    const saved = localStorage.getItem('toyland_settings');
-    return saved ? JSON.parse(saved) : INITIAL_SETTINGS;
+    const saved = localStorage.getItem('playbimboo_settings');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed.freeShippingThreshold === 50) {
+        parsed.freeShippingThreshold = 5000;
+      }
+      return parsed;
+    }
+    return INITIAL_SETTINGS;
   });
 
   const [cart, setCart] = useState<CartItem[]>(() => {
-    const saved = localStorage.getItem('toyland_cart');
+    const saved = localStorage.getItem('playbimboo_cart');
     return saved ? JSON.parse(saved) : [];
   });
 
   const [wishlist, setWishlist] = useState<string[]>(() => {
-    const saved = localStorage.getItem('toyland_wishlist');
+    const saved = localStorage.getItem('playbimboo_wishlist');
     return saved ? JSON.parse(saved) : ['p-101', 'p-103'];
   });
 
@@ -126,39 +135,39 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   // Sync to localStorage
   useEffect(() => {
-    localStorage.setItem('toyland_products', JSON.stringify(products));
+    localStorage.setItem('playbimboo_products', JSON.stringify(products));
   }, [products]);
 
   useEffect(() => {
-    localStorage.setItem('toyland_categories', JSON.stringify(categories));
+    localStorage.setItem('playbimboo_categories', JSON.stringify(categories));
   }, [categories]);
 
   useEffect(() => {
-    localStorage.setItem('toyland_orders', JSON.stringify(orders));
+    localStorage.setItem('playbimboo_orders', JSON.stringify(orders));
   }, [orders]);
 
   useEffect(() => {
-    localStorage.setItem('toyland_customers', JSON.stringify(customers));
+    localStorage.setItem('playbimboo_customers', JSON.stringify(customers));
   }, [customers]);
 
   useEffect(() => {
-    localStorage.setItem('toyland_coupons', JSON.stringify(coupons));
+    localStorage.setItem('playbimboo_coupons', JSON.stringify(coupons));
   }, [coupons]);
 
   useEffect(() => {
-    localStorage.setItem('toyland_reviews', JSON.stringify(reviews));
+    localStorage.setItem('playbimboo_reviews', JSON.stringify(reviews));
   }, [reviews]);
 
   useEffect(() => {
-    localStorage.setItem('toyland_settings', JSON.stringify(settings));
+    localStorage.setItem('playbimboo_settings', JSON.stringify(settings));
   }, [settings]);
 
   useEffect(() => {
-    localStorage.setItem('toyland_cart', JSON.stringify(cart));
+    localStorage.setItem('playbimboo_cart', JSON.stringify(cart));
   }, [cart]);
 
   useEffect(() => {
-    localStorage.setItem('toyland_wishlist', JSON.stringify(wishlist));
+    localStorage.setItem('playbimboo_wishlist', JSON.stringify(wishlist));
   }, [wishlist]);
 
   // Cart operations
@@ -211,7 +220,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     if (cartSubtotal < found.minSpend) {
       return {
         success: false,
-        message: `Minimum spend of $${found.minSpend.toFixed(2)} required for this code.`
+        message: `Minimum spend of ${formatPrice(found.minSpend)} required for this code.`
       };
     }
     setAppliedCoupon(found);
@@ -284,6 +293,13 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     if (trackingNumber) {
       api.updateOrderTracking(orderId, trackingNumber).catch(() => {});
     }
+  };
+
+  const updateOrderTracking = (orderId: string, trackingNumber: string) => {
+    setOrders(prev =>
+      prev.map(o => (o.id === orderId ? { ...o, trackingNumber } : o))
+    );
+    api.updateOrderTracking(orderId, trackingNumber).catch(() => {});
   };
 
   const placeOrder = (orderData: Omit<Order, 'id' | 'date'>) => {
@@ -413,6 +429,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         updateCategory,
         deleteCategory,
         updateOrderStatus,
+        updateOrderTracking,
         placeOrder,
         addCoupon,
         updateCoupon,

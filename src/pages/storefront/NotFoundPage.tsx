@@ -30,7 +30,7 @@ export const NotFoundPage: React.FC = () => {
             className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-rose-500 hover:bg-rose-600 text-white font-heading font-extrabold text-xs shadow-md transition-all hover:scale-105"
           >
             <Home className="w-4 h-4" />
-            <span>Back to ToyLand Home</span>
+            <span>Back to Play Bimboo Home</span>
           </Link>
         </div>
       </div>

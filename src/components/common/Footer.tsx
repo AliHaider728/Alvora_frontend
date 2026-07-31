@@ -25,7 +25,7 @@ export const Footer: React.FC = () => {
         <div className="bg-gradient-to-r from-rose-500 via-amber-500 to-sky-500 rounded-3xl p-6 sm:p-10 mb-16 shadow-2xl text-white relative overflow-hidden">
           <div className="relative z-10 max-w-2xl">
             <h3 className="font-heading font-black text-2xl sm:text-3xl mb-2 text-white">
-              Join the ToyLand Fun Club!
+              Join the Play Bimboo Fun Club!
             </h3>
             <p className="text-white/90 text-sm mb-6 font-medium">
               Subscribe to get exclusive secret sales, early toy drops, and a <strong className="underline">15% OFF coupon</strong> instantly!
@@ -64,7 +64,7 @@ export const Footer: React.FC = () => {
           <div className="lg:col-span-2 space-y-4">
             <Logo variant="dark" size="lg" />
             <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
-              ToyLand is your magical destination for premium, non-toxic toys, creative STEM kits, action figures, and family board games. Inspiring young minds to explore, imagine, and grow!
+              Play Bimboo is your magical destination for premium, non-toxic toys, creative STEM kits, action figures, and family board games. Inspiring young minds to explore, imagine, and grow!
             </p>
             <div className="space-y-2 text-xs text-slate-400 pt-2">
               <div className="flex items-center gap-2">

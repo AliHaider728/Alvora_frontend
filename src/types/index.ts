@@ -1,11 +1,19 @@
 export type AgeGroupCategory = '0-2' | '3-5' | '6-8' | '8+';
 
-export interface ProductVariantGroup {
-  name: string; // e.g., "Color", "Size", "Age Range", "Pack"
-  options: string[]; // e.g., ["Red", "Blue", "Green"]
+export interface ProductVariantOption {
+  id: string;
+  name: string;
+  priceOffset?: number;
+  inStock?: boolean;
 }
 
-export type DeliveryChargeType = 'fixed' | 'free' | 'none';
+export interface ProductVariantGroup {
+  id: string;
+  name: string;
+  options: ProductVariantOption[];
+}
+
+export type DeliveryChargeType = 'store_threshold' | 'category' | 'fixed' | 'free' | 'none';
 
 export interface Product {
   id: string;
@@ -113,6 +121,7 @@ export interface Order {
   status: 'Pending' | 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled';
   shippingAddress: {
     fullName: string;
+    phone?: string;
     street: string;
     city: string;
     state: string;
@@ -126,6 +135,7 @@ export interface Order {
 export interface Address {
   id: string;
   name: string;
+  phone?: string;
   street: string;
   city: string;
   state: string;
@@ -169,5 +179,6 @@ export interface StoreSettings {
   metaDescription: string;
   freeShippingThreshold: number;
   standardShippingFee: number;
+  flatDeliveryRate?: number;
   taxRate: number;
 }

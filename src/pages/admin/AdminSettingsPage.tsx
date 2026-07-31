@@ -16,8 +16,8 @@ export const AdminSettingsPage: React.FC = () => {
   const [freeShippingThreshold, setFreeShippingThreshold] = useState(settings.freeShippingThreshold);
   const [standardShippingFee, setStandardShippingFee] = useState(settings.standardShippingFee);
   const [taxRate, setTaxRate] = useState(settings.taxRate * 100);
-  const [defaultMetaTitle, setDefaultMetaTitle] = useState(settings.defaultMetaTitle);
-  const [defaultMetaDescription, setDefaultMetaDescription] = useState(settings.defaultMetaDescription);
+  const [metaTitle, setMetaTitle] = useState(settings.metaTitle);
+  const [metaDescription, setMetaDescription] = useState(settings.metaDescription);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,8 +30,8 @@ export const AdminSettingsPage: React.FC = () => {
       freeShippingThreshold: Number(freeShippingThreshold),
       standardShippingFee: Number(standardShippingFee),
       taxRate: Number(taxRate) / 100,
-      defaultMetaTitle,
-      defaultMetaDescription
+      metaTitle,
+      metaDescription
     });
     showToast('Store settings updated successfully!', 'success');
   };
@@ -169,8 +169,8 @@ export const AdminSettingsPage: React.FC = () => {
               <input
                 type="text"
                 required
-                value={defaultMetaTitle}
-                onChange={e => setDefaultMetaTitle(e.target.value)}
+                value={metaTitle}
+                onChange={e => setMetaTitle(e.target.value)}
                 className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200"
               />
             </div>
@@ -180,8 +180,8 @@ export const AdminSettingsPage: React.FC = () => {
               <textarea
                 rows={2}
                 required
-                value={defaultMetaDescription}
-                onChange={e => setDefaultMetaDescription(e.target.value)}
+                value={metaDescription}
+                onChange={e => setMetaDescription(e.target.value)}
                 className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200"
               />
             </div>

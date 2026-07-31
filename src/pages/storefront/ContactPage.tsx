@@ -34,7 +34,7 @@ export const ContactPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-5 space-y-6">
             <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm space-y-4">
-              <h1 className="font-heading font-black text-2xl text-slate-900">Get in Touch with ToyLand</h1>
+              <h1 className="font-heading font-black text-2xl text-slate-900">Get in Touch with Play Bimboo</h1>
               <p className="text-xs text-slate-500 leading-relaxed font-medium">
                 Have questions about toy safety, shipping speeds, or bulk gift orders? Send us a message and our support team will reply within 24 hours!
               </p>
@@ -81,7 +81,7 @@ export const ContactPage: React.FC = () => {
                 <div className="p-6 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-center space-y-2">
                   <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto animate-bounce" />
                   <h3 className="font-heading font-bold text-base">Message Sent Successfully!</h3>
-                  <p className="text-xs">Thank you for reaching out to ToyLand. We'll reply shortly!</p>
+                  <p className="text-xs">Thank you for reaching out to Play Bimboo. We'll reply shortly!</p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">

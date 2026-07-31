@@ -8,8 +8,8 @@ export const FaqPage: React.FC = () => {
 
   const faqs = [
     {
-      q: 'Are all toys on ToyLand child-safe and non-toxic?',
-      a: 'Yes, 100%! All toys sold on ToyLand undergo strict ASTM F963 and CPSIA testing. They are made with BPA-free, lead-free, non-toxic food-grade plastics or sustainably sourced birch woods.'
+      q: 'Are all toys on Play Bimboo child-safe and non-toxic?',
+      a: 'Yes, 100%! All toys sold on Play Bimboo undergo strict ASTM F963 and CPSIA testing. They are made with BPA-free, lead-free, non-toxic food-grade plastics or sustainably sourced birch woods.'
     },
     {
       q: 'How fast is your shipping and how do I get FREE shipping?',
@@ -25,7 +25,7 @@ export const FaqPage: React.FC = () => {
     },
     {
       q: 'Do you offer bulk school or daycare discounts?',
-      a: 'Yes, we offer educational STEM discounts for teachers, daycare centers, and schools. Please contact hello@toyland-store.com for a quote.'
+      a: 'Yes, we offer educational STEM discounts for teachers, daycare centers, and schools. Please contact hello@playbimboo.com for a quote.'
     }
   ];
 
@@ -42,7 +42,7 @@ export const FaqPage: React.FC = () => {
           </div>
           <h1 className="font-heading font-black text-3xl text-slate-900">Frequently Asked Questions</h1>
           <p className="text-xs text-slate-500 max-w-md mx-auto">
-            Everything you need to know about ToyLand safety, shipping speeds, gift options, and easy returns.
+            Everything you need to know about Play Bimboo safety, shipping speeds, gift options, and easy returns.
           </p>
         </div>
 

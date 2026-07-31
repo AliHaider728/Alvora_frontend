@@ -22,7 +22,7 @@ export const CategoryPage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>(categorySlug || 'all');
   const [selectedAge, setSelectedAge] = useState<string>(searchParams.get('age') || 'all');
   const [selectedBrand, setSelectedBrand] = useState<string>('all');
-  const [priceRange, setPriceRange] = useState<number>(100);
+  const [priceRange, setPriceRange] = useState<number>(15000);
   const [minRating, setMinRating] = useState<number>(0);
 
   // Sort state
@@ -90,7 +90,7 @@ export const CategoryPage: React.FC = () => {
     setSelectedCategory('all');
     setSelectedAge('all');
     setSelectedBrand('all');
-    setPriceRange(100);
+    setPriceRange(15000);
     setMinRating(0);
     setSortBy('featured');
     setSearchParams({});
@@ -213,27 +213,27 @@ export const CategoryPage: React.FC = () => {
 
             {/* Price Filter */}
             <div className="space-y-2 pt-4 border-t border-slate-100">
-              <div className="flex items-center justify-between">
-                <h3 className="font-heading font-bold text-xs uppercase tracking-wider text-slate-500">
-                  Max Price
-                </h3>
-                <span className="font-heading font-extrabold text-xs text-slate-900">
-                  ${priceRange.toFixed(2)}
-                </span>
-              </div>
-              <input
-                type="range"
-                min="10"
-                max="100"
-                step="5"
-                value={priceRange}
-                onChange={e => setPriceRange(Number(e.target.value))}
-                className="w-full accent-rose-500 cursor-pointer"
-              />
-              <div className="flex justify-between text-[10px] text-slate-400 font-bold">
-                <span>{formatPrice(10, settings.currency)}</span>
-                <span>{formatPrice(100, settings.currency)}+</span>
-              </div>
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-[10px] font-black uppercase tracking-wider text-slate-500">
+                    Max Price
+                  </h3>
+                  <span className="font-heading font-extrabold text-xs text-slate-900">
+                    {formatPrice(priceRange)}
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min="500"
+                  max="15000"
+                  step="500"
+                  value={priceRange}
+                  onChange={e => setPriceRange(Number(e.target.value))}
+                  className="w-full accent-rose-500 cursor-pointer"
+                />
+                <div className="flex justify-between text-[10px] text-slate-400 font-bold">
+                  <span>{formatPrice(500)}</span>
+                  <span>{formatPrice(15000)}</span>
+                </div>
             </div>
 
             {/* Brand Filter */}
