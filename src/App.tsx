@@ -33,6 +33,18 @@ import { AdminCouponsPage } from './pages/admin/AdminCouponsPage';
 import { AdminReportsPage } from './pages/admin/AdminReportsPage';
 import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
 
+const AdminProductFormPage = React.lazy(() =>
+  import('./pages/admin/AdminProductFormPage').then(module => ({
+    default: module.AdminProductFormPage
+  }))
+);
+
+const adminPageFallback = (
+  <div className="flex min-h-[40vh] items-center justify-center text-sm font-bold text-slate-500">
+    Loading product editor…
+  </div>
+);
+
 // Scroll to top helper on route change
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -83,6 +95,14 @@ export default function App() {
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboardPage />} />
             <Route path="products" element={<AdminProductsPage />} />
+            <Route
+              path="products/new"
+              element={<React.Suspense fallback={adminPageFallback}><AdminProductFormPage /></React.Suspense>}
+            />
+            <Route
+              path="products/edit/:id"
+              element={<React.Suspense fallback={adminPageFallback}><AdminProductFormPage /></React.Suspense>}
+            />
             <Route path="categories" element={<AdminCategoriesPage />} />
             <Route path="orders" element={<AdminOrdersPage />} />
             <Route path="customers" element={<AdminCustomersPage />} />

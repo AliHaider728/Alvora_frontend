@@ -93,8 +93,8 @@ interface StoreContextType {
   isInWishlist: (productId: string) => boolean;
 
   // Admin CRUD Actions
-  addProduct: (productData: Omit<Product, 'id'>) => Product;
-  updateProduct: (id: string, productData: Partial<Product>) => void;
+  addProduct: (productData: Omit<Product, 'id'>) => Promise<Product | null>;
+  updateProduct: (id: string, productData: Partial<Product>) => Promise<Product | null>;
   deleteProduct: (id: string) => void;
 
   addCategory: (categoryData: Omit<Category, 'id' | 'itemCount'>) => Category;
@@ -330,17 +330,22 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const isInWishlist = (productId: string) => wishlist.includes(productId);
 
   // Admin CRUD handlers
-  const addProduct = (productData: Omit<Product, 'id'>) => {
-    const newProduct: Product = {
-      ...productData,
-      id: `p-${Date.now().toString().slice(-4)}`,
-    };
-    setProducts(prev => [newProduct, ...prev]);
-    return newProduct;
+  const addProduct = async (productData: Omit<Product, 'id'>) => {
+    const savedProduct = await api.createProduct(productData);
+    if (!savedProduct) return null;
+
+    const normalizedProduct = normalizeProduct(savedProduct);
+    setProducts(prev => [normalizedProduct, ...prev]);
+    return normalizedProduct;
   };
 
-  const updateProduct = (id: string, productData: Partial<Product>) => {
-    setProducts(prev => prev.map(p => (p.id === id ? { ...p, ...productData } : p)));
+  const updateProduct = async (id: string, productData: Partial<Product>) => {
+    const savedProduct = await api.updateProduct(id, productData);
+    if (!savedProduct) return null;
+
+    const normalizedProduct = normalizeProduct(savedProduct);
+    setProducts(prev => prev.map(p => (p.id === id ? normalizedProduct : p)));
+    return normalizedProduct;
   };
 
   const deleteProduct = (id: string) => {
@@ -470,7 +475,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const prodReviews = [newReview, ...reviews.filter(r => r.productId === reviewData.productId)];
     const avgRating = prodReviews.reduce((sum, r) => sum + r.rating, 0) / prodReviews.length;
 
-    updateProduct(reviewData.productId, {
+    void updateProduct(reviewData.productId, {
       rating: parseFloat(avgRating.toFixed(1)),
       reviewCount: prodReviews.length,
     });
