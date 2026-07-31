@@ -4,6 +4,7 @@ import { Star, Heart, ShoppingBag, Eye, Check } from 'lucide-react';
 import { Product } from '../../types';
 import { useStore } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/formatters';
+import { getSafeImageSrc } from '../../utils/images';
 
 interface ProductCardProps {
   product: Product;
@@ -35,7 +36,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
       <div className="relative aspect-square w-full bg-slate-100/70 overflow-hidden rounded-t-3xl">
         <Link to={`/product/${product.slug}`} className="block w-full h-full">
           <img
-            src={product.images[0]}
+            src={getSafeImageSrc(product.images?.[0])}
             alt={product.name}
             loading="lazy"
             className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"

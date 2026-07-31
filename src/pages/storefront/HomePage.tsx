@@ -26,6 +26,7 @@ import { SeoHead } from '../../components/common/SeoHead';
 import { AGE_GROUPS } from '../../data/mockData';
 import { Product } from '../../types';
 import { formatPrice } from '../../utils/formatters';
+import { getSafeImageSrc } from '../../utils/images';
 import playBimbooVideo from '../../assets/newplaybimboo.mp4';
 import logoImage from '../../assets/images/play_bimboo_logo_1785311841625.jpg';
 import promoToysImage from '../../assets/images/promo_toys.jpg';
@@ -172,13 +173,13 @@ export const HomePage: React.FC = () => {
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           {categories.map(cat => (
             <Link
-              key={cat.id}
+              key={cat.id || cat.slug}
               to={`/category/${cat.slug}`}
               className="group bg-white rounded-3xl p-4 border border-slate-100 shadow-xs hover:shadow-xl hover:shadow-rose-100 hover:-translate-y-1.5 transition-all text-center flex flex-col items-center justify-between h-52"
             >
               <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-slate-50 mb-3">
                 <img
-                  src={cat.image}
+                  src={getSafeImageSrc(cat.image)}
                   alt={cat.name}
                   loading="lazy"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
@@ -267,7 +268,7 @@ export const HomePage: React.FC = () => {
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
           {featuredProducts.map(product => (
             <ProductCard
-              key={product.id}
+              key={product.id || product.slug}
               product={product}
               onQuickView={prod => setSelectedQuickViewProduct(prod)}
             />
@@ -371,7 +372,7 @@ export const HomePage: React.FC = () => {
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
           {newArrivals.map(product => (
             <ProductCard
-              key={product.id}
+              key={product.id || product.slug}
               product={product}
               onQuickView={prod => setSelectedQuickViewProduct(prod)}
             />
@@ -391,7 +392,7 @@ export const HomePage: React.FC = () => {
             </button>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
               <img
-                src={selectedQuickViewProduct.images[0]}
+                src={getSafeImageSrc(selectedQuickViewProduct.images?.[0])}
                 alt={selectedQuickViewProduct.name}
                 className="w-full h-64 object-cover rounded-2xl bg-slate-100"
               />

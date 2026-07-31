@@ -21,6 +21,45 @@ import {
 import { api } from '../services/api';
 import { formatPrice } from '../utils/formatters';
 
+type MongoRecord = {
+  _id?: unknown;
+};
+
+type BackendOrder = Partial<Order> &
+  MongoRecord & {
+    orderId?: unknown;
+    deliveryCharge?: number;
+    discountAmount?: number;
+  };
+
+const normalizeProduct = (product: Partial<Product> & MongoRecord): Product => ({
+  ...(product as Product),
+  id: String(product.id || product._id || product.slug || ''),
+  images: Array.isArray(product.images)
+    ? product.images.filter(
+        (image): image is string => typeof image === 'string' && image.trim().length > 0
+      )
+    : []
+});
+
+const normalizeCategory = (category: Partial<Category> & MongoRecord): Category => ({
+  ...(category as Category),
+  id: String(category.id || category._id || category.slug || ''),
+  image: typeof category.image === 'string' ? category.image.trim() : ''
+});
+
+const normalizeOrder = (order: BackendOrder): Order => ({
+  ...(order as Order),
+  id: String(order.id || order.orderId || order._id || ''),
+  date: order.date || order.createdAt || '',
+  customerName: order.customerName || order.shippingAddress?.fullName || '',
+  email: order.email || '',
+  phone: order.phone || order.shippingAddress?.phone || '',
+  items: Array.isArray(order.items) ? order.items : [],
+  discount: order.discount ?? order.discountAmount ?? 0,
+  shipping: order.shipping ?? order.deliveryCharge ?? 0
+});
+
 interface StoreContextType {
   // Data
   products: Product[];
@@ -80,17 +119,20 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // LocalStorage state initialization
   const [products, setProducts] = useState<Product[]>(() => {
     const saved = localStorage.getItem('playbimboo_products');
-    return saved ? JSON.parse(saved) : INITIAL_PRODUCTS;
+    const initialProducts = saved ? JSON.parse(saved) : INITIAL_PRODUCTS;
+    return initialProducts.map(normalizeProduct);
   });
 
   const [categories, setCategories] = useState<Category[]>(() => {
     const saved = localStorage.getItem('playbimboo_categories');
-    return saved ? JSON.parse(saved) : INITIAL_CATEGORIES;
+    const initialCategories = saved ? JSON.parse(saved) : INITIAL_CATEGORIES;
+    return initialCategories.map(normalizeCategory);
   });
 
   const [orders, setOrders] = useState<Order[]>(() => {
     const saved = localStorage.getItem('playbimboo_orders');
-    return saved ? JSON.parse(saved) : INITIAL_ORDERS;
+    const initialOrders = saved ? JSON.parse(saved) : INITIAL_ORDERS;
+    return initialOrders.map(normalizeOrder);
   });
 
   const [customers, setCustomers] = useState<Customer[]>(() => {
@@ -156,9 +198,9 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           api.getAllReviewsAdmin()
         ]);
 
-        if (realProducts) setProducts(realProducts);
-        if (realCategories) setCategories(realCategories);
-        if (realOrders) setOrders(realOrders);
+        if (realProducts) setProducts(realProducts.map(normalizeProduct));
+        if (realCategories) setCategories(realCategories.map(normalizeCategory));
+        if (realOrders) setOrders(realOrders.map(normalizeOrder));
         if (realCustomers) setCustomers(realCustomers);
         if (realCoupons) setCoupons(realCoupons);
         if (realSettings) setSettings(realSettings);

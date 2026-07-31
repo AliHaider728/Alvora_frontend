@@ -14,10 +14,11 @@ export const AdminOrdersPage: React.FC = () => {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [trackingInput, setTrackingInput] = useState('');
 
+  const normalizedSearchQuery = searchQuery.trim().toLowerCase();
   const filteredOrders = orders.filter(o =>
-    o.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    o.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    o.email.toLowerCase().includes(searchQuery.toLowerCase())
+    [o.id, o.customerName, o.email, o.status].some(value =>
+      (value || '').toLowerCase().includes(normalizedSearchQuery)
+    )
   );
 
   const handleStatusChange = (orderId: string, newStatus: Order['status']) => {
@@ -74,7 +75,7 @@ export const AdminOrdersPage: React.FC = () => {
             </thead>
             <tbody className="divide-y divide-slate-100">
               {filteredOrders.map(order => (
-                <tr key={order.id} className="hover:bg-slate-50/80 transition-colors">
+                <tr key={order.id || `${order.email}-${order.date}`} className="hover:bg-slate-50/80 transition-colors">
                   <td className="p-4 pl-6 font-heading font-bold text-slate-900">{order.id}</td>
                   <td className="p-4">
                     <span className="font-bold text-slate-800 block">{order.customerName}</span>
@@ -164,7 +165,7 @@ export const AdminOrdersPage: React.FC = () => {
               <div className="space-y-2">
                 <span className="font-bold text-slate-800 block">Items Purchased:</span>
                 {selectedOrder.items.map((it, idx) => (
-                  <div key={idx} className="flex items-center justify-between text-slate-700">
+                  <div key={`${it.productId || it.name}-${it.selectedVariant || 'default'}`} className="flex items-center justify-between text-slate-700">
                     <span>
                       {it.quantity}x {it.name} {it.selectedVariant ? `[${it.selectedVariant}]` : ''}
                     </span>
@@ -184,4 +185,3 @@ export const AdminOrdersPage: React.FC = () => {
     </div>
   );
 };
-

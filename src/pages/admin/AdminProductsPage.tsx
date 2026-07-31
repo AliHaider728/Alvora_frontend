@@ -7,6 +7,7 @@ import { api, API_BASE_URL } from '../../services/api';
 import { SeoHead } from '../../components/common/SeoHead';
 import { AGE_GROUPS } from '../../data/mockData';
 import { formatPrice } from '../../utils/formatters';
+import { getSafeImageSrc } from '../../utils/images';
 
 export const AdminProductsPage: React.FC = () => {
   const { products, categories, addProduct, updateProduct, deleteProduct, settings } = useStore();
@@ -259,7 +260,7 @@ export const AdminProductsPage: React.FC = () => {
         >
           <option value="all">All Categories</option>
           {categories.map(c => (
-            <option key={c.id} value={c.slug}>{c.name}</option>
+            <option key={c.id || c.slug} value={c.slug}>{c.name}</option>
           ))}
         </select>
       </div>
@@ -281,10 +282,10 @@ export const AdminProductsPage: React.FC = () => {
             </thead>
             <tbody className="divide-y divide-slate-100">
               {filteredProducts.map(prod => (
-                <tr key={prod.id} className="hover:bg-slate-50/80 transition-colors">
+                <tr key={prod.id || prod.slug} className="hover:bg-slate-50/80 transition-colors">
                   <td className="p-4 pl-6">
                     <div className="flex items-center gap-3">
-                      <img src={prod.images[0]} alt="" className="w-10 h-10 object-cover rounded-xl bg-slate-100" />
+                      <img src={getSafeImageSrc(prod.images?.[0])} alt="" className="w-10 h-10 object-cover rounded-xl bg-slate-100" />
                       <div>
                         <span className="font-heading font-bold text-slate-900 block">{prod.name}</span>
                         <span className="text-[10px] text-slate-400">{prod.brand}</span>
@@ -375,7 +376,7 @@ export const AdminProductsPage: React.FC = () => {
                     className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 bg-white"
                   >
                     {categories.map(c => (
-                      <option key={c.id} value={c.name}>{c.name}</option>
+                      <option key={c.id || c.slug} value={c.name}>{c.name}</option>
                     ))}
                   </select>
                 </div>
@@ -481,8 +482,8 @@ export const AdminProductsPage: React.FC = () => {
                   <label className="text-xs font-bold text-slate-700 block mb-1">Product Images</label>
                   <div className="flex flex-wrap gap-3 mb-3">
                     {images.map((img, i) => (
-                      <div key={i} className="relative group w-20 h-20 rounded-xl border border-slate-200 overflow-hidden">
-                        <img src={img} alt="" className="w-full h-full object-cover" />
+                      <div key={`${img || 'image'}-${i}`} className="relative group w-20 h-20 rounded-xl border border-slate-200 overflow-hidden">
+                        <img src={getSafeImageSrc(img)} alt="" className="w-full h-full object-cover" />
                         <button type="button" onClick={() => setImages(images.filter((_, idx) => idx !== i))} className="absolute inset-0 bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -562,7 +563,7 @@ export const AdminProductsPage: React.FC = () => {
 
                   {/* Group Items */}
                   {variants.map((group, groupIdx) => (
-                    <div key={groupIdx} className="p-3 bg-white rounded-xl border border-slate-200 space-y-2">
+                    <div key={group.id || group.name} className="p-3 bg-white rounded-xl border border-slate-200 space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="font-heading font-bold text-xs text-rose-600 uppercase">
                           {group.name}
@@ -580,7 +581,7 @@ export const AdminProductsPage: React.FC = () => {
                       <div className="flex flex-wrap gap-2">
                         {group.options.map((opt, optIdx) => (
                           <span
-                            key={opt.id}
+                            key={opt.id || `${group.id}-${opt.name}`}
                             className={`px-2.5 py-1 rounded-lg text-[11px] font-bold flex items-center gap-1.5 border ${!opt.inStock ? 'bg-slate-50 text-slate-400 border-slate-200' : 'bg-white text-slate-800 border-slate-200 shadow-sm'}`}
                           >
                             <span>{opt.name}</span>
@@ -676,4 +677,3 @@ export const AdminProductsPage: React.FC = () => {
     </div>
   );
 };
-
