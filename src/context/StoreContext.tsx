@@ -41,6 +41,9 @@ const normalizeProduct = (product: Partial<Product> & MongoRecord): Product => (
         (image): image is string => typeof image === 'string' && image.trim().length > 0
       )
     : [],
+  imagePublicIds: Array.isArray(product.imagePublicIds)
+    ? product.imagePublicIds.map(publicId => typeof publicId === 'string' ? publicId : '')
+    : [],
   shortDescription: product.shortDescription || '',
   status: product.status || 'published',
   inStock: product.inStock !== false && Number(product.stockQuantity ?? 0) > 0,

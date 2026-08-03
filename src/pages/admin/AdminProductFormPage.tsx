@@ -38,7 +38,12 @@ import {
 } from '../../types';
 import { getSafeImageSrc } from '../../utils/images';
 
-type OrderedImage = { id: string; url: string };
+type OrderedImage = {
+  id: string;
+  url: string;
+  publicId?: string;
+  newlyUploaded?: boolean;
+};
 type VariantRow = {
   id: string;
   type: string;
@@ -67,9 +72,16 @@ const stripHtml = (value: string) =>
     .replace(/\s+/g, ' ')
     .trim();
 
-const makeImage = (url: string, suffix = ''): OrderedImage => ({
+const makeImage = (
+  url: string,
+  suffix = '',
+  publicId?: string,
+  newlyUploaded = false
+): OrderedImage => ({
   id: `${url}-${suffix || `${Date.now()}-${Math.random().toString(36).slice(2)}`}`,
-  url
+  url,
+  publicId,
+  newlyUploaded
 });
 
 const FormCard: React.FC<{
@@ -292,7 +304,9 @@ export const AdminProductFormPage: React.FC = () => {
     setStatus(editingProduct.status || 'published');
     setIsVisible(editingProduct.isVisible !== false);
     setIsFeatured(editingProduct.isFeatured === true);
-    setImages((editingProduct.images || []).map((url, index) => makeImage(url, String(index))));
+    setImages((editingProduct.images || []).map((url, index) =>
+      makeImage(url, String(index), editingProduct.imagePublicIds?.[index])
+    ));
     setMetaTitle(editingProduct.metaTitle || '');
     setMetaDescription(editingProduct.metaDescription || '');
     setSlug(editingProduct.slug);
@@ -386,14 +400,22 @@ export const AdminProductFormPage: React.FC = () => {
     try {
       for (const file of validFiles) {
         const result = await api.uploadImage(file);
-        if (result?.url) uploaded.push(makeImage(result.url));
+        if (result?.url && result?.publicId) {
+          uploaded.push(makeImage(result.url, '', result.publicId, true));
+        } else {
+          throw new Error('The upload response did not include a Cloudinary URL and public ID.');
+        }
       }
       if (uploaded.length > 0) {
+        const replacedNewMain = target === 'main' && images[0]?.newlyUploaded
+          ? images[0]
+          : undefined;
         setImages(current =>
           target === 'main'
             ? [uploaded[0], ...current.slice(current.length > 0 ? 1 : 0)]
             : [...current, ...uploaded]
         );
+        if (replacedNewMain?.publicId) void api.deleteImage(replacedNewMain.publicId);
         markDirty();
         clearError('images');
         showToast(
@@ -404,6 +426,9 @@ export const AdminProductFormPage: React.FC = () => {
         );
       }
     } catch (error) {
+      await Promise.all(
+        uploaded.flatMap(image => image.publicId ? [api.deleteImage(image.publicId)] : [])
+      );
       showToast(error instanceof Error ? error.message : 'Image upload failed.', 'error');
     } finally {
       setUploadingTarget(null);
@@ -412,7 +437,13 @@ export const AdminProductFormPage: React.FC = () => {
 
   const removeImage = (imageId: string) => {
     const imageIndex = images.findIndex(image => image.id === imageId);
+    const removedImage = images[imageIndex];
     setImages(current => current.filter(image => image.id !== imageId));
+    if (removedImage?.newlyUploaded && removedImage.publicId) {
+      void api.deleteImage(removedImage.publicId).then(result => {
+        if (!result) showToast('The image was removed from the form, but Cloudinary cleanup failed.', 'error');
+      });
+    }
     markDirty();
     showToast(imageIndex === 0 ? 'Main image removed.' : 'Gallery image removed.', 'info');
   };
@@ -533,6 +564,7 @@ export const AdminProductFormPage: React.FC = () => {
       stockQuantity: Number(stockQuantity),
       lowStockThreshold: lowStockThreshold ?? null,
       images: images.map(image => image.url),
+      imagePublicIds: images.map(image => image.publicId || ''),
       shortDescription: shortDescription.trim(),
       description,
       features: editingProduct?.features || [],

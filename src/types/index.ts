@@ -35,6 +35,7 @@ export interface Product {
   stockQuantity: number;
   lowStockThreshold?: number;
   images: string[];
+  imagePublicIds?: string[];
   shortDescription?: string;
   description: string;
   features: string[];

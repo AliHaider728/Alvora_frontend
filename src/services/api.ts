@@ -109,10 +109,19 @@ export const api = {
         const errorBody = await res.json().catch(() => ({ error: 'Failed to upload image' }));
         throw new Error(errorBody.error || 'Failed to upload image');
       }
-      return await res.json();
+      const result = await res.json();
+      return {
+        ...result,
+        url: result.secureUrl || result.url
+      };
     } catch (err: any) {
       console.error('Image Upload Error:', err);
       throw err;
     }
-  }
+  },
+  deleteImage: (publicId: string) =>
+    fetchJson<{ deleted: boolean }>('/upload/image', {
+      method: 'DELETE',
+      body: JSON.stringify({ publicId })
+    })
 };
