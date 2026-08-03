@@ -149,6 +149,7 @@ export interface Order {
   };
   paymentMethod: 'Cash on Delivery (COD)';
   trackingNumber?: string;
+  checkoutRequestId?: string;
 }
 
 export interface Address {

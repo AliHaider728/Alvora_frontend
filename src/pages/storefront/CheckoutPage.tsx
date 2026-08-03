@@ -21,6 +21,15 @@ import { formatPrice } from '../../utils/formatters';
 import { getProductDeliveryType } from '../../utils/products';
 
 export const CheckoutPage: React.FC = () => {
+  const [checkoutRequestId] = useState(() => {
+    const existing = sessionStorage.getItem('pb_checkout_request_id');
+    if (existing) return existing;
+    const generated = typeof crypto.randomUUID === 'function'
+      ? crypto.randomUUID()
+      : `pb_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    sessionStorage.setItem('pb_checkout_request_id', generated);
+    return generated;
+  });
   const {
     cart,
     cartSubtotal,
@@ -142,7 +151,8 @@ export const CheckoutPage: React.FC = () => {
         country
       },
       paymentMethod: 'Cash on Delivery (COD)',
-      trackingNumber: `PB-${Math.floor(10000000 + Math.random() * 90000000)}`
+      trackingNumber: `PB-${Math.floor(10000000 + Math.random() * 90000000)}`,
+      checkoutRequestId
     });
 
     setIsPlacingOrder(false);
@@ -150,6 +160,7 @@ export const CheckoutPage: React.FC = () => {
       showToast('The order could not be placed. Please recheck stock and try again.', 'error');
       return;
     }
+    sessionStorage.removeItem('pb_checkout_request_id');
     setCompletedOrder(created);
     setCurrentStep(3);
     showToast('🎉 Order placed successfully with Cash on Delivery!', 'success');
