@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useStore } from '../../context/StoreContext';
 import { useToast } from '../../context/ToastContext';
 import { Product } from '../../types';
-import { API_BASE_URL } from '../../services/api';
+import { API_BASE_URL, getLastApiError } from '../../services/api';
 import { SeoHead } from '../../components/common/SeoHead';
 import { formatPrice } from '../../utils/formatters';
 import { getSafeImageSrc } from '../../utils/images';
@@ -59,10 +59,13 @@ export const AdminProductsPage: React.FC = () => {
     showToast(`${prod.name} is now ${nextState ? 'visible' : 'hidden'} on storefront.`, 'info');
   };
 
-  const handleDelete = (id: string, prodName: string) => {
+  const handleDelete = async (id: string, prodName: string) => {
     if (window.confirm(`Are you sure you want to delete ${prodName}?`)) {
-      deleteProduct(id);
-      showToast(`Deleted ${prodName}`, 'info');
+      const deleted = await deleteProduct(id);
+      showToast(
+        deleted ? `Deleted ${prodName}` : getLastApiError() || `Could not delete ${prodName}`,
+        deleted ? 'info' : 'error'
+      );
     }
   };
 
@@ -183,7 +186,7 @@ export const AdminProductsPage: React.FC = () => {
                       <Edit2 className="w-4 h-4 text-sky-600" />
                     </button>
                     <button
-                      onClick={() => handleDelete(prod.id, prod.name)}
+                      onClick={() => { void handleDelete(prod.id, prod.name); }}
                       className="p-1.5 rounded-lg text-slate-600 hover:bg-rose-50"
                       title="Delete"
                     >

@@ -121,7 +121,7 @@ interface StoreContextType {
   // Admin CRUD Actions
   addProduct: (productData: ProductInput) => Promise<Product | null>;
   updateProduct: (id: string, productData: Partial<ProductInput>) => Promise<Product | null>;
-  deleteProduct: (id: string) => void;
+  deleteProduct: (id: string) => Promise<boolean>;
 
   addCategory: (categoryData: Omit<Category, 'id' | 'itemCount'>) => Category;
   updateCategory: (id: string, categoryData: Partial<Category>) => void;
@@ -374,8 +374,11 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return normalizedProduct;
   };
 
-  const deleteProduct = (id: string) => {
+  const deleteProduct = async (id: string) => {
+    const result = await api.deleteProduct(id);
+    if (!result) return false;
     setProducts(prev => prev.filter(p => p.id !== id));
+    return true;
   };
 
   const addCategory = (categoryData: Omit<Category, 'id' | 'itemCount'>) => {
