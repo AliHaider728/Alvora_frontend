@@ -6,8 +6,8 @@ import { api, setAuthToken } from '../../services/api';
 
 export const AdminLoginPage: React.FC = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('admin@playbimboo.com');
-  const [password, setPassword] = useState('AdminPassword123!');
+  const [email, setEmail] = useState('playbimboo@gmail.com');
+  const [password, setPassword] = useState('admin123');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -62,7 +62,7 @@ export const AdminLoginPage: React.FC = () => {
               value={email}
               onChange={e => setEmail(e.target.value)}
               required
-              placeholder="admin@playbimboo.com"
+              placeholder="playbimboo@gmail.com"
               className="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 font-sans focus:outline-none focus:ring-2 focus:ring-slate-900"
             />
           </div>
@@ -97,8 +97,8 @@ export const AdminLoginPage: React.FC = () => {
 
         <div className="p-3 bg-amber-50 border border-amber-200 rounded-2xl text-[11px] text-amber-900 space-y-1">
           <p className="font-bold text-amber-950">Default Admin Seed Credentials:</p>
-          <p>Email: <code className="font-mono bg-white px-1 py-0.5 rounded text-rose-600 font-bold">admin@playbimboo.com</code></p>
-          <p>Password: <code className="font-mono bg-white px-1 py-0.5 rounded text-rose-600 font-bold">AdminPassword123!</code></p>
+          <p>Email: <code className="font-mono bg-white px-1 py-0.5 rounded text-rose-600 font-bold">playbimboo@gmail.com</code></p>
+          <p>Password: <code className="font-mono bg-white px-1 py-0.5 rounded text-rose-600 font-bold">admin123</code></p>
         </div>
 
         <div className="text-center pt-2 border-t border-slate-100">
