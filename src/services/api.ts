@@ -3,8 +3,14 @@ export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:50
 
 // Helper for Token Management
 export const getAuthToken = (): string | null => localStorage.getItem('pb_admin_token');
-export const setAuthToken = (token: string): void => localStorage.setItem('pb_admin_token', token);
-export const removeAuthToken = (): void => localStorage.removeItem('pb_admin_token');
+export const setAuthToken = (token: string): void => {
+  localStorage.setItem('pb_admin_token', token);
+  window.dispatchEvent(new Event('pb-auth-changed'));
+};
+export const removeAuthToken = (): void => {
+  localStorage.removeItem('pb_admin_token');
+  window.dispatchEvent(new Event('pb-auth-changed'));
+};
 let lastApiError = '';
 export const getLastApiError = (): string => lastApiError;
 

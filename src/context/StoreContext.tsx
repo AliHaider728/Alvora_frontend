@@ -19,7 +19,7 @@ import {
   INITIAL_CUSTOMERS,
   INITIAL_COUPONS
 } from '../data/mockData';
-import { api } from '../services/api';
+import { api, getAuthToken } from '../services/api';
 import { formatPrice } from '../utils/formatters';
 
 type MongoRecord = {
@@ -206,6 +206,13 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   useEffect(() => {
     const fetchRealData = async () => {
       try {
+        const hasAdminSession = Boolean(getAuthToken());
+        if (!hasAdminSession) {
+          setOrders([]);
+          setCustomers([]);
+          setCoupons([]);
+          setReviews([]);
+        }
         const [
           realProducts,
           realCategories,
@@ -217,11 +224,11 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         ] = await Promise.all([
           api.getProducts(),
           api.getCategories(),
-          api.getOrders(),
-          api.getCustomers(),
-          api.getCoupons(),
+          hasAdminSession ? api.getOrders() : Promise.resolve(null),
+          hasAdminSession ? api.getCustomers() : Promise.resolve(null),
+          hasAdminSession ? api.getCoupons() : Promise.resolve(null),
           api.getSettings(),
-          api.getAllReviewsAdmin()
+          hasAdminSession ? api.getAllReviewsAdmin() : Promise.resolve(null)
         ]);
 
         if (realProducts) setProducts(realProducts.map(normalizeProduct));
@@ -236,7 +243,9 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       }
     };
 
-    fetchRealData();
+    void fetchRealData();
+    window.addEventListener('pb-auth-changed', fetchRealData);
+    return () => window.removeEventListener('pb-auth-changed', fetchRealData);
   }, []);
 
   // Sync to localStorage
