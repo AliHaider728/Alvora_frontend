@@ -5,9 +5,12 @@ export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:50
 export const getAuthToken = (): string | null => localStorage.getItem('pb_admin_token');
 export const setAuthToken = (token: string): void => localStorage.setItem('pb_admin_token', token);
 export const removeAuthToken = (): void => localStorage.removeItem('pb_admin_token');
+let lastApiError = '';
+export const getLastApiError = (): string => lastApiError;
 
 async function fetchJson<T>(endpoint: string, options?: RequestInit): Promise<T | null> {
   try {
+    lastApiError = '';
     const token = getAuthToken();
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
@@ -31,6 +34,7 @@ async function fetchJson<T>(endpoint: string, options?: RequestInit): Promise<T 
 
     return await res.json();
   } catch (err: any) {
+    lastApiError = err.message || 'Request failed';
     console.warn(`[Backend API Warning] ${endpoint}:`, err.message);
     return null;
   }
@@ -101,11 +105,14 @@ export const api = {
         headers,
         body: formData
       });
-      if (!res.ok) throw new Error('Failed to upload image');
+      if (!res.ok) {
+        const errorBody = await res.json().catch(() => ({ error: 'Failed to upload image' }));
+        throw new Error(errorBody.error || 'Failed to upload image');
+      }
       return await res.json();
     } catch (err: any) {
       console.error('Image Upload Error:', err);
-      return null;
+      throw err;
     }
   }
 };

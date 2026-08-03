@@ -5,11 +5,14 @@ import { useStore } from '../../context/StoreContext';
 import { ProductCard } from '../../components/common/ProductCard';
 import { Breadcrumbs } from '../../components/common/Breadcrumbs';
 import { SeoHead } from '../../components/common/SeoHead';
+import { isProductVisibleOnStorefront } from '../../utils/products';
 
 export const WishlistPage: React.FC = () => {
   const { wishlist, products, toggleWishlist } = useStore();
 
-  const wishlistedProducts = products.filter(p => wishlist.includes(p.id));
+  const wishlistedProducts = products.filter(
+    p => wishlist.includes(p.id) && isProductVisibleOnStorefront(p)
+  );
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans py-6">

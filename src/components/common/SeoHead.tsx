@@ -12,8 +12,8 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ title, description, product, c
   const defaultTitle = "PlayBimboo - Premier Toy Store in Pakistan";
   const defaultDesc = "Shop original building sets, STEM robotics, action figures, plush toys, and board games in Pakistan with Cash on Delivery & Free Express Shipping.";
 
-  const finalTitle = title ? `${title} | PlayBimboo` : defaultTitle;
-  const finalDesc = description || product?.metaDescription || product?.description || defaultDesc;
+  const finalTitle = product?.metaTitle || (title ? `${title} | PlayBimboo` : defaultTitle);
+  const finalDesc = description || product?.metaDescription || product?.shortDescription || product?.description || defaultDesc;
   const currentUrl = canonicalUrl || window.location.href;
   const imageUrl = product?.images[0] || 'https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=1200&q=80';
 
@@ -57,7 +57,7 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ title, description, product, c
         "name": product.name,
         "image": product.images,
         "description": product.description,
-        "sku": product.id,
+        "sku": product.sku || product.id,
         "brand": {
           "@type": "Brand",
           "name": product.brand

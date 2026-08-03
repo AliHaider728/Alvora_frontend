@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Star, Heart, ShoppingBag, Eye, Check } from 'lucide-react';
 import { Product } from '../../types';
 import { useStore } from '../../context/StoreContext';
@@ -13,12 +13,18 @@ interface ProductCardProps {
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }) => {
   const { addToCart, toggleWishlist, isInWishlist, settings } = useStore();
+  const navigate = useNavigate();
   const [added, setAdded] = useState(false);
   const isWishlisted = isInWishlist(product.id);
+  const hasVariants = Boolean(product.variants?.some(group => group.options.length > 0));
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    if (hasVariants) {
+      navigate(`/product/${product.slug}`);
+      return;
+    }
     addToCart(product, 1);
     setAdded(true);
     setTimeout(() => setAdded(false), 1500);
@@ -117,6 +123,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
             {product.name}
           </Link>
 
+          {product.shortDescription && (
+            <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-slate-500">
+              {product.shortDescription}
+            </p>
+          )}
+
           {/* Star Rating */}
           <div className="flex items-center gap-1.5 mt-2">
             <div className="flex items-center text-amber-400">
@@ -161,6 +173,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
               </>
             ) : !product.inStock ? (
               <span>Out of Stock</span>
+            ) : hasVariants ? (
+              <span>Choose Options</span>
             ) : (
               <>
                 <ShoppingBag className="w-4 h-4" />

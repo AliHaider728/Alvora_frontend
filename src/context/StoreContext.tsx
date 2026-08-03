@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import {
   Product,
+  ProductInput,
   Category,
   Order,
   Customer,
@@ -39,6 +40,28 @@ const normalizeProduct = (product: Partial<Product> & MongoRecord): Product => (
     ? product.images.filter(
         (image): image is string => typeof image === 'string' && image.trim().length > 0
       )
+    : [],
+  shortDescription: product.shortDescription || '',
+  status: product.status || 'published',
+  inStock: product.inStock !== false && Number(product.stockQuantity ?? 0) > 0,
+  stockQuantity: Math.max(0, Number(product.stockQuantity ?? 0)),
+  features: Array.isArray(product.features) ? product.features : [],
+  tags: Array.isArray(product.tags) ? product.tags : [],
+  specifications: product.specifications || {},
+  safetyInfo: product.safetyInfo || '',
+  variants: Array.isArray(product.variants)
+    ? product.variants.map(group => ({
+        ...group,
+        options: Array.isArray(group.options)
+          ? group.options.map(option => ({
+              ...option,
+              inStock:
+                option.stockQuantity === undefined
+                  ? option.inStock !== false
+                  : option.stockQuantity > 0
+            }))
+          : []
+      }))
     : []
 });
 
@@ -93,8 +116,8 @@ interface StoreContextType {
   isInWishlist: (productId: string) => boolean;
 
   // Admin CRUD Actions
-  addProduct: (productData: Omit<Product, 'id'>) => Promise<Product | null>;
-  updateProduct: (id: string, productData: Partial<Product>) => Promise<Product | null>;
+  addProduct: (productData: ProductInput) => Promise<Product | null>;
+  updateProduct: (id: string, productData: Partial<ProductInput>) => Promise<Product | null>;
   deleteProduct: (id: string) => void;
 
   addCategory: (categoryData: Omit<Category, 'id' | 'itemCount'>) => Category;
@@ -103,7 +126,7 @@ interface StoreContextType {
 
   updateOrderStatus: (orderId: string, status: Order['status'], trackingNumber?: string) => void;
   updateOrderTracking: (orderId: string, trackingNumber: string) => void;
-  placeOrder: (orderData: Omit<Order, 'id' | 'date'>) => Order;
+  placeOrder: (orderData: Omit<Order, 'id' | 'date'>) => Promise<Order | null>;
 
   addCoupon: (couponData: Omit<Coupon, 'id' | 'usedCount'>) => Coupon;
   updateCoupon: (id: string, couponData: Partial<Coupon>) => void;
@@ -330,7 +353,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const isInWishlist = (productId: string) => wishlist.includes(productId);
 
   // Admin CRUD handlers
-  const addProduct = async (productData: Omit<Product, 'id'>) => {
+  const addProduct = async (productData: ProductInput) => {
     const savedProduct = await api.createProduct(productData);
     if (!savedProduct) return null;
 
@@ -339,7 +362,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return normalizedProduct;
   };
 
-  const updateProduct = async (id: string, productData: Partial<Product>) => {
+  const updateProduct = async (id: string, productData: Partial<ProductInput>) => {
     const savedProduct = await api.updateProduct(id, productData);
     if (!savedProduct) return null;
 
@@ -387,18 +410,16 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     api.updateOrderTracking(orderId, trackingNumber).catch(() => {});
   };
 
-  const placeOrder = (orderData: Omit<Order, 'id' | 'date'>) => {
-    const newOrder: Order = {
+  const placeOrder = async (orderData: Omit<Order, 'id' | 'date'>) => {
+    const savedOrder = await api.createOrder({
       ...orderData,
-      id: `ORD-${Math.floor(1000 + Math.random() * 9000)}`,
-      date: new Date().toISOString().replace('T', ' ').slice(0, 16),
-    };
-    setOrders(prev => [newOrder, ...prev]);
-
-    // Send order to backend API for email sending and database record
-    api.createOrder(newOrder).catch(err => {
-      console.warn('Backend API order creation warning:', err);
+      deliveryCharge: orderData.shipping,
+      discountAmount: orderData.discount
     });
+    if (!savedOrder) return null;
+
+    const newOrder = normalizeOrder(savedOrder);
+    setOrders(prev => [newOrder, ...prev]);
 
     // Update customer total spent
     setCustomers(prev => {

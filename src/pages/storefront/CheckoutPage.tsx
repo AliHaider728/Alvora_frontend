@@ -17,7 +17,8 @@ import { useToast } from '../../context/ToastContext';
 import { SeoHead } from '../../components/common/SeoHead';
 import { Breadcrumbs } from '../../components/common/Breadcrumbs';
 import { Order } from '../../types';
-import { formatPrice, calculateDeliveryFee } from '../../utils/formatters';
+import { formatPrice } from '../../utils/formatters';
+import { getProductDeliveryType } from '../../utils/products';
 
 export const CheckoutPage: React.FC = () => {
   const {
@@ -47,23 +48,63 @@ export const CheckoutPage: React.FC = () => {
 
   // Order result state
   const [completedOrder, setCompletedOrder] = useState<Order | null>(null);
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
-  // Calculate highest delivery fee among items or threshold
-  let highestDeliveryFee = 0;
+  // Product overrides take priority; otherwise the store threshold applies.
+  let highestOverrideFee = 0;
+  let hasShippingOverride = false;
+  let hasDefaultShippingItem = false;
+  let deliveryUnavailable = false;
   cart.forEach((item) => {
     const flatRate = settings.flatDeliveryRate ?? settings.standardShippingFee;
-    const fee = item.product.deliveryChargeType === 'fixed'
-      ? (item.product.customDeliveryFee ?? flatRate)
-      : (item.product.deliveryChargeType === 'free' ? 0 : flatRate);
-    if (fee > highestDeliveryFee) highestDeliveryFee = fee;
+    const deliveryType = getProductDeliveryType(item.product);
+    if (deliveryType === 'none') {
+      deliveryUnavailable = true;
+      return;
+    }
+    if (deliveryType === 'fixed') {
+      hasShippingOverride = true;
+      highestOverrideFee = Math.max(highestOverrideFee, item.product.customDeliveryFee ?? flatRate);
+      return;
+    }
+    if (deliveryType === 'free') {
+      return;
+    }
+    if (deliveryType === 'category') {
+      const category = categories.find(candidate => candidate.slug === item.product.categorySlug);
+      const categoryType = category?.deliveryType || category?.deliveryChargeType;
+      if (categoryType === 'none') {
+        deliveryUnavailable = true;
+      } else if (categoryType === 'free') {
+        return;
+      } else if (categoryType === 'fixed' || category?.deliveryCharge !== undefined) {
+        hasShippingOverride = true;
+        highestOverrideFee = Math.max(
+          highestOverrideFee,
+          category.customDeliveryFee ?? category.deliveryFee ?? category.deliveryCharge ?? flatRate
+        );
+      } else {
+        hasDefaultShippingItem = true;
+      }
+      return;
+    }
+    hasDefaultShippingItem = true;
   });
 
-  const shippingFee = cartSubtotal >= settings.freeShippingThreshold ? 0 : (highestDeliveryFee || settings.standardShippingFee || 250);
+  const defaultShippingFee =
+    hasDefaultShippingItem && cartSubtotal < settings.freeShippingThreshold
+      ? settings.standardShippingFee || 250
+      : 0;
+  const shippingFee = Math.max(hasShippingOverride ? highestOverrideFee : 0, defaultShippingFee);
   const taxFee = Math.round(cartSubtotal * settings.taxRate);
   const finalTotal = Math.max(0, cartSubtotal - couponDiscountAmount + shippingFee + taxFee);
 
   const handleShippingSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (deliveryUnavailable) {
+      showToast('One or more products are not available for delivery.', 'error');
+      return;
+    }
     if (fullName && email && phone && street && city) {
       setCurrentStep(2);
     } else {
@@ -71,9 +112,10 @@ export const CheckoutPage: React.FC = () => {
     }
   };
 
-  const handlePaymentSubmit = (e: React.FormEvent) => {
+  const handlePaymentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const created = placeOrder({
+    setIsPlacingOrder(true);
+    const created = await placeOrder({
       customerName: fullName,
       email,
       phone,
@@ -103,6 +145,11 @@ export const CheckoutPage: React.FC = () => {
       trackingNumber: `PB-${Math.floor(10000000 + Math.random() * 90000000)}`
     });
 
+    setIsPlacingOrder(false);
+    if (!created) {
+      showToast('The order could not be placed. Please recheck stock and try again.', 'error');
+      return;
+    }
     setCompletedOrder(created);
     setCurrentStep(3);
     showToast('🎉 Order placed successfully with Cash on Delivery!', 'success');
@@ -432,10 +479,11 @@ export const CheckoutPage: React.FC = () => {
 
                   <button
                     type="submit"
+                    disabled={isPlacingOrder}
                     className="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-heading font-black text-lg shadow-xl flex items-center justify-center gap-2 transition-all hover:scale-[1.01]"
                   >
-                    <span>Confirm Order & Pay {formatPrice(finalTotal, settings.currency)} on Delivery</span>
-                    <Check className="w-6 h-6" />
+                    <span>{isPlacingOrder ? 'Placing Order…' : `Confirm Order & Pay ${formatPrice(finalTotal, settings.currency)} on Delivery`}</span>
+                    {isPlacingOrder ? <span className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" /> : <Check className="w-6 h-6" />}
                   </button>
                 </form>
               )}
@@ -509,4 +557,3 @@ export const CheckoutPage: React.FC = () => {
     </div>
   );
 };
-

@@ -9,6 +9,7 @@ import { SeoHead } from '../../components/common/SeoHead';
 import { formatPrice } from '../../utils/formatters';
 import { AGE_GROUPS } from '../../data/mockData';
 import { AgeGroupCategory } from '../../types';
+import { isProductVisibleOnStorefront } from '../../utils/products';
 
 export const CategoryPage: React.FC = () => {
   const { categorySlug } = useParams<{ categorySlug?: string }>();
@@ -44,7 +45,7 @@ export const CategoryPage: React.FC = () => {
   // Filter Logic
   const filteredProducts = useMemo(() => {
     return products.filter(p => {
-      if (p.isVisible === false) return false;
+      if (!isProductVisibleOnStorefront(p)) return false;
       // Category match
       if (selectedCategory !== 'all' && p.categorySlug !== selectedCategory) {
         return false;

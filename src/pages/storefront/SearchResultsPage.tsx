@@ -5,6 +5,7 @@ import { useStore } from '../../context/StoreContext';
 import { ProductCard } from '../../components/common/ProductCard';
 import { Breadcrumbs } from '../../components/common/Breadcrumbs';
 import { SeoHead } from '../../components/common/SeoHead';
+import { isProductVisibleOnStorefront } from '../../utils/products';
 
 export const SearchResultsPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -14,7 +15,7 @@ export const SearchResultsPage: React.FC = () => {
   const [sortBy, setSortBy] = useState<'featured' | 'price-low' | 'price-high'>('featured');
 
   const results = products.filter(p =>
-    p.isVisible !== false && (
+    isProductVisibleOnStorefront(p) && (
       p.name.toLowerCase().includes(query.toLowerCase()) ||
       p.category.toLowerCase().includes(query.toLowerCase()) ||
       p.brand.toLowerCase().includes(query.toLowerCase()) ||

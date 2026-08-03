@@ -5,6 +5,8 @@ export interface ProductVariantOption {
   name: string;
   priceOffset?: number;
   inStock?: boolean;
+  stockQuantity?: number;
+  sku?: string;
 }
 
 export interface ProductVariantGroup {
@@ -19,6 +21,7 @@ export interface Product {
   id: string;
   name: string;
   slug: string;
+  sku?: string;
   price: number;
   originalPrice?: number;
   discountPercent?: number;
@@ -30,7 +33,9 @@ export interface Product {
   brand: string;
   inStock: boolean;
   stockQuantity: number;
+  lowStockThreshold?: number;
   images: string[];
+  shortDescription?: string;
   description: string;
   features: string[];
   safetyInfo: string;
@@ -39,6 +44,8 @@ export interface Product {
   isNewArrival?: boolean;
   isBestseller?: boolean;
   isVisible?: boolean; // Show/Hide toggle on storefront
+  status?: 'draft' | 'published';
+  weight?: number;
   tags: string[];
   variants?: ProductVariantGroup[];
   deliveryType?: DeliveryChargeType;
@@ -49,6 +56,17 @@ export interface Product {
   metaTitle?: string;
   metaDescription?: string;
 }
+
+export type ProductInput = Omit<
+  Product,
+  'id' | 'originalPrice' | 'sku' | 'lowStockThreshold' | 'weight' | 'customDeliveryFee'
+> & {
+  originalPrice?: number | null;
+  sku?: string | null;
+  lowStockThreshold?: number | null;
+  weight?: number | null;
+  customDeliveryFee?: number | null;
+};
 
 export interface Category {
   id: string;

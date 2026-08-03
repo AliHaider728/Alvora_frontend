@@ -18,15 +18,21 @@ import { useToast } from '../../context/ToastContext';
 import { ProductCard } from '../../components/common/ProductCard';
 import { Breadcrumbs } from '../../components/common/Breadcrumbs';
 import { SeoHead } from '../../components/common/SeoHead';
-import { formatPrice, calculateDeliveryFee } from '../../utils/formatters';
+import { formatPrice } from '../../utils/formatters';
 import { api } from '../../services/api';
+import { getProductDeliveryType, isProductVisibleOnStorefront } from '../../utils/products';
+
+const getPlainDescription = (description: string) =>
+  description.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 
 export const ProductDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const { products, categories, reviews, addToCart, toggleWishlist, isInWishlist, addReview, settings } = useStore();
   const { showToast } = useToast();
 
-  const product = products.find(p => p.slug === slug || p.id === slug);
+  const product = products.find(
+    p => (p.slug === slug || p.id === slug) && isProductVisibleOnStorefront(p)
+  );
 
   // Gallery state
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -55,9 +61,10 @@ export const ProductDetailPage: React.FC = () => {
   }
 
   const flatRate = settings.flatDeliveryRate ?? settings.standardShippingFee;
-  const deliveryFee = product.deliveryChargeType === 'fixed'
+  const productDeliveryType = getProductDeliveryType(product);
+  const deliveryFee = productDeliveryType === 'fixed'
     ? (product.customDeliveryFee ?? flatRate)
-    : product.deliveryChargeType === 'free'
+    : productDeliveryType === 'free'
     ? 0
     : flatRate;
 
@@ -78,6 +85,20 @@ export const ProductDetailPage: React.FC = () => {
     : 0;
 
   const currentPrice = product.price + totalVariantOffset;
+  const variantGroups = (product.variants || []).filter(group => group.options.length > 0);
+  const allVariantsSelected = variantGroups.every(group => Boolean(selectedVariants[group.name]));
+  const selectedVariantOptions = variantGroups
+    .map(group => group.options.find(option => option.name === selectedVariants[group.name]))
+    .filter(Boolean);
+  const selectedVariantStock = selectedVariantOptions.length > 0
+    ? Math.min(...selectedVariantOptions.map(option => option!.stockQuantity ?? product.stockQuantity))
+    : product.stockQuantity;
+  const canPurchase =
+    product.inStock &&
+    productDeliveryType !== 'none' &&
+    allVariantsSelected &&
+    selectedVariantStock > 0 &&
+    quantity <= selectedVariantStock;
 
   const handleVariantSelect = (groupName: string, optionName: string) => {
     setSelectedVariants(prev => ({ ...prev, [groupName]: optionName }));
@@ -88,6 +109,14 @@ export const ProductDetailPage: React.FC = () => {
     .join(', ');
 
   const handleAddToCart = () => {
+    if (!allVariantsSelected) {
+      showToast('Please select every product option before adding to cart.', 'error');
+      return;
+    }
+    if (!canPurchase) {
+      showToast('This product option is currently out of stock or unavailable for delivery.', 'error');
+      return;
+    }
     const productToCart = totalVariantOffset ? { ...product, price: currentPrice } : product;
     addToCart(productToCart, quantity, formattedVariantString || undefined);
     setAdded(true);
@@ -149,7 +178,7 @@ export const ProductDetailPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans py-6">
-      <SeoHead product={product} title={product.name} />
+      <SeoHead product={product} />
 
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
         <Breadcrumbs items={breadcrumbItems} />
@@ -232,10 +261,14 @@ export const ProductDetailPage: React.FC = () => {
 
                 <div className="text-right">
                   <span className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold ${
-                    product.inStock ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
+                    canPurchase || (product.inStock && variantGroups.length > 0 && !allVariantsSelected) ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
                   }`}>
-                    <span className={`w-2 h-2 rounded-full ${product.inStock ? 'bg-emerald-500 animate-ping' : 'bg-rose-500'}`} />
-                    {product.inStock ? `In Stock (${product.stockQuantity} left)` : 'Out of Stock'}
+                    <span className={`w-2 h-2 rounded-full ${product.inStock ? 'bg-emerald-500' : 'bg-rose-500'}`} />
+                    {!product.inStock
+                      ? 'Out of Stock'
+                      : variantGroups.length > 0 && !allVariantsSelected
+                      ? 'Select options to check stock'
+                      : `In Stock (${selectedVariantStock} left)`}
                   </span>
                 </div>
               </div>
@@ -245,12 +278,14 @@ export const ProductDetailPage: React.FC = () => {
                 <Truck className="w-4 h-4 text-sky-600 flex-shrink-0" />
                 <span>
                   Delivery Fee:{' '}
-                  {deliveryFee === 0 ? (
+                  {productDeliveryType === 'none' ? (
+                    <strong className="text-rose-600">Delivery unavailable</strong>
+                  ) : deliveryFee === 0 ? (
                     <strong className="text-emerald-600">FREE Delivery</strong>
                   ) : (
                     <strong>{formatPrice(deliveryFee, settings.currency)}</strong>
                   )}
-                  {settings.freeShippingThreshold > 0 && deliveryFee > 0 && (
+                  {productDeliveryType === 'store_threshold' && settings.freeShippingThreshold > 0 && deliveryFee > 0 && (
                     <span className="block sm:inline text-sky-700 font-normal ml-1">
                       (Free delivery on total orders above {formatPrice(settings.freeShippingThreshold, settings.currency)})
                     </span>
@@ -260,7 +295,7 @@ export const ProductDetailPage: React.FC = () => {
 
               {/* Description snippet */}
               <p className="text-sm text-slate-600 font-sans leading-relaxed mb-6">
-                {product.description}
+                {product.shortDescription || getPlainDescription(product.description).slice(0, 240)}
               </p>
 
               {/* Product Variants Selection */}
@@ -274,7 +309,7 @@ export const ProductDetailPage: React.FC = () => {
                       <div className="flex flex-wrap gap-2">
                         {vGroup.options.map((opt) => {
                           const isSelected = selectedVariants[vGroup.name] === opt.name;
-                          const isOptionInStock = opt.inStock !== false;
+                          const isOptionInStock = opt.inStock !== false && (opt.stockQuantity === undefined || opt.stockQuantity > 0);
                           return (
                             <button
                               key={opt.id || opt.name}
@@ -323,11 +358,11 @@ export const ProductDetailPage: React.FC = () => {
                 {/* Add to Cart CTA Button with bounce micro-interaction */}
                 <button
                   onClick={handleAddToCart}
-                  disabled={!product.inStock}
+                  disabled={!canPurchase}
                   className={`w-full py-4 rounded-2xl font-heading font-extrabold text-base shadow-xl flex items-center justify-center gap-2 transition-all duration-300 active:scale-95 ${
                     added
                       ? 'bg-emerald-500 text-white shadow-emerald-200'
-                      : !product.inStock
+                      : !canPurchase
                       ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
                       : 'bg-rose-500 hover:bg-rose-600 text-white shadow-rose-200/80 hover:scale-[1.01]'
                   }`}
@@ -340,7 +375,7 @@ export const ProductDetailPage: React.FC = () => {
                   ) : (
                     <>
                       <ShoppingBag className="w-5 h-5" />
-                      <span>Add to Cart - {formatPrice(product.price * quantity, settings.currency)}</span>
+                      <span>{!allVariantsSelected ? 'Select Product Options' : `Add to Cart - ${formatPrice(currentPrice * quantity, settings.currency)}`}</span>
                     </>
                   )}
                 </button>
@@ -405,7 +440,10 @@ export const ProductDetailPage: React.FC = () => {
           {/* Tab 1: Description & Features */}
           {activeTab === 'desc' && (
             <div className="space-y-4 text-sm text-slate-700 leading-relaxed">
-              <p>{product.description}</p>
+              <div
+                className="space-y-3 [&_a]:text-sky-600 [&_a]:underline [&_ol]:list-decimal [&_ol]:pl-5 [&_ul]:list-disc [&_ul]:pl-5"
+                dangerouslySetInnerHTML={{ __html: product.description }}
+              />
               <h4 className="font-heading font-bold text-sm text-slate-900 pt-2">Key Highlights:</h4>
               <ul className="space-y-2 list-disc list-inside text-slate-600">
                 {product.features.map((feat, i) => (
@@ -600,4 +638,3 @@ export const ProductDetailPage: React.FC = () => {
     </div>
   );
 };
-

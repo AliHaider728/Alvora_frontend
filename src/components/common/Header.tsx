@@ -14,6 +14,7 @@ import {
 import { Logo } from './Logo';
 import { useStore } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/formatters';
+import { isProductVisibleOnStorefront } from '../../utils/products';
 
 export const Header: React.FC = () => {
   const { cartTotalItems, wishlist, setIsCartOpen, products, categories, settings } = useStore();
@@ -34,7 +35,7 @@ export const Header: React.FC = () => {
   const searchResults = searchQuery.trim()
     ? products
         .filter(p =>
-          p.isVisible !== false && (
+          isProductVisibleOnStorefront(p) && (
             p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
             p.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
             p.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||

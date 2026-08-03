@@ -2,62 +2,176 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   ArrowLeft,
   ArrowRight,
+  Bold,
+  Box,
   ChevronLeft,
+  CircleDollarSign,
   Image as ImageIcon,
+  ImagePlus,
+  Info,
+  Italic,
+  Link2,
+  List,
+  ListOrdered,
   Loader2,
+  PackageCheck,
   Plus,
   Save,
-  Tag,
+  Search,
+  Send,
+  ShieldCheck,
   Trash2,
-  UploadCloud
+  Truck
 } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { SeoHead } from '../../components/common/SeoHead';
 import { useStore } from '../../context/StoreContext';
 import { useToast } from '../../context/ToastContext';
 import { AGE_GROUPS } from '../../data/mockData';
-import { api } from '../../services/api';
+import { api, getLastApiError } from '../../services/api';
 import {
   AgeGroupCategory,
   DeliveryChargeType,
   Product,
-  ProductVariantGroup,
-  ProductVariantOption
+  ProductInput,
+  ProductVariantGroup
 } from '../../types';
 import { getSafeImageSrc } from '../../utils/images';
 
-type VariantDraft = {
-  name: string;
-  priceOffset: number;
-  inStock: boolean;
-};
-
-type OrderedImage = {
+type OrderedImage = { id: string; url: string };
+type VariantRow = {
   id: string;
-  url: string;
+  type: string;
+  value: string;
+  priceOffset: number;
+  stockQuantity: number;
+  sku: string;
 };
+type FieldErrors = Record<string, string>;
 
 const fieldClassName =
-  'w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 outline-none transition focus:border-rose-300 focus:ring-2 focus:ring-rose-100';
+  'w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 outline-none transition focus:border-rose-400 focus:ring-2 focus:ring-rose-100';
+const errorFieldClassName = 'border-rose-400 focus:border-rose-500 focus:ring-rose-100';
+
+const slugify = (value: string) =>
+  value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+
+const stripHtml = (value: string) =>
+  value
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
 
 const makeImage = (url: string, suffix = ''): OrderedImage => ({
   id: `${url}-${suffix || `${Date.now()}-${Math.random().toString(36).slice(2)}`}`,
   url
 });
 
-const FormSection: React.FC<{
+const FormCard: React.FC<{
   title: string;
-  description: string;
+  description?: string;
+  icon: React.ComponentType<{ className?: string }>;
   children: React.ReactNode;
-}> = ({ title, description, children }) => (
-  <section className="rounded-3xl border border-slate-200/80 bg-white p-5 shadow-xs sm:p-7">
-    <div className="mb-5 border-b border-slate-100 pb-4">
-      <h2 className="font-heading text-lg font-black text-slate-900">{title}</h2>
-      <p className="mt-1 text-xs font-medium text-slate-500">{description}</p>
+}> = ({ title, description, icon: Icon, children }) => (
+  <section className="rounded-3xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-6">
+    <div className="mb-5 flex items-start gap-3">
+      <div className="mt-0.5 rounded-xl bg-indigo-50 p-2 text-indigo-600">
+        <Icon className="h-4 w-4" />
+      </div>
+      <div>
+        <h2 className="font-heading text-base font-black text-slate-900">{title}</h2>
+        {description && <p className="mt-0.5 text-xs font-medium text-slate-500">{description}</p>}
+      </div>
     </div>
     {children}
   </section>
 );
+
+const FieldError: React.FC<{ message?: string }> = ({ message }) =>
+  message ? <p role="alert" className="mt-1.5 text-xs font-semibold text-rose-600">{message}</p> : null;
+
+const RichTextEditor: React.FC<{
+  value: string;
+  onChange: (value: string) => void;
+  error?: string;
+}> = ({ value, onChange, error }) => {
+  const editorRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (editorRef.current && editorRef.current.innerHTML !== value) {
+      editorRef.current.innerHTML = value;
+    }
+  }, [value]);
+
+  const runCommand = (command: string, commandValue?: string) => {
+    editorRef.current?.focus();
+    document.execCommand(command, false, commandValue);
+    onChange(editorRef.current?.innerHTML || '');
+  };
+
+  const addLink = () => {
+    const url = window.prompt('Enter an https:// link');
+    if (!url) return;
+    if (!/^https?:\/\//i.test(url)) {
+      window.alert('Please enter a complete http:// or https:// URL.');
+      return;
+    }
+    runCommand('createLink', url);
+  };
+
+  const toolbar = [
+    { label: 'Bold', icon: Bold, command: 'bold' },
+    { label: 'Italic', icon: Italic, command: 'italic' },
+    { label: 'Bulleted list', icon: List, command: 'insertUnorderedList' },
+    { label: 'Numbered list', icon: ListOrdered, command: 'insertOrderedList' }
+  ];
+
+  return (
+    <div className={`overflow-hidden rounded-xl border bg-white ${error ? 'border-rose-400' : 'border-slate-200'} focus-within:border-rose-400 focus-within:ring-2 focus-within:ring-rose-100`}>
+      <div className="flex flex-wrap gap-1 border-b border-slate-200 bg-slate-50 px-2 py-1.5">
+        {toolbar.map(item => (
+          <button
+            key={item.command}
+            type="button"
+            title={item.label}
+            aria-label={item.label}
+            onMouseDown={event => event.preventDefault()}
+            onClick={() => runCommand(item.command)}
+            className="rounded-lg p-2 text-slate-600 transition hover:bg-white hover:text-slate-900"
+          >
+            <item.icon className="h-4 w-4" />
+          </button>
+        ))}
+        <button
+          type="button"
+          title="Insert link"
+          aria-label="Insert link"
+          onMouseDown={event => event.preventDefault()}
+          onClick={addLink}
+          className="rounded-lg p-2 text-slate-600 transition hover:bg-white hover:text-slate-900"
+        >
+          <Link2 className="h-4 w-4" />
+        </button>
+      </div>
+      <div
+        ref={editorRef}
+        role="textbox"
+        aria-multiline="true"
+        aria-label="Detailed Description"
+        contentEditable
+        suppressContentEditableWarning
+        onInput={event => onChange(event.currentTarget.innerHTML)}
+        className="min-h-44 px-4 py-3 text-sm leading-6 text-slate-700 outline-none empty:before:text-slate-400 empty:before:content-[attr(data-placeholder)] [&_a]:text-sky-600 [&_a]:underline [&_ol]:list-decimal [&_ol]:pl-5 [&_ul]:list-disc [&_ul]:pl-5"
+        data-placeholder="Write a detailed description about this product…"
+      />
+    </div>
+  );
+};
 
 export const AdminProductFormPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -67,37 +181,53 @@ export const AdminProductFormPage: React.FC = () => {
   const initializedProductId = useRef<string | null>(null);
 
   const productFromStore = id ? products.find(product => product.id === id) : undefined;
-  const [fetchedProduct, setFetchedProduct] = useState<Product | undefined>();
+  const [fetchedProduct, setFetchedProduct] = useState<Product>();
   const [productLoadFailed, setProductLoadFailed] = useState(false);
   const editingProduct = productFromStore || fetchedProduct;
   const isEditing = Boolean(id);
 
   const [name, setName] = useState('');
-  const [price, setPrice] = useState(2999);
-  const [originalPrice, setOriginalPrice] = useState<number | undefined>(3499);
+  const [shortDescription, setShortDescription] = useState('');
+  const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [categorySlug, setCategorySlug] = useState('');
-  const [ageGroup, setAgeGroup] = useState<AgeGroupCategory>('6-8');
-  const [brand, setBrand] = useState('PlayBimboo Studios');
+  const [regularPrice, setRegularPrice] = useState(2999);
+  const [salePrice, setSalePrice] = useState<number>();
+  const [sku, setSku] = useState('');
   const [stockQuantity, setStockQuantity] = useState(25);
-  const [images, setImages] = useState<OrderedImage[]>([]);
-  const [description, setDescription] = useState(
-    'Fun and engaging toy designed for hours of creative play.'
-  );
-  const [isVisible, setIsVisible] = useState(true);
+  const [stockStatus, setStockStatus] = useState<'in_stock' | 'out_of_stock'>('in_stock');
+  const [lowStockThreshold, setLowStockThreshold] = useState<number>();
+  const [variants, setVariants] = useState<VariantRow[]>([]);
+  const [ageGroup, setAgeGroup] = useState<AgeGroupCategory>('6-8');
+  const [material, setMaterial] = useState('');
+  const [safetyInfo, setSafetyInfo] = useState('');
+  const [weight, setWeight] = useState<number>();
   const [deliveryType, setDeliveryType] = useState<DeliveryChargeType>('store_threshold');
-  const [customDeliveryFee, setCustomDeliveryFee] = useState<number | undefined>();
+  const [customDeliveryFee, setCustomDeliveryFee] = useState<number>();
+  const [status, setStatus] = useState<'draft' | 'published'>('published');
+  const [isVisible, setIsVisible] = useState(true);
+  const [isFeatured, setIsFeatured] = useState(false);
+  const [images, setImages] = useState<OrderedImage[]>([]);
   const [metaTitle, setMetaTitle] = useState('');
   const [metaDescription, setMetaDescription] = useState('');
-  const [variants, setVariants] = useState<ProductVariantGroup[]>([]);
-  const [newGroupName, setNewGroupName] = useState('');
-  const [newOptionInputs, setNewOptionInputs] = useState<Record<number, VariantDraft>>({});
-  const [isUploading, setIsUploading] = useState(false);
+  const [slug, setSlug] = useState('');
+  const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
+  const [errors, setErrors] = useState<FieldErrors>({});
+  const [uploadingTarget, setUploadingTarget] = useState<'main' | 'gallery' | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [isDirty, setIsDirty] = useState(false);
+
+  const markDirty = () => setIsDirty(true);
+  const clearError = (field: string) =>
+    setErrors(current => {
+      if (!current[field]) return current;
+      const next = { ...current };
+      delete next[field];
+      return next;
+    });
 
   useEffect(() => {
     if (!id || productFromStore || fetchedProduct || productLoadFailed) return;
-
     let isCurrent = true;
     api.getProduct(id).then(result => {
       if (!isCurrent) return;
@@ -105,18 +235,12 @@ export const AdminProductFormPage: React.FC = () => {
         setProductLoadFailed(true);
         return;
       }
-
       setFetchedProduct({
         ...(result as Product),
         id: String(result.id || result._id || id),
-        images: Array.isArray(result.images)
-          ? result.images.filter((image: unknown): image is string =>
-              typeof image === 'string' && image.trim().length > 0
-            )
-          : []
+        images: Array.isArray(result.images) ? result.images.filter(Boolean) : []
       });
     });
-
     return () => {
       isCurrent = false;
     };
@@ -130,252 +254,330 @@ export const AdminProductFormPage: React.FC = () => {
   }, [categories, category]);
 
   useEffect(() => {
-    if (!editingProduct || initializedProductId.current === editingProduct.id) return;
+    if (!slugManuallyEdited) setSlug(slugify(name));
+  }, [name, slugManuallyEdited]);
 
+  useEffect(() => {
+    if (!editingProduct || initializedProductId.current === editingProduct.id) return;
     initializedProductId.current = editingProduct.id;
     setName(editingProduct.name);
-    setPrice(editingProduct.price);
-    setOriginalPrice(editingProduct.originalPrice);
+    setShortDescription(editingProduct.shortDescription || '');
+    setDescription(editingProduct.description || '');
     setCategory(editingProduct.category);
     setCategorySlug(editingProduct.categorySlug);
-    setAgeGroup(editingProduct.ageGroup);
-    setBrand(editingProduct.brand);
+    setRegularPrice(editingProduct.originalPrice ?? editingProduct.price);
+    setSalePrice(editingProduct.originalPrice ? editingProduct.price : undefined);
+    setSku(editingProduct.sku || '');
     setStockQuantity(editingProduct.stockQuantity);
-    setImages((editingProduct.images || []).map((url, index) => makeImage(url, String(index))));
-    setDescription(editingProduct.description);
-    setIsVisible(editingProduct.isVisible !== false);
-    setDeliveryType(editingProduct.deliveryType || 'store_threshold');
+    setStockStatus(editingProduct.inStock ? 'in_stock' : 'out_of_stock');
+    setLowStockThreshold(editingProduct.lowStockThreshold);
+    setVariants(
+      (editingProduct.variants || []).flatMap(group =>
+        group.options.map(option => ({
+          id: option.id || `variant-${Date.now()}-${Math.random()}`,
+          type: group.name,
+          value: option.name,
+          priceOffset: option.priceOffset || 0,
+          stockQuantity: option.stockQuantity ?? (option.inStock === false ? 0 : editingProduct.stockQuantity),
+          sku: option.sku || ''
+        }))
+      )
+    );
+    setAgeGroup(editingProduct.ageGroup);
+    setMaterial(editingProduct.specifications?.Material || '');
+    setSafetyInfo(editingProduct.safetyInfo || '');
+    setWeight(editingProduct.weight);
+    setDeliveryType(editingProduct.deliveryType || editingProduct.deliveryChargeType || 'store_threshold');
     setCustomDeliveryFee(editingProduct.customDeliveryFee);
+    setStatus(editingProduct.status || 'published');
+    setIsVisible(editingProduct.isVisible !== false);
+    setIsFeatured(editingProduct.isFeatured === true);
+    setImages((editingProduct.images || []).map((url, index) => makeImage(url, String(index))));
     setMetaTitle(editingProduct.metaTitle || '');
     setMetaDescription(editingProduct.metaDescription || '');
-    setVariants(
-      editingProduct.variants
-        ? editingProduct.variants.map(group => ({
-            ...group,
-            options: group.options.map(option => ({ ...option }))
-          }))
-        : []
-    );
+    setSlug(editingProduct.slug);
+    setSlugManuallyEdited(true);
+    setIsDirty(false);
   }, [editingProduct]);
 
-  const handleAddVariantGroup = () => {
-    const groupName = newGroupName.trim();
-    if (!groupName) {
-      showToast('Enter a variant group name first.', 'error');
-      return;
-    }
+  useEffect(() => {
+    const warnBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (!isDirty) return;
+      event.preventDefault();
+      event.returnValue = '';
+    };
+    window.addEventListener('beforeunload', warnBeforeUnload);
+    return () => window.removeEventListener('beforeunload', warnBeforeUnload);
+  }, [isDirty]);
 
+  useEffect(() => {
+    const warnBeforeLinkNavigation = (event: MouseEvent) => {
+      if (!isDirty) return;
+      const target = event.target as HTMLElement | null;
+      const anchor = target?.closest('a');
+      if (!anchor || anchor.target === '_blank') return;
+      const destination = new URL(anchor.href, window.location.href);
+      if (destination.origin !== window.location.origin || destination.pathname === window.location.pathname) return;
+      if (!window.confirm('You have unsaved product changes. Leave this page?')) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    };
+    document.addEventListener('click', warnBeforeLinkNavigation, true);
+    return () => document.removeEventListener('click', warnBeforeLinkNavigation, true);
+  }, [isDirty]);
+
+  const cancelEditing = () => {
+    if (isDirty && !window.confirm('Discard your unsaved product changes?')) return;
+    navigate('/admin/products');
+  };
+
+  const addVariant = () => {
     setVariants(current => [
       ...current,
-      { id: `g-${Date.now()}`, name: groupName, options: [] }
+      {
+        id: `variant-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        type: '',
+        value: '',
+        priceOffset: 0,
+        stockQuantity,
+        sku: ''
+      }
     ]);
-    setNewGroupName('');
-    showToast(`Added ${groupName} variant group.`, 'success');
+    markDirty();
   };
 
-  const handleRemoveVariantGroup = (groupIndex: number) => {
-    const groupName = variants[groupIndex]?.name || 'Variant';
-    setVariants(current => current.filter((_, index) => index !== groupIndex));
-    showToast(`Removed ${groupName} variant group.`, 'info');
+  const updateVariant = (variantId: string, changes: Partial<VariantRow>) => {
+    setVariants(current => current.map(variant => (variant.id === variantId ? { ...variant, ...changes } : variant)));
+    markDirty();
+    clearError('variants');
   };
 
-  const handleAddOptionToGroup = (groupIndex: number) => {
-    const input = newOptionInputs[groupIndex];
-    const optionName = input?.name.trim();
-    if (!optionName) {
-      showToast('Enter an option name first.', 'error');
+  const removeVariant = (variantId: string) => {
+    setVariants(current => current.filter(variant => variant.id !== variantId));
+    markDirty();
+    showToast('Variant removed.', 'info');
+  };
+
+  const uploadImages = async (files: File[], target: 'main' | 'gallery') => {
+    if (files.length === 0) return;
+    const remainingGallerySlots = Math.max(0, 8 - Math.max(0, images.length - 1));
+    if (target === 'gallery' && files.length > remainingGallerySlots) {
+      showToast(`You can add ${remainingGallerySlots} more gallery image(s).`, 'error');
       return;
     }
 
-    if (variants[groupIndex]?.options.some(option => option.name === optionName)) {
-      showToast(`${optionName} already exists in this group.`, 'error');
-      return;
-    }
-
-    const newOption: ProductVariantOption = {
-      id: `v-${Date.now()}-${Math.random().toString(36).slice(2)}`,
-      name: optionName,
-      priceOffset: input.priceOffset || 0,
-      inStock: input.inStock
-    };
-
-    setVariants(current =>
-      current.map((group, index) =>
-        index === groupIndex ? { ...group, options: [...group.options, newOption] } : group
-      )
-    );
-    setNewOptionInputs(current => ({
-      ...current,
-      [groupIndex]: { name: '', priceOffset: 0, inStock: true }
-    }));
-    showToast(`Added ${optionName} option.`, 'success');
-  };
-
-  const handleRemoveOption = (groupIndex: number, optionId: string) => {
-    setVariants(current =>
-      current.map((group, index) =>
-        index === groupIndex
-          ? { ...group, options: group.options.filter(option => option.id !== optionId) }
-          : group
-      )
-    );
-    showToast('Removed variant option.', 'info');
-  };
-
-  const moveImage = (fromIndex: number, toIndex: number) => {
-    if (toIndex < 0 || toIndex >= images.length || fromIndex === toIndex) return;
-
-    setImages(current => {
-      const reordered = [...current];
-      const [movedImage] = reordered.splice(fromIndex, 1);
-      reordered.splice(toIndex, 0, movedImage);
-      return reordered;
+    const acceptedTypes = new Set(['image/jpeg', 'image/png', 'image/webp']);
+    const validFiles = files.filter(file => {
+      if (!acceptedTypes.has(file.type)) {
+        showToast(`${file.name} must be JPG, PNG, or WebP.`, 'error');
+        return false;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        showToast(`${file.name} exceeds the 5MB limit.`, 'error');
+        return false;
+      }
+      return true;
     });
-    showToast(toIndex === 0 ? 'Main thumbnail updated.' : 'Image order updated.', 'success');
+    if (validFiles.length === 0) return;
+
+    setUploadingTarget(target);
+    const uploaded: OrderedImage[] = [];
+    try {
+      for (const file of validFiles) {
+        const result = await api.uploadImage(file);
+        if (result?.url) uploaded.push(makeImage(result.url));
+      }
+      if (uploaded.length > 0) {
+        setImages(current =>
+          target === 'main'
+            ? [uploaded[0], ...current.slice(current.length > 0 ? 1 : 0)]
+            : [...current, ...uploaded]
+        );
+        markDirty();
+        clearError('images');
+        showToast(
+          target === 'main'
+            ? images.length > 0 ? 'Main image replaced.' : 'Main image uploaded.'
+            : `${uploaded.length} gallery image${uploaded.length === 1 ? '' : 's'} uploaded.`,
+          'success'
+        );
+      }
+    } catch (error) {
+      showToast(error instanceof Error ? error.message : 'Image upload failed.', 'error');
+    } finally {
+      setUploadingTarget(null);
+    }
   };
 
   const removeImage = (imageId: string) => {
     const imageIndex = images.findIndex(image => image.id === imageId);
     setImages(current => current.filter(image => image.id !== imageId));
-    showToast(
-      imageIndex === 0
-        ? 'Main thumbnail removed. The next image is now the thumbnail.'
-        : 'Gallery image removed.',
-      'info'
-    );
+    markDirty();
+    showToast(imageIndex === 0 ? 'Main image removed.' : 'Gallery image removed.', 'info');
   };
 
-  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files || []);
-    event.target.value = '';
-    if (files.length === 0) return;
+  const moveGalleryImage = (imageIndex: number, direction: -1 | 1) => {
+    const targetIndex = imageIndex + direction;
+    if (targetIndex < 1 || targetIndex >= images.length) return;
+    setImages(current => {
+      const reordered = [...current];
+      [reordered[imageIndex], reordered[targetIndex]] = [reordered[targetIndex], reordered[imageIndex]];
+      return reordered;
+    });
+    markDirty();
+    showToast('Gallery order updated.', 'success');
+  };
 
-    setIsUploading(true);
-    const uploadedImages: OrderedImage[] = [];
+  const makeMainImage = (imageIndex: number) => {
+    setImages(current => {
+      const reordered = [...current];
+      const [selected] = reordered.splice(imageIndex, 1);
+      reordered.unshift(selected);
+      return reordered;
+    });
+    markDirty();
+    showToast('Main product image updated.', 'success');
+  };
 
-    for (const file of files) {
-      if (file.size > 5 * 1024 * 1024) {
-        showToast(`${file.name} is too large. Maximum size is 5MB.`, 'error');
-        continue;
-      }
-
-      const result = await api.uploadImage(file);
-      if (result?.url) {
-        uploadedImages.push(makeImage(result.url));
-      } else {
-        showToast(`Could not upload ${file.name}. Check the upload service configuration.`, 'error');
-      }
+  const validateForm = () => {
+    const nextErrors: FieldErrors = {};
+    const normalizedSlug = slugify(slug || name);
+    const normalizedSku = sku.trim().toUpperCase();
+    if (!name.trim()) nextErrors.name = 'Product name is required.';
+    if (!category) nextErrors.category = 'Select a category.';
+    if (!stripHtml(description)) nextErrors.description = 'Detailed description is required.';
+    if (!Number.isFinite(regularPrice) || regularPrice < 0) nextErrors.regularPrice = 'Enter a non-negative regular price.';
+    if (salePrice !== undefined && (!Number.isFinite(salePrice) || salePrice < 0 || salePrice >= regularPrice)) {
+      nextErrors.salePrice = 'Sale price must be non-negative and lower than regular price.';
     }
-
-    if (uploadedImages.length > 0) {
-      setImages(current => [...current, ...uploadedImages]);
-      showToast(
-        `${uploadedImages.length} image${uploadedImages.length === 1 ? '' : 's'} uploaded.`,
-        'success'
-      );
+    if (!Number.isInteger(stockQuantity) || stockQuantity < 0) nextErrors.stockQuantity = 'Stock must be a non-negative whole number.';
+    if (lowStockThreshold !== undefined && (!Number.isInteger(lowStockThreshold) || lowStockThreshold < 0)) {
+      nextErrors.lowStockThreshold = 'Low stock alert must be a non-negative whole number.';
     }
-    setIsUploading(false);
+    if (weight !== undefined && (!Number.isFinite(weight) || weight < 0)) nextErrors.weight = 'Weight must be zero or greater.';
+    if (deliveryType === 'fixed' && (customDeliveryFee === undefined || customDeliveryFee < 0)) {
+      nextErrors.customDeliveryFee = 'Enter a non-negative custom shipping fee.';
+    }
+    if (images.length === 0) nextErrors.images = 'A main product image is required.';
+    if (!normalizedSlug) nextErrors.slug = 'URL slug is required.';
+    if (products.some(product => product.id !== id && product.slug === normalizedSlug)) {
+      nextErrors.slug = 'This URL slug is already used by another product.';
+    }
+    if (normalizedSku && products.some(product =>
+      product.id !== id &&
+      (product.sku?.toUpperCase() === normalizedSku || product.variants?.some(group =>
+        group.options.some(option => option.sku?.toUpperCase() === normalizedSku)
+      ))
+    )) nextErrors.sku = 'This SKU is already in use.';
+
+    const variantSkus = variants.map(variant => variant.sku.trim().toUpperCase()).filter(Boolean);
+    if (new Set(variantSkus).size !== variantSkus.length || (normalizedSku && variantSkus.includes(normalizedSku))) {
+      nextErrors.variants = 'Product and variant SKUs must be unique.';
+    }
+    if (variants.some(variant =>
+      !variant.type.trim() || !variant.value.trim() || variant.priceOffset < 0 || !Number.isInteger(variant.stockQuantity) || variant.stockQuantity < 0
+    )) nextErrors.variants = 'Complete every variant row with valid non-negative price and stock values.';
+    if (variantSkus.some(variantSku => products.some(product =>
+      product.id !== id &&
+      (product.sku?.toUpperCase() === variantSku || product.variants?.some(group =>
+        group.options.some(option => option.sku?.toUpperCase() === variantSku)
+      ))
+    ))) nextErrors.variants = 'One or more variant SKUs are already in use.';
+
+    setErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
+  };
+
+  const groupVariants = (): ProductVariantGroup[] => {
+    const groups = new Map<string, ProductVariantGroup>();
+    variants.forEach(variant => {
+      const type = variant.type.trim();
+      if (!groups.has(type)) groups.set(type, { id: `group-${slugify(type)}`, name: type, options: [] });
+      groups.get(type)!.options.push({
+        id: variant.id,
+        name: variant.value.trim(),
+        priceOffset: Number(variant.priceOffset),
+        stockQuantity: Number(variant.stockQuantity),
+        inStock: variant.stockQuantity > 0,
+        sku: variant.sku.trim().toUpperCase() || undefined
+      });
+    });
+    return Array.from(groups.values());
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-
-    const trimmedName = name.trim();
-    const trimmedBrand = brand.trim();
-    const trimmedDescription = description.trim();
-    if (!trimmedName || !trimmedBrand || !trimmedDescription || !category) {
-      showToast('Complete all required product fields before saving.', 'error');
-      return;
-    }
-    if (price < 0 || stockQuantity < 0) {
-      showToast('Price and stock cannot be negative.', 'error');
-      return;
-    }
-    if (deliveryType === 'fixed' && (customDeliveryFee === undefined || customDeliveryFee < 0)) {
-      showToast('Enter a valid fixed delivery fee.', 'error');
+    if (!validateForm()) {
+      showToast('Please correct the highlighted product fields.', 'error');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
 
     const selectedCategory = categories.find(item => item.name === category);
-    const resolvedCategorySlug = selectedCategory?.slug || categorySlug;
-    const slug = trimmedName
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)/g, '');
-
-    const productPayload: Omit<Product, 'id'> = {
-      name: trimmedName,
-      slug,
-      price: Number(price),
-      originalPrice: originalPrice === undefined ? undefined : Number(originalPrice),
-      discountPercent:
-        originalPrice && originalPrice > price
-          ? Math.round(((originalPrice - price) / originalPrice) * 100)
-          : 0,
+    const activePrice = salePrice === undefined ? regularPrice : salePrice;
+    const payload: ProductInput = {
+      name: name.trim(),
+      slug: slugify(slug || name),
+      sku: sku.trim(),
+      price: Number(activePrice),
+      originalPrice: salePrice === undefined ? null : Number(regularPrice),
+      discountPercent: salePrice === undefined ? 0 : Math.round(((regularPrice - salePrice) / regularPrice) * 100),
       rating: editingProduct?.rating ?? 5,
       reviewCount: editingProduct?.reviewCount ?? 0,
       category,
-      categorySlug: resolvedCategorySlug,
+      categorySlug: selectedCategory?.slug || categorySlug,
       ageGroup,
-      brand: trimmedBrand,
-      inStock: Number(stockQuantity) > 0,
+      brand: editingProduct?.brand || 'PlayBimboo',
+      inStock: stockStatus === 'in_stock' && stockQuantity > 0,
       stockQuantity: Number(stockQuantity),
+      lowStockThreshold: lowStockThreshold ?? null,
       images: images.map(image => image.url),
-      description: trimmedDescription,
-      isVisible,
-      deliveryType,
-      customDeliveryFee: deliveryType === 'fixed' ? customDeliveryFee : undefined,
-      variants,
-      features: editingProduct?.features || [
-        'Durable BPA-free plastic construction',
-        'Encourages imaginative play'
-      ],
-      safetyInfo: editingProduct?.safetyInfo || 'Non-toxic child safe materials.',
-      specifications: editingProduct?.specifications || { Material: 'ABS Plastic' },
-      isFeatured: editingProduct?.isFeatured,
+      shortDescription: shortDescription.trim(),
+      description,
+      features: editingProduct?.features || [],
+      safetyInfo: safetyInfo.trim(),
+      specifications: {
+        ...(editingProduct?.specifications || {}),
+        Material: material.trim()
+      },
+      isFeatured,
       isNewArrival: editingProduct?.isNewArrival,
       isBestseller: editingProduct?.isBestseller,
-      tags: editingProduct?.tags?.length
-        ? editingProduct.tags
-        : ['toy', resolvedCategorySlug].filter(Boolean),
-      metaTitle: metaTitle.trim() || `${trimmedName} - PlayBimboo`,
-      metaDescription: metaDescription.trim() || trimmedDescription.slice(0, 150)
+      isVisible,
+      status,
+      weight: weight ?? null,
+      tags: editingProduct?.tags || [],
+      variants: groupVariants(),
+      deliveryType,
+      customDeliveryFee: deliveryType === 'fixed' ? customDeliveryFee ?? null : null,
+      metaTitle: metaTitle.trim(),
+      metaDescription: metaDescription.trim()
     };
 
     setIsSaving(true);
-    const savedProduct = id
-      ? await updateProduct(id, productPayload)
-      : await addProduct(productPayload);
+    const savedProduct = id ? await updateProduct(id, payload) : await addProduct(payload);
     setIsSaving(false);
-
     if (!savedProduct) {
-      showToast(`Could not ${isEditing ? 'update' : 'add'} the product. Please try again.`, 'error');
+      const apiError = getLastApiError() || `Could not ${isEditing ? 'update' : 'create'} the product.`;
+      if (/slug/i.test(apiError)) setErrors(current => ({ ...current, slug: apiError }));
+      if (/sku/i.test(apiError)) setErrors(current => ({ ...current, sku: apiError }));
+      showToast(apiError, 'error');
       return;
     }
 
-    showToast(
-      `${isEditing ? 'Updated' : 'Added'} product ${savedProduct.name}.`,
-      'success'
-    );
+    setIsDirty(false);
+    showToast(`${isEditing ? 'Updated' : 'Created'} ${savedProduct.name} successfully.`, 'success');
     navigate('/admin/products');
   };
 
   if (isEditing && productLoadFailed) {
     return (
-      <div className="flex min-h-[50vh] items-center justify-center rounded-3xl border border-slate-200 bg-white p-6">
-        <div className="text-center">
-          <ImageIcon className="mx-auto h-8 w-8 text-slate-300" />
+      <div className="flex min-h-[50vh] items-center justify-center rounded-3xl border border-slate-200 bg-white p-6 text-center">
+        <div>
+          <Box className="mx-auto h-9 w-9 text-slate-300" />
           <h1 className="mt-3 font-heading text-lg font-black text-slate-900">Product not found</h1>
-          <p className="mt-1 text-xs font-medium text-slate-500">
-            This product may have been removed or the edit link is invalid.
-          </p>
-          <button
-            type="button"
-            onClick={() => navigate('/admin/products')}
-            className="mt-5 rounded-xl bg-slate-900 px-4 py-2.5 text-xs font-bold text-white"
-          >
-            Back to Products
-          </button>
+          <button onClick={() => navigate('/admin/products')} className="mt-5 rounded-xl bg-slate-900 px-4 py-2.5 text-xs font-bold text-white">Back to Products</button>
         </div>
       </div>
     );
@@ -384,490 +586,179 @@ export const AdminProductFormPage: React.FC = () => {
   if (isEditing && !editingProduct) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center rounded-3xl border border-slate-200 bg-white">
-        <div className="text-center">
-          <Loader2 className="mx-auto h-7 w-7 animate-spin text-rose-500" />
-          <p className="mt-3 text-sm font-bold text-slate-600">Loading product details…</p>
-        </div>
+        <div className="text-center"><Loader2 className="mx-auto h-7 w-7 animate-spin text-rose-500" /><p className="mt-3 text-sm font-bold text-slate-600">Loading product details…</p></div>
       </div>
     );
   }
 
-  return (
-    <div className="mx-auto max-w-6xl space-y-6 pb-10 font-sans">
-      <SeoHead title={isEditing ? 'Edit Product' : 'Add Product'} />
+  const inputClass = (field: string) => `${fieldClassName} ${errors[field] ? errorFieldClassName : ''}`;
+  const galleryImages = images.slice(1);
 
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <button
-            type="button"
-            onClick={() => navigate('/admin/products')}
-            className="mb-2 inline-flex items-center gap-1 text-xs font-bold text-slate-500 transition hover:text-rose-600"
-          >
-            <ChevronLeft className="h-4 w-4" />
-            Back to Products
-          </button>
-          <h1 className="font-heading text-2xl font-black text-slate-900 sm:text-3xl">
-            {isEditing ? 'Edit Toy Product' : 'Add New Toy Product'}
-          </h1>
-          <p className="mt-1 text-xs font-medium text-slate-500">
-            {isEditing
-              ? 'Update product details, image order, variants, delivery, and search metadata.'
-              : 'Create a complete product listing for the PlayBimboo storefront.'}
-          </p>
-        </div>
+  return (
+    <div className="mx-auto max-w-[1440px] space-y-6 pb-8 font-sans">
+      <SeoHead title={isEditing ? 'Edit Product' : 'Add Product'} />
+      <div>
+        <button type="button" onClick={cancelEditing} className="mb-2 inline-flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-rose-600">
+          <ChevronLeft className="h-4 w-4" /> Back to Products
+        </button>
+        <h1 className="font-heading text-2xl font-black text-slate-900 sm:text-3xl">{isEditing ? 'Edit Toy Product' : 'Add New Toy Product'}</h1>
+        <p className="mt-1 text-xs font-medium text-slate-500">{isEditing ? 'Update this product and publish changes to the PlayBimboo storefront.' : 'Create and publish a new product on the PlayBimboo storefront.'}</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <FormSection title="Basic Info" description="Core storefront information and publishing status.">
-          <div className="grid gap-5 sm:grid-cols-2">
-            <label className="sm:col-span-2">
-              <span className="mb-1.5 block text-xs font-bold text-slate-700">Product Name *</span>
-              <input
-                type="text"
-                required
-                value={name}
-                onChange={event => setName(event.target.value)}
-                className={fieldClassName}
-              />
-            </label>
-            <label>
-              <span className="mb-1.5 block text-xs font-bold text-slate-700">Brand Name *</span>
-              <input
-                type="text"
-                required
-                value={brand}
-                onChange={event => setBrand(event.target.value)}
-                className={fieldClassName}
-              />
-            </label>
-            <label>
-              <span className="mb-1.5 block text-xs font-bold text-slate-700">Storefront Visibility</span>
-              <select
-                value={isVisible ? 'true' : 'false'}
-                onChange={event => setIsVisible(event.target.value === 'true')}
-                className={fieldClassName}
-              >
-                <option value="true">Visible to Customers</option>
-                <option value="false">Hidden / Draft</option>
-              </select>
-            </label>
-            <label className="sm:col-span-2">
-              <span className="mb-1.5 block text-xs font-bold text-slate-700">Description *</span>
-              <textarea
-                rows={5}
-                required
-                value={description}
-                onChange={event => setDescription(event.target.value)}
-                className={fieldClassName}
-              />
-            </label>
-          </div>
-        </FormSection>
-
-        <FormSection
-          title="Images"
-          description="The first image is always the main product thumbnail. Reorder or remove images before saving."
-        >
-          <div className="space-y-6">
-            <div>
-              <h3 className="mb-3 text-xs font-black uppercase tracking-wider text-rose-600">
-                Main Thumbnail
-              </h3>
-              {images[0] ? (
-                <div className="grid max-w-xl gap-4 rounded-2xl border-2 border-rose-200 bg-rose-50/40 p-4 sm:grid-cols-[160px_1fr]">
-                  <img
-                    src={getSafeImageSrc(images[0].url)}
-                    alt={`${name || 'Product'} main thumbnail`}
-                    className="aspect-square w-full rounded-xl bg-white object-cover"
-                  />
-                  <div className="flex flex-col justify-between gap-4">
-                    <div>
-                      <span className="inline-flex rounded-full bg-rose-500 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-white">
-                        Storefront Thumbnail
-                      </span>
-                      <p className="mt-2 text-xs leading-relaxed text-slate-600">
-                        This image appears first on product cards and product detail pages.
-                      </p>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      <button
-                        type="button"
-                        disabled={images.length < 2}
-                        onClick={() => moveImage(0, 1)}
-                        className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 disabled:cursor-not-allowed disabled:opacity-40"
-                      >
-                        <ArrowRight className="h-3.5 w-3.5" /> Move to Gallery
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => removeImage(images[0].id)}
-                        className="inline-flex items-center gap-1 rounded-lg border border-rose-200 bg-white px-3 py-2 text-xs font-bold text-rose-600"
-                      >
-                        <Trash2 className="h-3.5 w-3.5" /> Remove
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex max-w-xl items-center gap-3 rounded-2xl border-2 border-dashed border-slate-200 p-5 text-slate-500">
-                  <ImageIcon className="h-7 w-7" />
-                  <p className="text-xs font-semibold">Upload an image to create the main thumbnail.</p>
-                </div>
-              )}
-            </div>
-
-            <div>
-              <h3 className="mb-3 text-xs font-black uppercase tracking-wider text-slate-600">
-                Additional Gallery Images
-              </h3>
-              {images.length > 1 ? (
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {images.slice(1).map((image, galleryIndex) => {
-                    const imageIndex = galleryIndex + 1;
-                    return (
-                      <article key={image.id} className="rounded-2xl border border-slate-200 p-3">
-                        <img
-                          src={getSafeImageSrc(image.url)}
-                          alt={`${name || 'Product'} gallery ${imageIndex}`}
-                          className="aspect-video w-full rounded-xl bg-slate-100 object-cover"
-                        />
-                        <div className="mt-3 flex flex-wrap items-center gap-1.5">
-                          <button
-                            type="button"
-                            onClick={() => moveImage(imageIndex, 0)}
-                            className="rounded-lg bg-rose-50 px-2.5 py-1.5 text-[11px] font-bold text-rose-600"
-                          >
-                            Make Thumbnail
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => moveImage(imageIndex, imageIndex - 1)}
-                            aria-label={`Move gallery image ${imageIndex} left`}
-                            className="rounded-lg border border-slate-200 p-1.5 text-slate-600"
-                          >
-                            <ArrowLeft className="h-3.5 w-3.5" />
-                          </button>
-                          <button
-                            type="button"
-                            disabled={imageIndex === images.length - 1}
-                            onClick={() => moveImage(imageIndex, imageIndex + 1)}
-                            aria-label={`Move gallery image ${imageIndex} right`}
-                            className="rounded-lg border border-slate-200 p-1.5 text-slate-600 disabled:cursor-not-allowed disabled:opacity-40"
-                          >
-                            <ArrowRight className="h-3.5 w-3.5" />
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => removeImage(image.id)}
-                            aria-label={`Remove gallery image ${imageIndex}`}
-                            className="ml-auto rounded-lg border border-rose-200 p-1.5 text-rose-600"
-                          >
-                            <Trash2 className="h-3.5 w-3.5" />
-                          </button>
-                        </div>
-                      </article>
-                    );
-                  })}
-                </div>
-              ) : (
-                <p className="text-xs font-medium text-slate-400">No additional gallery images yet.</p>
-              )}
-            </div>
-
-            <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-slate-100 px-4 py-2.5 text-xs font-bold text-slate-700 transition hover:bg-slate-200">
-              {isUploading ? (
-                <Loader2 className="h-4 w-4 animate-spin text-rose-500" />
-              ) : (
-                <UploadCloud className="h-4 w-4" />
-              )}
-              <span>{isUploading ? 'Uploading…' : 'Upload Images (Max 5MB each)'}</span>
-              <input
-                type="file"
-                multiple
-                disabled={isUploading}
-                accept="image/jpeg,image/png,image/webp"
-                className="hidden"
-                onChange={handleImageUpload}
-              />
-            </label>
-          </div>
-        </FormSection>
-
-        <FormSection title="Category & Age" description="Choose where customers discover this product.">
-          <div className="grid gap-5 sm:grid-cols-2">
-            <label>
-              <span className="mb-1.5 block text-xs font-bold text-slate-700">Category *</span>
-              <select
-                required
-                value={category}
-                onChange={event => {
-                  setCategory(event.target.value);
-                  const selected = categories.find(item => item.name === event.target.value);
-                  if (selected) setCategorySlug(selected.slug);
-                }}
-                className={fieldClassName}
-              >
-                {categories.map(item => (
-                  <option key={item.id || item.slug} value={item.name}>
-                    {item.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label>
-              <span className="mb-1.5 block text-xs font-bold text-slate-700">Age Recommendation</span>
-              <select
-                value={ageGroup}
-                onChange={event => setAgeGroup(event.target.value as AgeGroupCategory)}
-                className={fieldClassName}
-              >
-                {AGE_GROUPS.map(group => (
-                  <option key={group.id} value={group.id}>
-                    {group.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-        </FormSection>
-
-        <FormSection title="Pricing & Stock" description="Set PKR pricing and available inventory.">
-          <div className="grid gap-5 sm:grid-cols-3">
-            <label>
-              <span className="mb-1.5 block text-xs font-bold text-slate-700">Price (Rs.) *</span>
-              <input
-                type="number"
-                min="0"
-                step="1"
-                required
-                value={price}
-                onChange={event => setPrice(Number(event.target.value))}
-                className={fieldClassName}
-              />
-            </label>
-            <label>
-              <span className="mb-1.5 block text-xs font-bold text-slate-700">Original Price (Rs.)</span>
-              <input
-                type="number"
-                min="0"
-                step="1"
-                value={originalPrice ?? ''}
-                onChange={event =>
-                  setOriginalPrice(event.target.value ? Number(event.target.value) : undefined)
-                }
-                className={fieldClassName}
-              />
-            </label>
-            <label>
-              <span className="mb-1.5 block text-xs font-bold text-slate-700">Stock Quantity *</span>
-              <input
-                type="number"
-                min="0"
-                required
-                value={stockQuantity}
-                onChange={event => setStockQuantity(Number(event.target.value))}
-                className={fieldClassName}
-              />
-            </label>
-          </div>
-        </FormSection>
-
-        <FormSection title="Variants" description="Add optional groups such as Color, Size, or Pack.">
-          <div className="space-y-4">
-            <div className="flex flex-col gap-2 sm:flex-row">
-              <input
-                type="text"
-                placeholder="Variant group name (e.g. Color)"
-                value={newGroupName}
-                onChange={event => setNewGroupName(event.target.value)}
-                className={fieldClassName}
-              />
-              <button
-                type="button"
-                onClick={handleAddVariantGroup}
-                className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 text-xs font-bold text-white"
-              >
-                <Plus className="h-4 w-4" /> Add Group
-              </button>
-            </div>
-
-            {variants.length === 0 && (
-              <p className="rounded-xl bg-slate-50 p-4 text-xs font-medium text-slate-500">
-                No variants configured. Customers will purchase the standard product.
-              </p>
-            )}
-
-            {variants.map((group, groupIndex) => (
-              <div key={group.id || group.name} className="space-y-3 rounded-2xl border border-slate-200 p-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-rose-600">
-                    <Tag className="h-4 w-4" /> {group.name}
-                  </h3>
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveVariantGroup(groupIndex)}
-                    className="text-xs font-bold text-rose-600"
-                  >
-                    Remove Group
-                  </button>
-                </div>
-
-                <div className="flex flex-wrap gap-2">
-                  {group.options.map(option => (
-                    <span
-                      key={option.id || `${group.id}-${option.name}`}
-                      className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-bold text-slate-700"
-                    >
-                      {option.name}
-                      {option.priceOffset ? ` (+Rs. ${option.priceOffset})` : ''}
-                      {!option.inStock ? ' — Out of stock' : ''}
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveOption(groupIndex, option.id)}
-                        aria-label={`Remove ${option.name}`}
-                        className="text-rose-500"
-                      >
-                        ×
-                      </button>
-                    </span>
-                  ))}
-                </div>
-
-                <div className="grid gap-2 border-t border-slate-100 pt-3 sm:grid-cols-[1fr_120px_auto_auto] sm:items-center">
-                  <input
-                    type="text"
-                    placeholder={`${group.name} option`}
-                    value={newOptionInputs[groupIndex]?.name || ''}
-                    onChange={event =>
-                      setNewOptionInputs(current => ({
-                        ...current,
-                        [groupIndex]: {
-                          ...(current[groupIndex] || { priceOffset: 0, inStock: true }),
-                          name: event.target.value
-                        }
-                      }))
-                    }
-                    className={fieldClassName}
-                  />
-                  <input
-                    type="number"
-                    placeholder="+Rs."
-                    value={newOptionInputs[groupIndex]?.priceOffset || ''}
-                    onChange={event =>
-                      setNewOptionInputs(current => ({
-                        ...current,
-                        [groupIndex]: {
-                          ...(current[groupIndex] || { name: '', inStock: true }),
-                          priceOffset: Number(event.target.value)
-                        }
-                      }))
-                    }
-                    className={fieldClassName}
-                  />
-                  <label className="flex items-center gap-2 text-xs font-bold text-slate-600">
-                    <input
-                      type="checkbox"
-                      checked={newOptionInputs[groupIndex]?.inStock ?? true}
-                      onChange={event =>
-                        setNewOptionInputs(current => ({
-                          ...current,
-                          [groupIndex]: {
-                            ...(current[groupIndex] || { name: '', priceOffset: 0 }),
-                            inStock: event.target.checked
-                          }
-                        }))
-                      }
-                    />
-                    In Stock
-                  </label>
-                  <button
-                    type="button"
-                    onClick={() => handleAddOptionToGroup(groupIndex)}
-                    className="rounded-xl bg-rose-500 px-4 py-2.5 text-xs font-bold text-white"
-                  >
-                    Add Option
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </FormSection>
-
-        <FormSection title="Delivery Charges" description="Choose how delivery is calculated for this product.">
-          <div className="grid gap-5 sm:grid-cols-2">
-            <label>
-              <span className="mb-1.5 block text-xs font-bold text-slate-700">Delivery Charge Model</span>
-              <select
-                value={deliveryType}
-                onChange={event => setDeliveryType(event.target.value as DeliveryChargeType)}
-                className={fieldClassName}
-              >
-                <option value="store_threshold">Default Store Shipping Fee</option>
-                <option value="category">Category-Based Charge</option>
-                <option value="fixed">Fixed Custom Fee</option>
-                <option value="free">Always Free Delivery</option>
-              </select>
-            </label>
-            {deliveryType === 'fixed' && (
-              <label>
-                <span className="mb-1.5 block text-xs font-bold text-slate-700">Custom Delivery Fee (Rs.) *</span>
-                <input
-                  type="number"
-                  min="0"
-                  required
-                  value={customDeliveryFee ?? ''}
-                  onChange={event =>
-                    setCustomDeliveryFee(event.target.value ? Number(event.target.value) : undefined)
-                  }
-                  className={fieldClassName}
-                />
+      <form onSubmit={handleSubmit} className="grid min-w-0 grid-cols-1 items-start gap-6 xl:grid-cols-[minmax(0,1.65fr)_minmax(320px,0.9fr)]">
+        <div className="min-w-0 space-y-6">
+          <FormCard title="Basic Information" icon={Info}>
+            <div className="grid gap-5 sm:grid-cols-2">
+              <label className="sm:col-span-2">
+                <span className="mb-1.5 block text-xs font-bold text-slate-700">Product Name <span className="text-rose-500">*</span></span>
+                <input value={name} onChange={event => { setName(event.target.value); markDirty(); clearError('name'); }} className={inputClass('name')} placeholder="e.g. Magnetic Building Blocks 64 PCS" />
+                <FieldError message={errors.name} />
               </label>
-            )}
-          </div>
-        </FormSection>
+              <label>
+                <span className="mb-1.5 block text-xs font-bold text-slate-700">Short Description</span>
+                <input value={shortDescription} maxLength={300} onChange={event => { setShortDescription(event.target.value); markDirty(); }} className={fieldClassName} placeholder="Short summary for product listings" />
+                <span className="mt-1 block text-right text-[10px] text-slate-400">{shortDescription.length}/300</span>
+              </label>
+              <label>
+                <span className="mb-1.5 block text-xs font-bold text-slate-700">Category <span className="text-rose-500">*</span></span>
+                <select value={category} onChange={event => { setCategory(event.target.value); const selected = categories.find(item => item.name === event.target.value); if (selected) setCategorySlug(selected.slug); markDirty(); clearError('category'); }} className={inputClass('category')}>
+                  <option value="">Select category</option>
+                  {categories.map(item => <option key={item.id || item.slug} value={item.name}>{item.name}</option>)}
+                </select>
+                <FieldError message={errors.category} />
+              </label>
+              <div className="sm:col-span-2">
+                <span className="mb-1.5 block text-xs font-bold text-slate-700">Detailed Description <span className="text-rose-500">*</span></span>
+                <RichTextEditor value={description} error={errors.description} onChange={value => { setDescription(value); markDirty(); clearError('description'); }} />
+                <FieldError message={errors.description} />
+              </div>
+            </div>
+          </FormCard>
 
-        <FormSection title="SEO" description="Optional search title and description for this product page.">
-          <div className="grid gap-5">
-            <label>
-              <span className="mb-1.5 block text-xs font-bold text-slate-700">SEO Meta Title</span>
-              <input
-                type="text"
-                value={metaTitle}
-                onChange={event => setMetaTitle(event.target.value)}
-                placeholder={name ? `${name} - PlayBimboo` : 'Product title for search results'}
-                className={fieldClassName}
-              />
-            </label>
-            <label>
-              <span className="mb-1.5 block text-xs font-bold text-slate-700">SEO Meta Description</span>
-              <textarea
-                rows={3}
-                value={metaDescription}
-                onChange={event => setMetaDescription(event.target.value)}
-                placeholder="Short product summary for search results"
-                className={fieldClassName}
-              />
-            </label>
-          </div>
-        </FormSection>
+          <FormCard title="Pricing & Stock" icon={CircleDollarSign}>
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              <label>
+                <span className="mb-1.5 block text-xs font-bold text-slate-700">Regular Price (Rs.) <span className="text-rose-500">*</span></span>
+                <input type="number" min="0" step="1" value={regularPrice} onChange={event => { setRegularPrice(Number(event.target.value)); markDirty(); clearError('regularPrice'); }} className={inputClass('regularPrice')} />
+                <FieldError message={errors.regularPrice} />
+              </label>
+              <label>
+                <span className="mb-1.5 block text-xs font-bold text-slate-700">Sale Price (Rs.)</span>
+                <input type="number" min="0" step="1" value={salePrice ?? ''} onChange={event => { setSalePrice(event.target.value === '' ? undefined : Number(event.target.value)); markDirty(); clearError('salePrice'); }} className={inputClass('salePrice')} placeholder="Leave empty if not on sale" />
+                <FieldError message={errors.salePrice} />
+              </label>
+              <label>
+                <span className="mb-1.5 block text-xs font-bold text-slate-700">SKU</span>
+                <input value={sku} onChange={event => { setSku(event.target.value.toUpperCase()); markDirty(); clearError('sku'); }} className={inputClass('sku')} placeholder="e.g. PB-064" />
+                <FieldError message={errors.sku} />
+              </label>
+              <label>
+                <span className="mb-1.5 block text-xs font-bold text-slate-700">Stock Quantity <span className="text-rose-500">*</span></span>
+                <input type="number" min="0" step="1" value={stockQuantity} onChange={event => { setStockQuantity(Number(event.target.value)); markDirty(); clearError('stockQuantity'); }} className={inputClass('stockQuantity')} />
+                <FieldError message={errors.stockQuantity} />
+              </label>
+              <label>
+                <span className="mb-1.5 block text-xs font-bold text-slate-700">Stock Status</span>
+                <select value={stockStatus} onChange={event => { setStockStatus(event.target.value as 'in_stock' | 'out_of_stock'); markDirty(); }} className={fieldClassName}>
+                  <option value="in_stock">In Stock</option><option value="out_of_stock">Out of Stock</option>
+                </select>
+              </label>
+              <label>
+                <span className="mb-1.5 block text-xs font-bold text-slate-700">Low Stock Alert</span>
+                <input type="number" min="0" step="1" value={lowStockThreshold ?? ''} onChange={event => { setLowStockThreshold(event.target.value === '' ? undefined : Number(event.target.value)); markDirty(); clearError('lowStockThreshold'); }} className={inputClass('lowStockThreshold')} placeholder="e.g. 5" />
+                <FieldError message={errors.lowStockThreshold} />
+              </label>
+            </div>
+          </FormCard>
 
-        <div className="sticky bottom-4 z-10 flex flex-col-reverse gap-3 rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-xl backdrop-blur-sm sm:flex-row sm:justify-end">
-          <button
-            type="button"
-            disabled={isSaving}
-            onClick={() => navigate('/admin/products')}
-            className="rounded-xl bg-slate-100 px-5 py-3 text-xs font-bold text-slate-700 disabled:opacity-50"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            disabled={isSaving || isUploading}
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-rose-500 px-6 py-3 text-xs font-bold text-white shadow-md transition hover:bg-rose-600 disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-            {isSaving ? 'Saving…' : 'Save Toy Product'}
-          </button>
+          <FormCard title="Variants (Optional)" description="Add simple options such as Pieces, Color, or Size." icon={PackageCheck}>
+            <div className="space-y-3">
+              {variants.map(variant => (
+                <div key={variant.id} className="grid min-w-0 gap-2 rounded-2xl border border-slate-200 bg-slate-50 p-3 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_110px_90px_120px_40px] lg:items-end">
+                  <label><span className="mb-1 block text-[10px] font-bold text-slate-500">Variant Type</span><input value={variant.type} onChange={event => updateVariant(variant.id, { type: event.target.value })} className={fieldClassName} placeholder="Color" /></label>
+                  <label><span className="mb-1 block text-[10px] font-bold text-slate-500">Variant Value</span><input value={variant.value} onChange={event => updateVariant(variant.id, { value: event.target.value })} className={fieldClassName} placeholder="Red" /></label>
+                  <label><span className="mb-1 block text-[10px] font-bold text-slate-500">Price +Rs.</span><input type="number" min="0" value={variant.priceOffset} onChange={event => updateVariant(variant.id, { priceOffset: Number(event.target.value) })} className={fieldClassName} /></label>
+                  <label><span className="mb-1 block text-[10px] font-bold text-slate-500">Stock</span><input type="number" min="0" step="1" value={variant.stockQuantity} onChange={event => updateVariant(variant.id, { stockQuantity: Number(event.target.value) })} className={fieldClassName} /></label>
+                  <label><span className="mb-1 block text-[10px] font-bold text-slate-500">SKU</span><input value={variant.sku} onChange={event => updateVariant(variant.id, { sku: event.target.value.toUpperCase() })} className={fieldClassName} placeholder="Optional" /></label>
+                  <button type="button" onClick={() => removeVariant(variant.id)} aria-label={`Remove ${variant.value || 'variant'}`} className="flex h-10 items-center justify-center rounded-xl border border-rose-200 bg-white text-rose-500 hover:bg-rose-50"><Trash2 className="h-4 w-4" /></button>
+                </div>
+              ))}
+              {variants.length === 0 && <p className="rounded-2xl border border-dashed border-slate-200 p-5 text-center text-xs font-medium text-slate-400">No variants added. The standard product price and stock will be used.</p>}
+              <FieldError message={errors.variants} />
+              <button type="button" onClick={addVariant} className="inline-flex items-center gap-2 rounded-xl border border-indigo-300 bg-white px-4 py-2.5 text-xs font-bold text-indigo-600 hover:bg-indigo-50"><Plus className="h-4 w-4" /> Add Variant</button>
+            </div>
+          </FormCard>
+
+          <FormCard title="Delivery & Shipping" icon={Truck}>
+            <div className="grid gap-5 sm:grid-cols-2">
+              <label>
+                <span className="mb-1.5 block text-xs font-bold text-slate-700">Weight (kg)</span>
+                <input type="number" min="0" step="0.01" value={weight ?? ''} onChange={event => { setWeight(event.target.value === '' ? undefined : Number(event.target.value)); markDirty(); clearError('weight'); }} className={inputClass('weight')} placeholder="e.g. 1.20" />
+                <FieldError message={errors.weight} />
+              </label>
+              <label>
+                <span className="mb-1.5 block text-xs font-bold text-slate-700">Delivery Charge Model</span>
+                <select value={deliveryType} onChange={event => { setDeliveryType(event.target.value as DeliveryChargeType); markDirty(); clearError('customDeliveryFee'); }} className={fieldClassName}>
+                  <option value="store_threshold">Default Store Shipping Fee</option><option value="free">Free Shipping</option><option value="fixed">Custom Shipping Fee</option>
+                </select>
+                <span className="mt-1.5 block text-[10px] text-slate-400">Product overrides take priority over the store-wide threshold.</span>
+              </label>
+              {deliveryType === 'fixed' && <label className="sm:col-span-2"><span className="mb-1.5 block text-xs font-bold text-slate-700">Custom Shipping Fee (Rs.) <span className="text-rose-500">*</span></span><input type="number" min="0" step="1" value={customDeliveryFee ?? ''} onChange={event => { setCustomDeliveryFee(event.target.value === '' ? undefined : Number(event.target.value)); markDirty(); clearError('customDeliveryFee'); }} className={inputClass('customDeliveryFee')} /><FieldError message={errors.customDeliveryFee} /></label>}
+            </div>
+          </FormCard>
+        </div>
+
+        <aside className="min-w-0 space-y-6 xl:sticky xl:top-20">
+          <FormCard title="Publish" icon={Send}>
+            <div className="space-y-4">
+              <label><span className="mb-1.5 block text-xs font-bold text-slate-700">Status</span><select value={status} onChange={event => { setStatus(event.target.value as 'draft' | 'published'); markDirty(); }} className={fieldClassName}><option value="published">Published</option><option value="draft">Draft</option></select></label>
+              <label><span className="mb-1.5 block text-xs font-bold text-slate-700">Visibility</span><select value={isVisible ? 'visible' : 'hidden'} onChange={event => { setIsVisible(event.target.value === 'visible'); markDirty(); }} className={fieldClassName}><option value="visible">Visible to Customers</option><option value="hidden">Hidden</option></select></label>
+              <div className="flex items-center justify-between gap-4 border-t border-slate-100 pt-4">
+                <div><span className="block text-xs font-bold text-slate-700">Featured Product</span><span className="text-[10px] text-slate-400">Show in the homepage featured section</span></div>
+                <button type="button" role="switch" aria-checked={isFeatured} onClick={() => { setIsFeatured(value => !value); markDirty(); }} className={`relative h-6 w-11 rounded-full transition ${isFeatured ? 'bg-rose-500' : 'bg-slate-200'}`}><span className={`absolute top-1 h-4 w-4 rounded-full bg-white shadow transition ${isFeatured ? 'left-6' : 'left-1'}`} /></button>
+              </div>
+            </div>
+          </FormCard>
+
+          <FormCard title="Product Images" icon={ImagePlus}>
+            <div className="space-y-5">
+              <div>
+                <span className="mb-2 block text-xs font-bold text-slate-700">Main Product Image <span className="text-rose-500">*</span></span>
+                {images[0] ? (
+                  <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-50"><img src={getSafeImageSrc(images[0].url)} alt="Main product preview" className="aspect-[4/3] w-full object-cover" /><div className="absolute inset-x-0 bottom-0 flex gap-2 bg-slate-900/70 p-2 backdrop-blur"><label className="flex flex-1 cursor-pointer items-center justify-center gap-1 rounded-lg bg-white px-2 py-2 text-[10px] font-bold text-slate-700"><ImagePlus className="h-3.5 w-3.5" /> Replace<input type="file" className="hidden" accept="image/jpeg,image/png,image/webp" disabled={uploadingTarget !== null} onChange={event => { void uploadImages(Array.from(event.target.files || []), 'main'); event.target.value = ''; }} /></label><button type="button" onClick={() => removeImage(images[0].id)} className="rounded-lg bg-white px-2.5 text-rose-500" aria-label="Remove main image"><Trash2 className="h-4 w-4" /></button></div></div>
+                ) : (
+                  <label className={`flex aspect-[4/3] cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed bg-slate-50 text-center transition hover:border-indigo-300 hover:bg-indigo-50/40 ${errors.images ? 'border-rose-400' : 'border-slate-200'}`}><input type="file" className="hidden" accept="image/jpeg,image/png,image/webp" disabled={uploadingTarget !== null} onChange={event => { void uploadImages(Array.from(event.target.files || []), 'main'); event.target.value = ''; }} />{uploadingTarget === 'main' ? <Loader2 className="h-7 w-7 animate-spin text-rose-500" /> : <ImageIcon className="h-7 w-7 text-indigo-500" />}<span className="mt-2 text-xs font-bold text-slate-600">Upload main image</span><span className="mt-1 text-[10px] text-slate-400">JPG, PNG, WebP · Max 5MB</span></label>
+                )}
+                <FieldError message={errors.images} />
+              </div>
+              <div>
+                <div className="mb-2 flex items-center justify-between"><span className="text-xs font-bold text-slate-700">Gallery Images</span><span className="text-[10px] text-slate-400">{galleryImages.length}/8</span></div>
+                {galleryImages.length > 0 && <div className="mb-3 grid grid-cols-2 gap-2">{galleryImages.map((image, galleryIndex) => { const imageIndex = galleryIndex + 1; return <div key={image.id} className="overflow-hidden rounded-xl border border-slate-200 bg-slate-50"><img src={getSafeImageSrc(image.url)} alt={`Gallery preview ${imageIndex}`} className="aspect-square w-full object-cover" /><div className="flex items-center justify-between gap-1 p-1.5"><button type="button" title="Make main image" onClick={() => makeMainImage(imageIndex)} className="rounded-md px-1.5 py-1 text-[9px] font-bold text-indigo-600 hover:bg-indigo-50">Main</button><button type="button" disabled={galleryIndex === 0} onClick={() => moveGalleryImage(imageIndex, -1)} className="rounded-md p-1 text-slate-500 disabled:opacity-30" aria-label="Move image left"><ArrowLeft className="h-3 w-3" /></button><button type="button" disabled={galleryIndex === galleryImages.length - 1} onClick={() => moveGalleryImage(imageIndex, 1)} className="rounded-md p-1 text-slate-500 disabled:opacity-30" aria-label="Move image right"><ArrowRight className="h-3 w-3" /></button><button type="button" onClick={() => removeImage(image.id)} className="rounded-md p-1 text-rose-500" aria-label="Remove gallery image"><Trash2 className="h-3 w-3" /></button></div></div>; })}</div>}
+                <label className={`flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-slate-300 px-3 py-3 text-xs font-bold text-slate-600 hover:border-indigo-300 hover:bg-indigo-50/40 ${galleryImages.length >= 8 ? 'pointer-events-none opacity-50' : ''}`}>{uploadingTarget === 'gallery' ? <Loader2 className="h-4 w-4 animate-spin text-rose-500" /> : <ImagePlus className="h-4 w-4 text-indigo-500" />} Add Gallery Images<input type="file" multiple className="hidden" accept="image/jpeg,image/png,image/webp" disabled={uploadingTarget !== null || galleryImages.length >= 8} onChange={event => { void uploadImages(Array.from(event.target.files || []), 'gallery'); event.target.value = ''; }} /></label>
+              </div>
+            </div>
+          </FormCard>
+
+          <FormCard title="Product Details" icon={Box}>
+            <div className="space-y-4">
+              <label><span className="mb-1.5 block text-xs font-bold text-slate-700">Age Recommendation</span><select value={ageGroup} onChange={event => { setAgeGroup(event.target.value as AgeGroupCategory); markDirty(); }} className={fieldClassName}>{AGE_GROUPS.map(group => <option key={group.id} value={group.id}>{group.name}</option>)}</select></label>
+              <label><span className="mb-1.5 block text-xs font-bold text-slate-700">Material</span><input value={material} onChange={event => { setMaterial(event.target.value); markDirty(); }} className={fieldClassName} placeholder="e.g. ABS Plastic (BPA Free)" /></label>
+              <label><span className="mb-1.5 block text-xs font-bold text-slate-700">Safety Notes</span><textarea rows={3} value={safetyInfo} onChange={event => { setSafetyInfo(event.target.value); markDirty(); }} className={fieldClassName} placeholder="Child-safe materials and relevant warnings" /></label>
+            </div>
+          </FormCard>
+
+          <FormCard title="SEO Settings" icon={Search}>
+            <div className="space-y-4">
+              <label><span className="mb-1.5 block text-xs font-bold text-slate-700">SEO Title</span><input value={metaTitle} maxLength={70} onChange={event => { setMetaTitle(event.target.value); markDirty(); }} className={fieldClassName} placeholder={`${name || 'Product name'} – PlayBimboo`} /><span className={`mt-1 block text-right text-[10px] ${metaTitle.length > 60 ? 'text-amber-600' : 'text-slate-400'}`}>{metaTitle.length}/60 recommended · 70 max</span></label>
+              <label><span className="mb-1.5 block text-xs font-bold text-slate-700">Meta Description</span><textarea rows={3} value={metaDescription} maxLength={180} onChange={event => { setMetaDescription(event.target.value); markDirty(); }} className={fieldClassName} placeholder="Short summary for search engines" /><span className={`mt-1 block text-right text-[10px] ${metaDescription.length > 160 ? 'text-amber-600' : 'text-slate-400'}`}>{metaDescription.length}/160 recommended · 180 max</span></label>
+              <label><span className="mb-1.5 block text-xs font-bold text-slate-700">URL Slug</span><input value={slug} onChange={event => { const next = slugify(event.target.value); setSlug(next); setSlugManuallyEdited(next.length > 0); markDirty(); clearError('slug'); }} className={inputClass('slug')} placeholder="auto-generated-from-product-name" /><span className="mt-1 block break-all text-[10px] text-slate-400">/product/{slug || 'product-slug'}</span><FieldError message={errors.slug} /></label>
+            </div>
+          </FormCard>
+        </aside>
+
+        <div className="sticky bottom-4 z-20 flex flex-col-reverse gap-3 rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-xl backdrop-blur sm:flex-row sm:justify-end xl:col-span-2">
+          <button type="button" disabled={isSaving} onClick={cancelEditing} className="rounded-xl bg-slate-100 px-5 py-3 text-xs font-bold text-slate-700 disabled:opacity-50">Cancel</button>
+          <button type="submit" disabled={isSaving || uploadingTarget !== null} className="inline-flex items-center justify-center gap-2 rounded-xl bg-rose-500 px-6 py-3 text-xs font-bold text-white shadow-md transition hover:bg-rose-600 disabled:cursor-not-allowed disabled:opacity-60">{isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}{isSaving ? 'Saving…' : isEditing ? 'Update Product' : 'Save Product'}</button>
         </div>
       </form>
     </div>

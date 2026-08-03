@@ -27,6 +27,7 @@ import { AGE_GROUPS } from '../../data/mockData';
 import { Product } from '../../types';
 import { formatPrice } from '../../utils/formatters';
 import { getSafeImageSrc } from '../../utils/images';
+import { isProductVisibleOnStorefront } from '../../utils/products';
 import playBimbooVideo from '../../assets/newplaybimboo.mp4';
 import logoImage from '../../assets/images/play_bimboo_logo_1785311841625.jpg';
 import promoToysImage from '../../assets/images/promo_toys.jpg';
@@ -35,7 +36,7 @@ export const HomePage: React.FC = () => {
   const { products, categories, settings } = useStore();
   const [selectedQuickViewProduct, setSelectedQuickViewProduct] = useState<Product | null>(null);
 
-  const visibleProducts = products.filter(p => p.isVisible !== false);
+  const visibleProducts = products.filter(isProductVisibleOnStorefront);
   const featuredProducts = visibleProducts.filter(p => p.isFeatured).slice(0, 4);
   const bestSellers = visibleProducts.filter(p => p.isBestseller).slice(0, 4);
   const newArrivals = visibleProducts.filter(p => p.isNewArrival).slice(0, 4);
