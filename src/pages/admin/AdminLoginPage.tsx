@@ -49,7 +49,7 @@ export const AdminLoginPage: React.FC = () => {
 
         {error && (
           <div className="p-3 bg-rose-50 border border-rose-200 rounded-2xl flex items-center gap-2 text-xs text-rose-700 font-semibold">
-            <AlertCircle className="w-4 h-4 text-rose-500 flex-shrink-0" />
+            <AlertCircle className="w-4 h-4 text-rose-500 shrink-0" />
             <span>{error}</span>
           </div>
         )}
