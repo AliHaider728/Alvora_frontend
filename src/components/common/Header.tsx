@@ -16,22 +16,28 @@ import { useStore } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/formatters';
 import { isProductVisibleOnStorefront } from '../../utils/products';
 import { orderedVisibleNavigation } from '../../config/storeAppearance';
+import { StorefrontNavigationItem } from '../../types';
+import { getSafeImageSrc } from '../../utils/images';
 
 export const Header: React.FC = () => {
-  const { cartTotalItems, wishlist, setIsCartOpen, products, categories, settings } = useStore();
+  const { cartTotalItems, wishlist, setIsCartOpen, products, settings } = useStore();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
-  const [categoriesOpen, setCategoriesOpen] = useState(false);
+  const [openMenuId, setOpenMenuId] = useState('');
   
   // Smart Scroll state
   const [isScrolledDown, setIsScrolledDown] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
   const searchRef = useRef<HTMLDivElement>(null);
+  const navigationRef = useRef<HTMLElement>(null);
   const navigate = useNavigate();
   const desktopNavigation = orderedVisibleNavigation(settings, 'desktop');
+  const desktopRoots = desktopNavigation.filter(item => !item.parentId);
+  const mobileNavigation = orderedVisibleNavigation(settings, 'mobile');
+  const mobileRoots = mobileNavigation.filter(item => !item.parentId);
 
   // Filter search autosuggest results
   const searchResults = searchQuery.trim()
@@ -52,8 +58,11 @@ export const Header: React.FC = () => {
       if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
         setIsSearchFocused(false);
       }
+      if (navigationRef.current && !navigationRef.current.contains(e.target as Node)) setOpenMenuId('');
     };
     document.addEventListener('mousedown', handleClickOutside);
+    const handleEscape = (event: KeyboardEvent) => { if (event.key === 'Escape') { setOpenMenuId(''); setMobileMenuOpen(false); } };
+    document.addEventListener('keydown', handleEscape);
     
     // Smart Scroll logic
     let lastScrollY = window.scrollY;
@@ -74,6 +83,7 @@ export const Header: React.FC = () => {
     
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
@@ -116,41 +126,42 @@ export const Header: React.FC = () => {
             <Logo size="lg" />
           </div>
 
+          <button type="button" onClick={() => setMobileMenuOpen(value => !value)} aria-expanded={mobileMenuOpen} aria-controls="storefront-mobile-menu" aria-label="Toggle navigation menu" className="rounded-xl p-2 text-slate-600 hover:bg-slate-100 xl:hidden">
+            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+
           {/* Consolidated Desktop Nav */}
-          <nav className="hidden xl:flex items-center gap-7 text-sm font-heading font-bold text-slate-600 flex-shrink-0">
-            {desktopNavigation.map(item => item.key === 'categories' ? (
-              <div key={item.key} className="relative group">
+          <nav ref={navigationRef} className="hidden xl:flex items-center gap-7 text-sm font-heading font-bold text-slate-600 flex-shrink-0">
+            {desktopRoots.map(item => {
+              const children = desktopNavigation.filter(child => child.parentId === item.id && child.visible);
+              return item.menuType === 'dropdown' && children.length > 0 ? (
+              <div key={item.id} className="relative" onMouseEnter={() => item.enabled && setOpenMenuId(item.id)} onMouseLeave={() => setOpenMenuId('')}>
                 <button
                   type="button"
                   disabled={!item.enabled}
                   aria-disabled={!item.enabled}
-                  onClick={() => item.enabled && setCategoriesOpen(!categoriesOpen)}
-                  className="flex items-center gap-1.5 hover:text-rose-500 transition-colors py-1 disabled:cursor-not-allowed disabled:text-slate-300"
+                  aria-expanded={openMenuId === item.id}
+                  aria-haspopup="menu"
+                  onClick={() => item.enabled && setOpenMenuId(openMenuId === item.id ? '' : item.id)}
+                  onKeyDown={event => { if (event.key === 'ArrowDown' && item.enabled) { event.preventDefault(); setOpenMenuId(item.id); setTimeout(() => navigationRef.current?.querySelector<HTMLElement>(`[data-menu="${item.id}"] a, [data-menu="${item.id}"] button`)?.focus(), 0); } }}
+                  className="flex items-center gap-1.5 py-1 transition-colors hover:text-rose-500 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-rose-500 disabled:cursor-not-allowed disabled:text-slate-300"
                   title={item.enabled ? undefined : 'Coming soon'}
                 >
                   <span>{item.label}</span>
+                  {item.badgeText && <span className="rounded-full bg-rose-100 px-1.5 py-0.5 text-[9px] font-black text-rose-600">{item.badgeText}</span>}
                   <ChevronDown className="w-4 h-4" />
                 </button>
-                {item.enabled && <div className="absolute top-full left-0 mt-3 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 hidden group-hover:block z-50">
-                  <Link to="/category/all" className="block px-3.5 py-2.5 rounded-xl text-slate-800 hover:bg-rose-50 font-bold text-sm">
-                    All Toys & Games
-                  </Link>
-                  {categories.map(cat => (
-                    <Link key={cat.id} to={`/category/${cat.slug}`} className="block px-3.5 py-2 rounded-xl text-slate-600 hover:text-rose-600 hover:bg-rose-50 transition-colors font-semibold text-sm">
-                      {cat.name}
-                    </Link>
-                  ))}
+                {item.enabled && openMenuId === item.id && <div data-menu={item.id} role="menu" className="absolute left-0 top-full z-50 w-60 rounded-2xl border border-slate-100 bg-white p-2 shadow-xl">
+                  {children.map(child => <NavigationDestination key={child.id} item={child} onNavigate={() => setOpenMenuId('')} className="flex items-center justify-between rounded-xl px-3.5 py-2.5 text-sm font-semibold text-slate-600 transition-colors hover:bg-rose-50 hover:text-rose-600 focus-visible:outline-2 focus-visible:outline-rose-500" />)}
                 </div>}
               </div>
             ) : item.enabled ? (
-              <Link key={item.key} to={item.path} className="hover:text-rose-500 transition-colors">
-                {item.label}
-              </Link>
+              <NavigationDestination key={item.id} item={item} className="flex items-center gap-1.5 transition-colors hover:text-rose-500 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-rose-500" />
             ) : (
-              <span key={item.key} aria-disabled="true" title="Coming soon" className="cursor-not-allowed text-slate-300">
-                {item.label}
+              <span key={item.id} aria-disabled="true" title="Coming soon" className="flex cursor-not-allowed items-center gap-1.5 text-slate-300">
+                {item.label}{item.badgeText && <span className="rounded-full bg-slate-100 px-1.5 py-0.5 text-[9px]">{item.badgeText}</span>}
               </span>
-            ))}
+            );})}
           </nav>
 
           {/* Search Bar with Autosuggest */}
@@ -200,7 +211,7 @@ export const Header: React.FC = () => {
                         className="flex items-center gap-3 p-2 rounded-xl hover:bg-rose-50/80 transition-colors"
                       >
                         <img
-                          src={prod.images[0]}
+                          src={getSafeImageSrc(prod.images[0])}
                           alt={prod.name}
                           className="w-10 h-10 md:w-12 md:h-12 object-cover rounded-lg bg-slate-100"
                         />
@@ -327,7 +338,7 @@ export const Header: React.FC = () => {
                             }}
                             className="flex items-center gap-3 p-2 rounded-xl hover:bg-rose-50/80 transition-colors"
                           >
-                            <img src={prod.images[0]} alt={prod.name} className="w-10 h-10 object-cover rounded-lg bg-slate-100" />
+                            <img src={getSafeImageSrc(prod.images[0])} alt={prod.name} className="w-10 h-10 object-cover rounded-lg bg-slate-100" />
                             <div>
                               <div className="text-xs font-bold text-slate-800 line-clamp-1">{prod.name}</div>
                               <div className="text-[10px] text-slate-500">{formatPrice(prod.price, settings.currency)}</div>
@@ -350,8 +361,23 @@ export const Header: React.FC = () => {
               </div>
             )}
           </div>
+
+          {mobileMenuOpen && <nav id="storefront-mobile-menu" aria-label="Store navigation" className="absolute left-0 right-0 top-full z-50 max-h-[70vh] overflow-y-auto rounded-b-3xl border border-slate-100 bg-white p-3 shadow-xl xl:hidden">
+            {mobileRoots.map(item => {
+              const children = mobileNavigation.filter(child => child.parentId === item.id && child.visible);
+              if (item.menuType === 'dropdown' && children.length > 0) return <div key={item.id} className="border-b border-slate-100 py-1"><button type="button" disabled={!item.enabled} aria-disabled={!item.enabled} aria-expanded={openMenuId === item.id} onClick={() => item.enabled && setOpenMenuId(openMenuId === item.id ? '' : item.id)} className="flex w-full items-center justify-between rounded-xl px-3 py-3 text-left text-sm font-bold text-slate-700 disabled:text-slate-300"><span className="flex items-center gap-2">{item.label}{item.badgeText && <span className="rounded-full bg-rose-100 px-2 py-0.5 text-[9px] text-rose-600">{item.badgeText}</span>}</span><ChevronDown className={`h-4 w-4 transition ${openMenuId === item.id ? 'rotate-180' : ''}`} /></button>{openMenuId === item.id && <div className="space-y-1 pb-2 pl-3">{children.map(child => <NavigationDestination key={child.id} item={child} onNavigate={() => { setMobileMenuOpen(false); setOpenMenuId(''); }} className="block rounded-xl px-4 py-3 text-sm font-semibold text-slate-600 hover:bg-rose-50" />)}</div>}</div>;
+              return item.enabled ? <NavigationDestination key={item.id} item={item} onNavigate={() => setMobileMenuOpen(false)} className="flex items-center gap-2 rounded-xl px-3 py-3 text-sm font-bold text-slate-700 hover:bg-rose-50" /> : <span key={item.id} aria-disabled="true" className="block rounded-xl px-3 py-3 text-sm font-bold text-slate-300">{item.label}</span>;
+            })}
+          </nav>}
         </div>
       </div>
     </header>
   );
+};
+
+const NavigationDestination: React.FC<{ item: StorefrontNavigationItem; className: string; onNavigate?: () => void }> = ({ item, className, onNavigate }) => {
+  const content = <>{item.label}{item.badgeText && <span className="rounded-full bg-rose-100 px-1.5 py-0.5 text-[9px] font-black text-rose-600">{item.badgeText}</span>}</>;
+  if (!item.enabled) return <span role="menuitem" aria-disabled="true" className={`${className} cursor-not-allowed text-slate-300`}>{content}</span>;
+  if (item.linkType === 'external_url') return <a role="menuitem" href={item.externalUrl} target={item.openInNewTab ? '_blank' : undefined} rel={item.openInNewTab ? 'noopener noreferrer' : undefined} onClick={onNavigate} className={className}>{content}</a>;
+  return <Link role="menuitem" to={item.path || '/'} onClick={onNavigate} className={className}>{content}</Link>;
 };

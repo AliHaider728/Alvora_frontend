@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Home, LayoutGrid, ShoppingBag, Heart, User, Store, Info, Mail } from 'lucide-react';
+import { Home, LayoutGrid, ShoppingBag, Heart, User, Store, Info, Mail, Link2 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { orderedVisibleNavigation } from '../../config/storeAppearance';
 
@@ -9,9 +9,9 @@ export const MobileBottomNav: React.FC = () => {
   const location = useLocation();
 
   const iconByKey = { home: Home, shop: Store, categories: LayoutGrid, about: Info, contact: Mail, wishlist: Heart, account: User };
-  const configuredItems = orderedVisibleNavigation(settings, 'mobile').map(item => ({
+  const configuredItems = orderedVisibleNavigation(settings, 'mobile').filter(item => !item.parentId && item.menuType === 'link').slice(0, 4).map(item => ({
     ...item,
-    icon: iconByKey[item.key],
+    icon: iconByKey[item.key as keyof typeof iconByKey] || Link2,
     badge: item.key === 'wishlist' ? wishlist.length : undefined
   }));
   const cartItem = {
@@ -29,10 +29,11 @@ export const MobileBottomNav: React.FC = () => {
       <div className="grid h-full max-w-xl mx-auto" style={{ gridTemplateColumns: `repeat(${navItems.length}, minmax(0, 1fr))` }}>
         {navItems.map((item) => {
           const Icon = item.icon;
-          const isActive = item.path !== '#cart' && (
-            item.path === '/' 
+          const destination = 'externalUrl' in item && item.linkType === 'external_url' ? item.externalUrl : item.path;
+          const isActive = destination !== '#cart' && Boolean(destination) && (
+            destination === '/'
               ? location.pathname === '/' 
-              : location.pathname.startsWith(item.path)
+              : location.pathname.startsWith(destination || '')
           );
 
           if ('onClick' in item) {
@@ -67,10 +68,16 @@ export const MobileBottomNav: React.FC = () => {
             );
           }
 
+          if (item.linkType === 'external_url') return (
+            <a key={item.id} href={item.externalUrl} target={item.openInNewTab ? '_blank' : undefined} rel={item.openInNewTab ? 'noopener noreferrer' : undefined} className="flex flex-col items-center justify-center py-1 text-slate-500 transition hover:text-rose-600">
+              <Icon className="h-5 w-5" /><span className="mt-1 max-w-full truncate px-1 text-[10px] font-bold">{item.label}</span>
+            </a>
+          );
+
           return (
             <NavLink
               key={item.key}
-              to={item.path}
+              to={item.path || '/'}
               className={({ isActive: linkActive }) => `
                 flex flex-col items-center justify-center py-1 transition-all relative
                 ${linkActive || isActive ? 'text-rose-600 font-bold' : 'text-slate-500 hover:text-slate-800 font-semibold'}

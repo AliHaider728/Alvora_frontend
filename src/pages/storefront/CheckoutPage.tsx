@@ -123,6 +123,7 @@ export const CheckoutPage: React.FC = () => {
 
   const handlePaymentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isPlacingOrder) return;
     setIsPlacingOrder(true);
     const created = await placeOrder({
       customerName: fullName,
@@ -163,7 +164,10 @@ export const CheckoutPage: React.FC = () => {
     sessionStorage.removeItem('pb_checkout_request_id');
     setCompletedOrder(created);
     setCurrentStep(3);
-    showToast('🎉 Order placed successfully with Cash on Delivery!', 'success');
+    showToast(created.confirmationEmailAccepted !== false && created.confirmationEmailSentAt
+      ? 'Order confirmed. A confirmation email has been sent.'
+      : 'Order confirmed. We could not send the email, but your order was placed successfully.',
+      created.confirmationEmailAccepted !== false && created.confirmationEmailSentAt ? 'success' : 'warning');
   };
 
   if (cart.length === 0 && currentStep !== 3) {
@@ -254,7 +258,9 @@ export const CheckoutPage: React.FC = () => {
                 Thank You for Shopping at PlayBimboo!
               </h1>
               <p className="text-sm text-slate-600 mt-2">
-                We’ve received your order and sent a confirmation receipt to <strong>{completedOrder.email}</strong>.
+                {completedOrder.confirmationEmailAccepted !== false && completedOrder.confirmationEmailSentAt
+                  ? <>We’ve received your order and sent a confirmation receipt to <strong>{completedOrder.email}</strong>.</>
+                  : <>We’ve received your order successfully. The email could not be sent, but your order is safely recorded.</>}
               </p>
             </div>
 

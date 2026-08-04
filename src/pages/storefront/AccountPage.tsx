@@ -5,10 +5,12 @@ import { useToast } from '../../context/ToastContext';
 import { Breadcrumbs } from '../../components/common/Breadcrumbs';
 import { SeoHead } from '../../components/common/SeoHead';
 import { formatPrice } from '../../utils/formatters';
+import { useDialog } from '../../context/DialogContext';
 
 export const AccountPage: React.FC = () => {
   const { orders, customers, updateOrderStatus, settings } = useStore();
   const { showToast } = useToast();
+  const { confirm } = useDialog();
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [activeTab, setActiveTab] = useState<'orders' | 'profile' | 'addresses'>('orders');
 
@@ -22,7 +24,7 @@ export const AccountPage: React.FC = () => {
     ]
   };
 
-  const handleCancelOrder = (orderId: string, orderDateStr: string) => {
+  const handleCancelOrder = async (orderId: string, orderDateStr: string) => {
     // Check 24 hour threshold
     const orderTime = new Date(orderDateStr).getTime();
     const currentTime = new Date().getTime();
@@ -33,10 +35,10 @@ export const AccountPage: React.FC = () => {
       return;
     }
 
-    if (window.confirm('Are you sure you want to cancel this order?')) {
-      updateOrderStatus(orderId, 'Cancelled');
-      showToast(`Order ${orderId} has been cancelled.`, 'info');
-    }
+    if (!await confirm({ title: 'Cancel this order?', description: 'The order status will change to Cancelled. Tracked product and variant stock will be restored where applicable.', cancelLabel: 'Keep Order', confirmLabel: 'Cancel Order', destructive: true })) return;
+    const result = await updateOrderStatus(orderId, 'Cancelled');
+    if (!result) showToast('The order could not be cancelled.', 'error');
+    else showToast(result.notification?.inventoryRestored ? 'Order cancelled and tracked stock restored.' : 'Order cancelled. No tracked stock required restoration.', 'success');
   };
 
   const isWithin24Hours = (orderDateStr: string) => {
@@ -216,4 +218,3 @@ export const AccountPage: React.FC = () => {
     </div>
   );
 };
-

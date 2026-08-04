@@ -5,14 +5,18 @@ import { useToast } from '../../context/ToastContext';
 import { Order } from '../../types';
 import { SeoHead } from '../../components/common/SeoHead';
 import { formatPrice } from '../../utils/formatters';
+import { useDialog } from '../../context/DialogContext';
+import { getLastApiError } from '../../services/api';
 
 export const AdminOrdersPage: React.FC = () => {
   const { orders, updateOrderStatus, updateOrderTracking, settings } = useStore();
   const { showToast } = useToast();
+  const { confirm } = useDialog();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [trackingInput, setTrackingInput] = useState('');
+  const [updatingOrderId, setUpdatingOrderId] = useState('');
 
   const normalizedSearchQuery = searchQuery.trim().toLowerCase();
   const filteredOrders = orders.filter(o =>
@@ -21,18 +25,41 @@ export const AdminOrdersPage: React.FC = () => {
     )
   );
 
-  const handleStatusChange = (orderId: string, newStatus: Order['status']) => {
-    updateOrderStatus(orderId, newStatus);
-    showToast(`Order ${orderId} status updated to ${newStatus}`, 'success');
+  const handleStatusChange = async (order: Order, newStatus: Order['status']) => {
+    if (newStatus === order.status) { if (newStatus === 'Delivered') showToast('This order is already marked as delivered.', 'info'); return; }
+    const isDelivered = newStatus === 'Delivered'; const isCancelled = newStatus === 'Cancelled';
+    const accepted = await confirm({
+      title: isDelivered ? 'Mark this order as delivered?' : isCancelled ? 'Cancel this order?' : `Mark this order as ${newStatus.toLowerCase()}?`,
+      description: isDelivered
+        ? `Order ${order.id} for ${order.customerName} (${order.email}) is currently ${order.status}. The customer’s delivery email will be sent if it has not already been sent.`
+        : isCancelled ? 'The order status will change to Cancelled. Tracked product and variant stock will be restored where applicable.'
+        : `Order ${order.id} will move from ${order.status} to ${newStatus}.`,
+      cancelLabel: isDelivered ? 'Not Yet' : isCancelled ? 'Keep Order' : 'Keep Current Status',
+      confirmLabel: isDelivered ? 'Mark Delivered' : isCancelled ? 'Cancel Order' : `Mark ${newStatus}`,
+      destructive: isCancelled
+    });
+    if (!accepted) return;
+    setUpdatingOrderId(order.id);
+    const result = await updateOrderStatus(order.id, newStatus);
+    setUpdatingOrderId('');
+    if (!result) { showToast(getLastApiError() || 'Order update failed.', 'error'); return; }
+    const notification = result.notification || {};
+    if (isDelivered) {
+      if (notification.alreadyDelivered || notification.emailStatus === 'already_sent') showToast('This order is already marked as delivered. The delivery email was not resent.', 'info');
+      else if (notification.emailStatus === 'sent') showToast('Order marked as delivered. Delivery email sent.', 'success');
+      else if (notification.emailStatus === 'failed') showToast('Order marked as delivered, but the email could not be sent.', 'warning');
+      else showToast('Order marked as delivered.', 'success');
+    } else if (isCancelled) showToast(notification.inventoryRestored ? 'Order cancelled and tracked stock restored.' : 'Order cancelled. No tracked stock required restoration.', 'success');
+    else showToast(`Order marked as ${newStatus}.`, 'success');
+    if (selectedOrder?.id === order.id) setSelectedOrder(result.order);
   };
 
-  const handleSaveTracking = (orderId: string) => {
+  const handleSaveTracking = async (orderId: string) => {
     if (!trackingInput.trim()) return;
-    updateOrderTracking(orderId, trackingInput.trim());
-    showToast(`Tracking code ${trackingInput.trim()} added to ${orderId}`, 'success');
-    if (selectedOrder) {
-      setSelectedOrder({ ...selectedOrder, trackingNumber: trackingInput.trim() });
-    }
+    const updated = await updateOrderTracking(orderId, trackingInput.trim());
+    if (!updated) { showToast(getLastApiError() || 'Could not save the tracking code.', 'error'); return; }
+    showToast(`Tracking code saved for ${orderId}.`, 'success');
+    if (selectedOrder) setSelectedOrder(updated);
   };
 
   return (
@@ -87,7 +114,8 @@ export const AdminOrdersPage: React.FC = () => {
                   <td className="p-4">
                     <select
                       value={order.status}
-                      onChange={e => handleStatusChange(order.id, e.target.value as any)}
+                      disabled={updatingOrderId === order.id}
+                      onChange={e => { void handleStatusChange(order, e.target.value as Order['status']); }}
                       className={`px-2.5 py-1 rounded-full text-[11px] font-bold border border-transparent cursor-pointer ${
                         order.status === 'Delivered' ? 'bg-emerald-100 text-emerald-800' :
                         order.status === 'Shipped' ? 'bg-sky-100 text-sky-800' :
@@ -154,7 +182,7 @@ export const AdminOrdersPage: React.FC = () => {
                     className="flex-1 px-3 py-1.5 text-xs rounded-xl border border-sky-200 bg-white"
                   />
                   <button
-                    onClick={() => handleSaveTracking(selectedOrder.id)}
+                    onClick={() => { void handleSaveTracking(selectedOrder.id); }}
                     className="px-3 py-1.5 rounded-xl bg-sky-600 text-white font-bold text-xs flex items-center gap-1"
                   >
                     <Send className="w-3 h-3" /> Save

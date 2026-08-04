@@ -3,6 +3,7 @@ import { Save, CheckCircle2, ShieldCheck, DollarSign, Globe, Sliders } from 'luc
 import { useStore } from '../../context/StoreContext';
 import { useToast } from '../../context/ToastContext';
 import { SeoHead } from '../../components/common/SeoHead';
+import { getLastApiError } from '../../services/api';
 
 export const AdminSettingsPage: React.FC = () => {
   const { settings, updateSettings } = useStore();
@@ -18,10 +19,12 @@ export const AdminSettingsPage: React.FC = () => {
   const [taxRate, setTaxRate] = useState(settings.taxRate * 100);
   const [metaTitle, setMetaTitle] = useState(settings.metaTitle);
   const [metaDescription, setMetaDescription] = useState(settings.metaDescription);
+  const [saving, setSaving] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    updateSettings({
+    setSaving(true);
+    const saved = await updateSettings({
       storeName,
       email,
       phone,
@@ -33,7 +36,8 @@ export const AdminSettingsPage: React.FC = () => {
       metaTitle,
       metaDescription
     });
-    showToast('Store settings updated successfully!', 'success');
+    setSaving(false);
+    showToast(saved ? 'Store settings updated successfully.' : getLastApiError() || 'Could not save store settings.', saved ? 'success' : 'error');
   };
 
   return (
@@ -190,13 +194,13 @@ export const AdminSettingsPage: React.FC = () => {
 
         <button
           type="submit"
-          className="px-8 py-3.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-heading font-extrabold text-xs shadow-md flex items-center gap-2"
+          disabled={saving}
+          className="px-8 py-3.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-heading font-extrabold text-xs shadow-md flex items-center gap-2 disabled:opacity-50"
         >
           <Save className="w-4 h-4 text-amber-400" />
-          <span>Save Store Settings</span>
+          <span>{saving ? 'Saving…' : 'Save Store Settings'}</span>
         </button>
       </form>
     </div>
   );
 };
-

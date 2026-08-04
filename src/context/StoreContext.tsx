@@ -19,7 +19,7 @@ import {
   INITIAL_CUSTOMERS,
   INITIAL_COUPONS
 } from '../data/mockData';
-import { api, getAuthToken } from '../services/api';
+import { api, getAuthToken, isSuperAdmin } from '../services/api';
 import { formatPrice } from '../utils/formatters';
 import { normalizeStoreSettings } from '../config/storeAppearance';
 import { normalizeInventory, normalizeProductAgeGroups } from '../utils/products';
@@ -77,7 +77,16 @@ const normalizeProduct = (product: Partial<Product> & MongoRecord): Product => {
 const normalizeCategory = (category: Partial<Category> & MongoRecord): Category => ({
   ...(category as Category),
   id: String(category.id || category._id || category.slug || ''),
-  image: typeof category.image === 'string' ? category.image.trim() : ''
+  image: typeof category.image === 'string' ? category.image.trim() : '',
+  shortDescription: category.shortDescription || category.description || '',
+  description: category.description || category.shortDescription || '',
+  isActive: category.isActive !== false,
+  isFeatured: category.isFeatured === true,
+  showInNavigation: category.showInNavigation !== false,
+  displayOrder: Number(category.displayOrder || 0),
+  desktopVisible: category.desktopVisible !== false,
+  mobileVisible: category.mobileVisible !== false,
+  itemCount: Number(category.itemCount || 0)
 });
 
 const normalizeOrder = (order: BackendOrder): Order => ({
@@ -90,6 +99,14 @@ const normalizeOrder = (order: BackendOrder): Order => ({
   items: Array.isArray(order.items) ? order.items : [],
   discount: order.discount ?? order.discountAmount ?? 0,
   shipping: order.shipping ?? order.deliveryCharge ?? 0
+});
+
+const normalizeCoupon = (coupon: any): Coupon => ({
+  id: String(coupon.id || coupon._id || ''), code: String(coupon.code || ''),
+  discountType: coupon.discountType === 'fixed' ? 'flat' : 'percentage',
+  amount: Number(coupon.amount ?? coupon.discountValue ?? 0), minSpend: Number(coupon.minSpend ?? coupon.minPurchase ?? 0),
+  expiryDate: coupon.expiryDate || '', usageLimit: Number(coupon.usageLimit ?? 0),
+  usedCount: Number(coupon.usedCount ?? coupon.usageCount ?? 0), isActive: coupon.isActive !== false
 });
 
 interface StoreContextType {
@@ -130,19 +147,20 @@ interface StoreContextType {
   deleteProduct: (id: string) => Promise<boolean>;
   refreshProducts: () => Promise<void>;
 
-  addCategory: (categoryData: Omit<Category, 'id' | 'itemCount'>) => Category;
-  updateCategory: (id: string, categoryData: Partial<Category>) => void;
-  deleteCategory: (id: string) => void;
+  refreshCategories: () => Promise<Category[]>;
+  addCategory: (categoryData: Partial<Category>) => Promise<Category | null>;
+  updateCategory: (id: string, categoryData: Partial<Category>) => Promise<Category | null>;
+  deleteCategory: (id: string, resolution: Record<string, unknown>) => Promise<any | null>;
 
-  updateOrderStatus: (orderId: string, status: Order['status'], trackingNumber?: string) => void;
-  updateOrderTracking: (orderId: string, trackingNumber: string) => void;
+  updateOrderStatus: (orderId: string, status: Order['status']) => Promise<any | null>;
+  updateOrderTracking: (orderId: string, trackingNumber: string) => Promise<Order | null>;
   placeOrder: (orderData: Omit<Order, 'id' | 'date'>) => Promise<Order | null>;
 
-  addCoupon: (couponData: Omit<Coupon, 'id' | 'usedCount'>) => Coupon;
-  updateCoupon: (id: string, couponData: Partial<Coupon>) => void;
-  deleteCoupon: (id: string) => void;
+  addCoupon: (couponData: Omit<Coupon, 'id' | 'usedCount'>) => Promise<Coupon | null>;
+  updateCoupon: (id: string, couponData: Partial<Coupon>) => Promise<Coupon | null>;
+  deleteCoupon: (id: string) => Promise<boolean>;
 
-  updateSettings: (newSettings: Partial<StoreSettings>) => void;
+  updateSettings: (newSettings: Partial<StoreSettings>) => Promise<boolean>;
   updateAppearanceSettings: (newSettings: Pick<StoreSettings, 'storefrontNavigation' | 'homepageSections'>) => void;
   addReview: (reviewData: Omit<Review, 'id' | 'date'>) => void;
 }
@@ -210,9 +228,15 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   const refreshProducts = async () => {
-    const [realProducts, realCategories] = await Promise.all([api.getProducts(), api.getCategories()]);
+    const realProducts = await api.getProducts();
     if (realProducts) setProducts(realProducts.map(normalizeProduct));
-    if (realCategories) setCategories(realCategories.map(normalizeCategory));
+  };
+
+  const refreshCategories = async () => {
+    const result = isSuperAdmin() ? await api.getAdminCategories() : await api.getCategories();
+    const normalized = result ? result.map(normalizeCategory) : [];
+    if (result) setCategories(normalized);
+    return normalized;
   };
 
   
@@ -237,7 +261,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           realReviews
         ] = await Promise.all([
           api.getProducts(),
-          api.getCategories(),
+          hasAdminSession && isSuperAdmin() ? api.getAdminCategories() : api.getCategories(),
           hasAdminSession ? api.getOrders() : Promise.resolve(null),
           hasAdminSession ? api.getCustomers() : Promise.resolve(null),
           hasAdminSession ? api.getCoupons() : Promise.resolve(null),
@@ -249,7 +273,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         if (realCategories) setCategories(realCategories.map(normalizeCategory));
         if (realOrders) setOrders(realOrders.map(normalizeOrder));
         if (realCustomers) setCustomers(realCustomers);
-        if (realCoupons) setCoupons(realCoupons);
+        if (realCoupons) setCoupons(realCoupons.map(normalizeCoupon));
         if (realSettings) setSettings(normalizeStoreSettings(realSettings));
         if (realReviews) setReviews(realReviews);
       } catch (err) {
@@ -406,39 +430,48 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return true;
   };
 
-  const addCategory = (categoryData: Omit<Category, 'id' | 'itemCount'>) => {
-    const newCategory: Category = {
-      ...categoryData,
-      id: `cat-${Date.now().toString().slice(-3)}`,
-      itemCount: 0,
-    };
-    setCategories(prev => [...prev, newCategory]);
-    return newCategory;
+  const addCategory = async (categoryData: Partial<Category>) => {
+    const saved = await api.createCategory(categoryData);
+    if (!saved) return null;
+    const normalized = normalizeCategory(saved);
+    setCategories(current => [...current.filter(item => item.id !== normalized.id), normalized].sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0)));
+    return normalized;
   };
 
-  const updateCategory = (id: string, categoryData: Partial<Category>) => {
-    setCategories(prev => prev.map(c => (c.id === id ? { ...c, ...categoryData } : c)));
+  const updateCategory = async (id: string, categoryData: Partial<Category>) => {
+    const saved = await api.updateCategory(id, categoryData);
+    if (!saved) return null;
+    const normalized = normalizeCategory(saved);
+    setCategories(current => current.map(item => item.id === id ? normalized : item).sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0)));
+    await refreshProducts();
+    return normalized;
   };
 
-  const deleteCategory = (id: string) => {
-    setCategories(prev => prev.filter(c => c.id !== id));
+  const deleteCategory = async (id: string, resolution: Record<string, unknown>) => {
+    const result = await api.deleteCategoryWithResolution(id, resolution);
+    if (!result) return null;
+    setCategories(current => current.filter(item => item.id !== id));
+    await refreshProducts();
+    const appearance = await api.getSettings();
+    if (appearance) updateAppearanceSettings(appearance);
+    return result;
   };
 
-  const updateOrderStatus = (orderId: string, status: Order['status'], trackingNumber?: string) => {
-    setOrders(prev =>
-      prev.map(o => (o.id === orderId ? { ...o, status, ...(trackingNumber ? { trackingNumber } : {}) } : o))
-    );
-    api.updateOrderStatus(orderId, status).catch(() => {});
-    if (trackingNumber) {
-      api.updateOrderTracking(orderId, trackingNumber).catch(() => {});
-    }
+  const updateOrderStatus = async (orderId: string, status: Order['status']) => {
+    const result = await api.updateOrderStatus(orderId, status);
+    if (!result) return null;
+    const updated = normalizeOrder(result.order || result);
+    setOrders(current => current.map(order => order.id === orderId ? updated : order));
+    await refreshProducts();
+    return { ...result, order: updated };
   };
 
-  const updateOrderTracking = (orderId: string, trackingNumber: string) => {
-    setOrders(prev =>
-      prev.map(o => (o.id === orderId ? { ...o, trackingNumber } : o))
-    );
-    api.updateOrderTracking(orderId, trackingNumber).catch(() => {});
+  const updateOrderTracking = async (orderId: string, trackingNumber: string) => {
+    const result = await api.updateOrderTracking(orderId, trackingNumber);
+    if (!result) return null;
+    const updated = normalizeOrder(result);
+    setOrders(current => current.map(order => order.id === orderId ? updated : order));
+    return updated;
   };
 
   const placeOrder = async (orderData: Omit<Order, 'id' | 'date'>) => {
@@ -494,26 +527,34 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return newOrder;
   };
 
-  const addCoupon = (couponData: Omit<Coupon, 'id' | 'usedCount'>) => {
-    const newCoupon: Coupon = {
-      ...couponData,
-      id: `coup-${Date.now().toString().slice(-3)}`,
-      usedCount: 0,
-    };
-    setCoupons(prev => [...prev, newCoupon]);
-    return newCoupon;
+  const addCoupon = async (couponData: Omit<Coupon, 'id' | 'usedCount'>) => {
+    const saved = await api.createCoupon(couponData);
+    if (!saved) return null;
+    const coupon = normalizeCoupon(saved);
+    setCoupons(prev => [coupon, ...prev.filter(item => item.id !== coupon.id)]);
+    return coupon;
   };
 
-  const updateCoupon = (id: string, couponData: Partial<Coupon>) => {
-    setCoupons(prev => prev.map(c => (c.id === id ? { ...c, ...couponData } : c)));
+  const updateCoupon = async (id: string, couponData: Partial<Coupon>) => {
+    const saved = await api.updateCoupon(id, couponData);
+    if (!saved) return null;
+    const coupon = normalizeCoupon(saved);
+    setCoupons(prev => prev.map(item => item.id === id ? coupon : item));
+    return coupon;
   };
 
-  const deleteCoupon = (id: string) => {
+  const deleteCoupon = async (id: string) => {
+    const deleted = await api.deleteCoupon(id);
+    if (!deleted) return false;
     setCoupons(prev => prev.filter(c => c.id !== id));
+    return true;
   };
 
-  const updateSettings = (newSettings: Partial<StoreSettings>) => {
-    setSettings(prev => normalizeStoreSettings({ ...prev, ...newSettings }));
+  const updateSettings = async (newSettings: Partial<StoreSettings>) => {
+    const saved = await api.updateSettings({ ...settings, ...newSettings });
+    if (!saved) return false;
+    setSettings(normalizeStoreSettings(saved));
+    return true;
   };
 
   const updateAppearanceSettings = (
@@ -562,6 +603,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         updateProduct,
         deleteProduct,
         refreshProducts,
+        refreshCategories,
         addCategory,
         updateCategory,
         deleteCategory,

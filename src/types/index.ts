@@ -54,6 +54,7 @@ export interface Product {
   reviewCount: number;
   category: string;
   categorySlug: string;
+  categoryId?: string;
   ageGroup?: AgeGroupCategory;
   ageGroups: AgeGroupCategory[];
   brand: string;
@@ -106,6 +107,8 @@ export interface Category {
   slug: string;
   iconName: string;
   image: string;
+  imagePublicId?: string;
+  shortDescription?: string;
   description: string;
   itemCount: number;
   deliveryType?: DeliveryChargeType;
@@ -113,6 +116,16 @@ export interface Category {
   deliveryFee?: number;
   deliveryCharge?: number;
   customDeliveryFee?: number;
+  isActive?: boolean;
+  isFeatured?: boolean;
+  showInNavigation?: boolean;
+  navigationLabel?: string;
+  displayOrder?: number;
+  parentCategoryId?: string;
+  seoTitle?: string;
+  metaDescription?: string;
+  desktopVisible?: boolean;
+  mobileVisible?: boolean;
 }
 
 export interface AgeGroupOption {
@@ -181,6 +194,9 @@ export interface Order {
   paymentMethod: 'Cash on Delivery (COD)';
   trackingNumber?: string;
   checkoutRequestId?: string;
+  confirmationEmailSentAt?: string;
+  confirmationEmailAccepted?: boolean;
+  confirmationEmailFailedAt?: string;
 }
 
 export interface Address {
@@ -236,18 +252,29 @@ export interface StoreSettings {
   homepageSections: HomepageSectionSetting[];
 }
 
-export type StorefrontNavigationKey =
-  | 'home' | 'shop' | 'categories' | 'about' | 'contact' | 'wishlist' | 'account';
+export type StorefrontNavigationKey = string;
+export type NavigationLinkType = 'internal_page' | 'category' | 'custom_internal_url' | 'external_url';
+export type NavigationMenuType = 'link' | 'dropdown';
 
 export interface StorefrontNavigationItem {
+  id: string;
   key: StorefrontNavigationKey;
   label: string;
-  path: string;
+  linkType: NavigationLinkType;
+  menuType: NavigationMenuType;
+  path?: string;
+  externalUrl?: string;
+  categoryId?: string;
+  parentId?: string | null;
   visible: boolean;
   enabled: boolean;
   showOnDesktop: boolean;
   showOnMobile: boolean;
   order: number;
+  displayOrder: number;
+  badgeText?: string;
+  openInNewTab?: boolean;
+  isSystemItem?: boolean;
 }
 
 export type HomepageSectionKey =

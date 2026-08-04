@@ -4,9 +4,14 @@ import { useStore } from '../../context/StoreContext';
 import { Coupon } from '../../types';
 import { SeoHead } from '../../components/common/SeoHead';
 import { formatPrice } from '../../utils/formatters';
+import { useToast } from '../../context/ToastContext';
+import { useDialog } from '../../context/DialogContext';
+import { getLastApiError } from '../../services/api';
 
 export const AdminCouponsPage: React.FC = () => {
   const { coupons, addCoupon, updateCoupon, deleteCoupon } = useStore();
+  const { showToast } = useToast();
+  const { confirm } = useDialog();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [code, setCode] = useState('');
@@ -15,9 +20,9 @@ export const AdminCouponsPage: React.FC = () => {
   const [minSpend, setMinSpend] = useState(30);
   const [expiryDate, setExpiryDate] = useState('2026-12-31');
 
-  const handleCreate = (e: React.FormEvent) => {
+  const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
-    addCoupon({
+    const saved = await addCoupon({
       code: code.toUpperCase(),
       discountType,
       amount: Number(amount),
@@ -26,8 +31,14 @@ export const AdminCouponsPage: React.FC = () => {
       usageLimit: 500,
       isActive: true
     });
-    setIsModalOpen(false);
-    setCode('');
+    if (!saved) { showToast(getLastApiError() || 'Could not create the coupon.', 'error'); return; }
+    setIsModalOpen(false); setCode(''); showToast('Coupon created successfully.', 'success');
+  };
+
+  const removeCoupon = async (coupon: Coupon) => {
+    if (!await confirm({ title: 'Delete this coupon?', description: `${coupon.code} will no longer be available to customers.`, cancelLabel: 'Keep Coupon', confirmLabel: 'Delete Coupon', destructive: true })) return;
+    const deleted = await deleteCoupon(coupon.id);
+    showToast(deleted ? 'Coupon deleted.' : getLastApiError() || 'Could not delete the coupon.', deleted ? 'info' : 'error');
   };
 
   return (
@@ -70,7 +81,7 @@ export const AdminCouponsPage: React.FC = () => {
 
             <div className="flex justify-end pt-2 border-t border-slate-100">
               <button
-                onClick={() => deleteCoupon(coup.id)}
+                onClick={() => { void removeCoupon(coup); }}
                 className="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg text-xs flex items-center gap-1 font-bold"
               >
                 <Trash2 className="w-3.5 h-3.5" />

@@ -9,10 +9,12 @@ import { SeoHead } from '../../components/common/SeoHead';
 import { formatPrice } from '../../utils/formatters';
 import { getSafeImageSrc } from '../../utils/images';
 import { formatProductAgeGroups } from '../../utils/products';
+import { useDialog } from '../../context/DialogContext';
 
 export const AdminProductsPage: React.FC = () => {
   const { products, categories, updateProduct, deleteProduct, settings } = useStore();
   const { showToast } = useToast();
+  const { confirm } = useDialog();
   const navigate = useNavigate();
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -57,25 +59,25 @@ export const AdminProductsPage: React.FC = () => {
         body: formData
       });
       if (res.ok) {
-        alert('Products imported successfully');
+        showToast('Products imported successfully. Refreshing the catalog…', 'success');
         window.location.reload();
       } else {
-        alert('Failed to import products');
+        showToast('Failed to import products. Check the CSV and try again.', 'error');
       }
-    } catch (err) {
-      alert('Error importing products');
+    } catch {
+      showToast('Could not import products.', 'error');
     }
     e.target.value = '';
   };
 
-  const toggleVisibility = (prod: Product) => {
+  const toggleVisibility = async (prod: Product) => {
     const nextState = !(prod.isVisible !== false);
-    void updateProduct(prod.id, { isVisible: nextState });
-    showToast(`${prod.name} is now ${nextState ? 'visible' : 'hidden'} on storefront.`, 'info');
+    const saved = await updateProduct(prod.id, { isVisible: nextState });
+    showToast(saved ? `${prod.name} is now ${nextState ? 'visible' : 'hidden'} on storefront.` : getLastApiError() || `Could not update ${prod.name}.`, saved ? 'info' : 'error');
   };
 
   const handleDelete = async (id: string, prodName: string) => {
-    if (window.confirm(`Are you sure you want to delete ${prodName}?`)) {
+    if (await confirm({ title: 'Delete this product?', description: 'This product will be removed from the store. Associated unused Cloudinary assets may also be deleted.', cancelLabel: 'Cancel', confirmLabel: 'Delete Product', destructive: true })) {
       const deleted = await deleteProduct(id);
       showToast(
         deleted ? `Deleted ${prodName}` : getLastApiError() || `Could not delete ${prodName}`,

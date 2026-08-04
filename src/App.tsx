@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { StoreProvider, useStore } from './context/StoreContext';
 import { ToastProvider } from './context/ToastContext';
+import { DialogProvider } from './context/DialogContext';
 import { Header } from './components/common/Header';
 import { Footer } from './components/common/Footer';
 import { CartDrawer } from './components/cart/CartDrawer';
@@ -87,6 +88,7 @@ const StorefrontLayout: React.FC = () => {
 export default function App() {
   return (
     <ToastProvider>
+      <DialogProvider>
       <StoreProvider>
         <BrowserRouter>
         <ScrollToTop />
@@ -118,6 +120,7 @@ export default function App() {
         </Routes>
       </BrowserRouter>
     </StoreProvider>
+    </DialogProvider>
     </ToastProvider>
   );
 }

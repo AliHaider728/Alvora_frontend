@@ -24,6 +24,20 @@ export const isSuperAdmin = () => getAdminSessionUser()?.role === 'super_admin';
 let lastApiError = '';
 export const getLastApiError = (): string => lastApiError;
 
+const safeApiError = (status: number, backendMessage?: string) => {
+  const safeBackend = typeof backendMessage === 'string' && backendMessage.length <= 280 &&
+    !/stack|mongodb|mongoose|smtp|cloudinary.*secret|api[_ -]?secret|node_modules|\\|\/src\//i.test(backendMessage)
+    ? backendMessage : '';
+  if (status === 400) return safeBackend || 'Please check the submitted information.';
+  if (status === 401) return 'Session expired. Please sign in again.';
+  if (status === 403) return 'You do not have permission to perform this action.';
+  if (status === 404) return safeBackend || 'Requested item was not found.';
+  if (status === 409) return safeBackend || 'This change conflicts with existing data.';
+  if (status === 413) return 'File is too large.';
+  if (status === 429) return 'Too many requests. Please try again.';
+  return status >= 500 ? 'Temporary service problem. Please try again.' : safeBackend || 'Request failed.';
+};
+
 async function fetchJson<T>(endpoint: string, options?: RequestInit): Promise<T | null> {
   try {
     lastApiError = '';
@@ -46,7 +60,7 @@ async function fetchJson<T>(endpoint: string, options?: RequestInit): Promise<T 
 
     if (!res.ok) {
       const errorBody = await res.json().catch(() => ({ error: res.statusText }));
-      throw new Error(errorBody.error || `HTTP Error ${res.status}`);
+      throw new Error(safeApiError(res.status, errorBody.error));
     }
 
     return await res.json();
@@ -80,9 +94,12 @@ export const api = {
 
   // Categories
   getCategories: () => fetchJson<any[]>('/categories'),
+  getAdminCategories: () => fetchJson<any[]>('/categories/admin/all'),
   createCategory: (data: any) => fetchJson<any>('/categories', { method: 'POST', body: JSON.stringify(data) }),
   updateCategory: (id: string, data: any) => fetchJson<any>(`/categories/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   deleteCategory: (id: string) => fetchJson<any>(`/categories/${id}`, { method: 'DELETE' }),
+  getCategoryDeleteImpact: (id: string) => fetchJson<any>(`/categories/${id}/delete-impact`),
+  deleteCategoryWithResolution: (id: string, data: any) => fetchJson<any>(`/categories/${id}`, { method: 'DELETE', body: JSON.stringify(data) }),
 
   // Orders
   getOrders: (email?: string) => fetchJson<any[]>(`/orders${email ? `?email=${encodeURIComponent(email)}` : ''}`),
@@ -95,6 +112,7 @@ export const api = {
   getCoupons: () => fetchJson<any[]>('/coupons'),
   validateCoupon: (code: string, cartSubtotal: number) => fetchJson<any>('/coupons/validate', { method: 'POST', body: JSON.stringify({ code, cartSubtotal }) }),
   createCoupon: (data: any) => fetchJson<any>('/coupons', { method: 'POST', body: JSON.stringify(data) }),
+  updateCoupon: (id: string, data: any) => fetchJson<any>(`/coupons/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   deleteCoupon: (id: string) => fetchJson<any>(`/coupons/${id}`, { method: 'DELETE' }),
 
   // Reviews
@@ -106,6 +124,7 @@ export const api = {
 
   // Settings
   getSettings: () => fetchJson<any>('/settings'),
+  getAdminAppearance: () => fetchJson<any>('/settings/appearance/admin'),
   updateSettings: (data: any) => fetchJson<any>('/settings', { method: 'PUT', body: JSON.stringify(data) }),
   updateAppearance: (data: any) => fetchJson<any>('/settings/appearance', { method: 'PUT', body: JSON.stringify(data) }),
   resetAppearance: () => fetchJson<any>('/settings/appearance/reset', { method: 'POST' }),
@@ -159,5 +178,24 @@ export const api = {
     fetchJson<{ deleted: boolean }>('/upload/image', {
       method: 'DELETE',
       body: JSON.stringify({ publicId })
-    })
+    }),
+  uploadCategoryImage: async (file: File) => {
+    const formData = new FormData();
+    formData.append('image', file);
+    const token = getAuthToken();
+    const res = await fetch(`${API_BASE_URL}/upload/category-image`, {
+      method: 'POST',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      body: formData,
+      credentials: 'include'
+    });
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      throw new Error(safeApiError(res.status, body.error));
+    }
+    return await res.json() as { secureUrl: string; url: string; publicId: string };
+  },
+  deleteCategoryImage: (publicId: string) => fetchJson<{ deleted: boolean }>('/upload/category-image', {
+    method: 'DELETE', body: JSON.stringify({ publicId })
+  })
 };

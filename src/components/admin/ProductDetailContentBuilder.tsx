@@ -6,6 +6,7 @@ import {
 import { ProductDetailBlock, ProductDetailBlockType } from '../../types';
 import { api } from '../../services/api';
 import { useToast } from '../../context/ToastContext';
+import { useDialog } from '../../context/DialogContext';
 
 type Props = {
   blocks: ProductDetailBlock[];
@@ -32,6 +33,7 @@ export const ProductDetailContentBuilder: React.FC<Props> = ({
   blocks, customCss, isSuperAdmin, onBlocksChange, onCustomCssChange
 }) => {
   const { showToast } = useToast();
+  const { confirm } = useDialog();
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
   const [uploadingBlock, setUploadingBlock] = useState<string>();
   const sorted = useMemo(() => [...blocks].sort((a, b) => a.order - b.order), [blocks]);
@@ -41,6 +43,7 @@ export const ProductDetailContentBuilder: React.FC<Props> = ({
   const add = (type: ProductDetailBlockType) => {
     if ((type === 'html') && !isSuperAdmin) return;
     onBlocksChange(ordered([...sorted, createBlock(type)]));
+    showToast(`${type === 'richText' ? 'Rich text' : type === 'html' ? 'Custom HTML' : type === 'image' ? 'Image' : 'Divider'} block added.`, 'info');
   };
   const move = (index: number, direction: -1 | 1) => {
     const target = index + direction;
@@ -48,6 +51,7 @@ export const ProductDetailContentBuilder: React.FC<Props> = ({
     const next = [...sorted];
     [next[index], next[target]] = [next[target], next[index]];
     onBlocksChange(ordered(next));
+    showToast('Product content blocks reordered.', 'info');
   };
   const duplicate = (block: ProductDetailBlock) => {
     if (block.type === 'html' && !isSuperAdmin) return;
@@ -55,8 +59,10 @@ export const ProductDetailContentBuilder: React.FC<Props> = ({
     const next = [...sorted];
     next.splice(index + 1, 0, { ...block, id: newId(), image: block.image ? { ...block.image } : undefined });
     onBlocksChange(ordered(next));
+    showToast('Product content block duplicated.', 'success');
   };
-  const remove = (block: ProductDetailBlock) => {
+  const remove = async (block: ProductDetailBlock) => {
+    if (!await confirm({ title: 'Delete this content block?', description: block.image ? 'The block will be removed. A temporary uploaded image may also be removed from Cloudinary.' : 'The block and its unsaved content will be removed.', cancelLabel: 'Keep Block', confirmLabel: 'Delete Block', destructive: true })) return;
     const isStillReferenced = sorted.some(item => item.id !== block.id && item.image?.publicId === block.image?.publicId);
     if (block.image?.newlyUploaded && block.image.publicId && !isStillReferenced) {
       void api.deleteImage(block.image.publicId).then(result => {
@@ -64,6 +70,7 @@ export const ProductDetailContentBuilder: React.FC<Props> = ({
       });
     }
     onBlocksChange(ordered(sorted.filter(item => item.id !== block.id)));
+    showToast('Product content block deleted.', 'info');
   };
   const upload = async (block: ProductDetailBlock, file?: File) => {
     if (!file) return;
@@ -118,7 +125,7 @@ export const ProductDetailContentBuilder: React.FC<Props> = ({
                 <IconButton label="Move up" disabled={codeLocked || index === 0} onClick={() => move(index, -1)} icon={ArrowUp} />
                 <IconButton label="Move down" disabled={codeLocked || index === sorted.length - 1} onClick={() => move(index, 1)} icon={ArrowDown} />
                 <IconButton label="Duplicate block" disabled={codeLocked} onClick={() => duplicate(block)} icon={Copy} />
-                <IconButton label="Delete block" disabled={codeLocked} onClick={() => remove(block)} icon={Trash2} danger />
+                <IconButton label="Delete block" disabled={codeLocked} onClick={() => { void remove(block); }} icon={Trash2} danger />
                 <IconButton label={isCollapsed ? 'Expand block' : 'Collapse block'} onClick={() => setCollapsed(current => { const next = new Set(current); isCollapsed ? next.delete(block.id) : next.add(block.id); return next; })} icon={isCollapsed ? ChevronDown : ChevronUp} />
               </div>
               {!isCollapsed && <div className="space-y-4 p-4">
@@ -170,11 +177,13 @@ const IconButton: React.FC<{ icon: React.ComponentType<{ className?: string }>; 
 
 const BlockRichEditor: React.FC<{ value: string; onChange: (value: string) => void }> = ({ value, onChange }) => {
   const ref = useRef<HTMLDivElement>(null);
+  const { prompt } = useDialog();
+  const { showToast } = useToast();
   const command = (name: string, commandValue?: string) => { ref.current?.focus(); document.execCommand(name, false, commandValue); onChange(ref.current?.innerHTML || ''); };
   return <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
     <div className="flex flex-wrap gap-1 border-b bg-slate-50 p-2">
       {[['formatBlock', 'p', 'Paragraph'], ['formatBlock', 'h2', 'Heading'], ['bold', '', 'Bold'], ['italic', '', 'Italic'], ['insertUnorderedList', '', 'Bullets'], ['insertOrderedList', '', 'Numbers'], ['justifyLeft', '', 'Left'], ['justifyCenter', '', 'Center'], ['justifyRight', '', 'Right']].map(([name, commandValue, label]) => <button key={`${name}-${commandValue}`} type="button" onMouseDown={event => event.preventDefault()} onClick={() => command(name, commandValue || undefined)} className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-[10px] font-bold text-slate-600">{label}</button>)}
-      <button type="button" onMouseDown={event => event.preventDefault()} onClick={() => { const url = window.prompt('Enter an https:// link'); if (url && /^https?:\/\//i.test(url)) command('createLink', url); }} className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-[10px] font-bold text-slate-600">Link</button>
+      <button type="button" onMouseDown={event => event.preventDefault()} onClick={() => { void prompt({ title: 'Add a link', description: 'Enter a complete http:// or https:// destination.', inputLabel: 'Link URL', placeholder: 'https://example.com', confirmLabel: 'Add Link' }).then(url => { if (!url) return; if (!/^https?:\/\//i.test(url)) { showToast('Please enter a complete http:// or https:// URL.', 'error'); return; } command('createLink', url); }); }} className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-[10px] font-bold text-slate-600">Link</button>
     </div>
     <div ref={ref} contentEditable suppressContentEditableWarning onInput={event => onChange(event.currentTarget.innerHTML)} dangerouslySetInnerHTML={{ __html: value }} className="min-h-36 p-3 text-sm leading-6 outline-none [&_ol]:list-decimal [&_ol]:pl-5 [&_ul]:list-disc [&_ul]:pl-5" />
   </div>;

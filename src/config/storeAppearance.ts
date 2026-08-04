@@ -1,17 +1,28 @@
-import type {
-  HomepageSectionSetting,
-  StoreSettings,
-  StorefrontNavigationItem
-} from '../types';
+import type { HomepageSectionSetting, StoreSettings, StorefrontNavigationItem } from '../types';
+
+export const INTERNAL_PAGE_OPTIONS = [
+  { value: '/', label: 'Home' },
+  { value: '/category/all', label: 'Shop All' },
+  { value: '/about', label: 'About' },
+  { value: '/contact', label: 'Contact' },
+  { value: '/wishlist', label: 'Wishlist' },
+  { value: '/account', label: 'Account' }
+];
+
+const systemItem = (key: string, label: string, path: string, displayOrder: number, overrides: Partial<StorefrontNavigationItem> = {}): StorefrontNavigationItem => ({
+  id: `nav-${key}`, key, label, linkType: 'internal_page', menuType: 'link', path,
+  parentId: null, visible: true, enabled: true, showOnDesktop: true, showOnMobile: true,
+  displayOrder, order: displayOrder, isSystemItem: true, ...overrides
+});
 
 export const DEFAULT_STOREFRONT_NAVIGATION: StorefrontNavigationItem[] = [
-  { key: 'home', label: 'Home', path: '/', visible: true, enabled: true, showOnDesktop: true, showOnMobile: true, order: 0 },
-  { key: 'shop', label: 'Shop', path: '/category/all', visible: true, enabled: true, showOnDesktop: true, showOnMobile: false, order: 1 },
-  { key: 'categories', label: 'Shop Categories', path: '/category/all', visible: true, enabled: true, showOnDesktop: true, showOnMobile: true, order: 2 },
-  { key: 'about', label: 'About', path: '/about', visible: true, enabled: true, showOnDesktop: true, showOnMobile: false, order: 3 },
-  { key: 'contact', label: 'Contact', path: '/contact', visible: true, enabled: true, showOnDesktop: true, showOnMobile: false, order: 4 },
-  { key: 'wishlist', label: 'Wishlist', path: '/wishlist', visible: true, enabled: true, showOnDesktop: false, showOnMobile: true, order: 5 },
-  { key: 'account', label: 'Account', path: '/account', visible: true, enabled: true, showOnDesktop: false, showOnMobile: true, order: 6 }
+  systemItem('home', 'Home', '/', 0),
+  systemItem('shop', 'Shop', '/category/all', 1, { showOnMobile: false }),
+  systemItem('categories', 'Shop Categories', '/category/all', 2, { menuType: 'dropdown', path: undefined }),
+  systemItem('about', 'About', '/about', 3, { showOnMobile: false }),
+  systemItem('contact', 'Contact', '/contact', 4, { showOnMobile: false }),
+  systemItem('wishlist', 'Wishlist', '/wishlist', 5, { showOnDesktop: false }),
+  systemItem('account', 'Account', '/account', 6, { showOnDesktop: false })
 ];
 
 export const DEFAULT_HOMEPAGE_SECTIONS: HomepageSectionSetting[] = [
@@ -23,11 +34,43 @@ export const DEFAULT_HOMEPAGE_SECTIONS: HomepageSectionSetting[] = [
   { key: 'newArrivals', name: 'New Arrivals', enabled: true, order: 5, heading: 'New Arrivals & Restocks', subheading: 'Fresh In Store', ctaLabel: 'Browse New Additions', ctaLink: '/category/all' }
 ];
 
-const mergeByKey = <T extends { key: string }>(defaults: T[], incoming?: Partial<T>[]): T[] =>
-  defaults.map(defaultItem => ({
-    ...defaultItem,
-    ...(incoming?.find(item => item.key === defaultItem.key) || {})
-  }));
+const normalizeNavigation = (incoming?: Partial<StorefrontNavigationItem>[]) => {
+  const source = incoming?.length ? incoming : DEFAULT_STOREFRONT_NAVIGATION;
+  const normalized = source.map((item, index): StorefrontNavigationItem => {
+    const fallback = DEFAULT_STOREFRONT_NAVIGATION.find(value => value.key === item.key);
+    const displayOrder = Number(item.displayOrder ?? item.order ?? index);
+    return {
+      ...(fallback || {}),
+      id: String(item.id || fallback?.id || `nav-${item.key || index}`),
+      key: String(item.key || fallback?.key || `custom-${index}`),
+      label: String(item.label || fallback?.label || 'Navigation Item'),
+      linkType: item.linkType || fallback?.linkType || 'custom_internal_url',
+      menuType: item.menuType || fallback?.menuType || 'link',
+      path: item.path ?? fallback?.path,
+      externalUrl: item.externalUrl,
+      categoryId: item.categoryId,
+      parentId: item.parentId || null,
+      visible: item.visible !== false,
+      enabled: item.enabled !== false,
+      showOnDesktop: item.showOnDesktop !== false,
+      showOnMobile: item.showOnMobile !== false,
+      displayOrder,
+      order: displayOrder,
+      badgeText: item.badgeText,
+      openInNewTab: item.openInNewTab === true,
+      isSystemItem: item.isSystemItem ?? Boolean(fallback)
+    };
+  });
+  DEFAULT_STOREFRONT_NAVIGATION.forEach(item => {
+    if (!normalized.some(candidate => candidate.key === item.key)) normalized.push({ ...item });
+  });
+  return normalized;
+};
+
+const mergeSections = (incoming?: Partial<HomepageSectionSetting>[]) => DEFAULT_HOMEPAGE_SECTIONS.map(defaultItem => ({
+  ...defaultItem,
+  ...(incoming?.find(item => item.key === defaultItem.key) || {})
+}));
 
 export const normalizeStoreSettings = (settings: Partial<StoreSettings>): StoreSettings => ({
   storeName: settings.storeName || 'PlayBimboo',
@@ -43,16 +86,14 @@ export const normalizeStoreSettings = (settings: Partial<StoreSettings>): StoreS
   standardShippingFee: Number(settings.standardShippingFee ?? settings.flatDeliveryRate ?? 200),
   flatDeliveryRate: settings.flatDeliveryRate,
   taxRate: Number(settings.taxRate ?? 0),
-  storefrontNavigation: mergeByKey(DEFAULT_STOREFRONT_NAVIGATION, settings.storefrontNavigation),
-  homepageSections: mergeByKey(DEFAULT_HOMEPAGE_SECTIONS, settings.homepageSections)
+  storefrontNavigation: normalizeNavigation(settings.storefrontNavigation),
+  homepageSections: mergeSections(settings.homepageSections)
 });
 
-export const orderedVisibleNavigation = (
-  settings: StoreSettings,
-  surface: 'desktop' | 'mobile'
-) => settings.storefrontNavigation
-  .filter(item => item.visible && (surface === 'desktop' ? item.showOnDesktop : item.showOnMobile))
-  .sort((a, b) => a.order - b.order);
+export const orderedVisibleNavigation = (settings: StoreSettings, surface: 'desktop' | 'mobile') =>
+  settings.storefrontNavigation
+    .filter(item => item.visible && (surface === 'desktop' ? item.showOnDesktop : item.showOnMobile))
+    .sort((a, b) => a.displayOrder - b.displayOrder);
 
 export const orderedHomepageSections = (settings: StoreSettings) =>
   settings.homepageSections.filter(section => section.enabled).sort((a, b) => a.order - b.order);
