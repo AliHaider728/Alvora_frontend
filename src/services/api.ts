@@ -11,6 +11,16 @@ export const removeAuthToken = (): void => {
   localStorage.removeItem('pb_admin_token');
   window.dispatchEvent(new Event('pb-auth-changed'));
 };
+export type AdminSessionUser = { id?: string; email?: string; role?: 'super_admin' | 'admin' | 'customer' };
+export const getAdminSessionUser = (): AdminSessionUser | null => {
+  try {
+    const value = localStorage.getItem('pb_admin_user');
+    return value ? JSON.parse(value) as AdminSessionUser : null;
+  } catch {
+    return null;
+  }
+};
+export const isSuperAdmin = () => getAdminSessionUser()?.role === 'super_admin';
 let lastApiError = '';
 export const getLastApiError = (): string => lastApiError;
 
@@ -96,6 +106,8 @@ export const api = {
   // Settings
   getSettings: () => fetchJson<any>('/settings'),
   updateSettings: (data: any) => fetchJson<any>('/settings', { method: 'PUT', body: JSON.stringify(data) }),
+  updateAppearance: (data: any) => fetchJson<any>('/settings/appearance', { method: 'PUT', body: JSON.stringify(data) }),
+  resetAppearance: () => fetchJson<any>('/settings/appearance/reset', { method: 'POST' }),
 
   // File Upload
   uploadImage: async (file: File) => {
@@ -124,6 +136,23 @@ export const api = {
       console.error('Image Upload Error:', err);
       throw err;
     }
+  },
+  uploadDetailContentImage: async (file: File) => {
+    const formData = new FormData();
+    formData.append('image', file);
+    const token = getAuthToken();
+    const headers: Record<string, string> = {};
+    if (token) headers.Authorization = `Bearer ${token}`;
+    const res = await fetch(`${API_BASE_URL}/upload/detail-content-image`, {
+      method: 'POST',
+      headers,
+      body: formData
+    });
+    if (!res.ok) {
+      const errorBody = await res.json().catch(() => ({ error: 'Failed to upload image' }));
+      throw new Error(errorBody.error || 'Failed to upload image');
+    }
+    return await res.json() as { secureUrl: string; url: string; publicId: string };
   },
   deleteImage: (publicId: string) =>
     fetchJson<{ deleted: boolean }>('/upload/image', {

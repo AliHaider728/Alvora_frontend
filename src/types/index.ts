@@ -1,4 +1,25 @@
 export type AgeGroupCategory = '0-2' | '3-5' | '6-8' | '8+';
+export type ProductDetailBlockType = 'richText' | 'image' | 'html' | 'divider';
+
+export interface ProductDetailBlock {
+  id: string;
+  type: ProductDetailBlockType;
+  enabled: boolean;
+  order: number;
+  heading?: string;
+  content?: string;
+  image?: {
+    secureUrl: string;
+    publicId: string;
+    alt: string;
+    caption?: string;
+    newlyUploaded?: boolean;
+  };
+  settings?: {
+    width?: 'full' | 'large' | 'medium';
+    alignment?: 'left' | 'center' | 'right';
+  };
+}
 
 export interface ProductVariantOption {
   id: string;
@@ -29,7 +50,8 @@ export interface Product {
   reviewCount: number;
   category: string;
   categorySlug: string;
-  ageGroup: AgeGroupCategory;
+  ageGroup?: AgeGroupCategory;
+  ageGroups: AgeGroupCategory[];
   brand: string;
   inStock: boolean;
   stockQuantity: number;
@@ -56,6 +78,9 @@ export interface Product {
   customDeliveryFee?: number;
   metaTitle?: string;
   metaDescription?: string;
+  productDetailBlocks?: ProductDetailBlock[];
+  productDetailCustomCss?: string;
+  productDetailScopedCss?: string;
 }
 
 export type ProductInput = Omit<
@@ -201,4 +226,34 @@ export interface StoreSettings {
   standardShippingFee: number;
   flatDeliveryRate?: number;
   taxRate: number;
+  storefrontNavigation: StorefrontNavigationItem[];
+  homepageSections: HomepageSectionSetting[];
+}
+
+export type StorefrontNavigationKey =
+  | 'home' | 'shop' | 'categories' | 'about' | 'contact' | 'wishlist' | 'account';
+
+export interface StorefrontNavigationItem {
+  key: StorefrontNavigationKey;
+  label: string;
+  path: string;
+  visible: boolean;
+  enabled: boolean;
+  showOnDesktop: boolean;
+  showOnMobile: boolean;
+  order: number;
+}
+
+export type HomepageSectionKey =
+  | 'hero' | 'categories' | 'ageGroups' | 'featuredProducts' | 'brandCampaign' | 'newArrivals';
+
+export interface HomepageSectionSetting {
+  key: HomepageSectionKey;
+  name: string;
+  enabled: boolean;
+  order: number;
+  heading?: string;
+  subheading?: string;
+  ctaLabel?: string;
+  ctaLink?: string;
 }

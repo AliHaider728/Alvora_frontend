@@ -5,6 +5,7 @@ import { Product } from '../../types';
 import { useStore } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/formatters';
 import { getSafeImageSrc } from '../../utils/images';
+import { formatProductAgeGroups } from '../../utils/products';
 
 interface ProductCardProps {
   product: Product;
@@ -84,7 +85,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
         {/* Age Group Badge */}
         <div className="absolute bottom-3 left-3 z-10">
           <span className="px-2.5 py-0.5 text-[10px] font-bold rounded-full bg-slate-900/70 text-white backdrop-blur-sm">
-            Ages {product.ageGroup}
+            {formatProductAgeGroups(product)}
           </span>
         </div>
 

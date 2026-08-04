@@ -8,6 +8,7 @@ import { API_BASE_URL, getLastApiError } from '../../services/api';
 import { SeoHead } from '../../components/common/SeoHead';
 import { formatPrice } from '../../utils/formatters';
 import { getSafeImageSrc } from '../../utils/images';
+import { formatProductAgeGroups } from '../../utils/products';
 
 export const AdminProductsPage: React.FC = () => {
   const { products, categories, updateProduct, deleteProduct, settings } = useStore();
@@ -24,9 +25,23 @@ export const AdminProductsPage: React.FC = () => {
   });
 
   
-  const handleExportCSV = () => {
+  const handleExportCSV = async () => {
     const token = localStorage.getItem('pb_admin_token') || '';
-    window.open(`${API_BASE_URL}/products/export/csv?token=${token}`);
+    try {
+      const response = await fetch(`${API_BASE_URL}/products/export/csv`, {
+        credentials: 'include',
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
+      });
+      if (!response.ok) throw new Error('Export failed');
+      const url = URL.createObjectURL(await response.blob());
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'playbimboo-products.csv';
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      showToast('Could not export products. Please sign in again and retry.', 'error');
+    }
   };
 
   const handleImportCSV = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,7 +96,7 @@ export const AdminProductsPage: React.FC = () => {
         </div>
         <div className="flex flex-wrap gap-2">
             <button
-              onClick={handleExportCSV}
+              onClick={() => { void handleExportCSV(); }}
               className="px-4 py-2.5 rounded-2xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs flex items-center gap-2 shadow-sm transition-all"
             >
               <DownloadCloud className="w-4 h-4" />
@@ -155,7 +170,7 @@ export const AdminProductsPage: React.FC = () => {
                     </div>
                   </td>
                   <td className="p-4 font-semibold text-sky-600">{prod.category}</td>
-                  <td className="p-4 font-bold">{prod.ageGroup} Yrs</td>
+                  <td className="p-4 font-bold">{formatProductAgeGroups(prod)}</td>
                   <td className="p-4 font-bold text-slate-900">{formatPrice(prod.price, settings.currency)}</td>
                   <td className="p-4">
                     <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${

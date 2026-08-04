@@ -1,4 +1,5 @@
 import { Category, AgeGroupOption, Product, Review, Order, Customer, Coupon, StoreSettings } from '../types';
+import { DEFAULT_HOMEPAGE_SECTIONS, DEFAULT_STOREFRONT_NAVIGATION } from '../config/storeAppearance';
 
 export const INITIAL_SETTINGS: StoreSettings = {
   storeName: "PlayBimboo",
@@ -12,6 +13,8 @@ export const INITIAL_SETTINGS: StoreSettings = {
   freeShippingThreshold: 5000,
   standardShippingFee: 250,
   taxRate: 0.05,
+  storefrontNavigation: DEFAULT_STOREFRONT_NAVIGATION.map(item => ({ ...item })),
+  homepageSections: DEFAULT_HOMEPAGE_SECTIONS.map(item => ({ ...item })),
 };
 
 export const AGE_GROUPS: AgeGroupOption[] = [
@@ -90,7 +93,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     reviewCount: 42,
     category: 'Building Sets & Blocks',
     categorySlug: 'building-sets',
-    ageGroup: '6-8',
+    ageGroups: ['6-8'],
     brand: 'SpaceCraft Toys',
     inStock: true,
     stockQuantity: 24,
@@ -134,7 +137,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     reviewCount: 56,
     category: 'Plush & Soft Toys',
     categorySlug: 'soft-toys',
-    ageGroup: '0-2',
+    ageGroups: ['0-2'],
     brand: 'HuggyFriends',
     inStock: true,
     stockQuantity: 18,
@@ -172,7 +175,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     reviewCount: 38,
     category: 'Educational & STEM',
     categorySlug: 'educational-stem',
-    ageGroup: '6-8',
+    ageGroups: ['6-8'],
     brand: 'TechKidz',
     inStock: true,
     stockQuantity: 15,
@@ -214,7 +217,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     reviewCount: 29,
     category: 'Outdoor & Active Play',
     categorySlug: 'outdoor-toys',
-    ageGroup: '8+',
+    ageGroups: ['8+'],
     brand: 'NitroWheels',
     inStock: true,
     stockQuantity: 30,
@@ -257,7 +260,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     reviewCount: 88,
     category: 'Building Sets & Blocks',
     categorySlug: 'building-sets',
-    ageGroup: '3-5',
+    ageGroups: ['3-5'],
     brand: 'MagnaCraft',
     inStock: true,
     stockQuantity: 40,
@@ -295,7 +298,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     reviewCount: 19,
     category: 'Board Games & Puzzles',
     categorySlug: 'board-games',
-    ageGroup: '3-5',
+    ageGroups: ['3-5'],
     brand: 'EcoWood Toys',
     inStock: true,
     stockQuantity: 22,
@@ -332,7 +335,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     reviewCount: 31,
     category: 'Action Figures & Playsets',
     categorySlug: 'action-figures',
-    ageGroup: '6-8',
+    ageGroups: ['6-8'],
     brand: 'Mythic Realm',
     inStock: true,
     stockQuantity: 12,
@@ -370,7 +373,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     reviewCount: 52,
     category: 'Board Games & Puzzles',
     categorySlug: 'board-games',
-    ageGroup: '6-8',
+    ageGroups: ['6-8'],
     brand: 'FunFamily Games',
     inStock: true,
     stockQuantity: 35,

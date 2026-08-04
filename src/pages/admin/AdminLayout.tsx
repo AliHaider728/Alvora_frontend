@@ -9,6 +9,7 @@ import {
   Tag,
   BarChart3,
   Settings,
+  Palette,
   LogOut,
   ExternalLink,
   Bell,
@@ -16,7 +17,7 @@ import {
   Menu,
   X as CloseIcon
 } from 'lucide-react';
-import { getAuthToken, removeAuthToken, api } from '../../services/api';
+import { getAuthToken, removeAuthToken, api, isSuperAdmin } from '../../services/api';
 
 export const AdminLayout: React.FC = () => {
   const location = useLocation();
@@ -40,6 +41,7 @@ export const AdminLayout: React.FC = () => {
     { label: 'Coupons & Deals', path: '/admin/coupons', icon: Tag },
     { label: 'Sales Reports', path: '/admin/reports', icon: BarChart3 },
     { label: 'Store Settings', path: '/admin/settings', icon: Settings },
+    ...(isSuperAdmin() ? [{ label: 'Store Appearance', path: '/admin/store-appearance', icon: Palette }] : []),
   ];
 
   const handleSignOut = async () => {

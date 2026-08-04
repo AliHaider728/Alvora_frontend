@@ -9,7 +9,7 @@ import { SeoHead } from '../../components/common/SeoHead';
 import { formatPrice } from '../../utils/formatters';
 import { AGE_GROUPS } from '../../data/mockData';
 import { AgeGroupCategory } from '../../types';
-import { isProductVisibleOnStorefront } from '../../utils/products';
+import { getProductAgeGroups, isProductVisibleOnStorefront } from '../../utils/products';
 
 export const CategoryPage: React.FC = () => {
   const { categorySlug } = useParams<{ categorySlug?: string }>();
@@ -51,7 +51,7 @@ export const CategoryPage: React.FC = () => {
         return false;
       }
       // Age group match
-      if (selectedAge !== 'all' && p.ageGroup !== selectedAge) {
+      if (selectedAge !== 'all' && !getProductAgeGroups(p).includes(selectedAge as AgeGroupCategory)) {
         return false;
       }
       // Brand match

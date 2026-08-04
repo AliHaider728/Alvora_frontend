@@ -1,46 +1,32 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Home, LayoutGrid, ShoppingBag, Heart, User } from 'lucide-react';
+import { Home, LayoutGrid, ShoppingBag, Heart, User, Store, Info, Mail } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
+import { orderedVisibleNavigation } from '../../config/storeAppearance';
 
 export const MobileBottomNav: React.FC = () => {
-  const { cartTotalItems, wishlist, setIsCartOpen } = useStore();
+  const { cartTotalItems, wishlist, setIsCartOpen, settings } = useStore();
   const location = useLocation();
 
-  const navItems = [
-    {
-      label: 'Home',
-      path: '/',
-      icon: Home
-    },
-    {
-      label: 'Categories',
-      path: '/category/all',
-      icon: LayoutGrid
-    },
-    {
+  const iconByKey = { home: Home, shop: Store, categories: LayoutGrid, about: Info, contact: Mail, wishlist: Heart, account: User };
+  const configuredItems = orderedVisibleNavigation(settings, 'mobile').map(item => ({
+    ...item,
+    icon: iconByKey[item.key],
+    badge: item.key === 'wishlist' ? wishlist.length : undefined
+  }));
+  const cartItem = {
       label: 'Cart',
       path: '#cart',
       icon: ShoppingBag,
       badge: cartTotalItems,
+      enabled: true,
       onClick: () => setIsCartOpen(true)
-    },
-    {
-      label: 'Wishlist',
-      path: '/wishlist',
-      icon: Heart,
-      badge: wishlist.length
-    },
-    {
-      label: 'Account',
-      path: '/account',
-      icon: User
-    }
-  ];
+  };
+  const navItems = [...configuredItems.slice(0, 2), cartItem, ...configuredItems.slice(2)];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-lg md:hidden h-16">
-      <div className="grid grid-cols-5 h-full max-w-md mx-auto">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-lg xl:hidden h-16">
+      <div className="grid h-full max-w-xl mx-auto" style={{ gridTemplateColumns: `repeat(${navItems.length}, minmax(0, 1fr))` }}>
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = item.path !== '#cart' && (
@@ -49,7 +35,7 @@ export const MobileBottomNav: React.FC = () => {
               : location.pathname.startsWith(item.path)
           );
 
-          if (item.onClick) {
+          if ('onClick' in item) {
             return (
               <button
                 key={item.label}
@@ -72,9 +58,18 @@ export const MobileBottomNav: React.FC = () => {
             );
           }
 
+          if (!item.enabled) {
+            return (
+              <button key={item.key} type="button" disabled aria-disabled="true" title="Coming soon" className="flex flex-col items-center justify-center py-1 text-slate-300">
+                <Icon className="h-5 w-5" />
+                <span className="mt-1 max-w-full truncate px-1 text-[10px] font-bold">{item.label}</span>
+              </button>
+            );
+          }
+
           return (
             <NavLink
-              key={item.label}
+              key={item.key}
               to={item.path}
               className={({ isActive: linkActive }) => `
                 flex flex-col items-center justify-center py-1 transition-all relative

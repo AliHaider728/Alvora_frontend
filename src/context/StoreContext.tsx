@@ -21,6 +21,7 @@ import {
 } from '../data/mockData';
 import { api, getAuthToken } from '../services/api';
 import { formatPrice } from '../utils/formatters';
+import { normalizeStoreSettings } from '../config/storeAppearance';
 
 type MongoRecord = {
   _id?: unknown;
@@ -36,6 +37,11 @@ type BackendOrder = Partial<Order> &
 const normalizeProduct = (product: Partial<Product> & MongoRecord): Product => ({
   ...(product as Product),
   id: String(product.id || product._id || product.slug || ''),
+  ageGroups: Array.isArray(product.ageGroups) && product.ageGroups.length > 0
+    ? product.ageGroups
+    : product.ageGroup
+      ? [['9-11', '9-12', '13+'].includes(String(product.ageGroup)) ? '8+' : product.ageGroup]
+      : [],
   images: Array.isArray(product.images)
     ? product.images.filter(
         (image): image is string => typeof image === 'string' && image.trim().length > 0
@@ -65,6 +71,9 @@ const normalizeProduct = (product: Partial<Product> & MongoRecord): Product => (
             }))
           : []
       }))
+    : [],
+  productDetailBlocks: Array.isArray(product.productDetailBlocks)
+    ? product.productDetailBlocks.map((block, index) => ({ ...block, order: index }))
     : []
 });
 
@@ -136,6 +145,7 @@ interface StoreContextType {
   deleteCoupon: (id: string) => void;
 
   updateSettings: (newSettings: Partial<StoreSettings>) => void;
+  updateAppearanceSettings: (newSettings: Pick<StoreSettings, 'storefrontNavigation' | 'homepageSections'>) => void;
   addReview: (reviewData: Omit<Review, 'id' | 'date'>) => void;
 }
 
@@ -183,9 +193,9 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       if (parsed.freeShippingThreshold === 50) {
         parsed.freeShippingThreshold = 5000;
       }
-      return parsed;
+      return normalizeStoreSettings(parsed);
     }
-    return INITIAL_SETTINGS;
+    return normalizeStoreSettings(INITIAL_SETTINGS);
   });
 
   const [cart, setCart] = useState<CartItem[]>(() => {
@@ -236,7 +246,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         if (realOrders) setOrders(realOrders.map(normalizeOrder));
         if (realCustomers) setCustomers(realCustomers);
         if (realCoupons) setCoupons(realCoupons);
-        if (realSettings) setSettings(realSettings);
+        if (realSettings) setSettings(normalizeStoreSettings(realSettings));
         if (realReviews) setReviews(realReviews);
       } catch (err) {
         console.error('Failed to fetch real data from backend', err);
@@ -496,7 +506,13 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   const updateSettings = (newSettings: Partial<StoreSettings>) => {
-    setSettings(prev => ({ ...prev, ...newSettings }));
+    setSettings(prev => normalizeStoreSettings({ ...prev, ...newSettings }));
+  };
+
+  const updateAppearanceSettings = (
+    newSettings: Pick<StoreSettings, 'storefrontNavigation' | 'homepageSections'>
+  ) => {
+    setSettings(prev => normalizeStoreSettings({ ...prev, ...newSettings }));
   };
 
   const addReview = (reviewData: Omit<Review, 'id' | 'date'>) => {
@@ -556,6 +572,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         updateCoupon,
         deleteCoupon,
         updateSettings,
+        updateAppearanceSettings,
         addReview,
       }}
     >

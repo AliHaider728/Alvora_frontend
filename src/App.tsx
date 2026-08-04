@@ -32,6 +32,7 @@ import { AdminCustomersPage } from './pages/admin/AdminCustomersPage';
 import { AdminCouponsPage } from './pages/admin/AdminCouponsPage';
 import { AdminReportsPage } from './pages/admin/AdminReportsPage';
 import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
+import { AdminStoreAppearancePage } from './pages/admin/AdminStoreAppearancePage';
 
 const AdminProductFormPage = React.lazy(() =>
   import('./pages/admin/AdminProductFormPage').then(module => ({
@@ -59,7 +60,7 @@ const ScrollToTop = () => {
 // Storefront Layout Wrapper
 const StorefrontLayout: React.FC = () => {
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50 font-sans text-slate-800 pb-20 md:pb-0">
+    <div className="flex flex-col min-h-screen bg-slate-50 font-sans text-slate-800 pb-20 xl:pb-0">
       <Header />
       <CartDrawer />
       <main className="flex-1">
@@ -109,6 +110,7 @@ export default function App() {
             <Route path="coupons" element={<AdminCouponsPage />} />
             <Route path="reports" element={<AdminReportsPage />} />
             <Route path="settings" element={<AdminSettingsPage />} />
+            <Route path="store-appearance" element={<AdminStoreAppearancePage />} />
           </Route>
 
           {/* Customer Storefront Routes */}

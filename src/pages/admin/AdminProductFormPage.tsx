@@ -29,14 +29,17 @@ import { useStore } from '../../context/StoreContext';
 import { useToast } from '../../context/ToastContext';
 import { AGE_GROUPS } from '../../data/mockData';
 import { api, getLastApiError } from '../../services/api';
+import { isSuperAdmin } from '../../services/api';
 import {
   AgeGroupCategory,
   DeliveryChargeType,
   Product,
+  ProductDetailBlock,
   ProductInput,
   ProductVariantGroup
 } from '../../types';
 import { getSafeImageSrc } from '../../utils/images';
+import { ProductDetailContentBuilder } from '../../components/admin/ProductDetailContentBuilder';
 
 type OrderedImage = {
   id: string;
@@ -210,7 +213,7 @@ export const AdminProductFormPage: React.FC = () => {
   const [stockStatus, setStockStatus] = useState<'in_stock' | 'out_of_stock'>('in_stock');
   const [lowStockThreshold, setLowStockThreshold] = useState<number>();
   const [variants, setVariants] = useState<VariantRow[]>([]);
-  const [ageGroup, setAgeGroup] = useState<AgeGroupCategory>('6-8');
+  const [ageGroups, setAgeGroups] = useState<AgeGroupCategory[]>(['6-8']);
   const [material, setMaterial] = useState('');
   const [safetyInfo, setSafetyInfo] = useState('');
   const [weight, setWeight] = useState<number>();
@@ -228,6 +231,9 @@ export const AdminProductFormPage: React.FC = () => {
   const [uploadingTarget, setUploadingTarget] = useState<'main' | 'gallery' | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
+  const [productDetailBlocks, setProductDetailBlocks] = useState<ProductDetailBlock[]>([]);
+  const [productDetailCustomCss, setProductDetailCustomCss] = useState('');
+  const superAdmin = isSuperAdmin();
 
   const markDirty = () => setIsDirty(true);
   const clearError = (field: string) =>
@@ -295,7 +301,9 @@ export const AdminProductFormPage: React.FC = () => {
         }))
       )
     );
-    setAgeGroup(editingProduct.ageGroup);
+    setAgeGroups(editingProduct.ageGroups?.length
+      ? editingProduct.ageGroups
+      : editingProduct.ageGroup ? [editingProduct.ageGroup] : ['6-8']);
     setMaterial(editingProduct.specifications?.Material || '');
     setSafetyInfo(editingProduct.safetyInfo || '');
     setWeight(editingProduct.weight);
@@ -311,6 +319,11 @@ export const AdminProductFormPage: React.FC = () => {
     setMetaDescription(editingProduct.metaDescription || '');
     setSlug(editingProduct.slug);
     setSlugManuallyEdited(true);
+    setProductDetailBlocks((editingProduct.productDetailBlocks || []).map(block => ({
+      ...block,
+      image: block.image ? { ...block.image, newlyUploaded: false } : undefined
+    })));
+    setProductDetailCustomCss(editingProduct.productDetailCustomCss || '');
     setIsDirty(false);
   }, [editingProduct]);
 
@@ -335,14 +348,25 @@ export const AdminProductFormPage: React.FC = () => {
       if (!window.confirm('You have unsaved product changes. Leave this page?')) {
         event.preventDefault();
         event.stopPropagation();
+      } else {
+        void cleanupTemporaryUploads();
       }
     };
     document.addEventListener('click', warnBeforeLinkNavigation, true);
     return () => document.removeEventListener('click', warnBeforeLinkNavigation, true);
   }, [isDirty]);
 
-  const cancelEditing = () => {
+  const cleanupTemporaryUploads = async () => {
+    const publicIds = [
+      ...images.filter(image => image.newlyUploaded).map(image => image.publicId),
+      ...productDetailBlocks.filter(block => block.image?.newlyUploaded).map(block => block.image?.publicId)
+    ].filter((value): value is string => Boolean(value));
+    await Promise.all([...new Set(publicIds)].map(publicId => api.deleteImage(publicId)));
+  };
+
+  const cancelEditing = async () => {
     if (isDirty && !window.confirm('Discard your unsaved product changes?')) return;
+    await cleanupTemporaryUploads();
     navigate('/admin/products');
   };
 
@@ -477,6 +501,7 @@ export const AdminProductFormPage: React.FC = () => {
     const normalizedSku = sku.trim().toUpperCase();
     if (!name.trim()) nextErrors.name = 'Product name is required.';
     if (!category) nextErrors.category = 'Select a category.';
+    if (ageGroups.length === 0) nextErrors.ageGroups = 'Select at least one age recommendation.';
     if (!stripHtml(description)) nextErrors.description = 'Detailed description is required.';
     if (!Number.isFinite(regularPrice) || regularPrice < 0) nextErrors.regularPrice = 'Enter a non-negative regular price.';
     if (salePrice !== undefined && (!Number.isFinite(salePrice) || salePrice < 0 || salePrice >= regularPrice)) {
@@ -491,6 +516,13 @@ export const AdminProductFormPage: React.FC = () => {
       nextErrors.customDeliveryFee = 'Enter a non-negative custom shipping fee.';
     }
     if (images.length === 0) nextErrors.images = 'A main product image is required.';
+    if (productDetailBlocks.some(block => block.type === 'image' && (!block.image?.secureUrl || !block.image.alt.trim()))) {
+      nextErrors.productDetailBlocks = 'Every image block needs an uploaded image and descriptive alt text.';
+    }
+    if (productDetailBlocks.some(block => block.type === 'html' && !block.content?.trim())) {
+      nextErrors.productDetailBlocks = 'Custom HTML blocks cannot be empty.';
+    }
+    if (productDetailCustomCss.length > 10000) nextErrors.productDetailBlocks = 'Custom CSS cannot exceed 10,000 characters.';
     if (!normalizedSlug) nextErrors.slug = 'URL slug is required.';
     if (products.some(product => product.id !== id && product.slug === normalizedSlug)) {
       nextErrors.slug = 'This URL slug is already used by another product.';
@@ -558,7 +590,7 @@ export const AdminProductFormPage: React.FC = () => {
       reviewCount: editingProduct?.reviewCount ?? 0,
       category,
       categorySlug: selectedCategory?.slug || categorySlug,
-      ageGroup,
+      ageGroups,
       brand: editingProduct?.brand || 'PlayBimboo',
       inStock: stockStatus === 'in_stock' && stockQuantity > 0,
       stockQuantity: Number(stockQuantity),
@@ -584,7 +616,18 @@ export const AdminProductFormPage: React.FC = () => {
       deliveryType,
       customDeliveryFee: deliveryType === 'fixed' ? customDeliveryFee ?? null : null,
       metaTitle: metaTitle.trim(),
-      metaDescription: metaDescription.trim()
+      metaDescription: metaDescription.trim(),
+      productDetailBlocks: productDetailBlocks.map((block, order) => ({
+        ...block,
+        order,
+        image: block.image ? {
+          secureUrl: block.image.secureUrl,
+          publicId: block.image.publicId,
+          alt: block.image.alt,
+          caption: block.image.caption
+        } : undefined
+      })),
+      ...(superAdmin ? { productDetailCustomCss } : {})
     };
 
     setIsSaving(true);
@@ -594,6 +637,9 @@ export const AdminProductFormPage: React.FC = () => {
       const apiError = getLastApiError() || `Could not ${isEditing ? 'update' : 'create'} the product.`;
       if (/slug/i.test(apiError)) setErrors(current => ({ ...current, slug: apiError }));
       if (/sku/i.test(apiError)) setErrors(current => ({ ...current, sku: apiError }));
+      await cleanupTemporaryUploads();
+      setImages(current => current.filter(image => !image.newlyUploaded));
+      setProductDetailBlocks(current => current.filter(block => !block.image?.newlyUploaded));
       showToast(apiError, 'error');
       return;
     }
@@ -738,6 +784,15 @@ export const AdminProductFormPage: React.FC = () => {
               {deliveryType === 'fixed' && <label className="sm:col-span-2"><span className="mb-1.5 block text-xs font-bold text-slate-700">Custom Shipping Fee (Rs.) <span className="text-rose-500">*</span></span><input type="number" min="0" step="1" value={customDeliveryFee ?? ''} onChange={event => { setCustomDeliveryFee(event.target.value === '' ? undefined : Number(event.target.value)); markDirty(); clearError('customDeliveryFee'); }} className={inputClass('customDeliveryFee')} /><FieldError message={errors.customDeliveryFee} /></label>}
             </div>
           </FormCard>
+
+          <ProductDetailContentBuilder
+            blocks={productDetailBlocks}
+            customCss={productDetailCustomCss}
+            isSuperAdmin={superAdmin}
+            onBlocksChange={next => { setProductDetailBlocks(next); markDirty(); clearError('productDetailBlocks'); }}
+            onCustomCssChange={next => { setProductDetailCustomCss(next); markDirty(); clearError('productDetailBlocks'); }}
+          />
+          <FieldError message={errors.productDetailBlocks} />
         </div>
 
         <aside className="min-w-0 space-y-6 xl:sticky xl:top-20">
@@ -773,7 +828,13 @@ export const AdminProductFormPage: React.FC = () => {
 
           <FormCard title="Product Details" icon={Box}>
             <div className="space-y-4">
-              <label><span className="mb-1.5 block text-xs font-bold text-slate-700">Age Recommendation</span><select value={ageGroup} onChange={event => { setAgeGroup(event.target.value as AgeGroupCategory); markDirty(); }} className={fieldClassName}>{AGE_GROUPS.map(group => <option key={group.id} value={group.id}>{group.name}</option>)}</select></label>
+              <fieldset>
+                <legend className="mb-2 block text-xs font-bold text-slate-700">Age Recommendations <span className="text-rose-500">*</span></legend>
+                <div className="grid grid-cols-2 gap-2">
+                  {AGE_GROUPS.map(group => <label key={group.id} className={`flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2.5 text-xs font-bold transition ${ageGroups.includes(group.id) ? 'border-indigo-300 bg-indigo-50 text-indigo-700' : 'border-slate-200 bg-white text-slate-600'}`}><input type="checkbox" checked={ageGroups.includes(group.id)} onChange={event => { setAgeGroups(current => event.target.checked ? [...current, group.id] : current.filter(value => value !== group.id)); markDirty(); clearError('ageGroups'); }} />{group.label}</label>)}
+                </div>
+                <FieldError message={errors.ageGroups} />
+              </fieldset>
               <label><span className="mb-1.5 block text-xs font-bold text-slate-700">Material</span><input value={material} onChange={event => { setMaterial(event.target.value); markDirty(); }} className={fieldClassName} placeholder="e.g. ABS Plastic (BPA Free)" /></label>
               <label><span className="mb-1.5 block text-xs font-bold text-slate-700">Safety Notes</span><textarea rows={3} value={safetyInfo} onChange={event => { setSafetyInfo(event.target.value); markDirty(); }} className={fieldClassName} placeholder="Child-safe materials and relevant warnings" /></label>
             </div>
@@ -789,7 +850,7 @@ export const AdminProductFormPage: React.FC = () => {
         </aside>
 
         <div className="sticky bottom-4 z-20 flex flex-col-reverse gap-3 rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-xl backdrop-blur sm:flex-row sm:justify-end xl:col-span-2">
-          <button type="button" disabled={isSaving} onClick={cancelEditing} className="rounded-xl bg-slate-100 px-5 py-3 text-xs font-bold text-slate-700 disabled:opacity-50">Cancel</button>
+          <button type="button" disabled={isSaving} onClick={() => { void cancelEditing(); }} className="rounded-xl bg-slate-100 px-5 py-3 text-xs font-bold text-slate-700 disabled:opacity-50">Cancel</button>
           <button type="submit" disabled={isSaving || uploadingTarget !== null} className="inline-flex items-center justify-center gap-2 rounded-xl bg-rose-500 px-6 py-3 text-xs font-bold text-white shadow-md transition hover:bg-rose-600 disabled:cursor-not-allowed disabled:opacity-60">{isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}{isSaving ? 'Saving…' : isEditing ? 'Update Product' : 'Save Product'}</button>
         </div>
       </form>

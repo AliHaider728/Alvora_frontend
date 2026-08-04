@@ -40,6 +40,7 @@ export const HomePage: React.FC = () => {
   const featuredProducts = visibleProducts.filter(p => p.isFeatured).slice(0, 4);
   const bestSellers = visibleProducts.filter(p => p.isBestseller).slice(0, 4);
   const newArrivals = visibleProducts.filter(p => p.isNewArrival).slice(0, 4);
+  const sectionByKey = Object.fromEntries(settings.homepageSections.map(section => [section.key, section]));
 
   const categoryIcons: Record<string, React.ReactNode> = {
     'building-sets': <Boxes className="w-6 h-6 text-amber-500" />,
@@ -58,14 +59,14 @@ export const HomePage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans">
+    <div className="min-h-screen bg-slate-50 font-sans flex flex-col">
       <SeoHead
         title="Playful Toys & Games Store"
         description="Shop top-rated STEM toys, building sets, action figures, soft plushies, and board games for kids of all ages. Safe, non-toxic & fast delivery!"
       />
 
       {/* Hero Banner Section */}
-      <section className="relative w-full min-h-[650px] lg:h-[700px] overflow-visible flex flex-col justify-center pt-8 pb-32 lg:py-0 mt-0">
+      {sectionByKey.hero?.enabled && <section style={{ order: sectionByKey.hero.order }} className="relative w-full min-h-[650px] lg:h-[700px] overflow-visible flex flex-col justify-center pt-8 pb-32 lg:py-0 mt-0">
         {/* Full Background Video */}
         <div className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-[#E2F1F8]">
           <video
@@ -100,19 +101,19 @@ export const HomePage: React.FC = () => {
             </div>
 
             <h1 className="font-heading font-black text-4xl sm:text-5xl lg:text-[72px] text-slate-900 leading-[1.1] tracking-tight drop-shadow-sm">
-              Where <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-rose-400 to-sky-400">Imagination</span><br /> Comes to Play!
+              {sectionByKey.hero.heading}
             </h1>
 
             <p className="text-slate-800 lg:text-slate-600 font-sans text-base sm:text-lg max-w-[500px] mx-auto lg:mx-0 leading-relaxed font-medium">
-              Discover award-winning toys, STEM sets, plushies, action figures, and more that spark curiosity, inspire learning, and bring families closer together through the power of play.
+              {sectionByKey.hero.subheading}
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
               <Link
-                to="/category/all"
+                to={sectionByKey.hero.ctaLink || '/category/all'}
                 className="w-full sm:w-auto px-8 py-4 rounded-full bg-gradient-to-r from-orange-500 to-rose-500 hover:from-orange-600 hover:to-rose-600 text-white font-heading font-extrabold text-base shadow-[0_8px_20px_-8px_rgba(244,63,94,0.5)] flex items-center justify-center gap-2 transition-all hover:scale-105 active:scale-95"
               >
-                <span>Explore All Toys &rarr;</span>
+                <span>{sectionByKey.hero.ctaLabel || 'Explore All Toys'} &rarr;</span>
               </Link>
 
               <Link
@@ -149,24 +150,24 @@ export const HomePage: React.FC = () => {
             <TrustBadges />
           </div>
         </div>
-      </section>
+      </section>}
 
       {/* Shop by Category Section */}
-      <section className="py-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {sectionByKey.categories?.enabled && <section style={{ order: sectionByKey.categories.order }} className="py-14 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8">
           <div>
             <span className="text-xs font-extrabold uppercase tracking-wider text-rose-500 font-heading">
-              Browse Collections
+              {sectionByKey.categories.subheading}
             </span>
             <h2 className="font-heading font-black text-2xl sm:text-3xl text-slate-900 mt-1">
-              Shop by Category
+              {sectionByKey.categories.heading}
             </h2>
           </div>
           <Link
-            to="/category/all"
+            to={sectionByKey.categories.ctaLink || '/category/all'}
             className="mt-2 sm:mt-0 font-heading font-bold text-xs sm:text-sm text-rose-500 hover:text-rose-600 flex items-center gap-1 group"
           >
-            <span>View All Categories</span>
+            <span>{sectionByKey.categories.ctaLabel || 'View All Categories'}</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
@@ -202,20 +203,20 @@ export const HomePage: React.FC = () => {
             </Link>
           ))}
         </div>
-      </section>
+      </section>}
 
       {/* Shop by Age Group Section */}
-      <section className="py-12 bg-gradient-to-r from-amber-50/70 via-rose-50/50 to-sky-50/70 border-y border-slate-200/60">
+      {sectionByKey.ageGroups?.enabled && <section style={{ order: sectionByKey.ageGroups.order }} className="py-12 w-full bg-gradient-to-r from-amber-50/70 via-rose-50/50 to-sky-50/70 border-y border-slate-200/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-xl mx-auto mb-8">
             <span className="text-xs font-extrabold uppercase tracking-wider text-amber-600 font-heading">
               Tailored for Every Stage
             </span>
             <h2 className="font-heading font-black text-2xl sm:text-3xl text-slate-900 mt-1">
-              Shop by Age Group
+              {sectionByKey.ageGroups.heading}
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 mt-1 font-medium">
-              Find perfectly developmental & age-appropriate toys designed for your child’s growth.
+              {sectionByKey.ageGroups.subheading}
             </p>
           </div>
 
@@ -244,25 +245,25 @@ export const HomePage: React.FC = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section>}
 
       {/* Featured / Bestseller Products Section */}
-      <section className="py-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {sectionByKey.featuredProducts?.enabled && <section style={{ order: sectionByKey.featuredProducts.order }} className="py-14 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8">
           <div>
             <span className="text-xs font-extrabold uppercase tracking-wider text-rose-500 font-heading flex items-center gap-1">
               <Flame className="w-4 h-4 fill-rose-500" />
-              Hot Picks
+              {sectionByKey.featuredProducts.subheading}
             </span>
             <h2 className="font-heading font-black text-2xl sm:text-3xl text-slate-900 mt-1">
-              Featured Toys & Bestsellers
+              {sectionByKey.featuredProducts.heading}
             </h2>
           </div>
           <Link
-            to="/category/all"
+            to={sectionByKey.featuredProducts.ctaLink || '/category/all'}
             className="mt-2 sm:mt-0 font-heading font-bold text-xs sm:text-sm text-rose-500 hover:text-rose-600 flex items-center gap-1"
           >
-            <span>Shop All Bestsellers &rarr;</span>
+            <span>{sectionByKey.featuredProducts.ctaLabel || 'Shop All Bestsellers'} &rarr;</span>
           </Link>
         </div>
 
@@ -275,10 +276,10 @@ export const HomePage: React.FC = () => {
             />
           ))}
         </div>
-      </section>
+      </section>}
 
       {/* Brand Discovery Campaign Section */}
-      <section className="py-10 max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8">
+      {sectionByKey.brandCampaign?.enabled && <section style={{ order: sectionByKey.brandCampaign.order }} className="py-10 w-full max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative w-full rounded-[28px] md:rounded-[36px] overflow-hidden flex flex-col justify-center min-h-[500px] md:h-[600px] lg:h-[650px] shadow-xl group">
           {/* Full Background Image */}
           <img 
@@ -314,22 +315,21 @@ export const HomePage: React.FC = () => {
 
             {/* Headline */}
             <h3 className="font-heading font-black text-3xl sm:text-4xl lg:text-[44px] leading-[1.15] text-white animate-fade-in-up">
-              Discover Toys That <br className="hidden lg:block" />
-              Make Learning <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-orange-400 to-pink-400">Magical</span>
+              {sectionByKey.brandCampaign.heading}
             </h3>
 
             {/* Copy */}
             <p className="text-sm sm:text-base text-slate-100 font-sans leading-relaxed max-w-[420px] animate-fade-in-up [animation-delay:100ms]">
-              From STEM kits and building sets to creative play essentials, Play Bimboo brings fun, skill-building toys that spark curiosity and joyful learning at every age.
+              {sectionByKey.brandCampaign.subheading}
             </p>
 
             {/* CTA & Pills Container */}
             <div className="pt-4 w-full flex flex-col items-center md:items-start gap-5 animate-fade-in-up [animation-delay:200ms]">
               <Link
-                to="/category/all"
+                to={sectionByKey.brandCampaign.ctaLink || '/category/all'}
                 className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-[20px] bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-300 hover:to-amber-400 text-slate-900 font-heading font-extrabold text-sm shadow-[0_8px_20px_-6px_rgba(251,191,36,0.6)] transition-all hover:scale-[1.02] active:scale-95"
               >
-                <span>Explore Play Bimboo Favorites</span>
+                <span>{sectionByKey.brandCampaign.ctaLabel || 'Explore PlayBimboo Favorites'}</span>
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Link>
               
@@ -349,24 +349,24 @@ export const HomePage: React.FC = () => {
 
           </div>
         </div>
-      </section>
+      </section>}
 
       {/* New Arrivals Grid */}
-      <section className="py-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {sectionByKey.newArrivals?.enabled && <section style={{ order: sectionByKey.newArrivals.order }} className="py-14 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8">
           <div>
             <span className="text-xs font-extrabold uppercase tracking-wider text-sky-600 font-heading">
-              Fresh In Store
+              {sectionByKey.newArrivals.subheading}
             </span>
             <h2 className="font-heading font-black text-2xl sm:text-3xl text-slate-900 mt-1">
-              New Arrivals & Restocks
+              {sectionByKey.newArrivals.heading}
             </h2>
           </div>
           <Link
-            to="/category/all"
+            to={sectionByKey.newArrivals.ctaLink || '/category/all'}
             className="mt-2 sm:mt-0 font-heading font-bold text-xs sm:text-sm text-sky-600 hover:text-sky-700 flex items-center gap-1"
           >
-            <span>Browse New Additions &rarr;</span>
+            <span>{sectionByKey.newArrivals.ctaLabel || 'Browse New Additions'} &rarr;</span>
           </Link>
         </div>
 
@@ -379,7 +379,7 @@ export const HomePage: React.FC = () => {
             />
           ))}
         </div>
-      </section>
+      </section>}
 
       {/* Quick View Product Modal */}
       {selectedQuickViewProduct && (

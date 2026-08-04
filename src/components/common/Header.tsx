@@ -15,6 +15,7 @@ import { Logo } from './Logo';
 import { useStore } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/formatters';
 import { isProductVisibleOnStorefront } from '../../utils/products';
+import { orderedVisibleNavigation } from '../../config/storeAppearance';
 
 export const Header: React.FC = () => {
   const { cartTotalItems, wishlist, setIsCartOpen, products, categories, settings } = useStore();
@@ -30,6 +31,7 @@ export const Header: React.FC = () => {
 
   const searchRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const desktopNavigation = orderedVisibleNavigation(settings, 'desktop');
 
   // Filter search autosuggest results
   const searchResults = searchQuery.trim()
@@ -115,38 +117,40 @@ export const Header: React.FC = () => {
           </div>
 
           {/* Consolidated Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-5 xl:gap-7 text-sm font-heading font-bold text-slate-600 flex-shrink-0">
-            <Link to="/" className="hover:text-rose-500 text-slate-900 transition-colors">
-              Home
-            </Link>
-            <Link to="/category/all" className="hover:text-rose-500 transition-colors">
-              Shop
-            </Link>
-            <div className="relative group">
-              <button
-                onClick={() => setCategoriesOpen(!categoriesOpen)}
-                className="flex items-center gap-1.5 hover:text-rose-500 transition-colors py-1"
-              >
-                <span>Shop Categories</span>
-                <ChevronDown className="w-4 h-4" />
-              </button>
-              <div className="absolute top-full left-0 mt-3 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 hidden group-hover:block z-50">
-                <Link to="/category/all" className="block px-3.5 py-2.5 rounded-xl text-slate-800 hover:bg-rose-50 font-bold text-sm">
-                  All Toys & Games
-                </Link>
-                {categories.map(cat => (
-                  <Link key={cat.id} to={`/category/${cat.slug}`} className="block px-3.5 py-2 rounded-xl text-slate-600 hover:text-rose-600 hover:bg-rose-50 transition-colors font-semibold text-sm">
-                    {cat.name}
+          <nav className="hidden xl:flex items-center gap-7 text-sm font-heading font-bold text-slate-600 flex-shrink-0">
+            {desktopNavigation.map(item => item.key === 'categories' ? (
+              <div key={item.key} className="relative group">
+                <button
+                  type="button"
+                  disabled={!item.enabled}
+                  aria-disabled={!item.enabled}
+                  onClick={() => item.enabled && setCategoriesOpen(!categoriesOpen)}
+                  className="flex items-center gap-1.5 hover:text-rose-500 transition-colors py-1 disabled:cursor-not-allowed disabled:text-slate-300"
+                  title={item.enabled ? undefined : 'Coming soon'}
+                >
+                  <span>{item.label}</span>
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+                {item.enabled && <div className="absolute top-full left-0 mt-3 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 hidden group-hover:block z-50">
+                  <Link to="/category/all" className="block px-3.5 py-2.5 rounded-xl text-slate-800 hover:bg-rose-50 font-bold text-sm">
+                    All Toys & Games
                   </Link>
-                ))}
+                  {categories.map(cat => (
+                    <Link key={cat.id} to={`/category/${cat.slug}`} className="block px-3.5 py-2 rounded-xl text-slate-600 hover:text-rose-600 hover:bg-rose-50 transition-colors font-semibold text-sm">
+                      {cat.name}
+                    </Link>
+                  ))}
+                </div>}
               </div>
-            </div>
-            <Link to="/about" className="hover:text-rose-500 transition-colors">
-              About
-            </Link>
-            <Link to="/contact" className="hover:text-rose-500 transition-colors">
-              Contact
-            </Link>
+            ) : item.enabled ? (
+              <Link key={item.key} to={item.path} className="hover:text-rose-500 transition-colors">
+                {item.label}
+              </Link>
+            ) : (
+              <span key={item.key} aria-disabled="true" title="Coming soon" className="cursor-not-allowed text-slate-300">
+                {item.label}
+              </span>
+            ))}
           </nav>
 
           {/* Search Bar with Autosuggest */}
@@ -250,7 +254,7 @@ export const Header: React.FC = () => {
             {/* Wishlist */}
             <Link
               to="/wishlist"
-              className="hidden lg:flex items-center gap-2 group"
+              className="hidden xl:flex items-center gap-2 group"
               title="Wishlist"
             >
               <div className="relative p-2 rounded-full bg-slate-50 group-hover:bg-rose-50 text-slate-600 transition-colors">

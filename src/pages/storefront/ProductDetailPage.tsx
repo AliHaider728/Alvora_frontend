@@ -21,6 +21,8 @@ import { SeoHead } from '../../components/common/SeoHead';
 import { formatPrice } from '../../utils/formatters';
 import { api } from '../../services/api';
 import { getProductDeliveryType, isProductVisibleOnStorefront } from '../../utils/products';
+import { getProductAgeGroups } from '../../utils/products';
+import { ProductDetailContent } from '../../components/product/ProductDetailContent';
 
 const getPlainDescription = (description: string) =>
   description.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
@@ -239,6 +241,12 @@ export const ProductDetailPage: React.FC = () => {
                 {product.name}
               </h1>
 
+              <div className="mb-4 flex flex-wrap gap-2" aria-label="Recommended age groups">
+                {getProductAgeGroups(product).map(age => (
+                  <span key={age} className="rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-[11px] font-bold text-indigo-700">Ages {age}</span>
+                ))}
+              </div>
+
               {/* Price & Stock */}
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between mb-4">
                 <div>
@@ -399,6 +407,8 @@ export const ProductDetailPage: React.FC = () => {
             </div>
           </div>
         </div>
+
+        <ProductDetailContent product={product} />
 
         {/* Product Information Tabs */}
         <div className="bg-white rounded-3xl p-4 sm:p-8 border border-slate-100 shadow-sm mb-12">
