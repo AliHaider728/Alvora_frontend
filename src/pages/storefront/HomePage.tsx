@@ -400,7 +400,7 @@ export const HomePage: React.FC = () => {
               />
               <div className="space-y-3">
                 <span className="text-xs font-bold text-sky-600 uppercase">
-                  {selectedQuickViewProduct.category}
+                  {selectedQuickViewProduct.category || 'Uncategorized'}
                 </span>
                 <h3 className="font-heading font-bold text-lg text-slate-900">
                   {selectedQuickViewProduct.name}
@@ -416,7 +416,7 @@ export const HomePage: React.FC = () => {
                   )}
                 </div>
                 <p className="text-xs text-slate-600 line-clamp-3">
-                  {selectedQuickViewProduct.description}
+                  {selectedQuickViewProduct.shortDescription || selectedQuickViewProduct.description.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()}
                 </p>
                 <div className="pt-2">
                   <Link

@@ -1,5 +1,6 @@
 export type AgeGroupCategory = '0-2' | '3-5' | '6-8' | '9-12' | '13+';
 export type ProductDetailBlockType = 'richText' | 'image' | 'html' | 'divider';
+export type StockStatus = 'in_stock' | 'out_of_stock';
 
 export interface ProductDetailBlock {
   id: string;
@@ -26,7 +27,10 @@ export interface ProductVariantOption {
   name: string;
   priceOffset?: number;
   inStock?: boolean;
-  stockQuantity?: number;
+  trackInventory?: boolean;
+  stockQuantity?: number | null;
+  stockStatus?: StockStatus;
+  lowStockThreshold?: number | null;
   sku?: string;
 }
 
@@ -54,8 +58,10 @@ export interface Product {
   ageGroups: AgeGroupCategory[];
   brand: string;
   inStock: boolean;
-  stockQuantity: number;
-  lowStockThreshold?: number;
+  trackInventory?: boolean;
+  stockQuantity?: number | null;
+  stockStatus?: StockStatus;
+  lowStockThreshold?: number | null;
   images: string[];
   imagePublicIds?: string[];
   shortDescription?: string;

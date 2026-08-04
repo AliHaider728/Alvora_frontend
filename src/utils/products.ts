@@ -1,4 +1,73 @@
-import { AgeGroupCategory, Product } from '../types';
+import { AgeGroupCategory, Product, ProductVariantOption, StockStatus } from '../types';
+
+type InventorySource = {
+  trackInventory?: boolean;
+  stockQuantity?: number | null;
+  stockStatus?: StockStatus;
+  inStock?: boolean;
+};
+
+export type NormalizedInventory = {
+  trackInventory: boolean;
+  stockQuantity?: number;
+  stockStatus: StockStatus;
+  inStock: boolean;
+};
+
+export const normalizeInventory = (source: InventorySource): NormalizedInventory => {
+  const hasQuantity = source.stockQuantity !== undefined && source.stockQuantity !== null &&
+    Number.isInteger(Number(source.stockQuantity)) && Number(source.stockQuantity) >= 0;
+  const trackInventory = typeof source.trackInventory === 'boolean'
+    ? source.trackInventory
+    : hasQuantity;
+  if (trackInventory) {
+    const stockQuantity = hasQuantity ? Number(source.stockQuantity) : 0;
+    return {
+      trackInventory: true,
+      stockQuantity,
+      stockStatus: stockQuantity > 0 ? 'in_stock' : 'out_of_stock',
+      inStock: stockQuantity > 0
+    };
+  }
+  const stockStatus: StockStatus = source.stockStatus === 'out_of_stock' || source.inStock === false
+    ? 'out_of_stock'
+    : 'in_stock';
+  return { trackInventory: false, stockStatus, inStock: stockStatus === 'in_stock' };
+};
+
+export const isVariantOptionAvailable = (option: ProductVariantOption) =>
+  normalizeInventory(option).inStock;
+
+export const getEffectiveProductAvailability = (
+  product: Product,
+  selectedVariants?: Record<string, string>
+) => {
+  const groups = (product.variants || []).filter(group => group.options.length > 0);
+  if (groups.length === 0) return normalizeInventory(product).inStock;
+  return groups.every(group => {
+    const selected = selectedVariants?.[group.name];
+    return selected
+      ? group.options.some(option => option.name === selected && isVariantOptionAvailable(option))
+      : group.options.some(isVariantOptionAvailable);
+  });
+};
+
+export const getEffectiveAvailableQuantity = (
+  product: Product,
+  selectedVariants?: Record<string, string>
+): number | undefined => {
+  const groups = (product.variants || []).filter(group => group.options.length > 0);
+  if (groups.length === 0) return normalizeInventory(product).stockQuantity;
+  const selected = groups
+    .map(group => group.options.find(option => option.name === selectedVariants?.[group.name]))
+    .filter((option): option is ProductVariantOption => Boolean(option));
+  if (selected.length !== groups.length) return undefined;
+  const trackedQuantities = selected
+    .map(normalizeInventory)
+    .filter(inventory => inventory.trackInventory)
+    .map(inventory => inventory.stockQuantity || 0);
+  return trackedQuantities.length > 0 ? Math.min(...trackedQuantities) : undefined;
+};
 
 export const normalizeProductAgeGroups = (ageGroups: unknown, legacyAgeGroup?: unknown): AgeGroupCategory[] => {
   const submitted = Array.isArray(ageGroups) && ageGroups.length > 0

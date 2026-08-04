@@ -34,7 +34,7 @@ export const AdminDashboardPage: React.FC = () => {
   if (loading) return <div className="p-8 text-center text-slate-500 font-bold">Loading dashboard data...</div>;
 
   const totalRevenue = orders.reduce((sum, o) => sum + o.total, 0);
-  const lowStockProducts = products.filter(p => p.stockQuantity < 20);
+  const lowStockProducts = products.filter(p => p.trackInventory && (p.stockQuantity ?? 0) < 20);
 
   return (
     <div className="space-y-6">

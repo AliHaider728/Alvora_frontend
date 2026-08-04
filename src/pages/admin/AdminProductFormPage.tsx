@@ -36,9 +36,11 @@ import {
   Product,
   ProductDetailBlock,
   ProductInput,
-  ProductVariantGroup
+  ProductVariantGroup,
+  StockStatus
 } from '../../types';
 import { getSafeImageSrc } from '../../utils/images';
+import { normalizeInventory } from '../../utils/products';
 import { ProductDetailContentBuilder } from '../../components/admin/ProductDetailContentBuilder';
 
 type OrderedImage = {
@@ -52,7 +54,9 @@ type VariantRow = {
   type: string;
   value: string;
   priceOffset: number;
-  stockQuantity: number;
+  trackInventory: boolean;
+  stockQuantity?: number;
+  stockStatus: StockStatus;
   sku: string;
 };
 type FieldErrors = Record<string, string>;
@@ -209,8 +213,9 @@ export const AdminProductFormPage: React.FC = () => {
   const [regularPrice, setRegularPrice] = useState(2999);
   const [salePrice, setSalePrice] = useState<number>();
   const [sku, setSku] = useState('');
-  const [stockQuantity, setStockQuantity] = useState(25);
-  const [stockStatus, setStockStatus] = useState<'in_stock' | 'out_of_stock'>('in_stock');
+  const [trackInventory, setTrackInventory] = useState(true);
+  const [stockQuantity, setStockQuantity] = useState<number | undefined>(25);
+  const [stockStatus, setStockStatus] = useState<StockStatus>('in_stock');
   const [lowStockThreshold, setLowStockThreshold] = useState<number>();
   const [variants, setVariants] = useState<VariantRow[]>([]);
   const [ageGroups, setAgeGroups] = useState<AgeGroupCategory[]>(['6-8']);
@@ -265,13 +270,6 @@ export const AdminProductFormPage: React.FC = () => {
   }, [fetchedProduct, id, productFromStore, productLoadFailed]);
 
   useEffect(() => {
-    if (!category && categories.length > 0) {
-      setCategory(categories[0].name);
-      setCategorySlug(categories[0].slug);
-    }
-  }, [categories, category]);
-
-  useEffect(() => {
     if (!slugManuallyEdited) setSlug(slugify(name));
   }, [name, slugManuallyEdited]);
 
@@ -281,13 +279,15 @@ export const AdminProductFormPage: React.FC = () => {
     setName(editingProduct.name);
     setShortDescription(editingProduct.shortDescription || '');
     setDescription(editingProduct.description || '');
-    setCategory(editingProduct.category);
-    setCategorySlug(editingProduct.categorySlug);
+    setCategory(editingProduct.category || '');
+    setCategorySlug(editingProduct.categorySlug || '');
     setRegularPrice(editingProduct.originalPrice ?? editingProduct.price);
     setSalePrice(editingProduct.originalPrice ? editingProduct.price : undefined);
     setSku(editingProduct.sku || '');
-    setStockQuantity(editingProduct.stockQuantity);
-    setStockStatus(editingProduct.inStock ? 'in_stock' : 'out_of_stock');
+    const productInventory = normalizeInventory(editingProduct);
+    setTrackInventory(productInventory.trackInventory);
+    setStockQuantity(productInventory.stockQuantity);
+    setStockStatus(productInventory.stockStatus);
     setLowStockThreshold(editingProduct.lowStockThreshold);
     setVariants(
       (editingProduct.variants || []).flatMap(group =>
@@ -296,7 +296,9 @@ export const AdminProductFormPage: React.FC = () => {
           type: group.name,
           value: option.name,
           priceOffset: option.priceOffset || 0,
-          stockQuantity: option.stockQuantity ?? (option.inStock === false ? 0 : editingProduct.stockQuantity),
+          trackInventory: normalizeInventory(option).trackInventory,
+          stockQuantity: normalizeInventory(option).stockQuantity,
+          stockStatus: normalizeInventory(option).stockStatus,
           sku: option.sku || ''
         }))
       )
@@ -378,7 +380,9 @@ export const AdminProductFormPage: React.FC = () => {
         type: '',
         value: '',
         priceOffset: 0,
-        stockQuantity,
+        trackInventory: true,
+        stockQuantity: stockQuantity ?? 0,
+        stockStatus: 'in_stock',
         sku: ''
       }
     ]);
@@ -500,15 +504,14 @@ export const AdminProductFormPage: React.FC = () => {
     const normalizedSlug = slugify(slug || name);
     const normalizedSku = sku.trim().toUpperCase();
     if (!name.trim()) nextErrors.name = 'Product name is required.';
-    if (!category) nextErrors.category = 'Select a category.';
     if (ageGroups.length === 0) nextErrors.ageGroups = 'Select at least one age recommendation.';
     if (!stripHtml(description)) nextErrors.description = 'Detailed description is required.';
     if (!Number.isFinite(regularPrice) || regularPrice < 0) nextErrors.regularPrice = 'Enter a non-negative regular price.';
     if (salePrice !== undefined && (!Number.isFinite(salePrice) || salePrice < 0 || salePrice >= regularPrice)) {
       nextErrors.salePrice = 'Sale price must be non-negative and lower than regular price.';
     }
-    if (!Number.isInteger(stockQuantity) || stockQuantity < 0) nextErrors.stockQuantity = 'Stock must be a non-negative whole number.';
-    if (lowStockThreshold !== undefined && (!Number.isInteger(lowStockThreshold) || lowStockThreshold < 0)) {
+    if (trackInventory && (!Number.isInteger(stockQuantity) || Number(stockQuantity) < 0)) nextErrors.stockQuantity = 'Stock must be a non-negative whole number.';
+    if (trackInventory && lowStockThreshold !== undefined && (!Number.isInteger(lowStockThreshold) || lowStockThreshold < 0)) {
       nextErrors.lowStockThreshold = 'Low stock alert must be a non-negative whole number.';
     }
     if (weight !== undefined && (!Number.isFinite(weight) || weight < 0)) nextErrors.weight = 'Weight must be zero or greater.';
@@ -539,8 +542,9 @@ export const AdminProductFormPage: React.FC = () => {
       nextErrors.variants = 'Product and variant SKUs must be unique.';
     }
     if (variants.some(variant =>
-      !variant.type.trim() || !variant.value.trim() || variant.priceOffset < 0 || !Number.isInteger(variant.stockQuantity) || variant.stockQuantity < 0
-    )) nextErrors.variants = 'Complete every variant row with valid non-negative price and stock values.';
+      !variant.type.trim() || !variant.value.trim() || variant.priceOffset < 0 ||
+      (variant.trackInventory && (!Number.isInteger(variant.stockQuantity) || Number(variant.stockQuantity) < 0))
+    )) nextErrors.variants = 'Complete every variant row with valid non-negative price and tracked stock values.';
     if (variantSkus.some(variantSku => products.some(product =>
       product.id !== id &&
       (product.sku?.toUpperCase() === variantSku || product.variants?.some(group =>
@@ -557,12 +561,12 @@ export const AdminProductFormPage: React.FC = () => {
     variants.forEach(variant => {
       const type = variant.type.trim();
       if (!groups.has(type)) groups.set(type, { id: `group-${slugify(type)}`, name: type, options: [] });
+      const inventory = normalizeInventory(variant);
       groups.get(type)!.options.push({
         id: variant.id,
         name: variant.value.trim(),
         priceOffset: Number(variant.priceOffset),
-        stockQuantity: Number(variant.stockQuantity),
-        inStock: variant.stockQuantity > 0,
+        ...inventory,
         sku: variant.sku.trim().toUpperCase() || undefined
       });
     });
@@ -586,15 +590,15 @@ export const AdminProductFormPage: React.FC = () => {
       price: Number(activePrice),
       originalPrice: salePrice === undefined ? null : Number(regularPrice),
       discountPercent: salePrice === undefined ? 0 : Math.round(((regularPrice - salePrice) / regularPrice) * 100),
-      rating: editingProduct?.rating ?? 5,
+      rating: editingProduct?.rating ?? 0,
       reviewCount: editingProduct?.reviewCount ?? 0,
       category,
-      categorySlug: selectedCategory?.slug || categorySlug,
+      categorySlug: category ? selectedCategory?.slug || categorySlug : '',
       ageGroups,
       brand: editingProduct?.brand || 'PlayBimboo',
-      inStock: stockStatus === 'in_stock' && stockQuantity > 0,
-      stockQuantity: Number(stockQuantity),
-      lowStockThreshold: lowStockThreshold ?? null,
+      ...normalizeInventory({ trackInventory, stockQuantity, stockStatus }),
+      stockQuantity: trackInventory ? Number(stockQuantity) : null,
+      lowStockThreshold: trackInventory ? lowStockThreshold ?? null : null,
       images: images.map(image => image.url),
       imagePublicIds: images.map(image => image.publicId || ''),
       shortDescription: shortDescription.trim(),
@@ -698,12 +702,11 @@ export const AdminProductFormPage: React.FC = () => {
                 <span className="mt-1 block text-right text-[10px] text-slate-400">{shortDescription.length}/300</span>
               </label>
               <label>
-                <span className="mb-1.5 block text-xs font-bold text-slate-700">Category <span className="text-rose-500">*</span></span>
-                <select value={category} onChange={event => { setCategory(event.target.value); const selected = categories.find(item => item.name === event.target.value); if (selected) setCategorySlug(selected.slug); markDirty(); clearError('category'); }} className={inputClass('category')}>
-                  <option value="">Select category</option>
+                <span className="mb-1.5 block text-xs font-bold text-slate-700">Category</span>
+                <select value={category} onChange={event => { setCategory(event.target.value); const selected = categories.find(item => item.name === event.target.value); setCategorySlug(selected?.slug || ''); markDirty(); }} className={fieldClassName}>
+                  <option value="">No Category / Uncategorized</option>
                   {categories.map(item => <option key={item.id || item.slug} value={item.name}>{item.name}</option>)}
                 </select>
-                <FieldError message={errors.category} />
               </label>
               <div className="sm:col-span-2">
                 <span className="mb-1.5 block text-xs font-bold text-slate-700">Detailed Description <span className="text-rose-500">*</span></span>
@@ -730,33 +733,43 @@ export const AdminProductFormPage: React.FC = () => {
                 <input value={sku} onChange={event => { setSku(event.target.value.toUpperCase()); markDirty(); clearError('sku'); }} className={inputClass('sku')} placeholder="e.g. PB-064" />
                 <FieldError message={errors.sku} />
               </label>
-              <label>
-                <span className="mb-1.5 block text-xs font-bold text-slate-700">Stock Quantity <span className="text-rose-500">*</span></span>
-                <input type="number" min="0" step="1" value={stockQuantity} onChange={event => { setStockQuantity(Number(event.target.value)); markDirty(); clearError('stockQuantity'); }} className={inputClass('stockQuantity')} />
-                <FieldError message={errors.stockQuantity} />
-              </label>
-              <label>
-                <span className="mb-1.5 block text-xs font-bold text-slate-700">Stock Status</span>
-                <select value={stockStatus} onChange={event => { setStockStatus(event.target.value as 'in_stock' | 'out_of_stock'); markDirty(); }} className={fieldClassName}>
+              <div className="flex items-center justify-between gap-4 rounded-xl border border-slate-200 px-3 py-2.5">
+                <div><span className="block text-xs font-bold text-slate-700">Track Inventory</span><span className="text-[10px] text-slate-400">Reduce exact quantity after orders</span></div>
+                <button type="button" role="switch" aria-checked={trackInventory} onClick={() => { setTrackInventory(value => !value); markDirty(); clearError('stockQuantity'); }} className={`relative h-6 w-11 rounded-full transition ${trackInventory ? 'bg-rose-500' : 'bg-slate-200'}`}><span className={`absolute top-1 h-4 w-4 rounded-full bg-white shadow transition ${trackInventory ? 'left-6' : 'left-1'}`} /></button>
+              </div>
+              {trackInventory ? <>
+                <label>
+                  <span className="mb-1.5 block text-xs font-bold text-slate-700">Stock Quantity <span className="text-rose-500">*</span></span>
+                  <input type="number" min="0" step="1" value={stockQuantity ?? ''} onChange={event => { setStockQuantity(event.target.value === '' ? undefined : Number(event.target.value)); markDirty(); clearError('stockQuantity'); }} className={inputClass('stockQuantity')} />
+                  <FieldError message={errors.stockQuantity} />
+                </label>
+                <label>
+                  <span className="mb-1.5 block text-xs font-bold text-slate-700">Computed Availability</span>
+                  <span className={`flex h-[42px] items-center rounded-xl border px-3 text-sm font-bold ${(stockQuantity || 0) > 0 ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : 'border-rose-200 bg-rose-50 text-rose-700'}`}>{(stockQuantity || 0) > 0 ? 'In Stock' : 'Out of Stock'}</span>
+                </label>
+                <label>
+                  <span className="mb-1.5 block text-xs font-bold text-slate-700">Low Stock Alert</span>
+                  <input type="number" min="0" step="1" value={lowStockThreshold ?? ''} onChange={event => { setLowStockThreshold(event.target.value === '' ? undefined : Number(event.target.value)); markDirty(); clearError('lowStockThreshold'); }} className={inputClass('lowStockThreshold')} placeholder="e.g. 5" />
+                  <FieldError message={errors.lowStockThreshold} />
+                </label>
+              </> : <label>
+                <span className="mb-1.5 block text-xs font-bold text-slate-700">Manual Stock Status</span>
+                <select value={stockStatus} onChange={event => { setStockStatus(event.target.value as StockStatus); markDirty(); }} className={fieldClassName}>
                   <option value="in_stock">In Stock</option><option value="out_of_stock">Out of Stock</option>
                 </select>
-              </label>
-              <label>
-                <span className="mb-1.5 block text-xs font-bold text-slate-700">Low Stock Alert</span>
-                <input type="number" min="0" step="1" value={lowStockThreshold ?? ''} onChange={event => { setLowStockThreshold(event.target.value === '' ? undefined : Number(event.target.value)); markDirty(); clearError('lowStockThreshold'); }} className={inputClass('lowStockThreshold')} placeholder="e.g. 5" />
-                <FieldError message={errors.lowStockThreshold} />
-              </label>
+              </label>}
             </div>
           </FormCard>
 
           <FormCard title="Variants (Optional)" description="Add simple options such as Pieces, Color, or Size." icon={PackageCheck}>
             <div className="space-y-3">
               {variants.map(variant => (
-                <div key={variant.id} className="grid min-w-0 gap-2 rounded-2xl border border-slate-200 bg-slate-50 p-3 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_110px_90px_120px_40px] lg:items-end">
+                <div key={variant.id} className="grid min-w-0 gap-2 rounded-2xl border border-slate-200 bg-slate-50 p-3 sm:grid-cols-2 lg:grid-cols-4 lg:items-end">
                   <label><span className="mb-1 block text-[10px] font-bold text-slate-500">Variant Type</span><input value={variant.type} onChange={event => updateVariant(variant.id, { type: event.target.value })} className={fieldClassName} placeholder="Color" /></label>
                   <label><span className="mb-1 block text-[10px] font-bold text-slate-500">Variant Value</span><input value={variant.value} onChange={event => updateVariant(variant.id, { value: event.target.value })} className={fieldClassName} placeholder="Red" /></label>
                   <label><span className="mb-1 block text-[10px] font-bold text-slate-500">Price +Rs.</span><input type="number" min="0" value={variant.priceOffset} onChange={event => updateVariant(variant.id, { priceOffset: Number(event.target.value) })} className={fieldClassName} /></label>
-                  <label><span className="mb-1 block text-[10px] font-bold text-slate-500">Stock</span><input type="number" min="0" step="1" value={variant.stockQuantity} onChange={event => updateVariant(variant.id, { stockQuantity: Number(event.target.value) })} className={fieldClassName} /></label>
+                  <label className="flex h-[42px] items-center justify-between gap-2 rounded-xl border border-slate-200 bg-white px-3"><span className="text-[10px] font-bold text-slate-500">Track Stock</span><input type="checkbox" checked={variant.trackInventory} onChange={event => updateVariant(variant.id, { trackInventory: event.target.checked })} /></label>
+                  {variant.trackInventory ? <label><span className="mb-1 block text-[10px] font-bold text-slate-500">Stock</span><input type="number" min="0" step="1" value={variant.stockQuantity ?? ''} onChange={event => updateVariant(variant.id, { stockQuantity: event.target.value === '' ? undefined : Number(event.target.value) })} className={fieldClassName} /></label> : <label><span className="mb-1 block text-[10px] font-bold text-slate-500">Manual Status</span><select value={variant.stockStatus} onChange={event => updateVariant(variant.id, { stockStatus: event.target.value as StockStatus })} className={fieldClassName}><option value="in_stock">In Stock</option><option value="out_of_stock">Out of Stock</option></select></label>}
                   <label><span className="mb-1 block text-[10px] font-bold text-slate-500">SKU</span><input value={variant.sku} onChange={event => updateVariant(variant.id, { sku: event.target.value.toUpperCase() })} className={fieldClassName} placeholder="Optional" /></label>
                   <button type="button" onClick={() => removeVariant(variant.id)} aria-label={`Remove ${variant.value || 'variant'}`} className="flex h-10 items-center justify-center rounded-xl border border-rose-200 bg-white text-rose-500 hover:bg-rose-50"><Trash2 className="h-4 w-4" /></button>
                 </div>

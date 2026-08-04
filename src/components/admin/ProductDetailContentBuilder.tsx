@@ -189,7 +189,11 @@ const escapeHtml = (value: string) => value
 
 const sanitizePreviewHtml = (value: string) => {
   const template = document.createElement('template');
-  template.innerHTML = value;
+  const looksLikeDocument = /<!doctype|<html\b|<head\b|<body\b/i.test(value);
+  const fragment = looksLikeDocument
+    ? new DOMParser().parseFromString(value, 'text/html').body.innerHTML
+    : value;
+  template.innerHTML = fragment;
   template.content
     .querySelectorAll('script,style,iframe,object,embed,form,input,button,textarea,select,link,meta')
     .forEach(node => node.remove());

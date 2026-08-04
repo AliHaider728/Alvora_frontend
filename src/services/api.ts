@@ -39,6 +39,7 @@ async function fetchJson<T>(endpoint: string, options?: RequestInit): Promise<T 
 
     const res = await fetch(`${API_BASE_URL}${endpoint}`, {
       ...options,
+      cache: options?.cache || 'no-store',
       credentials: 'include',
       headers
     });

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Product } from '../../types';
+import { getEffectiveProductAvailability } from '../../utils/products';
 
 interface SeoHeadProps {
   title?: string;
@@ -69,7 +70,7 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ title, description, product, c
           "price": product.price,
           "priceValidUntil": "2027-12-31",
           "itemCondition": "https://schema.org/NewCondition",
-          "availability": product.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+          "availability": getEffectiveProductAvailability(product) ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
           "seller": {
             "@type": "Organization",
             "name": "PlayBimboo"

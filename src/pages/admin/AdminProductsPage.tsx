@@ -169,14 +169,14 @@ export const AdminProductsPage: React.FC = () => {
                       </div>
                     </div>
                   </td>
-                  <td className="p-4 font-semibold text-sky-600">{prod.category}</td>
+                  <td className="p-4 font-semibold text-sky-600">{prod.category || 'Uncategorized'}</td>
                   <td className="p-4 font-bold">{formatProductAgeGroups(prod)}</td>
                   <td className="p-4 font-bold text-slate-900">{formatPrice(prod.price, settings.currency)}</td>
                   <td className="p-4">
                     <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
-                      prod.stockQuantity > 15 ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                      prod.inStock ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
                     }`}>
-                      {prod.stockQuantity} in stock
+                      {prod.trackInventory ? `${prod.stockQuantity ?? 0} in stock` : prod.inStock ? 'In stock (not tracked)' : 'Out of stock'}
                     </span>
                   </td>
                   <td className="p-4">

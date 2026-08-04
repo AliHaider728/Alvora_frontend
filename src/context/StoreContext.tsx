@@ -22,7 +22,7 @@ import {
 import { api, getAuthToken } from '../services/api';
 import { formatPrice } from '../utils/formatters';
 import { normalizeStoreSettings } from '../config/storeAppearance';
-import { normalizeProductAgeGroups } from '../utils/products';
+import { normalizeInventory, normalizeProductAgeGroups } from '../utils/products';
 
 type MongoRecord = {
   _id?: unknown;
@@ -35,7 +35,9 @@ type BackendOrder = Partial<Order> &
     discountAmount?: number;
   };
 
-const normalizeProduct = (product: Partial<Product> & MongoRecord): Product => ({
+const normalizeProduct = (product: Partial<Product> & MongoRecord): Product => {
+  const inventory = normalizeInventory(product);
+  return ({
   ...(product as Product),
   id: String(product.id || product._id || product.slug || ''),
   ageGroups: normalizeProductAgeGroups(product.ageGroups, product.ageGroup),
@@ -49,8 +51,11 @@ const normalizeProduct = (product: Partial<Product> & MongoRecord): Product => (
     : [],
   shortDescription: product.shortDescription || '',
   status: product.status || 'published',
-  inStock: product.inStock !== false && Number(product.stockQuantity ?? 0) > 0,
-  stockQuantity: Math.max(0, Number(product.stockQuantity ?? 0)),
+  ...inventory,
+  category: product.category || '',
+  categorySlug: product.categorySlug || '',
+  rating: Number(product.reviewCount || 0) > 0 ? Number(product.rating || 0) : 0,
+  reviewCount: Math.max(0, Number(product.reviewCount || 0)),
   features: Array.isArray(product.features) ? product.features : [],
   tags: Array.isArray(product.tags) ? product.tags : [],
   specifications: product.specifications || {},
@@ -59,20 +64,15 @@ const normalizeProduct = (product: Partial<Product> & MongoRecord): Product => (
     ? product.variants.map(group => ({
         ...group,
         options: Array.isArray(group.options)
-          ? group.options.map(option => ({
-              ...option,
-              inStock:
-                option.stockQuantity === undefined
-                  ? option.inStock !== false
-                  : option.stockQuantity > 0
-            }))
+          ? group.options.map(option => ({ ...option, ...normalizeInventory(option) }))
           : []
       }))
     : [],
   productDetailBlocks: Array.isArray(product.productDetailBlocks)
     ? product.productDetailBlocks.map((block, index) => ({ ...block, order: index }))
     : []
-});
+  });
+};
 
 const normalizeCategory = (category: Partial<Category> & MongoRecord): Category => ({
   ...(category as Category),
@@ -128,6 +128,7 @@ interface StoreContextType {
   addProduct: (productData: ProductInput) => Promise<Product | null>;
   updateProduct: (id: string, productData: Partial<ProductInput>) => Promise<Product | null>;
   deleteProduct: (id: string) => Promise<boolean>;
+  refreshProducts: () => Promise<void>;
 
   addCategory: (categoryData: Omit<Category, 'id' | 'itemCount'>) => Category;
   updateCategory: (id: string, categoryData: Partial<Category>) => void;
@@ -207,6 +208,12 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
+
+  const refreshProducts = async () => {
+    const [realProducts, realCategories] = await Promise.all([api.getProducts(), api.getCategories()]);
+    if (realProducts) setProducts(realProducts.map(normalizeProduct));
+    if (realCategories) setCategories(realCategories.map(normalizeCategory));
+  };
 
   
   // Fetch real data from backend API on mount
@@ -378,6 +385,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     const normalizedProduct = normalizeProduct(savedProduct);
     setProducts(prev => [normalizedProduct, ...prev]);
+    await refreshProducts();
     return normalizedProduct;
   };
 
@@ -387,6 +395,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     const normalizedProduct = normalizeProduct(savedProduct);
     setProducts(prev => prev.map(p => (p.id === id ? normalizedProduct : p)));
+    await refreshProducts();
     return normalizedProduct;
   };
 
@@ -442,6 +451,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     const newOrder = normalizeOrder(savedOrder);
     setOrders(prev => [newOrder, ...prev]);
+    await refreshProducts();
 
     // Update customer total spent
     setCustomers(prev => {
@@ -520,14 +530,6 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     };
     setReviews(prev => [newReview, ...prev]);
 
-    // Recalculate product rating
-    const prodReviews = [newReview, ...reviews.filter(r => r.productId === reviewData.productId)];
-    const avgRating = prodReviews.reduce((sum, r) => sum + r.rating, 0) / prodReviews.length;
-
-    void updateProduct(reviewData.productId, {
-      rating: parseFloat(avgRating.toFixed(1)),
-      reviewCount: prodReviews.length,
-    });
   };
 
   return (
@@ -559,6 +561,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         addProduct,
         updateProduct,
         deleteProduct,
+        refreshProducts,
         addCategory,
         updateCategory,
         deleteCategory,

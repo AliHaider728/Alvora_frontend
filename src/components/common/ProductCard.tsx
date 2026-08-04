@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Star, Heart, ShoppingBag, Eye, Check } from 'lucide-react';
+import { Heart, ShoppingBag, Eye, Check } from 'lucide-react';
 import { Product } from '../../types';
 import { useStore } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/formatters';
 import { getSafeImageSrc } from '../../utils/images';
-import { formatProductAgeGroups } from '../../utils/products';
+import { formatProductAgeGroups, getEffectiveProductAvailability } from '../../utils/products';
+import { ReviewSummary } from './ReviewSummary';
 
 interface ProductCardProps {
   product: Product;
@@ -18,6 +19,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
   const [added, setAdded] = useState(false);
   const isWishlisted = isInWishlist(product.id);
   const hasVariants = Boolean(product.variants?.some(group => group.options.length > 0));
+  const isAvailable = getEffectiveProductAvailability(product);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -111,7 +113,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
           {/* Category & Brand */}
           <div className="flex items-center justify-between text-xs text-slate-400 mb-1">
             <span className="font-semibold text-sky-600 uppercase tracking-wider text-[10px]">
-              {product.category}
+              {product.category || 'Uncategorized'}
             </span>
             <span className="font-medium text-slate-400">{product.brand}</span>
           </div>
@@ -131,13 +133,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
           )}
 
           {/* Star Rating */}
-          <div className="flex items-center gap-1.5 mt-2">
-            <div className="flex items-center text-amber-400">
-              <Star className="w-3.5 h-3.5 fill-amber-400" />
-            </div>
-            <span className="text-xs font-bold text-slate-700">{product.rating}</span>
-            <span className="text-xs text-slate-400">({product.reviewCount})</span>
-          </div>
+          <div className="mt-2"><ReviewSummary rating={product.rating} reviewCount={product.reviewCount} compact /></div>
         </div>
 
         {/* Pricing & Add to Cart Footer */}
@@ -158,11 +154,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
           {/* Add to Cart Micro-interaction Button */}
           <button
             onClick={handleAddToCart}
-            disabled={!product.inStock}
+            disabled={!isAvailable}
             className={`relative overflow-hidden flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-2xl font-heading font-bold text-xs shadow-sm transition-all duration-300 active:scale-95 ${
               added
                 ? 'bg-emerald-500 text-white shadow-emerald-200'
-                : !product.inStock
+                : !isAvailable
                 ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
                 : 'bg-rose-500 hover:bg-rose-600 text-white hover:shadow-lg hover:shadow-rose-200'
             }`}
@@ -172,7 +168,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
                 <Check className="w-4 h-4 animate-bounce" />
                 <span>Added!</span>
               </>
-            ) : !product.inStock ? (
+            ) : !isAvailable ? (
               <span>Out of Stock</span>
             ) : hasVariants ? (
               <span>Choose Options</span>

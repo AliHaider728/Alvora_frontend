@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import {
   Star,
@@ -16,20 +16,29 @@ import {
 import { useStore } from '../../context/StoreContext';
 import { useToast } from '../../context/ToastContext';
 import { ProductCard } from '../../components/common/ProductCard';
+import { ReviewSummary } from '../../components/common/ReviewSummary';
 import { Breadcrumbs } from '../../components/common/Breadcrumbs';
 import { SeoHead } from '../../components/common/SeoHead';
 import { formatPrice } from '../../utils/formatters';
-import { api } from '../../services/api';
-import { getProductDeliveryType, isProductVisibleOnStorefront } from '../../utils/products';
-import { getProductAgeGroups } from '../../utils/products';
+import { api, getLastApiError } from '../../services/api';
+import {
+  getEffectiveAvailableQuantity,
+  getEffectiveProductAvailability,
+  getProductAgeGroups,
+  getProductDeliveryType,
+  isProductVisibleOnStorefront,
+  isVariantOptionAvailable
+} from '../../utils/products';
 import { ProductDetailContent } from '../../components/product/ProductDetailContent';
+import { Review } from '../../types';
+import { getSafeImageSrc } from '../../utils/images';
 
 const getPlainDescription = (description: string) =>
   description.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 
 export const ProductDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const { products, categories, reviews, addToCart, toggleWishlist, isInWishlist, addReview, settings } = useStore();
+  const { products, addToCart, toggleWishlist, isInWishlist, refreshProducts, settings } = useStore();
   const { showToast } = useToast();
 
   const product = products.find(
@@ -49,6 +58,26 @@ export const ProductDetailPage: React.FC = () => {
   const [newTitle, setNewTitle] = useState('');
   const [newComment, setNewComment] = useState('');
   const [newUserName, setNewUserName] = useState('');
+  const [productReviews, setProductReviews] = useState<Review[]>([]);
+
+  const loadProductReviews = async (productId: string) => {
+    const result = await api.getProductReviews(productId);
+    if (!result) return;
+    setProductReviews(result.map(review => ({
+      id: String(review.id || review._id || ''),
+      productId: String(review.productId || productId),
+      userName: String(review.authorName || 'PlayBimboo customer'),
+      rating: Number(review.rating || 0),
+      date: String(review.createdAt || '').slice(0, 10),
+      title: String(review.title || 'Customer review'),
+      comment: String(review.comment || ''),
+      verifiedPurchase: Boolean(review.verifiedPurchase)
+    })));
+  };
+
+  useEffect(() => {
+    if (product?.id) void loadProductReviews(product.id);
+  }, [product?.id]);
 
   if (!product) {
     return (
@@ -71,9 +100,8 @@ export const ProductDetailPage: React.FC = () => {
     : flatRate;
 
   const isWishlisted = isInWishlist(product.id);
-  const productReviews = reviews.filter(r => r.productId === product.id);
   const relatedProducts = products
-    .filter(p => p.categorySlug === product.categorySlug && p.id !== product.id)
+    .filter(p => Boolean(product.categorySlug) && p.categorySlug === product.categorySlug && p.id !== product.id)
     .slice(0, 4);
 
   // Calculate variant price offset
@@ -89,18 +117,13 @@ export const ProductDetailPage: React.FC = () => {
   const currentPrice = product.price + totalVariantOffset;
   const variantGroups = (product.variants || []).filter(group => group.options.length > 0);
   const allVariantsSelected = variantGroups.every(group => Boolean(selectedVariants[group.name]));
-  const selectedVariantOptions = variantGroups
-    .map(group => group.options.find(option => option.name === selectedVariants[group.name]))
-    .filter(Boolean);
-  const selectedVariantStock = selectedVariantOptions.length > 0
-    ? Math.min(...selectedVariantOptions.map(option => option!.stockQuantity ?? product.stockQuantity))
-    : product.stockQuantity;
+  const effectiveAvailable = getEffectiveProductAvailability(product, selectedVariants);
+  const selectedVariantStock = getEffectiveAvailableQuantity(product, selectedVariants);
   const canPurchase =
-    product.inStock &&
+    effectiveAvailable &&
     productDeliveryType !== 'none' &&
     allVariantsSelected &&
-    selectedVariantStock > 0 &&
-    quantity <= selectedVariantStock;
+    (selectedVariantStock === undefined || quantity <= selectedVariantStock);
 
   const handleVariantSelect = (groupName: string, optionName: string) => {
     setSelectedVariants(prev => ({ ...prev, [groupName]: optionName }));
@@ -139,32 +162,19 @@ export const ProductDetailPage: React.FC = () => {
     e.preventDefault();
     if (!newUserName || !newComment) return;
     try {
-      await api.submitReview({
+      const submitted = await api.submitReview({
         productId: product.id,
         productName: product.name,
         authorName: newUserName,
         rating: newRating,
         comment: newComment
       });
-      addReview({
-        productId: product.id,
-        userName: newUserName,
-        rating: newRating,
-        title: newTitle || 'Great toy!',
-        comment: newComment,
-        verifiedPurchase: true
-      });
+      if (!submitted) throw new Error(getLastApiError() || 'Review submission failed.');
+      await Promise.all([loadProductReviews(product.id), refreshProducts()]);
       showToast('Thank you! Your review has been submitted.', 'success');
     } catch (err) {
-      addReview({
-        productId: product.id,
-        userName: newUserName,
-        rating: newRating,
-        title: newTitle || 'Great toy!',
-        comment: newComment,
-        verifiedPurchase: true
-      });
-      showToast('Thank you! Your review has been submitted.', 'success');
+      showToast(err instanceof Error ? err.message : 'Review submission failed.', 'error');
+      return;
     } finally {
       setReviewModalOpen(false);
       setNewTitle('');
@@ -174,7 +184,9 @@ export const ProductDetailPage: React.FC = () => {
   };
 
   const breadcrumbItems = [
-    { label: product.category, path: `/category/${product.categorySlug}` },
+    ...(product.category && product.categorySlug
+      ? [{ label: product.category, path: `/category/${product.categorySlug}` }]
+      : []),
     { label: product.name }
   ];
 
@@ -192,7 +204,7 @@ export const ProductDetailPage: React.FC = () => {
             {/* Main Preview Image with Hover Zoom Effect */}
             <div className="relative aspect-square w-full rounded-3xl overflow-hidden bg-slate-100 border border-slate-100 group">
               <img
-                src={product.images[activeImageIndex] || product.images[0]}
+                src={getSafeImageSrc(product.images[activeImageIndex] || product.images[0])}
                 alt={product.name}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
@@ -214,7 +226,7 @@ export const ProductDetailPage: React.FC = () => {
                       activeImageIndex === idx ? 'border-rose-500 scale-95 shadow-sm' : 'border-slate-200 opacity-70 hover:opacity-100'
                     }`}
                   >
-                    <img src={img} alt={`${product.name} thumbnail ${idx}`} className="w-full h-full object-cover" />
+                    <img src={getSafeImageSrc(img)} alt={`${product.name} thumbnail ${idx}`} className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>
@@ -229,11 +241,7 @@ export const ProductDetailPage: React.FC = () => {
                 <span className="text-xs font-bold uppercase tracking-wider text-rose-500 bg-rose-50 px-3 py-1 rounded-full">
                   {product.brand}
                 </span>
-                <div className="flex items-center gap-1 text-amber-400 text-xs font-bold">
-                  <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                  <span className="text-slate-800 font-extrabold">{product.rating}</span>
-                  <span className="text-slate-400">({product.reviewCount} reviews)</span>
-                </div>
+                <ReviewSummary rating={product.rating} reviewCount={product.reviewCount} />
               </div>
 
               {/* Product Title */}
@@ -269,14 +277,14 @@ export const ProductDetailPage: React.FC = () => {
 
                 <div className="text-right">
                   <span className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold ${
-                    canPurchase || (product.inStock && variantGroups.length > 0 && !allVariantsSelected) ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
+                    effectiveAvailable ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
                   }`}>
-                    <span className={`w-2 h-2 rounded-full ${product.inStock ? 'bg-emerald-500' : 'bg-rose-500'}`} />
-                    {!product.inStock
+                    <span className={`w-2 h-2 rounded-full ${effectiveAvailable ? 'bg-emerald-500' : 'bg-rose-500'}`} />
+                    {!effectiveAvailable
                       ? 'Out of Stock'
                       : variantGroups.length > 0 && !allVariantsSelected
                       ? 'Select options to check stock'
-                      : `In Stock (${selectedVariantStock} left)`}
+                      : selectedVariantStock === undefined ? 'In Stock' : `In Stock (${selectedVariantStock} left)`}
                   </span>
                 </div>
               </div>
@@ -317,7 +325,7 @@ export const ProductDetailPage: React.FC = () => {
                       <div className="flex flex-wrap gap-2">
                         {vGroup.options.map((opt) => {
                           const isSelected = selectedVariants[vGroup.name] === opt.name;
-                          const isOptionInStock = opt.inStock !== false && (opt.stockQuantity === undefined || opt.stockQuantity > 0);
+                          const isOptionInStock = isVariantOptionAvailable(opt);
                           return (
                             <button
                               key={opt.id || opt.name}
@@ -451,7 +459,7 @@ export const ProductDetailPage: React.FC = () => {
           {activeTab === 'desc' && (
             <div className="space-y-4 text-sm text-slate-700 leading-relaxed">
               <div
-                className="space-y-3 [&_a]:text-sky-600 [&_a]:underline [&_ol]:list-decimal [&_ol]:pl-5 [&_ul]:list-disc [&_ul]:pl-5"
+                className="max-w-none space-y-4 leading-7 [&_a]:text-sky-600 [&_a]:underline [&_blockquote]:border-l-4 [&_blockquote]:border-slate-200 [&_blockquote]:pl-4 [&_h1]:mt-7 [&_h1]:text-2xl [&_h1]:font-black [&_h2]:mt-6 [&_h2]:text-xl [&_h2]:font-black [&_h3]:mt-5 [&_h3]:text-lg [&_h3]:font-bold [&_img]:h-auto [&_img]:max-w-full [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:my-3 [&_table]:block [&_table]:max-w-full [&_table]:overflow-x-auto [&_table]:border-collapse [&_td]:border [&_td]:border-slate-200 [&_td]:p-2 [&_th]:border [&_th]:border-slate-200 [&_th]:bg-slate-50 [&_th]:p-2 [&_ul]:list-disc [&_ul]:pl-6"
                 dangerouslySetInnerHTML={{ __html: product.description }}
               />
               <h4 className="font-heading font-bold text-sm text-slate-900 pt-2">Key Highlights:</h4>
@@ -494,9 +502,7 @@ export const ProductDetailPage: React.FC = () => {
                   <h4 className="font-heading font-bold text-base text-slate-900">
                     Customer Experience & Reviews
                   </h4>
-                  <p className="text-xs text-slate-500">
-                    Average score of {product.rating} / 5 based on verified purchases.
-                  </p>
+                  <div className="mt-1"><ReviewSummary rating={product.rating} reviewCount={product.reviewCount} /></div>
                 </div>
                 <button
                   onClick={() => setReviewModalOpen(true)}
