@@ -1,4 +1,4 @@
-export type AgeGroupCategory = '0-2' | '3-5' | '6-8' | '8+';
+export type AgeGroupCategory = '0-2' | '3-5' | '6-8' | '9-12' | '13+';
 export type ProductDetailBlockType = 'richText' | 'image' | 'html' | 'divider';
 
 export interface ProductDetailBlock {

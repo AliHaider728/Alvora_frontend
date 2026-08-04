@@ -55,7 +55,8 @@ export const HomePage: React.FC = () => {
     '0-2': <Baby className="w-6 h-6 text-amber-600" />,
     '3-5': <Blocks className="w-6 h-6 text-rose-600" />,
     '6-8': <Rocket className="w-6 h-6 text-sky-600" />,
-    '8+': <Gamepad2 className="w-6 h-6 text-purple-600" />
+    '9-12': <Gamepad2 className="w-6 h-6 text-purple-600" />,
+    '13+': <Gamepad2 className="w-6 h-6 text-indigo-600" />
   };
 
   return (

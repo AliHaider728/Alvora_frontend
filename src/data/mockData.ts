@@ -21,7 +21,8 @@ export const AGE_GROUPS: AgeGroupOption[] = [
   { id: '0-2', name: 'Toddlers (0-2 Yrs)', label: '0 - 2 Yrs', range: '0-2', color: 'bg-amber-100 text-amber-800 border-amber-300', icon: 'Baby' },
   { id: '3-5', name: 'Preschool (3-5 Yrs)', label: '3 - 5 Yrs', range: '3-5', color: 'bg-rose-100 text-rose-800 border-rose-300', icon: 'Blocks' },
   { id: '6-8', name: 'Early Grades (6-8 Yrs)', label: '6 - 8 Yrs', range: '6-8', color: 'bg-sky-100 text-sky-800 border-sky-300', icon: 'Rocket' },
-  { id: '8+', name: 'Big Kids & Tweens (8+ Yrs)', label: '8+ Yrs', range: '8+', color: 'bg-purple-100 text-purple-800 border-purple-300', icon: 'Gamepad2' },
+  { id: '9-12', name: 'Big Kids (9-12 Yrs)', label: '9 - 12 Yrs', range: '9-12', color: 'bg-purple-100 text-purple-800 border-purple-300', icon: 'Gamepad2' },
+  { id: '13+', name: 'Teens (13+ Yrs)', label: '13+ Yrs', range: '13+', color: 'bg-indigo-100 text-indigo-800 border-indigo-300', icon: 'Gamepad2' },
 ];
 
 export const INITIAL_CATEGORIES: Category[] = [
@@ -217,7 +218,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     reviewCount: 29,
     category: 'Outdoor & Active Play',
     categorySlug: 'outdoor-toys',
-    ageGroups: ['8+'],
+    ageGroups: ['9-12'],
     brand: 'NitroWheels',
     inStock: true,
     stockQuantity: 30,

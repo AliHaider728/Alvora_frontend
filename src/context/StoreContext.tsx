@@ -22,6 +22,7 @@ import {
 import { api, getAuthToken } from '../services/api';
 import { formatPrice } from '../utils/formatters';
 import { normalizeStoreSettings } from '../config/storeAppearance';
+import { normalizeProductAgeGroups } from '../utils/products';
 
 type MongoRecord = {
   _id?: unknown;
@@ -37,11 +38,7 @@ type BackendOrder = Partial<Order> &
 const normalizeProduct = (product: Partial<Product> & MongoRecord): Product => ({
   ...(product as Product),
   id: String(product.id || product._id || product.slug || ''),
-  ageGroups: Array.isArray(product.ageGroups) && product.ageGroups.length > 0
-    ? product.ageGroups
-    : product.ageGroup
-      ? [['9-11', '9-12', '13+'].includes(String(product.ageGroup)) ? '8+' : product.ageGroup]
-      : [],
+  ageGroups: normalizeProductAgeGroups(product.ageGroups, product.ageGroup),
   images: Array.isArray(product.images)
     ? product.images.filter(
         (image): image is string => typeof image === 'string' && image.trim().length > 0
