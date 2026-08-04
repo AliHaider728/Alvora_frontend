@@ -180,5 +180,39 @@ const BlockRichEditor: React.FC<{ value: string; onChange: (value: string) => vo
   </div>;
 };
 
-const escapeAttribute = (value: string) => value.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
-const makePreviewDocument = (blocks: ProductDetailBlock[], css: string) => `<!doctype html><html><head><meta charset="utf-8"><style>body{font-family:Arial,sans-serif;color:#1e293b;padding:18px;line-height:1.6}img{max-width:100%;height:auto}table{display:block;max-width:100%;overflow:auto}hr{border:0;border-top:1px solid #cbd5e1}${css.replace(/<\/style/gi, '')}</style></head><body>${blocks.filter(block => block.enabled).map(block => block.type === 'divider' ? '<hr>' : block.type === 'image' && block.image ? `<figure><img src="${escapeAttribute(block.image.secureUrl)}" alt="${escapeAttribute(block.image.alt)}"><figcaption>${block.image.caption || ''}</figcaption></figure>` : `<section>${block.heading ? `<h2>${block.heading}</h2>` : ''}${block.content || ''}</section>`).join('')}</body></html>`;
+const escapeHtml = (value: string) => value
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
+  .replace(/'/g, '&#39;');
+
+const sanitizePreviewHtml = (value: string) => {
+  const template = document.createElement('template');
+  template.innerHTML = value;
+  template.content
+    .querySelectorAll('script,style,iframe,object,embed,form,input,button,textarea,select,link,meta')
+    .forEach(node => node.remove());
+  template.content.querySelectorAll('*').forEach(node => {
+    for (const attribute of [...node.attributes]) {
+      if (/^on/i.test(attribute.name) || attribute.name.toLowerCase() === 'srcdoc') {
+        node.removeAttribute(attribute.name);
+        continue;
+      }
+      if (
+        ['href', 'src', 'action', 'formaction'].includes(attribute.name.toLowerCase()) &&
+        /^(?:javascript|data|vbscript):/i.test(attribute.value.trim())
+      ) {
+        node.removeAttribute(attribute.name);
+      }
+    }
+  });
+  return template.innerHTML;
+};
+
+const sanitizePreviewCss = (value: string) => value
+  .replace(/@import[\s\S]*?(?:;|$)/gi, '')
+  .replace(/url\s*\([^)]*\)/gi, 'none')
+  .replace(/<\/style/gi, '');
+
+const makePreviewDocument = (blocks: ProductDetailBlock[], css: string) => `<!doctype html><html><head><meta charset="utf-8"><style>body{font-family:Arial,sans-serif;color:#1e293b;padding:18px;line-height:1.6}img{max-width:100%;height:auto}table{display:block;max-width:100%;overflow:auto}hr{border:0;border-top:1px solid #cbd5e1}${sanitizePreviewCss(css)}</style></head><body>${blocks.filter(block => block.enabled).map(block => block.type === 'divider' ? '<hr>' : block.type === 'image' && block.image ? `<figure><img src="${escapeHtml(block.image.secureUrl)}" alt="${escapeHtml(block.image.alt)}"><figcaption>${escapeHtml(block.image.caption || '')}</figcaption></figure>` : `<section>${block.heading ? `<h2>${escapeHtml(block.heading)}</h2>` : ''}${sanitizePreviewHtml(block.content || '')}</section>`).join('')}</body></html>`;
