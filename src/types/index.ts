@@ -151,13 +151,21 @@ export interface WishlistItem {
 export interface Review {
   id: string;
   productId: string;
-  userName: string;
-  userAvatar?: string;
+  reviewerName: string;
+  reviewerEmail?: string;
+  title?: string;
+  content: string;
   rating: number;
-  date: string;
-  title: string;
-  comment: string;
+  avatarUrl?: string;
   verifiedPurchase: boolean;
+  source: 'customer' | 'admin';
+  status: 'pending' | 'approved' | 'rejected';
+  userId?: string;
+  orderId?: string;
+  approvedAt?: string;
+  approvedBy?: string;
+  createdAt?: string; // from backend
+  updatedAt?: string;
 }
 
 export interface OrderItem {

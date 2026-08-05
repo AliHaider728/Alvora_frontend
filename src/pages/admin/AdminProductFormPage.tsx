@@ -43,6 +43,7 @@ import { getSafeImageSrc } from '../../utils/images';
 import { normalizeInventory } from '../../utils/products';
 import { ProductDetailContentBuilder } from '../../components/admin/ProductDetailContentBuilder';
 import { CategoryFormModal } from '../../components/admin/CategoryFormModal';
+import { AdminProductReviewsSection } from '../../components/admin/AdminProductReviewsSection';
 import { useDialog } from '../../context/DialogContext';
 
 type OrderedImage = {
@@ -809,6 +810,8 @@ export const AdminProductFormPage: React.FC = () => {
               {deliveryType === 'fixed' && <label className="sm:col-span-2"><span className="mb-1.5 block text-xs font-bold text-slate-700">Custom Shipping Fee (Rs.) <span className="text-rose-500">*</span></span><input type="number" min="0" step="1" value={customDeliveryFee ?? ''} onChange={event => { setCustomDeliveryFee(event.target.value === '' ? undefined : Number(event.target.value)); markDirty(); clearError('customDeliveryFee'); }} className={inputClass('customDeliveryFee')} /><FieldError message={errors.customDeliveryFee} /></label>}
             </div>
           </FormCard>
+
+          <AdminProductReviewsSection productId={isEditing ? id : undefined} />
 
           <ProductDetailContentBuilder
             blocks={productDetailBlocks}

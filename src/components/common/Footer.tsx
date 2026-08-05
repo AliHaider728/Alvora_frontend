@@ -33,7 +33,7 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="relative overflow-hidden bg-slate-900 text-slate-300 font-sans pt-14 pb-8">
+    <footer className="relative overflow-hidden bg-black text-slate-300 font-sans pt-14 pb-8">
       {/* Ballpit background animation — sits behind everything, doesn't block clicks */}
       <div className="absolute inset-0 z-0 pointer-events-none opacity-60">
         <Ballpit
@@ -42,17 +42,18 @@ export const Footer: React.FC = () => {
           friction={0.998}
           wallBounce={0.95}
           followCursor={true}
-          colors={[0x8b5cf6, 0x94a3b8, 0x1e1b4b]} /* violet-500 -> slate-400 -> deep indigo, muted like the React Bits demo */
+          colors={[0xffffff, 0x8b5cf6, 0x18181b]} /* white -> vivid violet -> near-black, high contrast like the React Bits demo */
+          materialParams={{ metalness: 0.15, roughness: 0.35, clearcoat: 1, clearcoatRoughness: 0.1 }}
           minSize={0.35}
           maxSize={0.7}
           size0={0.5}
-          ambientIntensity={1}
-          lightIntensity={200}
+          ambientIntensity={1.4}
+          lightIntensity={300}
         />
       </div>
 
       {/* Light dark overlay — just enough to keep text readable without hiding the balls */}
-      <div className="absolute inset-0 z-[1] pointer-events-none bg-gradient-to-b from-slate-900/10 via-slate-900/30 to-slate-900/50" />
+      <div className="absolute inset-0 z-[1] pointer-events-none bg-gradient-to-b from-black/10 via-black/25 to-black/45" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -108,7 +109,7 @@ export const Footer: React.FC = () => {
               alt="Play Bimboo"
               className="h-14 w-auto object-contain"
             />
-            <p className="text-sm text-slate-300 leading-relaxed max-w-sm">
+            <p className="text-base text-white/80 leading-relaxed max-w-sm font-medium">
               Play Bimboo is your magical destination for premium, non-toxic toys, creative STEM kits, action figures, and family board games. Inspiring young minds to explore, imagine, and grow!
             </p>
 
@@ -140,10 +141,10 @@ export const Footer: React.FC = () => {
 
           {/* Column 2: Customer Care */}
           <div>
-            <h4 className="font-heading font-bold text-white text-sm uppercase tracking-wider mb-5">
+            <h4 className="font-heading font-bold text-white text-base uppercase tracking-wider mb-5">
               Customer Care
             </h4>
-            <ul className="space-y-3 text-sm text-slate-300">
+            <ul className="space-y-3.5 text-base text-white/80 font-medium">
               <li>
                 <Link to="/about" className="hover:text-rose-400 transition-colors relative group inline-block">
                   About Us
@@ -180,10 +181,10 @@ export const Footer: React.FC = () => {
           {/* Column 3: Contact + Account */}
           <div className="space-y-6">
             <div>
-              <h4 className="font-heading font-bold text-white text-sm uppercase tracking-wider mb-5">
+              <h4 className="font-heading font-bold text-white text-base uppercase tracking-wider mb-5">
                 Get In Touch
               </h4>
-              <div className="space-y-2.5 text-sm text-slate-300">
+              <div className="space-y-3 text-base text-white/80 font-medium">
                 <div className="flex items-center gap-2.5">
                   <span className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
                     <MapPin className="w-3.5 h-3.5 text-rose-400" />
@@ -220,16 +221,16 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Footer Bottom Bar */}
-        <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+        <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-white/60">
           <p className="flex items-center gap-1.5 text-center md:text-left">
             &copy; {new Date().getFullYear()} {settings.storeName}. All rights reserved. Crafted with{' '}
             <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" /> for playful kids worldwide.
           </p>
 
           {/* Credit */}
-          <p className="text-xs text-slate-400">
+          <p className="text-sm text-white/60">
             Design and developed by{' '}
-            <span className="font-heading font-bold text-slate-200">Tecnosphere</span>
+            <span className="font-heading font-bold text-white/90">Tecnosphere</span>
           </p>
         </div>
       </div>

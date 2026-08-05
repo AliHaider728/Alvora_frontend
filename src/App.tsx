@@ -35,6 +35,12 @@ import { AdminReportsPage } from './pages/admin/AdminReportsPage';
 import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
 import { AdminStoreAppearancePage } from './pages/admin/AdminStoreAppearancePage';
 
+const AdminReviewsPage = React.lazy(() =>
+  import('./pages/admin/AdminReviewsPage').then(module => ({
+    default: module.AdminReviewsPage
+  }))
+);
+
 const AdminProductFormPage = React.lazy(() =>
   import('./pages/admin/AdminProductFormPage').then(module => ({
     default: module.AdminProductFormPage
@@ -109,6 +115,7 @@ export default function App() {
             <Route path="categories" element={<AdminCategoriesPage />} />
             <Route path="orders" element={<AdminOrdersPage />} />
             <Route path="customers" element={<AdminCustomersPage />} />
+            <Route path="reviews" element={<React.Suspense fallback={adminPageFallback}><AdminReviewsPage /></React.Suspense>} />
             <Route path="coupons" element={<AdminCouponsPage />} />
             <Route path="reports" element={<AdminReportsPage />} />
             <Route path="settings" element={<AdminSettingsPage />} />

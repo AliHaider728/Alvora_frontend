@@ -118,8 +118,15 @@ export const api = {
   // Reviews
   getProductReviews: (productId: string) => fetchJson<any[]>(`/reviews/product/${productId}`),
   submitReview: (reviewData: any) => fetchJson<any>('/reviews', { method: 'POST', body: JSON.stringify(reviewData) }),
-  getAllReviewsAdmin: () => fetchJson<any[]>('/reviews/admin/all'),
+  submitAdminReview: (reviewData: any) => fetchJson<any>('/reviews/admin', { method: 'POST', body: JSON.stringify(reviewData) }),
+  getAdminReviews: (params?: any) => {
+    const query = params ? new URLSearchParams(params as any).toString() : '';
+    return fetchJson<any>(`/reviews/admin${query ? `?${query}` : ''}`);
+  },
+  getAllReviewsAdmin: () => fetchJson<any[]>('/reviews/admin/all'), // Legacy/fallback, can be removed eventually
+  updateReview: (id: string, data: any) => fetchJson<any>(`/reviews/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   approveReview: (id: string) => fetchJson<any>(`/reviews/${id}/approve`, { method: 'PUT' }),
+  rejectReview: (id: string) => fetchJson<any>(`/reviews/${id}/reject`, { method: 'PUT' }),
   deleteReview: (id: string) => fetchJson<any>(`/reviews/${id}`, { method: 'DELETE' }),
 
   // Settings

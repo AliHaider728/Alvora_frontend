@@ -162,7 +162,15 @@ interface StoreContextType {
 
   updateSettings: (newSettings: Partial<StoreSettings>) => Promise<boolean>;
   updateAppearanceSettings: (newSettings: Pick<StoreSettings, 'storefrontNavigation' | 'homepageSections'>) => void;
-  addReview: (reviewData: Omit<Review, 'id' | 'date'>) => void;
+  
+  // Review Actions
+  submitCustomerReview: (reviewData: Omit<Review, 'id' | 'createdAt' | 'updatedAt' | 'source' | 'status' | 'approvedAt' | 'approvedBy'>) => Promise<{ success: boolean; message: string; review?: Review }>;
+  addAdminReview: (reviewData: Omit<Review, 'id' | 'createdAt' | 'updatedAt' | 'source' | 'status' | 'approvedAt' | 'approvedBy'>) => Promise<Review | null>;
+  updateReview: (id: string, data: Partial<Review>) => Promise<Review | null>;
+  approveReview: (id: string) => Promise<Review | null>;
+  rejectReview: (id: string) => Promise<Review | null>;
+  deleteReview: (id: string) => Promise<boolean>;
+  refreshAdminReviews: (params?: any) => Promise<{ reviews: Review[]; total: number; page: number; totalPages: number; counts: any } | null>;
 }
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -563,14 +571,62 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setSettings(prev => normalizeStoreSettings({ ...prev, ...newSettings }));
   };
 
-  const addReview = (reviewData: Omit<Review, 'id' | 'date'>) => {
-    const newReview: Review = {
-      ...reviewData,
-      id: `rev-${Date.now().toString().slice(-4)}`,
-      date: new Date().toISOString().split('T')[0],
-    };
-    setReviews(prev => [newReview, ...prev]);
+  const submitCustomerReview = async (reviewData: Omit<Review, 'id' | 'createdAt' | 'updatedAt' | 'source' | 'status' | 'approvedAt' | 'approvedBy'>) => {
+    try {
+      const result = await api.submitReview(reviewData);
+      if (!result) return { success: false, message: 'Failed to submit review' };
+      return { success: true, message: result.message || 'Review submitted successfully', review: result.review };
+    } catch (e: any) {
+      return { success: false, message: e.message || 'Failed to submit review' };
+    }
+  };
 
+  const addAdminReview = async (reviewData: Omit<Review, 'id' | 'createdAt' | 'updatedAt' | 'source' | 'status' | 'approvedAt' | 'approvedBy'>) => {
+    const result = await api.submitAdminReview(reviewData);
+    if (!result) return null;
+    const formatted = { ...result, id: result._id || result.id };
+    setReviews(prev => [formatted, ...prev]);
+    return formatted;
+  };
+
+  const updateReview = async (id: string, data: Partial<Review>) => {
+    const result = await api.updateReview(id, data);
+    if (!result) return null;
+    const formatted = { ...result, id: result._id || result.id };
+    setReviews(prev => prev.map(r => r.id === id ? formatted : r));
+    return formatted;
+  };
+
+  const approveReview = async (id: string) => {
+    const result = await api.approveReview(id);
+    if (!result) return null;
+    const formatted = { ...result, id: result._id || result.id };
+    setReviews(prev => prev.map(r => r.id === id ? formatted : r));
+    return formatted;
+  };
+
+  const rejectReview = async (id: string) => {
+    const result = await api.rejectReview(id);
+    if (!result) return null;
+    const formatted = { ...result, id: result._id || result.id };
+    setReviews(prev => prev.map(r => r.id === id ? formatted : r));
+    return formatted;
+  };
+
+  const deleteReview = async (id: string) => {
+    const success = await api.deleteReview(id);
+    if (!success) return false;
+    setReviews(prev => prev.filter(r => r.id !== id));
+    return true;
+  };
+
+  const refreshAdminReviews = async (params?: any) => {
+    const result = await api.getAdminReviews(params);
+    if (!result) return null;
+    // Map _id to id
+    const formattedReviews = result.reviews.map((r: any) => ({ ...r, id: r._id || r.id }));
+    setReviews(formattedReviews);
+    return { ...result, reviews: formattedReviews };
   };
 
   return (
@@ -615,7 +671,13 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         deleteCoupon,
         updateSettings,
         updateAppearanceSettings,
-        addReview,
+        submitCustomerReview,
+        addAdminReview,
+        updateReview,
+        approveReview,
+        rejectReview,
+        deleteReview,
+        refreshAdminReviews
       }}
     >
       {children}
@@ -625,7 +687,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
 export const useStore = () => {
   const context = useContext(StoreContext);
-  if (!context) {
+  if (context === undefined) {
     throw new Error('useStore must be used within a StoreProvider');
   }
   return context;

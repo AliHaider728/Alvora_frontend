@@ -38,6 +38,7 @@ export const AdminLayout: React.FC = () => {
     { label: 'Categories', path: '/admin/categories', icon: Layers },
     { label: 'Orders', path: '/admin/orders', icon: ShoppingBag },
     { label: 'Customers', path: '/admin/customers', icon: Users },
+    { label: 'Reviews', path: '/admin/reviews', icon: MessageSquare },
     { label: 'Coupons & Deals', path: '/admin/coupons', icon: Tag },
     { label: 'Sales Reports', path: '/admin/reports', icon: BarChart3 },
     { label: 'Store Settings', path: '/admin/settings', icon: Settings },

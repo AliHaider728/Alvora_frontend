@@ -38,7 +38,7 @@ const getPlainDescription = (description: string) =>
 
 export const ProductDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const { products, addToCart, toggleWishlist, isInWishlist, refreshProducts, settings } = useStore();
+  const { products, addToCart, toggleWishlist, isInWishlist, refreshProducts, settings, submitCustomerReview } = useStore();
   const { showToast } = useToast();
 
   const product = products.find(
@@ -66,11 +66,11 @@ export const ProductDetailPage: React.FC = () => {
     setProductReviews(result.map(review => ({
       id: String(review.id || review._id || ''),
       productId: String(review.productId || productId),
-      userName: String(review.authorName || 'PlayBimboo customer'),
+      userName: String(review.reviewerName || review.authorName || 'PlayBimboo customer'),
       rating: Number(review.rating || 0),
-      date: String(review.createdAt || '').slice(0, 10),
-      title: String(review.title || 'Customer review'),
-      comment: String(review.comment || ''),
+      date: String(review.createdAt || review.date || '').slice(0, 10),
+      title: String(review.title || ''),
+      comment: String(review.content || review.comment || ''),
       verifiedPurchase: Boolean(review.verifiedPurchase)
     })));
   };
@@ -162,16 +162,19 @@ export const ProductDetailPage: React.FC = () => {
     e.preventDefault();
     if (!newUserName || !newComment) return;
     try {
-      const submitted = await api.submitReview({
+      const result = await submitCustomerReview({
         productId: product.id,
-        productName: product.name,
-        authorName: newUserName,
+        reviewerName: newUserName,
         rating: newRating,
-        comment: newComment
+        content: newComment,
+        verifiedPurchase: false, // Defaulting to false for public submissions
+        title: newTitle
       });
-      if (!submitted) throw new Error(getLastApiError() || 'Review submission failed.');
-      await Promise.all([loadProductReviews(product.id), refreshProducts()]);
-      showToast('Thank you! Your review has been submitted.', 'success');
+      if (!result.success) throw new Error(result.message || 'Review submission failed.');
+      // After submission, it goes to pending, so it won't show up immediately for customers anyway
+      // But we still refresh the products to update any stats if needed
+      await refreshProducts();
+      showToast('Thank you! Your review has been submitted and is awaiting approval.', 'success');
     } catch (err) {
       showToast(err instanceof Error ? err.message : 'Review submission failed.', 'error');
       return;
