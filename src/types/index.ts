@@ -159,6 +159,7 @@ export interface Product {
   productDetailBlocks?: ProductDetailBlock[];
   productDetailCustomCss?: string;
   productDetailScopedCss?: string;
+  productSchemaVersion?: number;
 }
 
 export type ProductInput = Omit<

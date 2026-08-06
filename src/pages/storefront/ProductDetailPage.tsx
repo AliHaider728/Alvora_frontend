@@ -87,7 +87,7 @@ export const ProductDetailPage: React.FC = () => {
 
   const hasDesc = Boolean((product?.productDetailBlocks || []).filter(b => b.enabled).length > 0 || product?.description || product?.productDetailCustomCss);
   const hasSpecs = Boolean(Object.keys(product?.specifications || {}).length > 0 || (product?.productType === 'variable' && product?.attributes?.some(a => a.visible && a.terms?.length)));
-  const hasSafety = Boolean(product?.ageGroups?.length || product?.safetyWarnings?.length);
+  const hasSafety = Boolean(product?.ageGroups?.length || product?.safetyInfo?.length);
   const approvedReviews = productReviews.filter(r => r.status === 'approved');
   const hasReviews = Boolean(approvedReviews.length > 0);
   
