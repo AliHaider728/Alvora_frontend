@@ -131,9 +131,18 @@ export const CheckoutPage: React.FC = () => {
       phone,
       items: cart.map(item => {
         let price = item.product.price;
+        let image = item.product.images[0];
+        let sku = item.product.sku;
+        let attributes = undefined;
+
         if (item.product.productType === 'variable' && item.variationId) {
            const variation = item.product.variations?.find(v => String(v.id) === String(item.variationId));
-           if (variation) price = variation.salePrice !== undefined && variation.salePrice !== null ? variation.salePrice : variation.regularPrice;
+           if (variation) {
+             price = variation.salePrice !== undefined && variation.salePrice !== null ? variation.salePrice : variation.regularPrice;
+             if (variation.image?.url) image = variation.image.url;
+             if (variation.sku) sku = variation.sku;
+             attributes = variation.attributes;
+           }
         } else if (item.selectedVariant && item.product.variants) {
            const selections = new Map(
              item.selectedVariant.split(',').map(part => {
@@ -154,16 +163,12 @@ export const CheckoutPage: React.FC = () => {
           name: item.product.name,
           quantity: item.quantity,
           price: price,
-          image: item.product.images[0],
+          image: image,
           selectedVariant: item.selectedVariant,
           variationId: item.variationId,
           productType: item.product.productType || 'simple',
-          sku: item.product.productType === 'variable' && item.variationId 
-            ? item.product.variations?.find(v => String(v.id) === String(item.variationId))?.sku 
-            : item.product.sku,
-          selectedAttributes: item.product.productType === 'variable' && item.variationId 
-            ? item.product.variations?.find(v => String(v.id) === String(item.variationId))?.attributes 
-            : undefined
+          sku: sku,
+          selectedAttributes: attributes
         };
       }),
       subtotal: cartSubtotal,

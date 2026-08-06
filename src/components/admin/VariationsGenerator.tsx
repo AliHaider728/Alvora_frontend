@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
-import { Play, Settings2, Trash2 } from 'lucide-react';
+import { Play, Settings2, Trash2, Image as ImageIcon } from 'lucide-react';
 import { ProductAttribute, ProductVariation } from '../../types';
+import { VariationImageModal } from './VariationImageModal';
 
 interface VariationsGeneratorProps {
   attributes: ProductAttribute[];
   variations: ProductVariation[];
   onChange: (variations: ProductVariation[]) => void;
   basePrice: number;
+  productImages?: { id: string; url: string; publicId?: string }[];
 }
 
-export const VariationsGenerator: React.FC<VariationsGeneratorProps> = ({ attributes, variations, onChange, basePrice }) => {
+export const VariationsGenerator: React.FC<VariationsGeneratorProps> = ({ attributes, variations, onChange, basePrice, productImages = [] }) => {
+  const [editingImageFor, setEditingImageFor] = useState<string | null>(null);
+
   const variationAttributes = attributes.filter(a => {
     if (!a.usedForVariations) return false;
     if (a.source === 'custom') return a.terms && a.terms.length > 0;
@@ -108,6 +112,7 @@ export const VariationsGenerator: React.FC<VariationsGeneratorProps> = ({ attrib
             <div className="col-span-2">Sale Price</div>
             <div className="col-span-2">SKU</div>
             <div className="col-span-2">Stock</div>
+            <div className="col-span-1 text-center">Image</div>
             <div className="col-span-1 text-right">Actions</div>
           </div>
           
@@ -184,6 +189,21 @@ export const VariationsGenerator: React.FC<VariationsGeneratorProps> = ({ attrib
                 )}
               </div>
 
+              <div className="col-span-1 flex justify-center items-center">
+                <button
+                  type="button"
+                  onClick={() => setEditingImageFor(variation.id)}
+                  className={`p-1.5 rounded-lg border transition-colors ${variation.image?.url ? 'border-indigo-200 bg-indigo-50 hover:bg-indigo-100' : 'border-slate-200 bg-white hover:bg-slate-50'} text-slate-500`}
+                  title="Variation Image"
+                >
+                  {variation.image?.url ? (
+                    <img src={variation.image.url} alt="Variation" className="w-6 h-6 object-cover rounded-md" />
+                  ) : (
+                    <ImageIcon className="w-5 h-5 opacity-70" />
+                  )}
+                </button>
+              </div>
+
               <div className="col-span-1 flex justify-end">
                 <button
                   type="button"
@@ -197,6 +217,18 @@ export const VariationsGenerator: React.FC<VariationsGeneratorProps> = ({ attrib
             </div>
           ))}
         </div>
+      )}
+
+      {editingImageFor && (
+        <VariationImageModal
+          isOpen={true}
+          onClose={() => setEditingImageFor(null)}
+          currentImage={variations.find(v => v.id === editingImageFor)?.image}
+          productImages={productImages}
+          onSave={(img) => {
+            updateVariation(editingImageFor, 'image', img);
+          }}
+        />
       )}
     </div>
   );

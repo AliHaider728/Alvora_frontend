@@ -497,7 +497,10 @@ export const AdminProductFormPage: React.FC = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    const currentErrors = validateForm();
+    if (isSaving) return;
+
+    try {
+      const currentErrors = validateForm();
     if (currentErrors) {
       const firstError = Object.values(currentErrors)[0];
       showToast(firstError, 'error');
@@ -529,6 +532,9 @@ export const AdminProductFormPage: React.FC = () => {
          computedOriginalPrice = null;
       }
     }
+
+    const normalizedSku = productType === 'simple' && sku ? sku.trim().toUpperCase() : undefined;
+
     const payload: ProductInput = {
       productSchemaVersion: 2,
       name: name.trim(),
@@ -589,7 +595,6 @@ export const AdminProductFormPage: React.FC = () => {
 
     setIsSaving(true);
     const savedProduct = id ? await updateProduct(id, payload) : await addProduct(payload);
-    setIsSaving(false);
     if (!savedProduct) {
       const apiError = getLastApiError() || `Could not ${isEditing ? 'update' : 'create'} the product.`;
       if (/slug/i.test(apiError)) setErrors(current => ({ ...current, slug: apiError }));
@@ -614,6 +619,13 @@ export const AdminProductFormPage: React.FC = () => {
     setIsDirty(false);
     showToast(`${isEditing ? 'Updated' : 'Created'} ${savedProduct.name} successfully.`, 'success');
     navigate('/admin/products');
+    
+    } catch (err: any) {
+      showToast(err.message || 'An unexpected error occurred during save.', 'error');
+      console.error('Submit error:', err);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   if (isEditing && productLoadFailed) {
@@ -752,7 +764,7 @@ export const AdminProductFormPage: React.FC = () => {
               )}
 
               <FormCard title="Variations" description="Generate and manage product variations." icon={PackageCheck}>
-                <VariationsGenerator attributes={attributes} variations={variations} onChange={(newVars) => { setVariations(newVars); markDirty(); }} basePrice={regularPrice} />
+                <VariationsGenerator attributes={attributes} variations={variations} onChange={(newVars) => { setVariations(newVars); markDirty(); }} basePrice={regularPrice} productImages={images} />
                 
                 {variations.filter(v => v.enabled).length > 0 && (
                   <div className="mt-6 p-4 bg-slate-50 border border-slate-200 rounded-xl">

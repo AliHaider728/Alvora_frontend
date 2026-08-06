@@ -265,16 +265,14 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           realOrders,
           realCustomers,
           realCoupons,
-          realSettings,
-          realReviews
+          realSettings
         ] = await Promise.all([
           api.getProducts(),
           hasAdminSession && isSuperAdmin() ? api.getAdminCategories() : api.getCategories(),
           hasAdminSession ? api.getOrders() : Promise.resolve(null),
           hasAdminSession ? api.getCustomers() : Promise.resolve(null),
           hasAdminSession ? api.getCoupons() : Promise.resolve(null),
-          api.getSettings(),
-          hasAdminSession ? api.getAllReviewsAdmin() : Promise.resolve(null)
+          api.getSettings()
         ]);
 
         if (realProducts) setProducts(realProducts.map(normalizeProduct));
@@ -283,7 +281,6 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         if (realCustomers) setCustomers(realCustomers);
         if (realCoupons) setCoupons(realCoupons.map(normalizeCoupon));
         if (realSettings) setSettings(normalizeStoreSettings(realSettings));
-        if (realReviews) setReviews(realReviews);
       } catch (err) {
         console.error('Failed to fetch real data from backend', err);
       }

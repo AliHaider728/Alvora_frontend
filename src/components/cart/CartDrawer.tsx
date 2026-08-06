@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { X, ShoppingBag, Trash2, Plus, Minus, Tag, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/formatters';
+import { getSafeImageSrc } from '../../utils/images';
 
 export const CartDrawer: React.FC = () => {
   const {
@@ -142,8 +143,8 @@ export const CartDrawer: React.FC = () => {
                   className="flex gap-3.5 p-3.5 rounded-2xl bg-slate-50 border border-slate-100 hover:border-slate-200 transition-all"
                 >
                   <img
-                    src={item.product.images[0]}
-                    alt={item.product.name}
+                    src={getSafeImageSrc(variation?.image?.url || item.product.images[0])}
+                    alt={variation?.image?.alt || item.product.name}
                     className="w-20 h-20 object-cover rounded-xl bg-white flex-shrink-0"
                   />
 

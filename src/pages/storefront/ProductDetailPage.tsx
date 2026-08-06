@@ -187,6 +187,17 @@ export const ProductDetailPage: React.FC = () => {
       })
     : undefined;
 
+  useEffect(() => {
+    if (isVariable) {
+      if (currentVariation?.image?.url) {
+        setOverrideImage(currentVariation.image.url);
+      } else {
+        setOverrideImage(null);
+        setActiveImageIndex(0);
+      }
+    }
+  }, [currentVariation?.id, isVariable]);
+
   let currentPrice = product.price;
   let currentOriginalPrice = product.originalPrice;
   let totalVariantOffset = 0;

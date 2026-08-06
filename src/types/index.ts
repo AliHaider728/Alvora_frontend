@@ -92,7 +92,11 @@ export interface ProductVariation {
   sku?: string;
   regularPrice: number;
   salePrice?: number;
-  image?: string;
+  image?: {
+    url: string;
+    publicId?: string;
+    alt?: string;
+  };
   manageStock: boolean;
   stockQuantity?: number | null;
   lowStockThreshold?: number | null;
