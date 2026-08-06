@@ -229,7 +229,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const [wishlist, setWishlist] = useState<string[]>(() => {
     const saved = localStorage.getItem('playbimboo_wishlist');
-    return saved ? JSON.parse(saved) : ['p-101', 'p-103'];
+    return saved ? JSON.parse(saved) : [];
   });
 
   const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(null);

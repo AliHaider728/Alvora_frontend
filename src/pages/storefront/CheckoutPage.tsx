@@ -45,13 +45,13 @@ export const CheckoutPage: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
 
   // Form states
-  const [fullName, setFullName] = useState('Ali Raza');
-  const [email, setEmail] = useState('ali.raza@example.com');
-  const [phone, setPhone] = useState('+92 300 1234567');
-  const [street, setStreet] = useState('House #45, Block C, Gulberg III');
-  const [city, setCity] = useState('Lahore');
-  const [state, setState] = useState('Punjab');
-  const [postalCode, setPostalCode] = useState('54000');
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [street, setStreet] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [postalCode, setPostalCode] = useState('');
   const [country] = useState('Pakistan');
   const [orderNotes, setOrderNotes] = useState('');
 

@@ -7,6 +7,7 @@ import { Header } from './components/common/Header';
 import { Footer } from './components/common/Footer';
 import { CartDrawer } from './components/cart/CartDrawer';
 import { MobileBottomNav } from './components/common/MobileBottomNav';
+import { FloatingWhatsApp } from './components/common/FloatingWhatsApp';
 
 
 // Storefront Pages
@@ -92,6 +93,7 @@ const StorefrontLayout: React.FC = () => {
         </Routes>
       </main>
       <Footer />
+      <FloatingWhatsApp />
       <MobileBottomNav />
     </div>
   );

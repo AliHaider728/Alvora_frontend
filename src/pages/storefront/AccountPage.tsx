@@ -15,13 +15,11 @@ export const AccountPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'orders' | 'profile' | 'addresses'>('orders');
 
   const customer = customers[0] || {
-    name: 'Ali Raza',
-    email: 'ali.raza@example.com',
-    phone: '+92 300 1234567',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
-    addresses: [
-      { id: '1', name: 'Home', street: 'House #45, Block C, Gulberg III', city: 'Lahore', state: 'Punjab', postalCode: '54000', isDefault: true }
-    ]
+    name: '',
+    email: '',
+    phone: '',
+    avatar: '',
+    addresses: []
   };
 
   const handleCancelOrder = async (orderId: string, orderDateStr: string) => {
