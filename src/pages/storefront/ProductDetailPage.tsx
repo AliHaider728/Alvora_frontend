@@ -892,7 +892,7 @@ export const ProductDetailPage: React.FC = () => {
             <h3 className="font-heading font-black text-2xl text-slate-900">
               You Might Also Love
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-stretch">
               {relatedProducts.map(prod => (
                 <ProductCard key={prod.id} product={prod} />
               ))}

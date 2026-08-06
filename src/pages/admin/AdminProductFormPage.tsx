@@ -68,6 +68,15 @@ const slugify = (value: string) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)/g, '');
 
+const inferProductType = (product?: Partial<Product>) => {
+  if (product?.productType === 'variable') return 'variable';
+  const hasVariations = Array.isArray(product?.variations) && product.variations.length > 0;
+  const usesVariationAttributes = Array.isArray(product?.attributes)
+    ? product.attributes.some(attribute => attribute.usedForVariations)
+    : false;
+  return hasVariations || usesVariationAttributes ? 'variable' : 'simple';
+};
+
 const stripHtml = (value: string) =>
   value
     .replace(/<[^>]*>/g, ' ')
@@ -285,7 +294,7 @@ export const AdminProductFormPage: React.FC = () => {
     setStockQuantity(productInventory.stockQuantity);
     setStockStatus(productInventory.stockStatus);
     setLowStockThreshold(editingProduct.lowStockThreshold);
-    setProductType(editingProduct.productType || 'simple');
+    setProductType(inferProductType(editingProduct));
     setAttributes(editingProduct.attributes || []);
     setVariations(editingProduct.variations || []);
     setDefaultAttributes(editingProduct.defaultAttributes || {});
@@ -378,7 +387,7 @@ export const AdminProductFormPage: React.FC = () => {
             setStockQuantity(data.stockQuantity);
             setStockStatus(data.stockStatus || 'in_stock');
             setLowStockThreshold(data.lowStockThreshold);
-            setProductType(data.productType || 'simple');
+            setProductType(inferProductType(data));
             setAttributes(data.attributes || []);
             setVariations(data.variations || []);
             
@@ -935,7 +944,7 @@ export const AdminProductFormPage: React.FC = () => {
               <FormCard title="Variations" description="Generate and manage product variations." icon={PackageCheck}>
                 <VariationsGenerator attributes={attributes} variations={variations} onChange={handleVariationsChange} basePrice={regularPrice} productImages={images} />
                 
-                {variations.filter(v => v.enabled).length > 0 && (
+                {variations.length > 0 && (
                   <div className="mt-6 p-4 bg-slate-50 border border-slate-200 rounded-xl">
                     <label className="block text-sm font-bold text-slate-800 mb-2">Default Variation</label>
                     <p className="text-xs text-slate-500 mb-3">This variation will be pre-selected when customers open the product page.</p>

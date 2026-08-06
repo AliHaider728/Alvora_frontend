@@ -77,7 +77,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
   return (
     <div className="group relative bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden h-full">
       {/* Product Image Container */}
-      <div className="relative h-[220px] sm:h-[300px] w-full bg-white overflow-hidden rounded-t-3xl border-b border-slate-100/50 flex-shrink-0">
+      <div className="relative h-[240px] sm:h-[320px] w-full bg-white overflow-hidden rounded-t-3xl border-b border-slate-100/50 flex-shrink-0">
         <Link to={`/product/${product.slug}`} className="block w-full h-full">
           <img
             src={getSafeImageSrc(product.images?.[0])}
