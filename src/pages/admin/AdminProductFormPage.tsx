@@ -290,12 +290,16 @@ export const AdminProductFormPage: React.FC = () => {
     setVariations(editingProduct.variations || []);
     setDefaultAttributes(editingProduct.defaultAttributes || {});
     
-    let initialDefaultVarId = '';
-    if (editingProduct.defaultAttributes && Object.keys(editingProduct.defaultAttributes).length > 0) {
-       const match = (editingProduct.variations || []).find(v => Object.entries(editingProduct.defaultAttributes!).every(([k, val]) => v.attributes[k] === val));
-       if (match) initialDefaultVarId = match.id;
+    let initialDefaultVarId = editingProduct.defaultVariationId || '';
+    let validMatch = (editingProduct.variations || []).find(v => v.id === initialDefaultVarId);
+    
+    if (!validMatch && editingProduct.defaultAttributes && Object.keys(editingProduct.defaultAttributes).length > 0) {
+       validMatch = (editingProduct.variations || []).find(v => Object.entries(editingProduct.defaultAttributes!).every(([k, val]) => v.attributes[k] === val));
+       if (validMatch) initialDefaultVarId = validMatch.id;
     }
+    
     setDefaultVariationId(initialDefaultVarId);
+    if (validMatch) setDefaultAttributes(validMatch.attributes);
     
     setAgeGroups(editingProduct.ageGroups?.length
       ? editingProduct.ageGroups
@@ -377,8 +381,19 @@ export const AdminProductFormPage: React.FC = () => {
             setProductType(data.productType || 'simple');
             setAttributes(data.attributes || []);
             setVariations(data.variations || []);
-            setDefaultAttributes(data.defaultAttributes || {});
-            setDefaultVariationId(data.defaultVariationId || '');
+            
+            let draftDefaultVarId = data.defaultVariationId || '';
+            let validDraftMatch = (data.variations || []).find((v: any) => v.id === draftDefaultVarId);
+            
+            if (!validDraftMatch && data.defaultAttributes && Object.keys(data.defaultAttributes).length > 0) {
+               validDraftMatch = (data.variations || []).find((v: any) => Object.entries(data.defaultAttributes!).every(([k, val]) => v.attributes[k] === val));
+               if (validDraftMatch) draftDefaultVarId = validDraftMatch.id;
+            }
+            
+            setDefaultVariationId(draftDefaultVarId);
+            if (validDraftMatch) setDefaultAttributes(validDraftMatch.attributes);
+            else setDefaultAttributes(data.defaultAttributes || {});
+
             setAgeGroups(data.ageGroups || []);
             setMaterial(data.material || '');
             setSafetyInfo(data.safetyInfo || '');
@@ -937,8 +952,8 @@ export const AdminProductFormPage: React.FC = () => {
                     >
                       <option value="" disabled>Select a default variation...</option>
                       {variations.filter(v => v.enabled).map(v => (
-                        <option key={v.id} value={v.id}>
-                          {Object.entries(v.attributes).map(([key, val]) => `${key}: ${val}`).join(', ')}
+                        <option key={v.id} value={v.id} className="text-slate-800">
+                          {attributes.filter(a => a.usedForVariations).map(a => v.attributes[a.slug]).filter(Boolean).join(' / ')}
                         </option>
                       ))}
                     </select>

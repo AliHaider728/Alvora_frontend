@@ -5,7 +5,7 @@ import { Product } from '../../types';
 import { useStore } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/formatters';
 import { getSafeImageSrc } from '../../utils/images';
-import { formatProductAgeGroups, getEffectiveProductAvailability } from '../../utils/products';
+import { formatProductAgeGroups, getEffectiveProductAvailability, normalizeInventory } from '../../utils/products';
 import { ReviewSummary } from './ReviewSummary';
 
 interface ProductCardProps {
@@ -21,6 +21,19 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
   const isVariable = product.productType === 'variable';
   const hasVariants = isVariable || Boolean(product.variants?.some(group => group.options.length > 0));
   const isAvailable = getEffectiveProductAvailability(product);
+
+  let validDefaultVariation: any = null;
+  if (isVariable && product.variations && product.variations.length > 0) {
+    if (product.defaultAttributes && Object.keys(product.defaultAttributes).length > 0) {
+      const match = product.variations.find(v => v.enabled && Object.entries(product.defaultAttributes!).every(([k, val]) => v.attributes[k] === val));
+      if (match && normalizeInventory(match).inStock) {
+        validDefaultVariation = match;
+      }
+    }
+  }
+  
+  const showAddToCart = !isVariable || (isVariable && validDefaultVariation);
+
 
   let displayPrice = product.price;
   let displayOriginalPrice = product.originalPrice;
@@ -42,11 +55,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (hasVariants) {
+    if (!showAddToCart) {
       navigate(`/product/${product.slug}`);
       return;
     }
-    addToCart(product, 1);
+    if (validDefaultVariation) {
+      addToCart(product, 1, JSON.stringify(validDefaultVariation.attributes), validDefaultVariation.id);
+    } else {
+      addToCart(product, 1);
+    }
     setAdded(true);
     setTimeout(() => setAdded(false), 1500);
   };
@@ -60,13 +77,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
   return (
     <div className="group relative bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden">
       {/* Product Image Container */}
-      <div className="relative aspect-square w-full bg-white overflow-hidden rounded-t-3xl border-b border-slate-100/50">
+      <div className="relative aspect-[4/3] w-full bg-slate-50/50 overflow-hidden rounded-t-3xl border-b border-slate-100/50">
         <Link to={`/product/${product.slug}`} className="block w-full h-full">
           <img
             src={getSafeImageSrc(product.images?.[0])}
             alt={product.name}
             loading="lazy"
-            className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-500 ease-out p-1"
+            className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-500 ease-out"
           />
         </Link>
 
@@ -202,7 +219,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
                 </>
               ) : !isAvailable ? (
                 <span className="whitespace-nowrap">Sold Out</span>
-              ) : hasVariants ? (
+              ) : !showAddToCart ? (
                 <>
                   <Eye className="w-4 h-4" />
                   <span className="hidden sm:inline">View</span>

@@ -36,6 +36,7 @@ export const CheckoutPage: React.FC = () => {
     appliedCoupon,
     couponDiscountAmount,
     categories,
+    customers,
     settings,
     placeOrder
   } = useStore();
@@ -45,13 +46,16 @@ export const CheckoutPage: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
 
   // Form states
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [street, setStreet] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
-  const [postalCode, setPostalCode] = useState('');
+  const customer = customers?.[0]; // Assuming first customer for logged in state
+  const defaultAddress = customer?.addresses?.find(a => a.isDefault) || customer?.addresses?.[0];
+
+  const [fullName, setFullName] = useState(customer?.name || '');
+  const [email, setEmail] = useState(customer?.email || '');
+  const [phone, setPhone] = useState(customer?.phone || '');
+  const [street, setStreet] = useState(defaultAddress?.street || '');
+  const [city, setCity] = useState(defaultAddress?.city || '');
+  const [state, setState] = useState(defaultAddress?.state || '');
+  const [postalCode, setPostalCode] = useState(defaultAddress?.postalCode || '');
   const [country] = useState('Pakistan');
   const [orderNotes, setOrderNotes] = useState('');
 
