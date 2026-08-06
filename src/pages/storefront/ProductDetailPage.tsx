@@ -49,11 +49,13 @@ export const ProductDetailPage: React.FC = () => {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>({});
+  const [selectedAttributes, setSelectedAttributes] = useState<Record<string, string>>({});
   const [activeTab, setActiveTab] = useState<'desc' | 'specs' | 'safety' | 'reviews'>('desc');
   const [added, setAdded] = useState(false);
 
   // Write review modal state
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
+  const [sizeGuideModalOpen, setSizeGuideModalOpen] = useState(false);
   const [newRating, setNewRating] = useState(5);
   const [newTitle, setNewTitle] = useState('');
   const [newComment, setNewComment] = useState('');
@@ -64,19 +66,70 @@ export const ProductDetailPage: React.FC = () => {
     const result = await api.getProductReviews(productId);
     if (!result) return;
     setProductReviews(result.map(review => ({
+      ...review,
       id: String(review.id || review._id || ''),
       productId: String(review.productId || productId),
-      userName: String(review.reviewerName || review.authorName || 'PlayBimboo customer'),
+      reviewerName: String(review.reviewerName || review.authorName || 'PlayBimboo customer'),
       rating: Number(review.rating || 0),
-      date: String(review.createdAt || review.date || '').slice(0, 10),
+      createdAt: String(review.createdAt || review.date || '').slice(0, 10),
       title: String(review.title || ''),
-      comment: String(review.content || review.comment || ''),
-      verifiedPurchase: Boolean(review.verifiedPurchase)
+      content: String(review.content || review.comment || ''),
+      verifiedPurchase: Boolean(review.verifiedPurchase),
+      source: review.source || 'customer',
+      status: review.status || 'approved'
     })));
   };
 
   useEffect(() => {
     if (product?.id) void loadProductReviews(product.id);
+  }, [product?.id]);
+
+  // Size Guide Focus Trap
+  const sizeGuideRef = React.useRef<HTMLDivElement>(null);
+  const sizeGuideTriggerRef = React.useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (sizeGuideModalOpen) {
+      const modal = sizeGuideRef.current;
+      if (!modal) return;
+      const focusableElements = modal.querySelectorAll<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Tab') {
+          if (e.shiftKey) {
+            if (document.activeElement === firstElement) {
+              e.preventDefault();
+              lastElement?.focus();
+            }
+          } else {
+            if (document.activeElement === lastElement) {
+              e.preventDefault();
+              firstElement?.focus();
+            }
+          }
+        }
+      };
+
+      modal.addEventListener('keydown', handleKeyDown);
+      firstElement?.focus();
+      document.body.style.overflow = 'hidden';
+
+      return () => {
+        modal.removeEventListener('keydown', handleKeyDown);
+        document.body.style.overflow = '';
+        sizeGuideTriggerRef.current?.focus();
+      };
+    }
+  }, [sizeGuideModalOpen]);
+
+  useEffect(() => {
+    if (product?.productType === 'variable' && product.defaultAttributes) {
+      setSelectedAttributes(product.defaultAttributes);
+    }
   }, [product?.id]);
 
   if (!product) {
@@ -104,21 +157,54 @@ export const ProductDetailPage: React.FC = () => {
     .filter(p => Boolean(product.categorySlug) && p.categorySlug === product.categorySlug && p.id !== product.id)
     .slice(0, 4);
 
-  // Calculate variant price offset
-  const totalVariantOffset = product.variants
-    ? product.variants.reduce((sum, group) => {
-        const selectedOptName = selectedVariants[group.name];
-        if (!selectedOptName) return sum;
-        const foundOpt = group.options.find(o => o.name === selectedOptName);
-        return sum + (foundOpt?.priceOffset || 0);
-      }, 0)
-    : 0;
+  const isVariable = product.productType === 'variable';
 
-  const currentPrice = product.price + totalVariantOffset;
+  // Find active variation
+  const currentVariation = isVariable
+    ? product.variations?.find(v => {
+        if (!v.enabled) return false;
+        return Object.entries(selectedAttributes).every(([key, val]) => v.attributes[key] === val);
+      })
+    : undefined;
+
+  let currentPrice = product.price;
+  let currentOriginalPrice = product.originalPrice;
+  let totalVariantOffset = 0;
+
+  if (isVariable) {
+    if (currentVariation) {
+      currentPrice = currentVariation.salePrice !== undefined && currentVariation.salePrice !== null ? currentVariation.salePrice : currentVariation.regularPrice;
+      currentOriginalPrice = currentVariation.salePrice !== undefined && currentVariation.salePrice !== null ? currentVariation.regularPrice : undefined;
+    } else {
+       // Find minimum price for 'From Rs. X' display later
+       const allPrices = (product.variations || []).map(v => v.salePrice !== undefined && v.salePrice !== null ? v.salePrice : v.regularPrice);
+       currentPrice = allPrices.length > 0 ? Math.min(...allPrices) : product.price;
+    }
+  } else {
+    totalVariantOffset = product.variants
+      ? product.variants.reduce((sum, group) => {
+          const selectedOptName = selectedVariants[group.name];
+          if (!selectedOptName) return sum;
+          const foundOpt = group.options.find(o => o.name === selectedOptName);
+          return sum + (foundOpt?.priceOffset || 0);
+        }, 0)
+      : 0;
+    currentPrice = product.price + totalVariantOffset;
+  }
+
   const variantGroups = (product.variants || []).filter(group => group.options.length > 0);
-  const allVariantsSelected = variantGroups.every(group => Boolean(selectedVariants[group.name]));
-  const effectiveAvailable = getEffectiveProductAvailability(product, selectedVariants);
-  const selectedVariantStock = getEffectiveAvailableQuantity(product, selectedVariants);
+  const allVariantsSelected = isVariable
+    ? (product.attributes || []).every(attr => Boolean(selectedAttributes[attr.slug]))
+    : variantGroups.every(group => Boolean(selectedVariants[group.name]));
+
+  const effectiveAvailable = isVariable
+    ? (currentVariation ? (currentVariation.manageStock ? (currentVariation.stockQuantity || 0) > 0 : true) : false)
+    : getEffectiveProductAvailability(product, selectedVariants);
+
+  const selectedVariantStock = isVariable
+    ? (currentVariation?.manageStock ? (currentVariation.stockQuantity ?? undefined) : undefined)
+    : getEffectiveAvailableQuantity(product, selectedVariants);
+
   const canPurchase =
     effectiveAvailable &&
     productDeliveryType !== 'none' &&
@@ -127,6 +213,10 @@ export const ProductDetailPage: React.FC = () => {
 
   const handleVariantSelect = (groupName: string, optionName: string) => {
     setSelectedVariants(prev => ({ ...prev, [groupName]: optionName }));
+  };
+
+  const handleAttributeSelect = (slug: string, value: string) => {
+    setSelectedAttributes(prev => ({ ...prev, [slug]: value }));
   };
 
   const formattedVariantString = Object.entries(selectedVariants)
@@ -142,8 +232,12 @@ export const ProductDetailPage: React.FC = () => {
       showToast('This product option is currently out of stock or unavailable for delivery.', 'error');
       return;
     }
-    const productToCart = totalVariantOffset ? { ...product, price: currentPrice } : product;
-    addToCart(productToCart, quantity, formattedVariantString || undefined);
+    if (isVariable) {
+      addToCart({ ...product, price: currentPrice }, quantity, undefined, currentVariation?.id);
+    } else {
+      const productToCart = totalVariantOffset ? { ...product, price: currentPrice } : product;
+      addToCart(productToCart, quantity, formattedVariantString || undefined);
+    }
     setAdded(true);
     showToast(`Added ${quantity} x ${product.name} to cart!`, 'success');
     setTimeout(() => setAdded(false), 1500);
@@ -317,8 +411,134 @@ export const ProductDetailPage: React.FC = () => {
                 {product.shortDescription || getPlainDescription(product.description).slice(0, 240)}
               </p>
 
-              {/* Product Variants Selection */}
-              {product.variants && product.variants.length > 0 && (
+              {/* Product Attributes (New Variable Workflow) */}
+              {isVariable && product.attributes && product.attributes.length > 0 && (
+                <div className="space-y-4 mb-6 pt-4 border-t border-slate-100">
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="text-sm font-bold text-slate-900">Options</h4>
+                    {product.sizeGuide && (
+                      <button 
+                        ref={sizeGuideTriggerRef}
+                        onClick={() => setSizeGuideModalOpen(true)} 
+                        className="text-xs font-bold text-blue-600 hover:underline flex items-center gap-1"
+                      >
+                        <Info className="w-3.5 h-3.5" /> Size Guide
+                      </button>
+                    )}
+                  </div>
+                  {product.attributes.map((attr) => {
+                    if (!attr.visible) return null;
+                    const displayType = attr.source === 'global' ? (attr.displayTypeOverride || attr.displayType) : attr.displayType;
+                    const terms = attr.source === 'global' 
+                      ? attr.terms.filter(t => (attr.selectedTermIds || []).includes(t.id))
+                      : attr.terms;
+
+                    return (
+                      <div key={attr.id || attr.slug} className="space-y-2">
+                        <label className="text-xs font-heading font-extrabold text-slate-800 uppercase tracking-wider block">
+                          Select {attr.name}: <span className="text-slate-500 font-medium normal-case ml-1">{selectedAttributes[attr.slug]}</span>
+                        </label>
+
+                        {displayType === 'dropdown' ? (
+                          <select
+                            value={selectedAttributes[attr.slug] || ''}
+                            onChange={(e) => handleAttributeSelect(attr.slug, e.target.value)}
+                            className="w-full sm:w-64 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100"
+                          >
+                            <option value="" disabled>Choose {attr.name}</option>
+                            {terms.map(t => <option key={t.id} value={t.value}>{t.label}</option>)}
+                          </select>
+                        ) : displayType === 'radio' ? (
+                          <div className="space-y-1">
+                            {terms.map((t) => (
+                              <label key={t.id} className="flex items-center gap-2 cursor-pointer">
+                                <input
+                                  type="radio"
+                                  name={attr.slug}
+                                  value={t.value}
+                                  checked={selectedAttributes[attr.slug] === t.value}
+                                  onChange={() => handleAttributeSelect(attr.slug, t.value)}
+                                  className="text-rose-500 focus:ring-rose-500"
+                                />
+                                <span className="text-sm font-medium text-slate-700">{t.label}</span>
+                              </label>
+                            ))}
+                          </div>
+                        ) : displayType === 'color_swatches' ? (
+                          <div className="flex flex-wrap gap-2 pt-1">
+                            {terms.map((t) => {
+                              const isSelected = selectedAttributes[attr.slug] === t.value;
+                              return (
+                                <button
+                                  key={t.id}
+                                  type="button"
+                                  title={t.label}
+                                  onClick={() => handleAttributeSelect(attr.slug, t.value)}
+                                  className={`w-9 h-9 rounded-full border-2 transition-all ${
+                                    isSelected
+                                      ? 'border-slate-900 scale-110 shadow-sm'
+                                      : 'border-transparent hover:scale-105 shadow-sm'
+                                  }`}
+                                  style={{ backgroundColor: t.colorValue || '#ccc' }}
+                                />
+                              );
+                            })}
+                          </div>
+                        ) : displayType === 'image_swatches' ? (
+                          <div className="flex flex-wrap gap-2 pt-1">
+                            {terms.map((t) => {
+                              const isSelected = selectedAttributes[attr.slug] === t.value;
+                              return (
+                                <button
+                                  key={t.id}
+                                  type="button"
+                                  title={t.label}
+                                  onClick={() => handleAttributeSelect(attr.slug, t.value)}
+                                  className={`w-12 h-12 rounded-xl border-2 overflow-hidden transition-all bg-slate-100 ${
+                                    isSelected
+                                      ? 'border-rose-500 shadow-md ring-2 ring-rose-200 ring-offset-1'
+                                      : 'border-slate-200 hover:border-slate-300'
+                                  }`}
+                                >
+                                  {t.imageUrl ? (
+                                    <img src={t.imageUrl} alt={t.label} className="w-full h-full object-cover" />
+                                  ) : (
+                                    <span className="text-[10px] font-bold text-slate-400 block p-1 text-center leading-tight">No Img</span>
+                                  )}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        ) : (
+                          // Default to Text Buttons
+                          <div className="flex flex-wrap gap-2">
+                            {terms.map((t) => {
+                              const isSelected = selectedAttributes[attr.slug] === t.value;
+                              return (
+                                <button
+                                  key={t.id}
+                                  type="button"
+                                  onClick={() => handleAttributeSelect(attr.slug, t.value)}
+                                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                                    isSelected
+                                      ? 'bg-slate-800 text-white shadow-sm ring-2 ring-slate-800 ring-offset-1'
+                                      : 'bg-white border border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50'
+                                  }`}
+                                >
+                                  {t.label}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* Legacy Product Variants Selection */}
+              {!isVariable && product.variants && product.variants.length > 0 && (
                 <div className="space-y-4 mb-6 pt-4 border-t border-slate-100">
                   {product.variants.map((vGroup) => (
                     <div key={vGroup.id || vGroup.name} className="space-y-2">
@@ -523,20 +743,23 @@ export const ProductDetailPage: React.FC = () => {
                     Be the first parent to review this toy!
                   </p>
                 ) : (
-                  productReviews.map(rev => (
-                    <div key={rev.id} className="p-4 rounded-2xl border border-slate-100 bg-white space-y-2">
+                  productReviews.map(review => (
+                    <div key={review.id} className="p-4 rounded-2xl border border-slate-100 bg-white space-y-2">
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <img
-                            src={rev.userAvatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80'}
-                            alt=""
-                            className="w-8 h-8 rounded-full object-cover"
-                          />
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-slate-100">
+                            <img src={review.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(review.reviewerName)}&background=random`} alt="" className="w-full h-full object-cover" />
+                          </div>
                           <div>
-                            <span className="font-heading font-bold text-xs text-slate-800 block">
-                              {rev.userName}
-                            </span>
-                            <span className="text-[10px] text-slate-400">{rev.date}</span>
+                            <div className="flex items-center gap-2">
+                              <span className="font-bold text-sm text-slate-800">{review.reviewerName}</span>
+                              {review.verifiedPurchase && (
+                                <span className="flex items-center text-[10px] text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-full font-medium">
+                                  <ShieldCheck className="w-3 h-3 mr-0.5" /> Verified
+                                </span>
+                              )}
+                            </div>
+                            <span className="text-[10px] text-slate-400">{review.createdAt}</span>
                           </div>
                         </div>
 
@@ -544,14 +767,14 @@ export const ProductDetailPage: React.FC = () => {
                           {[...Array(5)].map((_, i) => (
                             <Star
                               key={i}
-                              className={`w-3.5 h-3.5 ${i < rev.rating ? 'fill-amber-400' : 'text-slate-200'}`}
+                              className={`w-3.5 h-3.5 ${i < review.rating ? 'fill-amber-400' : 'text-slate-200'}`}
                             />
                           ))}
                         </div>
                       </div>
 
-                      <h5 className="font-heading font-bold text-xs text-slate-900">{rev.title}</h5>
-                      <p className="text-xs text-slate-600 leading-relaxed">{rev.comment}</p>
+                      <h5 className="font-heading font-bold text-xs text-slate-900">{review.title}</h5>
+                      <p className="text-xs text-slate-600 leading-relaxed">{review.content}</p>
                     </div>
                   ))
                 )}
@@ -651,6 +874,48 @@ export const ProductDetailPage: React.FC = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Size Guide Modal */}
+      {sizeGuideModalOpen && product.sizeGuide && (
+        <div 
+          ref={sizeGuideRef}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="size-guide-title"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setSizeGuideModalOpen(false);
+            }
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') setSizeGuideModalOpen(false);
+          }}
+          tabIndex={-1}
+        >
+          <div className="bg-white rounded-3xl max-w-2xl w-full p-6 relative shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-4 pb-4 border-b border-slate-100">
+              <h3 id="size-guide-title" className="font-heading font-extrabold text-xl text-slate-900">
+                Size Guide
+              </h3>
+              <button 
+                onClick={() => setSizeGuideModalOpen(false)} 
+                className="text-slate-400 hover:text-slate-600 focus:outline-none focus:ring-2 focus:ring-rose-500 rounded-lg p-1"
+                aria-label="Close Size Guide"
+              >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            <div 
+              className="prose prose-sm prose-slate max-w-none [&_table]:w-full [&_table]:min-w-[400px] overflow-x-auto [&_th]:bg-slate-50 [&_th]:text-left [&_th]:p-3 [&_td]:p-3 [&_td]:border-t [&_td]:border-slate-100"
+              dangerouslySetInnerHTML={{ __html: product.sizeGuide }}
+            />
           </div>
         </div>
       )}

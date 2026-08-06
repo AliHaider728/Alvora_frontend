@@ -129,14 +129,43 @@ export const CheckoutPage: React.FC = () => {
       customerName: fullName,
       email,
       phone,
-      items: cart.map(item => ({
-        productId: item.product.id,
-        name: item.product.name,
-        quantity: item.quantity,
-        price: item.product.price,
-        image: item.product.images[0],
-        selectedVariant: item.selectedVariant
-      })),
+      items: cart.map(item => {
+        let price = item.product.price;
+        if (item.product.productType === 'variable' && item.variationId) {
+           const variation = item.product.variations?.find(v => String(v.id) === String(item.variationId));
+           if (variation) price = variation.salePrice !== undefined && variation.salePrice !== null ? variation.salePrice : variation.regularPrice;
+        } else if (item.selectedVariant && item.product.variants) {
+           const selections = new Map(
+             item.selectedVariant.split(',').map(part => {
+               const separator = part.indexOf(':');
+               return separator === -1 ? ['', part.trim()] : [part.slice(0, separator).trim(), part.slice(separator + 1).trim()];
+             })
+           );
+           const variantOffset = item.product.variants.reduce((sum, group) => {
+             const optionName = selections.get(group.name);
+             const option = group.options?.find(opt => opt.name === optionName);
+             return sum + Number(option?.priceOffset || 0);
+           }, 0);
+           price += variantOffset;
+        }
+
+        return {
+          productId: item.product.id,
+          name: item.product.name,
+          quantity: item.quantity,
+          price: price,
+          image: item.product.images[0],
+          selectedVariant: item.selectedVariant,
+          variationId: item.variationId,
+          productType: item.product.productType || 'simple',
+          sku: item.product.productType === 'variable' && item.variationId 
+            ? item.product.variations?.find(v => String(v.id) === String(item.variationId))?.sku 
+            : item.product.sku,
+          selectedAttributes: item.product.productType === 'variable' && item.variationId 
+            ? item.product.variations?.find(v => String(v.id) === String(item.variationId))?.attributes 
+            : undefined
+        };
+      }),
       subtotal: cartSubtotal,
       discount: couponDiscountAmount,
       shipping: shippingFee,
@@ -515,8 +544,31 @@ export const CheckoutPage: React.FC = () => {
 
                 {/* Items preview */}
                 <div className="space-y-3 max-h-60 overflow-y-auto pr-1">
-                  {cart.map(item => (
-                    <div key={item.product.id} className="flex items-center gap-3">
+                  {cart.map(item => {
+                    const variation = item.product.productType === 'variable' && item.variationId
+                      ? item.product.variations?.find(v => String(v.id) === String(item.variationId))
+                      : undefined;
+
+                    let itemPrice = item.product.price;
+                    if (variation) {
+                      itemPrice = variation.salePrice !== undefined && variation.salePrice !== null ? variation.salePrice : variation.regularPrice;
+                    } else if (item.selectedVariant && item.product.variants) {
+                      const selections = new Map(
+                        item.selectedVariant.split(',').map(part => {
+                          const separator = part.indexOf(':');
+                          return separator === -1 ? ['', part.trim()] : [part.slice(0, separator).trim(), part.slice(separator + 1).trim()];
+                        })
+                      );
+                      const variantOffset = item.product.variants.reduce((sum, group) => {
+                        const optionName = selections.get(group.name);
+                        const option = group.options?.find(opt => opt.name === optionName);
+                        return sum + Number(option?.priceOffset || 0);
+                      }, 0);
+                      itemPrice += variantOffset;
+                    }
+
+                    return (
+                    <div key={`${item.product.id}-${item.selectedVariant || ''}-${item.variationId || ''}`} className="flex items-center gap-3">
                       <img
                         src={item.product.images[0]}
                         alt=""
@@ -526,13 +578,25 @@ export const CheckoutPage: React.FC = () => {
                         <h4 className="font-heading font-bold text-xs text-slate-800 truncate">
                           {item.product.name}
                         </h4>
-                        <span className="text-xs text-slate-400 block">Qty: {item.quantity} {item.selectedVariant ? `| ${item.selectedVariant}` : ''}</span>
+                        {variation && (
+                          <div className="mt-0.5 flex flex-wrap gap-1">
+                            {Object.entries(variation.attributes).map(([key, val]) => (
+                              <span key={key} className="text-[9px] font-bold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">
+                                {val}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        {!variation && item.selectedVariant && (
+                           <span className="text-xs text-slate-400 block truncate">{item.selectedVariant}</span>
+                        )}
+                        <span className="text-xs text-slate-400 block mt-0.5">Qty: {item.quantity}</span>
                       </div>
                       <span className="font-heading font-bold text-xs text-slate-900">
-                        {formatPrice(item.product.price * item.quantity, settings.currency)}
+                        {formatPrice(itemPrice * item.quantity, settings.currency)}
                       </span>
                     </div>
-                  ))}
+                  );})}
                 </div>
 
                 {/* Summary calculation */}

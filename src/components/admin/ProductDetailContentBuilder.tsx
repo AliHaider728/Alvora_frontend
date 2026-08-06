@@ -103,7 +103,7 @@ export const ProductDetailContentBuilder: React.FC<Props> = ({
   return (
     <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
       <div className="mb-5">
-        <h2 className="font-heading text-base font-black text-slate-900">Product Page Content</h2>
+        <h2 className="font-heading text-base font-black text-slate-900">Product Description & Page Content</h2>
         <p className="mt-1 text-xs text-slate-500">Build responsive content below the main product information. The server sanitizes every block before publishing.</p>
       </div>
       <div className="mb-5 flex flex-wrap gap-2">

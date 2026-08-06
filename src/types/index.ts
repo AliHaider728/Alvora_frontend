@@ -1,5 +1,8 @@
 export type AgeGroupCategory = '0-2' | '3-5' | '6-8' | '9-12' | '13+';
-export type ProductDetailBlockType = 'richText' | 'image' | 'html' | 'divider';
+export type ProductDetailBlockType = 
+  | 'heading' | 'richText' | 'image' | 'imageText' | 'fullWidthImage' 
+  | 'gallery' | 'featureCards' | 'iconText' | 'benefitsList' | 'whatsIncluded' 
+  | 'recommendedAge' | 'giftBadges' | 'divider' | 'spacer' | 'ctaBanner' | 'html';
 export type StockStatus = 'in_stock' | 'out_of_stock';
 
 export interface ProductDetailBlock {
@@ -9,16 +12,31 @@ export interface ProductDetailBlock {
   order: number;
   heading?: string;
   content?: string;
+  items?: Record<string, any>[];
+  images?: {
+    secureUrl: string;
+    publicId: string;
+    alt: string;
+    caption?: string;
+    newlyUploaded?: boolean;
+    file?: File;
+  }[];
   image?: {
     secureUrl: string;
     publicId: string;
     alt: string;
     caption?: string;
     newlyUploaded?: boolean;
+    file?: File;
   };
   settings?: {
     width?: 'full' | 'large' | 'medium';
     alignment?: 'left' | 'center' | 'right';
+    background?: string;
+    spacing?: 'none' | 'small' | 'medium' | 'large';
+    responsiveVisibility?: 'all' | 'desktop' | 'mobile';
+    imagePosition?: 'left' | 'right';
+    columns?: 2 | 3 | 4;
   };
 }
 
@@ -40,10 +58,55 @@ export interface ProductVariantGroup {
   options: ProductVariantOption[];
 }
 
+export interface ProductAttributeTerm {
+  id: string;
+  label: string;
+  slug: string;
+  value: string;
+  colorValue?: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  position: number;
+  isArchived?: boolean;
+}
+
+export interface ProductAttribute {
+  source: 'global' | 'custom';
+  globalAttributeId?: string;
+  id: string;
+  name: string;
+  slug: string;
+  displayType: 'dropdown' | 'buttons' | 'radio' | 'color_swatches' | 'image_swatches';
+  terms: ProductAttributeTerm[];
+  selectedTermIds?: string[];
+  visible: boolean;
+  usedForVariations: boolean;
+  position: number;
+  displayTypeOverride?: string;
+}
+
+export interface ProductVariation {
+  id: string;
+  attributes: Record<string, string>;
+  enabled: boolean;
+  sku?: string;
+  regularPrice: number;
+  salePrice?: number;
+  image?: string;
+  manageStock: boolean;
+  stockQuantity?: number | null;
+  lowStockThreshold?: number | null;
+  stockStatus: StockStatus;
+  weight?: number;
+  dimensions?: { length: number; width: number; height: number };
+  description?: string;
+}
+
 export type DeliveryChargeType = 'store_threshold' | 'category' | 'fixed' | 'free' | 'none';
 
 export interface Product {
   id: string;
+  productType?: 'simple' | 'variable';
   name: string;
   slug: string;
   sku?: string;
@@ -76,8 +139,12 @@ export interface Product {
   isVisible?: boolean; // Show/Hide toggle on storefront
   status?: 'draft' | 'published';
   weight?: number;
+  sizeGuide?: string;
   tags: string[];
   variants?: ProductVariantGroup[];
+  attributes?: ProductAttribute[];
+  variations?: ProductVariation[];
+  defaultAttributes?: Record<string, string>;
   deliveryType?: DeliveryChargeType;
   deliveryChargeType?: DeliveryChargeType;
   deliveryFee?: number;
@@ -140,7 +207,8 @@ export interface AgeGroupOption {
 export interface CartItem {
   product: Product;
   quantity: number;
-  selectedVariant?: string;
+  selectedVariant?: string; // Legacy
+  variationId?: string;
 }
 
 export interface WishlistItem {
@@ -174,7 +242,11 @@ export interface OrderItem {
   quantity: number;
   price: number;
   image: string;
-  selectedVariant?: string;
+  selectedVariant?: string; // Legacy
+  variationId?: string;
+  productType?: 'simple' | 'variable';
+  sku?: string;
+  selectedAttributes?: Record<string, string>;
 }
 
 export interface Order {

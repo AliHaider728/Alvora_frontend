@@ -12,8 +12,8 @@ import { formatPrice } from '../../utils/formatters';
 
 export const AdminReviewsPage: React.FC = () => {
   const { refreshAdminReviews, approveReview, rejectReview, deleteReview } = useStore();
-  const { addToast } = useToast();
-  const { showDialog } = useDialog();
+  const { showToast } = useToast();
+  const { confirm } = useDialog();
   
   const [reviews, setReviews] = useState<Review[]>([]);
   const [total, setTotal] = useState(0);
@@ -49,7 +49,7 @@ export const AdminReviewsPage: React.FC = () => {
         setCounts(result.counts || { pending: 0, approved: 0, rejected: 0 });
       }
     } catch (e: any) {
-      addToast('error', e.message || 'Failed to fetch reviews');
+      showToast(e.message || 'Failed to fetch reviews', 'error');
     } finally {
       setLoading(false);
     }
@@ -58,39 +58,40 @@ export const AdminReviewsPage: React.FC = () => {
   const handleApprove = async (id: string) => {
     try {
       await approveReview(id);
-      addToast('success', 'Review approved successfully');
+      showToast('Review approved successfully', 'success');
       fetchReviews();
     } catch (e) {
-      addToast('error', 'Failed to approve review');
+      showToast('Failed to approve review', 'error');
     }
   };
 
   const handleReject = async (id: string) => {
     try {
       await rejectReview(id);
-      addToast('success', 'Review rejected');
+      showToast('Review rejected', 'success');
       fetchReviews();
     } catch (e) {
-      addToast('error', 'Failed to reject review');
+      showToast('Failed to reject review', 'error');
     }
   };
 
-  const handleDelete = (id: string) => {
-    showDialog({
+  const handleDelete = async (id: string) => {
+    const isConfirmed = await confirm({
       title: 'Delete Review',
-      message: 'Are you sure you want to permanently delete this review? This action cannot be undone and will affect the product rating.',
-      type: 'danger',
+      description: 'Are you sure you want to permanently delete this review? This action cannot be undone and will affect the product rating.',
+      destructive: true,
       confirmLabel: 'Delete',
-      onConfirm: async () => {
-        try {
-          await deleteReview(id);
-          addToast('success', 'Review deleted successfully');
-          fetchReviews();
-        } catch (e) {
-          addToast('error', 'Failed to delete review');
-        }
-      }
     });
+    
+    if (isConfirmed) {
+      try {
+        await deleteReview(id);
+        showToast('Review deleted successfully', 'success');
+        fetchReviews();
+      } catch (e) {
+        showToast('Failed to delete review', 'error');
+      }
+    }
   };
 
   const renderStars = (rating: number) => {

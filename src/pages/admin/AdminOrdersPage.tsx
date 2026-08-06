@@ -193,10 +193,25 @@ export const AdminOrdersPage: React.FC = () => {
               <div className="space-y-2">
                 <span className="font-bold text-slate-800 block">Items Purchased:</span>
                 {selectedOrder.items.map((it, idx) => (
-                  <div key={`${it.productId || it.name}-${it.selectedVariant || 'default'}`} className="flex items-center justify-between text-slate-700">
-                    <span>
-                      {it.quantity}x {it.name} {it.selectedVariant ? `[${it.selectedVariant}]` : ''}
-                    </span>
+                  <div key={`${it.productId || it.name}-${it.selectedVariant || 'default'}-${idx}`} className="flex items-center justify-between text-slate-700">
+                    <div className="flex flex-col">
+                      <span>
+                        {it.quantity}x {it.name}
+                      </span>
+                      {it.selectedAttributes && (
+                        <div className="mt-0.5 flex flex-wrap gap-1">
+                          {Object.entries(it.selectedAttributes).map(([k, v]) => (
+                            <span key={k} className="text-[9px] font-bold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">
+                              {v}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      {!it.selectedAttributes && it.selectedVariant && (
+                        <span className="text-[10px] text-slate-500">{it.selectedVariant}</span>
+                      )}
+                      {it.sku && <span className="text-[9px] text-slate-400 mt-0.5 font-mono">SKU: {it.sku}</span>}
+                    </div>
                     <span className="font-bold text-slate-900">{formatPrice(it.price * it.quantity, settings.currency)}</span>
                   </div>
                 ))}

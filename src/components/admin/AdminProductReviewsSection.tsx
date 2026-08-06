@@ -11,8 +11,8 @@ interface AdminProductReviewsSectionProps {
 
 export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProps> = ({ productId }) => {
   const { refreshAdminReviews, addAdminReview, deleteReview } = useStore();
-  const { addToast } = useToast();
-  const { showDialog } = useDialog();
+  const { showToast } = useToast();
+  const { confirm } = useDialog();
 
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(false);
@@ -26,7 +26,7 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [verifiedPurchase, setVerifiedPurchase] = useState(true);
-  const [reviewerAvatar, setReviewerAvatar] = useState('');
+  const [avatarUrl, setAvatarUrl] = useState('');
 
   useEffect(() => {
     if (productId) {
@@ -52,7 +52,7 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
     e.preventDefault();
     if (!productId) return;
     if (!reviewerName.trim() || !content.trim()) {
-      addToast('error', 'Name and review content are required.');
+      showToast('Name and review content are required.', 'error');
       return;
     }
 
@@ -62,7 +62,7 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
         productId,
         reviewerName,
         reviewerEmail,
-        reviewerAvatar,
+        avatarUrl,
         rating,
         title,
         content,
@@ -70,7 +70,7 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
       });
 
       if (newReview) {
-        addToast('success', 'Review added successfully');
+        showToast('Review added successfully', 'success');
         setReviews([newReview, ...reviews]);
         setShowAddForm(false);
         // Reset form
@@ -80,33 +80,39 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
         setTitle('');
         setContent('');
         setVerifiedPurchase(true);
-        setReviewerAvatar('');
+        setVerifiedPurchase(true);
+        setAvatarUrl('');
       } else {
-        addToast('error', 'Failed to add review');
+        showToast('Failed to add review', 'error');
       }
     } catch (e: any) {
-      addToast('error', e.message || 'Failed to add review');
+      showToast(e.message || 'Failed to add review', 'error');
     } finally {
       setSubmitting(false);
     }
   };
 
-  const handleDelete = (id: string) => {
-    showDialog({
+  const handleDelete = async (id: string) => {
+    const isConfirmed = await confirm({
       title: 'Delete Review',
-      message: 'Are you sure you want to delete this review?',
-      type: 'danger',
+      description: 'Are you sure you want to permanently delete this review? This action cannot be undone and will affect the product rating.',
+      destructive: true,
       confirmLabel: 'Delete',
-      onConfirm: async () => {
-        try {
-          await deleteReview(id);
-          addToast('success', 'Review deleted');
-          setReviews(prev => prev.filter(r => r.id !== id));
-        } catch (e) {
-          addToast('error', 'Failed to delete review');
-        }
-      }
     });
+    
+    if (isConfirmed) {
+      try {
+        const success = await deleteReview(id);
+        if (success) {
+          showToast('Review deleted successfully', 'success');
+          setReviews(reviews.filter(r => r.id !== id));
+        } else {
+          showToast('Failed to delete review', 'error');
+        }
+      } catch (e: any) {
+        showToast(e.message || 'Failed to delete review', 'error');
+      }
+    }
   };
 
   const renderStars = (rating: number, interactive = false, setVal?: (val: number) => void) => {
@@ -179,6 +185,15 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
                   required
                   value={reviewerName}
                   onChange={e => setReviewerName(e.target.value)}
+                  className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </label>
+              <label>
+                <span className="block text-xs font-bold text-slate-700 mb-1.5">Reviewer Avatar URL</span>
+                <input
+                  type="text"
+                  value={avatarUrl}
+                  onChange={(e) => setAvatarUrl(e.target.value)}
                   className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </label>

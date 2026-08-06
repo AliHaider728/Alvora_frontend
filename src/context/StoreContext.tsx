@@ -123,9 +123,9 @@ interface StoreContextType {
   cart: CartItem[];
   isCartOpen: boolean;
   setIsCartOpen: (open: boolean) => void;
-  addToCart: (product: Product, quantity?: number, selectedVariant?: string) => void;
-  removeFromCart: (productId: string) => void;
-  updateCartQuantity: (productId: string, quantity: number) => void;
+  addToCart: (product: Product, quantity?: number, selectedVariant?: string, variationId?: string) => void;
+  removeFromCart: (productId: string, selectedVariant?: string, variationId?: string) => void;
+  updateCartQuantity: (productId: string, quantity: number, selectedVariant?: string, variationId?: string) => void;
   clearCart: () => void;
   cartTotalItems: number;
   cartSubtotal: number;
@@ -332,33 +332,33 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, [wishlist]);
 
   // Cart operations
-  const addToCart = (product: Product, quantity = 1, selectedVariant?: string) => {
+  const addToCart = (product: Product, quantity = 1, selectedVariant?: string, variationId?: string) => {
     setCart(prev => {
-      const existing = prev.find(item => item.product.id === product.id && item.selectedVariant === selectedVariant);
+      const existing = prev.find(item => item.product.id === product.id && item.selectedVariant === selectedVariant && item.variationId === variationId);
       if (existing) {
         return prev.map(item =>
-          item.product.id === product.id && item.selectedVariant === selectedVariant
+          item.product.id === product.id && item.selectedVariant === selectedVariant && item.variationId === variationId
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );
       }
-      return [...prev, { product, quantity, selectedVariant }];
+      return [...prev, { product, quantity, selectedVariant, variationId }];
     });
     setIsCartOpen(true);
   };
 
-  const removeFromCart = (productId: string) => {
-    setCart(prev => prev.filter(item => item.product.id !== productId));
+  const removeFromCart = (productId: string, selectedVariant?: string, variationId?: string) => {
+    setCart(prev => prev.filter(item => !(item.product.id === productId && item.selectedVariant === selectedVariant && item.variationId === variationId)));
   };
 
-  const updateCartQuantity = (productId: string, quantity: number) => {
+  const updateCartQuantity = (productId: string, quantity: number, selectedVariant?: string, variationId?: string) => {
     if (quantity <= 0) {
-      removeFromCart(productId);
+      removeFromCart(productId, selectedVariant, variationId);
       return;
     }
     setCart(prev =>
       prev.map(item =>
-        item.product.id === productId ? { ...item, quantity } : item
+        item.product.id === productId && item.selectedVariant === selectedVariant && item.variationId === variationId ? { ...item, quantity } : item
       )
     );
   };
@@ -369,7 +369,28 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   const cartTotalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
-  const cartSubtotal = cart.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
+  const cartSubtotal = cart.reduce((acc, item) => {
+    let price = item.product.price;
+    if (item.product.productType === 'variable' && item.variationId) {
+       const variation = item.product.variations?.find(v => String(v.id) === String(item.variationId));
+       if (variation) price = variation.salePrice !== undefined && variation.salePrice !== null ? variation.salePrice : variation.regularPrice;
+    } else if (item.selectedVariant && item.product.variants) {
+       // Legacy
+       const selections = new Map(
+         item.selectedVariant.split(',').map(part => {
+           const separator = part.indexOf(':');
+           return separator === -1 ? ['', part.trim()] : [part.slice(0, separator).trim(), part.slice(separator + 1).trim()];
+         })
+       );
+       const variantOffset = item.product.variants.reduce((sum, group) => {
+         const optionName = selections.get(group.name);
+         const option = group.options?.find(opt => opt.name === optionName);
+         return sum + Number(option?.priceOffset || 0);
+       }, 0);
+       price += variantOffset;
+    }
+    return acc + price * item.quantity;
+  }, 0);
 
   // Coupon application logic
   const applyCoupon = (code: string) => {

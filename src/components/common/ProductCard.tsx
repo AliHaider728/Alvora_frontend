@@ -18,8 +18,23 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
   const navigate = useNavigate();
   const [added, setAdded] = useState(false);
   const isWishlisted = isInWishlist(product.id);
-  const hasVariants = Boolean(product.variants?.some(group => group.options.length > 0));
+  const isVariable = product.productType === 'variable';
+  const hasVariants = isVariable || Boolean(product.variants?.some(group => group.options.length > 0));
   const isAvailable = getEffectiveProductAvailability(product);
+
+  let displayPrice = product.price;
+  let displayOriginalPrice = product.originalPrice;
+  let pricePrefix = '';
+
+  if (isVariable && product.variations && product.variations.length > 0) {
+    const prices = product.variations.map(v => v.salePrice !== undefined && v.salePrice !== null ? v.salePrice : v.regularPrice);
+    const minPrice = Math.min(...prices);
+    const maxPrice = Math.max(...prices);
+    displayPrice = minPrice;
+    if (minPrice < maxPrice) {
+      pricePrefix = 'From ';
+    }
+  }
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -141,11 +156,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
           <div className="flex flex-col">
             <div className="flex items-baseline gap-1.5">
               <span className="font-heading font-extrabold text-lg sm:text-xl text-slate-900">
-                {formatPrice(product.price, settings.currency)}
+                {pricePrefix}{formatPrice(displayPrice, settings.currency)}
               </span>
-              {product.originalPrice && product.originalPrice > product.price && (
+              {displayOriginalPrice && displayOriginalPrice > displayPrice && !pricePrefix && (
                 <span className="text-xs text-slate-400 line-through font-medium">
-                  {formatPrice(product.originalPrice, settings.currency)}
+                  {formatPrice(displayOriginalPrice, settings.currency)}
                 </span>
               )}
             </div>

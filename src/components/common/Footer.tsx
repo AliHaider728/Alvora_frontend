@@ -41,7 +41,7 @@ export const Footer: React.FC = () => {
           gravity={0}
           friction={0.998}
           wallBounce={0.95}
-          followCursor={true}
+          followCursor={false}
           colors={[0xffffff, 0x8b5cf6, 0x18181b]} /* white -> vivid violet -> near-black, high contrast like the React Bits demo */
           materialParams={{ metalness: 0.15, roughness: 0.35, clearcoat: 1, clearcoatRoughness: 0.1 }}
           minSize={0.35}
@@ -232,7 +232,7 @@ export const Footer: React.FC = () => {
             Design and developed by{' '}
             <span className="font-heading font-bold text-white/90">Tecnosphere</span>
           </p>
-        </div>
+        </div>  
       </div>
     </footer>
   );

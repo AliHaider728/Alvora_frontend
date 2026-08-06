@@ -406,46 +406,54 @@ export const INITIAL_REVIEWS: Review[] = [
   {
     id: 'rev-1',
     productId: 'p-101',
-    userName: 'Sarah Jenkins',
-    userAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80',
+    reviewerName: 'Sarah Jenkins',
+    avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80',
     rating: 5,
-    date: '2026-06-15',
+    createdAt: '2026-06-15',
     title: 'Absolute favorite present for my 7yo!',
-    comment: 'My son built this over the weekend and hasn’t stopped playing with the thruster lights and astronaut figures. The instructions were crystal clear.',
-    verifiedPurchase: true
+    content: 'My son built this over the weekend and hasn’t stopped playing with the thruster lights and astronaut figures. The instructions were crystal clear.',
+    verifiedPurchase: true,
+    source: 'customer',
+    status: 'approved'
   },
   {
     id: 'rev-2',
     productId: 'p-101',
-    userName: 'David Miller',
-    userAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
+    reviewerName: 'David Miller',
+    avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
     rating: 5,
-    date: '2026-07-02',
+    createdAt: '2026-07-02',
     title: 'Sturdy blocks, fits with our existing set',
-    comment: 'Great quality bricks! Better than expensive branded ones and the glowing engine effect is super cool.',
-    verifiedPurchase: true
+    content: 'Great quality bricks! Better than expensive branded ones and the glowing engine effect is super cool.',
+    verifiedPurchase: true,
+    source: 'customer',
+    status: 'approved'
   },
   {
     id: 'rev-3',
     productId: 'p-102',
-    userName: 'Emily Watson',
-    userAvatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=150&q=80',
+    reviewerName: 'Emily Watson',
+    avatarUrl: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=150&q=80',
     rating: 5,
-    date: '2026-07-10',
+    createdAt: '2026-07-10',
     title: 'So soft and huge!',
-    comment: 'Bought this for my toddler daughter’s reading corner. It is huge, plush, and smells super clean out of the package.',
-    verifiedPurchase: true
+    content: 'Bought this for my toddler daughter’s reading corner. It is huge, plush, and smells super clean out of the package.',
+    verifiedPurchase: true,
+    source: 'customer',
+    status: 'approved'
   },
   {
     id: 'rev-4',
     productId: 'p-103',
-    userName: 'Marcus Vance',
-    userAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80',
+    reviewerName: 'Marcus Vance',
+    avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80',
     rating: 5,
-    date: '2026-07-20',
+    createdAt: '2026-07-20',
     title: 'Awesome screen-free STEM toy',
-    comment: 'As a computer science teacher, I am impressed by how easily this teaches sequencing logic without putting a tablet in front of my 6 year old.',
-    verifiedPurchase: true
+    content: 'As a computer science teacher, I am impressed by how easily this teaches sequencing logic without putting a tablet in front of my 6 year old.',
+    verifiedPurchase: true,
+    source: 'customer',
+    status: 'approved'
   }
 ];
 

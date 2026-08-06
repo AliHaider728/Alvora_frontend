@@ -204,5 +204,15 @@ export const api = {
   },
   deleteCategoryImage: (publicId: string) => fetchJson<{ deleted: boolean }>('/upload/category-image', {
     method: 'DELETE', body: JSON.stringify({ publicId })
-  })
+  }),
+  getGlobalAttributes: () => fetchJson<any[]>('/admin/global-attributes'),
+  getGlobalAttributeUsage: (id: string) => fetchJson<{ productCount: number }>(`/admin/global-attributes/${id}/usage`),
+  createGlobalAttribute: (data: any) => fetchJson<any>('/admin/global-attributes', { method: 'POST', body: JSON.stringify(data) }),
+  updateGlobalAttribute: (id: string, data: any) => fetchJson<any>(`/admin/global-attributes/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  deleteGlobalAttribute: (id: string) => fetchJson<any>(`/admin/global-attributes/${id}`, { method: 'DELETE' }),
+  addGlobalAttributeTerm: (attrId: string, data: any) => fetchJson<any>(`/admin/global-attributes/${attrId}/terms`, { method: 'POST', body: JSON.stringify(data) }),
+  updateGlobalAttributeTerm: (attrId: string, termId: string, data: any) => fetchJson<any>(`/admin/global-attributes/${attrId}/terms/${termId}`, { method: 'PUT', body: JSON.stringify(data) }),
+  deleteGlobalAttributeTerm: (attrId: string, termId: string) => fetchJson<any>(`/admin/global-attributes/${attrId}/terms/${termId}`, { method: 'DELETE' }),
+  reorderGlobalAttributeTerms: (attrId: string, data: any) => fetchJson<any>(`/admin/global-attributes/${attrId}/reorder-terms`, { method: 'PUT', body: JSON.stringify(data) }),
+  uploadProductImage: (formData: FormData) => fetchJson<{ secureUrl: string }>('/upload/product-image', { method: 'POST', body: formData })
 };

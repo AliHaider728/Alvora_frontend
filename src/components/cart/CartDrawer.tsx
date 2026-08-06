@@ -113,9 +113,32 @@ export const CartDrawer: React.FC = () => {
                 </button>
               </div>
             ) : (
-              cart.map((item) => (
+              cart.map((item) => {
+                const variation = item.product.productType === 'variable' && item.variationId
+                  ? item.product.variations?.find(v => String(v.id) === String(item.variationId))
+                  : undefined;
+                  
+                let itemPrice = item.product.price;
+                if (variation) {
+                  itemPrice = variation.salePrice !== undefined && variation.salePrice !== null ? variation.salePrice : variation.regularPrice;
+                } else if (item.selectedVariant && item.product.variants) {
+                  const selections = new Map(
+                    item.selectedVariant.split(',').map(part => {
+                      const separator = part.indexOf(':');
+                      return separator === -1 ? ['', part.trim()] : [part.slice(0, separator).trim(), part.slice(separator + 1).trim()];
+                    })
+                  );
+                  const variantOffset = item.product.variants.reduce((sum, group) => {
+                    const optionName = selections.get(group.name);
+                    const option = group.options?.find(opt => opt.name === optionName);
+                    return sum + Number(option?.priceOffset || 0);
+                  }, 0);
+                  itemPrice += variantOffset;
+                }
+
+                return (
                 <div
-                  key={`${item.product.id}-${item.selectedVariant || ''}`}
+                  key={`${item.product.id}-${item.selectedVariant || ''}-${item.variationId || ''}`}
                   className="flex gap-3.5 p-3.5 rounded-2xl bg-slate-50 border border-slate-100 hover:border-slate-200 transition-all"
                 >
                   <img
@@ -135,7 +158,7 @@ export const CartDrawer: React.FC = () => {
                           {item.product.name}
                         </Link>
                         <button
-                          onClick={() => removeFromCart(item.product.id)}
+                          onClick={() => removeFromCart(item.product.id, item.selectedVariant, item.variationId)}
                           className="text-slate-400 hover:text-rose-500 transition-colors p-1"
                           title="Remove"
                         >
@@ -143,22 +166,37 @@ export const CartDrawer: React.FC = () => {
                         </button>
                       </div>
 
-                      <span className="text-[10px] text-sky-600 font-semibold uppercase">
+                      <span className="text-[10px] text-sky-600 font-semibold uppercase block">
                         {item.product.category}
                       </span>
+                      
+                      {variation && (
+                        <div className="mt-1 flex flex-wrap gap-1">
+                          {Object.entries(variation.attributes).map(([key, val]) => (
+                            <span key={key} className="text-[9px] font-bold text-slate-500 bg-slate-200 px-1.5 py-0.5 rounded">
+                              {val}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      {!variation && item.selectedVariant && (
+                        <span className="text-[10px] text-slate-500 block mt-1">
+                          {item.selectedVariant}
+                        </span>
+                      )}
                     </div>
 
                     <div className="flex items-center justify-between mt-2">
                       <div className="flex items-center border border-slate-200 rounded-xl bg-white">
                         <button
-                          onClick={() => updateCartQuantity(item.product.id, item.quantity - 1)}
+                          onClick={() => updateCartQuantity(item.product.id, item.quantity - 1, item.selectedVariant, item.variationId)}
                           className="p-1 sm:p-1.5 text-slate-600 hover:bg-slate-100 rounded-l-xl transition-colors"
                         >
                           <Minus className="w-3 h-3" />
                         </button>
                         <span className="px-2 text-xs font-bold text-slate-800">{item.quantity}</span>
                         <button
-                          onClick={() => updateCartQuantity(item.product.id, item.quantity + 1)}
+                          onClick={() => updateCartQuantity(item.product.id, item.quantity + 1, item.selectedVariant, item.variationId)}
                           className="p-1 sm:p-1.5 text-slate-600 hover:bg-slate-100 rounded-r-xl transition-colors"
                         >
                           <Plus className="w-3 h-3" />
@@ -166,14 +204,15 @@ export const CartDrawer: React.FC = () => {
                       </div>
 
                       <span className="font-heading font-extrabold text-sm text-slate-900">
-                        {formatPrice(item.product.price * item.quantity, settings.currency)}
+                        {formatPrice(itemPrice * item.quantity, settings.currency)}
                       </span>
                     </div>
                   </div>
                 </div>
-              ))
-            )}
-          </div>
+              );
+            })
+          )}
+        </div>
 
           {/* Drawer Footer Summary */}
           {cart.length > 0 && (
