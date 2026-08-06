@@ -36,6 +36,7 @@ export const AdminLayout: React.FC = () => {
     { label: 'Dashboard', path: '/admin', icon: LayoutDashboard },
     { label: 'Products', path: '/admin/products', icon: Package },
     { label: 'Categories', path: '/admin/categories', icon: Layers },
+    { label: 'Attributes', path: '/admin/attributes', icon: Settings },
     { label: 'Orders', path: '/admin/orders', icon: ShoppingBag },
     { label: 'Customers', path: '/admin/customers', icon: Users },
     { label: 'Reviews', path: '/admin/reviews', icon: MessageSquare },
@@ -67,7 +68,7 @@ export const AdminLayout: React.FC = () => {
       )}
       
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-slate-300 flex flex-col justify-between p-4 border-r border-slate-800 transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-slate-300 flex flex-col justify-between p-4 border-r border-slate-800 transition-transform duration-300 ease-in-out lg:translate-x-0 overflow-y-auto ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div>
           {/* Logo Header */}
           <div className="flex items-center justify-between pb-6 pt-2 px-2 border-b border-slate-800 mb-4">
@@ -132,7 +133,7 @@ export const AdminLayout: React.FC = () => {
       </aside>
 
       {/* Main Container */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 lg:ml-64">
         {/* Top Header Bar */}
         <header className="h-16 bg-white border-b border-slate-200 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 shadow-xs">
           <div className="flex items-center gap-4">

@@ -50,9 +50,9 @@ export const VariationsGenerator: React.FC<VariationsGeneratorProps> = ({ attrib
       return {
         id: `var-${Date.now()}-${Math.random().toString(36).slice(2)}`,
         attributes: combo,
-        enabled: true,
+        enabled: false, // New variations begin disabled until configured
         sku: '',
-        regularPrice: basePrice,
+        regularPrice: '' as unknown as number, // Force empty state instead of 0
         manageStock: false,
         stockStatus: 'in_stock' as const
       };
@@ -134,10 +134,10 @@ export const VariationsGenerator: React.FC<VariationsGeneratorProps> = ({ attrib
                 <input
                   type="number"
                   min="0"
-                  value={variation.regularPrice || ''}
-                  onChange={(e) => updateVariation(variation.id, 'regularPrice', parseFloat(e.target.value) || 0)}
+                  value={variation.regularPrice !== undefined && variation.regularPrice !== ('' as unknown as number) ? variation.regularPrice : ''}
+                  onChange={(e) => updateVariation(variation.id, 'regularPrice', e.target.value === '' ? ('' as unknown as number) : parseFloat(e.target.value))}
                   className="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-sm focus:border-rose-400 outline-none focus:ring-1 focus:ring-rose-400"
-                  placeholder="0.00"
+                  placeholder="Required"
                 />
               </div>
 

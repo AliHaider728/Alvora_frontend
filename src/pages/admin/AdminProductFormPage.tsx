@@ -407,17 +407,28 @@ export const AdminProductFormPage: React.FC = () => {
     const nextErrors: FieldErrors = {};
     const normalizedSlug = slugify(slug || name);
     const normalizedSku = sku.trim().toUpperCase();
+    
     if (!name.trim()) nextErrors.name = 'Product name is required.';
     if (ageGroups.length === 0) nextErrors.ageGroups = 'Select at least one age recommendation.';
     if (!stripHtml(description)) nextErrors.description = 'Detailed description is required.';
-    if (!Number.isFinite(regularPrice) || regularPrice < 0) nextErrors.regularPrice = 'Enter a non-negative regular price.';
-    if (salePrice !== undefined && (!Number.isFinite(salePrice) || salePrice < 0 || salePrice >= regularPrice)) {
-      nextErrors.salePrice = 'Sale price must be non-negative and lower than regular price.';
+    
+    if (productType === 'simple') {
+      if (!Number.isFinite(regularPrice) || regularPrice < 0) nextErrors.regularPrice = 'Enter a non-negative regular price.';
+      if (salePrice !== undefined && (!Number.isFinite(salePrice) || salePrice < 0 || salePrice >= regularPrice)) {
+        nextErrors.salePrice = 'Sale price must be non-negative and lower than regular price.';
+      }
+      if (trackInventory && (!Number.isInteger(stockQuantity) || Number(stockQuantity) < 0)) nextErrors.stockQuantity = 'Stock must be a non-negative whole number.';
+      if (trackInventory && lowStockThreshold !== undefined && (!Number.isInteger(lowStockThreshold) || lowStockThreshold < 0)) {
+        nextErrors.lowStockThreshold = 'Low stock alert must be a non-negative whole number.';
+      }
+      if (normalizedSku && products.some(product =>
+        product.id !== id &&
+        (product.sku?.toUpperCase() === normalizedSku || product.variants?.some(group =>
+          group.options.some(option => option.sku?.toUpperCase() === normalizedSku)
+        ))
+      )) nextErrors.sku = 'This SKU is already in use.';
     }
-    if (trackInventory && (!Number.isInteger(stockQuantity) || Number(stockQuantity) < 0)) nextErrors.stockQuantity = 'Stock must be a non-negative whole number.';
-    if (trackInventory && lowStockThreshold !== undefined && (!Number.isInteger(lowStockThreshold) || lowStockThreshold < 0)) {
-      nextErrors.lowStockThreshold = 'Low stock alert must be a non-negative whole number.';
-    }
+
     if (weight !== undefined && (!Number.isFinite(weight) || weight < 0)) nextErrors.weight = 'Weight must be zero or greater.';
     if (deliveryType === 'fixed' && (customDeliveryFee === undefined || customDeliveryFee < 0)) {
       nextErrors.customDeliveryFee = 'Enter a non-negative custom shipping fee.';
@@ -434,13 +445,6 @@ export const AdminProductFormPage: React.FC = () => {
     if (products.some(product => product.id !== id && product.slug === normalizedSlug)) {
       nextErrors.slug = 'This URL slug is already used by another product.';
     }
-    if (normalizedSku && products.some(product =>
-      product.id !== id &&
-      (product.sku?.toUpperCase() === normalizedSku || product.variants?.some(group =>
-        group.options.some(option => option.sku?.toUpperCase() === normalizedSku)
-      ))
-    )) nextErrors.sku = 'This SKU is already in use.';
-
 
     if (productType === 'variable') {
       const activeVars = variations.filter(v => v.enabled);
@@ -451,34 +455,88 @@ export const AdminProductFormPage: React.FC = () => {
         if (new Set(vSkus).size !== vSkus.length || (normalizedSku && vSkus.includes(normalizedSku))) {
           nextErrors.variations = 'Variation SKUs must be unique.';
         }
-        if (activeVars.some(v => v.regularPrice < 0)) {
-          nextErrors.variations = 'Variation prices cannot be negative.';
+        
+        for (const v of activeVars) {
+          if (!Number.isFinite(v.regularPrice) || v.regularPrice < 0) {
+            nextErrors.variations = `Regular price is required for ${v.id}.`;
+            break;
+          }
+          if (v.salePrice !== undefined && v.salePrice !== null && (v.salePrice < 0 || v.salePrice >= v.regularPrice)) {
+            nextErrors.variations = `Sale price cannot exceed regular price for ${v.id}.`;
+            break;
+          }
         }
+      }
+
+      // Check for duplicate attributes
+      const attrSlugs = attributes.filter(a => a.name.trim()).map(a => a.slug || slugify(a.name));
+      if (new Set(attrSlugs).size !== attrSlugs.length) {
+        nextErrors.attributes = 'Duplicate attribute names are not allowed.';
+      }
+      
+      const customAttrsMissingTerms = attributes.some(a => a.source === 'custom' && (!a.terms || a.terms.length === 0));
+      if (customAttrsMissingTerms) {
+        nextErrors.attributes = 'Add at least one value to every custom attribute.';
+      }
+
+      if (Object.keys(defaultAttributes).length > 0) {
+        const isValidDefault = activeVars.some(v => 
+          Object.entries(defaultAttributes).every(([attrSlug, attrVal]) => v.attributes[attrSlug] === attrVal)
+        );
+        if (!isValidDefault) {
+          nextErrors.defaultAttributes = 'Select a default variation.';
+        }
+      } else {
+         nextErrors.defaultAttributes = 'Select a default variation.';
       }
     }
 
     setErrors(nextErrors);
-    return Object.keys(nextErrors).length === 0;
+    return Object.keys(nextErrors).length === 0 ? null : nextErrors;
   };
-
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (!validateForm()) {
-      showToast('Please correct the highlighted product fields.', 'error');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    const currentErrors = validateForm();
+    if (currentErrors) {
+      const firstError = Object.values(currentErrors)[0];
+      showToast(firstError, 'error');
+      
+      setTimeout(() => {
+        const errorElement = document.querySelector('.border-rose-500, .text-rose-500');
+        if (errorElement) {
+          errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          const input = errorElement.querySelector('input, select, textarea') as HTMLElement;
+          if (input) input.focus();
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }, 100);
       return;
     }
 
-    const selectedCategory = categories.find(item => item.id === categoryId);
-    const activePrice = salePrice === undefined ? regularPrice : salePrice;
+    let activePrice = salePrice === undefined ? regularPrice : salePrice;
+    let computedOriginalPrice = salePrice === undefined ? null : Number(regularPrice);
+    
+    if (productType === 'variable') {
+      const activeVars = variations.filter(v => v.enabled);
+      if (activeVars.length > 0) {
+         activePrice = Math.min(...activeVars.map(v => v.salePrice ?? v.regularPrice));
+         const maxRegular = Math.max(...activeVars.map(v => v.regularPrice));
+         computedOriginalPrice = activePrice < maxRegular ? maxRegular : null;
+      } else {
+         activePrice = 0;
+         computedOriginalPrice = null;
+      }
+    }
     const payload: ProductInput = {
+      productSchemaVersion: 2,
       name: name.trim(),
       slug: slugify(slug || name),
       sku: normalizedSku,
       price: Number(activePrice),
-      originalPrice: salePrice === undefined ? null : Number(regularPrice),
-      discountPercent: salePrice === undefined ? 0 : Math.round(((regularPrice - salePrice) / regularPrice) * 100),
+      originalPrice: computedOriginalPrice,
+      discountPercent: computedOriginalPrice ? Math.round(((computedOriginalPrice - activePrice) / computedOriginalPrice) * 100) : 0,
       rating: editingProduct?.rating ?? 0,
       reviewCount: editingProduct?.reviewCount ?? 0,
       category,
@@ -540,6 +598,16 @@ export const AdminProductFormPage: React.FC = () => {
       setImages(current => current.filter(image => !image.newlyUploaded));
       setProductDetailBlocks(current => current.filter(block => !block.image?.newlyUploaded));
       showToast(apiError, 'error');
+      setTimeout(() => {
+        const errorElement = document.querySelector('.border-rose-500, .text-rose-500');
+        if (errorElement) {
+          errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          const input = errorElement.querySelector('input, select, textarea') as HTMLElement;
+          if (input) input.focus();
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }, 100);
       return;
     }
 
@@ -685,6 +753,33 @@ export const AdminProductFormPage: React.FC = () => {
 
               <FormCard title="Variations" description="Generate and manage product variations." icon={PackageCheck}>
                 <VariationsGenerator attributes={attributes} variations={variations} onChange={(newVars) => { setVariations(newVars); markDirty(); }} basePrice={regularPrice} />
+                
+                {variations.filter(v => v.enabled).length > 0 && (
+                  <div className="mt-6 p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                    <label className="block text-sm font-bold text-slate-800 mb-2">Default Variation</label>
+                    <p className="text-xs text-slate-500 mb-3">This variation will be pre-selected when customers open the product page.</p>
+                    <select
+                      value={variations.find(v => Object.entries(defaultAttributes).every(([k, val]) => v.attributes[k] === val))?.id || ''}
+                      onChange={(e) => {
+                        const selectedId = e.target.value;
+                        const v = variations.find(v => v.id === selectedId);
+                        if (v) setDefaultAttributes(v.attributes);
+                        markDirty();
+                        clearError('defaultAttributes');
+                      }}
+                      className={`w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-1 ${errors.defaultAttributes ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500' : 'border-slate-300 focus:border-rose-400 focus:ring-rose-400'}`}
+                    >
+                      <option value="" disabled>Select a default variation...</option>
+                      {variations.filter(v => v.enabled).map(v => (
+                        <option key={v.id} value={v.id}>
+                          {Object.entries(v.attributes).map(([key, val]) => `${key}: ${val}`).join(', ')}
+                        </option>
+                      ))}
+                    </select>
+                    <FieldError message={errors.defaultAttributes} />
+                  </div>
+                )}
+                
                 <FieldError message={errors.variations} />
               </FormCard>
             </>

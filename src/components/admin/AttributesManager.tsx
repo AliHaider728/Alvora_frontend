@@ -83,35 +83,44 @@ export const AttributesManager: React.FC<AttributesManagerProps> = ({ attributes
     );
   };
 
-  const handleCustomTermsChange = (id: string, termsStr: string) => {
-    const termLabels = termsStr.split('|').map(v => v.trim()).filter(Boolean);
-    const updatedTerms = termLabels.map((label, index) => {
-      return {
-        id: `term-${Date.now()}-${index}`,
-        label,
-        slug: label.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-        value: label,
-        position: index
-      } as ProductAttributeTerm;
-    });
+  const addCustomTerm = (attrId: string, label: string) => {
+    label = label.trim();
+    if (!label) return;
     
-    // Merge to try to keep IDs for existing labels
     onChange(attributes.map(a => {
-      if (a.id !== id || a.source !== 'custom') return a;
-      
-      const newTermsMerged = termLabels.map((label, index) => {
-        const existing = (a.terms || []).find(t => t.label === label);
-        return existing ? { ...existing, position: index } : {
-          id: `term-${Date.now()}-${index}`,
-          label,
-          slug: label.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-          value: label,
-          position: index
-        };
-      });
-
-      return { ...a, terms: newTermsMerged };
+      if (a.id !== attrId || a.source !== 'custom') return a;
+      const terms = a.terms || [];
+      if (terms.some(t => t.label.toLowerCase() === label.toLowerCase())) {
+        return a; // Prevent duplicate value
+      }
+      return {
+        ...a,
+        terms: [
+          ...terms,
+          {
+            id: `term-${Date.now()}-${terms.length}`,
+            label,
+            slug: label.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+            value: label,
+            position: terms.length
+          }
+        ]
+      };
     }));
+  };
+
+  const removeCustomTerm = (attrId: string, termId: string) => {
+    onChange(attributes.map(a => {
+      if (a.id !== attrId || a.source !== 'custom') return a;
+      return {
+        ...a,
+        terms: (a.terms || []).filter(t => t.id !== termId)
+      };
+    }));
+  };
+
+  const handleCustomTermsChange = (id: string, termsStr: string) => {
+    // Keep this function if we need a fallback, but we will mostly rely on addCustomTerm
   };
 
   const toggleGlobalTermSelection = (attrId: string, termId: string) => {
@@ -191,13 +200,35 @@ export const AttributesManager: React.FC<AttributesManagerProps> = ({ attributes
                 </label>
                 
                 {attr.source === 'custom' ? (
-                  <input
-                    type="text"
-                    value={attr.terms.map(t => t.label).join(' | ')}
-                    onChange={(e) => handleCustomTermsChange(attr.id, e.target.value)}
-                    placeholder="e.g. Small | Medium | Large"
-                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-rose-400 outline-none focus:ring-1 focus:ring-rose-400"
-                  />
+                  <div className="space-y-2">
+                    <div className="flex flex-wrap gap-2">
+                      {attr.terms.map(t => (
+                        <span key={t.id} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 text-sm border border-rose-200">
+                          {t.label}
+                          <button type="button" onClick={() => removeCustomTerm(attr.id, t.id)} className="text-rose-500 hover:text-rose-700 p-0.5 rounded-full hover:bg-rose-100 transition-colors">
+                            <span className="sr-only">Remove</span>
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                    <input
+                      type="text"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          addCustomTerm(attr.id, e.currentTarget.value);
+                          e.currentTarget.value = '';
+                        }
+                      }}
+                      onBlur={(e) => {
+                        addCustomTerm(attr.id, e.target.value);
+                        e.target.value = '';
+                      }}
+                      placeholder="Type value and press Enter..."
+                      className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-rose-400 outline-none focus:ring-1 focus:ring-rose-400"
+                    />
+                  </div>
                 ) : (
                   <div className="flex flex-wrap gap-2 pt-1">
                     {attr.terms.filter(t => !t.isArchived).map(term => {

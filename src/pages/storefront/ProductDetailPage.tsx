@@ -47,6 +47,7 @@ export const ProductDetailPage: React.FC = () => {
 
   // Gallery state
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [overrideImage, setOverrideImage] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>({});
   const [selectedAttributes, setSelectedAttributes] = useState<Record<string, string>>({});
@@ -86,16 +87,16 @@ export const ProductDetailPage: React.FC = () => {
 
   const hasDesc = Boolean(product?.productDetailBlocks?.length || product?.description || product?.productDetailCustomCss);
   const hasSpecs = Boolean(Object.keys(product?.specifications || {}).length > 0 || (product?.productType === 'variable' && product?.attributes?.some(a => a.visible && a.terms?.length)));
-  const hasSafety = Boolean(product?.safetyInfo || product?.specifications?.Material);
+  const hasSafety = Boolean(product?.ageGroups?.length || product?.safetyWarnings?.length);
   const approvedReviews = productReviews.filter(r => r.status === 'approved');
-  const hasReviews = approvedReviews.length > 0;
-
+  const hasReviews = Boolean(approvedReviews.length > 0);
+  
   const availableTabs = [
-    ...(hasDesc ? ['desc'] : []),
-    ...(hasSpecs ? ['specs'] : []),
-    ...(hasSafety ? ['safety'] : []),
-    ...(hasReviews ? ['reviews'] : [])
-  ];
+    hasDesc && 'desc',
+    hasSpecs && 'specs',
+    hasSafety && 'safety',
+    hasReviews && 'reviews'
+  ].filter(Boolean) as string[];
 
   useEffect(() => {
     if (availableTabs.length > 0 && !availableTabs.includes(activeTab)) {
@@ -320,7 +321,7 @@ export const ProductDetailPage: React.FC = () => {
             {/* Main Preview Image with Hover Zoom Effect */}
             <div className="relative aspect-square w-full rounded-3xl overflow-hidden bg-slate-100 border border-slate-100 group">
               <img
-                src={getSafeImageSrc(product.images[activeImageIndex] || product.images[0])}
+                src={getSafeImageSrc(overrideImage || product.images[activeImageIndex] || product.images[0])}
                 alt={product.name}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
@@ -337,9 +338,12 @@ export const ProductDetailPage: React.FC = () => {
                 {product.images.map((img, idx) => (
                   <button
                     key={idx}
-                    onClick={() => setActiveImageIndex(idx)}
+                    onClick={() => {
+                      setActiveImageIndex(idx);
+                      setOverrideImage(null);
+                    }}
                     className={`relative aspect-square w-20 rounded-2xl overflow-hidden border-2 transition-all flex-shrink-0 ${
-                      activeImageIndex === idx ? 'border-rose-500 scale-95 shadow-sm' : 'border-slate-200 opacity-70 hover:opacity-100'
+                      (!overrideImage && activeImageIndex === idx) ? 'border-rose-500 scale-95 shadow-sm' : 'border-slate-200 opacity-70 hover:opacity-100'
                     }`}
                   >
                     <img src={getSafeImageSrc(img)} alt={`${product.name} thumbnail ${idx}`} className="w-full h-full object-cover" />
