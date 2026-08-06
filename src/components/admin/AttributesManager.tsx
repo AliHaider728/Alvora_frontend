@@ -100,7 +100,7 @@ export const AttributesManager: React.FC<AttributesManagerProps> = ({ attributes
       if (a.id !== id || a.source !== 'custom') return a;
       
       const newTermsMerged = termLabels.map((label, index) => {
-        const existing = a.terms.find(t => t.label === label);
+        const existing = (a.terms || []).find(t => t.label === label);
         return existing ? { ...existing, position: index } : {
           id: `term-${Date.now()}-${index}`,
           label,

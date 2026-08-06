@@ -27,8 +27,8 @@ export const VariationsGenerator: React.FC<VariationsGeneratorProps> = ({ attrib
       const attr = variationAttributes[index];
       const results: Record<string, string>[] = [];
       const values = attr.source === 'global' 
-        ? attr.terms.filter(t => (attr.selectedTermIds || []).includes(t.id)).map(t => t.value)
-        : attr.terms.map(t => t.value);
+        ? (attr.terms || []).filter(t => (attr.selectedTermIds || []).includes(t.id)).map(t => t.value)
+        : (attr.terms || []).map(t => t.value);
 
       for (const val of values) {
         results.push(...generate(index + 1, { ...currentCombo, [attr.slug]: val }));

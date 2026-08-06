@@ -71,18 +71,37 @@ export const ProductDetailPage: React.FC = () => {
       productId: String(review.productId || productId),
       reviewerName: String(review.reviewerName || review.authorName || 'PlayBimboo customer'),
       rating: Number(review.rating || 0),
-      createdAt: String(review.createdAt || review.date || '').slice(0, 10),
+      createdAt: String((review as any).createdAt || (review as any).date || '').slice(0, 10),
       title: String(review.title || ''),
+      status: review.status || 'approved',
       content: String(review.content || review.comment || ''),
       verifiedPurchase: Boolean(review.verifiedPurchase),
-      source: review.source || 'customer',
-      status: review.status || 'approved'
+      source: review.source || 'customer'
     })));
   };
 
   useEffect(() => {
     if (product?.id) void loadProductReviews(product.id);
   }, [product?.id]);
+
+  const hasDesc = Boolean(product?.productDetailBlocks?.length || product?.description || product?.productDetailCustomCss);
+  const hasSpecs = Boolean(Object.keys(product?.specifications || {}).length > 0 || (product?.productType === 'variable' && product?.attributes?.some(a => a.visible && a.terms?.length)));
+  const hasSafety = Boolean(product?.safetyInfo || product?.specifications?.Material);
+  const approvedReviews = productReviews.filter(r => r.status === 'approved');
+  const hasReviews = approvedReviews.length > 0;
+
+  const availableTabs = [
+    ...(hasDesc ? ['desc'] : []),
+    ...(hasSpecs ? ['specs'] : []),
+    ...(hasSafety ? ['safety'] : []),
+    ...(hasReviews ? ['reviews'] : [])
+  ];
+
+  useEffect(() => {
+    if (availableTabs.length > 0 && !availableTabs.includes(activeTab)) {
+      setActiveTab(availableTabs[0] as any);
+    }
+  }, [hasDesc, hasSpecs, hasSafety, hasReviews, activeTab]);
 
   // Size Guide Focus Trap
   const sizeGuideRef = React.useRef<HTMLDivElement>(null);
@@ -643,40 +662,50 @@ export const ProductDetailPage: React.FC = () => {
 
         {/* Product Information Tabs */}
         <div className="bg-white rounded-3xl p-4 sm:p-8 border border-slate-100 shadow-sm mb-12">
-          <div className="flex border-b border-slate-200 overflow-x-auto whitespace-nowrap scrollbar-hide gap-4 sm:gap-8 mb-6">
-            <button
-              onClick={() => setActiveTab('desc')}
-              className={`pb-3 font-heading font-bold text-xs sm:text-sm uppercase tracking-wider border-b-2 transition-colors ${
-                activeTab === 'desc' ? 'border-rose-500 text-rose-500' : 'border-transparent text-slate-500 hover:text-slate-800'
-              }`}
-            >
-              Description & Features
-            </button>
-            <button
-              onClick={() => setActiveTab('specs')}
-              className={`pb-3 font-heading font-bold text-xs sm:text-sm uppercase tracking-wider border-b-2 transition-colors ${
-                activeTab === 'specs' ? 'border-rose-500 text-rose-500' : 'border-transparent text-slate-500 hover:text-slate-800'
-              }`}
-            >
-              Specifications
-            </button>
-            <button
-              onClick={() => setActiveTab('safety')}
-              className={`pb-3 font-heading font-bold text-xs sm:text-sm uppercase tracking-wider border-b-2 transition-colors ${
-                activeTab === 'safety' ? 'border-rose-500 text-rose-500' : 'border-transparent text-slate-500 hover:text-slate-800'
-              }`}
-            >
-              Safety & Material Info
-            </button>
-            <button
-              onClick={() => setActiveTab('reviews')}
-              className={`pb-3 font-heading font-bold text-xs sm:text-sm uppercase tracking-wider border-b-2 transition-colors ${
-                activeTab === 'reviews' ? 'border-rose-500 text-rose-500' : 'border-transparent text-slate-500 hover:text-slate-800'
-              }`}
-            >
-              Customer Reviews ({productReviews.length})
-            </button>
-          </div>
+          {availableTabs.length > 1 && (
+            <div className="flex border-b border-slate-200 overflow-x-auto whitespace-nowrap scrollbar-hide gap-4 sm:gap-8 mb-6">
+              {availableTabs.includes('desc') && (
+                <button
+                  onClick={() => setActiveTab('desc')}
+                  className={`pb-3 font-heading font-bold text-xs sm:text-sm uppercase tracking-wider border-b-2 transition-colors ${
+                    activeTab === 'desc' ? 'border-rose-500 text-rose-500' : 'border-transparent text-slate-500 hover:text-slate-800'
+                  }`}
+                >
+                  Description & Features
+                </button>
+              )}
+              {availableTabs.includes('specs') && (
+                <button
+                  onClick={() => setActiveTab('specs')}
+                  className={`pb-3 font-heading font-bold text-xs sm:text-sm uppercase tracking-wider border-b-2 transition-colors ${
+                    activeTab === 'specs' ? 'border-rose-500 text-rose-500' : 'border-transparent text-slate-500 hover:text-slate-800'
+                  }`}
+                >
+                  Specifications
+                </button>
+              )}
+              {availableTabs.includes('safety') && (
+                <button
+                  onClick={() => setActiveTab('safety')}
+                  className={`pb-3 font-heading font-bold text-xs sm:text-sm uppercase tracking-wider border-b-2 transition-colors ${
+                    activeTab === 'safety' ? 'border-rose-500 text-rose-500' : 'border-transparent text-slate-500 hover:text-slate-800'
+                  }`}
+                >
+                  Safety & Material Info
+                </button>
+              )}
+              {availableTabs.includes('reviews') && (
+                <button
+                  onClick={() => setActiveTab('reviews')}
+                  className={`pb-3 font-heading font-bold text-xs sm:text-sm uppercase tracking-wider border-b-2 transition-colors ${
+                    activeTab === 'reviews' ? 'border-rose-500 text-rose-500' : 'border-transparent text-slate-500 hover:text-slate-800'
+                  }`}
+                >
+                  Customer Reviews ({approvedReviews.length})
+                </button>
+              )}
+            </div>
+          )}
 
           {/* Tab 1: Description & Features */}
           {activeTab === 'desc' && (

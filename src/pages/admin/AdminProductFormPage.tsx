@@ -148,7 +148,7 @@ export const AdminProductFormPage: React.FC = () => {
   const [material, setMaterial] = useState('');
   const [safetyInfo, setSafetyInfo] = useState('');
   const [weight, setWeight] = useState<number>();
-  const [deliveryType, setDeliveryType] = useState<DeliveryChargeType>('store_threshold');
+  const [deliveryType, setDeliveryType] = useState<DeliveryChargeType>('free');
   const [customDeliveryFee, setCustomDeliveryFee] = useState<number>();
   const [status, setStatus] = useState<'draft' | 'published'>('published');
   const [isVisible, setIsVisible] = useState(true);
@@ -228,7 +228,7 @@ export const AdminProductFormPage: React.FC = () => {
     setMaterial(editingProduct.specifications?.Material || '');
     setSafetyInfo(editingProduct.safetyInfo || '');
     setWeight(editingProduct.weight);
-    setDeliveryType(editingProduct.deliveryType || editingProduct.deliveryChargeType || 'store_threshold');
+    setDeliveryType(editingProduct.deliveryType || editingProduct.deliveryChargeType || 'free');
     setCustomDeliveryFee(editingProduct.customDeliveryFee);
     setStatus(editingProduct.status || 'published');
     setIsVisible(editingProduct.isVisible !== false);
@@ -475,7 +475,7 @@ export const AdminProductFormPage: React.FC = () => {
     const payload: ProductInput = {
       name: name.trim(),
       slug: slugify(slug || name),
-      sku: sku.trim(),
+      sku: normalizedSku,
       price: Number(activePrice),
       originalPrice: salePrice === undefined ? null : Number(regularPrice),
       discountPercent: salePrice === undefined ? 0 : Math.round(((regularPrice - salePrice) / regularPrice) * 100),
@@ -487,8 +487,8 @@ export const AdminProductFormPage: React.FC = () => {
       ageGroups,
       brand: editingProduct?.brand || 'PlayBimboo',
       ...normalizeInventory({ trackInventory, stockQuantity, stockStatus }),
-      stockQuantity: trackInventory ? Number(stockQuantity) : null,
-      lowStockThreshold: trackInventory ? lowStockThreshold ?? null : null,
+      stockQuantity: stockQuantity !== undefined ? Number(stockQuantity) : null,
+      lowStockThreshold: lowStockThreshold ?? null,
       images: images.map(image => image.url),
       imagePublicIds: images.map(image => image.publicId || ''),
       shortDescription: shortDescription.trim(),

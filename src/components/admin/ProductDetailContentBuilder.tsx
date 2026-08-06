@@ -36,6 +36,7 @@ export const ProductDetailContentBuilder: React.FC<Props> = ({
   const { confirm } = useDialog();
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
   const [uploadingBlock, setUploadingBlock] = useState<string>();
+  const [selectedBlockType, setSelectedBlockType] = useState<ProductDetailBlockType>('richText');
   const sorted = useMemo(() => [...blocks].sort((a, b) => a.order - b.order), [blocks]);
 
   const update = (id: string, changes: Partial<ProductDetailBlock>) =>
@@ -106,11 +107,28 @@ export const ProductDetailContentBuilder: React.FC<Props> = ({
         <h2 className="font-heading text-base font-black text-slate-900">Product Description & Page Content</h2>
         <p className="mt-1 text-xs text-slate-500">Build responsive content below the main product information. The server sanitizes every block before publishing.</p>
       </div>
-      <div className="mb-5 flex flex-wrap gap-2">
-        <AddButton icon={Text} label="Rich text" onClick={() => add('richText')} />
-        <AddButton icon={ImagePlus} label="Image" onClick={() => add('image')} />
-        <AddButton icon={Minus} label="Divider" onClick={() => add('divider')} />
-        {isSuperAdmin && <AddButton icon={Code2} label="Custom HTML" onClick={() => add('html')} />}
+      <div className="mb-5 flex flex-wrap items-center gap-2">
+        <select value={selectedBlockType} onChange={e => setSelectedBlockType(e.target.value as ProductDetailBlockType)} className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100">
+          <option value="heading">Heading</option>
+          <option value="richText">Rich Text</option>
+          <option value="image">Image</option>
+          <option value="imageText">Image + Text</option>
+          <option value="fullWidthImage">Full-width Image</option>
+          <option value="gallery">Gallery</option>
+          <option value="featureCards">Feature Cards</option>
+          <option value="iconText">Icon + Text</option>
+          <option value="benefitsList">Benefits List</option>
+          <option value="whatsIncluded">What's Included</option>
+          <option value="recommendedAge">Recommended Age</option>
+          <option value="giftBadges">Gift Badges</option>
+          <option value="divider">Divider</option>
+          <option value="spacer">Spacer</option>
+          <option value="ctaBanner">CTA Banner</option>
+          {isSuperAdmin && <option value="html">Custom HTML</option>}
+        </select>
+        <button type="button" onClick={() => add(selectedBlockType)} className="inline-flex items-center gap-2 rounded-xl border border-indigo-200 bg-indigo-50 px-3 py-2 text-xs font-bold text-indigo-700 hover:bg-indigo-100">
+          <Plus className="h-4 w-4" /> Add Block
+        </button>
       </div>
 
       <div className="space-y-3">
@@ -133,19 +151,23 @@ export const ProductDetailContentBuilder: React.FC<Props> = ({
                   <label className="block text-xs font-bold text-slate-600">Optional heading<input maxLength={140} value={block.heading || ''} onChange={event => update(block.id, { heading: event.target.value })} className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm" /></label>
                   <BlockRichEditor value={block.content || ''} onChange={content => update(block.id, { content })} />
                 </>}
-                {block.type === 'image' && <>
+                {['heading', 'featureCards', 'iconText', 'benefitsList', 'whatsIncluded', 'recommendedAge', 'giftBadges', 'spacer', 'ctaBanner', 'imageText', 'fullWidthImage', 'gallery'].includes(block.type) && <>
+                  <label className="block text-xs font-bold text-slate-600">Heading<input maxLength={140} value={block.heading || ''} onChange={event => update(block.id, { heading: event.target.value })} className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm" placeholder="Block heading" /></label>
+                  <label className="block text-xs font-bold text-slate-600 mt-3">Content (optional)<textarea rows={4} maxLength={2000} value={block.content || ''} onChange={event => update(block.id, { content: event.target.value })} className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm" placeholder="Block text content" /></label>
+                </>}
+                {['image', 'imageText', 'fullWidthImage', 'gallery', 'ctaBanner'].includes(block.type) && <>
                   {block.image?.secureUrl && <img src={block.image.secureUrl} alt={block.image.alt || 'Product detail preview'} className="max-h-72 w-full rounded-xl bg-white object-contain" />}
-                  <label className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-indigo-300 bg-white px-4 py-3 text-xs font-bold text-indigo-600">
-                    {uploadingBlock === block.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImagePlus className="h-4 w-4" />}{block.image ? 'Replace image' : 'Upload image'}
+                  <label className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-indigo-300 bg-white px-4 py-3 text-xs font-bold text-indigo-600 mt-3">
+                    {uploadingBlock === block.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImagePlus className="h-4 w-4" />}{block.image ? 'Replace image' : 'Upload primary media'}
                     <input type="file" className="hidden" accept="image/jpeg,image/png,image/webp" disabled={uploadingBlock === block.id} onChange={event => { void upload(block, event.target.files?.[0]); event.target.value = ''; }} />
                   </label>
-                  <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="grid gap-3 sm:grid-cols-2 mt-3">
                     <label className="text-xs font-bold text-slate-600">Alt text *<input maxLength={180} value={block.image?.alt || ''} onChange={event => block.image && update(block.id, { image: { ...block.image, alt: event.target.value } })} className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm" /></label>
                     <label className="text-xs font-bold text-slate-600">Caption<input maxLength={300} value={block.image?.caption || ''} onChange={event => block.image && update(block.id, { image: { ...block.image, caption: event.target.value } })} className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm" /></label>
                   </div>
                 </>}
                 {block.type === 'html' && isSuperAdmin && <label className="block text-xs font-bold text-slate-600">Custom HTML<textarea rows={10} maxLength={30000} spellCheck={false} value={block.content || ''} onChange={event => update(block.id, { content: event.target.value })} className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-950 p-3 font-mono text-xs text-emerald-200" /></label>}
-                {codeLocked && <p className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs font-semibold text-amber-800">This custom HTML block is read-only. A Super Admin can edit, reorder, disable, duplicate, or remove it.</p>}
+                {codeLocked && <p className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs font-semibold text-amber-800 mt-3">This custom HTML block is read-only. A Super Admin can edit, reorder, disable, duplicate, or remove it.</p>}
                 {block.type === 'divider' && <div className="py-6"><hr className="border-slate-300" /></div>}
                 {block.type !== 'divider' && <div className="grid gap-3 sm:grid-cols-2">
                   <label className="text-xs font-bold text-slate-600">Width<select value={block.settings?.width || 'full'} onChange={event => update(block.id, { settings: { ...block.settings, width: event.target.value as 'full' | 'large' | 'medium' } })} className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5"><option value="full">Full</option><option value="large">Large</option><option value="medium">Medium</option></select></label>
@@ -172,7 +194,6 @@ export const ProductDetailContentBuilder: React.FC<Props> = ({
   );
 };
 
-const AddButton: React.FC<{ icon: React.ComponentType<{ className?: string }>; label: string; onClick: () => void }> = ({ icon: Icon, label, onClick }) => <button type="button" onClick={onClick} className="inline-flex items-center gap-2 rounded-xl border border-indigo-200 bg-indigo-50 px-3 py-2 text-xs font-bold text-indigo-700"><Plus className="h-3.5 w-3.5" /><Icon className="h-4 w-4" />{label}</button>;
 const IconButton: React.FC<{ icon: React.ComponentType<{ className?: string }>; label: string; disabled?: boolean; danger?: boolean; onClick: () => void }> = ({ icon: Icon, label, disabled, danger, onClick }) => <button type="button" title={label} aria-label={label} disabled={disabled} onClick={onClick} className={`rounded-lg border p-2 disabled:opacity-30 ${danger ? 'border-rose-200 text-rose-500' : 'border-slate-200 text-slate-500'}`}><Icon className="h-3.5 w-3.5" /></button>;
 
 const BlockRichEditor: React.FC<{ value: string; onChange: (value: string) => void }> = ({ value, onChange }) => {
