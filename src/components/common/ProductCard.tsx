@@ -75,15 +75,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
   };
 
   return (
-    <div className="group relative bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden">
+    <div className="group relative bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden h-full">
       {/* Product Image Container */}
-      <div className="relative aspect-[4/3] w-full bg-slate-50/50 overflow-hidden rounded-t-3xl border-b border-slate-100/50">
+      <div className="relative h-[220px] sm:h-[300px] w-full bg-white overflow-hidden rounded-t-3xl border-b border-slate-100/50 flex-shrink-0">
         <Link to={`/product/${product.slug}`} className="block w-full h-full">
           <img
             src={getSafeImageSrc(product.images?.[0])}
             alt={product.name}
             loading="lazy"
-            className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-500 ease-out"
+            className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-500 ease-out p-2"
           />
         </Link>
 
@@ -146,7 +146,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
       <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
         <div>
           {/* Category & Brand */}
-          <div className="flex items-center justify-between text-xs text-slate-400 mb-1">
+          <div className="flex items-center justify-between text-xs text-slate-400 mb-1 min-h-[1.25rem]">
             <span className="font-semibold text-sky-600 uppercase tracking-wider text-[10px]">
               {product.category || 'Uncategorized'}
             </span>
@@ -156,13 +156,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
           {/* Product Title */}
           <Link
             to={`/product/${product.slug}`}
-            className="font-heading font-bold text-sm sm:text-base text-slate-800 hover:text-rose-500 line-clamp-2 transition-colors leading-snug"
+            className="font-heading font-bold text-sm sm:text-base text-slate-800 hover:text-rose-500 line-clamp-2 transition-colors leading-snug min-h-[2.5rem]"
           >
             {product.name}
           </Link>
 
           {product.shortDescription && (
-            <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-slate-500">
+            <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-slate-500 min-h-[2.25rem]">
               {product.shortDescription}
             </p>
           )}
