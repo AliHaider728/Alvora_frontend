@@ -410,7 +410,7 @@ export const AdminProductFormPage: React.FC = () => {
     
     if (!name.trim()) nextErrors.name = 'Product name is required.';
     if (ageGroups.length === 0) nextErrors.ageGroups = 'Select at least one age recommendation.';
-    if (!stripHtml(description)) nextErrors.description = 'Detailed description is required.';
+    // Detailed description is now optional, unified builder replaces it
     
     if (productType === 'simple') {
       if (!Number.isFinite(regularPrice) || regularPrice < 0) nextErrors.regularPrice = 'Enter a non-negative regular price.';

@@ -85,7 +85,7 @@ export const ProductDetailPage: React.FC = () => {
     if (product?.id) void loadProductReviews(product.id);
   }, [product?.id]);
 
-  const hasDesc = Boolean(product?.productDetailBlocks?.length || product?.description || product?.productDetailCustomCss);
+  const hasDesc = Boolean((product?.productDetailBlocks || []).filter(b => b.enabled).length > 0 || product?.description || product?.productDetailCustomCss);
   const hasSpecs = Boolean(Object.keys(product?.specifications || {}).length > 0 || (product?.productType === 'variable' && product?.attributes?.some(a => a.visible && a.terms?.length)));
   const hasSafety = Boolean(product?.ageGroups?.length || product?.safetyWarnings?.length);
   const approvedReviews = productReviews.filter(r => r.status === 'approved');
@@ -662,8 +662,6 @@ export const ProductDetailPage: React.FC = () => {
           </div>
         </div>
 
-        <ProductDetailContent product={product} />
-
         {/* Product Information Tabs */}
         <div className="bg-white rounded-3xl p-4 sm:p-8 border border-slate-100 shadow-sm mb-12">
           {availableTabs.length > 1 && (
@@ -714,16 +712,28 @@ export const ProductDetailPage: React.FC = () => {
           {/* Tab 1: Description & Features */}
           {activeTab === 'desc' && (
             <div className="space-y-4 text-sm text-slate-700 leading-relaxed">
-              <div
-                className="max-w-none space-y-4 leading-7 [&_a]:text-sky-600 [&_a]:underline [&_blockquote]:border-l-4 [&_blockquote]:border-slate-200 [&_blockquote]:pl-4 [&_h1]:mt-7 [&_h1]:text-2xl [&_h1]:font-black [&_h2]:mt-6 [&_h2]:text-xl [&_h2]:font-black [&_h3]:mt-5 [&_h3]:text-lg [&_h3]:font-bold [&_img]:h-auto [&_img]:max-w-full [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:my-3 [&_table]:block [&_table]:max-w-full [&_table]:overflow-x-auto [&_table]:border-collapse [&_td]:border [&_td]:border-slate-200 [&_td]:p-2 [&_th]:border [&_th]:border-slate-200 [&_th]:bg-slate-50 [&_th]:p-2 [&_ul]:list-disc [&_ul]:pl-6"
-                dangerouslySetInnerHTML={{ __html: product.description }}
-              />
-              <h4 className="font-heading font-bold text-sm text-slate-900 pt-2">Key Highlights:</h4>
-              <ul className="space-y-2 list-disc list-inside text-slate-600">
-                {product.features.map((feat, i) => (
-                  <li key={i}>{feat}</li>
-                ))}
-              </ul>
+              {(product.productDetailBlocks || []).filter(b => b.enabled).length > 0 ? (
+                <ProductDetailContent product={product} />
+              ) : (
+                <>
+                  {product.description && (
+                    <div
+                      className="max-w-none space-y-4 leading-7 [&_a]:text-sky-600 [&_a]:underline [&_blockquote]:border-l-4 [&_blockquote]:border-slate-200 [&_blockquote]:pl-4 [&_h1]:mt-7 [&_h1]:text-2xl [&_h1]:font-black [&_h2]:mt-6 [&_h2]:text-xl [&_h2]:font-black [&_h3]:mt-5 [&_h3]:text-lg [&_h3]:font-bold [&_img]:h-auto [&_img]:max-w-full [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:my-3 [&_table]:block [&_table]:max-w-full [&_table]:overflow-x-auto [&_table]:border-collapse [&_td]:border [&_td]:border-slate-200 [&_td]:p-2 [&_th]:border [&_th]:border-slate-200 [&_th]:bg-slate-50 [&_th]:p-2 [&_ul]:list-disc [&_ul]:pl-6"
+                      dangerouslySetInnerHTML={{ __html: product.description }}
+                    />
+                  )}
+                  {product.features && product.features.length > 0 && (
+                    <>
+                      <h4 className="font-heading font-bold text-sm text-slate-900 pt-2">Key Highlights:</h4>
+                      <ul className="space-y-2 list-disc list-inside text-slate-600">
+                        {product.features.map((feat, i) => (
+                          <li key={i}>{feat}</li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+                </>
+              )}
             </div>
           )}
 
