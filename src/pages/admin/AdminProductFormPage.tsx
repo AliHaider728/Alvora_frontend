@@ -599,6 +599,7 @@ export const AdminProductFormPage: React.FC = () => {
       const apiError = getLastApiError() || `Could not ${isEditing ? 'update' : 'create'} the product.`;
       if (/slug/i.test(apiError)) setErrors(current => ({ ...current, slug: apiError }));
       if (/sku/i.test(apiError)) setErrors(current => ({ ...current, sku: apiError }));
+      if (/Selector/i.test(apiError) || /Custom CSS/i.test(apiError)) setErrors(current => ({ ...current, productDetailBlocks: apiError }));
       await cleanupTemporaryUploads();
       setImages(current => current.filter(image => !image.newlyUploaded));
       setProductDetailBlocks(current => current.filter(block => !block.image?.newlyUploaded));

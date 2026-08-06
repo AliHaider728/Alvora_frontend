@@ -166,7 +166,12 @@ export const ProductDetailContentBuilder: React.FC<Props> = ({
                     <label className="text-xs font-bold text-slate-600">Caption<input maxLength={300} value={block.image?.caption || ''} onChange={event => block.image && update(block.id, { image: { ...block.image, caption: event.target.value } })} className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm" /></label>
                   </div>
                 </>}
-                {block.type === 'html' && isSuperAdmin && <label className="block text-xs font-bold text-slate-600">Custom HTML<textarea rows={10} maxLength={30000} spellCheck={false} value={block.content || ''} onChange={event => update(block.id, { content: event.target.value })} className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-950 p-3 font-mono text-xs text-emerald-200" /></label>}
+                {block.type === 'html' && isSuperAdmin && (
+                  <div>
+                    <label className="block text-xs font-bold text-slate-600">Custom HTML<textarea rows={10} maxLength={30000} spellCheck={false} value={block.content || ''} onChange={event => update(block.id, { content: event.target.value })} className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-950 p-3 font-mono text-xs text-emerald-200" /></label>
+                    <p className="mt-2 text-[11px] font-semibold text-amber-600">Paste only the product-section HTML. Remove &lt;html&gt;, &lt;head&gt;, &lt;body&gt;, and &lt;style&gt; tags.</p>
+                  </div>
+                )}
                 {codeLocked && <p className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs font-semibold text-amber-800 mt-3">This custom HTML block is read-only. A Super Admin can edit, reorder, disable, duplicate, or remove it.</p>}
                 {block.type === 'divider' && <div className="py-6"><hr className="border-slate-300" /></div>}
                 {block.type !== 'divider' && <div className="grid gap-3 sm:grid-cols-2">
