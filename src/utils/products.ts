@@ -16,6 +16,7 @@ export type NormalizedInventory = {
 
 export const normalizeInventory = (source: InventorySource): NormalizedInventory => {
   const hasQuantity = source.stockQuantity !== undefined && source.stockQuantity !== null &&
+    String(source.stockQuantity).trim() !== '' &&
     Number.isInteger(Number(source.stockQuantity)) && Number(source.stockQuantity) >= 0;
   const trackInventory = typeof source.trackInventory === 'boolean'
     ? source.trackInventory
@@ -42,6 +43,14 @@ export const getEffectiveProductAvailability = (
   product: Product,
   selectedVariants?: Record<string, string>
 ) => {
+  if (product.productType === 'variable' && product.variations && product.variations.length > 0) {
+    if (selectedVariants && Object.keys(selectedVariants).length > 0) {
+      const matched = product.variations.find(v => v.enabled && Object.entries(selectedVariants).every(([k, val]) => v.attributes[k] === val));
+      return matched ? normalizeInventory(matched).inStock : false;
+    }
+    return product.variations.some(v => v.enabled && normalizeInventory(v).inStock);
+  }
+
   const groups = (product.variants || []).filter(group => group.options.length > 0);
   if (groups.length === 0) return normalizeInventory(product).inStock;
   return groups.every(group => {
@@ -56,6 +65,22 @@ export const getEffectiveAvailableQuantity = (
   product: Product,
   selectedVariants?: Record<string, string>
 ): number | undefined => {
+  if (product.productType === 'variable' && product.variations && product.variations.length > 0) {
+    if (selectedVariants && Object.keys(selectedVariants).length > 0) {
+      const matched = product.variations.find(v => v.enabled && Object.entries(selectedVariants).every(([k, val]) => v.attributes[k] === val));
+      if (matched) {
+        const inv = normalizeInventory(matched);
+        return inv.trackInventory ? inv.stockQuantity : undefined;
+      }
+    }
+    const trackedQuantities = product.variations
+      .filter(v => v.enabled)
+      .map(normalizeInventory)
+      .filter(inv => inv.trackInventory)
+      .map(inv => inv.stockQuantity || 0);
+    return trackedQuantities.length > 0 ? Math.max(...trackedQuantities) : undefined;
+  }
+
   const groups = (product.variants || []).filter(group => group.options.length > 0);
   if (groups.length === 0) return normalizeInventory(product).stockQuantity;
   const selected = groups

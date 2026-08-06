@@ -27,12 +27,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
   let pricePrefix = '';
 
   if (isVariable && product.variations && product.variations.length > 0) {
-    const prices = product.variations.map(v => v.salePrice !== undefined && v.salePrice !== null ? v.salePrice : v.regularPrice);
-    const minPrice = Math.min(...prices);
-    const maxPrice = Math.max(...prices);
-    displayPrice = minPrice;
-    if (minPrice < maxPrice) {
-      pricePrefix = 'From ';
+    const activeVariations = product.variations.filter(v => v.enabled);
+    if (activeVariations.length > 0) {
+      const prices = activeVariations.map(v => v.salePrice !== undefined && v.salePrice !== null ? v.salePrice : v.regularPrice);
+      const minPrice = Math.min(...prices);
+      const maxPrice = Math.max(...prices);
+      displayPrice = minPrice;
+      if (minPrice < maxPrice) {
+        pricePrefix = 'From ';
+      }
     }
   }
 
@@ -63,7 +66,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
             src={getSafeImageSrc(product.images?.[0])}
             alt={product.name}
             loading="lazy"
-            className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
+            className="w-full h-full object-contain object-center bg-slate-50 p-2 group-hover:scale-105 transition-transform duration-500 ease-out"
           />
         </Link>
 

@@ -143,6 +143,7 @@ export const AdminProductFormPage: React.FC = () => {
   const [attributes, setAttributes] = useState<ProductAttribute[]>([]);
   const [variations, setVariations] = useState<ProductVariation[]>([]);
   const [defaultAttributes, setDefaultAttributes] = useState<Record<string, string>>({});
+    const [defaultVariationId, setDefaultVariationId] = useState('');
   
   const [ageGroups, setAgeGroups] = useState<AgeGroupCategory[]>(['6-8']);
   const [material, setMaterial] = useState('');
@@ -201,8 +202,74 @@ export const AdminProductFormPage: React.FC = () => {
     if (!slugManuallyEdited) setSlug(slugify(name));
   }, [name, slugManuallyEdited]);
 
+  
+  const handleVariationsChange = (newVars: ProductVariation[]) => {
+    setVariations(newVars);
+    setIsDirty(true);
+    const activeVars = newVars.filter(v => v.enabled);
+    if (activeVars.length > 0) {
+      const currentDefault = activeVars.find(v => v.id === defaultVariationId);
+      if (!currentDefault) {
+        const primaryAttr = attributes.find(a => a.usedForVariations);
+        if (primaryAttr) {
+          const sortedVars = [...activeVars].sort((a, b) => {
+            const valA = a.attributes[primaryAttr.slug] || '';
+            const valB = b.attributes[primaryAttr.slug] || '';
+            const numA = parseInt(valA.replace(/\D/g, ''), 10) || 0;
+            const numB = parseInt(valB.replace(/\D/g, ''), 10) || 0;
+            return numB - numA;
+          });
+          setDefaultVariationId(sortedVars[0].id);
+          setDefaultAttributes(sortedVars[0].attributes);
+          setErrors(current => {
+            if (!current['defaultAttributes']) return current;
+            const next = { ...current };
+            delete next['defaultAttributes'];
+            return next;
+          });
+        }
+      } else {
+        setDefaultAttributes(currentDefault.attributes);
+      }
+    }
+  };
+
+  const stateRef = useRef<any>(null);
+  stateRef.current = {
+    name, shortDescription, description, category, categoryId, categorySlug,
+    regularPrice, salePrice, sku, trackInventory, stockQuantity, stockStatus, lowStockThreshold,
+    productType, attributes, variations, defaultAttributes, defaultVariationId,
+    ageGroups, material, safetyInfo, weight, deliveryType, customDeliveryFee,
+    status, isVisible, isFeatured, metaTitle, metaDescription, productDetailBlocks, productDetailCustomCss,
+    images
+  };
+
   useEffect(() => {
-    if (!editingProduct || initializedProductId.current === editingProduct.id) return;
+    if (!isDirty || productLoadFailed) return;
+    const timer = setTimeout(() => {
+      const state = stateRef.current;
+      const DRAFT_KEY = `product-draft-${id || 'new'}`;
+      sessionStorage.setItem(DRAFT_KEY, JSON.stringify({
+        draftVersion: 1,
+        savedAt: Date.now(),
+        formData: {
+          ...state,
+          images: state.images.filter((img: any) => img.url && !img.url.startsWith('blob:')).map((img: any) => ({ url: img.url, publicId: img.publicId, alt: img.alt }))
+        }
+      }));
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [
+    name, shortDescription, description, category, categoryId, categorySlug,
+    regularPrice, salePrice, sku, trackInventory, stockQuantity, stockStatus, lowStockThreshold,
+    productType, attributes, variations, defaultAttributes, defaultVariationId,
+    ageGroups, material, safetyInfo, weight, deliveryType, customDeliveryFee,
+    status, isVisible, isFeatured, metaTitle, metaDescription, productDetailBlocks, productDetailCustomCss,
+    images, isDirty, productLoadFailed, id
+  ]);
+
+  const initializeFromApi = () => {
+    if (!editingProduct) return;
     initializedProductId.current = editingProduct.id;
     setName(editingProduct.name);
     setShortDescription(editingProduct.shortDescription || '');
@@ -222,6 +289,14 @@ export const AdminProductFormPage: React.FC = () => {
     setAttributes(editingProduct.attributes || []);
     setVariations(editingProduct.variations || []);
     setDefaultAttributes(editingProduct.defaultAttributes || {});
+    
+    let initialDefaultVarId = '';
+    if (editingProduct.defaultAttributes && Object.keys(editingProduct.defaultAttributes).length > 0) {
+       const match = (editingProduct.variations || []).find(v => Object.entries(editingProduct.defaultAttributes!).every(([k, val]) => v.attributes[k] === val));
+       if (match) initialDefaultVarId = match.id;
+    }
+    setDefaultVariationId(initialDefaultVarId);
+    
     setAgeGroups(editingProduct.ageGroups?.length
       ? editingProduct.ageGroups
       : editingProduct.ageGroup ? [editingProduct.ageGroup] : ['6-8']);
@@ -256,7 +331,85 @@ export const AdminProductFormPage: React.FC = () => {
     }
     setProductDetailCustomCss(editingProduct.productDetailCustomCss || '');
     setIsDirty(false);
-  }, [editingProduct]);
+  };
+
+  useEffect(() => {
+    if (productLoadFailed) return;
+    if (id && (!editingProduct || initializedProductId.current === editingProduct.id)) return;
+    
+    const DRAFT_KEY = `product-draft-${id || 'new'}`;
+    const draftStr = sessionStorage.getItem(DRAFT_KEY);
+    
+    if (draftStr) {
+      try {
+        const draft = JSON.parse(draftStr);
+        if (id && (editingProduct as any)?.updatedAt) {
+          const apiUpdatedAt = new Date((editingProduct as any).updatedAt).getTime();
+          if (draft.savedAt < apiUpdatedAt) {
+             sessionStorage.removeItem(DRAFT_KEY);
+             initializeFromApi();
+             return;
+          }
+        }
+        
+        void confirm({
+          title: 'Unsaved Draft Found',
+          description: 'An unsaved product draft was found in this browser tab. Restore it?',
+          confirmLabel: 'Restore',
+          cancelLabel: 'Discard',
+          destructive: false
+        }).then(restore => {
+          if (restore) {
+            const data = draft.formData;
+            setName(data.name || '');
+            setShortDescription(data.shortDescription || '');
+            setDescription(data.description || '');
+            setCategory(data.category || '');
+            setCategoryId(data.categoryId || '');
+            setCategorySlug(data.categorySlug || '');
+            setRegularPrice(data.regularPrice || 0);
+            setSalePrice(data.salePrice);
+            setSku(data.sku || '');
+            setTrackInventory(data.trackInventory || false);
+            setStockQuantity(data.stockQuantity);
+            setStockStatus(data.stockStatus || 'in_stock');
+            setLowStockThreshold(data.lowStockThreshold);
+            setProductType(data.productType || 'simple');
+            setAttributes(data.attributes || []);
+            setVariations(data.variations || []);
+            setDefaultAttributes(data.defaultAttributes || {});
+            setDefaultVariationId(data.defaultVariationId || '');
+            setAgeGroups(data.ageGroups || []);
+            setMaterial(data.material || '');
+            setSafetyInfo(data.safetyInfo || '');
+            setWeight(data.weight);
+            setDeliveryType(data.deliveryType || 'free');
+            setCustomDeliveryFee(data.customDeliveryFee);
+            setStatus(data.status || 'published');
+            setIsVisible(data.isVisible !== false);
+            setIsFeatured(data.isFeatured || false);
+            setMetaTitle(data.metaTitle || '');
+            setMetaDescription(data.metaDescription || '');
+            setProductDetailBlocks(data.productDetailBlocks || []);
+            setProductDetailCustomCss(data.productDetailCustomCss || '');
+            if (data.images) {
+              setImages(data.images.map((img: any, index: number) => makeImage(img.url, String(index), img.publicId, img.alt)));
+            }
+            setIsDirty(true);
+            if (id && editingProduct) initializedProductId.current = editingProduct.id;
+          } else {
+            sessionStorage.removeItem(DRAFT_KEY);
+            initializeFromApi();
+          }
+        });
+        return;
+      } catch (e) {
+        sessionStorage.removeItem(DRAFT_KEY);
+      }
+    }
+    initializeFromApi();
+  }, [editingProduct, id, productLoadFailed, confirm]);
+
 
   useEffect(() => {
     const warnBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -765,7 +918,7 @@ export const AdminProductFormPage: React.FC = () => {
               )}
 
               <FormCard title="Variations" description="Generate and manage product variations." icon={PackageCheck}>
-                <VariationsGenerator attributes={attributes} variations={variations} onChange={(newVars) => { setVariations(newVars); markDirty(); }} basePrice={regularPrice} productImages={images} />
+                <VariationsGenerator attributes={attributes} variations={variations} onChange={handleVariationsChange} basePrice={regularPrice} productImages={images} />
                 
                 {variations.filter(v => v.enabled).length > 0 && (
                   <div className="mt-6 p-4 bg-slate-50 border border-slate-200 rounded-xl">

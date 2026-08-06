@@ -27,7 +27,8 @@ import {
   getProductAgeGroups,
   getProductDeliveryType,
   isProductVisibleOnStorefront,
-  isVariantOptionAvailable
+  isVariantOptionAvailable,
+  normalizeInventory
 } from '../../utils/products';
 import { ProductDetailContent } from '../../components/product/ProductDetailContent';
 import { Review } from '../../types';
@@ -85,9 +86,19 @@ export const ProductDetailPage: React.FC = () => {
     if (product?.id) void loadProductReviews(product.id);
   }, [product?.id]);
 
+  const sanitizedSpecs = Object.entries(product?.specifications || {}).filter(
+    ([key, val]) => key.trim() !== '' && typeof val === 'string' && val.trim() !== ''
+  );
+
   const hasDesc = Boolean((product?.productDetailBlocks || []).filter(b => b.enabled).length > 0 || product?.description || product?.productDetailCustomCss);
-  const hasSpecs = Boolean(Object.keys(product?.specifications || {}).length > 0 || (product?.productType === 'variable' && product?.attributes?.some(a => a.visible && a.terms?.length)));
-  const hasSafety = Boolean(product?.ageGroups?.length || product?.safetyInfo?.length);
+  const hasSpecs = Boolean(sanitizedSpecs.length > 0);
+  const hasSafety = Boolean(
+    (product?.safetyInfo && product.safetyInfo.trim() !== '') ||
+    (product?.specifications?.Material && product.specifications.Material.trim() !== '') ||
+    (product?.specifications?.['Safety Notes'] && product.specifications['Safety Notes'].trim() !== '') ||
+    sanitizedSpecs.some(([key]) => key.toLowerCase().includes('safety') || key.toLowerCase().includes('material'))
+  );
+  
   const approvedReviews = productReviews.filter(r => r.status === 'approved');
   const hasReviews = Boolean(approvedReviews.length > 0);
   
@@ -102,7 +113,7 @@ export const ProductDetailPage: React.FC = () => {
     if (availableTabs.length > 0 && !availableTabs.includes(activeTab)) {
       setActiveTab(availableTabs[0] as any);
     }
-  }, [hasDesc, hasSpecs, hasSafety, hasReviews, activeTab]);
+  }, [hasDesc, hasSpecs, hasSafety, hasReviews]);
 
   // Size Guide Focus Trap
   const sizeGuideRef = React.useRef<HTMLDivElement>(null);
@@ -229,11 +240,11 @@ export const ProductDetailPage: React.FC = () => {
     : variantGroups.every(group => Boolean(selectedVariants[group.name]));
 
   const effectiveAvailable = isVariable
-    ? (currentVariation ? (currentVariation.manageStock ? (currentVariation.stockQuantity || 0) > 0 : true) : false)
+    ? getEffectiveProductAvailability(product, selectedAttributes)
     : getEffectiveProductAvailability(product, selectedVariants);
 
   const selectedVariantStock = isVariable
-    ? (currentVariation?.manageStock ? (currentVariation.stockQuantity ?? undefined) : undefined)
+    ? getEffectiveAvailableQuantity(product, selectedAttributes)
     : getEffectiveAvailableQuantity(product, selectedVariants);
 
   const canPurchase =
@@ -330,11 +341,11 @@ export const ProductDetailPage: React.FC = () => {
           {/* Left Column: Image Gallery */}
           <div className="lg:col-span-6 space-y-4">
             {/* Main Preview Image with Hover Zoom Effect */}
-            <div className="relative aspect-square w-full rounded-3xl overflow-hidden bg-slate-100 border border-slate-100 group">
+            <div className="relative aspect-square w-full rounded-3xl overflow-hidden bg-slate-50 border border-slate-100 group flex items-center justify-center p-4">
               <img
                 src={getSafeImageSrc(overrideImage || product.images[activeImageIndex] || product.images[0])}
                 alt={product.name}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
               />
               {product.discountPercent && (
                 <span className="absolute top-4 left-4 bg-rose-500 text-white font-heading font-extrabold text-xs px-3 py-1.5 rounded-full shadow-md">
@@ -353,11 +364,11 @@ export const ProductDetailPage: React.FC = () => {
                       setActiveImageIndex(idx);
                       setOverrideImage(null);
                     }}
-                    className={`relative aspect-square w-20 rounded-2xl overflow-hidden border-2 transition-all flex-shrink-0 ${
+                    className={`relative aspect-square w-20 rounded-2xl overflow-hidden border-2 transition-all flex-shrink-0 flex items-center justify-center p-1 ${
                       (!overrideImage && activeImageIndex === idx) ? 'border-rose-500 scale-95 shadow-sm' : 'border-slate-200 opacity-70 hover:opacity-100'
                     }`}
                   >
-                    <img src={getSafeImageSrc(img)} alt={`${product.name} thumbnail ${idx}`} className="w-full h-full object-cover" />
+                    <img src={getSafeImageSrc(img)} alt={`${product.name} thumbnail ${idx}`} className="w-full h-full object-contain" />
                   </button>
                 ))}
               </div>
@@ -408,13 +419,19 @@ export const ProductDetailPage: React.FC = () => {
 
                 <div className="text-right">
                   <span className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold ${
-                    effectiveAvailable ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
+                    ((isVariable ? (product.attributes?.length || 0) > 0 : variantGroups.length > 0) && !allVariantsSelected)
+                      ? 'bg-amber-100 text-amber-800'
+                      : effectiveAvailable ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
                   }`}>
-                    <span className={`w-2 h-2 rounded-full ${effectiveAvailable ? 'bg-emerald-500' : 'bg-rose-500'}`} />
-                    {!effectiveAvailable
-                      ? 'Out of Stock'
-                      : variantGroups.length > 0 && !allVariantsSelected
+                    <span className={`w-2 h-2 rounded-full ${
+                      ((isVariable ? (product.attributes?.length || 0) > 0 : variantGroups.length > 0) && !allVariantsSelected)
+                        ? 'bg-amber-500'
+                        : effectiveAvailable ? 'bg-emerald-500' : 'bg-rose-500'
+                    }`} />
+                    {((isVariable ? (product.attributes?.length || 0) > 0 : variantGroups.length > 0) && !allVariantsSelected)
                       ? 'Select options to check stock'
+                      : !effectiveAvailable
+                      ? 'Out of Stock'
                       : selectedVariantStock === undefined ? 'In Stock' : `In Stock (${selectedVariantStock} left)`}
                   </span>
                 </div>
@@ -502,19 +519,27 @@ export const ProductDetailPage: React.FC = () => {
                           <div className="flex flex-wrap gap-2 pt-1">
                             {terms.map((t) => {
                               const isSelected = selectedAttributes[attr.slug] === t.value;
+                              const isOptionInStock = product.variations?.some(v => v.enabled && v.attributes[attr.slug] === t.value && normalizeInventory(v).inStock) ?? true;
                               return (
                                 <button
                                   key={t.id}
                                   type="button"
                                   title={t.label}
+                                  disabled={!isOptionInStock}
                                   onClick={() => handleAttributeSelect(attr.slug, t.value)}
-                                  className={`w-9 h-9 rounded-full border-2 transition-all ${
-                                    isSelected
+                                  className={`relative w-9 h-9 rounded-full border-2 transition-all ${
+                                    !isOptionInStock
+                                      ? 'border-slate-200 opacity-40 cursor-not-allowed'
+                                      : isSelected
                                       ? 'border-slate-900 scale-110 shadow-sm'
                                       : 'border-transparent hover:scale-105 shadow-sm'
                                   }`}
                                   style={{ backgroundColor: t.colorValue || '#ccc' }}
-                                />
+                                >
+                                  {!isOptionInStock && (
+                                    <div className="absolute inset-0 m-auto w-full h-[2px] bg-slate-400 rotate-45 transform origin-center" />
+                                  )}
+                                </button>
                               );
                             })}
                           </div>
@@ -522,22 +547,29 @@ export const ProductDetailPage: React.FC = () => {
                           <div className="flex flex-wrap gap-2 pt-1">
                             {terms.map((t) => {
                               const isSelected = selectedAttributes[attr.slug] === t.value;
+                              const isOptionInStock = product.variations?.some(v => v.enabled && v.attributes[attr.slug] === t.value && normalizeInventory(v).inStock) ?? true;
                               return (
                                 <button
                                   key={t.id}
                                   type="button"
                                   title={t.label}
+                                  disabled={!isOptionInStock}
                                   onClick={() => handleAttributeSelect(attr.slug, t.value)}
-                                  className={`w-12 h-12 rounded-xl border-2 overflow-hidden transition-all bg-slate-100 ${
-                                    isSelected
+                                  className={`relative w-12 h-12 rounded-xl border-2 overflow-hidden transition-all flex items-center justify-center p-0.5 bg-slate-50 ${
+                                    !isOptionInStock
+                                      ? 'border-slate-200 opacity-50 cursor-not-allowed'
+                                      : isSelected
                                       ? 'border-rose-500 shadow-md ring-2 ring-rose-200 ring-offset-1'
                                       : 'border-slate-200 hover:border-slate-300'
                                   }`}
                                 >
                                   {t.imageUrl ? (
-                                    <img src={t.imageUrl} alt={t.label} className="w-full h-full object-cover" />
+                                    <img src={t.imageUrl} alt={t.label} className="w-full h-full object-contain" />
                                   ) : (
                                     <span className="text-[10px] font-bold text-slate-400 block p-1 text-center leading-tight">No Img</span>
+                                  )}
+                                  {!isOptionInStock && (
+                                    <div className="absolute inset-0 m-auto w-full h-[2px] bg-slate-400 rotate-45 transform origin-center" />
                                   )}
                                 </button>
                               );
@@ -548,13 +580,17 @@ export const ProductDetailPage: React.FC = () => {
                           <div className="flex flex-wrap gap-2">
                             {terms.map((t) => {
                               const isSelected = selectedAttributes[attr.slug] === t.value;
+                              const isOptionInStock = product.variations?.some(v => v.enabled && v.attributes[attr.slug] === t.value && normalizeInventory(v).inStock) ?? true;
                               return (
                                 <button
                                   key={t.id}
                                   type="button"
+                                  disabled={!isOptionInStock}
                                   onClick={() => handleAttributeSelect(attr.slug, t.value)}
                                   className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                                    isSelected
+                                    !isOptionInStock
+                                      ? 'bg-slate-50 text-slate-400 border border-slate-200 cursor-not-allowed opacity-60 line-through'
+                                      : isSelected
                                       ? 'bg-slate-800 text-white shadow-sm ring-2 ring-slate-800 ring-offset-1'
                                       : 'bg-white border border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50'
                                   }`}
@@ -751,7 +787,7 @@ export const ProductDetailPage: React.FC = () => {
           {/* Tab 2: Specs */}
           {activeTab === 'specs' && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-              {Object.entries(product.specifications).map(([key, val]) => (
+              {sanitizedSpecs.map(([key, val]) => (
                 <div key={key} className="p-3.5 rounded-2xl bg-slate-50 flex justify-between">
                   <span className="font-bold text-slate-600">{key}:</span>
                   <span className="text-slate-900 font-medium">{val}</span>

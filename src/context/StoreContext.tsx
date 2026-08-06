@@ -332,14 +332,29 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const addToCart = (product: Product, quantity = 1, selectedVariant?: string, variationId?: string) => {
     setCart(prev => {
       const existing = prev.find(item => item.product.id === product.id && item.selectedVariant === selectedVariant && item.variationId === variationId);
+      
+      let enrichedProduct = { ...product };
+      if (variationId && product.variations) {
+        const variation = product.variations.find(v => v.id === variationId);
+        if (variation) {
+          const varPrice = variation.salePrice !== undefined && variation.salePrice !== null ? variation.salePrice : variation.regularPrice;
+          enrichedProduct = {
+            ...product,
+            price: varPrice,
+            images: variation.image?.url ? [variation.image.url, ...product.images.filter(img => img !== variation.image?.url)] : product.images,
+            sku: variation.sku || product.sku
+          };
+        }
+      }
+
       if (existing) {
         return prev.map(item =>
           item.product.id === product.id && item.selectedVariant === selectedVariant && item.variationId === variationId
-            ? { ...item, quantity: item.quantity + quantity }
+            ? { ...item, quantity: item.quantity + quantity, product: enrichedProduct }
             : item
         );
       }
-      return [...prev, { product, quantity, selectedVariant, variationId }];
+      return [...prev, { product: enrichedProduct, quantity, selectedVariant, variationId }];
     });
     setIsCartOpen(true);
   };
