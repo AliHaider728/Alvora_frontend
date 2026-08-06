@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Play, Settings2, Trash2, Image as ImageIcon } from 'lucide-react';
 import { ProductAttribute, ProductVariation } from '../../types';
 import { VariationImageModal } from './VariationImageModal';
+import { getVariationDisplayLabel } from '../../utils/products';
 
 interface VariationsGeneratorProps {
   attributes: ProductAttribute[];

@@ -949,7 +949,12 @@ export const AdminProductFormPage: React.FC = () => {
                     <label className="block text-sm font-bold text-slate-800 mb-2">Default Variation</label>
                     <p className="text-xs text-slate-500 mb-3">This variation will be pre-selected when customers open the product page.</p>
                     <select
-                      value={variations.find(v => Object.entries(defaultAttributes).every(([k, val]) => v.attributes[k] === val))?.id || ''}
+                      value={
+                          (variations.find(v => v.id === defaultVariationId) 
+                            ? defaultVariationId 
+                            : variations.find(v => Object.keys(defaultAttributes).length > 0 && Object.entries(defaultAttributes).every(([k, val]) => v.attributes[k] === val))?.id) 
+                          || ''
+                        }
                       onChange={(e) => {
                         const selectedId = e.target.value;
                         const v = variations.find(v => v.id === selectedId);
@@ -960,9 +965,9 @@ export const AdminProductFormPage: React.FC = () => {
                       className={`w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-1 ${errors.defaultAttributes ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500' : 'border-slate-300 focus:border-rose-400 focus:ring-rose-400'}`}
                     >
                       <option value="" disabled>Select a default variation...</option>
-                      {variations.filter(v => v.enabled).map(v => (
+                      {variations.filter(v => v.enabled).map((v, i) => (
                         <option key={v.id} value={v.id} className="text-slate-800">
-                          {attributes.filter(a => a.usedForVariations).map(a => v.attributes[a.slug]).filter(Boolean).join(' / ')}
+                          {getVariationDisplayLabel(v, attributes, i)}
                         </option>
                       ))}
                     </select>

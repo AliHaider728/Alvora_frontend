@@ -118,3 +118,57 @@ export const formatProductAgeGroups = (product: Product) => {
   const groups = getProductAgeGroups(product);
   return groups.length ? `Ages ${groups.join(', ')}` : 'All ages';
 };
+
+
+export const getVariationDisplayLabel = (
+  variation: any,
+  productAttributes: any[],
+  index: number
+): string => {
+  if (!variation || !variation.attributes || Object.keys(variation.attributes).length === 0) {
+    if (variation?.sku) return variation.sku;
+    return `Variation ${index + 1}`;
+  }
+
+  const parts: string[] = [];
+  const varAttrs = productAttributes.filter(a => a.usedForVariations);
+
+  for (const attr of varAttrs) {
+    // 1. variation value by attribute slug
+    let val = variation.attributes[attr.slug];
+    
+    // 2. variation value by attribute ID
+    if (!val && attr.id) val = variation.attributes[attr.id];
+    
+    // 3. variation value by globalAttributeId
+    if (!val && attr.globalAttributeId) val = variation.attributes[attr.globalAttributeId];
+    
+    // 4. variation value by attribute name
+    if (!val && attr.name) val = variation.attributes[attr.name];
+
+    // 5. resolve stored term ID to its visible term label
+    if (val) {
+      const termMatch = attr.terms?.find((t: any) => t.id === val || t.value === val || t.slug === val);
+      if (termMatch) {
+        val = termMatch.label || termMatch.value || val;
+      }
+      parts.push(val);
+    }
+  }
+
+  if (parts.length > 0) {
+    return parts.join(' / ');
+  }
+
+  // 6. any remaining non-empty variation attribute values
+  const allVals = Object.values(variation.attributes).filter(Boolean);
+  if (allVals.length > 0) {
+    return allVals.map(String).join(' / ');
+  }
+
+  // 7. variation SKU
+  if (variation.sku) return variation.sku;
+
+  // 8. Variation ${index + 1}
+  return `Variation ${index + 1}`;
+};

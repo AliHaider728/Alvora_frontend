@@ -4,6 +4,7 @@ import { X, ShoppingBag, Trash2, Plus, Minus, Tag, ArrowRight, ShieldCheck, Spar
 import { useStore } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/formatters';
 import { getSafeImageSrc } from '../../utils/images';
+import { getVariationDisplayLabel } from '../../utils/products';
 
 export const CartDrawer: React.FC = () => {
   const {
@@ -173,11 +174,9 @@ export const CartDrawer: React.FC = () => {
                       
                       {variation && (
                         <div className="mt-1 flex flex-wrap gap-1">
-                          {Object.entries(variation.attributes).map(([key, val]) => (
-                            <span key={key} className="text-[9px] font-bold text-slate-500 bg-slate-200 px-1.5 py-0.5 rounded">
-                              {val}
-                            </span>
-                          ))}
+                          <span className="text-[10px] font-bold text-slate-500 bg-slate-200 px-1.5 py-0.5 rounded">
+                            {getVariationDisplayLabel(variation, item.product.attributes || [], 0)}
+                          </span>
                         </div>
                       )}
                       {!variation && item.selectedVariant && (
