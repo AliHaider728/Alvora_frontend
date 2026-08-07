@@ -10,27 +10,39 @@ export const MobileBottomNav: React.FC = () => {
 
   if (isCartOpen) return null;
 
-  const iconByKey = { home: Home, shop: Store, categories: LayoutGrid, about: Info, contact: Mail, wishlist: Heart, account: User };
-  const rawItems = orderedVisibleNavigation(settings, 'mobile').filter(item => !item.parentId && item.menuType === 'link');
-  const configuredItems = rawItems.map(item => {
-    if (item.key === 'account') {
-      return settings.storefrontNavigation.find(i => i.key === 'shop') || { key: 'shop', label: 'Shop', path: '/category/all', enabled: true, menuType: 'link', linkType: 'internal_page' } as any;
-    }
-    return item;
-  }).slice(0, 4).map(item => ({
-    ...item,
-    icon: iconByKey[item.key as keyof typeof iconByKey] || Link2,
-    badge: item.key === 'wishlist' ? wishlist.length : undefined
-  }));
-  const cartItem = {
+  const navItems = [
+    {
+      key: 'home',
+      label: 'Home',
+      path: '/',
+      icon: Home,
+      enabled: true
+    },
+    {
+      key: 'shop',
+      label: 'Shop',
+      path: '/category/all',
+      icon: Store,
+      enabled: true
+    },
+    {
+      key: 'cart',
       label: 'Cart',
       path: '#cart',
       icon: ShoppingBag,
       badge: cartTotalItems,
       enabled: true,
       onClick: () => setIsCartOpen(true)
-  };
-  const navItems = [...configuredItems.slice(0, 2), cartItem, ...configuredItems.slice(2)];
+    },
+    {
+      key: 'wishlist',
+      label: 'Wishlist',
+      path: '/wishlist',
+      icon: Heart,
+      badge: wishlist.length,
+      enabled: true
+    }
+  ];
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-lg xl:hidden h-[calc(4rem+env(safe-area-inset-bottom))] pb-[env(safe-area-inset-bottom)]">

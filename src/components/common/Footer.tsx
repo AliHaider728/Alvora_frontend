@@ -11,8 +11,10 @@ import {
   Instagram,
   Youtube,
   PackageSearch,
+  UserCircle2
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
+import { getAuthToken } from '../../services/api';
 import Ballpit from '../Ballpit/Ballpit';
 
 // Adjust this import path to wherever the transparent logo file lives in your project
@@ -20,6 +22,7 @@ import playBimbooLogo from '../../assets/images/playbimboo-logo.png';
 
 export const Footer: React.FC = () => {
   const { settings } = useStore();
+  const isAuthenticated = Boolean(getAuthToken());
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
@@ -61,10 +64,7 @@ export const Footer: React.FC = () => {
         <div className="relative mb-8 overflow-hidden rounded-3xl bg-gradient-to-r from-rose-500 via-amber-500 to-sky-500 p-5 text-white shadow-xl sm:p-7">
           <div className="relative z-10 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-xl">
-              <h3 className="font-heading font-black text-2xl sm:text-3xl mb-2 text-white drop-shadow-sm">
-                Join the Play Bimboo Fun Club! 🎉
-              </h3>
-              <p className="text-white/90 text-sm font-medium">
+              <p className="font-heading font-black text-2xl sm:text-3xl mb-2 text-white drop-shadow-sm">
                 Subscribe to receive emails about new arrivals, exclusive offers, and latest updates.
               </p>
             </div>
@@ -149,15 +149,15 @@ export const Footer: React.FC = () => {
                   <Youtube className="w-4 h-4" />
                 </a>
               )}
-              {settings.socialLinks?.twitter && (
+              {settings.socialLinks?.tiktok && (
                 <a
-                  href={settings.socialLinks.twitter}
+                  href={settings.socialLinks.tiktok}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Twitter"
+                  aria-label="TikTok"
                   className="w-9 h-9 rounded-full bg-white/5 hover:bg-gradient-to-br hover:from-sky-400 hover:to-blue-500 flex items-center justify-center transition-colors"
                 >
-                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 2.22-1.15 4.39-2.95 5.73-1.74 1.3-4.04 1.81-6.17 1.34-2.11-.47-3.92-1.89-4.83-3.83-.93-1.95-.91-4.26.06-6.19.98-1.93 2.72-3.34 4.79-3.89.84-.22 1.7-.33 2.56-.31v4.06c-1.43.08-2.82.72-3.69 1.83-.88 1.1-1.12 2.65-.63 3.98.48 1.31 1.65 2.31 2.99 2.62 1.34.31 2.77.01 3.86-.78 1.12-.82 1.81-2.14 1.85-3.56.09-3.93.03-7.87.03-11.8V.02z"/></svg>
                 </a>
               )}
             </div>
@@ -237,11 +237,11 @@ export const Footer: React.FC = () => {
             </div>
 
             <Link
-              to="/account"
+              to={isAuthenticated ? "/account" : "/login"}
               className="inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-amber-500 hover:opacity-90 text-white font-heading font-bold text-xs shadow-md transition-opacity"
             >
-              <PackageSearch className="w-3.5 h-3.5" />
-              Track Order & Account
+              <UserCircle2 className="w-3.5 h-3.5" />
+              {isAuthenticated ? "My Account" : "Login / Sign Up"}
             </Link>
           </div>
         </div>
@@ -252,11 +252,7 @@ export const Footer: React.FC = () => {
             &copy; {new Date().getFullYear()} {settings.storeName}. All rights reserved.
           </p>
 
-          {/* Credit */}
-          <p className="text-sm text-white/60">
-            Design and developed by{' '}
-            <span className="font-heading font-bold text-white/90">Tecnosphere</span>
-          </p>
+
         </div>  
       </div>
     </footer>

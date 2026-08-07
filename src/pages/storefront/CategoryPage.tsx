@@ -37,15 +37,11 @@ export const CategoryPage: React.FC = () => {
     return categorySlug && categorySlug !== 'all' ? [categorySlug] : [];
   });
   const [selectedAges, setSelectedAges] = useState<string[]>(() => parseMultiValueParam(searchParams.get('age')));
-  const [selectedBrand, setSelectedBrand] = useState<string>('all');
   const [priceRange, setPriceRange] = useState<number>(15000);
   const [minRating, setMinRating] = useState<number>(0);
 
   // Sort state
   const [sortBy, setSortBy] = useState<'featured' | 'price-low' | 'price-high' | 'rating' | 'newest'>('featured');
-
-  // Brands list from products
-  const brands = useMemo(() => Array.from(new Set(products.map(p => p.brand))), [products]);
 
   // Sync direct navigation and browser back/forward changes.
   React.useEffect(() => {
@@ -123,10 +119,6 @@ export const CategoryPage: React.FC = () => {
       if (selectedAges.length > 0 && !selectedAges.some(age => productAgeGroups.includes(age as AgeGroupCategory))) {
         return false;
       }
-      // Brand match
-      if (selectedBrand !== 'all' && p.brand !== selectedBrand) {
-        return false;
-      }
       // Price filter
       if (p.price > priceRange) {
         return false;
@@ -159,7 +151,6 @@ export const CategoryPage: React.FC = () => {
   const resetFilters = () => {
     setSelectedCategories([]);
     setSelectedAges([]);
-    setSelectedBrand('all');
     setPriceRange(15000);
     setMinRating(0);
     setSortBy('featured');
@@ -314,22 +305,6 @@ export const CategoryPage: React.FC = () => {
                 </div>
             </div>
 
-            {/* Brand Filter */}
-            <div className="space-y-2 pt-4 border-t border-slate-100">
-              <h3 className="font-heading font-bold text-xs uppercase tracking-wider text-slate-500">
-                Brand
-              </h3>
-              <select
-                value={selectedBrand}
-                onChange={e => setSelectedBrand(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 bg-white font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-rose-400"
-              >
-                <option value="all">All Brands</option>
-                {brands.map(b => (
-                  <option key={b} value={b}>{b}</option>
-                ))}
-              </select>
-            </div>
 
             {/* Minimum Rating Filter */}
             <div className="space-y-2 pt-4 border-t border-slate-100">

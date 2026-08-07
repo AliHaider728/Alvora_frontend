@@ -344,6 +344,12 @@ export interface StoreSettings {
   taxRate: number;
   storefrontNavigation: StorefrontNavigationItem[];
   homepageSections: HomepageSectionSetting[];
+  socialLinks?: {
+    instagram?: string;
+    facebook?: string;
+    youtube?: string;
+    tiktok?: string;
+  };
 }
 
 export type StorefrontNavigationKey = string;

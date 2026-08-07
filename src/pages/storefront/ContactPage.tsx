@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send, CheckCircle2 } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, CheckCircle2, Facebook, Instagram, Youtube } from 'lucide-react';
 import { Breadcrumbs } from '../../components/common/Breadcrumbs';
 import { SeoHead } from '../../components/common/SeoHead';
 import { useStore } from '../../context/StoreContext';
@@ -84,6 +84,49 @@ export const ContactPage: React.FC = () => {
                       {settings.email}
                     </a>
                   </div>
+                </div>
+
+                <div className="flex gap-2.5 pt-2">
+                  {settings.socialLinks?.facebook && (
+                    <a
+                      href={settings.socialLinks.facebook}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 rounded-full bg-slate-100 text-slate-500 hover:bg-rose-50 hover:text-rose-500 flex items-center justify-center transition-colors"
+                    >
+                      <Facebook className="w-4 h-4" />
+                    </a>
+                  )}
+                  {settings.socialLinks?.instagram && (
+                    <a
+                      href={settings.socialLinks.instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 rounded-full bg-slate-100 text-slate-500 hover:bg-rose-50 hover:text-rose-500 flex items-center justify-center transition-colors"
+                    >
+                      <Instagram className="w-4 h-4" />
+                    </a>
+                  )}
+                  {settings.socialLinks?.youtube && (
+                    <a
+                      href={settings.socialLinks.youtube}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 rounded-full bg-slate-100 text-slate-500 hover:bg-rose-50 hover:text-rose-500 flex items-center justify-center transition-colors"
+                    >
+                      <Youtube className="w-4 h-4" />
+                    </a>
+                  )}
+                  {settings.socialLinks?.tiktok && (
+                    <a
+                      href={settings.socialLinks.tiktok}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 rounded-full bg-slate-100 text-slate-500 hover:bg-rose-50 hover:text-rose-500 flex items-center justify-center transition-colors"
+                    >
+                      <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 2.22-1.15 4.39-2.95 5.73-1.74 1.3-4.04 1.81-6.17 1.34-2.11-.47-3.92-1.89-4.83-3.83-.93-1.95-.91-4.26.06-6.19.98-1.93 2.72-3.34 4.79-3.89.84-.22 1.7-.33 2.56-.31v4.06c-1.43.08-2.82.72-3.69 1.83-.88 1.1-1.12 2.65-.63 3.98.48 1.31 1.65 2.31 2.99 2.62 1.34.31 2.77.01 3.86-.78 1.12-.82 1.81-2.14 1.85-3.56.09-3.93.03-7.87.03-11.8V.02z"/></svg>
+                    </a>
+                  )}
                 </div>
               </div>
             </div>

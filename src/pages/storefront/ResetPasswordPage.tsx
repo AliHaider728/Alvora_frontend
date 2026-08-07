@@ -16,15 +16,9 @@ export const ResetPasswordPage: React.FC = () => {
 
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [tokenInput, setTokenInput] = useState(token || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
-
-  useEffect(() => {
-    if (!token) {
-      showToast('Invalid or missing reset token. Please request a new one.', 'error');
-      navigate('/login');
-    }
-  }, [token, navigate, showToast]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,7 +34,7 @@ export const ResetPasswordPage: React.FC = () => {
       const response = await fetch(`${api.baseUrl || 'http://localhost:5000/api'}/auth/reset-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, newPassword: password })
+        body: JSON.stringify({ token: tokenInput, newPassword: password })
       });
       const data = await response.json();
       
@@ -102,6 +96,22 @@ export const ResetPasswordPage: React.FC = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-500">
+                6-Digit Verification Code
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={tokenInput}
+                  onChange={(e) => setTokenInput(e.target.value)}
+                  required
+                  maxLength={6}
+                  className="w-full rounded-2xl border-2 border-slate-100 bg-slate-50 py-3.5 px-4 text-sm font-medium text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-rose-500 focus:bg-white focus:shadow-lg focus:shadow-rose-100 text-center tracking-[0.5em] font-mono text-xl"
+                  placeholder="------"
+                />
+              </div>
+            </div>
             <div>
               <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-500">
                 New Password

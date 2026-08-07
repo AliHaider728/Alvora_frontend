@@ -75,9 +75,9 @@ const mergeSections = (incoming?: Partial<HomepageSectionSetting>[]) => DEFAULT_
 export const normalizeStoreSettings = (settings: Partial<StoreSettings>): StoreSettings => ({
   storeName: settings.storeName || 'PlayBimboo',
   tagline: settings.tagline || 'Where Imagination Comes to Life',
-  email: settings.email || 'sales@playbimboo.com',
-  phone: settings.phone || '+327-6655557',
-  address: settings.address || 'Mumtaz Market, Shafique Center, Gujranwala, Pakistan',
+  email: settings.email || 'Sales@playbimboo.com',
+  phone: settings.phone || '0310-7172222',
+  address: settings.address || 'Mumtaz Market, Gujranwala',
   currency: settings.currency || 'Rs.',
   logoUrl: settings.logoUrl,
   metaTitle: settings.metaTitle || 'PlayBimboo - Premium Toys for Kids',
@@ -87,7 +87,13 @@ export const normalizeStoreSettings = (settings: Partial<StoreSettings>): StoreS
   flatDeliveryRate: settings.flatDeliveryRate,
   taxRate: Number(settings.taxRate ?? 0),
   storefrontNavigation: normalizeNavigation(settings.storefrontNavigation),
-  homepageSections: mergeSections(settings.homepageSections)
+  homepageSections: mergeSections(settings.homepageSections),
+  socialLinks: {
+    instagram: settings.socialLinks?.instagram || 'https://www.instagram.com/playbimbootoys',
+    facebook: settings.socialLinks?.facebook || 'https://facebook.com/playbimbootoys',
+    youtube: settings.socialLinks?.youtube || 'https://youtube.com/@playbimboo',
+    tiktok: settings.socialLinks?.tiktok || 'https://tiktok.com/@playbimbootoys'
+  }
 });
 
 export const orderedVisibleNavigation = (settings: StoreSettings, surface: 'desktop' | 'mobile') =>

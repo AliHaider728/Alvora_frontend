@@ -372,7 +372,7 @@ export const CheckoutPage: React.FC = () => {
           /* STEP 1 & 2 GRID: FORM + STICKY ORDER SUMMARY */
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             {/* Form Column */}
-            <div className="lg:col-span-7">
+            <div className="lg:col-span-7 order-2 lg:order-1">
               {currentStep === 1 && (
                 <form onSubmit={handleShippingSubmit} className="bg-white rounded-3xl p-4 sm:p-8 border border-slate-100 shadow-sm space-y-6">
                   <div className="flex flex-col items-start gap-3 border-b border-slate-100 pb-4 sm:flex-row sm:items-center sm:justify-between">
@@ -545,7 +545,7 @@ export const CheckoutPage: React.FC = () => {
             </div>
 
             {/* Sticky Order Summary Column */}
-            <div className="lg:col-span-5">
+            <div className="lg:col-span-5 order-1 lg:order-2">
               <div className="bg-white rounded-3xl p-4 sm:p-6 border border-slate-100 shadow-sm lg:sticky lg:top-24 space-y-4">
                 <h3 className="font-heading font-black text-lg text-slate-900 pb-3 border-b border-slate-100">
                   Order Summary ({cart.length} item(s))

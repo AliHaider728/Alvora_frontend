@@ -15,14 +15,13 @@ export const AccountPage: React.FC = () => {
   const [view, setView] = useState<'login' | 'forgot-password'>('login');
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [activeTab, setActiveTab] = useState<'orders' | 'profile' | 'addresses'>('orders');
+  const [activeTab, setActiveTab] = useState<'orders' | 'profile'>('orders');
 
   const customer = customers[0] || {
     name: '',
     email: '',
     phone: '',
-    avatar: '',
-    addresses: []
+    avatar: ''
   };
 
 
@@ -181,15 +180,7 @@ export const AccountPage: React.FC = () => {
               <Package className="w-4 h-4" />
               <span>Order History ({orders.length})</span>
             </button>
-            <button
-              onClick={() => setActiveTab('addresses')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-heading font-bold text-xs transition-colors ${
-                activeTab === 'addresses' ? 'bg-rose-500 text-white' : 'text-slate-700 hover:bg-slate-100'
-              }`}
-            >
-              <MapPin className="w-4 h-4" />
-              <span>Saved Addresses</span>
-            </button>
+
           </aside>
 
           <main className="lg:col-span-3">
@@ -242,18 +233,7 @@ export const AccountPage: React.FC = () => {
               </div>
             )}
 
-            {activeTab === 'addresses' && (
-              <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm space-y-4">
-                <h2 className="font-heading font-black text-xl text-slate-900 mb-4">Saved Addresses</h2>
-                {customer.addresses.map(addr => (
-                  <div key={addr.id} className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs sm:text-sm text-slate-700 space-y-1">
-                    <span className="font-bold text-slate-900 block">{addr.name} (Default)</span>
-                    <p>{addr.street}</p>
-                    <p>{addr.city}, {addr.state} {addr.postalCode}</p>
-                  </div>
-                ))}
-              </div>
-            )}
+
           </main>
         </div>
       </div>

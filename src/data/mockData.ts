@@ -129,7 +129,7 @@ export const INITIAL_PRODUCTS: Product[] = [
   },
   {
     id: 'p-102',
-    name: 'CuddlePal Plush Giant Teddy Bear (30 Inch)',
+    name: 'CuddlePal Plush Giant Teddy Bear (30 Inch) - Sold Out',
     slug: 'cuddlepal-plush-giant-teddy-bear',
     price: 3499,
     originalPrice: 3999,
@@ -140,8 +140,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     categorySlug: 'soft-toys',
     ageGroups: ['0-2'],
     brand: 'HuggyFriends',
-    inStock: true,
-    stockQuantity: 18,
+    inStock: false,
+    stockQuantity: 0,
     images: [
       'https://images.unsplash.com/photo-1559454403-b8fb88521f11?auto=format&fit=crop&w=800&q=80',
       'https://images.unsplash.com/photo-1563241527-3004b7be0ffd?auto=format&fit=crop&w=800&q=80',

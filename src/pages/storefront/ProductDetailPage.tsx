@@ -856,7 +856,7 @@ export const ProductDetailPage: React.FC = () => {
                     ) : (
                       <>
                         <ShoppingBag className="w-5 h-5" />
-                        <span>{!allVariantsSelected ? 'Select Options' : `Add - ${formatPrice(currentPrice * quantity, settings.currency)}`}</span>
+                        <span>{!allVariantsSelected ? 'Select Options' : !canPurchase ? 'Sold Out' : `Add - ${formatPrice(currentPrice * quantity, settings.currency)}`}</span>
                       </>
                     )}
                   </button>

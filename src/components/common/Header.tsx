@@ -244,20 +244,6 @@ export const Header: React.FC = () => {
 
           {/* Quick Actions & Cart / Wishlist */}
           <div className="flex items-center justify-end gap-2 md:gap-4 lg:gap-7 flex-shrink-0">
-            {/* Account / User */}
-            <Link
-              to="/account"
-              className="hidden sm:flex items-center gap-2.5 group"
-              title="My Account"
-            >
-              <div className="p-2.5 rounded-full bg-slate-50 group-hover:bg-rose-50 text-slate-600 transition-colors">
-                <User className="w-5 h-5 md:w-6 md:h-6" />
-              </div>
-              <div className="hidden lg:flex flex-col">
-                <span className="text-base font-heading font-bold text-slate-900 leading-tight">Account</span>
-                <span className="text-xs font-medium text-slate-500 leading-tight">Sign in / Up</span>
-              </div>
-            </Link>
 
             {/* Wishlist */}
             <Link
