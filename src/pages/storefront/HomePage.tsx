@@ -277,8 +277,8 @@ export const HomePage: React.FC = () => {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 lg:gap-6">
-          {featuredProducts.map(product => (
+        <div className="grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+          {featuredProducts.slice(0, 3).map(product => (
             <ProductCard
               key={product.id || product.slug}
               product={product}
@@ -381,8 +381,8 @@ export const HomePage: React.FC = () => {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 lg:gap-6">
-          {newArrivals.map(product => (
+        <div className="grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+          {newArrivals.slice(0, 3).map(product => (
             <ProductCard
               key={product.id || product.slug}
               product={product}
