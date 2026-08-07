@@ -162,6 +162,12 @@ export const HomePage: React.FC = () => {
         </div>
       </section>}
 
+      {spotlightProduct && (
+        <div style={{ order: (sectionByKey.hero?.order ?? 0) + 0.5 }}>
+          <ProductSpotlight product={spotlightProduct} />
+        </div>
+      )}
+
       {/* Shop by Category Section */}
       {sectionByKey.categories?.enabled && <section style={{ order: sectionByKey.categories.order }} className="py-14 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8">
@@ -392,12 +398,6 @@ export const HomePage: React.FC = () => {
           ))}
         </div>
       </section>}
-
-      {spotlightProduct && (
-        <div style={{ order: (sectionByKey.newArrivals?.order ?? 6) + 1 }}>
-          <ProductSpotlight product={spotlightProduct} />
-        </div>
-      )}
 
       {/* Quick View Product Modal */}
       {selectedQuickViewProduct && (
