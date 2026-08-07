@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useStore } from '../../context/StoreContext';
 
 export const FloatingWhatsApp: React.FC = () => {
   const location = useLocation();
   const [isVisible, setIsVisible] = useState(true);
+  const { isCartOpen } = useStore();
 
   useEffect(() => {
     const hiddenRoutes = ['/admin', '/checkout', '/login', '/product/'];
     setIsVisible(!hiddenRoutes.some(route => location.pathname.startsWith(route)));
   }, [location.pathname]);
 
-  if (!isVisible) return null;
+  if (!isVisible || isCartOpen) return null;
 
   return (
     <>

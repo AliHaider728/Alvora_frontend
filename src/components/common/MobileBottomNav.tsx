@@ -5,8 +5,10 @@ import { useStore } from '../../context/StoreContext';
 import { orderedVisibleNavigation } from '../../config/storeAppearance';
 
 export const MobileBottomNav: React.FC = () => {
-  const { cartTotalItems, wishlist, setIsCartOpen, settings } = useStore();
+  const { cartTotalItems, wishlist, setIsCartOpen, settings, isCartOpen } = useStore();
   const location = useLocation();
+
+  if (isCartOpen) return null;
 
   const iconByKey = { home: Home, shop: Store, categories: LayoutGrid, about: Info, contact: Mail, wishlist: Heart, account: User };
   const configuredItems = orderedVisibleNavigation(settings, 'mobile').filter(item => !item.parentId && item.menuType === 'link').slice(0, 4).map(item => ({
@@ -25,7 +27,7 @@ export const MobileBottomNav: React.FC = () => {
   const navItems = [...configuredItems.slice(0, 2), cartItem, ...configuredItems.slice(2)];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-lg xl:hidden h-16">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-lg xl:hidden h-[calc(4rem+env(safe-area-inset-bottom))] pb-[env(safe-area-inset-bottom)]">
       <div className="grid h-full max-w-xl mx-auto" style={{ gridTemplateColumns: `repeat(${navItems.length}, minmax(0, 1fr))` }}>
         {navItems.map((item) => {
           const Icon = item.icon;
