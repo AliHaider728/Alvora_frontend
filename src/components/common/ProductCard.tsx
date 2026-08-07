@@ -5,7 +5,7 @@ import { Product } from '../../types';
 import { useStore } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/formatters';
 import { getSafeImageSrc } from '../../utils/images';
-import { formatProductAgeGroups, getEffectiveProductAvailability, normalizeInventory } from '../../utils/products';
+import { formatProductAgeGroups, formatProductCategories, getEffectiveProductAvailability, normalizeInventory } from '../../utils/products';
 import { ReviewSummary } from './ReviewSummary';
 
 interface ProductCardProps {
@@ -146,21 +146,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
           </button>
         )}
 
-        {/* Age badge */}
-        <div className="absolute bottom-3 left-3 z-10">
-          <span className="rounded-full bg-slate-900/85 px-2.5 py-1 text-[10px] font-semibold tracking-wide text-white backdrop-blur">
-            {formatProductAgeGroups(product)}
-          </span>
-        </div>
       </div>
 
       {/* ---------- CONTENT ---------- */}
       <div className={`flex flex-1 flex-col ${compact ? 'p-4' : 'p-5 sm:p-6'}`}>
-        <div className="flex items-center justify-between gap-2">
-          <span className="truncate text-xs font-bold uppercase tracking-[0.14em] text-sky-600">
-            {product.category || 'Uncategorized'}
-            {(product.categoryNames?.length || 0) > 1 && ` +${product.categoryNames!.length - 1}`}
-          </span>
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-1 text-[10px] font-bold uppercase tracking-[0.1em]">
+            <span className="truncate text-sky-600">{formatProductCategories(product)}</span>
+            <span aria-hidden="true" className="text-slate-300">•</span>
+            <span className="whitespace-nowrap text-indigo-500">{formatProductAgeGroups(product)}</span>
+          </div>
           {product.brand && (
             <span className="shrink-0 text-xs font-medium text-slate-400">{product.brand}</span>
           )}

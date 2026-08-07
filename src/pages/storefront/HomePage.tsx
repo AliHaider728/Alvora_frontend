@@ -41,7 +41,13 @@ export const HomePage: React.FC = () => {
   const featuredProducts = [...new Map(
     visibleProducts.filter(p => p.isFeatured || p.isBestseller).map(product => [product.id, product])
   ).values()].slice(0, 4);
-  const newArrivals = visibleProducts.filter(p => p.isNewArrival).slice(0, 4);
+  const markedNewArrivals = visibleProducts.filter(p => p.isNewArrival);
+  const recentProducts = [...visibleProducts].sort((a, b) => {
+    const aTime = Date.parse(a.createdAt || a.updatedAt || '');
+    const bTime = Date.parse(b.createdAt || b.updatedAt || '');
+    return (Number.isFinite(bTime) ? bTime : 0) - (Number.isFinite(aTime) ? aTime : 0);
+  });
+  const newArrivals = (markedNewArrivals.length > 0 ? markedNewArrivals : recentProducts).slice(0, 4);
   const spotlightProduct = visibleProducts.find(p => p.isSpotlight);
   const sectionByKey = Object.fromEntries(settings.homepageSections.map(section => [section.key, section]));
 

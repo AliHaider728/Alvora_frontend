@@ -126,6 +126,28 @@ export const formatProductAgeGroups = (product: Product) => {
   return groups.length ? `Ages ${groups.join(', ')}` : 'All ages';
 };
 
+export const getProductCategoryNames = (product: Product): string[] => {
+  const values: unknown[] = Array.isArray(product.categoryNames) && product.categoryNames.length > 0
+    ? product.categoryNames
+    : product.category ? [product.category] : [];
+  return [...new Set(values.map(value => {
+    if (typeof value === 'string') return value.trim();
+    if (value && typeof value === 'object') {
+      const record = value as Record<string, unknown>;
+      return String(record.name || record.label || '').trim();
+    }
+    return '';
+  }).filter(Boolean))];
+};
+
+export const formatProductCategories = (product: Product, limit = 1) => {
+  const names = getProductCategoryNames(product);
+  if (names.length === 0) return 'Uncategorized';
+  const visible = names.slice(0, Math.max(1, limit));
+  const remaining = names.length - visible.length;
+  return `${visible.join(', ')}${remaining > 0 ? ` +${remaining}` : ''}`;
+};
+
 
 export const getVariationAttributeValue = (
   variation: Pick<ProductVariation, 'attributes'>,

@@ -167,6 +167,8 @@ export interface Product {
   productDetailCustomCss?: string;
   productDetailScopedCss?: string;
   productSchemaVersion?: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export type ProductInput = Omit<
