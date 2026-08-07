@@ -11,7 +11,13 @@ export const MobileBottomNav: React.FC = () => {
   if (isCartOpen) return null;
 
   const iconByKey = { home: Home, shop: Store, categories: LayoutGrid, about: Info, contact: Mail, wishlist: Heart, account: User };
-  const configuredItems = orderedVisibleNavigation(settings, 'mobile').filter(item => !item.parentId && item.menuType === 'link').slice(0, 4).map(item => ({
+  const rawItems = orderedVisibleNavigation(settings, 'mobile').filter(item => !item.parentId && item.menuType === 'link');
+  const configuredItems = rawItems.map(item => {
+    if (item.key === 'account') {
+      return settings.storefrontNavigation.find(i => i.key === 'shop') || { key: 'shop', label: 'Shop', path: '/category/all', enabled: true, menuType: 'link', linkType: 'internal_page' } as any;
+    }
+    return item;
+  }).slice(0, 4).map(item => ({
     ...item,
     icon: iconByKey[item.key as keyof typeof iconByKey] || Link2,
     badge: item.key === 'wishlist' ? wishlist.length : undefined

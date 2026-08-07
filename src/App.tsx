@@ -22,6 +22,8 @@ import { AboutPage } from './pages/storefront/AboutPage';
 import { ContactPage } from './pages/storefront/ContactPage';
 import { FaqPage } from './pages/storefront/FaqPage';
 import { NotFoundPage } from './pages/storefront/NotFoundPage';
+import { ResetPasswordPage } from './pages/storefront/ResetPasswordPage';
+import { ReturnPolicyPage } from './pages/storefront/ReturnPolicyPage';
 
 // Admin Pages
 import { AdminLayout } from './pages/admin/AdminLayout';
@@ -35,6 +37,7 @@ import { AdminCouponsPage } from './pages/admin/AdminCouponsPage';
 import { AdminReportsPage } from './pages/admin/AdminReportsPage';
 import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
 import { AdminStoreAppearancePage } from './pages/admin/AdminStoreAppearancePage';
+import { AdminContactMessages } from './pages/admin/AdminContactMessages';
 
 const AdminReviewsPage = React.lazy(() =>
   import('./pages/admin/AdminReviewsPage').then(module => ({
@@ -89,6 +92,8 @@ const StorefrontLayout: React.FC = () => {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/faq" element={<FaqPage />} />
+          <Route path="/return-policy" element={<ReturnPolicyPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
@@ -125,6 +130,7 @@ export default function App() {
             <Route path="orders" element={<AdminOrdersPage />} />
             <Route path="customers" element={<AdminCustomersPage />} />
             <Route path="reviews" element={<React.Suspense fallback={adminPageFallback}><AdminReviewsPage /></React.Suspense>} />
+            <Route path="contact-messages" element={<AdminContactMessages />} />
             <Route path="coupons" element={<AdminCouponsPage />} />
             <Route path="reports" element={<AdminReportsPage />} />
             <Route path="settings" element={<AdminSettingsPage />} />

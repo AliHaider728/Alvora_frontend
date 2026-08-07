@@ -14,6 +14,7 @@ import {
   ExternalLink,
   Bell,
   MessageSquare,
+  Mail,
   Menu,
   X as CloseIcon
 } from 'lucide-react';
@@ -40,6 +41,7 @@ export const AdminLayout: React.FC = () => {
     { label: 'Orders', path: '/admin/orders', icon: ShoppingBag },
     { label: 'Customers', path: '/admin/customers', icon: Users },
     { label: 'Reviews', path: '/admin/reviews', icon: MessageSquare },
+    { label: 'Contact Messages', path: '/admin/contact-messages', icon: Mail },
     { label: 'Coupons & Deals', path: '/admin/coupons', icon: Tag },
     { label: 'Sales Reports', path: '/admin/reports', icon: BarChart3 },
     { label: 'Store Settings', path: '/admin/settings', icon: Settings },

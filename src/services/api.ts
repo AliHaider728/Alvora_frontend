@@ -77,6 +77,8 @@ export const api = {
     fetchJson<any>('/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) }),
   logout: () => fetchJson<any>('/auth/logout', { method: 'POST' }),
   getMe: () => fetchJson<any>('/auth/me'),
+  forgotPassword: (email: string) => fetchJson<any>('/auth/forgot-password', { method: 'POST', body: JSON.stringify({ email }) }),
+  resetPassword: (data: any) => fetchJson<any>('/auth/reset-password', { method: 'POST', body: JSON.stringify(data) }),
   syncWishlist: (wishlist: string[]) =>
     fetchJson<any>('/auth/wishlist', { method: 'POST', body: JSON.stringify({ wishlist }) }),
   getCustomers: () => fetchJson<any[]>('/auth/users'),
@@ -88,6 +90,7 @@ export const api = {
   },
 
   getProduct: (idOrSlug: string) => fetchJson<any>(`/products/${idOrSlug}`),
+  getRelatedProducts: (idOrSlug: string) => fetchJson<any[]>(`/products/${idOrSlug}/related`),
   createProduct: (data: any) => fetchJson<any>('/products', { method: 'POST', body: JSON.stringify(data) }),
   updateProduct: (id: string, data: any) => fetchJson<any>(`/products/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   deleteProduct: (id: string) => fetchJson<any>(`/products/${id}`, { method: 'DELETE' }),
@@ -127,6 +130,11 @@ export const api = {
   approveReview: (id: string) => fetchJson<any>(`/reviews/${id}/approve`, { method: 'PUT' }),
   rejectReview: (id: string) => fetchJson<any>(`/reviews/${id}/reject`, { method: 'PUT' }),
   deleteReview: (id: string) => fetchJson<any>(`/reviews/${id}`, { method: 'DELETE' }),
+
+  // Contact
+  submitContact: (data: any) => fetchJson<any>('/contact', { method: 'POST', body: JSON.stringify(data) }),
+  getContactMessages: () => fetchJson<any[]>('/contact'),
+  updateContactStatus: (id: string, status: string) => fetchJson<any>(`/contact/${id}/status`, { method: 'PUT', body: JSON.stringify({ status }) }),
 
   // Settings
   getSettings: () => fetchJson<any>('/settings'),

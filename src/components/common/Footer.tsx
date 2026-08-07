@@ -65,8 +65,7 @@ export const Footer: React.FC = () => {
                 Join the Play Bimboo Fun Club! 🎉
               </h3>
               <p className="text-white/90 text-sm font-medium">
-                Subscribe to get exclusive secret sales, early toy drops, and a{' '}
-                <strong className="underline decoration-white/70 underline-offset-2">15% OFF coupon</strong> instantly!
+                Subscribe to receive emails about new arrivals, exclusive offers, and latest updates.
               </p>
             </div>
 
@@ -117,27 +116,50 @@ export const Footer: React.FC = () => {
 
             {/* Social links */}
             <div className="flex items-center gap-2.5 pt-1">
-              <a
-                href="#"
-                aria-label="Facebook"
-                className="w-9 h-9 rounded-full bg-white/5 hover:bg-gradient-to-br hover:from-rose-500 hover:to-amber-500 flex items-center justify-center transition-colors"
-              >
-                <Facebook className="w-4 h-4" />
-              </a>
-              <a
-                href="#"
-                aria-label="Instagram"
-                className="w-9 h-9 rounded-full bg-white/5 hover:bg-gradient-to-br hover:from-rose-500 hover:to-amber-500 flex items-center justify-center transition-colors"
-              >
-                <Instagram className="w-4 h-4" />
-              </a>
-              <a
-                href="#"
-                aria-label="YouTube"
-                className="w-9 h-9 rounded-full bg-white/5 hover:bg-gradient-to-br hover:from-rose-500 hover:to-amber-500 flex items-center justify-center transition-colors"
-              >
-                <Youtube className="w-4 h-4" />
-              </a>
+              {settings.socialLinks?.facebook && (
+                <a
+                  href={settings.socialLinks.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Facebook"
+                  className="w-9 h-9 rounded-full bg-white/5 hover:bg-gradient-to-br hover:from-rose-500 hover:to-amber-500 flex items-center justify-center transition-colors"
+                >
+                  <Facebook className="w-4 h-4" />
+                </a>
+              )}
+              {settings.socialLinks?.instagram && (
+                <a
+                  href={settings.socialLinks.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram"
+                  className="w-9 h-9 rounded-full bg-white/5 hover:bg-gradient-to-br hover:from-rose-500 hover:to-amber-500 flex items-center justify-center transition-colors"
+                >
+                  <Instagram className="w-4 h-4" />
+                </a>
+              )}
+              {settings.socialLinks?.youtube && (
+                <a
+                  href={settings.socialLinks.youtube}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="YouTube"
+                  className="w-9 h-9 rounded-full bg-white/5 hover:bg-gradient-to-br hover:from-rose-500 hover:to-amber-500 flex items-center justify-center transition-colors"
+                >
+                  <Youtube className="w-4 h-4" />
+                </a>
+              )}
+              {settings.socialLinks?.twitter && (
+                <a
+                  href={settings.socialLinks.twitter}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Twitter"
+                  className="w-9 h-9 rounded-full bg-white/5 hover:bg-gradient-to-br hover:from-sky-400 hover:to-blue-500 flex items-center justify-center transition-colors"
+                >
+                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+                </a>
+              )}
             </div>
           </div>
 
@@ -172,8 +194,8 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/privacy-policy" className="hover:text-rose-400 transition-colors relative group inline-block">
-                  Privacy Policy
+                <Link to="/return-policy" className="hover:text-rose-400 transition-colors relative group inline-block">
+                  Return Policy
                   <span className="absolute left-0 -bottom-0.5 w-0 h-px bg-rose-400 transition-all group-hover:w-full" />
                 </Link>
               </li>
@@ -191,14 +213,14 @@ export const Footer: React.FC = () => {
                   <span className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
                     <MapPin className="w-3.5 h-3.5 text-rose-400" />
                   </span>
-                  <span>Mumtaz Market, Shafique Center, Gujranwala, Pakistan</span>
+                  <span>{settings.address || 'Gujranwala, Pakistan'}</span>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <span className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
                     <Phone className="w-3.5 h-3.5 text-amber-400" />
                   </span>
-                  <a href="tel:923107172222" className="hover:text-amber-400 transition-colors">
-                    923107172222
+                  <a href={`tel:${settings.phone?.startsWith('+') ? settings.phone : `+${settings.phone}`}`} className="hover:text-amber-400 transition-colors">
+                    {settings.phone || '0310-7172222'}
                   </a>
                 </div>
                 <div className="flex items-start gap-2.5">
@@ -206,11 +228,8 @@ export const Footer: React.FC = () => {
                     <Mail className="w-3.5 h-3.5 text-sky-400" />
                   </span>
                   <div className="flex flex-col gap-1.5 pt-1">
-                    <a href="mailto:sales@playbimboo.com" className="hover:text-sky-400 transition-colors leading-none">
-                      sales@playbimboo.com
-                    </a>
-                    <a href="mailto:abraransarise@gmail.com" className="hover:text-sky-400 transition-colors leading-none">
-                      abraransarise@gmail.com
+                    <a href={`mailto:${settings.email}`} className="hover:text-sky-400 transition-colors leading-none">
+                      {settings.email || 'sales@playbimboo.com'}
                     </a>
                   </div>
                 </div>
@@ -230,8 +249,7 @@ export const Footer: React.FC = () => {
         {/* Footer Bottom Bar */}
         <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-white/60">
           <p className="flex items-center gap-1.5 text-center md:text-left">
-            &copy; {new Date().getFullYear()} {settings.storeName}. All rights reserved. Crafted with{' '}
-            <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" /> for playful kids worldwide.
+            &copy; {new Date().getFullYear()} {settings.storeName}. All rights reserved.
           </p>
 
           {/* Credit */}

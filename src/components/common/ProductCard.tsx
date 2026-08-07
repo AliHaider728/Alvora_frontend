@@ -61,6 +61,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
   let displayPrice = product.price;
   let displayOriginalPrice = product.originalPrice;
   let pricePrefix = '';
+  let displayPriceStr = formatPrice(displayPrice, settings.currency);
 
   if (isVariable && product.variations && product.variations.length > 0) {
     const activeVariations = product.variations.filter(v => v.enabled);
@@ -70,7 +71,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
       const maxPrice = Math.max(...prices);
       displayPrice = minPrice;
       if (minPrice < maxPrice) {
-        pricePrefix = 'From ';
+        displayPriceStr = `${formatPrice(minPrice, settings.currency)} – ${formatPrice(maxPrice, settings.currency)}`;
+        pricePrefix = '';
+      } else {
+        displayPriceStr = formatPrice(minPrice, settings.currency);
       }
     }
   }
@@ -133,20 +137,28 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
 
         {/* Top-left badges */}
         <div className="pointer-events-none absolute left-3 top-3 z-10 flex flex-col items-start gap-1.5">
-          {product.discountPercent && product.discountPercent > 0 && (
-            <span className="rounded-full bg-rose-500 px-3 py-1 text-[11px] font-extrabold tracking-wide text-white shadow-sm">
-              -{product.discountPercent}%
+          {!isAvailable ? (
+            <span className="rounded-full bg-slate-800 px-3 py-1 text-[11px] font-extrabold tracking-wide text-white shadow-sm uppercase">
+              Sold Out
             </span>
-          )}
-          {product.isBestseller && (
-            <span className="rounded-full bg-amber-400 px-3 py-1 text-[11px] font-bold tracking-wide text-amber-950 shadow-sm">
-              BESTSELLER
-            </span>
-          )}
-          {product.isNewArrival && (
-            <span className="rounded-full bg-sky-500 px-3 py-1 text-[11px] font-bold tracking-wide text-white shadow-sm">
-              NEW
-            </span>
+          ) : (
+            <>
+              {product.discountPercent && product.discountPercent > 0 && (
+                <span className="rounded-full bg-rose-500 px-3 py-1 text-[11px] font-extrabold tracking-wide text-white shadow-sm">
+                  -{product.discountPercent}%
+                </span>
+              )}
+              {product.isBestseller && (
+                <span className="rounded-full bg-amber-400 px-3 py-1 text-[11px] font-bold tracking-wide text-amber-950 shadow-sm">
+                  BESTSELLER
+                </span>
+              )}
+              {product.isNewArrival && (
+                <span className="rounded-full bg-sky-500 px-3 py-1 text-[11px] font-bold tracking-wide text-white shadow-sm">
+                  NEW
+                </span>
+              )}
+            </>
           )}
         </div>
 
@@ -203,7 +215,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
 
         <div className="mt-2.5 flex items-baseline gap-2">
           <span className={`font-black leading-none tracking-tight text-rose-500 ${compact ? 'text-xl sm:text-2xl' : 'text-2xl sm:text-3xl'}`}>
-            {pricePrefix}{formatPrice(displayPrice, settings.currency)}
+            {pricePrefix}{displayPriceStr}
           </span>
           {displayOriginalPrice && displayOriginalPrice > displayPrice && !pricePrefix && (
             <span className="text-base font-medium text-slate-400 line-through">

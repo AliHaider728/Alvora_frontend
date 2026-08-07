@@ -1061,19 +1061,7 @@ export const ProductDetailPage: React.FC = () => {
           )}
         </div>
 
-        {/* Related Products Carousel */}
-        {relatedProducts.length > 0 && (
-          <div className="mb-10 space-y-5">
-            <h3 className="font-heading font-black text-2xl text-slate-900">
-              You Might Also Love
-            </h3>
-            <div className="grid grid-cols-1 items-start gap-5 sm:grid-cols-2 lg:gap-6">
-              {relatedProducts.map(prod => (
-                <ProductCard key={prod.id} product={prod} />
-              ))}
-            </div>
-          </div>
-        )}
+
       </div>
 
       {lightboxOpen && lightboxImages.length > 0 && (

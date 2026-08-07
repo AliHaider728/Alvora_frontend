@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { User, Package, MapPin, LogOut, Clock, XCircle, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { User, Package, MapPin, LogOut, Clock, XCircle, AlertCircle, CheckCircle2, Loader2, ArrowLeft } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { useToast } from '../../context/ToastContext';
 import { Breadcrumbs } from '../../components/common/Breadcrumbs';
@@ -12,6 +12,9 @@ export const AccountPage: React.FC = () => {
   const { showToast } = useToast();
   const { confirm } = useDialog();
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [view, setView] = useState<'login' | 'forgot-password'>('login');
+  const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeTab, setActiveTab] = useState<'orders' | 'profile' | 'addresses'>('orders');
 
   const customer = customers[0] || {
@@ -24,7 +27,65 @@ export const AccountPage: React.FC = () => {
 
 
 
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return showToast('Please enter your email', 'error');
+    setIsSubmitting(true);
+    try {
+      const { api } = await import('../../services/api');
+      await api.forgotPassword(email);
+      showToast('If an account exists, a password reset link has been sent.', 'success');
+      setView('login');
+    } catch (err: any) {
+      showToast(err.message || 'Something went wrong', 'error');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   if (!isLoggedIn) {
+    if (view === 'forgot-password') {
+      return (
+        <div className="min-h-screen bg-slate-50 font-sans py-12 flex items-center justify-center">
+          <SeoHead title="Forgot Password" />
+          <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-xl max-w-md w-full space-y-6 relative">
+            <button
+              onClick={() => setView('login')}
+              className="absolute left-6 top-6 text-slate-400 hover:text-slate-700 transition-colors"
+              aria-label="Back to login"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+            <div className="text-center space-y-2 pt-4">
+              <h2 className="font-heading font-black text-2xl text-slate-900">Reset Password</h2>
+              <p className="text-xs text-slate-500">Enter your email and we'll send you a link to reset your password.</p>
+            </div>
+
+            <form onSubmit={handleForgotPassword} className="space-y-4">
+              <div>
+                <label className="text-xs font-bold text-slate-700 block mb-1">Email</label>
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  placeholder="name@example.com"
+                  className="w-full px-4 py-2.5 text-base sm:text-sm rounded-xl border border-slate-200"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full py-3.5 flex justify-center items-center gap-2 rounded-2xl bg-rose-500 hover:bg-rose-600 transition-colors text-white font-heading font-extrabold text-sm shadow-md disabled:opacity-50"
+              >
+                {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Send Reset Link'}
+              </button>
+            </form>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="min-h-screen bg-slate-50 font-sans py-12 flex items-center justify-center">
         <SeoHead title="Customer Login" />
@@ -44,7 +105,16 @@ export const AccountPage: React.FC = () => {
               />
             </div>
             <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1">Password</label>
+              <div className="flex justify-between mb-1 items-center">
+                <label className="text-xs font-bold text-slate-700">Password</label>
+                <button
+                  type="button"
+                  onClick={() => setView('forgot-password')}
+                  className="text-xs font-bold text-rose-500 hover:text-rose-600"
+                >
+                  Forgot Password?
+                </button>
+              </div>
               <input
                 type="password"
                 defaultValue="••••••••"

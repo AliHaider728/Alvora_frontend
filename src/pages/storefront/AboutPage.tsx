@@ -1,5 +1,5 @@
 import React from 'react';
-import { Rocket, Heart, ShieldCheck, Sparkles, Award } from 'lucide-react';
+import { Rocket, Heart, ShieldCheck, Sparkles, Award, Play } from 'lucide-react';
 import { Breadcrumbs } from '../../components/common/Breadcrumbs';
 import { SeoHead } from '../../components/common/SeoHead';
 
@@ -57,6 +57,46 @@ export const AboutPage: React.FC = () => {
             <p className="text-xs text-slate-500 leading-relaxed">
               We stand by our 30-day hassle-free return policy. If your kid isn't thrilled, our customer support will make it right!
             </p>
+          </div>
+        </div>
+
+        {/* Brand Story & Video Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16 items-center">
+          <div className="space-y-6">
+            <h2 className="font-heading font-black text-2xl sm:text-3xl text-slate-900">
+              The Story Behind Play Bimboo
+            </h2>
+            <div className="space-y-4 text-sm text-slate-600 leading-relaxed font-medium">
+              <p>
+                It all started with a simple idea: toys shouldn't just be plastic distractions. They should be tools for growth, imagination, and family bonding. Play Bimboo was born out of a desire to create a magical space where parents could find high-quality, thoughtfully curated toys without compromising on safety or educational value.
+              </p>
+              <p>
+                Our journey began in a small workshop where we tested and curated the very best STEM kits, puzzles, and creative sets. Today, we're proud to serve thousands of families across the globe, bringing smiles and "aha!" moments to young explorers every single day.
+              </p>
+              <p>
+                We believe that every child is a natural innovator. With the right toys, they can build, discover, and learn the skills they need to shape the future. Thank you for being a part of our story!
+              </p>
+            </div>
+            <div className="flex items-center gap-4 pt-2">
+              <div className="flex -space-x-4">
+                <img className="w-12 h-12 rounded-full border-4 border-white object-cover bg-slate-200" src="https://i.pravatar.cc/100?img=1" alt="Founder 1" />
+                <img className="w-12 h-12 rounded-full border-4 border-white object-cover bg-slate-200" src="https://i.pravatar.cc/100?img=5" alt="Founder 2" />
+              </div>
+              <div className="text-xs font-bold text-slate-700">
+                <p>Sarah & James</p>
+                <p className="text-slate-500 font-medium">Co-Founders</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-slate-900 aspect-video group flex items-center justify-center">
+            <div className="absolute inset-0 bg-rose-500/10 mix-blend-overlay z-10 pointer-events-none" />
+            <div className="text-center z-20">
+              <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-4 backdrop-blur-sm border border-white/20">
+                <Play className="w-8 h-8 text-white fill-white" />
+              </div>
+              <p className="text-white/70 font-medium text-sm">Brand Video (Coming Soon)</p>
+            </div>
           </div>
         </div>
       </div>

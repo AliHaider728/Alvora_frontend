@@ -137,7 +137,7 @@ export const CategoryPage: React.FC = () => {
       }
       return true;
     });
-  }, [products, selectedCategories, selectedAges, selectedBrand, priceRange, minRating]);
+  }, [products, selectedCategories, selectedAges, priceRange, minRating]);
 
   // Sort Logic
   const sortedProducts = useMemo(() => {
