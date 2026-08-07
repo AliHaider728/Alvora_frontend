@@ -5,7 +5,7 @@ import { useStore } from '../../context/StoreContext';
 import { Product } from '../../types';
 import { formatPrice } from '../../utils/formatters';
 import { getSafeImageSrc } from '../../utils/images';
-import { formatProductAgeGroups, getEffectiveProductAvailability, normalizeInventory } from '../../utils/products';
+import { formatProductAgeGroups, getEffectiveProductAvailability, normalizeInventory, getVariationDisplayLabel } from '../../utils/products';
 import { useToast } from '../../context/ToastContext';
 
 export const ProductSpotlight: React.FC<{ product: Product }> = ({ product }) => {
@@ -16,23 +16,45 @@ export const ProductSpotlight: React.FC<{ product: Product }> = ({ product }) =>
   const cartActionLocked = useRef(false);
   const addTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const isAvailable = getEffectiveProductAvailability(product);
+  
   const isVariable = product.productType === 'variable';
+  const activeVariations = isVariable ? (product.variations?.filter(v => v.enabled) || []) : [];
+  
   const defaultVariation = isVariable
-    ? product.variations?.find(variation =>
-        variation.enabled &&
+    ? activeVariations.find(variation =>
         normalizeInventory(variation).inStock &&
+        Object.keys(product.defaultAttributes || {}).length > 0 &&
         Object.entries(product.defaultAttributes || {}).every(
           ([key, value]) => variation.attributes[key] === value
         )
-      )
+      ) || (activeVariations.length === 1 ? activeVariations[0] : undefined)
     : undefined;
-  const canAddDirectly = !isVariable || Boolean(defaultVariation);
-  const hasDiscount = Number(product.originalPrice) > Number(product.price) && Number(product.originalPrice) > 0;
+
+  const [selectedVariationId, setSelectedVariationId] = useState<string | null>(defaultVariation?.id || null);
+
+  const selectedVariation = isVariable && selectedVariationId 
+    ? activeVariations.find(v => v.id === selectedVariationId) 
+    : defaultVariation;
+
+  const currentPrice = selectedVariation 
+    ? (selectedVariation.salePrice !== undefined && selectedVariation.salePrice !== null ? selectedVariation.salePrice : selectedVariation.regularPrice)
+    : product.price;
+    
+  const currentOriginalPrice = selectedVariation 
+    ? (selectedVariation.regularPrice !== undefined && selectedVariation.regularPrice !== null ? selectedVariation.regularPrice : product.originalPrice)
+    : product.originalPrice;
+
+  const isAvailable = selectedVariation 
+    ? normalizeInventory(selectedVariation).inStock
+    : getEffectiveProductAvailability(product);
+    
+  const canAddDirectly = !isVariable || Boolean(selectedVariation);
+
+  const hasDiscount = Number(currentOriginalPrice) > Number(currentPrice) && Number(currentOriginalPrice) > 0;
   const discountPercentage = hasDiscount
-    ? Math.round(((Number(product.originalPrice) - product.price) / Number(product.originalPrice)) * 100)
+    ? Math.round(((Number(currentOriginalPrice) - currentPrice) / Number(currentOriginalPrice)) * 100)
     : 0;
-  const savings = hasDiscount ? Number(product.originalPrice) - product.price : 0;
+  const savings = hasDiscount ? Number(currentOriginalPrice) - currentPrice : 0;
   const highlights = product.features?.filter(Boolean).slice(0, 3) || [];
   const categories = product.categoryNames?.length ? product.categoryNames : product.category ? [product.category] : [];
 
@@ -50,8 +72,8 @@ export const ProductSpotlight: React.FC<{ product: Product }> = ({ product }) =>
     cartActionLocked.current = true;
     setCartActionState('adding');
     addTimerRef.current = setTimeout(() => {
-      if (defaultVariation) {
-        addToCart(product, 1, JSON.stringify(defaultVariation.attributes), defaultVariation.id);
+      if (selectedVariation) {
+        addToCart(product, 1, JSON.stringify(selectedVariation.attributes), selectedVariation.id);
       } else {
         addToCart(product, 1);
       }
@@ -82,8 +104,8 @@ export const ProductSpotlight: React.FC<{ product: Product }> = ({ product }) =>
             <p className="mt-4 max-w-xl text-sm leading-7 text-indigo-100 sm:text-base">{product.shortDescription || product.description.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()}</p>
 
             <div className="mt-5 flex flex-wrap items-end gap-x-3 gap-y-2">
-              <span className="font-heading text-3xl font-black text-white sm:text-4xl">{formatPrice(product.price, settings.currency)}</span>
-              {hasDiscount && <span className="pb-1 text-base font-bold text-indigo-200 line-through">{formatPrice(Number(product.originalPrice), settings.currency)}</span>}
+              <span className="font-heading text-3xl font-black text-white sm:text-4xl">{formatPrice(currentPrice, settings.currency)}</span>
+              {hasDiscount && <span className="pb-1 text-base font-bold text-indigo-200 line-through">{formatPrice(Number(currentOriginalPrice), settings.currency)}</span>}
               {discountPercentage > 0 && <span className="mb-1 rounded-full bg-amber-300 px-3 py-1 text-xs font-black text-indigo-950">Save {discountPercentage}% · {formatPrice(savings, settings.currency)}</span>}
             </div>
 
@@ -94,6 +116,34 @@ export const ProductSpotlight: React.FC<{ product: Product }> = ({ product }) =>
             </div>
 
             {highlights.length > 0 && <ul className="mt-5 grid gap-2 text-sm text-indigo-50 sm:grid-cols-2">{highlights.map(highlight => <li key={highlight} className="flex items-start gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-300" />{highlight}</li>)}</ul>}
+
+            {isVariable && activeVariations.length > 0 && (
+              <div className="mt-6">
+                <div className="text-xs font-bold text-indigo-200 uppercase tracking-wider mb-3">Available Options</div>
+                <div className="flex flex-wrap gap-2">
+                  {activeVariations.map((variation, index) => {
+                    const isSelected = selectedVariationId === variation.id;
+                    const isVarAvailable = normalizeInventory(variation).inStock;
+                    return (
+                      <button
+                        key={variation.id}
+                        onClick={() => setSelectedVariationId(variation.id)}
+                        disabled={!isVarAvailable}
+                        className={`px-4 py-2 rounded-xl text-sm font-bold border-2 transition-all ${
+                          isSelected
+                            ? 'bg-rose-500 border-rose-500 text-white shadow-lg shadow-rose-900/30'
+                            : !isVarAvailable
+                            ? 'bg-white/5 border-white/10 text-white/40 cursor-not-allowed'
+                            : 'bg-white/10 border-white/20 text-white hover:bg-white/20'
+                        }`}
+                      >
+                        {getVariationDisplayLabel(variation, product.attributes || [], index)}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <button type="button" disabled={(!isAvailable && canAddDirectly) || cartActionState !== 'idle'} aria-busy={cartActionState === 'adding'} onClick={handlePrimaryAction} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-rose-500 px-6 text-sm font-black text-white shadow-lg shadow-rose-950/30 transition hover:bg-rose-400 disabled:cursor-not-allowed disabled:opacity-60">
