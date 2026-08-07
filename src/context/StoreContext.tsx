@@ -49,6 +49,12 @@ const normalizeProduct = (product: Partial<Product> & MongoRecord): Product => {
   imagePublicIds: Array.isArray(product.imagePublicIds)
     ? product.imagePublicIds.map(publicId => typeof publicId === 'string' ? publicId : '')
     : [],
+  imageThumbnailUrls: Array.isArray(product.imageThumbnailUrls)
+    ? product.imageThumbnailUrls.map(url => typeof url === 'string' ? url : '')
+    : [],
+  imageThumbnailPublicIds: Array.isArray(product.imageThumbnailPublicIds)
+    ? product.imageThumbnailPublicIds.map(publicId => typeof publicId === 'string' ? publicId : '')
+    : [],
   shortDescription: product.shortDescription || '',
   status: product.status || 'published',
   ...inventory,

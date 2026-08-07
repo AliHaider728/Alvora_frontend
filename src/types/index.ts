@@ -132,6 +132,8 @@ export interface Product {
   lowStockThreshold?: number | null;
   images: string[];
   imagePublicIds?: string[];
+  imageThumbnailUrls?: string[];
+  imageThumbnailPublicIds?: string[];
   shortDescription?: string;
   description: string;
   features: string[];

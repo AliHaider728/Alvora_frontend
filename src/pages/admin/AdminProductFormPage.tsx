@@ -53,6 +53,8 @@ type OrderedImage = {
   id: string;
   url: string;
   publicId?: string;
+  thumbnailUrl?: string;
+  thumbnailPublicId?: string;
   newlyUploaded?: boolean;
 };
 type FieldErrors = Record<string, string>;
@@ -88,11 +90,15 @@ const makeImage = (
   url: string,
   suffix = '',
   publicId?: string,
-  newlyUploaded = false
+  newlyUploaded = false,
+  thumbnailUrl?: string,
+  thumbnailPublicId?: string
 ): OrderedImage => ({
   id: `${url}-${suffix || `${Date.now()}-${Math.random().toString(36).slice(2)}`}`,
   url,
   publicId,
+  thumbnailUrl,
+  thumbnailPublicId,
   newlyUploaded
 });
 
@@ -266,7 +272,12 @@ export const AdminProductFormPage: React.FC = () => {
         savedAt: Date.now(),
         formData: {
           ...state,
-          images: state.images.filter((img: any) => img.url && !img.url.startsWith('blob:')).map((img: any) => ({ url: img.url, publicId: img.publicId, alt: img.alt }))
+          images: state.images.filter((img: any) => img.url && !img.url.startsWith('blob:')).map((img: any) => ({
+            url: img.url,
+            publicId: img.publicId,
+            thumbnailUrl: img.thumbnailUrl,
+            thumbnailPublicId: img.thumbnailPublicId
+          }))
         }
       }));
     }, 500);
@@ -325,7 +336,14 @@ export const AdminProductFormPage: React.FC = () => {
     setIsVisible(editingProduct.isVisible !== false);
     setIsFeatured(editingProduct.isFeatured === true);
     setImages((editingProduct.images || []).map((url, index) =>
-      makeImage(url, String(index), editingProduct.imagePublicIds?.[index])
+      makeImage(
+        url,
+        String(index),
+        editingProduct.imagePublicIds?.[index],
+        false,
+        editingProduct.imageThumbnailUrls?.[index],
+        editingProduct.imageThumbnailPublicIds?.[index]
+      )
     ));
     setMetaTitle(editingProduct.metaTitle || '');
     setMetaDescription(editingProduct.metaDescription || '');
@@ -420,7 +438,17 @@ export const AdminProductFormPage: React.FC = () => {
             setProductDetailBlocks(data.productDetailBlocks || []);
             setProductDetailCustomCss(data.productDetailCustomCss || '');
             if (data.images) {
-              setImages(data.images.map((img: any, index: number) => makeImage(img.url, String(index), img.publicId, img.alt)));
+              setImages(data.images.map((img: any, index: number) => {
+                const apiIndex = editingProduct?.images?.indexOf(img.url) ?? -1;
+                return makeImage(
+                  img.url,
+                  String(index),
+                  img.publicId,
+                  false,
+                  img.thumbnailUrl || (apiIndex >= 0 ? editingProduct?.imageThumbnailUrls?.[apiIndex] : undefined),
+                  img.thumbnailPublicId || (apiIndex >= 0 ? editingProduct?.imageThumbnailPublicIds?.[apiIndex] : undefined)
+                );
+              }));
             }
             setIsDirty(true);
             if (id && editingProduct) initializedProductId.current = editingProduct.id;
@@ -471,6 +499,7 @@ export const AdminProductFormPage: React.FC = () => {
   const cleanupTemporaryUploads = async () => {
     const publicIds = [
       ...images.filter(image => image.newlyUploaded).map(image => image.publicId),
+      ...images.filter(image => image.newlyUploaded).map(image => image.thumbnailPublicId),
       ...productDetailBlocks.filter(block => block.image?.newlyUploaded).map(block => block.image?.publicId)
     ].filter((value): value is string => Boolean(value));
     await Promise.all([...new Set(publicIds)].map(publicId => api.deleteImage(publicId)));
@@ -511,10 +540,17 @@ export const AdminProductFormPage: React.FC = () => {
     try {
       for (const file of validFiles) {
         const result = await api.uploadImage(file);
-        if (result?.url && result?.publicId) {
-          uploaded.push(makeImage(result.url, '', result.publicId, true));
+        if (result?.url && result?.publicId && result?.thumbnailUrl && result?.thumbnailPublicId) {
+          uploaded.push(makeImage(
+            result.url,
+            '',
+            result.publicId,
+            true,
+            result.thumbnailUrl,
+            result.thumbnailPublicId
+          ));
         } else {
-          throw new Error('The upload response did not include a Cloudinary URL and public ID.');
+          throw new Error('The upload response did not include the original and thumbnail Cloudinary assets.');
         }
       }
       if (uploaded.length > 0) {
@@ -526,7 +562,13 @@ export const AdminProductFormPage: React.FC = () => {
             ? [uploaded[0], ...current.slice(current.length > 0 ? 1 : 0)]
             : [...current, ...uploaded]
         );
-        if (replacedNewMain?.publicId) void api.deleteImage(replacedNewMain.publicId);
+        if (replacedNewMain) {
+          void Promise.all(
+            [replacedNewMain.publicId, replacedNewMain.thumbnailPublicId]
+              .filter((value): value is string => Boolean(value))
+              .map(publicId => api.deleteImage(publicId))
+          );
+        }
         markDirty();
         clearError('images');
         showToast(
@@ -538,7 +580,9 @@ export const AdminProductFormPage: React.FC = () => {
       }
     } catch (error) {
       await Promise.all(
-        uploaded.flatMap(image => image.publicId ? [api.deleteImage(image.publicId)] : [])
+        uploaded.flatMap(image => [image.publicId, image.thumbnailPublicId]
+          .filter((value): value is string => Boolean(value))
+          .map(publicId => api.deleteImage(publicId)))
       );
       showToast(error instanceof Error ? error.message : 'Image upload failed.', 'error');
     } finally {
@@ -551,9 +595,13 @@ export const AdminProductFormPage: React.FC = () => {
     const removedImage = images[imageIndex];
     if (!removedImage || !await confirm({ title: 'Remove this image?', description: removedImage.newlyUploaded ? 'This temporary upload will be permanently removed from Cloudinary.' : 'The image will be removed when the product is saved, and its unused Cloudinary asset may be deleted.', cancelLabel: 'Keep Image', confirmLabel: 'Remove Image', destructive: true })) return;
     setImages(current => current.filter(image => image.id !== imageId));
-    if (removedImage?.newlyUploaded && removedImage.publicId) {
-      void api.deleteImage(removedImage.publicId).then(result => {
-        if (!result) showToast('The image was removed from the form, but Cloudinary cleanup failed.', 'error');
+    if (removedImage?.newlyUploaded) {
+      void Promise.all(
+        [removedImage.publicId, removedImage.thumbnailPublicId]
+          .filter((value): value is string => Boolean(value))
+          .map(publicId => api.deleteImage(publicId))
+      ).then(results => {
+        if (results.some(result => !result)) showToast('The image was removed from the form, but Cloudinary cleanup failed.', 'error');
       });
     }
     markDirty();
@@ -735,6 +783,8 @@ export const AdminProductFormPage: React.FC = () => {
       lowStockThreshold: lowStockThreshold ?? null,
       images: images.map(image => image.url),
       imagePublicIds: images.map(image => image.publicId || ''),
+      imageThumbnailUrls: images.map(image => image.thumbnailUrl || ''),
+      imageThumbnailPublicIds: images.map(image => image.thumbnailPublicId || ''),
       shortDescription: shortDescription.trim(),
       description,
       features: editingProduct?.features || [],

@@ -18,6 +18,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
   const navigate = useNavigate();
   const [added, setAdded] = useState(false);
   const isWishlisted = isInWishlist(product.id);
+  const thumbnailUrl = product.imageThumbnailUrls?.[0]?.trim();
+  const cardImageUrl = thumbnailUrl || product.images?.[0];
   const isVariable = product.productType === 'variable';
   const hasVariants = isVariable || Boolean(product.variants?.some(group => group.options.length > 0));
   const isAvailable = getEffectiveProductAvailability(product);
@@ -75,18 +77,18 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
   };
 
   return (
-    <article className="group relative flex h-[470px] w-full min-w-0 flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_6px_24px_rgba(15,23,42,0.06)] transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-[0_14px_34px_rgba(15,23,42,0.12)] sm:h-[450px]">
-      <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden border-b border-slate-100 bg-slate-50/60">
+    <article className="group relative flex h-auto w-full min-w-0 flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_6px_24px_rgba(15,23,42,0.06)] transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-[0_14px_34px_rgba(15,23,42,0.12)]">
+      <div className={`relative w-full shrink-0 border-b border-slate-100 bg-slate-50/60 ${thumbnailUrl ? 'aspect-square' : ''}`}>
         <Link
           to={`/product/${product.slug}`}
           className="block h-full w-full"
           aria-label={`View ${product.name}`}
         >
           <img
-            src={getSafeImageSrc(product.images?.[0])}
+            src={getSafeImageSrc(cardImageUrl)}
             alt={product.name}
             loading="lazy"
-            className="h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.035]"
+            className={thumbnailUrl ? 'block h-full w-full' : 'block h-auto w-full'}
           />
         </Link>
 

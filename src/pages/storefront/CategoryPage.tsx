@@ -333,7 +333,7 @@ export const CategoryPage: React.FC = () => {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 items-stretch">
+              <div className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 xl:grid-cols-2">
                 {sortedProducts.map(product => (
                   <ProductCard key={product.id} product={product} />
                 ))}
