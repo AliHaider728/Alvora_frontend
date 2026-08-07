@@ -75,18 +75,18 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
   };
 
   return (
-    <article className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_6px_24px_rgba(15,23,42,0.06)] transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-[0_14px_34px_rgba(15,23,42,0.12)]">
-      <div className="relative flex h-[200px] w-full shrink-0 items-center justify-center overflow-hidden border-b border-slate-100 bg-slate-50/60 sm:h-[216px]">
+    <article className="group relative flex h-[470px] w-full min-w-0 flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_6px_24px_rgba(15,23,42,0.06)] transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-[0_14px_34px_rgba(15,23,42,0.12)] sm:h-[450px]">
+      <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden border-b border-slate-100 bg-slate-50/60">
         <Link
           to={`/product/${product.slug}`}
-          className="flex h-full w-full items-center justify-center"
+          className="block h-full w-full"
           aria-label={`View ${product.name}`}
         >
           <img
             src={getSafeImageSrc(product.images?.[0])}
             alt={product.name}
             loading="lazy"
-            className="h-[88%] w-[88%] object-contain object-center transition-transform duration-500 ease-out group-hover:scale-[1.035]"
+            className="h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.035]"
           />
         </Link>
 
