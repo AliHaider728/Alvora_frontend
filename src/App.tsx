@@ -3,12 +3,13 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { StoreProvider, useStore } from './context/StoreContext';
 import { ToastProvider } from './context/ToastContext';
 import { DialogProvider } from './context/DialogContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import { Header } from './components/common/Header';
 import { Footer } from './components/common/Footer';
 import { CartDrawer } from './components/cart/CartDrawer';
 import { MobileBottomNav } from './components/common/MobileBottomNav';
 import { FloatingWhatsApp } from './components/common/FloatingWhatsApp';
-
+import { AuthModal } from './components/auth/AuthModal';
 
 // Storefront Pages
 import { HomePage } from './pages/storefront/HomePage';
@@ -76,10 +77,13 @@ const ScrollToTop = () => {
 
 // Storefront Layout Wrapper
 const StorefrontLayout: React.FC = () => {
+  const { isAuthModalOpen, closeAuthModal, authModalMode } = useAuth();
+  
   return (
     <div className="flex flex-col min-h-screen bg-slate-50 font-sans text-slate-800 pb-20 xl:pb-0">
       <Header />
       <CartDrawer />
+      <AuthModal isOpen={isAuthModalOpen} onClose={closeAuthModal} defaultMode={authModalMode} />
       <main className="flex-1">
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -109,38 +113,40 @@ export default function App() {
     <ToastProvider>
       <DialogProvider>
       <StoreProvider>
-        <BrowserRouter>
-        <ScrollToTop />
-        <Routes>
-          {/* Admin Routes */}
-          <Route path="/admin/login" element={<AdminLoginPage />} />
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<AdminDashboardPage />} />
-            <Route path="products" element={<AdminProductsPage />} />
-            <Route
-              path="products/new"
-              element={<React.Suspense fallback={adminPageFallback}><AdminProductFormPage /></React.Suspense>}
-            />
-            <Route
-              path="products/edit/:id"
-              element={<React.Suspense fallback={adminPageFallback}><AdminProductFormPage /></React.Suspense>}
-            />
-            <Route path="categories" element={<AdminCategoriesPage />} />
-            <Route path="attributes" element={<React.Suspense fallback={adminPageFallback}><AdminGlobalAttributesPage /></React.Suspense>} />
-            <Route path="orders" element={<AdminOrdersPage />} />
-            <Route path="customers" element={<AdminCustomersPage />} />
-            <Route path="reviews" element={<React.Suspense fallback={adminPageFallback}><AdminReviewsPage /></React.Suspense>} />
-            <Route path="contact-messages" element={<AdminContactMessages />} />
-            <Route path="coupons" element={<AdminCouponsPage />} />
-            <Route path="reports" element={<AdminReportsPage />} />
-            <Route path="settings" element={<AdminSettingsPage />} />
-            <Route path="store-appearance" element={<AdminStoreAppearancePage />} />
-          </Route>
+        <AuthProvider>
+          <BrowserRouter>
+          <ScrollToTop />
+          <Routes>
+            {/* Admin Routes */}
+            <Route path="/admin/login" element={<AdminLoginPage />} />
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminDashboardPage />} />
+              <Route path="products" element={<AdminProductsPage />} />
+              <Route
+                path="products/new"
+                element={<React.Suspense fallback={adminPageFallback}><AdminProductFormPage /></React.Suspense>}
+              />
+              <Route
+                path="products/edit/:id"
+                element={<React.Suspense fallback={adminPageFallback}><AdminProductFormPage /></React.Suspense>}
+              />
+              <Route path="categories" element={<AdminCategoriesPage />} />
+              <Route path="attributes" element={<React.Suspense fallback={adminPageFallback}><AdminGlobalAttributesPage /></React.Suspense>} />
+              <Route path="orders" element={<AdminOrdersPage />} />
+              <Route path="customers" element={<AdminCustomersPage />} />
+              <Route path="reviews" element={<React.Suspense fallback={adminPageFallback}><AdminReviewsPage /></React.Suspense>} />
+              <Route path="contact-messages" element={<AdminContactMessages />} />
+              <Route path="coupons" element={<AdminCouponsPage />} />
+              <Route path="reports" element={<AdminReportsPage />} />
+              <Route path="settings" element={<AdminSettingsPage />} />
+              <Route path="store-appearance" element={<AdminStoreAppearancePage />} />
+            </Route>
 
-          {/* Customer Storefront Routes */}
-          <Route path="/*" element={<StorefrontLayout />} />
-        </Routes>
-      </BrowserRouter>
+            {/* Customer Storefront Routes */}
+            <Route path="/*" element={<StorefrontLayout />} />
+          </Routes>
+        </BrowserRouter>
+        </AuthProvider>
     </StoreProvider>
     </DialogProvider>
     </ToastProvider>

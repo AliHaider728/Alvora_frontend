@@ -1,5 +1,22 @@
 import React from 'react';
-import { Rocket, Heart, ShieldCheck, Sparkles, Award, Play, Youtube, Instagram, Facebook } from 'lucide-react';
+import {
+  Rocket,
+  Heart,
+  ShieldCheck,
+  Sparkles,
+  Award,
+  Play,
+  Youtube,
+  Instagram,
+  Facebook,
+  Users,
+  Star,
+  Clock,
+  Truck,
+  PackageCheck,
+  LayoutGrid,
+  Quote
+} from 'lucide-react';
 import { Breadcrumbs } from '../../components/common/Breadcrumbs';
 import { SeoHead } from '../../components/common/SeoHead';
 import { useStore } from '../../context/StoreContext';
@@ -99,7 +116,7 @@ export const AboutPage: React.FC = () => {
             <p className="text-sm text-slate-500 max-w-sm">
               Follow Play Bimboo on our official social channels to see toys in action, get exclusive offers, and share your magical moments!
             </p>
-            
+
             <div className="flex gap-4 pt-4">
               {settings.socialLinks?.youtube && (
                 <a
@@ -143,6 +160,115 @@ export const AboutPage: React.FC = () => {
               )}
             </div>
           </div>
+        </div>
+
+        {/* ───────────────────────────────────────────── */}
+        {/* NEW SECTION: Trust / Stats Bar */}
+        {/* ───────────────────────────────────────────── */}
+        <div className="rounded-3xl bg-slate-900 p-8 sm:p-10 mb-16 shadow-xl">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+            <div className="text-center space-y-2">
+              <div className="w-12 h-12 rounded-2xl bg-white/10 text-amber-300 flex items-center justify-center mx-auto">
+                <Users className="w-6 h-6" />
+              </div>
+              <p className="font-heading font-black text-2xl sm:text-3xl text-white">12,000+</p>
+              <p className="text-[11px] sm:text-xs text-white/60 font-medium">Happy Parents</p>
+            </div>
+            <div className="text-center space-y-2">
+              <div className="w-12 h-12 rounded-2xl bg-white/10 text-rose-300 flex items-center justify-center mx-auto">
+                <Star className="w-6 h-6" />
+              </div>
+              <p className="font-heading font-black text-2xl sm:text-3xl text-white">4.9/5</p>
+              <p className="text-[11px] sm:text-xs text-white/60 font-medium">Average Rating</p>
+            </div>
+            <div className="text-center space-y-2">
+              <div className="w-12 h-12 rounded-2xl bg-white/10 text-sky-300 flex items-center justify-center mx-auto">
+                <PackageCheck className="w-6 h-6" />
+              </div>
+              <p className="font-heading font-black text-2xl sm:text-3xl text-white">500+</p>
+              <p className="text-[11px] sm:text-xs text-white/60 font-medium">Toys Curated</p>
+            </div>
+            <div className="text-center space-y-2">
+              <div className="w-12 h-12 rounded-2xl bg-white/10 text-emerald-300 flex items-center justify-center mx-auto">
+                <Clock className="w-6 h-6" />
+              </div>
+              <p className="font-heading font-black text-2xl sm:text-3xl text-white">2-4 Days</p>
+              <p className="text-[11px] sm:text-xs text-white/60 font-medium">Nationwide Delivery</p>
+            </div>
+          </div>
+        </div>
+
+        {/* ───────────────────────────────────────────── */}
+        {/* NEW SECTION: Why Choose Play Bimboo */}
+        {/* ───────────────────────────────────────────── */}
+        <div className="mb-16">
+          <div className="text-center max-w-xl mx-auto mb-10 space-y-3">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 text-sky-500 text-xs font-bold uppercase tracking-wider">
+              <Sparkles className="w-3.5 h-3.5" />
+              Why Choose Us
+            </span>
+            <h2 className="font-heading font-black text-2xl sm:text-3xl text-slate-900">
+              Why Families Choose Play Bimboo
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+              From the moment you order to the moment it lands in your child's hands, every step is built around safety, speed, and a little bit of magic.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-500 flex items-center justify-center">
+                <PackageCheck className="w-6 h-6" />
+              </div>
+              <h3 className="font-heading font-bold text-sm text-slate-900">Sustainable Packaging</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Every order is carefully packed in protective, eco-conscious packaging so it arrives safe and sound.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-sky-100 text-sky-500 flex items-center justify-center">
+                <Truck className="w-6 h-6" />
+              </div>
+              <h3 className="font-heading font-bold text-sm text-slate-900">Fast Delivery Across Pakistan</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Quick and reliable delivery straight to your doorstep, nationwide, with Cash on Delivery available.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-rose-100 text-rose-500 flex items-center justify-center">
+                <Heart className="w-6 h-6" />
+              </div>
+              <h3 className="font-heading font-bold text-sm text-slate-900">Safe Materials for Kids</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Every toy is selected with your child's safety in mind, using non-toxic, quality-tested materials.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-500 flex items-center justify-center">
+                <LayoutGrid className="w-6 h-6" />
+              </div>
+              <h3 className="font-heading font-bold text-sm text-slate-900">A Toy for Every Explorer</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Explore RC toys, STEM kits, dolls, puzzles, and more — curated for every age and interest.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* ───────────────────────────────────────────── */}
+        {/* NEW SECTION: Our Promise Quote */}
+        {/* ───────────────────────────────────────────── */}
+        <div className="bg-gradient-to-br from-sky-50 via-white to-rose-50 rounded-3xl border border-slate-100 shadow-sm p-8 sm:p-12 mb-4 text-center relative overflow-hidden">
+          <div className="w-14 h-14 rounded-2xl bg-white shadow-sm text-rose-400 flex items-center justify-center mx-auto mb-5">
+            <Quote className="w-7 h-7" />
+          </div>
+          <p className="max-w-2xl mx-auto font-heading font-bold text-base sm:text-xl text-slate-800 leading-relaxed">
+            "At Play Bimboo, we're passionate about creating unforgettable childhood moments through fun, safe, and engaging toys — chosen with care, so every playtime becomes a memory worth keeping."
+          </p>
+          <p className="mt-5 text-xs font-bold text-slate-500 uppercase tracking-wider">— The Play Bimboo Team</p>
         </div>
       </div>
     </div>

@@ -75,12 +75,13 @@ export const api = {
   // Auth
   login: (email: string, password: string) =>
     fetchJson<any>('/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) }),
-  register: (name: string, email: string, password: string) =>
-    fetchJson<any>('/auth/register', { method: 'POST', body: JSON.stringify({ name, email, password }) }),
+  register: (email: string, password: string) =>
+    fetchJson<any>('/auth/register', { method: 'POST', body: JSON.stringify({ email, password }) }),
   logout: () => fetchJson<any>('/auth/logout', { method: 'POST' }),
   getMe: () => fetchJson<any>('/auth/me'),
   forgotPassword: (email: string) => fetchJson<any>('/auth/forgot-password', { method: 'POST', body: JSON.stringify({ email }) }),
   resetPassword: (data: any) => fetchJson<any>('/auth/reset-password', { method: 'POST', body: JSON.stringify(data) }),
+  changePassword: (newPassword: string) => fetchJson<any>('/auth/change-password', { method: 'POST', body: JSON.stringify({ newPassword }) }),
   syncWishlist: (wishlist: string[]) =>
     fetchJson<any>('/auth/wishlist', { method: 'POST', body: JSON.stringify({ wishlist }) }),
   getCustomers: () => fetchJson<any[]>('/auth/users'),
