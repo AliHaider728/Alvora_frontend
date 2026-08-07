@@ -96,7 +96,7 @@ export const ProductSpotlight: React.FC<{ product: Product }> = ({ product }) =>
             {highlights.length > 0 && <ul className="mt-5 grid gap-2 text-sm text-indigo-50 sm:grid-cols-2">{highlights.map(highlight => <li key={highlight} className="flex items-start gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-300" />{highlight}</li>)}</ul>}
 
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <button type="button" disabled={(!isAvailable && canAddDirectly) || cartActionState !== 'idle'} onClick={handlePrimaryAction} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-rose-500 px-6 text-sm font-black text-white shadow-lg shadow-rose-950/30 transition hover:bg-rose-400 disabled:cursor-not-allowed disabled:opacity-60">
+              <button type="button" disabled={(!isAvailable && canAddDirectly) || cartActionState !== 'idle'} aria-busy={cartActionState === 'adding'} onClick={handlePrimaryAction} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-rose-500 px-6 text-sm font-black text-white shadow-lg shadow-rose-950/30 transition hover:bg-rose-400 disabled:cursor-not-allowed disabled:opacity-60">
                 {cartActionState === 'adding' ? <Loader2 className="h-5 w-5 animate-spin" /> : cartActionState === 'added' ? <Check className="h-5 w-5" /> : canAddDirectly ? <ShoppingBag className="h-5 w-5" /> : <PackageCheck className="h-5 w-5" />}
                 {cartActionState === 'adding' ? 'Adding...' : cartActionState === 'added' ? 'Added' : canAddDirectly ? isAvailable ? 'Add to Cart' : 'Out of Stock' : 'Choose Options'}
               </button>

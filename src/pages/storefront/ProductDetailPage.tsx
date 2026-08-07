@@ -839,6 +839,7 @@ export const ProductDetailPage: React.FC = () => {
                   <button
                     onClick={handleAddToCart}
                     disabled={!canPurchase || cartActionState !== 'idle'}
+                    aria-busy={cartActionState === 'adding'}
                     className={`flex h-12 flex-1 items-center justify-center gap-2 rounded-2xl font-heading text-sm font-extrabold shadow-xl transition-all duration-300 active:scale-95 sm:text-base ${
                       cartActionState === 'added'
                         ? 'bg-emerald-500 text-white shadow-emerald-200'
