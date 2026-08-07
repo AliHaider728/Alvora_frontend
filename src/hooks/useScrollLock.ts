@@ -1,23 +1,41 @@
-import { useEffect } from 'react';
+import { useEffect, useId } from 'react';
+
+// Set-based lock ownership: each component instance acquires a unique lock.
+// Body overflow is 'hidden' whenever at least one lock is held.
+const activeLocks = new Set<string>();
+
+function syncBodyOverflow() {
+  document.body.style.overflow = activeLocks.size > 0 ? 'hidden' : '';
+}
 
 export const useScrollLock = (isLocked: boolean) => {
-  useEffect(() => {
-    if (!isLocked) return;
+  const id = useId();
 
-    const currentLocks = parseInt(document.body.dataset.scrollLocks || '0', 10);
-    document.body.dataset.scrollLocks = String(currentLocks + 1);
-    
-    if (currentLocks === 0) {
-      document.body.style.overflow = 'hidden';
+  useEffect(() => {
+    if (!isLocked) {
+      // If this component's lock was previously held but isLocked changed to false,
+      // release it explicitly.
+      if (activeLocks.has(id)) {
+        activeLocks.delete(id);
+        syncBodyOverflow();
+      }
+      return;
     }
 
+    activeLocks.add(id);
+    syncBodyOverflow();
+
     return () => {
-      const remainingLocks = Math.max(0, parseInt(document.body.dataset.scrollLocks || '1', 10) - 1);
-      document.body.dataset.scrollLocks = String(remainingLocks);
-      
-      if (remainingLocks === 0) {
-        document.body.style.overflow = '';
-      }
+      activeLocks.delete(id);
+      syncBodyOverflow();
     };
-  }, [isLocked]);
+  }, [isLocked, id]);
+
+  // Cleanup on unmount regardless of isLocked state
+  useEffect(() => {
+    return () => {
+      activeLocks.delete(id);
+      syncBodyOverflow();
+    };
+  }, [id]);
 };
