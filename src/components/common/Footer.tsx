@@ -201,13 +201,18 @@ export const Footer: React.FC = () => {
                     923107172222
                   </a>
                 </div>
-                <div className="flex items-center gap-2.5">
+                <div className="flex items-start gap-2.5">
                   <span className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
                     <Mail className="w-3.5 h-3.5 text-sky-400" />
                   </span>
-                  <a href="mailto:sales@playbimboo.com" className="hover:text-sky-400 transition-colors">
-                    sales@playbimboo.com
-                  </a>
+                  <div className="flex flex-col gap-1.5 pt-1">
+                    <a href="mailto:sales@playbimboo.com" className="hover:text-sky-400 transition-colors leading-none">
+                      sales@playbimboo.com
+                    </a>
+                    <a href="mailto:abraransarise@gmail.com" className="hover:text-sky-400 transition-colors leading-none">
+                      abraransarise@gmail.com
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
