@@ -11,6 +11,14 @@ import { AGE_GROUPS } from '../../data/mockData';
 import { AgeGroupCategory } from '../../types';
 import { getProductAgeGroups, isProductVisibleOnStorefront } from '../../utils/products';
 
+const parseMultiValueParam = (value: string | null) =>
+  value
+    ? Array.from(new Set(value.split(',').map(item => item.trim()).filter(item => item && item !== 'all')))
+    : [];
+
+const sameSelections = (left: string[], right: string[]) =>
+  left.length === right.length && left.every((value, index) => value === right[index]);
+
 export const CategoryPage: React.FC = () => {
   const { categorySlug } = useParams<{ categorySlug?: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -20,8 +28,12 @@ export const CategoryPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   // Filter States initialized from URL params
-  const [selectedCategory, setSelectedCategory] = useState<string>(categorySlug || 'all');
-  const [selectedAge, setSelectedAge] = useState<string>(searchParams.get('age') || 'all');
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(() => {
+    const categoryParam = searchParams.get('category');
+    if (categoryParam !== null) return parseMultiValueParam(categoryParam);
+    return categorySlug && categorySlug !== 'all' ? [categorySlug] : [];
+  });
+  const [selectedAges, setSelectedAges] = useState<string[]>(() => parseMultiValueParam(searchParams.get('age')));
   const [selectedBrand, setSelectedBrand] = useState<string>('all');
   const [priceRange, setPriceRange] = useState<number>(15000);
   const [minRating, setMinRating] = useState<number>(0);
@@ -32,26 +44,79 @@ export const CategoryPage: React.FC = () => {
   // Brands list from products
   const brands = useMemo(() => Array.from(new Set(products.map(p => p.brand))), [products]);
 
-  // Sync route param change
+  // Sync direct navigation and browser back/forward changes.
   React.useEffect(() => {
-    if (categorySlug) {
-      setSelectedCategory(categorySlug);
+    const categoryParam = searchParams.get('category');
+    const nextCategories = categoryParam !== null
+      ? parseMultiValueParam(categoryParam)
+      : categorySlug && categorySlug !== 'all'
+        ? [categorySlug]
+        : [];
+    const nextAges = parseMultiValueParam(searchParams.get('age'));
+
+    setSelectedCategories(current => sameSelections(current, nextCategories) ? current : nextCategories);
+    setSelectedAges(current => sameSelections(current, nextAges) ? current : nextAges);
+  }, [categorySlug, searchParams]);
+
+  const syncFilterParams = (categoriesToSync: string[], agesToSync: string[]) => {
+    const nextParams = new URLSearchParams(searchParams);
+    if (categoriesToSync.length > 0) {
+      nextParams.set('category', categoriesToSync.join(','));
+    } else if (categorySlug && categorySlug !== 'all') {
+      nextParams.set('category', 'all');
+    } else {
+      nextParams.delete('category');
     }
-  }, [categorySlug]);
+    if (agesToSync.length > 0) {
+      nextParams.set('age', agesToSync.join(','));
+    } else {
+      nextParams.delete('age');
+    }
+    setSearchParams(nextParams, { replace: true });
+  };
+
+  const toggleCategory = (category: string) => {
+    const nextCategories = selectedCategories.includes(category)
+      ? selectedCategories.filter(value => value !== category)
+      : [...selectedCategories, category];
+    setSelectedCategories(nextCategories);
+    syncFilterParams(nextCategories, selectedAges);
+  };
+
+  const selectAllCategories = () => {
+    setSelectedCategories([]);
+    syncFilterParams([], selectedAges);
+  };
+
+  const toggleAge = (age: string) => {
+    const nextAges = selectedAges.includes(age)
+      ? selectedAges.filter(value => value !== age)
+      : [...selectedAges, age];
+    setSelectedAges(nextAges);
+    syncFilterParams(selectedCategories, nextAges);
+  };
+
+  const selectAllAges = () => {
+    setSelectedAges([]);
+    syncFilterParams(selectedCategories, []);
+  };
 
   // Current active category object
-  const currentCategoryObj = categories.find(c => c.slug === selectedCategory);
+  const currentCategoryObj = selectedCategories.length === 1
+    ? categories.find(c => c.slug === selectedCategories[0])
+    : undefined;
 
   // Filter Logic
   const filteredProducts = useMemo(() => {
     return products.filter(p => {
       if (!isProductVisibleOnStorefront(p)) return false;
       // Category match
-      if (selectedCategory !== 'all' && p.categorySlug !== selectedCategory) {
+      if (selectedCategories.length > 0 && !selectedCategories.includes(p.categorySlug)) {
         return false;
       }
       // Age group match
-      if (selectedAge !== 'all' && !getProductAgeGroups(p).includes(selectedAge as AgeGroupCategory)) {
+      const productAgeGroups = getProductAgeGroups(p);
+      if (selectedAges.length > 0 && !selectedAges.some(age => productAgeGroups.includes(age as AgeGroupCategory))) {
         return false;
       }
       // Brand match
@@ -68,7 +133,7 @@ export const CategoryPage: React.FC = () => {
       }
       return true;
     });
-  }, [products, selectedCategory, selectedAge, selectedBrand, priceRange, minRating]);
+  }, [products, selectedCategories, selectedAges, selectedBrand, priceRange, minRating]);
 
   // Sort Logic
   const sortedProducts = useMemo(() => {
@@ -88,13 +153,17 @@ export const CategoryPage: React.FC = () => {
   }, [filteredProducts, sortBy]);
 
   const resetFilters = () => {
-    setSelectedCategory('all');
-    setSelectedAge('all');
+    setSelectedCategories([]);
+    setSelectedAges([]);
     setSelectedBrand('all');
     setPriceRange(15000);
     setMinRating(0);
     setSortBy('featured');
-    setSearchParams({});
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.delete('age');
+    if (categorySlug && categorySlug !== 'all') nextParams.set('category', 'all');
+    else nextParams.delete('category');
+    setSearchParams(nextParams, { replace: true });
   };
 
   const breadcrumbItems = [
@@ -154,9 +223,10 @@ export const CategoryPage: React.FC = () => {
               </h3>
               <div className="space-y-1">
                 <button
-                  onClick={() => setSelectedCategory('all')}
+                  onClick={selectAllCategories}
+                  aria-pressed={selectedCategories.length === 0}
                   className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold transition-colors ${
-                    selectedCategory === 'all'
+                    selectedCategories.length === 0
                       ? 'bg-rose-500 text-white'
                       : 'text-slate-700 hover:bg-slate-100'
                   }`}
@@ -166,9 +236,10 @@ export const CategoryPage: React.FC = () => {
                 {categories.map(cat => (
                   <button
                     key={cat.id}
-                    onClick={() => setSelectedCategory(cat.slug)}
+                    onClick={() => toggleCategory(cat.slug)}
+                    aria-pressed={selectedCategories.includes(cat.slug)}
                     className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold transition-colors flex items-center justify-between ${
-                      selectedCategory === cat.slug
+                      selectedCategories.includes(cat.slug)
                         ? 'bg-rose-500 text-white font-bold'
                         : 'text-slate-700 hover:bg-slate-100'
                     }`}
@@ -187,9 +258,10 @@ export const CategoryPage: React.FC = () => {
               </h3>
               <div className="grid grid-cols-2 gap-2">
                 <button
-                  onClick={() => setSelectedAge('all')}
+                  onClick={selectAllAges}
+                  aria-pressed={selectedAges.length === 0}
                   className={`px-2.5 py-2 rounded-xl text-xs font-bold text-center transition-colors ${
-                    selectedAge === 'all'
+                    selectedAges.length === 0
                       ? 'bg-sky-500 text-white'
                       : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                   }`}
@@ -199,9 +271,10 @@ export const CategoryPage: React.FC = () => {
                 {AGE_GROUPS.map(age => (
                   <button
                     key={age.id}
-                    onClick={() => setSelectedAge(age.id)}
+                    onClick={() => toggleAge(age.id)}
+                    aria-pressed={selectedAges.includes(age.id)}
                     className={`px-2.5 py-2 rounded-xl text-xs font-bold text-center transition-colors ${
-                      selectedAge === age.id
+                      selectedAges.includes(age.id)
                         ? 'bg-sky-500 text-white'
                         : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                     }`}
@@ -333,7 +406,7 @@ export const CategoryPage: React.FC = () => {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 xl:grid-cols-2">
+              <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 xl:grid-cols-3 xl:gap-5">
                 {sortedProducts.map(product => (
                   <ProductCard key={product.id} product={product} />
                 ))}
@@ -367,16 +440,18 @@ export const CategoryPage: React.FC = () => {
                 <h4 className="font-heading font-bold text-xs uppercase text-slate-500">Category</h4>
                 <div className="space-y-1">
                   <button
-                    onClick={() => { setSelectedCategory('all'); setMobileFilterOpen(false); }}
-                    className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold ${selectedCategory === 'all' ? 'bg-rose-500 text-white' : 'text-slate-700'}`}
+                    onClick={selectAllCategories}
+                    aria-pressed={selectedCategories.length === 0}
+                    className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold ${selectedCategories.length === 0 ? 'bg-rose-500 text-white' : 'text-slate-700'}`}
                   >
                     All Categories
                   </button>
                   {categories.map(cat => (
                     <button
                       key={cat.id}
-                      onClick={() => { setSelectedCategory(cat.slug); setMobileFilterOpen(false); }}
-                      className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold ${selectedCategory === cat.slug ? 'bg-rose-500 text-white font-bold' : 'text-slate-700'}`}
+                      onClick={() => toggleCategory(cat.slug)}
+                      aria-pressed={selectedCategories.includes(cat.slug)}
+                      className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold ${selectedCategories.includes(cat.slug) ? 'bg-rose-500 text-white font-bold' : 'text-slate-700'}`}
                     >
                       {cat.name}
                     </button>
@@ -388,11 +463,19 @@ export const CategoryPage: React.FC = () => {
               <div className="space-y-2 pt-4 border-t border-slate-100">
                 <h4 className="font-heading font-bold text-xs uppercase text-slate-500">Age Group</h4>
                 <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={selectAllAges}
+                    aria-pressed={selectedAges.length === 0}
+                    className={`px-2 py-2 rounded-xl text-xs font-bold ${selectedAges.length === 0 ? 'bg-sky-500 text-white' : 'bg-slate-100'}`}
+                  >
+                    All Ages
+                  </button>
                   {AGE_GROUPS.map(age => (
                     <button
                       key={age.id}
-                      onClick={() => { setSelectedAge(age.id); setMobileFilterOpen(false); }}
-                      className={`px-2 py-2 rounded-xl text-xs font-bold ${selectedAge === age.id ? 'bg-sky-500 text-white' : 'bg-slate-100'}`}
+                      onClick={() => toggleAge(age.id)}
+                      aria-pressed={selectedAges.includes(age.id)}
+                      className={`px-2 py-2 rounded-xl text-xs font-bold ${selectedAges.includes(age.id) ? 'bg-sky-500 text-white' : 'bg-slate-100'}`}
                     >
                       {age.label}
                     </button>
@@ -400,9 +483,15 @@ export const CategoryPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-slate-100">
+              <div className="grid grid-cols-2 gap-2 pt-4 border-t border-slate-100">
                 <button
-                  onClick={() => { resetFilters(); setMobileFilterOpen(false); }}
+                  onClick={resetFilters}
+                  className="w-full py-3 rounded-2xl bg-slate-100 text-slate-700 font-heading font-bold text-xs"
+                >
+                  Reset
+                </button>
+                <button
+                  onClick={() => setMobileFilterOpen(false)}
                   className="w-full py-3 rounded-2xl bg-slate-900 text-white font-heading font-bold text-xs"
                 >
                   Apply & Close

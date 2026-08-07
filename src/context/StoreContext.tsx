@@ -35,6 +35,43 @@ type BackendOrder = Partial<Order> &
     discountAmount?: number;
   };
 
+const getCartLineKey = (
+  productId: string,
+  selectedVariant?: string,
+  variationId?: string
+) => variationId
+  ? `${productId}::variation::${variationId}`
+  : `${productId}::legacy::${selectedVariant?.trim() || ''}`;
+
+const consolidateCartItems = (items: unknown): CartItem[] => {
+  if (!Array.isArray(items)) return [];
+
+  const consolidated = new Map<string, CartItem>();
+  for (const candidate of items) {
+    if (!candidate || typeof candidate !== 'object') continue;
+    const item = candidate as CartItem;
+    if (!item.product?.id) continue;
+    const quantity = Math.max(1, Math.floor(Number(item.quantity) || 1));
+    const key = getCartLineKey(item.product.id, item.selectedVariant, item.variationId);
+    const existing = consolidated.get(key);
+    if (existing) {
+      consolidated.set(key, { ...existing, product: item.product, quantity: existing.quantity + quantity });
+    } else {
+      consolidated.set(key, { ...item, quantity });
+    }
+  }
+  return [...consolidated.values()];
+};
+
+const readStoredCart = (): CartItem[] => {
+  try {
+    const saved = localStorage.getItem('playbimboo_cart');
+    return saved ? consolidateCartItems(JSON.parse(saved)) : [];
+  } catch {
+    return [];
+  }
+};
+
 const normalizeProduct = (product: Partial<Product> & MongoRecord): Product => {
   const inventory = normalizeInventory(product);
   return ({
@@ -229,8 +266,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   });
 
   const [cart, setCart] = useState<CartItem[]>(() => {
-    const saved = localStorage.getItem('playbimboo_cart');
-    return saved ? JSON.parse(saved) : [];
+    return readStoredCart();
   });
 
   const [wishlist, setWishlist] = useState<string[]>(() => {
@@ -331,13 +367,43 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, [cart]);
 
   useEffect(() => {
+    const syncCartFromAnotherTab = (event: StorageEvent) => {
+      if (event.key !== 'playbimboo_cart') return;
+      try {
+        setCart(event.newValue ? consolidateCartItems(JSON.parse(event.newValue)) : []);
+      } catch {
+        // Ignore malformed data from another tab and preserve the current cart.
+      }
+    };
+    window.addEventListener('storage', syncCartFromAnotherTab);
+    return () => window.removeEventListener('storage', syncCartFromAnotherTab);
+  }, []);
+
+  useEffect(() => {
     localStorage.setItem('playbimboo_wishlist', JSON.stringify(wishlist));
   }, [wishlist]);
+
+  // Prune wishlist so it only ever reflects REAL, currently-existing products.
+  // This clears out any stale/ghost IDs left over from old mock data or
+  // previous testing sessions, so the header count only shows items the
+  // user has actually and currently added.
+  useEffect(() => {
+    if (products.length === 0) return;
+    setWishlist(prev => {
+      const validIds = new Set(products.map(p => p.id));
+      const cleaned = prev.filter(id => validIds.has(id));
+      return cleaned.length === prev.length ? prev : cleaned;
+    });
+  }, [products]);
 
   // Cart operations
   const addToCart = (product: Product, quantity = 1, selectedVariant?: string, variationId?: string) => {
     setCart(prev => {
-      const existing = prev.find(item => item.product.id === product.id && item.selectedVariant === selectedVariant && item.variationId === variationId);
+      const normalizedCart = consolidateCartItems(prev);
+      const lineKey = getCartLineKey(product.id, selectedVariant, variationId);
+      const existing = normalizedCart.find(item =>
+        getCartLineKey(item.product.id, item.selectedVariant, item.variationId) === lineKey
+      );
       
       let enrichedProduct = { ...product };
       if (variationId && product.variations) {
@@ -354,19 +420,22 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       }
 
       if (existing) {
-        return prev.map(item =>
-          item.product.id === product.id && item.selectedVariant === selectedVariant && item.variationId === variationId
+        return normalizedCart.map(item =>
+          getCartLineKey(item.product.id, item.selectedVariant, item.variationId) === lineKey
             ? { ...item, quantity: item.quantity + quantity, product: enrichedProduct }
             : item
         );
       }
-      return [...prev, { product: enrichedProduct, quantity, selectedVariant, variationId }];
+      return [...normalizedCart, { product: enrichedProduct, quantity, selectedVariant, variationId }];
     });
     setIsCartOpen(true);
   };
 
   const removeFromCart = (productId: string, selectedVariant?: string, variationId?: string) => {
-    setCart(prev => prev.filter(item => !(item.product.id === productId && item.selectedVariant === selectedVariant && item.variationId === variationId)));
+    const lineKey = getCartLineKey(productId, selectedVariant, variationId);
+    setCart(prev => prev.filter(item =>
+      getCartLineKey(item.product.id, item.selectedVariant, item.variationId) !== lineKey
+    ));
   };
 
   const updateCartQuantity = (productId: string, quantity: number, selectedVariant?: string, variationId?: string) => {
@@ -374,9 +443,10 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       removeFromCart(productId, selectedVariant, variationId);
       return;
     }
+    const lineKey = getCartLineKey(productId, selectedVariant, variationId);
     setCart(prev =>
       prev.map(item =>
-        item.product.id === productId && item.selectedVariant === selectedVariant && item.variationId === variationId ? { ...item, quantity } : item
+        getCartLineKey(item.product.id, item.selectedVariant, item.variationId) === lineKey ? { ...item, quantity } : item
       )
     );
   };
@@ -535,6 +605,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     // Update customer total spent
     setCustomers(prev => {
+      if (!orderData.email.trim()) return prev;
       const existing = prev.find(c => c.email.toLowerCase() === orderData.email.toLowerCase());
       if (existing) {
         return prev.map(c =>

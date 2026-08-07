@@ -10,7 +10,9 @@ import {
   PackageCheck,
   Banknote,
   Clock,
-  UserCheck
+  UserCheck,
+  Minus,
+  Plus
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { useToast } from '../../context/ToastContext';
@@ -19,6 +21,7 @@ import { Breadcrumbs } from '../../components/common/Breadcrumbs';
 import { Order } from '../../types';
 import { formatPrice } from '../../utils/formatters';
 import { getProductDeliveryType } from '../../utils/products';
+import { getSafeImageSrc } from '../../utils/images';
 
 export const CheckoutPage: React.FC = () => {
   const [checkoutRequestId] = useState(() => {
@@ -36,9 +39,9 @@ export const CheckoutPage: React.FC = () => {
     appliedCoupon,
     couponDiscountAmount,
     categories,
-    customers,
     settings,
-    placeOrder
+    placeOrder,
+    updateCartQuantity
   } = useStore();
   const { showToast } = useToast();
 
@@ -46,16 +49,13 @@ export const CheckoutPage: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
 
   // Form states
-  const customer = customers?.[0]; // Assuming first customer for logged in state
-  const defaultAddress = customer?.addresses?.find(a => a.isDefault) || customer?.addresses?.[0];
-
-  const [fullName, setFullName] = useState(customer?.name || '');
-  const [email, setEmail] = useState(customer?.email || '');
-  const [phone, setPhone] = useState(customer?.phone || '');
-  const [street, setStreet] = useState(defaultAddress?.street || '');
-  const [city, setCity] = useState(defaultAddress?.city || '');
-  const [state, setState] = useState(defaultAddress?.state || '');
-  const [postalCode, setPostalCode] = useState(defaultAddress?.postalCode || '');
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [street, setStreet] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [postalCode, setPostalCode] = useState('');
   const [country] = useState('Pakistan');
   const [orderNotes, setOrderNotes] = useState('');
 
@@ -118,7 +118,7 @@ export const CheckoutPage: React.FC = () => {
       showToast('One or more products are not available for delivery.', 'error');
       return;
     }
-    if (fullName && email && phone && street && city) {
+    if (fullName.trim() && phone.trim() && street.trim() && city.trim()) {
       setCurrentStep(2);
     } else {
       showToast('Please fill in all required shipping fields', 'error');
@@ -130,9 +130,9 @@ export const CheckoutPage: React.FC = () => {
     if (isPlacingOrder) return;
     setIsPlacingOrder(true);
     const created = await placeOrder({
-      customerName: fullName,
-      email,
-      phone,
+      customerName: fullName.trim(),
+      email: email.trim(),
+      phone: phone.trim(),
       items: cart.map(item => {
         let price = item.product.price;
         let image = item.product.images[0];
@@ -181,12 +181,12 @@ export const CheckoutPage: React.FC = () => {
       total: finalTotal,
       status: 'Pending',
       shippingAddress: {
-        fullName,
-        phone,
-        street,
-        city,
-        state,
-        postalCode,
+        fullName: fullName.trim(),
+        phone: phone.trim(),
+        street: street.trim(),
+        city: city.trim(),
+        state: state.trim(),
+        postalCode: postalCode.trim(),
         country
       },
       paymentMethod: 'Cash on Delivery (COD)',
@@ -202,10 +202,13 @@ export const CheckoutPage: React.FC = () => {
     sessionStorage.removeItem('pb_checkout_request_id');
     setCompletedOrder(created);
     setCurrentStep(3);
-    showToast(created.confirmationEmailAccepted !== false && created.confirmationEmailSentAt
-      ? 'Order confirmed. A confirmation email has been sent.'
-      : 'Order confirmed. We could not send the email, but your order was placed successfully.',
-      created.confirmationEmailAccepted !== false && created.confirmationEmailSentAt ? 'success' : 'warning');
+    const confirmationEmailSent = Boolean(created.confirmationEmailSentAt && created.confirmationEmailAccepted !== false);
+    showToast(!email.trim()
+      ? 'Order confirmed successfully.'
+      : confirmationEmailSent
+        ? 'Order confirmed. A confirmation email has been sent.'
+        : 'Order confirmed. We could not send the email, but your order was placed successfully.',
+      !email.trim() || confirmationEmailSent ? 'success' : 'warning');
   };
 
   if (cart.length === 0 && currentStep !== 3) {
@@ -224,19 +227,19 @@ export const CheckoutPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans py-8">
+    <div className="min-h-screen bg-slate-50 font-sans py-5 sm:py-8">
       <SeoHead title="Secure Checkout" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Breadcrumbs items={[{ label: 'Checkout' }]} />
 
         {/* Step Progress Bar */}
-        <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm mb-8">
-          <div className="flex items-center justify-between max-w-2xl mx-auto relative">
+        <div className="bg-white rounded-3xl px-3 py-5 sm:p-6 border border-slate-100 shadow-sm mb-6 sm:mb-8 overflow-hidden">
+          <div className="flex items-start justify-between max-w-2xl mx-auto relative">
             {/* Step 1 */}
-            <div className="flex flex-col items-center gap-1 z-10">
+            <div className="flex w-[72px] shrink-0 flex-col items-center gap-1 z-10 sm:w-auto">
               <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center font-heading font-black text-xs transition-all ${
+                className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-heading font-black text-xs transition-all ${
                   currentStep >= 1
                     ? 'bg-rose-500 text-white shadow-md shadow-rose-200'
                     : 'bg-slate-100 text-slate-400'
@@ -244,15 +247,15 @@ export const CheckoutPage: React.FC = () => {
               >
                 {currentStep > 1 ? <Check className="w-5 h-5" /> : 1}
               </div>
-              <span className="text-xs font-heading font-bold text-slate-800">Delivery Address</span>
+              <span className="text-center text-[10px] leading-tight sm:text-xs font-heading font-bold text-slate-800">Delivery Address</span>
             </div>
 
-            <div className={`flex-1 h-1 mx-2 rounded-full ${currentStep >= 2 ? 'bg-rose-500' : 'bg-slate-200'}`} />
+            <div className={`mt-3.5 sm:mt-[18px] min-w-2 flex-1 h-1 mx-1 sm:mx-2 rounded-full ${currentStep >= 2 ? 'bg-rose-500' : 'bg-slate-200'}`} />
 
             {/* Step 2 */}
-            <div className="flex flex-col items-center gap-1 z-10">
+            <div className="flex w-[72px] shrink-0 flex-col items-center gap-1 z-10 sm:w-auto">
               <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center font-heading font-black text-xs transition-all ${
+                className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-heading font-black text-xs transition-all ${
                   currentStep >= 2
                     ? 'bg-rose-500 text-white shadow-md shadow-rose-200'
                     : 'bg-slate-100 text-slate-400'
@@ -260,15 +263,18 @@ export const CheckoutPage: React.FC = () => {
               >
                 {currentStep > 2 ? <Check className="w-5 h-5" /> : 2}
               </div>
-              <span className="text-xs font-heading font-bold text-slate-800">Cash on Delivery (COD)</span>
+              <span className="text-center text-[10px] leading-tight sm:text-xs font-heading font-bold text-slate-800">
+                <span className="sm:hidden">COD</span>
+                <span className="hidden sm:inline">Cash on Delivery (COD)</span>
+              </span>
             </div>
 
-            <div className={`flex-1 h-1 mx-2 rounded-full ${currentStep === 3 ? 'bg-rose-500' : 'bg-slate-200'}`} />
+            <div className={`mt-3.5 sm:mt-[18px] min-w-2 flex-1 h-1 mx-1 sm:mx-2 rounded-full ${currentStep === 3 ? 'bg-rose-500' : 'bg-slate-200'}`} />
 
             {/* Step 3 */}
-            <div className="flex flex-col items-center gap-1 z-10">
+            <div className="flex w-[72px] shrink-0 flex-col items-center gap-1 z-10 sm:w-auto">
               <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center font-heading font-black text-xs transition-all ${
+                className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-heading font-black text-xs transition-all ${
                   currentStep === 3
                     ? 'bg-emerald-500 text-white shadow-md shadow-emerald-200'
                     : 'bg-slate-100 text-slate-400'
@@ -276,7 +282,7 @@ export const CheckoutPage: React.FC = () => {
               >
                 3
               </div>
-              <span className="text-xs font-heading font-bold text-slate-800">Confirmation</span>
+              <span className="text-center text-[10px] leading-tight sm:text-xs font-heading font-bold text-slate-800">Confirmation</span>
             </div>
           </div>
         </div>
@@ -296,7 +302,9 @@ export const CheckoutPage: React.FC = () => {
                 Thank You for Shopping at PlayBimboo!
               </h1>
               <p className="text-sm text-slate-600 mt-2">
-                {completedOrder.confirmationEmailAccepted !== false && completedOrder.confirmationEmailSentAt
+                {!completedOrder.email
+                  ? <>Your order is safely recorded. Our team will contact you before dispatch.</>
+                  : completedOrder.confirmationEmailAccepted !== false && completedOrder.confirmationEmailSentAt
                   ? <>We’ve received your order and sent a confirmation receipt to <strong>{completedOrder.email}</strong>.</>
                   : <>We’ve received your order successfully. The email could not be sent, but your order is safely recorded.</>}
               </p>
@@ -373,8 +381,8 @@ export const CheckoutPage: React.FC = () => {
             {/* Form Column */}
             <div className="lg:col-span-7">
               {currentStep === 1 && (
-                <form onSubmit={handleShippingSubmit} className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm space-y-6">
-                  <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                <form onSubmit={handleShippingSubmit} className="bg-white rounded-3xl p-4 sm:p-8 border border-slate-100 shadow-sm space-y-6">
+                  <div className="flex flex-col items-start gap-3 border-b border-slate-100 pb-4 sm:flex-row sm:items-center sm:justify-between">
                     <h2 className="font-heading font-black text-xl text-slate-900 flex items-center gap-2">
                       <Truck className="w-5 h-5 text-rose-500" />
                       <span>Delivery Address & Contact</span>
@@ -394,18 +402,6 @@ export const CheckoutPage: React.FC = () => {
                         placeholder="e.g. Ali Raza"
                         value={fullName}
                         onChange={e => setFullName(e.target.value)}
-                        className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 font-sans focus:outline-none focus:ring-2 focus:ring-rose-400"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="text-xs font-bold text-slate-700 block mb-1">Email Address *</label>
-                      <input
-                        type="email"
-                        required
-                        placeholder="e.g. ali@example.com"
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
                         className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 font-sans focus:outline-none focus:ring-2 focus:ring-rose-400"
                       />
                     </div>
@@ -446,9 +442,9 @@ export const CheckoutPage: React.FC = () => {
                       />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-2">
                       <div>
-                        <label className="text-xs font-bold text-slate-700 block mb-1">Province / State</label>
+                        <label className="text-xs font-bold text-slate-700 block mb-1">Province / State (Optional)</label>
                         <input
                           type="text"
                           value={state}
@@ -457,7 +453,7 @@ export const CheckoutPage: React.FC = () => {
                         />
                       </div>
                       <div>
-                        <label className="text-xs font-bold text-slate-700 block mb-1">Postal Code</label>
+                        <label className="text-xs font-bold text-slate-700 block mb-1">Postal Code (Optional)</label>
                         <input
                           type="text"
                           value={postalCode}
@@ -477,6 +473,17 @@ export const CheckoutPage: React.FC = () => {
                         className="w-full px-4 py-2 text-base sm:text-sm rounded-xl border border-slate-200 font-sans focus:outline-none focus:ring-2 focus:ring-rose-400"
                       />
                     </div>
+
+                    <div className="sm:col-span-2">
+                      <label className="text-xs font-bold text-slate-700 block mb-1">Email Address (Optional)</label>
+                      <input
+                        type="email"
+                        placeholder="e.g. ali@example.com"
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                        className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 font-sans focus:outline-none focus:ring-2 focus:ring-rose-400"
+                      />
+                    </div>
                   </div>
 
                   <button
@@ -490,8 +497,8 @@ export const CheckoutPage: React.FC = () => {
               )}
 
               {currentStep === 2 && (
-                <form onSubmit={handlePaymentSubmit} className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm space-y-6">
-                  <div className="flex items-center justify-between">
+                <form onSubmit={handlePaymentSubmit} className="bg-white rounded-3xl p-4 sm:p-8 border border-slate-100 shadow-sm space-y-6">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
                     <h2 className="font-heading font-black text-xl text-slate-900 flex items-center gap-2">
                       <Banknote className="w-6 h-6 text-emerald-600" />
                       <span>Payment Method</span>
@@ -506,13 +513,13 @@ export const CheckoutPage: React.FC = () => {
                   </div>
 
                   {/* Strictly Cash on Delivery Only */}
-                  <div className="p-6 rounded-2xl bg-emerald-50 border-2 border-emerald-500 shadow-sm space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
+                  <div className="p-4 sm:p-6 rounded-2xl bg-emerald-50 border-2 border-emerald-500 shadow-sm space-y-3">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex min-w-0 items-start gap-3">
                         <div className="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center">
                           <Banknote className="w-6 h-6" />
                         </div>
-                        <div>
+                        <div className="min-w-0">
                           <h4 className="font-heading font-extrabold text-base text-emerald-950">
                             Cash on Delivery (COD)
                           </h4>
@@ -521,7 +528,7 @@ export const CheckoutPage: React.FC = () => {
                           </p>
                         </div>
                       </div>
-                      <span className="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center">
+                      <span className="w-6 h-6 shrink-0 rounded-full bg-emerald-500 text-white flex items-center justify-center">
                         <Check className="w-4 h-4" />
                       </span>
                     </div>
@@ -546,7 +553,7 @@ export const CheckoutPage: React.FC = () => {
 
             {/* Sticky Order Summary Column */}
             <div className="lg:col-span-5">
-              <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm sticky top-24 space-y-4">
+              <div className="bg-white rounded-3xl p-4 sm:p-6 border border-slate-100 shadow-sm lg:sticky lg:top-24 space-y-4">
                 <h3 className="font-heading font-black text-lg text-slate-900 pb-3 border-b border-slate-100">
                   Order Summary ({cart.length} item(s))
                 </h3>
@@ -577,11 +584,11 @@ export const CheckoutPage: React.FC = () => {
                     }
 
                     return (
-                    <div key={`${item.product.id}-${item.selectedVariant || ''}-${item.variationId || ''}`} className="flex items-center gap-3">
+                    <div key={`${item.product.id}-${item.variationId || item.selectedVariant || ''}`} className="flex items-start gap-3 rounded-2xl border border-slate-100 bg-slate-50/60 p-2.5">
                       <img
-                        src={item.product.images[0]}
-                        alt=""
-                        className="w-12 h-12 object-cover rounded-xl bg-slate-100"
+                        src={getSafeImageSrc(variation?.image?.url || item.product.imageThumbnailUrls?.[0] || item.product.images[0])}
+                        alt={variation?.image?.alt || item.product.name}
+                        className="w-14 h-14 shrink-0 object-contain rounded-xl bg-white p-0.5"
                       />
                       <div className="flex-1 min-w-0">
                         <h4 className="font-heading font-bold text-xs text-slate-800 truncate">
@@ -599,11 +606,31 @@ export const CheckoutPage: React.FC = () => {
                         {!variation && item.selectedVariant && (
                            <span className="text-xs text-slate-400 block truncate">{item.selectedVariant}</span>
                         )}
-                        <span className="text-xs text-slate-400 block mt-0.5">Qty: {item.quantity}</span>
+                        <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
+                          <div className="flex items-center rounded-xl border border-slate-200 bg-white">
+                            <button
+                              type="button"
+                              onClick={() => updateCartQuantity(item.product.id, item.quantity - 1, item.selectedVariant, item.variationId)}
+                              aria-label={`Decrease quantity of ${item.product.name}`}
+                              className="rounded-l-xl p-1.5 text-slate-600 transition-colors hover:bg-slate-100"
+                            >
+                              <Minus className="h-3 w-3" />
+                            </button>
+                            <span className="min-w-7 px-1 text-center text-xs font-bold text-slate-800">{item.quantity}</span>
+                            <button
+                              type="button"
+                              onClick={() => updateCartQuantity(item.product.id, item.quantity + 1, item.selectedVariant, item.variationId)}
+                              aria-label={`Increase quantity of ${item.product.name}`}
+                              className="rounded-r-xl p-1.5 text-slate-600 transition-colors hover:bg-slate-100"
+                            >
+                              <Plus className="h-3 w-3" />
+                            </button>
+                          </div>
+                          <span className="font-heading font-bold text-xs text-slate-900">
+                            {formatPrice(itemPrice * item.quantity, settings.currency)}
+                          </span>
+                        </div>
                       </div>
-                      <span className="font-heading font-bold text-xs text-slate-900">
-                        {formatPrice(itemPrice * item.quantity, settings.currency)}
-                      </span>
                     </div>
                   );})}
                 </div>

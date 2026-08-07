@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { X, ShoppingBag, Trash2, Plus, Minus, Tag, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { X, ShoppingBag, Trash2, Plus, Minus, Tag, ArrowRight, ShieldCheck } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/formatters';
 import { getSafeImageSrc } from '../../utils/images';
@@ -39,8 +39,6 @@ export const CartDrawer: React.FC = () => {
   };
 
   const finalTotal = Math.max(0, cartSubtotal - couponDiscountAmount);
-  const freeShippingNeeded = Math.max(0, settings.freeShippingThreshold - cartSubtotal);
-  const shippingProgress = Math.min(100, (cartSubtotal / settings.freeShippingThreshold) * 100);
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
@@ -73,28 +71,6 @@ export const CartDrawer: React.FC = () => {
               <X className="w-5 h-5" />
             </button>
           </div>
-
-          {/* Free Shipping Progress Indicator */}
-          {cart.length > 0 && (
-            <div className="bg-amber-50/70 border-b border-amber-100 p-3 px-5">
-              <div className="flex items-center justify-between text-xs font-semibold text-amber-900 mb-1.5">
-                <span className="flex items-center gap-1">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                  {freeShippingNeeded === 0 ? (
-                    <span className="text-emerald-700 font-bold">🎉 You qualify for FREE Shipping!</span>
-                  ) : (
-                    <span>Add <strong className="text-rose-600">{formatPrice(freeShippingNeeded)}</strong> more for FREE Shipping</span>
-                  )}
-                </span>
-              </div>
-              <div className="w-full bg-amber-200/60 rounded-full h-2 overflow-hidden">
-                <div
-                  className="bg-gradient-to-r from-amber-400 to-rose-500 h-full transition-all duration-500"
-                  style={{ width: `${shippingProgress}%` }}
-                />
-              </div>
-            </div>
-          )}
 
           {/* Cart Items List */}
           <div className="flex-1 overflow-y-auto p-5 space-y-4">
@@ -144,9 +120,13 @@ export const CartDrawer: React.FC = () => {
                   className="flex gap-3.5 p-3.5 rounded-2xl bg-slate-50 border border-slate-100 hover:border-slate-200 transition-all"
                 >
                   <img
-                    src={getSafeImageSrc(variation?.image?.url || item.product.images[0])}
+                    src={getSafeImageSrc(
+                      variation?.image?.url ||
+                      item.product.imageThumbnailUrls?.[0] ||
+                      item.product.images[0]
+                    )}
                     alt={variation?.image?.alt || item.product.name}
-                    className="w-20 h-20 object-cover rounded-xl bg-white flex-shrink-0"
+                    className="h-20 w-20 flex-shrink-0 rounded-xl bg-white object-contain p-1"
                   />
 
                   <div className="flex-1 flex flex-col justify-between">

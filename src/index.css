@@ -29,6 +29,23 @@
   font-family: var(--font-sans);
 }
 
+/* Keep native admin selects readable regardless of OS/browser color scheme. */
+.admin-shell select {
+  background-color: #ffffff;
+  color: #1e293b;
+  color-scheme: light;
+}
+
+.admin-shell select option {
+  background-color: #ffffff;
+  color: #1e293b;
+}
+
+.admin-shell select:disabled {
+  background-color: #f1f5f9;
+  color: #64748b;
+}
+
 /* Custom scrollbar for smooth sliding sliders */
 ::-webkit-scrollbar {
   width: 8px;

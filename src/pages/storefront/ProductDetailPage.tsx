@@ -366,9 +366,9 @@ export const ProductDetailPage: React.FC = () => {
         <Breadcrumbs items={breadcrumbItems} />
 
         {/* Top Detail Section: Gallery + Product Info */}
-        <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-100 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-10 mb-10">
+        <div className="mb-6 grid grid-cols-1 items-start gap-6 rounded-3xl border border-slate-100 bg-white p-5 shadow-sm sm:p-8 lg:grid-cols-12 lg:gap-8">
           {/* Left Column: Image Gallery */}
-          <div className="lg:col-span-6 space-y-4">
+          <div className="self-start space-y-3 lg:col-span-6">
             {/* Main Preview Image with Hover Zoom Effect */}
             <div className="relative aspect-square w-full rounded-3xl overflow-hidden bg-slate-50 border border-slate-100 group flex items-center justify-center p-4">
               <img
@@ -385,7 +385,7 @@ export const ProductDetailPage: React.FC = () => {
 
             {/* Gallery Thumbnails */}
             {product.images.length > 1 && (
-              <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-thin">
+              <div className="flex gap-3 overflow-x-auto pb-1 scrollbar-thin">
                 {product.images.map((img, idx) => (
                   <button
                     key={idx}
@@ -405,7 +405,7 @@ export const ProductDetailPage: React.FC = () => {
           </div>
 
           {/* Right Column: Product Information & Buy Panel */}
-          <div className="lg:col-span-6 flex flex-col">
+          <div className="self-start lg:col-span-6">
             <div>
               {/* Category & Brand Header */}
               <div className="flex items-center justify-between mb-2">
@@ -467,7 +467,7 @@ export const ProductDetailPage: React.FC = () => {
               </div>
 
               {/* Delivery Charge Info Badge */}
-              <div className="p-3 rounded-2xl bg-sky-50 border border-sky-100 flex items-center gap-2.5 text-sky-900 text-xs font-semibold mb-6">
+              <div className="p-3 rounded-2xl bg-sky-50 border border-sky-100 flex items-center gap-2.5 text-sky-900 text-xs font-semibold mb-4">
                 <Truck className="w-4 h-4 text-sky-600 flex-shrink-0" />
                 <span>
                   Delivery Fee:{' '}
@@ -487,13 +487,13 @@ export const ProductDetailPage: React.FC = () => {
               </div>
 
               {/* Description snippet */}
-              <p className="text-sm text-slate-600 font-sans leading-relaxed mb-6">
+              <p className="text-sm text-slate-600 font-sans leading-relaxed mb-4">
                 {product.shortDescription || getPlainDescription(product.description).slice(0, 240)}
               </p>
 
               {/* Product Attributes (New Variable Workflow) */}
               {isVariable && product.attributes && product.attributes.length > 0 && (
-                <div className="space-y-4 mb-6 pt-4 border-t border-slate-100">
+                <div className="space-y-4 mb-4 pt-4 border-t border-slate-100">
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="text-sm font-bold text-slate-900">Options</h4>
                     {product.sizeGuide && (
@@ -660,7 +660,7 @@ export const ProductDetailPage: React.FC = () => {
 
               {/* Legacy Product Variants Selection */}
               {!isVariable && product.variants && product.variants.length > 0 && (
-                <div className="space-y-4 mb-6 pt-4 border-t border-slate-100">
+                <div className="space-y-4 mb-4 pt-4 border-t border-slate-100">
                   {product.variants.map((vGroup) => (
                     <div key={vGroup.id || vGroup.name} className="space-y-2">
                       <label className="text-xs font-heading font-extrabold text-slate-800 uppercase tracking-wider block">
@@ -756,7 +756,7 @@ export const ProductDetailPage: React.FC = () => {
             </div>
 
             {/* Micro Guarantees */}
-            <div className="grid grid-cols-3 gap-3 pt-6 border-t border-slate-100 text-center text-slate-500 text-[11px] sm:text-xs">
+            <div className="grid grid-cols-3 gap-3 pt-4 border-t border-slate-100 text-center text-slate-500 text-[11px] sm:text-xs">
               <div className="p-2.5 rounded-2xl bg-slate-50">
                 <Truck className="w-4 h-4 mx-auto text-sky-500 mb-1" />
                 <span>Cash on Delivery</span>
