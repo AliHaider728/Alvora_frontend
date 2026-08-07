@@ -40,7 +40,7 @@ import {
   StockStatus
 } from '../../types';
 import { getSafeImageSrc } from '../../utils/images';
-import { normalizeInventory } from '../../utils/products';
+import { getVariationDisplayLabel, normalizeInventory } from '../../utils/products';
 import { ProductDetailContentBuilder } from '../../components/admin/ProductDetailContentBuilder';
 import { CategoryFormModal } from '../../components/admin/CategoryFormModal';
 import { AdminProductReviewsSection } from '../../components/admin/AdminProductReviewsSection';
@@ -220,26 +220,29 @@ export const AdminProductFormPage: React.FC = () => {
       const currentDefault = activeVars.find(v => v.id === defaultVariationId);
       if (!currentDefault) {
         const primaryAttr = attributes.find(a => a.usedForVariations);
-        if (primaryAttr) {
-          const sortedVars = [...activeVars].sort((a, b) => {
+        const sortedVars = primaryAttr
+          ? [...activeVars].sort((a, b) => {
             const valA = a.attributes[primaryAttr.slug] || '';
             const valB = b.attributes[primaryAttr.slug] || '';
             const numA = parseInt(valA.replace(/\D/g, ''), 10) || 0;
             const numB = parseInt(valB.replace(/\D/g, ''), 10) || 0;
             return numB - numA;
-          });
-          setDefaultVariationId(sortedVars[0].id);
-          setDefaultAttributes(sortedVars[0].attributes);
-          setErrors(current => {
-            if (!current['defaultAttributes']) return current;
-            const next = { ...current };
-            delete next['defaultAttributes'];
-            return next;
-          });
-        }
+          })
+          : activeVars;
+        setDefaultVariationId(sortedVars[0].id);
+        setDefaultAttributes(sortedVars[0].attributes);
+        setErrors(current => {
+          if (!current['defaultAttributes']) return current;
+          const next = { ...current };
+          delete next['defaultAttributes'];
+          return next;
+        });
       } else {
         setDefaultAttributes(currentDefault.attributes);
       }
+    } else {
+      setDefaultVariationId('');
+      setDefaultAttributes({});
     }
   };
 
@@ -300,14 +303,14 @@ export const AdminProductFormPage: React.FC = () => {
     setDefaultAttributes(editingProduct.defaultAttributes || {});
     
     let initialDefaultVarId = editingProduct.defaultVariationId || '';
-    let validMatch = (editingProduct.variations || []).find(v => v.id === initialDefaultVarId);
+    let validMatch = (editingProduct.variations || []).find(v => v.enabled && v.id === initialDefaultVarId);
     
     if (!validMatch && editingProduct.defaultAttributes && Object.keys(editingProduct.defaultAttributes).length > 0) {
-       validMatch = (editingProduct.variations || []).find(v => Object.entries(editingProduct.defaultAttributes!).every(([k, val]) => v.attributes[k] === val));
+       validMatch = (editingProduct.variations || []).find(v => v.enabled && Object.entries(editingProduct.defaultAttributes!).every(([k, val]) => v.attributes[k] === val));
        if (validMatch) initialDefaultVarId = validMatch.id;
     }
     
-    setDefaultVariationId(initialDefaultVarId);
+    setDefaultVariationId(validMatch ? initialDefaultVarId : '');
     if (validMatch) setDefaultAttributes(validMatch.attributes);
     
     setAgeGroups(editingProduct.ageGroups?.length
@@ -392,14 +395,14 @@ export const AdminProductFormPage: React.FC = () => {
             setVariations(data.variations || []);
             
             let draftDefaultVarId = data.defaultVariationId || '';
-            let validDraftMatch = (data.variations || []).find((v: any) => v.id === draftDefaultVarId);
+            let validDraftMatch = (data.variations || []).find((v: any) => v.enabled && v.id === draftDefaultVarId);
             
             if (!validDraftMatch && data.defaultAttributes && Object.keys(data.defaultAttributes).length > 0) {
-               validDraftMatch = (data.variations || []).find((v: any) => Object.entries(data.defaultAttributes!).every(([k, val]) => v.attributes[k] === val));
+               validDraftMatch = (data.variations || []).find((v: any) => v.enabled && Object.entries(data.defaultAttributes!).every(([k, val]) => v.attributes[k] === val));
                if (validDraftMatch) draftDefaultVarId = validDraftMatch.id;
             }
             
-            setDefaultVariationId(draftDefaultVarId);
+            setDefaultVariationId(validDraftMatch ? draftDefaultVarId : '');
             if (validDraftMatch) setDefaultAttributes(validDraftMatch.attributes);
             else setDefaultAttributes(data.defaultAttributes || {});
 
@@ -752,6 +755,7 @@ export const AdminProductFormPage: React.FC = () => {
       attributes,
       variations,
       defaultAttributes,
+      defaultVariationId,
       deliveryType,
       customDeliveryFee: deliveryType === 'fixed' ? customDeliveryFee ?? null : null,
       metaTitle: metaTitle.trim(),
@@ -950,19 +954,20 @@ export const AdminProductFormPage: React.FC = () => {
                     <p className="text-xs text-slate-500 mb-3">This variation will be pre-selected when customers open the product page.</p>
                     <select
                       value={
-                          (variations.find(v => v.id === defaultVariationId) 
-                            ? defaultVariationId 
-                            : variations.find(v => Object.keys(defaultAttributes).length > 0 && Object.entries(defaultAttributes).every(([k, val]) => v.attributes[k] === val))?.id) 
+                          (variations.find(v => v.enabled && v.id === defaultVariationId)
+                            ? defaultVariationId
+                            : variations.find(v => v.enabled && Object.keys(defaultAttributes).length > 0 && Object.entries(defaultAttributes).every(([k, val]) => v.attributes[k] === val))?.id)
                           || ''
                         }
                       onChange={(e) => {
                         const selectedId = e.target.value;
                         const v = variations.find(v => v.id === selectedId);
-                        if (v) setDefaultAttributes(v.attributes);
+                        setDefaultVariationId(selectedId);
+                        if (v) setDefaultAttributes({ ...v.attributes });
                         markDirty();
                         clearError('defaultAttributes');
                       }}
-                      className={`w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-1 ${errors.defaultAttributes ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500' : 'border-slate-300 focus:border-rose-400 focus:ring-rose-400'}`}
+                      className={`w-full rounded-lg border bg-white px-3 py-2 text-sm text-slate-800 outline-none focus:ring-1 ${errors.defaultAttributes ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500' : 'border-slate-300 focus:border-rose-400 focus:ring-rose-400'}`}
                     >
                       <option value="" disabled>Select a default variation...</option>
                       {variations.filter(v => v.enabled).map((v, i) => (

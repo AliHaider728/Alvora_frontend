@@ -149,6 +149,7 @@ export interface Product {
   attributes?: ProductAttribute[];
   variations?: ProductVariation[];
   defaultAttributes?: Record<string, string>;
+  defaultVariationId?: string;
   deliveryType?: DeliveryChargeType;
   deliveryChargeType?: DeliveryChargeType;
   deliveryFee?: number;

@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import { Play, Settings2, Trash2, Image as ImageIcon } from 'lucide-react';
 import { ProductAttribute, ProductVariation } from '../../types';
 import { VariationImageModal } from './VariationImageModal';
-import { getVariationDisplayLabel } from '../../utils/products';
+import {
+  getAttributeTermLabel,
+  getVariationAttributeValue,
+  getVariationDisplayLabel
+} from '../../utils/products';
 
 interface VariationsGeneratorProps {
   attributes: ProductAttribute[];
@@ -117,14 +121,31 @@ export const VariationsGenerator: React.FC<VariationsGeneratorProps> = ({ attrib
             <div className="col-span-1 text-right">Actions</div>
           </div>
           
-          {variations.map(variation => (
+          {variations.map((variation, variationIndex) => (
             <div key={variation.id} className={`grid grid-cols-12 gap-4 px-4 py-3 border border-slate-200 rounded-xl items-center transition-opacity ${!variation.enabled ? 'opacity-50 bg-slate-50' : 'bg-white'}`}>
               <div className="col-span-3 flex flex-col gap-1">
-                {Object.entries(variation.attributes).map(([key, val]) => (
-                  <span key={key} className="text-sm font-medium text-slate-700 bg-slate-100 px-2 py-0.5 rounded-md self-start">
-                    {key}: {val}
-                  </span>
-                ))}
+                <span className="text-sm font-bold text-slate-800">
+                  {getVariationDisplayLabel(variation, attributes, variationIndex)}
+                </span>
+                {attributes.filter(attribute => attribute.usedForVariations).map(attribute => {
+                  const value = getVariationAttributeValue(variation, attribute);
+                  const term = attribute.terms?.find(item =>
+                    [item.id, item.value, item.slug, item.label].includes(value)
+                  );
+                  if (!value) return null;
+                  return (
+                    <span key={attribute.id || attribute.slug} className="inline-flex self-start items-center gap-1.5 rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">
+                      {(attribute.displayTypeOverride || attribute.displayType) === 'color_swatches' && (
+                        <span
+                          className="h-3.5 w-3.5 rounded-full border border-black/10"
+                          style={{ backgroundColor: term?.colorValue || term?.value || '#cbd5e1' }}
+                          aria-hidden="true"
+                        />
+                      )}
+                      {attribute.name}: {getAttributeTermLabel(attribute, value)}
+                    </span>
+                  );
+                })}
                 <label className="flex items-center gap-2 text-xs text-slate-500 mt-1 cursor-pointer">
                   <input
                     type="checkbox"

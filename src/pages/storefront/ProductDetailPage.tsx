@@ -24,8 +24,10 @@ import { api, getLastApiError } from '../../services/api';
 import {
   getEffectiveAvailableQuantity,
   getEffectiveProductAvailability,
+  getAttributeTermLabel,
   getProductAgeGroups,
   getProductDeliveryType,
+  getVariationAttributeValue,
   isProductVisibleOnStorefront,
   isVariantOptionAvailable,
   normalizeInventory
@@ -158,10 +160,58 @@ export const ProductDetailPage: React.FC = () => {
   }, [sizeGuideModalOpen]);
 
   useEffect(() => {
-    if (product?.productType === 'variable' && product.defaultAttributes) {
-      setSelectedAttributes(product.defaultAttributes);
+    if (product?.productType !== 'variable') {
+      setSelectedAttributes({});
+      return;
     }
-  }, [product?.id]);
+
+    const enabledVariations = (product.variations || []).filter(variation => variation.enabled);
+    const selectedDefault = enabledVariations.find(variation =>
+      Boolean(product.defaultVariationId) && variation.id === product.defaultVariationId
+    ) || enabledVariations.find(variation =>
+      Object.keys(product.defaultAttributes || {}).length > 0 &&
+      Object.entries(product.defaultAttributes || {}).every(
+        ([key, value]) => variation.attributes[key] === value
+      )
+    );
+
+    setSelectedAttributes(selectedDefault ? { ...selectedDefault.attributes } : {});
+  }, [product?.id, product?.defaultVariationId]);
+
+  const isVariable = product?.productType === 'variable';
+  const variationAttributes = (product?.attributes || []).filter(attribute => attribute.usedForVariations);
+  const currentVariation = isVariable
+    ? product?.variations?.find(variation => {
+        if (!variation.enabled) return false;
+        return variationAttributes.length > 0 && variationAttributes.every(attribute => {
+          const selectedValue = selectedAttributes[attribute.slug];
+          return Boolean(selectedValue) && getVariationAttributeValue(variation, attribute) === selectedValue;
+        });
+      })
+    : undefined;
+
+  useEffect(() => {
+    if (!isVariable) return;
+
+    let isCurrent = true;
+    const variationImageUrl = currentVariation?.image?.url;
+    setOverrideImage(null);
+    setActiveImageIndex(0);
+
+    if (variationImageUrl?.startsWith('https://')) {
+      void fetch(variationImageUrl, { method: 'HEAD' })
+        .then(response => {
+          if (isCurrent && response.ok) setOverrideImage(variationImageUrl);
+        })
+        .catch(() => {
+          // Keep the product's main image when a variation asset is unavailable.
+        });
+    }
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [currentVariation?.id, isVariable]);
 
   if (!product) {
     return (
@@ -187,27 +237,6 @@ export const ProductDetailPage: React.FC = () => {
   const relatedProducts = products
     .filter(p => Boolean(product.categorySlug) && p.categorySlug === product.categorySlug && p.id !== product.id)
     .slice(0, 4);
-
-  const isVariable = product.productType === 'variable';
-
-  // Find active variation
-  const currentVariation = isVariable
-    ? product.variations?.find(v => {
-        if (!v.enabled) return false;
-        return Object.entries(selectedAttributes).every(([key, val]) => v.attributes[key] === val);
-      })
-    : undefined;
-
-  useEffect(() => {
-    if (isVariable) {
-      if (currentVariation?.image?.url) {
-        setOverrideImage(currentVariation.image.url);
-      } else {
-        setOverrideImage(null);
-        setActiveImageIndex(0);
-      }
-    }
-  }, [currentVariation?.id, isVariable]);
 
   let currentPrice = product.price;
   let currentOriginalPrice = product.originalPrice;
@@ -236,7 +265,7 @@ export const ProductDetailPage: React.FC = () => {
 
   const variantGroups = (product.variants || []).filter(group => group.options.length > 0);
   const allVariantsSelected = isVariable
-    ? (product.attributes || []).every(attr => Boolean(selectedAttributes[attr.slug]))
+    ? variationAttributes.length > 0 && variationAttributes.every(attr => Boolean(selectedAttributes[attr.slug]))
     : variantGroups.every(group => Boolean(selectedVariants[group.name]));
 
   const effectiveAvailable = isVariable
@@ -483,11 +512,25 @@ export const ProductDetailPage: React.FC = () => {
                     const terms = attr.source === 'global' 
                       ? attr.terms.filter(t => (attr.selectedTermIds || []).includes(t.id))
                       : attr.terms;
+                    const selectedValue = selectedAttributes[attr.slug] || '';
+                    const selectedLabel = getAttributeTermLabel(attr, selectedValue);
+                    const isTermInStock = (termValue: string) => product.variations?.some(variation => {
+                      if (!variation.enabled || !normalizeInventory(variation).inStock) return false;
+                      return variationAttributes.every(candidateAttribute => {
+                        const expectedValue = candidateAttribute.slug === attr.slug
+                          ? termValue
+                          : selectedAttributes[candidateAttribute.slug];
+                        return !expectedValue || getVariationAttributeValue(variation, candidateAttribute) === expectedValue;
+                      });
+                    }) ?? false;
 
                     return (
                       <div key={attr.id || attr.slug} className="space-y-2">
                         <label className="text-xs font-heading font-extrabold text-slate-800 uppercase tracking-wider block">
-                          Select {attr.name}: <span className="text-slate-500 font-medium normal-case ml-1">{selectedAttributes[attr.slug]}</span>
+                          Select {attr.name}:
+                          <span className="ml-1 font-medium normal-case text-slate-600">
+                            {selectedLabel || 'Choose an option'}
+                          </span>
                         </label>
 
                         {displayType === 'dropdown' ? (
@@ -518,27 +561,35 @@ export const ProductDetailPage: React.FC = () => {
                         ) : displayType === 'color_swatches' ? (
                           <div className="flex flex-wrap gap-2 pt-1">
                             {terms.map((t) => {
-                              const isSelected = selectedAttributes[attr.slug] === t.value;
-                              const isOptionInStock = product.variations?.some(v => v.enabled && v.attributes[attr.slug] === t.value && normalizeInventory(v).inStock) ?? true;
+                              const isSelected = selectedValue === t.value;
+                              const isOptionInStock = isTermInStock(t.value);
                               return (
                                 <button
                                   key={t.id}
                                   type="button"
-                                  title={t.label}
+                                  title={`${attr.name}: ${t.label}`}
+                                  aria-label={`${attr.name}: ${t.label}${!isOptionInStock ? ' (out of stock)' : ''}`}
+                                  aria-pressed={isSelected}
                                   disabled={!isOptionInStock}
                                   onClick={() => handleAttributeSelect(attr.slug, t.value)}
-                                  className={`relative w-9 h-9 rounded-full border-2 transition-all ${
+                                  className={`group/swatch flex min-w-[72px] items-center gap-2 rounded-xl border px-2.5 py-2 text-left transition-all ${
                                     !isOptionInStock
-                                      ? 'border-slate-200 opacity-40 cursor-not-allowed'
+                                      ? 'cursor-not-allowed border-slate-200 opacity-40'
                                       : isSelected
-                                      ? 'border-slate-900 scale-110 shadow-sm'
-                                      : 'border-transparent hover:scale-105 shadow-sm'
+                                      ? 'border-slate-900 bg-slate-50 shadow-sm ring-1 ring-slate-900'
+                                      : 'border-slate-200 bg-white hover:border-slate-400'
                                   }`}
-                                  style={{ backgroundColor: t.colorValue || '#ccc' }}
                                 >
+                                  <span
+                                    className="relative h-6 w-6 shrink-0 rounded-full border border-black/10 shadow-inner"
+                                    style={{ backgroundColor: t.colorValue || t.value || '#cbd5e1' }}
+                                    aria-hidden="true"
+                                  >
                                   {!isOptionInStock && (
-                                    <div className="absolute inset-0 m-auto w-full h-[2px] bg-slate-400 rotate-45 transform origin-center" />
+                                      <span className="absolute inset-0 m-auto h-[2px] w-full origin-center rotate-45 bg-slate-500" />
                                   )}
+                                  </span>
+                                  <span className="max-w-24 truncate text-xs font-bold text-slate-700">{t.label}</span>
                                 </button>
                               );
                             })}
@@ -546,8 +597,8 @@ export const ProductDetailPage: React.FC = () => {
                         ) : displayType === 'image_swatches' ? (
                           <div className="flex flex-wrap gap-2 pt-1">
                             {terms.map((t) => {
-                              const isSelected = selectedAttributes[attr.slug] === t.value;
-                              const isOptionInStock = product.variations?.some(v => v.enabled && v.attributes[attr.slug] === t.value && normalizeInventory(v).inStock) ?? true;
+                              const isSelected = selectedValue === t.value;
+                              const isOptionInStock = isTermInStock(t.value);
                               return (
                                 <button
                                   key={t.id}
@@ -579,8 +630,8 @@ export const ProductDetailPage: React.FC = () => {
                           // Default to Text Buttons
                           <div className="flex flex-wrap gap-2">
                             {terms.map((t) => {
-                              const isSelected = selectedAttributes[attr.slug] === t.value;
-                              const isOptionInStock = product.variations?.some(v => v.enabled && v.attributes[attr.slug] === t.value && normalizeInventory(v).inStock) ?? true;
+                              const isSelected = selectedValue === t.value;
+                              const isOptionInStock = isTermInStock(t.value);
                               return (
                                 <button
                                   key={t.id}

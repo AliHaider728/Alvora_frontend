@@ -1,4 +1,11 @@
-import { AgeGroupCategory, Product, ProductVariantOption, StockStatus } from '../types';
+import {
+  AgeGroupCategory,
+  Product,
+  ProductAttribute,
+  ProductVariation,
+  ProductVariantOption,
+  StockStatus
+} from '../types';
 
 type InventorySource = {
   trackInventory?: boolean;
@@ -120,9 +127,34 @@ export const formatProductAgeGroups = (product: Product) => {
 };
 
 
+export const getVariationAttributeValue = (
+  variation: Pick<ProductVariation, 'attributes'>,
+  attribute: ProductAttribute
+): string => {
+  const candidates = [attribute.slug, attribute.id, attribute.globalAttributeId, attribute.name]
+    .filter((candidate): candidate is string => Boolean(candidate));
+  for (const key of candidates) {
+    const value = variation.attributes?.[key];
+    if (typeof value === 'string' && value.trim()) return value.trim();
+  }
+  return '';
+};
+
+export const getAttributeTermLabel = (attribute: ProductAttribute, value: string): string => {
+  const normalizedValue = String(value || '').trim();
+  if (!normalizedValue) return '';
+  const normalizedLower = normalizedValue.toLowerCase();
+  const term = attribute.terms?.find(item =>
+    [item.id, item.value, item.slug, item.label].some(candidate =>
+      String(candidate || '').trim().toLowerCase() === normalizedLower
+    )
+  );
+  return String(term?.label || term?.value || normalizedValue).trim();
+};
+
 export const getVariationDisplayLabel = (
-  variation: any,
-  productAttributes: any[],
+  variation: ProductVariation,
+  productAttributes: ProductAttribute[],
   index: number
 ): string => {
   if (!variation || !variation.attributes || Object.keys(variation.attributes).length === 0) {
@@ -134,26 +166,9 @@ export const getVariationDisplayLabel = (
   const varAttrs = productAttributes.filter(a => a.usedForVariations);
 
   for (const attr of varAttrs) {
-    // 1. variation value by attribute slug
-    let val = variation.attributes[attr.slug];
-    
-    // 2. variation value by attribute ID
-    if (!val && attr.id) val = variation.attributes[attr.id];
-    
-    // 3. variation value by globalAttributeId
-    if (!val && attr.globalAttributeId) val = variation.attributes[attr.globalAttributeId];
-    
-    // 4. variation value by attribute name
-    if (!val && attr.name) val = variation.attributes[attr.name];
-
-    // 5. resolve stored term ID to its visible term label
-    if (val) {
-      const termMatch = attr.terms?.find((t: any) => t.id === val || t.value === val || t.slug === val);
-      if (termMatch) {
-        val = termMatch.label || termMatch.value || val;
-      }
-      parts.push(val);
-    }
+    const value = getVariationAttributeValue(variation, attr);
+    const label = getAttributeTermLabel(attr, value);
+    if (label) parts.push(`${attr.name}: ${label}`);
   }
 
   if (parts.length > 0) {
@@ -161,7 +176,9 @@ export const getVariationDisplayLabel = (
   }
 
   // 6. any remaining non-empty variation attribute values
-  const allVals = Object.values(variation.attributes).filter(Boolean);
+  const allVals = Object.values(variation.attributes)
+    .map(value => String(value || '').trim())
+    .filter(Boolean);
   if (allVals.length > 0) {
     return allVals.map(String).join(' / ');
   }

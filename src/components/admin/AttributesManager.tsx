@@ -204,6 +204,13 @@ export const AttributesManager: React.FC<AttributesManagerProps> = ({ attributes
                     <div className="flex flex-wrap gap-2">
                       {attr.terms.map(t => (
                         <span key={t.id} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 text-sm border border-rose-200">
+                          {(attr.displayTypeOverride || attr.displayType) === 'color_swatches' && (
+                            <span
+                              className="h-3.5 w-3.5 rounded-full border border-black/10"
+                              style={{ backgroundColor: t.colorValue || t.value || '#cbd5e1' }}
+                              aria-hidden="true"
+                            />
+                          )}
                           {t.label}
                           <button type="button" onClick={() => removeCustomTerm(attr.id, t.id)} className="text-rose-500 hover:text-rose-700 p-0.5 rounded-full hover:bg-rose-100 transition-colors">
                             <span className="sr-only">Remove</span>
@@ -243,6 +250,13 @@ export const AttributesManager: React.FC<AttributesManagerProps> = ({ attributes
                               : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300'
                           }`}
                         >
+                          {(attr.displayTypeOverride || attr.displayType) === 'color_swatches' && (
+                            <span
+                              className="mr-1.5 inline-block h-3.5 w-3.5 rounded-full border border-black/10 align-[-2px]"
+                              style={{ backgroundColor: term.colorValue || term.value || '#cbd5e1' }}
+                              aria-hidden="true"
+                            />
+                          )}
                           {term.label}
                         </button>
                       );
