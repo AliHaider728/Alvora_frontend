@@ -21,6 +21,7 @@ export const getAdminSessionUser = (): AdminSessionUser | null => {
   }
 };
 export const isSuperAdmin = () => getAdminSessionUser()?.role === 'super_admin';
+export const isAdmin = () => ['admin', 'super_admin'].includes(getAdminSessionUser()?.role || '');
 let lastApiError = '';
 export const getLastApiError = (): string => lastApiError;
 
@@ -75,6 +76,8 @@ export const api = {
   // Auth
   login: (email: string, password: string) =>
     fetchJson<any>('/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) }),
+  register: (name: string, email: string, password: string) =>
+    fetchJson<any>('/auth/register', { method: 'POST', body: JSON.stringify({ name, email, password }) }),
   logout: () => fetchJson<any>('/auth/logout', { method: 'POST' }),
   getMe: () => fetchJson<any>('/auth/me'),
   forgotPassword: (email: string) => fetchJson<any>('/auth/forgot-password', { method: 'POST', body: JSON.stringify({ email }) }),

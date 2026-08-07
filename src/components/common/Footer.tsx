@@ -14,15 +14,14 @@ import {
   UserCircle2
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
-import { getAuthToken } from '../../services/api';
+import { getAuthToken, getAdminSessionUser } from '../../services/api';
 import Ballpit from '../Ballpit/Ballpit';
 
-// Adjust this import path to wherever the transparent logo file lives in your project
 import playBimbooLogo from '../../assets/images/playbimboo-logo.png';
 
 export const Footer: React.FC = () => {
   const { settings } = useStore();
-  const isAuthenticated = Boolean(getAuthToken());
+  const isAuthenticated = getAdminSessionUser()?.role === 'customer';
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
@@ -237,7 +236,7 @@ export const Footer: React.FC = () => {
             </div>
 
             <Link
-              to={isAuthenticated ? "/account" : "/login"}
+              to="/account"
               className="inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-amber-500 hover:opacity-90 text-white font-heading font-bold text-xs shadow-md transition-opacity"
             >
               <UserCircle2 className="w-3.5 h-3.5" />

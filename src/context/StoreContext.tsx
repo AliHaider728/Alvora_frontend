@@ -315,48 +315,83 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return normalized;
   };
 
-  
-  // Fetch real data from backend API on mount
+  // ─── Settings: fetched independently, never mixed with auth-gated data ───
+  // This MUST run on mount and NEVER be re-triggered by pb-auth-changed.
+  // It is the sole authority for settings state in production.
   useEffect(() => {
-    const fetchRealData = async () => {
+    const fetchSettings = async () => {
       try {
-        const hasAdminSession = Boolean(getAuthToken());
-        if (!hasAdminSession) {
+        const result = await api.getSettings();
+        if (result) {
+          setSettings(normalizeStoreSettings(result));
+        }
+        // If API fails, keep the current canonical value — do NOT fall back to mock
+      } catch {
+        // Settings API temporarily unavailable; keep current state (already normalized)
+      }
+    };
+    void fetchSettings();
+  }, []); // runs ONCE on mount only — no auth dependency
+
+  // ─── Auth-gated data: fetched on mount + on auth change ───
+  // Does NOT touch settings. Each domain updates only its own slice.
+  useEffect(() => {
+    const fetchAuthGatedData = async () => {
+      try {
+        const hasAuthSession = Boolean(getAuthToken());
+        if (!hasAuthSession) {
           setOrders([]);
           setCustomers([]);
           setCoupons([]);
           setReviews([]);
+          return; // Nothing more to fetch for guests
         }
-        const [
-          realProducts,
-          realCategories,
-          realOrders,
-          realCustomers,
-          realCoupons,
-          realSettings
-        ] = await Promise.all([
-          api.getProducts(),
-          hasAdminSession && isSuperAdmin() ? api.getAdminCategories() : api.getCategories(),
-          hasAdminSession ? api.getOrders() : Promise.resolve(null),
-          hasAdminSession ? api.getCustomers() : Promise.resolve(null),
-          hasAdminSession ? api.getCoupons() : Promise.resolve(null),
-          api.getSettings()
-        ]);
+        
+        // Orders can be fetched by customer (returns their own) or admin (returns all)
+        try {
+          const realOrders = await api.getOrders();
+          if (realOrders) setOrders(realOrders.map(normalizeOrder));
+        } catch (err) {
+          console.error('Failed to fetch orders', err);
+        }
 
-        if (realProducts) setProducts(realProducts.map(normalizeProduct));
-        if (realCategories) setCategories(realCategories.map(normalizeCategory));
-        if (realOrders) setOrders(realOrders.map(normalizeOrder));
-        if (realCustomers) setCustomers(realCustomers);
-        if (realCoupons) setCoupons(realCoupons.map(normalizeCoupon));
-        if (realSettings) setSettings(normalizeStoreSettings(realSettings));
+        // Admin-only data
+        if (isAdmin()) {
+          try {
+            const [realCustomers, realCoupons] = await Promise.all([
+              api.getCustomers(),
+              api.getCoupons()
+            ]);
+            if (realCustomers) setCustomers(realCustomers);
+            if (realCoupons) setCoupons(realCoupons.map(normalizeCoupon));
+          } catch (err) {
+            console.error('Failed to fetch admin-only data', err);
+          }
+        }
       } catch (err) {
-        console.error('Failed to fetch real data from backend', err);
+        console.error('Failed to fetch auth-gated data from backend', err);
       }
     };
 
-    void fetchRealData();
-    window.addEventListener('pb-auth-changed', fetchRealData);
-    return () => window.removeEventListener('pb-auth-changed', fetchRealData);
+    // ─── Public data (products + categories) — always fetch ───
+    const fetchPublicData = async () => {
+      try {
+        const hasAdminSession = Boolean(getAuthToken());
+        const [realProducts, realCategories] = await Promise.all([
+          api.getProducts(),
+          hasAdminSession && isSuperAdmin() ? api.getAdminCategories() : api.getCategories()
+        ]);
+        if (realProducts) setProducts(realProducts.map(normalizeProduct));
+        if (realCategories) setCategories(realCategories.map(normalizeCategory));
+      } catch (err) {
+        console.error('Failed to fetch public catalog data', err);
+      }
+    };
+
+    void fetchPublicData();
+    void fetchAuthGatedData();
+    window.addEventListener('pb-auth-changed', fetchAuthGatedData);
+    return () => window.removeEventListener('pb-auth-changed', fetchAuthGatedData);
   }, []);
 
   // Sync to localStorage
