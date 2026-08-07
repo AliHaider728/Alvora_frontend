@@ -11,7 +11,11 @@ import {
   Plus,
   Minus,
   MessageSquarePlus,
-  Info
+  Info,
+  X,
+  ChevronLeft,
+  ChevronRight,
+  ZoomIn
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { useToast } from '../../context/ToastContext';
@@ -25,7 +29,8 @@ import {
   getEffectiveAvailableQuantity,
   getEffectiveProductAvailability,
   getAttributeTermLabel,
-  getProductAgeGroups,
+  formatProductAgeGroups,
+  getProductCategoryNames,
   getProductDeliveryType,
   getVariationAttributeValue,
   isProductVisibleOnStorefront,
@@ -56,6 +61,13 @@ export const ProductDetailPage: React.FC = () => {
   const [selectedAttributes, setSelectedAttributes] = useState<Record<string, string>>({});
   const [activeTab, setActiveTab] = useState<'desc' | 'specs' | 'safety' | 'reviews'>('desc');
   const [added, setAdded] = useState(false);
+  const [isZooming, setIsZooming] = useState(false);
+  const [zoomOrigin, setZoomOrigin] = useState('50% 50%');
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+  const lightboxRef = React.useRef<HTMLDivElement>(null);
+  const lightboxCloseRef = React.useRef<HTMLButtonElement>(null);
+  const lightboxTriggerRef = React.useRef<HTMLButtonElement>(null);
 
   // Write review modal state
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
@@ -213,6 +225,48 @@ export const ProductDetailPage: React.FC = () => {
     };
   }, [currentVariation?.id, isVariable]);
 
+  const lightboxImages = product
+    ? overrideImage && !product.images.includes(overrideImage)
+      ? [overrideImage, ...product.images]
+      : product.images
+    : [];
+
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    const modal = lightboxRef.current;
+    const previousOverflow = document.body.style.overflow;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setLightboxOpen(false);
+      if (event.key === 'ArrowLeft' && lightboxImages.length > 1) {
+        setLightboxIndex(index => (index - 1 + lightboxImages.length) % lightboxImages.length);
+      }
+      if (event.key === 'ArrowRight' && lightboxImages.length > 1) {
+        setLightboxIndex(index => (index + 1) % lightboxImages.length);
+      }
+      if (event.key === 'Tab' && modal) {
+        const controls = [...modal.querySelectorAll<HTMLElement>('button:not([disabled])')];
+        if (controls.length === 0) return;
+        const first = controls[0];
+        const last = controls[controls.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
+    };
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', handleKeyDown);
+    lightboxCloseRef.current?.focus();
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', handleKeyDown);
+      lightboxTriggerRef.current?.focus();
+    };
+  }, [lightboxOpen, lightboxImages.length]);
+
   if (!product) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">
@@ -362,31 +416,55 @@ export const ProductDetailPage: React.FC = () => {
       : []),
     { label: product.name }
   ];
+  const activeImageUrl = overrideImage || product.images[activeImageIndex] || product.images[0];
+  const openLightbox = () => {
+    const selectedIndex = lightboxImages.indexOf(activeImageUrl);
+    setLightboxIndex(selectedIndex >= 0 ? selectedIndex : 0);
+    setLightboxOpen(true);
+  };
+  const handleZoomPointerMove = (event: React.PointerEvent<HTMLButtonElement>) => {
+    if (event.pointerType !== 'mouse' || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const x = Math.min(100, Math.max(0, ((event.clientX - bounds.left) / bounds.width) * 100));
+    const y = Math.min(100, Math.max(0, ((event.clientY - bounds.top) / bounds.height) * 100));
+    setZoomOrigin(`${x}% ${y}%`);
+    setIsZooming(true);
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 py-4 font-sans sm:py-6">
       <SeoHead product={product} />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
         <Breadcrumbs items={breadcrumbItems} />
 
         {/* Top Detail Section: Gallery + Product Info */}
-        <div className="mb-5 grid grid-cols-1 items-start gap-5 rounded-3xl border border-slate-100 bg-white p-4 shadow-sm sm:p-6 lg:grid-cols-12 lg:gap-7">
+        <div className="mb-5 grid grid-cols-1 items-start gap-5 rounded-3xl border border-slate-100 bg-white p-4 shadow-sm sm:p-6 lg:grid-cols-12 lg:gap-8">
           {/* Left Column: Image Gallery */}
           <div className="self-start space-y-2.5 lg:col-span-6">
             {/* Main Preview Image with Hover Zoom Effect */}
-            <div className="relative flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded-2xl border border-slate-100 bg-slate-50 p-2 sm:p-3">
+            <button
+              ref={lightboxTriggerRef}
+              type="button"
+              onClick={openLightbox}
+              onPointerMove={handleZoomPointerMove}
+              onPointerLeave={() => { setIsZooming(false); setZoomOrigin('50% 50%'); }}
+              className="group/gallery relative flex aspect-[4/3] w-full cursor-zoom-in items-center justify-center overflow-hidden rounded-2xl border border-slate-100 bg-slate-50 p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 focus-visible:ring-offset-2 sm:p-2"
+              aria-label={`Enlarge ${product.name} image`}
+            >
               <img
-                src={getSafeImageSrc(overrideImage || product.images[activeImageIndex] || product.images[0])}
+                src={getSafeImageSrc(activeImageUrl)}
                 alt={product.name}
-                className="h-full w-full object-contain object-center"
+                style={{ transformOrigin: zoomOrigin }}
+                className={`h-full w-full object-contain object-center transition-transform duration-200 ease-out motion-reduce:transition-none ${isZooming ? 'scale-[1.75]' : 'scale-100'}`}
               />
+              <span className="pointer-events-none absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-slate-950/70 px-3 py-1.5 text-[10px] font-bold text-white opacity-0 backdrop-blur transition-opacity group-hover/gallery:opacity-100"><ZoomIn className="h-3.5 w-3.5" /> Click to enlarge</span>
               {product.discountPercent && (
                 <span className="absolute top-4 left-4 bg-rose-500 text-white font-heading font-extrabold text-xs px-3 py-1.5 rounded-full shadow-md">
                   -{product.discountPercent}% OFF
                 </span>
               )}
-            </div>
+            </button>
 
             {/* Gallery Thumbnails */}
             {product.images.length > 1 && (
@@ -428,13 +506,9 @@ export const ProductDetailPage: React.FC = () => {
                 {product.name}
               </h1>
 
-              <div className="mb-3 flex flex-wrap gap-2" aria-label="Product categories and recommended age groups">
-                {(product.categoryNames?.length ? product.categoryNames : product.category ? [product.category] : []).slice(0, 3).map(categoryName => (
-                  <span key={categoryName} className="rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-[11px] font-bold text-sky-700">{categoryName}</span>
-                ))}
-                {getProductAgeGroups(product).map(age => (
-                  <span key={age} className="rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-[11px] font-bold text-indigo-700">Ages {age}</span>
-                ))}
+              <div className="mb-3 grid gap-1.5 rounded-2xl border border-slate-100 bg-slate-50/70 px-3 py-2.5 text-xs sm:grid-cols-2" aria-label="Product categories and recommended age groups">
+                <div><span className="font-black text-slate-700">Categories: </span><span className="font-semibold text-sky-700">{getProductCategoryNames(product).join(', ') || 'Uncategorized'}</span></div>
+                <div><span className="font-black text-slate-700">Age: </span><span className="font-semibold text-indigo-700">{formatProductAgeGroups(product).replace(/^Ages\s*/i, '')}</span></div>
               </div>
 
               {/* Price & Stock */}
@@ -985,6 +1059,23 @@ export const ProductDetailPage: React.FC = () => {
           </div>
         )}
       </div>
+
+      {lightboxOpen && lightboxImages.length > 0 && (
+        <div
+          ref={lightboxRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${product.name} image gallery`}
+          className="fixed inset-0 z-[120] flex items-center justify-center bg-slate-950/90 p-3 backdrop-blur-md sm:p-6"
+          onMouseDown={event => { if (event.target === event.currentTarget) setLightboxOpen(false); }}
+        >
+          <button ref={lightboxCloseRef} type="button" onClick={() => setLightboxOpen(false)} className="absolute right-4 top-4 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white ring-1 ring-white/20 backdrop-blur transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white" aria-label="Close image gallery"><X className="h-6 w-6" /></button>
+          {lightboxImages.length > 1 && <button type="button" onClick={() => setLightboxIndex(index => (index - 1 + lightboxImages.length) % lightboxImages.length)} className="absolute left-3 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white ring-1 ring-white/20 backdrop-blur transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white sm:left-6" aria-label="Previous product image"><ChevronLeft className="h-7 w-7" /></button>}
+          <img src={getSafeImageSrc(lightboxImages[lightboxIndex])} alt={`${product.name} image ${lightboxIndex + 1} of ${lightboxImages.length}`} className="max-h-[88vh] max-w-[92vw] object-contain" />
+          {lightboxImages.length > 1 && <button type="button" onClick={() => setLightboxIndex(index => (index + 1) % lightboxImages.length)} className="absolute right-3 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white ring-1 ring-white/20 backdrop-blur transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white sm:right-6" aria-label="Next product image"><ChevronRight className="h-7 w-7" /></button>}
+          <span className="absolute bottom-4 rounded-full bg-black/40 px-3 py-1.5 text-xs font-bold text-white" aria-live="polite">{lightboxIndex + 1} / {lightboxImages.length}</span>
+        </div>
+      )}
 
       {/* Write Review Modal */}
       {reviewModalOpen && (
