@@ -22,29 +22,7 @@ export const AccountPage: React.FC = () => {
     addresses: []
   };
 
-  const handleCancelOrder = async (orderId: string, orderDateStr: string) => {
-    // Check 24 hour threshold
-    const orderTime = new Date(orderDateStr).getTime();
-    const currentTime = new Date().getTime();
-    const hoursElapsed = (currentTime - orderTime) / (1000 * 60 * 60);
 
-    if (hoursElapsed > 24) {
-      showToast('Order cancellation window (24 hours) has passed. Please contact store support.', 'error');
-      return;
-    }
-
-    if (!await confirm({ title: 'Cancel this order?', description: 'The order status will change to Cancelled. Tracked product and variant stock will be restored where applicable.', cancelLabel: 'Keep Order', confirmLabel: 'Cancel Order', destructive: true })) return;
-    const result = await updateOrderStatus(orderId, 'Cancelled');
-    if (!result) showToast('The order could not be cancelled.', 'error');
-    else showToast(result.notification?.inventoryRestored ? 'Order cancelled and tracked stock restored.' : 'Order cancelled. No tracked stock required restoration.', 'success');
-  };
-
-  const isWithin24Hours = (orderDateStr: string) => {
-    const orderTime = new Date(orderDateStr).getTime();
-    const currentTime = new Date().getTime();
-    const hoursElapsed = (currentTime - orderTime) / (1000 * 60 * 60);
-    return isNaN(hoursElapsed) || hoursElapsed <= 24;
-  };
 
   if (!isLoggedIn) {
     return (
@@ -95,11 +73,17 @@ export const AccountPage: React.FC = () => {
         {/* Profile Header */}
         <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-sm mb-8 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-4">
-            <img
-              src={customer.avatar}
-              alt={customer.name}
-              className="w-16 h-16 rounded-full object-cover ring-4 ring-rose-100"
-            />
+            {customer.avatar ? (
+              <img
+                src={customer.avatar}
+                alt={customer.name}
+                className="w-16 h-16 rounded-full object-cover ring-4 ring-rose-100"
+              />
+            ) : (
+              <div className="w-16 h-16 rounded-full ring-4 ring-rose-100 flex items-center justify-center bg-rose-500 text-white font-heading font-black text-2xl">
+                {customer.name?.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'U'}
+              </div>
+            )}
             <div>
               <h1 className="font-heading font-black text-2xl text-slate-900">{customer.name}</h1>
               <span className="text-xs text-slate-500 font-medium">{customer.email} &bull; {customer.phone}</span>
@@ -146,8 +130,6 @@ export const AccountPage: React.FC = () => {
                   <p className="text-xs text-slate-500 p-6 bg-white rounded-3xl text-center">No past orders found.</p>
                 ) : (
                   orders.map(order => {
-                    const cancellable = (order.status === 'Pending' || order.status === 'Processing') && isWithin24Hours(order.date);
-
                     return (
                       <div key={order.id} className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm space-y-4">
                         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
@@ -163,15 +145,7 @@ export const AccountPage: React.FC = () => {
                             }`}>
                               {order.status}
                             </span>
-                            {cancellable && (
-                              <button
-                                onClick={() => handleCancelOrder(order.id, order.date)}
-                                className="px-3 py-1 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs flex items-center gap-1 border border-rose-200 transition-colors"
-                              >
-                                <XCircle className="w-3.5 h-3.5" />
-                                Cancel Order (24h)
-                              </button>
-                            )}
+
                           </div>
                         </div>
 

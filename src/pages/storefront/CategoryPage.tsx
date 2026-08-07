@@ -10,6 +10,7 @@ import { formatPrice } from '../../utils/formatters';
 import { AGE_GROUPS } from '../../data/mockData';
 import { AgeGroupCategory } from '../../types';
 import { getProductAgeGroups, isProductVisibleOnStorefront } from '../../utils/products';
+import { useScrollLock } from '../../hooks/useScrollLock';
 
 const parseMultiValueParam = (value: string | null) =>
   value
@@ -26,6 +27,8 @@ export const CategoryPage: React.FC = () => {
 
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  useScrollLock(mobileFilterOpen);
 
   // Filter States initialized from URL params
   const [selectedCategories, setSelectedCategories] = useState<string[]>(() => {

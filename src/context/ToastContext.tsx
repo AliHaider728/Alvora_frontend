@@ -41,7 +41,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     if (type === 'loading') return;
     const existing = timers.current.get(id);
     if (existing) clearTimeout(existing);
-    const timer = setTimeout(() => dismissToast(id), type === 'error' ? 8000 : 4500);
+    const timer = setTimeout(() => dismissToast(id), type === 'error' ? 8000 : 2500);
     timers.current.set(id, timer);
   }, [dismissToast]);
 

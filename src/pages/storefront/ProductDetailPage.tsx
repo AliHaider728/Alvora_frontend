@@ -25,6 +25,7 @@ import { ReviewSummary } from '../../components/common/ReviewSummary';
 import { Breadcrumbs } from '../../components/common/Breadcrumbs';
 import { SeoHead } from '../../components/common/SeoHead';
 import { formatPrice } from '../../utils/formatters';
+import { useScrollLock } from '../../hooks/useScrollLock';
 import { api, getLastApiError } from '../../services/api';
 import {
   getEffectiveAvailableQuantity,
@@ -86,6 +87,8 @@ export const ProductDetailPage: React.FC = () => {
   const [newComment, setNewComment] = useState('');
   const [newUserName, setNewUserName] = useState('');
   const [productReviews, setProductReviews] = useState<Review[]>([]);
+
+  useScrollLock(lightboxOpen || sizeGuideModalOpen || reviewModalOpen);
 
   const loadProductReviews = async (productId: string) => {
     const result = await api.getProductReviews(productId);
@@ -170,11 +173,9 @@ export const ProductDetailPage: React.FC = () => {
 
       modal.addEventListener('keydown', handleKeyDown);
       firstElement?.focus();
-      document.body.style.overflow = 'hidden';
 
       return () => {
         modal.removeEventListener('keydown', handleKeyDown);
-        document.body.style.overflow = '';
         sizeGuideTriggerRef.current?.focus();
       };
     }
@@ -243,7 +244,6 @@ export const ProductDetailPage: React.FC = () => {
   useEffect(() => {
     if (!lightboxOpen) return;
     const modal = lightboxRef.current;
-    const previousOverflow = document.body.style.overflow;
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setLightboxOpen(false);
       if (event.key === 'ArrowLeft' && lightboxImages.length > 1) {
@@ -266,11 +266,9 @@ export const ProductDetailPage: React.FC = () => {
         }
       }
     };
-    document.body.style.overflow = 'hidden';
     document.addEventListener('keydown', handleKeyDown);
     lightboxCloseRef.current?.focus();
     return () => {
-      document.body.style.overflow = previousOverflow;
       document.removeEventListener('keydown', handleKeyDown);
       lightboxTriggerRef.current?.focus();
     };

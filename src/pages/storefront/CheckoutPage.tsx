@@ -310,16 +310,7 @@ export const CheckoutPage: React.FC = () => {
               </p>
             </div>
 
-            {/* 24-Hour Cancellation Policy Alert */}
-            <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs sm:text-sm flex items-start gap-3 text-left">
-              <Clock className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-              <div>
-                <strong className="font-bold block text-amber-950">24-Hour Order Cancellation Window:</strong>
-                <span>
-                  You can cancel or modify this order within 24 hours of placement directly from your account page.
-                </span>
-              </div>
-            </div>
+
 
             {/* Order Receipt Box */}
             <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 text-left space-y-4">
@@ -361,12 +352,14 @@ export const CheckoutPage: React.FC = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-              <Link
-                to="/account"
-                className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-slate-900 text-white font-heading font-bold text-sm shadow-md"
-              >
-                View Order Status & Cancel (24h Window)
-              </Link>
+              {completedOrder.email && (
+                <Link
+                  to="/account"
+                  className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-slate-900 text-white font-heading font-bold text-sm shadow-md"
+                >
+                  Track Order & Account
+                </Link>
+              )}
               <Link
                 to="/category/all"
                 className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-rose-500 text-white font-heading font-bold text-sm shadow-md"

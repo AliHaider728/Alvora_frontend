@@ -5,6 +5,7 @@ import { useStore } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/formatters';
 import { getSafeImageSrc } from '../../utils/images';
 import { getVariationDisplayLabel } from '../../utils/products';
+import { useScrollLock } from '../../hooks/useScrollLock';
 
 export const CartDrawer: React.FC = () => {
   const {
@@ -23,6 +24,8 @@ export const CartDrawer: React.FC = () => {
 
   const [couponCodeInput, setCouponCodeInput] = useState('');
   const [couponMsg, setCouponMsg] = useState<{ success: boolean; message: string } | null>(null);
+
+  useScrollLock(isCartOpen);
 
   const navigate = useNavigate();
 
