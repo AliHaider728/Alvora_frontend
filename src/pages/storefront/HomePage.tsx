@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { ProductCard } from '../../components/common/ProductCard';
+import { ProductSpotlight } from '../../components/home/ProductSpotlight';
 import { TrustBadges } from '../../components/common/TrustBadges';
 import { SeoHead } from '../../components/common/SeoHead';
 import { AGE_GROUPS } from '../../data/mockData';
@@ -37,9 +38,11 @@ export const HomePage: React.FC = () => {
   const [selectedQuickViewProduct, setSelectedQuickViewProduct] = useState<Product | null>(null);
 
   const visibleProducts = products.filter(isProductVisibleOnStorefront);
-  const featuredProducts = visibleProducts.filter(p => p.isFeatured).slice(0, 4);
-  const bestSellers = visibleProducts.filter(p => p.isBestseller).slice(0, 4);
+  const featuredProducts = [...new Map(
+    visibleProducts.filter(p => p.isFeatured || p.isBestseller).map(product => [product.id, product])
+  ).values()].slice(0, 4);
   const newArrivals = visibleProducts.filter(p => p.isNewArrival).slice(0, 4);
+  const spotlightProduct = visibleProducts.find(p => p.isSpotlight);
   const sectionByKey = Object.fromEntries(settings.homepageSections.map(section => [section.key, section]));
 
   const categoryIcons: Record<string, React.ReactNode> = {
@@ -249,7 +252,7 @@ export const HomePage: React.FC = () => {
       </section>}
 
       {/* Featured / Bestseller Products Section */}
-      {sectionByKey.featuredProducts?.enabled && <section style={{ order: sectionByKey.featuredProducts.order }} className="py-14 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {sectionByKey.featuredProducts?.enabled && featuredProducts.length > 0 && <section style={{ order: sectionByKey.featuredProducts.order }} className="py-14 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8">
           <div>
             <span className="text-xs font-extrabold uppercase tracking-wider text-rose-500 font-heading flex items-center gap-1">
@@ -268,7 +271,7 @@ export const HomePage: React.FC = () => {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+        <div className="grid grid-cols-1 items-start gap-5 sm:grid-cols-2 lg:gap-6">
           {featuredProducts.map(product => (
             <ProductCard
               key={product.id || product.slug}
@@ -353,7 +356,7 @@ export const HomePage: React.FC = () => {
       </section>}
 
       {/* New Arrivals Grid */}
-      {sectionByKey.newArrivals?.enabled && <section style={{ order: sectionByKey.newArrivals.order }} className="py-14 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {sectionByKey.newArrivals?.enabled && newArrivals.length > 0 && <section style={{ order: sectionByKey.newArrivals.order }} className="py-14 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8">
           <div>
             <span className="text-xs font-extrabold uppercase tracking-wider text-sky-600 font-heading">
@@ -371,7 +374,7 @@ export const HomePage: React.FC = () => {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+        <div className="grid grid-cols-1 items-start gap-5 sm:grid-cols-2 lg:gap-6">
           {newArrivals.map(product => (
             <ProductCard
               key={product.id || product.slug}
@@ -381,6 +384,12 @@ export const HomePage: React.FC = () => {
           ))}
         </div>
       </section>}
+
+      {spotlightProduct && (
+        <div style={{ order: (sectionByKey.newArrivals?.order ?? 6) + 1 }}>
+          <ProductSpotlight product={spotlightProduct} />
+        </div>
+      )}
 
       {/* Quick View Product Modal */}
       {selectedQuickViewProduct && (

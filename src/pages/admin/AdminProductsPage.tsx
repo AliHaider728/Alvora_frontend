@@ -22,7 +22,8 @@ export const AdminProductsPage: React.FC = () => {
 
   const filteredProducts = products.filter(p => {
     const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || p.brand.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCat = selectedCatFilter === 'all' || p.categorySlug === selectedCatFilter;
+    const productCategorySlugs = p.categorySlugs?.length ? p.categorySlugs : p.categorySlug ? [p.categorySlug] : [];
+    const matchesCat = selectedCatFilter === 'all' || productCategorySlugs.includes(selectedCatFilter);
     return matchesSearch && matchesCat;
   });
 
@@ -151,7 +152,7 @@ export const AdminProductsPage: React.FC = () => {
             <thead className="bg-slate-50 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
               <tr>
                 <th className="p-4 pl-6">Toy</th>
-                <th className="p-4">Category</th>
+                <th className="p-4">Categories</th>
                 <th className="p-4">Age</th>
                 <th className="p-4">Price (PKR)</th>
                 <th className="p-4">Stock</th>
@@ -171,7 +172,7 @@ export const AdminProductsPage: React.FC = () => {
                       </div>
                     </div>
                   </td>
-                  <td className="p-4 font-semibold text-sky-600">{prod.category || 'Uncategorized'}</td>
+                  <td className="p-4 font-semibold text-sky-600">{prod.category || 'Uncategorized'}{(prod.categoryNames?.length || 0) > 1 && <span className="ml-1 text-[10px] text-slate-400">+{prod.categoryNames!.length - 1}</span>}</td>
                   <td className="p-4 font-bold">{formatProductAgeGroups(prod)}</td>
                   <td className="p-4 font-bold text-slate-900">{formatPrice(prod.price, settings.currency)}</td>
                   <td className="p-4">

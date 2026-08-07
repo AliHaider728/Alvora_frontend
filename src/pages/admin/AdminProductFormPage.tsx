@@ -184,6 +184,8 @@ export const AdminProductFormPage: React.FC = () => {
   const [category, setCategory] = useState('');
   const [categoryId, setCategoryId] = useState('');
   const [categorySlug, setCategorySlug] = useState('');
+  const [categoryIds, setCategoryIds] = useState<string[]>([]);
+  const [categorySearch, setCategorySearch] = useState('');
   const [regularPrice, setRegularPrice] = useState(2999);
   const [salePrice, setSalePrice] = useState<number>();
   const [sku, setSku] = useState('');
@@ -207,6 +209,9 @@ export const AdminProductFormPage: React.FC = () => {
   const [status, setStatus] = useState<'draft' | 'published'>('published');
   const [isVisible, setIsVisible] = useState(true);
   const [isFeatured, setIsFeatured] = useState(false);
+  const [isBestseller, setIsBestseller] = useState(false);
+  const [isNewArrival, setIsNewArrival] = useState(false);
+  const [isSpotlight, setIsSpotlight] = useState(false);
   const [images, setImages] = useState<OrderedImage[]>([]);
   const [metaTitle, setMetaTitle] = useState('');
   const [metaDescription, setMetaDescription] = useState('');
@@ -223,6 +228,16 @@ export const AdminProductFormPage: React.FC = () => {
   const superAdmin = isSuperAdmin();
 
   const markDirty = () => setIsDirty(true);
+  const applyCategorySelection = (nextIds: string[]) => {
+    const uniqueIds = [...new Set(nextIds)];
+    const primary = categories.find(item => item.id === uniqueIds[0]);
+    setCategoryIds(uniqueIds);
+    setCategoryId(primary?.id || '');
+    setCategory(primary?.name || '');
+    setCategorySlug(primary?.slug || '');
+    markDirty();
+    clearError('categories');
+  };
   const clearError = (field: string) =>
     setErrors(current => {
       if (!current[field]) return current;
@@ -293,11 +308,11 @@ export const AdminProductFormPage: React.FC = () => {
 
   const stateRef = useRef<any>(null);
   stateRef.current = {
-    name, shortDescription, description, category, categoryId, categorySlug,
+    name, shortDescription, description, category, categoryId, categorySlug, categoryIds,
     regularPrice, salePrice, sku, trackInventory, stockQuantity, stockStatus, lowStockThreshold,
     productType, attributes, variations, defaultAttributes, defaultVariationId,
     ageGroups, material, safetyInfo, weight, deliveryType, customDeliveryFee,
-    status, isVisible, isFeatured, metaTitle, metaDescription, productDetailBlocks, productDetailCustomCss,
+    status, isVisible, isFeatured, isBestseller, isNewArrival, isSpotlight, metaTitle, metaDescription, productDetailBlocks, productDetailCustomCss,
     images
   };
 
@@ -322,11 +337,11 @@ export const AdminProductFormPage: React.FC = () => {
     }, 500);
     return () => clearTimeout(timer);
   }, [
-    name, shortDescription, description, category, categoryId, categorySlug,
+    name, shortDescription, description, category, categoryId, categorySlug, categoryIds,
     regularPrice, salePrice, sku, trackInventory, stockQuantity, stockStatus, lowStockThreshold,
     productType, attributes, variations, defaultAttributes, defaultVariationId,
     ageGroups, material, safetyInfo, weight, deliveryType, customDeliveryFee,
-    status, isVisible, isFeatured, metaTitle, metaDescription, productDetailBlocks, productDetailCustomCss,
+    status, isVisible, isFeatured, isBestseller, isNewArrival, isSpotlight, metaTitle, metaDescription, productDetailBlocks, productDetailCustomCss,
     images, isDirty, productLoadFailed, id
   ]);
 
@@ -339,6 +354,9 @@ export const AdminProductFormPage: React.FC = () => {
     setCategory(editingProduct.category || '');
     setCategoryId(editingProduct.categoryId || categories.find(item => item.slug === editingProduct.categorySlug || item.name === editingProduct.category)?.id || '');
     setCategorySlug(editingProduct.categorySlug || '');
+    setCategoryIds(editingProduct.categoryIds?.length
+      ? editingProduct.categoryIds
+      : editingProduct.categoryId ? [editingProduct.categoryId] : []);
     setRegularPrice(editingProduct.originalPrice ?? editingProduct.price);
     setSalePrice(editingProduct.originalPrice ? editingProduct.price : undefined);
     setSku(editingProduct.sku || '');
@@ -371,6 +389,9 @@ export const AdminProductFormPage: React.FC = () => {
     setStatus(editingProduct.status || 'published');
     setIsVisible(editingProduct.isVisible !== false);
     setIsFeatured(editingProduct.isFeatured === true);
+    setIsBestseller(editingProduct.isBestseller === true);
+    setIsNewArrival(editingProduct.isNewArrival === true);
+    setIsSpotlight(editingProduct.isSpotlight === true);
     setImages((editingProduct.images || []).map((url, index) =>
       makeImage(
         url,
@@ -437,6 +458,7 @@ export const AdminProductFormPage: React.FC = () => {
             setCategory(data.category || '');
             setCategoryId(data.categoryId || '');
             setCategorySlug(data.categorySlug || '');
+            setCategoryIds(data.categoryIds || (data.categoryId ? [data.categoryId] : []));
             setRegularPrice(data.regularPrice || 0);
             setSalePrice(data.salePrice);
             setSku(data.sku || '');
@@ -466,6 +488,9 @@ export const AdminProductFormPage: React.FC = () => {
             setStatus(data.status || 'published');
             setIsVisible(data.isVisible !== false);
             setIsFeatured(data.isFeatured || false);
+            setIsBestseller(data.isBestseller || false);
+            setIsNewArrival(data.isNewArrival || false);
+            setIsSpotlight(data.isSpotlight || false);
             setMetaTitle(data.metaTitle || '');
             setMetaDescription(data.metaDescription || '');
             setProductDetailBlocks(data.productDetailBlocks || []);
@@ -809,6 +834,9 @@ export const AdminProductFormPage: React.FC = () => {
       category,
       categoryId: categoryId || '',
       categorySlug: categoryId ? categorySlug : '',
+      categoryIds,
+      categoryNames: categoryIds.map(selectedId => categories.find(item => item.id === selectedId)?.name).filter((value): value is string => Boolean(value)),
+      categorySlugs: categoryIds.map(selectedId => categories.find(item => item.id === selectedId)?.slug).filter((value): value is string => Boolean(value)),
       ageGroups,
       brand: editingProduct?.brand || 'PlayBimboo',
       ...normalizeInventory({ trackInventory, stockQuantity, stockStatus }),
@@ -827,8 +855,9 @@ export const AdminProductFormPage: React.FC = () => {
         Material: material.trim()
       },
       isFeatured,
-      isNewArrival: editingProduct?.isNewArrival,
-      isBestseller: editingProduct?.isBestseller,
+      isNewArrival,
+      isBestseller,
+      isSpotlight,
       isVisible,
       status,
       weight: weight ?? null,
@@ -956,14 +985,36 @@ export const AdminProductFormPage: React.FC = () => {
                 <input value={shortDescription} maxLength={300} onChange={event => { setShortDescription(event.target.value); markDirty(); }} className={fieldClassName} placeholder="Short summary for product listings" />
                 <span className="mt-1 block text-right text-[10px] text-slate-400">{shortDescription.length}/300</span>
               </label>
-              <div>
-                <span className="mb-1.5 block text-xs font-bold text-slate-700">Category</span>
-                <select value={categoryId} onChange={event => { if (event.target.value === '__add__') { setCategoryModalOpen(true); return; } const selected = categories.find(item => item.id === event.target.value); setCategoryId(selected?.id || ''); setCategory(selected?.name || ''); setCategorySlug(selected?.slug || ''); markDirty(); }} className={fieldClassName}>
-                  <option value="">No Category / Uncategorized</option>
-                  {categories.filter(item => item.isActive !== false).map(item => <option key={item.id || item.slug} value={item.id}>{item.name}</option>)}
-                  {superAdmin && <option value="__add__">+ Add New Category</option>}
-                </select>
-              </div>
+              <fieldset className="sm:col-span-2">
+                <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                  <legend className="text-xs font-bold text-slate-700">Categories</legend>
+                  {superAdmin && <button type="button" onClick={() => setCategoryModalOpen(true)} className="inline-flex items-center gap-1 text-[11px] font-bold text-indigo-600 hover:text-indigo-700"><Plus className="h-3.5 w-3.5" /> Add category</button>}
+                </div>
+                {categoryIds.length > 0 && (
+                  <div className="mb-2 flex flex-wrap gap-2" aria-label="Selected categories">
+                    {categoryIds.map((selectedId, index) => {
+                      const selected = categories.find(item => item.id === selectedId);
+                      if (!selected) return null;
+                      return <button key={selected.id} type="button" onClick={() => applyCategorySelection(categoryIds.filter(idValue => idValue !== selected.id))} className="inline-flex min-h-9 items-center gap-1.5 rounded-full bg-indigo-50 px-3 text-xs font-bold text-indigo-700 ring-1 ring-indigo-200" aria-label={`Remove ${selected.name}`}>{selected.name}{index === 0 && <span className="text-[9px] font-black uppercase tracking-wide text-indigo-400">Primary</span>}<span aria-hidden="true">&times;</span></button>;
+                    })}
+                  </div>
+                )}
+                <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-3">
+                  <label className="relative block">
+                    <span className="sr-only">Search categories</span>
+                    <Search className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                    <input value={categorySearch} onChange={event => setCategorySearch(event.target.value)} className="w-full rounded-xl border border-slate-200 bg-white py-2 pl-9 pr-3 text-xs outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100" placeholder="Search categories…" />
+                  </label>
+                  <div className="mt-2 grid max-h-44 gap-2 overflow-y-auto pr-1 sm:grid-cols-2" role="group" aria-label="Product categories">
+                    {categories.filter(item => item.isActive !== false && item.name.toLowerCase().includes(categorySearch.trim().toLowerCase())).map(item => {
+                      const checked = categoryIds.includes(item.id);
+                      return <label key={item.id || item.slug} className={`flex min-h-10 cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-xs font-bold transition ${checked ? 'border-indigo-300 bg-white text-indigo-700 shadow-sm' : 'border-transparent text-slate-600 hover:border-slate-200 hover:bg-white'}`}><input type="checkbox" checked={checked} onChange={event => applyCategorySelection(event.target.checked ? [...categoryIds, item.id] : categoryIds.filter(idValue => idValue !== item.id))} />{item.name}</label>;
+                    })}
+                  </div>
+                </div>
+                <p className="mt-1.5 text-[10px] text-slate-400">The first selected category is used as the primary category on cards and breadcrumbs.</p>
+                <FieldError message={errors.categories} />
+              </fieldset>
             </div>
           </FormCard>
 
@@ -1111,6 +1162,16 @@ export const AdminProductFormPage: React.FC = () => {
                 <div><span className="block text-xs font-bold text-slate-700">Featured Product</span><span className="text-[10px] text-slate-400">Show in the homepage featured section</span></div>
                 <button type="button" role="switch" aria-checked={isFeatured} onClick={() => { setIsFeatured(value => !value); markDirty(); }} className={`relative h-6 w-11 rounded-full transition ${isFeatured ? 'bg-rose-500' : 'bg-slate-200'}`}><span className={`absolute top-1 h-4 w-4 rounded-full bg-white shadow transition ${isFeatured ? 'left-6' : 'left-1'}`} /></button>
               </div>
+              {[
+                { label: 'Bestseller', help: 'Include in Featured Toys & Bestsellers', value: isBestseller, setValue: setIsBestseller },
+                { label: 'New Arrival', help: 'Include in New Arrivals & Restocks', value: isNewArrival, setValue: setIsNewArrival },
+                { label: 'Homepage Spotlight', help: 'Large homepage promotion; replaces the current spotlight', value: isSpotlight, setValue: setIsSpotlight }
+              ].map(option => (
+                <div key={option.label} className="flex items-center justify-between gap-4 border-t border-slate-100 pt-4">
+                  <div><span className="block text-xs font-bold text-slate-700">{option.label}</span><span className="text-[10px] text-slate-400">{option.help}</span></div>
+                  <button type="button" role="switch" aria-label={option.label} aria-checked={option.value} onClick={() => { option.setValue(value => !value); markDirty(); }} className={`relative h-6 w-11 shrink-0 rounded-full transition ${option.value ? 'bg-rose-500' : 'bg-slate-200'}`}><span className={`absolute top-1 h-4 w-4 rounded-full bg-white shadow transition ${option.value ? 'left-6' : 'left-1'}`} /></button>
+                </div>
+              ))}
             </div>
           </FormCard>
 
@@ -1162,7 +1223,7 @@ export const AdminProductFormPage: React.FC = () => {
         </div>
       </form>
     </div>
-      {categoryModalOpen && <CategoryFormModal compact categories={categories} onClose={() => setCategoryModalOpen(false)} onSave={addCategory} onSaved={created => { setCategoryId(created.id); setCategory(created.name); setCategorySlug(created.slug); markDirty(); showToast(`${created.name} selected for this product.`, 'success'); }} />}
+      {categoryModalOpen && <CategoryFormModal compact categories={categories} onClose={() => setCategoryModalOpen(false)} onSave={addCategory} onSaved={created => { applyCategorySelection([...categoryIds, created.id]); showToast(`${created.name} added to this product.`, 'success'); }} />}
     </>
   );
 };

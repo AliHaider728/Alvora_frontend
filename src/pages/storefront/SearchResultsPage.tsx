@@ -17,7 +17,7 @@ export const SearchResultsPage: React.FC = () => {
   const results = products.filter(p =>
     isProductVisibleOnStorefront(p) && (
       p.name.toLowerCase().includes(query.toLowerCase()) ||
-      p.category.toLowerCase().includes(query.toLowerCase()) ||
+      (p.categoryNames?.length ? p.categoryNames : [p.category]).some(category => category.toLowerCase().includes(query.toLowerCase())) ||
       p.brand.toLowerCase().includes(query.toLowerCase()) ||
       p.tags.some(t => t.toLowerCase().includes(query.toLowerCase()))
     )
@@ -81,7 +81,7 @@ export const SearchResultsPage: React.FC = () => {
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+          <div className="grid grid-cols-1 items-start gap-5 sm:grid-cols-2 lg:gap-6">
             {sortedResults.map(p => (
               <ProductCard key={p.id} product={p} />
             ))}

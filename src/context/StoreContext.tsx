@@ -13,7 +13,6 @@ import {
 import {
   INITIAL_SETTINGS,
   INITIAL_CATEGORIES,
-  INITIAL_PRODUCTS,
   INITIAL_REVIEWS,
   INITIAL_ORDERS,
   INITIAL_CUSTOMERS,
@@ -97,6 +96,15 @@ const normalizeProduct = (product: Partial<Product> & MongoRecord): Product => {
   ...inventory,
   category: product.category || '',
   categorySlug: product.categorySlug || '',
+  categoryIds: Array.isArray(product.categoryIds) && product.categoryIds.length > 0
+    ? product.categoryIds.filter((value): value is string => typeof value === 'string' && Boolean(value))
+    : product.categoryId ? [product.categoryId] : [],
+  categoryNames: Array.isArray(product.categoryNames) && product.categoryNames.length > 0
+    ? product.categoryNames.filter((value): value is string => typeof value === 'string' && Boolean(value))
+    : product.category ? [product.category] : [],
+  categorySlugs: Array.isArray(product.categorySlugs) && product.categorySlugs.length > 0
+    ? product.categorySlugs.filter((value): value is string => typeof value === 'string' && Boolean(value))
+    : product.categorySlug ? [product.categorySlug] : [],
   rating: Number(product.reviewCount || 0) > 0 ? Number(product.rating || 0) : 0,
   reviewCount: Math.max(0, Number(product.reviewCount || 0)),
   features: Array.isArray(product.features) ? product.features : [],
@@ -222,7 +230,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // LocalStorage state initialization
   const [products, setProducts] = useState<Product[]>(() => {
     const saved = localStorage.getItem('playbimboo_products');
-    const initialProducts = saved ? JSON.parse(saved) : INITIAL_PRODUCTS;
+    const initialProducts = saved ? JSON.parse(saved) : [];
     return initialProducts.map(normalizeProduct);
   });
 

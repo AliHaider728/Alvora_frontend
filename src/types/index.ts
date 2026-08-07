@@ -122,6 +122,9 @@ export interface Product {
   category: string;
   categorySlug: string;
   categoryId?: string;
+  categoryIds?: string[];
+  categoryNames?: string[];
+  categorySlugs?: string[];
   ageGroup?: AgeGroupCategory;
   ageGroups: AgeGroupCategory[];
   brand: string;
@@ -142,6 +145,7 @@ export interface Product {
   isFeatured?: boolean;
   isNewArrival?: boolean;
   isBestseller?: boolean;
+  isSpotlight?: boolean;
   isVisible?: boolean; // Show/Hide toggle on storefront
   status?: 'draft' | 'published';
   weight?: number;

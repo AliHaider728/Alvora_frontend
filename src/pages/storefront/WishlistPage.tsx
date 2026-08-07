@@ -50,7 +50,7 @@ export const WishlistPage: React.FC = () => {
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+          <div className="grid grid-cols-1 items-start gap-5 sm:grid-cols-2 lg:gap-6">
             {wishlistedProducts.map(p => (
               <ProductCard key={p.id} product={p} />
             ))}

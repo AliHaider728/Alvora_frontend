@@ -111,7 +111,8 @@ export const CategoryPage: React.FC = () => {
     return products.filter(p => {
       if (!isProductVisibleOnStorefront(p)) return false;
       // Category match
-      if (selectedCategories.length > 0 && !selectedCategories.includes(p.categorySlug)) {
+      const productCategorySlugs = p.categorySlugs?.length ? p.categorySlugs : p.categorySlug ? [p.categorySlug] : [];
+      if (selectedCategories.length > 0 && !selectedCategories.some(slug => productCategorySlugs.includes(slug))) {
         return false;
       }
       // Age group match
@@ -384,7 +385,7 @@ export const CategoryPage: React.FC = () => {
 
             {/* Product Grid */}
             {loading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 items-stretch">
+              <div className="grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 lg:gap-6">
                 {[...Array(6)].map((_, i) => (
                   <SkeletonCard key={i} />
                 ))}
@@ -406,7 +407,7 @@ export const CategoryPage: React.FC = () => {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 xl:grid-cols-3 xl:gap-5">
+              <div className="grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 lg:gap-6">
                 {sortedProducts.map(product => (
                   <ProductCard key={product.id} product={product} />
                 ))}

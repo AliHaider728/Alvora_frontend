@@ -63,6 +63,11 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ title, description, product, c
           "@type": "Brand",
           "name": product.brand
         },
+        "category": (product.categoryNames?.length ? product.categoryNames : [product.category]).filter(Boolean).join(', '),
+        "audience": product.ageGroups?.length ? {
+          "@type": "PeopleAudience",
+          "audienceType": product.ageGroups.map(group => `Ages ${group}`).join(', ')
+        } : undefined,
         "offers": {
           "@type": "Offer",
           "url": currentUrl,

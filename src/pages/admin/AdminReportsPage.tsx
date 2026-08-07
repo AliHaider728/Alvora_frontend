@@ -26,7 +26,7 @@ export const AdminReportsPage: React.FC = () => {
 
           <div className="space-y-3 pt-2">
             {categories.map((c, idx) => {
-              const catProducts = products.filter(p => p.categorySlug === c.slug);
+              const catProducts = products.filter(p => (p.categorySlugs?.length ? p.categorySlugs : [p.categorySlug]).includes(c.slug));
               const percent = Math.round((catProducts.length / products.length) * 100) || 15;
               return (
                 <div key={c.id} className="space-y-1">
