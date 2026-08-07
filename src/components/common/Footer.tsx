@@ -197,8 +197,8 @@ export const Footer: React.FC = () => {
                   <span className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
                     <Phone className="w-3.5 h-3.5 text-amber-400" />
                   </span>
-                  <a href="tel:3276655557" className="hover:text-amber-400 transition-colors">
-                    +327-6655557
+                  <a href="tel:923107172222" className="hover:text-amber-400 transition-colors">
+                    923107172222
                   </a>
                 </div>
                 <div className="flex items-center gap-2.5">
