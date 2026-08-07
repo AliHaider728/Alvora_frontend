@@ -6,7 +6,7 @@ export const FloatingWhatsApp: React.FC = () => {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    const hiddenRoutes = ['/admin', '/checkout', '/login'];
+    const hiddenRoutes = ['/admin', '/checkout', '/login', '/product/'];
     setIsVisible(!hiddenRoutes.some(route => location.pathname.startsWith(route)));
   }, [location.pathname]);
 

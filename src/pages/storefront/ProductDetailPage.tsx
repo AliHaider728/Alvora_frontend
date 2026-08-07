@@ -235,7 +235,12 @@ export const ProductDetailPage: React.FC = () => {
 
   const isWishlisted = isInWishlist(product.id);
   const relatedProducts = products
-    .filter(p => Boolean(product.categorySlug) && p.categorySlug === product.categorySlug && p.id !== product.id)
+    .filter(p => {
+      if (p.id === product.id) return false;
+      const currentSlugs = product.categorySlugs?.length ? product.categorySlugs : product.categorySlug ? [product.categorySlug] : [];
+      const candidateSlugs = p.categorySlugs?.length ? p.categorySlugs : p.categorySlug ? [p.categorySlug] : [];
+      return currentSlugs.some(slug => candidateSlugs.includes(slug));
+    })
     .slice(0, 4);
 
   let currentPrice = product.price;
@@ -359,22 +364,22 @@ export const ProductDetailPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans py-6">
+    <div className="min-h-screen bg-slate-50 py-4 font-sans sm:py-6">
       <SeoHead product={product} />
 
-      <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Breadcrumbs items={breadcrumbItems} />
 
         {/* Top Detail Section: Gallery + Product Info */}
-        <div className="mb-6 grid grid-cols-1 items-start gap-6 rounded-3xl border border-slate-100 bg-white p-5 shadow-sm sm:p-8 lg:grid-cols-12 lg:gap-8">
+        <div className="mb-5 grid grid-cols-1 items-start gap-5 rounded-3xl border border-slate-100 bg-white p-4 shadow-sm sm:p-6 lg:grid-cols-12 lg:gap-7">
           {/* Left Column: Image Gallery */}
-          <div className="self-start space-y-3 lg:col-span-6">
+          <div className="self-start space-y-2.5 lg:col-span-6">
             {/* Main Preview Image with Hover Zoom Effect */}
-            <div className="relative aspect-square w-full rounded-3xl overflow-hidden bg-slate-50 border border-slate-100 group flex items-center justify-center p-4">
+            <div className="relative flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded-2xl border border-slate-100 bg-slate-50 p-2 sm:p-3">
               <img
                 src={getSafeImageSrc(overrideImage || product.images[activeImageIndex] || product.images[0])}
                 alt={product.name}
-                className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                className="h-full w-full object-contain object-center"
               />
               {product.discountPercent && (
                 <span className="absolute top-4 left-4 bg-rose-500 text-white font-heading font-extrabold text-xs px-3 py-1.5 rounded-full shadow-md">
@@ -385,19 +390,22 @@ export const ProductDetailPage: React.FC = () => {
 
             {/* Gallery Thumbnails */}
             {product.images.length > 1 && (
-              <div className="flex gap-3 overflow-x-auto pb-1 scrollbar-thin">
+              <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-thin">
                 {product.images.map((img, idx) => (
                   <button
-                    key={idx}
+                    key={`${img}-${idx}`}
+                    type="button"
                     onClick={() => {
                       setActiveImageIndex(idx);
                       setOverrideImage(null);
                     }}
-                    className={`relative aspect-square w-20 rounded-2xl overflow-hidden border-2 transition-all flex-shrink-0 flex items-center justify-center p-1 ${
-                      (!overrideImage && activeImageIndex === idx) ? 'border-rose-500 scale-95 shadow-sm' : 'border-slate-200 opacity-70 hover:opacity-100'
+                    aria-label={`Show ${product.name} image ${idx + 1}`}
+                    aria-current={!overrideImage && activeImageIndex === idx ? 'true' : undefined}
+                    className={`relative flex h-16 w-16 flex-shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 p-0.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 focus-visible:ring-offset-2 sm:h-20 sm:w-20 ${
+                      (!overrideImage && activeImageIndex === idx) ? 'border-rose-500 bg-rose-50 shadow-sm' : 'border-slate-200 bg-white opacity-75 hover:opacity-100'
                     }`}
                   >
-                    <img src={getSafeImageSrc(img)} alt={`${product.name} thumbnail ${idx}`} className="w-full h-full object-contain" />
+                    <img src={getSafeImageSrc(img)} alt={`${product.name} thumbnail ${idx + 1}`} className="h-full w-full object-contain" />
                   </button>
                 ))}
               </div>
@@ -416,21 +424,24 @@ export const ProductDetailPage: React.FC = () => {
               </div>
 
               {/* Product Title */}
-              <h1 className="font-heading font-black text-2xl sm:text-3xl text-slate-900 mb-4 leading-snug">
+              <h1 className="mb-3 font-heading text-2xl font-black leading-tight text-slate-900 sm:text-3xl">
                 {product.name}
               </h1>
 
-              <div className="mb-4 flex flex-wrap gap-2" aria-label="Recommended age groups">
+              <div className="mb-3 flex flex-wrap gap-2" aria-label="Product categories and recommended age groups">
+                {(product.categoryNames?.length ? product.categoryNames : product.category ? [product.category] : []).slice(0, 3).map(categoryName => (
+                  <span key={categoryName} className="rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-[11px] font-bold text-sky-700">{categoryName}</span>
+                ))}
                 {getProductAgeGroups(product).map(age => (
                   <span key={age} className="rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-[11px] font-bold text-indigo-700">Ages {age}</span>
                 ))}
               </div>
 
               {/* Price & Stock */}
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between mb-4">
+              <div className="mb-3 flex flex-col items-start gap-3 rounded-2xl border border-slate-100 bg-slate-50 p-3 sm:flex-row sm:items-center sm:justify-between sm:p-4">
                 <div>
                   <div className="flex items-baseline gap-3">
-                    <span className="font-heading font-black text-3xl text-slate-900">
+                    <span className="font-heading text-2xl font-black text-slate-900 sm:text-3xl">
                       {formatPrice(currentPrice, settings.currency)}
                     </span>
                     {product.originalPrice && (
@@ -446,7 +457,7 @@ export const ProductDetailPage: React.FC = () => {
                   )}
                 </div>
 
-                <div className="text-right">
+                <div className="text-left sm:text-right">
                   <span className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold ${
                     ((isVariable ? (product.attributes?.length || 0) > 0 : variantGroups.length > 0) && !allVariantsSelected)
                       ? 'bg-amber-100 text-amber-800'
@@ -467,7 +478,7 @@ export const ProductDetailPage: React.FC = () => {
               </div>
 
               {/* Delivery Charge Info Badge */}
-              <div className="p-3 rounded-2xl bg-sky-50 border border-sky-100 flex items-center gap-2.5 text-sky-900 text-xs font-semibold mb-4">
+              <div className="mb-3 flex items-center gap-2.5 rounded-2xl border border-sky-100 bg-sky-50 p-3 text-xs font-semibold text-sky-900">
                 <Truck className="w-4 h-4 text-sky-600 flex-shrink-0" />
                 <span>
                   Delivery Fee:{' '}
@@ -487,14 +498,14 @@ export const ProductDetailPage: React.FC = () => {
               </div>
 
               {/* Description snippet */}
-              <p className="text-sm text-slate-600 font-sans leading-relaxed mb-4">
+              <p className="mb-3 font-sans text-sm leading-relaxed text-slate-600">
                 {product.shortDescription || getPlainDescription(product.description).slice(0, 240)}
               </p>
 
               {/* Product Attributes (New Variable Workflow) */}
               {isVariable && product.attributes && product.attributes.length > 0 && (
-                <div className="space-y-4 mb-4 pt-4 border-t border-slate-100">
-                  <div className="flex items-center justify-between mb-2">
+                <div className="mb-3 space-y-3 border-t border-slate-100 pt-3">
+                  <div className="mb-1.5 flex items-center justify-between">
                     <h4 className="text-sm font-bold text-slate-900">Options</h4>
                     {product.sizeGuide && (
                       <button 
@@ -604,6 +615,8 @@ export const ProductDetailPage: React.FC = () => {
                                   key={t.id}
                                   type="button"
                                   title={t.label}
+                                  aria-label={`${attr.name}: ${t.label}${!isOptionInStock ? ' (out of stock)' : ''}`}
+                                  aria-pressed={isSelected}
                                   disabled={!isOptionInStock}
                                   onClick={() => handleAttributeSelect(attr.slug, t.value)}
                                   className={`relative w-12 h-12 rounded-xl border-2 overflow-hidden transition-all flex items-center justify-center p-0.5 bg-slate-50 ${
@@ -636,6 +649,8 @@ export const ProductDetailPage: React.FC = () => {
                                 <button
                                   key={t.id}
                                   type="button"
+                                  aria-pressed={isSelected}
+                                  aria-label={`${attr.name}: ${t.label}${!isOptionInStock ? ' (out of stock)' : ''}`}
                                   disabled={!isOptionInStock}
                                   onClick={() => handleAttributeSelect(attr.slug, t.value)}
                                   className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
@@ -660,7 +675,7 @@ export const ProductDetailPage: React.FC = () => {
 
               {/* Legacy Product Variants Selection */}
               {!isVariable && product.variants && product.variants.length > 0 && (
-                <div className="space-y-4 mb-4 pt-4 border-t border-slate-100">
+                <div className="mb-3 space-y-3 border-t border-slate-100 pt-3">
                   {product.variants.map((vGroup) => (
                     <div key={vGroup.id || vGroup.name} className="space-y-2">
                       <label className="text-xs font-heading font-extrabold text-slate-800 uppercase tracking-wider block">
@@ -674,6 +689,8 @@ export const ProductDetailPage: React.FC = () => {
                             <button
                               key={opt.id || opt.name}
                               type="button"
+                              aria-pressed={isSelected}
+                              aria-label={`${vGroup.name}: ${opt.name}${!isOptionInStock ? ' (out of stock)' : ''}`}
                               disabled={!isOptionInStock}
                               onClick={() => handleVariantSelect(vGroup.name, opt.name)}
                               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
@@ -695,18 +712,22 @@ export const ProductDetailPage: React.FC = () => {
               )}
 
               {/* Quantity Stepper & Add to Cart */}
-              <div className="space-y-4 pt-4 border-t border-slate-100">
-                <div className="flex items-center gap-4">
+              <div className="space-y-3 border-t border-slate-100 pt-3">
+                <div className="flex items-center gap-3">
                   <span className="font-heading font-bold text-xs text-slate-700 uppercase">Quantity:</span>
                   <div className="flex items-center border border-slate-200 rounded-2xl bg-slate-50 p-1">
                     <button
+                      type="button"
+                      aria-label="Decrease quantity"
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
                       className="p-2 text-slate-600 hover:bg-white rounded-xl transition-colors"
                     >
                       <Minus className="w-4 h-4" />
                     </button>
-                    <span className="px-4 font-heading font-bold text-sm text-slate-800">{quantity}</span>
+                    <output aria-live="polite" className="px-4 font-heading text-sm font-bold text-slate-800">{quantity}</output>
                     <button
+                      type="button"
+                      aria-label="Increase quantity"
                       onClick={() => setQuantity(quantity + 1)}
                       className="p-2 text-slate-600 hover:bg-white rounded-xl transition-colors"
                     >
@@ -715,14 +736,15 @@ export const ProductDetailPage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex gap-3 w-full">
+                <div className="flex w-full gap-2">
                   {/* WhatsApp Button */}
                   <a
                     href={`https://wa.me/3276655557?text=${encodeURIComponent(`Hello, I am interested in this product:\nProduct: ${product.name}\nPrice: ${formatPrice(currentPrice, settings.currency)}\nLink: ${window.location.origin}/product/${product.slug}${Object.keys(selectedVariants).length > 0 ? `\nVariant: ${Object.values(selectedVariants).join(', ')}` : ''}`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center h-14 w-16 sm:w-20 rounded-2xl bg-[#25D366]/10 text-[#25D366] hover:bg-[#25D366] hover:text-white transition-colors shadow-sm flex-shrink-0"
+                    className="flex h-12 w-14 flex-shrink-0 items-center justify-center rounded-2xl bg-[#25D366]/10 text-[#25D366] shadow-sm transition-colors hover:bg-[#25D366] hover:text-white sm:w-16"
                     title="Order via WhatsApp"
+                    aria-label={`Order ${product.name} via WhatsApp`}
                   >
                     <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
                   </a>
@@ -731,7 +753,7 @@ export const ProductDetailPage: React.FC = () => {
                   <button
                     onClick={handleAddToCart}
                     disabled={!canPurchase}
-                    className={`flex-1 h-14 rounded-2xl font-heading font-extrabold text-sm sm:text-base shadow-xl flex items-center justify-center gap-2 transition-all duration-300 active:scale-95 ${
+                    className={`flex h-12 flex-1 items-center justify-center gap-2 rounded-2xl font-heading text-sm font-extrabold shadow-xl transition-all duration-300 active:scale-95 sm:text-base ${
                       added
                         ? 'bg-emerald-500 text-white shadow-emerald-200'
                         : !canPurchase
@@ -756,16 +778,16 @@ export const ProductDetailPage: React.FC = () => {
             </div>
 
             {/* Micro Guarantees */}
-            <div className="grid grid-cols-3 gap-3 pt-4 border-t border-slate-100 text-center text-slate-500 text-[11px] sm:text-xs">
-              <div className="p-2.5 rounded-2xl bg-slate-50">
+            <div className="grid grid-cols-3 gap-1.5 border-t border-slate-100 pt-3 text-center text-[10px] text-slate-500 sm:gap-3 sm:text-xs">
+              <div className="rounded-2xl bg-slate-50 p-2 sm:p-2.5">
                 <Truck className="w-4 h-4 mx-auto text-sky-500 mb-1" />
                 <span>Cash on Delivery</span>
               </div>
-              <div className="p-2.5 rounded-2xl bg-slate-50">
+              <div className="rounded-2xl bg-slate-50 p-2 sm:p-2.5">
                 <ShieldCheck className="w-4 h-4 mx-auto text-emerald-500 mb-1" />
                 <span>100% Child Safe</span>
               </div>
-              <div className="p-2.5 rounded-2xl bg-slate-50">
+              <div className="rounded-2xl bg-slate-50 p-2 sm:p-2.5">
                 <RotateCcw className="w-4 h-4 mx-auto text-amber-500 mb-1" />
                 <span>Easy 7-Day Returns</span>
               </div>
@@ -774,12 +796,15 @@ export const ProductDetailPage: React.FC = () => {
         </div>
 
         {/* Product Information Tabs */}
-        <div className="bg-white rounded-3xl p-4 sm:p-8 border border-slate-100 shadow-sm mb-12">
+        <div className="mb-8 rounded-3xl border border-slate-100 bg-white p-4 shadow-sm sm:p-6">
           {availableTabs.length > 1 && (
-            <div className="flex border-b border-slate-200 overflow-x-auto whitespace-nowrap scrollbar-hide gap-4 sm:gap-8 mb-6">
+            <div className="mb-5 flex gap-4 overflow-x-auto whitespace-nowrap border-b border-slate-200 scrollbar-hide sm:gap-8" role="tablist" aria-label="Product information">
               {availableTabs.includes('desc') && (
                 <button
                   onClick={() => setActiveTab('desc')}
+                  role="tab"
+                  aria-selected={activeTab === 'desc'}
+                  aria-controls="product-panel-desc"
                   className={`pb-3 font-heading font-bold text-xs sm:text-sm uppercase tracking-wider border-b-2 transition-colors ${
                     activeTab === 'desc' ? 'border-rose-500 text-rose-500' : 'border-transparent text-slate-500 hover:text-slate-800'
                   }`}
@@ -790,6 +815,9 @@ export const ProductDetailPage: React.FC = () => {
               {availableTabs.includes('specs') && (
                 <button
                   onClick={() => setActiveTab('specs')}
+                  role="tab"
+                  aria-selected={activeTab === 'specs'}
+                  aria-controls="product-panel-specs"
                   className={`pb-3 font-heading font-bold text-xs sm:text-sm uppercase tracking-wider border-b-2 transition-colors ${
                     activeTab === 'specs' ? 'border-rose-500 text-rose-500' : 'border-transparent text-slate-500 hover:text-slate-800'
                   }`}
@@ -800,6 +828,9 @@ export const ProductDetailPage: React.FC = () => {
               {availableTabs.includes('safety') && (
                 <button
                   onClick={() => setActiveTab('safety')}
+                  role="tab"
+                  aria-selected={activeTab === 'safety'}
+                  aria-controls="product-panel-safety"
                   className={`pb-3 font-heading font-bold text-xs sm:text-sm uppercase tracking-wider border-b-2 transition-colors ${
                     activeTab === 'safety' ? 'border-rose-500 text-rose-500' : 'border-transparent text-slate-500 hover:text-slate-800'
                   }`}
@@ -810,6 +841,9 @@ export const ProductDetailPage: React.FC = () => {
               {availableTabs.includes('reviews') && (
                 <button
                   onClick={() => setActiveTab('reviews')}
+                  role="tab"
+                  aria-selected={activeTab === 'reviews'}
+                  aria-controls="product-panel-reviews"
                   className={`pb-3 font-heading font-bold text-xs sm:text-sm uppercase tracking-wider border-b-2 transition-colors ${
                     activeTab === 'reviews' ? 'border-rose-500 text-rose-500' : 'border-transparent text-slate-500 hover:text-slate-800'
                   }`}
@@ -822,7 +856,7 @@ export const ProductDetailPage: React.FC = () => {
 
           {/* Tab 1: Description & Features */}
           {activeTab === 'desc' && (
-            <div className="space-y-4 text-sm text-slate-700 leading-relaxed">
+            <div id="product-panel-desc" role="tabpanel" className="space-y-4 text-sm leading-relaxed text-slate-700">
               {(product.productDetailBlocks || []).filter(b => b.enabled).length > 0 ? (
                 <ProductDetailContent product={product} />
               ) : (
@@ -850,7 +884,7 @@ export const ProductDetailPage: React.FC = () => {
 
           {/* Tab 2: Specs */}
           {activeTab === 'specs' && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+            <div id="product-panel-specs" role="tabpanel" className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
               {sanitizedSpecs.map(([key, val]) => (
                 <div key={key} className="p-3.5 rounded-2xl bg-slate-50 flex justify-between">
                   <span className="font-bold text-slate-600">{key}:</span>
@@ -862,7 +896,7 @@ export const ProductDetailPage: React.FC = () => {
 
           {/* Tab 3: Safety */}
           {activeTab === 'safety' && (
-            <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-950 text-sm space-y-2">
+            <div id="product-panel-safety" role="tabpanel" className="space-y-2 rounded-2xl border border-emerald-100 bg-emerald-50 p-4 text-sm text-emerald-950">
               <div className="flex items-center gap-2 font-heading font-bold text-emerald-800">
                 <ShieldCheck className="w-5 h-5 text-emerald-600" />
                 <span>Certified Child-Safe Standards</span>
@@ -873,7 +907,7 @@ export const ProductDetailPage: React.FC = () => {
 
           {/* Tab 4: Reviews Section */}
           {activeTab === 'reviews' && (
-            <div className="space-y-6">
+            <div id="product-panel-reviews" role="tabpanel" className="space-y-6">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-slate-50">
                 <div>
                   <h4 className="font-heading font-bold text-base text-slate-900">
@@ -939,11 +973,11 @@ export const ProductDetailPage: React.FC = () => {
 
         {/* Related Products Carousel */}
         {relatedProducts.length > 0 && (
-          <div className="space-y-6 mb-16">
+          <div className="mb-10 space-y-5">
             <h3 className="font-heading font-black text-2xl text-slate-900">
               You Might Also Love
             </h3>
-            <div className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+            <div className="grid grid-cols-1 items-start gap-5 sm:grid-cols-2 lg:gap-6">
               {relatedProducts.map(prod => (
                 <ProductCard key={prod.id} product={prod} />
               ))}
