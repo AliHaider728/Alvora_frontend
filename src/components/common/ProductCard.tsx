@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Heart, ShoppingBag, Eye, Check, Loader2 } from 'lucide-react';
+import { Heart, ShoppingBag, Eye, Check, Loader2, X } from 'lucide-react';
 import { Product } from '../../types';
 import { useStore } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/formatters';
 import { getSafeImageSrc } from '../../utils/images';
-import { formatProductAgeGroups, formatProductCategories, getEffectiveProductAvailability, normalizeInventory } from '../../utils/products';
+import { formatProductAgeGroups, formatProductCategories, getEffectiveProductAvailability, normalizeInventory, getVariationDisplayLabel } from '../../utils/products';
 import { ReviewSummary } from './ReviewSummary';
 import { useToast } from '../../context/ToastContext';
 
@@ -34,6 +34,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
     .replace(/\s+/g, ' ')
     .trim();
   const compact = layout === 'compact';
+  const [isVariationModalOpen, setIsVariationModalOpen] = useState(false);
+  const [selectedVariationId, setSelectedVariationId] = useState<string | null>(null);
 
   useEffect(() => () => {
     if (addTimerRef.current) clearTimeout(addTimerRef.current);
@@ -72,16 +74,33 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    
+    // If it's variable and has NO default variation, prompt selection
+    if (isVariable && !validDefaultVariation && product.variations && product.variations.filter(v => v.enabled).length > 0) {
+      const activeVars = product.variations.filter(v => v.enabled);
+      if (activeVars.length === 1) {
+        // Only one valid size, add directly
+        performAddToCart(activeVars[0]);
+        return;
+      }
+      setIsVariationModalOpen(true);
+      return;
+    }
+    
     if (!showAddToCart) {
       navigate(`/product/${product.slug}`);
       return;
     }
     if (cartActionLocked.current) return;
+    performAddToCart(validDefaultVariation);
+  };
+
+  const performAddToCart = (variationToUse: any) => {
     cartActionLocked.current = true;
     setCartActionState('adding');
     addTimerRef.current = setTimeout(() => {
-      if (validDefaultVariation) {
-        addToCart(product, 1, JSON.stringify(validDefaultVariation.attributes), validDefaultVariation.id);
+      if (variationToUse) {
+        addToCart(product, 1, JSON.stringify(variationToUse.attributes), variationToUse.id);
       } else {
         addToCart(product, 1);
       }
@@ -93,6 +112,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
       }, 900);
     }, 180);
   };
+
 
   const handleWishlistToggle = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -264,6 +284,72 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
           </button>
         </div>
       </div>
+      {/* Variation Selection Modal */}
+      {isVariationModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsVariationModalOpen(false); }}>
+          <div className="w-full max-w-sm bg-white rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between p-4 border-b border-slate-100 bg-slate-50/50">
+              <h3 className="font-heading font-bold text-slate-800">Select an Option</h3>
+              <button onClick={() => setIsVariationModalOpen(false)} className="p-2 text-slate-400 hover:text-rose-500 hover:bg-white rounded-full transition-colors">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="p-5 space-y-3">
+              {product.variations?.filter(v => v.enabled).map((variation, index) => {
+                const varInventory = normalizeInventory(variation);
+                const isVarAvailable = varInventory.inStock;
+                const price = variation.salePrice !== undefined && variation.salePrice !== null ? variation.salePrice : variation.regularPrice;
+                
+                return (
+                  <button
+                    key={variation.id}
+                    disabled={!isVarAvailable}
+                    onClick={() => setSelectedVariationId(variation.id)}
+                    className={`w-full flex items-center justify-between p-3 rounded-2xl border-2 transition-all ${
+                      selectedVariationId === variation.id
+                        ? 'border-rose-500 bg-rose-50/50'
+                        : !isVarAvailable
+                        ? 'border-slate-100 bg-slate-50 opacity-60 cursor-not-allowed'
+                        : 'border-slate-200 hover:border-rose-200 hover:bg-slate-50'
+                    }`}
+                  >
+                    <div className="flex flex-col items-start">
+                      <span className={`font-bold ${selectedVariationId === variation.id ? 'text-rose-700' : 'text-slate-700'}`}>
+                        {getVariationDisplayLabel(variation, product.attributes || [], index)}
+                      </span>
+                      {!isVarAvailable && <span className="text-[10px] font-bold text-rose-500 mt-0.5 uppercase tracking-wider">Out of Stock</span>}
+                    </div>
+                    <span className="font-black text-slate-900">{formatPrice(price, settings.currency)}</span>
+                  </button>
+                );
+              })}
+            </div>
+            <div className="p-4 border-t border-slate-100 bg-slate-50/50">
+              <button
+                disabled={!selectedVariationId}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  if (selectedVariationId) {
+                    const variationToUse = product.variations?.find(v => v.id === selectedVariationId);
+                    if (variationToUse) {
+                      setIsVariationModalOpen(false);
+                      performAddToCart(variationToUse);
+                    }
+                  }
+                }}
+                className={`w-full py-3.5 rounded-2xl font-heading font-extrabold text-sm transition-all shadow-sm ${
+                  selectedVariationId
+                    ? 'bg-rose-500 text-white hover:bg-rose-600 hover:shadow-rose-200 shadow-lg'
+                    : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                }`}
+              >
+                Confirm Selection
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </article>
   );
 };
