@@ -4,17 +4,23 @@ import { DEFAULT_HOMEPAGE_SECTIONS, DEFAULT_STOREFRONT_NAVIGATION } from '../con
 export const INITIAL_SETTINGS: StoreSettings = {
   storeName: "PlayBimboo",
   tagline: "Where Imagination Takes Flight!",
-  email: "sales@playbimboo.com",
-  phone: "+327-6655557",
-  address: "Mumtaz Market, Shafique Center, Gujranwala, Pakistan",
+  email: "Sales@playbimboo.com",
+  phone: "0310-7172222",
+  address: "Mumtaz Market, Gujranwala",
   currency: "Rs.",
   metaTitle: "PlayBimboo - Magical Toys, Games & Educational Play",
   metaDescription: "Discover top-rated toys, action figures, board games, plush soft toys, and educational STEM play for kids of all ages. Fast shipping across Pakistan!",
   freeShippingThreshold: 5000,
   standardShippingFee: 250,
-  taxRate: 0.05,
+  taxRate: 0,
   storefrontNavigation: DEFAULT_STOREFRONT_NAVIGATION.map(item => ({ ...item })),
   homepageSections: DEFAULT_HOMEPAGE_SECTIONS.map(item => ({ ...item })),
+  socialLinks: {
+    instagram: 'https://www.instagram.com/playbimbootoys',
+    facebook: 'https://facebook.com/playbimbootoys',
+    youtube: 'https://youtube.com/@playbimboo',
+    tiktok: 'https://tiktok.com/@playbimbootoys'
+  }
 };
 
 export const AGE_GROUPS: AgeGroupOption[] = [

@@ -267,11 +267,26 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [settings, setSettings] = useState<StoreSettings>(() => {
     const saved = localStorage.getItem('playbimboo_settings');
     if (saved) {
-      const parsed = JSON.parse(saved);
-      if (parsed.freeShippingThreshold === 50) {
-        parsed.freeShippingThreshold = 5000;
+      try {
+        const parsed = JSON.parse(saved);
+        // Cache-bust: if cached settings still contain any old/wrong contact values, discard them
+        const STALE_MARKERS = [
+          'Gulberg', 'Lahore', 'support@playbimboo', '+92 300', '923001234567',
+          '+327', 'Shafique Center, Gujranwala, Pakistan'
+        ];
+        const settingsStr = JSON.stringify(parsed);
+        const isStale = STALE_MARKERS.some(marker => settingsStr.includes(marker));
+        if (isStale) {
+          localStorage.removeItem('playbimboo_settings');
+          return normalizeStoreSettings(INITIAL_SETTINGS);
+        }
+        if (parsed.freeShippingThreshold === 50) {
+          parsed.freeShippingThreshold = 5000;
+        }
+        return normalizeStoreSettings(parsed);
+      } catch {
+        localStorage.removeItem('playbimboo_settings');
       }
-      return normalizeStoreSettings(parsed);
     }
     return normalizeStoreSettings(INITIAL_SETTINGS);
   });

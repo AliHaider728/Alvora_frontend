@@ -213,13 +213,13 @@ export const Footer: React.FC = () => {
                   <span className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
                     <MapPin className="w-3.5 h-3.5 text-rose-400" />
                   </span>
-                  <span>{settings.address || 'Gujranwala, Pakistan'}</span>
+                  <span>{settings.address || 'Mumtaz Market, Gujranwala'}</span>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <span className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
                     <Phone className="w-3.5 h-3.5 text-amber-400" />
                   </span>
-                  <a href={`tel:${settings.phone?.startsWith('+') ? settings.phone : `+${settings.phone}`}`} className="hover:text-amber-400 transition-colors">
+                  <a href={`tel:+92${(settings.phone || '0310-7172222').replace(/[^0-9]/g, '').replace(/^0/, '')}`} className="hover:text-amber-400 transition-colors">
                     {settings.phone || '0310-7172222'}
                   </a>
                 </div>
@@ -228,8 +228,8 @@ export const Footer: React.FC = () => {
                     <Mail className="w-3.5 h-3.5 text-sky-400" />
                   </span>
                   <div className="flex flex-col gap-1.5 pt-1">
-                    <a href={`mailto:${settings.email}`} className="hover:text-sky-400 transition-colors leading-none">
-                      {settings.email || 'sales@playbimboo.com'}
+                    <a href={`mailto:${settings.email || 'Sales@playbimboo.com'}`} className="hover:text-sky-400 transition-colors leading-none">
+                      {settings.email || 'Sales@playbimboo.com'}
                     </a>
                   </div>
                 </div>
