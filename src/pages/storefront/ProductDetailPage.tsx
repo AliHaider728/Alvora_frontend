@@ -825,7 +825,7 @@ export const ProductDetailPage: React.FC = () => {
                 <div className="flex w-full gap-2">
                   {/* WhatsApp Button */}
                   <a
-                    href={`https://wa.me/923107172222?text=${encodeURIComponent(`Hello, I am interested in this product:\nProduct: ${product.name}\nPrice: ${formatPrice(currentPrice, settings.currency)}\nLink: ${window.location.origin}/product/${product.slug}${Object.keys(selectedVariants).length > 0 ? `\nVariant: ${Object.values(selectedVariants).join(', ')}` : ''}`)}`}
+                    href={`https://wa.me/923107172222?text=${encodeURIComponent(`Hello, I am interested in this product:\nProduct: ${product.name}\nPrice: ${formatPrice(currentPrice, settings.currency)}\nLink: ${window.location.origin}/product/${product.slug}${Object.keys(selectedVariants).length > 0 ? `\nVariant: ${Object.values(selectedVariants).join(', ')}` : Object.values(selectedAttributes).filter(Boolean).length > 0 ? `\nOption: ${Object.values(selectedAttributes).filter(Boolean).join(', ')}` : ''}`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex h-12 w-14 flex-shrink-0 items-center justify-center rounded-2xl bg-[#25D366]/10 text-[#25D366] shadow-sm transition-colors hover:bg-[#25D366] hover:text-white sm:w-16"
