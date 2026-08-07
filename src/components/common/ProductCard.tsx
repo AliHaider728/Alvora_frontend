@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Heart, ShoppingBag, Eye, Check, Star } from 'lucide-react';
+import { Heart, ShoppingBag, Eye, Check, Loader2 } from 'lucide-react';
 import { Product } from '../../types';
 import { useStore } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/formatters';
 import { getSafeImageSrc } from '../../utils/images';
 import { formatProductAgeGroups, formatProductCategories, getEffectiveProductAvailability, normalizeInventory } from '../../utils/products';
 import { ReviewSummary } from './ReviewSummary';
+import { useToast } from '../../context/ToastContext';
 
 interface ProductCardProps {
   product: Product;
@@ -16,8 +17,12 @@ interface ProductCardProps {
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, layout = 'standard' }) => {
   const { addToCart, toggleWishlist, isInWishlist, settings } = useStore();
+  const { showToast } = useToast();
   const navigate = useNavigate();
-  const [added, setAdded] = useState(false);
+  const [cartActionState, setCartActionState] = useState<'idle' | 'adding' | 'added'>('idle');
+  const cartActionLocked = useRef(false);
+  const addTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isWishlisted = isInWishlist(product.id);
   const thumbnailUrl = product.imageThumbnailUrls?.[0]?.trim();
   const cardImageUrl = thumbnailUrl || product.images?.[0];
@@ -29,6 +34,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
     .replace(/\s+/g, ' ')
     .trim();
   const compact = layout === 'compact';
+
+  useEffect(() => () => {
+    if (addTimerRef.current) clearTimeout(addTimerRef.current);
+    if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
+  }, []);
 
   let validDefaultVariation: any = null;
   if (isVariable && product.variations && product.variations.length > 0) {
@@ -66,13 +76,22 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
       navigate(`/product/${product.slug}`);
       return;
     }
-    if (validDefaultVariation) {
-      addToCart(product, 1, JSON.stringify(validDefaultVariation.attributes), validDefaultVariation.id);
-    } else {
-      addToCart(product, 1);
-    }
-    setAdded(true);
-    setTimeout(() => setAdded(false), 1500);
+    if (cartActionLocked.current) return;
+    cartActionLocked.current = true;
+    setCartActionState('adding');
+    addTimerRef.current = setTimeout(() => {
+      if (validDefaultVariation) {
+        addToCart(product, 1, JSON.stringify(validDefaultVariation.attributes), validDefaultVariation.id);
+      } else {
+        addToCart(product, 1);
+      }
+      showToast(`Added ${product.name} to cart.`, 'success');
+      setCartActionState('added');
+      resetTimerRef.current = setTimeout(() => {
+        cartActionLocked.current = false;
+        setCartActionState('idle');
+      }, 900);
+    }, 180);
   };
 
   const handleWishlistToggle = (e: React.MouseEvent) => {
@@ -122,13 +141,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
         <button
           onClick={handleWishlistToggle}
           aria-label={isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
-          className={`absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full shadow-sm ring-1 ring-black/5 backdrop-blur transition-all duration-200 ${
+          className={`absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full shadow-sm ring-1 ring-black/5 backdrop-blur transition-all duration-200 active:scale-90 ${
             isWishlisted
-              ? 'bg-rose-500 text-white'
+              ? 'scale-105 bg-rose-500 text-white'
               : 'bg-white/90 text-slate-500 hover:scale-110 hover:text-rose-500'
           }`}
         >
-          <Heart className={`h-4 w-4 ${isWishlisted ? 'fill-white' : ''}`} strokeWidth={2.2} />
+          <Heart className={`h-4 w-4 transition-all duration-200 ${isWishlisted ? 'scale-110 fill-white' : ''}`} strokeWidth={2.2} />
         </button>
 
         {/* Quick view — desktop hover */}
@@ -208,19 +227,24 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
 
           <button
             onClick={handleAddToCart}
-            disabled={!isAvailable}
+            disabled={!isAvailable || cartActionState !== 'idle'}
             className={`relative flex h-11 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-2xl px-3 text-[13px] font-bold tracking-wide shadow-sm transition-all duration-300 active:scale-95 ${
-              added
+              cartActionState === 'added'
                 ? 'bg-emerald-500 text-white shadow-emerald-200'
                 : !isAvailable
                 ? 'cursor-not-allowed bg-slate-100 text-slate-400'
                 : 'bg-rose-500 text-white hover:bg-rose-600 hover:shadow-lg hover:shadow-rose-200'
             }`}
           >
-            {added ? (
+            {cartActionState === 'added' ? (
               <>
-                <Check className="h-4 w-4 animate-bounce" />
+                <Check className="h-4 w-4" />
                 <span>Added</span>
+              </>
+            ) : cartActionState === 'adding' ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span>Adding...</span>
               </>
             ) : !isAvailable ? (
               <span className="whitespace-nowrap">Sold Out</span>

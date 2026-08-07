@@ -174,3 +174,19 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
+
+@keyframes cart-count-pop {
+  0% { opacity: 0.65; transform: scale(0.78); }
+  55% { opacity: 1; transform: scale(1.12); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.cart-count-pop {
+  animation: cart-count-pop 280ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cart-count-pop {
+    animation: none;
+  }
+}

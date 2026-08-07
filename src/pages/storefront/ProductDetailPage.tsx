@@ -15,7 +15,8 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
-  ZoomIn
+  ZoomIn,
+  Loader2
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { useToast } from '../../context/ToastContext';
@@ -60,7 +61,10 @@ export const ProductDetailPage: React.FC = () => {
   const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>({});
   const [selectedAttributes, setSelectedAttributes] = useState<Record<string, string>>({});
   const [activeTab, setActiveTab] = useState<'desc' | 'specs' | 'safety' | 'reviews'>('desc');
-  const [added, setAdded] = useState(false);
+  const [cartActionState, setCartActionState] = useState<'idle' | 'adding' | 'added'>('idle');
+  const cartActionLocked = React.useRef(false);
+  const addTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const resetTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isZooming, setIsZooming] = useState(false);
   const [zoomOrigin, setZoomOrigin] = useState('50% 50%');
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -68,6 +72,11 @@ export const ProductDetailPage: React.FC = () => {
   const lightboxRef = React.useRef<HTMLDivElement>(null);
   const lightboxCloseRef = React.useRef<HTMLButtonElement>(null);
   const lightboxTriggerRef = React.useRef<HTMLButtonElement>(null);
+
+  useEffect(() => () => {
+    if (addTimerRef.current) clearTimeout(addTimerRef.current);
+    if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
+  }, []);
 
   // Write review modal state
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
@@ -362,24 +371,27 @@ export const ProductDetailPage: React.FC = () => {
       showToast('This product option is currently out of stock or unavailable for delivery.', 'error');
       return;
     }
-    if (isVariable) {
-      addToCart({ ...product, price: currentPrice }, quantity, undefined, currentVariation?.id);
-    } else {
-      const productToCart = totalVariantOffset ? { ...product, price: currentPrice } : product;
-      addToCart(productToCart, quantity, formattedVariantString || undefined);
-    }
-    setAdded(true);
-    showToast(`Added ${quantity} x ${product.name} to cart!`, 'success');
-    setTimeout(() => setAdded(false), 1500);
+    if (cartActionLocked.current) return;
+    cartActionLocked.current = true;
+    setCartActionState('adding');
+    addTimerRef.current = setTimeout(() => {
+      if (isVariable) {
+        addToCart({ ...product, price: currentPrice }, quantity, undefined, currentVariation?.id);
+      } else {
+        const productToCart = totalVariantOffset ? { ...product, price: currentPrice } : product;
+        addToCart(productToCart, quantity, formattedVariantString || undefined);
+      }
+      showToast(`Added ${quantity} x ${product.name} to cart.`, 'success');
+      setCartActionState('added');
+      resetTimerRef.current = setTimeout(() => {
+        cartActionLocked.current = false;
+        setCartActionState('idle');
+      }, 900);
+    }, 180);
   };
 
   const handleToggleWishlist = () => {
     toggleWishlist(product.id);
-    if (!isWishlisted) {
-      showToast(`Added ${product.name} to Wishlist!`, 'success');
-    } else {
-      showToast(`Removed from Wishlist`, 'info');
-    }
   };
 
   const handleReviewSubmit = async (e: React.FormEvent) => {
@@ -826,19 +838,24 @@ export const ProductDetailPage: React.FC = () => {
                   {/* Add to Cart CTA Button with bounce micro-interaction */}
                   <button
                     onClick={handleAddToCart}
-                    disabled={!canPurchase}
+                    disabled={!canPurchase || cartActionState !== 'idle'}
                     className={`flex h-12 flex-1 items-center justify-center gap-2 rounded-2xl font-heading text-sm font-extrabold shadow-xl transition-all duration-300 active:scale-95 sm:text-base ${
-                      added
+                      cartActionState === 'added'
                         ? 'bg-emerald-500 text-white shadow-emerald-200'
                         : !canPurchase
                         ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
                         : 'bg-rose-500 hover:bg-rose-600 text-white shadow-rose-200/80 hover:scale-[1.01]'
                     }`}
                   >
-                    {added ? (
+                    {cartActionState === 'added' ? (
                       <>
-                        <Check className="w-5 h-5 animate-bounce" />
+                        <Check className="w-5 h-5" />
                         <span>Added!</span>
+                      </>
+                    ) : cartActionState === 'adding' ? (
+                      <>
+                        <Loader2 className="h-5 w-5 animate-spin" />
+                        <span>Adding...</span>
                       </>
                     ) : (
                       <>

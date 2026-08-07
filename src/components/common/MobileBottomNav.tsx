@@ -47,7 +47,7 @@ export const MobileBottomNav: React.FC = () => {
                 <div className="relative">
                   <Icon className="w-5 h-5 text-slate-700 hover:text-rose-500" />
                   {typeof item.badge === 'number' && item.badge > 0 && (
-                    <span className="absolute -top-1.5 -right-2 bg-rose-500 text-white text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
+                    <span key={`cart-badge-${item.badge}`} className="cart-count-pop absolute -right-2 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-black text-white shadow-xs">
                       {item.badge > 99 ? '99+' : item.badge}
                     </span>
                   )}
@@ -86,7 +86,7 @@ export const MobileBottomNav: React.FC = () => {
               <div className="relative">
                 <Icon className={`w-5 h-5 ${isActive ? 'text-rose-600 stroke-[2.5px]' : 'text-slate-600'}`} />
                 {typeof item.badge === 'number' && item.badge > 0 && (
-                  <span className="absolute -top-1.5 -right-2 bg-rose-500 text-white text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
+                  <span key={`nav-badge-${item.key}-${item.badge}`} className="cart-count-pop absolute -right-2 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-black text-white shadow-xs">
                     {item.badge > 99 ? '99+' : item.badge}
                   </span>
                 )}

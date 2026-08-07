@@ -1,15 +1,21 @@
-import React from 'react';
-import { ArrowRight, Check, PackageCheck, ShoppingBag, Sparkles } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { ArrowRight, Check, Loader2, PackageCheck, ShoppingBag, Sparkles } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useStore } from '../../context/StoreContext';
 import { Product } from '../../types';
 import { formatPrice } from '../../utils/formatters';
 import { getSafeImageSrc } from '../../utils/images';
 import { formatProductAgeGroups, getEffectiveProductAvailability, normalizeInventory } from '../../utils/products';
+import { useToast } from '../../context/ToastContext';
 
 export const ProductSpotlight: React.FC<{ product: Product }> = ({ product }) => {
   const { addToCart, settings } = useStore();
+  const { showToast } = useToast();
   const navigate = useNavigate();
+  const [cartActionState, setCartActionState] = useState<'idle' | 'adding' | 'added'>('idle');
+  const cartActionLocked = useRef(false);
+  const addTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isAvailable = getEffectiveProductAvailability(product);
   const isVariable = product.productType === 'variable';
   const defaultVariation = isVariable
@@ -30,16 +36,32 @@ export const ProductSpotlight: React.FC<{ product: Product }> = ({ product }) =>
   const highlights = product.features?.filter(Boolean).slice(0, 3) || [];
   const categories = product.categoryNames?.length ? product.categoryNames : product.category ? [product.category] : [];
 
+  useEffect(() => () => {
+    if (addTimerRef.current) clearTimeout(addTimerRef.current);
+    if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
+  }, []);
+
   const handlePrimaryAction = () => {
     if (!isAvailable || !canAddDirectly) {
       navigate(`/product/${product.slug}`);
       return;
     }
-    if (defaultVariation) {
-      addToCart(product, 1, JSON.stringify(defaultVariation.attributes), defaultVariation.id);
-    } else {
-      addToCart(product, 1);
-    }
+    if (cartActionLocked.current) return;
+    cartActionLocked.current = true;
+    setCartActionState('adding');
+    addTimerRef.current = setTimeout(() => {
+      if (defaultVariation) {
+        addToCart(product, 1, JSON.stringify(defaultVariation.attributes), defaultVariation.id);
+      } else {
+        addToCart(product, 1);
+      }
+      showToast(`Added ${product.name} to cart.`, 'success');
+      setCartActionState('added');
+      resetTimerRef.current = setTimeout(() => {
+        cartActionLocked.current = false;
+        setCartActionState('idle');
+      }, 900);
+    }, 180);
   };
 
   return (
@@ -74,9 +96,9 @@ export const ProductSpotlight: React.FC<{ product: Product }> = ({ product }) =>
             {highlights.length > 0 && <ul className="mt-5 grid gap-2 text-sm text-indigo-50 sm:grid-cols-2">{highlights.map(highlight => <li key={highlight} className="flex items-start gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-300" />{highlight}</li>)}</ul>}
 
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <button type="button" disabled={!isAvailable && canAddDirectly} onClick={handlePrimaryAction} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-rose-500 px-6 text-sm font-black text-white shadow-lg shadow-rose-950/30 transition hover:bg-rose-400 disabled:cursor-not-allowed disabled:opacity-60">
-                {canAddDirectly ? <ShoppingBag className="h-5 w-5" /> : <PackageCheck className="h-5 w-5" />}
-                {canAddDirectly ? isAvailable ? 'Add to Cart' : 'Out of Stock' : 'Choose Options'}
+              <button type="button" disabled={(!isAvailable && canAddDirectly) || cartActionState !== 'idle'} onClick={handlePrimaryAction} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-rose-500 px-6 text-sm font-black text-white shadow-lg shadow-rose-950/30 transition hover:bg-rose-400 disabled:cursor-not-allowed disabled:opacity-60">
+                {cartActionState === 'adding' ? <Loader2 className="h-5 w-5 animate-spin" /> : cartActionState === 'added' ? <Check className="h-5 w-5" /> : canAddDirectly ? <ShoppingBag className="h-5 w-5" /> : <PackageCheck className="h-5 w-5" />}
+                {cartActionState === 'adding' ? 'Adding...' : cartActionState === 'added' ? 'Added' : canAddDirectly ? isAvailable ? 'Add to Cart' : 'Out of Stock' : 'Choose Options'}
               </button>
               <Link to={`/product/${product.slug}`} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-white/25 bg-white/10 px-6 text-sm font-black text-white backdrop-blur transition hover:bg-white/20">View Product <ArrowRight className="h-4 w-4" /></Link>
             </div>

@@ -22,6 +22,7 @@ import { api, getAuthToken, isSuperAdmin } from '../services/api';
 import { formatPrice } from '../utils/formatters';
 import { normalizeStoreSettings } from '../config/storeAppearance';
 import { normalizeInventory, normalizeProductAgeGroups } from '../utils/products';
+import { useToast } from './ToastContext';
 
 type MongoRecord = {
   _id?: unknown;
@@ -227,6 +228,8 @@ interface StoreContextType {
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
 
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { showToast } = useToast();
+
   // LocalStorage state initialization
   const [products, setProducts] = useState<Product[]>(() => {
     const saved = localStorage.getItem('playbimboo_products');
@@ -520,8 +523,14 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   // Wishlist toggle
   const toggleWishlist = (productId: string) => {
+    const isAdding = !wishlist.includes(productId);
     setWishlist(prev =>
       prev.includes(productId) ? prev.filter(id => id !== productId) : [...prev, productId]
+    );
+    const productName = products.find(product => product.id === productId)?.name;
+    showToast(
+      `${isAdding ? 'Added' : 'Removed'}${productName ? ` ${productName}` : ' product'} ${isAdding ? 'to' : 'from'} wishlist.`,
+      isAdding ? 'success' : 'info'
     );
   };
 
