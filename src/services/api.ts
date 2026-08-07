@@ -21,7 +21,6 @@ export const getAdminSessionUser = (): AdminSessionUser | null => {
   }
 };
 export const isSuperAdmin = () => getAdminSessionUser()?.role === 'super_admin';
-export const isAdmin = () => ['admin', 'super_admin'].includes(getAdminSessionUser()?.role || '');
 let lastApiError = '';
 export const getLastApiError = (): string => lastApiError;
 

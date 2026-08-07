@@ -333,43 +333,34 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     void fetchSettings();
   }, []); // runs ONCE on mount only — no auth dependency
 
-  // ─── Auth-gated data: fetched on mount + on auth change ───
+  // ─── Auth-gated admin data: fetched on mount + on auth change ───
   // Does NOT touch settings. Each domain updates only its own slice.
   useEffect(() => {
-    const fetchAuthGatedData = async () => {
+    const fetchAdminData = async () => {
       try {
-        const hasAuthSession = Boolean(getAuthToken());
-        if (!hasAuthSession) {
+        const hasAdminSession = Boolean(getAuthToken());
+        if (!hasAdminSession) {
           setOrders([]);
           setCustomers([]);
           setCoupons([]);
           setReviews([]);
           return; // Nothing more to fetch for guests
         }
-        
-        // Orders can be fetched by customer (returns their own) or admin (returns all)
-        try {
-          const realOrders = await api.getOrders();
-          if (realOrders) setOrders(realOrders.map(normalizeOrder));
-        } catch (err) {
-          console.error('Failed to fetch orders', err);
-        }
+        const [
+          realOrders,
+          realCustomers,
+          realCoupons
+        ] = await Promise.all([
+          api.getOrders(),
+          api.getCustomers(),
+          api.getCoupons()
+        ]);
 
-        // Admin-only data
-        if (isAdmin()) {
-          try {
-            const [realCustomers, realCoupons] = await Promise.all([
-              api.getCustomers(),
-              api.getCoupons()
-            ]);
-            if (realCustomers) setCustomers(realCustomers);
-            if (realCoupons) setCoupons(realCoupons.map(normalizeCoupon));
-          } catch (err) {
-            console.error('Failed to fetch admin-only data', err);
-          }
-        }
+        if (realOrders) setOrders(realOrders.map(normalizeOrder));
+        if (realCustomers) setCustomers(realCustomers);
+        if (realCoupons) setCoupons(realCoupons.map(normalizeCoupon));
       } catch (err) {
-        console.error('Failed to fetch auth-gated data from backend', err);
+        console.error('Failed to fetch admin data from backend', err);
       }
     };
 
@@ -389,9 +380,9 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     };
 
     void fetchPublicData();
-    void fetchAuthGatedData();
-    window.addEventListener('pb-auth-changed', fetchAuthGatedData);
-    return () => window.removeEventListener('pb-auth-changed', fetchAuthGatedData);
+    void fetchAdminData();
+    window.addEventListener('pb-auth-changed', fetchAdminData);
+    return () => window.removeEventListener('pb-auth-changed', fetchAdminData);
   }, []);
 
   // Sync to localStorage

@@ -14,14 +14,28 @@ import {
   UserCircle2
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
-import { getAuthToken, getAdminSessionUser } from '../../services/api';
+import { getAuthToken } from '../../services/api';
 import Ballpit from '../Ballpit/Ballpit';
 
+// Adjust this import path to wherever the transparent logo file lives in your project
 import playBimbooLogo from '../../assets/images/playbimboo-logo.png';
+
+// ─────────────────────────────────────────────────────────
+// Hardcoded real store contact info.
+// These are the confirmed real values — do NOT replace with
+// settings.phone / settings.email / settings.address, which
+// was the source of the data-flicker bug (settings context
+// loads async and could momentarily return stale/empty data,
+// overwriting these correct values after initial render).
+// If these ever need to change, update them directly here.
+// ─────────────────────────────────────────────────────────
+const STORE_PHONE = '0310-7172222';
+const STORE_EMAIL = 'Sales@playbimboo.com';
+const STORE_ADDRESS = 'Mumtaz Market, Gujranwala';
 
 export const Footer: React.FC = () => {
   const { settings } = useStore();
-  const isAuthenticated = getAdminSessionUser()?.role === 'customer';
+  const isAuthenticated = Boolean(getAuthToken());
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
@@ -212,14 +226,14 @@ export const Footer: React.FC = () => {
                   <span className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
                     <MapPin className="w-3.5 h-3.5 text-rose-400" />
                   </span>
-                  <span>{settings.address || 'Mumtaz Market, Gujranwala'}</span>
+                  <span>{STORE_ADDRESS}</span>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <span className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
                     <Phone className="w-3.5 h-3.5 text-amber-400" />
                   </span>
-                  <a href={`tel:+92${(settings.phone || '0310-7172222').replace(/[^0-9]/g, '').replace(/^0/, '')}`} className="hover:text-amber-400 transition-colors">
-                    {settings.phone || '0310-7172222'}
+                  <a href={`tel:+92${STORE_PHONE.replace(/[^0-9]/g, '').replace(/^0/, '')}`} className="hover:text-amber-400 transition-colors">
+                    {STORE_PHONE}
                   </a>
                 </div>
                 <div className="flex items-start gap-2.5">
@@ -227,8 +241,8 @@ export const Footer: React.FC = () => {
                     <Mail className="w-3.5 h-3.5 text-sky-400" />
                   </span>
                   <div className="flex flex-col gap-1.5 pt-1">
-                    <a href={`mailto:${settings.email || 'Sales@playbimboo.com'}`} className="hover:text-sky-400 transition-colors leading-none">
-                      {settings.email || 'Sales@playbimboo.com'}
+                    <a href={`mailto:${STORE_EMAIL}`} className="hover:text-sky-400 transition-colors leading-none">
+                      {STORE_EMAIL}
                     </a>
                   </div>
                 </div>
@@ -236,7 +250,7 @@ export const Footer: React.FC = () => {
             </div>
 
             <Link
-              to="/account"
+              to={isAuthenticated ? "/account" : "/login"}
               className="inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-amber-500 hover:opacity-90 text-white font-heading font-bold text-xs shadow-md transition-opacity"
             >
               <UserCircle2 className="w-3.5 h-3.5" />

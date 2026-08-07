@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { api } from '../../services/api';
 import { useToast } from '../../context/ToastContext';
-import { Lock, Mail, ArrowRight, CheckCircle, Eye, EyeOff } from 'lucide-react';
+import { Lock, Mail, ArrowRight, CheckCircle } from 'lucide-react';
 import { Logo as StoreLogo } from '../../components/common/Logo';
 
 export const ResetPasswordPage: React.FC = () => {
@@ -19,8 +19,6 @@ export const ResetPasswordPage: React.FC = () => {
   const [tokenInput, setTokenInput] = useState(token || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,7 +44,7 @@ export const ResetPasswordPage: React.FC = () => {
       
       setSuccess(true);
       showToast(isActivation ? 'Account activated successfully!' : 'Password reset successful!', 'success');
-      setTimeout(() => navigate('/account'), 3000);
+      setTimeout(() => navigate('/login'), 3000);
     } catch (err: any) {
       showToast(err.message, 'error');
     } finally {
@@ -68,7 +66,7 @@ export const ResetPasswordPage: React.FC = () => {
             Your password has been successfully saved. You will be redirected to the login page momentarily.
           </p>
           <button
-            onClick={() => navigate('/account')}
+            onClick={() => navigate('/login')}
             className="w-full rounded-2xl bg-rose-500 py-3.5 text-sm font-bold text-white transition-all hover:bg-rose-600 active:scale-95"
           >
             Go to Login
@@ -121,21 +119,13 @@ export const ResetPasswordPage: React.FC = () => {
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
                 <input
-                  type={showPassword ? 'text' : 'password'}
+                  type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full rounded-2xl border-2 border-slate-100 bg-slate-50 py-3.5 pl-11 pr-12 text-sm font-medium text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-rose-500 focus:bg-white focus:shadow-lg focus:shadow-rose-100"
+                  className="w-full rounded-2xl border-2 border-slate-100 bg-slate-50 py-3.5 pl-11 pr-4 text-sm font-medium text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-rose-500 focus:bg-white focus:shadow-lg focus:shadow-rose-100"
                   placeholder="At least 8 characters"
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none"
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
-                >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                </button>
               </div>
             </div>
 
@@ -146,21 +136,13 @@ export const ResetPasswordPage: React.FC = () => {
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
                 <input
-                  type={showConfirmPassword ? 'text' : 'password'}
+                  type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
-                  className="w-full rounded-2xl border-2 border-slate-100 bg-slate-50 py-3.5 pl-11 pr-12 text-sm font-medium text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-rose-500 focus:bg-white focus:shadow-lg focus:shadow-rose-100"
+                  className="w-full rounded-2xl border-2 border-slate-100 bg-slate-50 py-3.5 pl-11 pr-4 text-sm font-medium text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-rose-500 focus:bg-white focus:shadow-lg focus:shadow-rose-100"
                   placeholder="Confirm new password"
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none"
-                  aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
-                >
-                  {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                </button>
               </div>
             </div>
 

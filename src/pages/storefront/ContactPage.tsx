@@ -34,6 +34,20 @@ const YouTubeIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+// ─────────────────────────────────────────────────────────
+// Hardcoded real store contact info.
+// These are the confirmed real values — kept in sync with
+// Footer.tsx. Do NOT fall back to settings.phone / .email /
+// .address, which was the source of the data-flicker bug
+// (settings context loads async and could momentarily show
+// stale/empty data after the real values had already rendered).
+// If these ever need to change, update them directly here
+// (and in Footer.tsx to keep both in sync).
+// ─────────────────────────────────────────────────────────
+const STORE_PHONE = '0310-7172222';
+const STORE_EMAIL = 'Sales@playbimboo.com';
+const STORE_ADDRESS = 'Mumtaz Market, Gujranwala';
+
 export const ContactPage: React.FC = () => {
   const { settings } = useStore();
   const [submitted, setSubmitted] = useState(false);
@@ -64,11 +78,11 @@ export const ContactPage: React.FC = () => {
     }
   };
 
-  const phoneDisplay = settings.phone || '0310-7172222';
+  const phoneDisplay = STORE_PHONE;
   const phoneLink = `tel:+92${phoneDisplay.replace(/[^0-9]/g, '').replace(/^0/, '')}`;
-  const emailDisplay = settings.email || 'Sales@playbimboo.com';
+  const emailDisplay = STORE_EMAIL;
   const emailLink = `mailto:${emailDisplay}`;
-  const addressDisplay = settings.address || 'Mumtaz Market, Gujranwala';
+  const addressDisplay = STORE_ADDRESS;
 
   const socialLinks = [
     {
