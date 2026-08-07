@@ -4,9 +4,9 @@ import { DEFAULT_HOMEPAGE_SECTIONS, DEFAULT_STOREFRONT_NAVIGATION } from '../con
 export const INITIAL_SETTINGS: StoreSettings = {
   storeName: "PlayBimboo",
   tagline: "Where Imagination Takes Flight!",
-  email: "hello@playbimboo.com",
-  phone: "+92 300 555-TOYS",
-  address: "123 Wonder St, Lahore, Pakistan",
+  email: "sales@playbimboo.com",
+  phone: "+327-6655557",
+  address: "Mumtaz Market, Shafique Center, Gujranwala, Pakistan",
   currency: "Rs.",
   metaTitle: "PlayBimboo - Magical Toys, Games & Educational Play",
   metaDescription: "Discover top-rated toys, action figures, board games, plush soft toys, and educational STEM play for kids of all ages. Fast shipping across Pakistan!",

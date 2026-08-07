@@ -75,9 +75,9 @@ const mergeSections = (incoming?: Partial<HomepageSectionSetting>[]) => DEFAULT_
 export const normalizeStoreSettings = (settings: Partial<StoreSettings>): StoreSettings => ({
   storeName: settings.storeName || 'PlayBimboo',
   tagline: settings.tagline || 'Where Imagination Comes to Life',
-  email: settings.email || 'support@playbimboo.com',
-  phone: settings.phone || '',
-  address: settings.address || '',
+  email: settings.email || 'sales@playbimboo.com',
+  phone: settings.phone || '+327-6655557',
+  address: settings.address || 'Mumtaz Market, Shafique Center, Gujranwala, Pakistan',
   currency: settings.currency || 'Rs.',
   logoUrl: settings.logoUrl,
   metaTitle: settings.metaTitle || 'PlayBimboo - Premium Toys for Kids',

@@ -404,7 +404,7 @@ export const CheckoutPage: React.FC = () => {
                       <input
                         type="tel"
                         required
-                        placeholder="e.g. 0300 1234567"
+                        placeholder="e.g. 0327 6655557"
                         value={phone}
                         onChange={e => setPhone(e.target.value)}
                         className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 font-sans focus:outline-none focus:ring-2 focus:ring-rose-400"
@@ -428,7 +428,7 @@ export const CheckoutPage: React.FC = () => {
                       <input
                         type="text"
                         required
-                        placeholder="e.g. Lahore, Karachi, Islamabad"
+                        placeholder="e.g. Gujranwala, Karachi, Islamabad"
                         value={city}
                         onChange={e => setCity(e.target.value)}
                         className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 font-sans focus:outline-none focus:ring-2 focus:ring-rose-400"

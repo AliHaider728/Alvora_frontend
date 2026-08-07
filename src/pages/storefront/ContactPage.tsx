@@ -48,7 +48,7 @@ export const ContactPage: React.FC = () => {
             <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm space-y-4">
               <h1 className="font-heading font-black text-2xl text-slate-900">Get in Touch with Play Bimboo</h1>
               <p className="text-xs text-slate-500 leading-relaxed font-medium">
-                Have questions about toy safety, shipping speeds, or bulk gift orders? Send us a message and our support team will reply within 24 hours!
+                Have questions about our toys, orders, delivery, or anything else? Send us a message and our team will get back to you as soon as possible.
               </p>
 
               <div className="space-y-4 pt-4 border-t border-slate-100 text-xs text-slate-700">
@@ -68,7 +68,9 @@ export const ContactPage: React.FC = () => {
                   </div>
                   <div>
                     <span className="font-bold block text-slate-900">Phone Support</span>
-                    <span>{settings.phone}</span>
+                    <a href={`tel:${settings.phone?.startsWith('+') ? settings.phone : `+${settings.phone}`}`} className="hover:text-rose-500 transition-colors">
+                      {settings.phone}
+                    </a>
                   </div>
                 </div>
 
@@ -78,7 +80,9 @@ export const ContactPage: React.FC = () => {
                   </div>
                   <div>
                     <span className="font-bold block text-slate-900">Email Customer Service</span>
-                    <span>{settings.email}</span>
+                    <a href={`mailto:${settings.email}`} className="hover:text-rose-500 transition-colors">
+                      {settings.email}
+                    </a>
                   </div>
                 </div>
               </div>

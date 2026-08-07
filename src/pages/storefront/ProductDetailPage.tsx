@@ -90,6 +90,10 @@ export const ProductDetailPage: React.FC = () => {
 
   useScrollLock(lightboxOpen || sizeGuideModalOpen || reviewModalOpen);
 
+  const [apiRelatedProducts, setApiRelatedProducts] = useState<any[]>([]);
+  const loadRelatedProducts = async (productId: string) => {
+    try { const res = await api.getRelatedProducts(productId); setApiRelatedProducts(res || []); } catch(e) { console.error(e); }
+  };
   const loadProductReviews = async (productId: string) => {
     const result = await api.getProductReviews(productId);
     if (!result) return;
@@ -109,7 +113,7 @@ export const ProductDetailPage: React.FC = () => {
   };
 
   useEffect(() => {
-    if (product?.id) void loadProductReviews(product.id);
+    if (product?.id) { void loadProductReviews(product.id); void loadRelatedProducts(product.id); }
   }, [product?.id]);
 
   const sanitizedSpecs = Object.entries(product?.specifications || {}).filter(
@@ -295,14 +299,7 @@ export const ProductDetailPage: React.FC = () => {
     : flatRate;
 
   const isWishlisted = isInWishlist(product.id);
-  const relatedProducts = products
-    .filter(p => {
-      if (p.id === product.id) return false;
-      const currentSlugs = product.categorySlugs?.length ? product.categorySlugs : product.categorySlug ? [product.categorySlug] : [];
-      const candidateSlugs = p.categorySlugs?.length ? p.categorySlugs : p.categorySlug ? [p.categorySlug] : [];
-      return currentSlugs.some(slug => candidateSlugs.includes(slug));
-    })
-    .slice(0, 4);
+
 
   let currentPrice = product.price;
   let currentOriginalPrice = product.originalPrice;
@@ -459,7 +456,7 @@ export const ProductDetailPage: React.FC = () => {
               onClick={openLightbox}
               onPointerMove={handleZoomPointerMove}
               onPointerLeave={() => { setIsZooming(false); setZoomOrigin('50% 50%'); }}
-              className="group/gallery relative flex aspect-[4/3] w-full cursor-zoom-in items-center justify-center overflow-hidden rounded-2xl border border-slate-100 bg-slate-50 p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 focus-visible:ring-offset-2 sm:p-2"
+              className="group/gallery relative flex aspect-[4/3] sm:aspect-square w-full cursor-zoom-in items-center justify-center overflow-hidden rounded-2xl border border-slate-100 bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 focus-visible:ring-offset-2"
               aria-label={`Enlarge ${product.name} image`}
             >
               <img
@@ -470,7 +467,7 @@ export const ProductDetailPage: React.FC = () => {
               />
               <span className="pointer-events-none absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-slate-950/70 px-3 py-1.5 text-[10px] font-bold text-white opacity-0 backdrop-blur transition-opacity group-hover/gallery:opacity-100"><ZoomIn className="h-3.5 w-3.5" /> Click to enlarge</span>
               {product.discountPercent && (
-                <span className="absolute top-4 left-4 bg-rose-500 text-white font-heading font-extrabold text-xs px-3 py-1.5 rounded-full shadow-md">
+                <span className="absolute top-4 left-4 z-10 bg-rose-500 text-white font-heading font-extrabold text-xs px-3 py-1.5 rounded-full shadow-md">
                   -{product.discountPercent}% OFF
                 </span>
               )}
@@ -1078,6 +1075,18 @@ export const ProductDetailPage: React.FC = () => {
           <img src={getSafeImageSrc(lightboxImages[lightboxIndex])} alt={`${product.name} image ${lightboxIndex + 1} of ${lightboxImages.length}`} className="max-h-[88vh] max-w-[92vw] object-contain" />
           {lightboxImages.length > 1 && <button type="button" onClick={() => setLightboxIndex(index => (index + 1) % lightboxImages.length)} className="absolute right-3 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white ring-1 ring-white/20 backdrop-blur transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white sm:right-6" aria-label="Next product image"><ChevronRight className="h-7 w-7" /></button>}
           <span className="absolute bottom-4 rounded-full bg-black/40 px-3 py-1.5 text-xs font-bold text-white" aria-live="polite">{lightboxIndex + 1} / {lightboxImages.length}</span>
+        </div>
+      )}
+
+      {/* Related Products */}
+      {apiRelatedProducts.length > 0 && (
+        <div className="mt-16 border-t border-slate-100 pt-12">
+          <h2 className="font-heading font-black text-2xl text-slate-900 mb-8 text-center sm:text-left">You May Also Like</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {apiRelatedProducts.map(rp => (
+              <ProductCard key={rp.id || rp._id} product={rp} />
+            ))}
+          </div>
         </div>
       )}
 
