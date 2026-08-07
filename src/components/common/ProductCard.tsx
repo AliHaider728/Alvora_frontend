@@ -11,9 +11,10 @@ import { ReviewSummary } from './ReviewSummary';
 interface ProductCardProps {
   product: Product;
   onQuickView?: (product: Product) => void;
+  layout?: 'standard' | 'compact';
 }
 
-export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }) => {
+export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, layout = 'standard' }) => {
   const { addToCart, toggleWishlist, isInWishlist, settings } = useStore();
   const navigate = useNavigate();
   const [added, setAdded] = useState(false);
@@ -27,6 +28,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
     .replace(/<[^>]*>/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
+  const compact = layout === 'compact';
 
   let validDefaultVariation: any = null;
   if (isVariable && product.variations && product.variations.length > 0) {
@@ -86,7 +88,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
       <div className="relative aspect-[1/1] w-full shrink-0 overflow-hidden bg-white">
         <Link
           to={`/product/${product.slug}`}
-          className="flex h-full w-full items-center justify-center p-3 sm:p-4"
+          className={`flex h-full w-full items-center justify-center ${compact ? 'p-2.5' : 'p-3 sm:p-4'}`}
           aria-label={`View ${product.name}`}
         >
           <img
@@ -153,7 +155,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
       </div>
 
       {/* ---------- CONTENT ---------- */}
-      <div className="flex flex-1 flex-col p-5 sm:p-6">
+      <div className={`flex flex-1 flex-col ${compact ? 'p-4' : 'p-5 sm:p-6'}`}>
         <div className="flex items-center justify-between gap-2">
           <span className="truncate text-xs font-bold uppercase tracking-[0.14em] text-sky-600">
             {product.category || 'Uncategorized'}
@@ -166,13 +168,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
 
         <Link
           to={`/product/${product.slug}`}
-          className="mt-2 line-clamp-2 text-lg font-bold leading-snug text-slate-900 transition-colors hover:text-rose-500 sm:text-xl"
+          className={`mt-2 line-clamp-2 font-bold leading-snug text-slate-900 transition-colors hover:text-rose-500 ${compact ? 'text-base sm:text-lg' : 'text-lg sm:text-xl'}`}
         >
           {product.name}
         </Link>
 
         <div className="mt-2.5 flex items-baseline gap-2">
-          <span className="text-2xl font-black leading-none tracking-tight text-rose-500 sm:text-3xl">
+          <span className={`font-black leading-none tracking-tight text-rose-500 ${compact ? 'text-xl sm:text-2xl' : 'text-2xl sm:text-3xl'}`}>
             {pricePrefix}{formatPrice(displayPrice, settings.currency)}
           </span>
           {displayOriginalPrice && displayOriginalPrice > displayPrice && !pricePrefix && (
@@ -183,11 +185,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
         </div>
 
         {cardDescription ? (
-          <p className="mt-2.5 line-clamp-2 text-sm leading-relaxed text-slate-500">
+          <p className={`mt-2.5 line-clamp-2 leading-relaxed text-slate-500 ${compact ? 'text-xs' : 'text-sm'}`}>
             {cardDescription}
           </p>
         ) : (
-          <p className="mt-2.5 line-clamp-2 text-sm leading-relaxed text-slate-400">
+          <p className={`mt-2.5 line-clamp-2 leading-relaxed text-slate-400 ${compact ? 'text-xs' : 'text-sm'}`}>
             A fun, quality toy selected for curious young minds.
           </p>
         )}
@@ -197,7 +199,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
         </div>
 
         {/* ---------- ACTIONS ---------- */}
-        <div className="mt-4 flex items-center gap-2 border-t border-slate-100 pt-4">
+        <div className={`flex items-center gap-2 border-t border-slate-100 ${compact ? 'mt-3 pt-3' : 'mt-4 pt-4'}`}>
           <a
             href={`https://wa.me/3276655557?text=${encodeURIComponent(`Hello, I am interested in this product:\nProduct: ${product.name}\nPrice: ${formatPrice(displayPrice, settings.currency)}\nLink: ${window.location.origin}/product/${product.slug}`)}`}
             target="_blank"
