@@ -116,6 +116,39 @@ export const ProductDetailPage: React.FC = () => {
     if (product?.id) { void loadProductReviews(product.id); void loadRelatedProducts(product.id); }
   }, [product?.id]);
 
+  // Reset ALL per-product local state when navigating between products via client-side routing.
+  // React Router reuses the same component instance for /product/:slug routes, so state
+  // from the previous product leaks into the next one unless explicitly reset here.
+  useEffect(() => {
+    if (!product?.id) return;
+    // Gallery state — this was the confirmed root cause of the stale image bug
+    setActiveImageIndex(0);
+    setOverrideImage(null);
+    // Quantity & variant selections
+    setQuantity(1);
+    setSelectedVariants({});
+    // Cart CTA button state
+    setCartActionState('idle');
+    cartActionLocked.current = false;
+    if (addTimerRef.current) { clearTimeout(addTimerRef.current); addTimerRef.current = null; }
+    if (resetTimerRef.current) { clearTimeout(resetTimerRef.current); resetTimerRef.current = null; }
+    // Gallery zoom & lightbox
+    setIsZooming(false);
+    setZoomOrigin('50% 50%');
+    setLightboxOpen(false);
+    setLightboxIndex(0);
+    // Modals
+    setReviewModalOpen(false);
+    setSizeGuideModalOpen(false);
+    // Write-review form
+    setNewRating(5);
+    setNewTitle('');
+    setNewComment('');
+    setNewUserName('');
+    // Reset tab to default (tab availability effect will correct it if needed)
+    setActiveTab('desc');
+  }, [product?.id]);
+
   const sanitizedSpecs = Object.entries(product?.specifications || {}).filter(
     ([key, val]) => key.trim() !== '' && typeof val === 'string' && val.trim() !== ''
   );
