@@ -121,7 +121,7 @@ export const HomePage: React.FC = () => {
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
               <Link
                 to={sectionByKey.hero.ctaLink || '/category/all'}
-                className="w-full sm:w-auto px-8 py-4 rounded-full bg-linear-to- from-orange-500 to-rose-500 hover:from-orange-600 hover:to-rose-600 text-white font-heading font-extrabold text-base shadow-[0_8px_20px_-8px_rgba(244,63,94,0.5)] flex items-center justify-center gap-2 transition-all hover:scale-105 active:scale-95"
+                className="w-full sm:w-auto px-8 py-4 rounded-full bg-linear-to-r from-orange-500 to-rose-500 hover:from-orange-600 hover:to-rose-600 text-white font-heading font-extrabold text-base shadow-[0_8px_20px_-8px_rgba(244,63,94,0.5)] flex items-center justify-center gap-2 transition-all hover:scale-105 active:scale-95"
               >
                 <span>{sectionByKey.hero.ctaLabel || 'Explore All Toys'} &rarr;</span>
               </Link>
@@ -222,7 +222,7 @@ export const HomePage: React.FC = () => {
       </section>}
 
       {/* Shop by Age Group Section */}
-      {sectionByKey.ageGroups?.enabled && <section style={{ order: sectionByKey.ageGroups.order }} className="py-12 w-full bg-linear-to- from-amber-50/70 via-rose-50/50 to-sky-50/70 border-y border-slate-200/60 mt-6 sm:mt-10">
+      {sectionByKey.ageGroups?.enabled && <section style={{ order: sectionByKey.ageGroups.order }} className="py-12 w-full bg-linear-to-r from-amber-50/70 via-rose-50/50 to-sky-50/70 border-y border-slate-200/60 mt-6 sm:mt-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-xl mx-auto mb-8">
             <span className="text-xs font-extrabold uppercase tracking-wider text-amber-600 font-heading">
@@ -309,8 +309,8 @@ export const HomePage: React.FC = () => {
           <div className="absolute inset-0 bg-[#14083c]/15 pointer-events-none" />
           
           {/* Mobile-only stronger overlay for readability */}
-          <div className="absolute inset-0 bg-linear-to- from-[#14083c]/80 via-[#14083c]/40 to-transparent md:hidden pointer-events-none" />
-          <div className="absolute inset-0 bg-linear-to- from-[#14083c]/40 to-transparent hidden md:block pointer-events-none" />
+          <div className="absolute inset-0 bg-linear-to-t from-[#14083c]/80 via-[#14083c]/40 to-transparent md:hidden pointer-events-none" />
+          <div className="absolute inset-0 bg-linear-to-r from-[#14083c]/40 to-transparent hidden md:block pointer-events-none" />
 
           {/* Content Overlay */}
           <div className="relative z-10 w-full md:w-[44%] p-8 sm:p-12 lg:p-16 flex flex-col items-center md:items-start text-center md:text-left space-y-6 md:ml-4 lg:ml-8 mt-auto md:mt-0">
@@ -344,7 +344,7 @@ export const HomePage: React.FC = () => {
             <div className="pt-4 w-full flex flex-col items-center md:items-start gap-5 animate-fade-in-up [animation-delay:200ms]">
               <Link
                 to={sectionByKey.brandCampaign.ctaLink || '/category/all'}
-                className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-[20px] bg-linear-to- from-yellow-400 to-amber-500 hover:from-yellow-300 hover:to-amber-400 text-slate-900 font-heading font-extrabold text-sm shadow-[0_8px_20px_-6px_rgba(251,191,36,0.6)] transition-all hover:scale-[1.02] active:scale-95"
+                className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-[20px] bg-linear-to-r from-yellow-400 to-amber-500 hover:from-yellow-300 hover:to-amber-400 text-slate-900 font-heading font-extrabold text-sm shadow-[0_8px_20px_-6px_rgba(251,191,36,0.6)] transition-all hover:scale-[1.02] active:scale-95"
               >
                 <span>{sectionByKey.brandCampaign.ctaLabel || 'Explore PlayBimboo Favorites'}</span>
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
