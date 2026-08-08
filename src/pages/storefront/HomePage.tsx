@@ -426,7 +426,7 @@ export const HomePage: React.FC = () => {
                   <span className="font-heading font-extrabold text-2xl text-rose-600">
                     {formatPrice(selectedQuickViewProduct.price, settings.currency)}
                   </span>
-                  {selectedQuickViewProduct.originalPrice && (
+                  {(selectedQuickViewProduct.originalPrice ?? 0) > 0 && (
                     <span className="text-sm font-bold text-slate-400 line-through">
                       {formatPrice(selectedQuickViewProduct.originalPrice, settings.currency)}
                     </span>

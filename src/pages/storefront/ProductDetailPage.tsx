@@ -460,7 +460,7 @@ export const ProductDetailPage: React.FC = () => {
                 className={`h-full w-full object-contain object-center transition-transform duration-200 ease-out motion-reduce:transition-none ${isZooming ? 'scale-[1.75]' : 'scale-100'}`}
               />
               <span className="pointer-events-none absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-slate-950/70 px-3 py-1.5 text-[10px] font-bold text-white opacity-0 backdrop-blur transition-opacity group-hover/gallery:opacity-100"><ZoomIn className="h-3.5 w-3.5" /> Click to enlarge</span>
-              {product.discountPercent && (
+              {(product.discountPercent ?? 0) > 0 && (
                 <span className="absolute top-4 left-4 z-10 bg-rose-500 text-white font-heading font-extrabold text-xs px-3 py-1.5 rounded-full shadow-md">
                   -{product.discountPercent}% OFF
                 </span>
@@ -500,7 +500,7 @@ export const ProductDetailPage: React.FC = () => {
                   <span className="text-xs font-bold uppercase tracking-wider text-rose-500 bg-rose-50 px-3 py-1 rounded-full">
                     {product.brand}
                   </span>
-                  {product.soldCount && product.soldCount >= 50 && (
+                  {(product.soldCount ?? 0) >= 50 && (
                     <span className="text-xs font-bold tracking-wider text-white bg-orange-500 px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
                       🔥 {product.soldCount}+ Sold
                     </span>
@@ -526,13 +526,13 @@ export const ProductDetailPage: React.FC = () => {
                     <span className="font-heading text-2xl font-black text-slate-900 sm:text-3xl">
                       {formatPrice(currentPrice, settings.currency)}
                     </span>
-                    {product.originalPrice && (
+                    {(product.originalPrice ?? 0) > 0 && (
                       <span className="text-base text-slate-400 line-through font-semibold">
                         {formatPrice(product.originalPrice, settings.currency)}
                       </span>
                     )}
                   </div>
-                  {product.discountPercent && (
+                  {(product.discountPercent ?? 0) > 0 && (
                     <span className="text-xs font-bold text-emerald-600">
                       You save {formatPrice(product.originalPrice! - currentPrice, settings.currency)} ({product.discountPercent}% discount)
                     </span>
