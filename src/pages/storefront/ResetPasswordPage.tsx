@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { api } from '../../services/api';
+import { api, API_BASE_URL } from '../../services/api';
 import { useToast } from '../../context/ToastContext';
 import { Lock, Mail, ArrowRight, CheckCircle } from 'lucide-react';
 import { Logo as StoreLogo } from '../../components/common/Logo';
@@ -31,7 +31,7 @@ export const ResetPasswordPage: React.FC = () => {
 
     setIsSubmitting(true);
     try {
-      const response = await fetch(`${api.baseUrl || 'http://localhost:5000/api'}/auth/reset-password`, {
+      const response = await fetch(`${API_BASE_URL || 'http://localhost:5000/api'}/auth/reset-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: tokenInput, newPassword: password })

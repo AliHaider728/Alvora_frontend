@@ -49,7 +49,7 @@ export const MobileBottomNav: React.FC = () => {
       <div className="grid h-full max-w-xl mx-auto" style={{ gridTemplateColumns: `repeat(${navItems.length}, minmax(0, 1fr))` }}>
         {navItems.map((item) => {
           const Icon = item.icon;
-          const destination = 'externalUrl' in item && item.linkType === 'external_url' ? item.externalUrl : item.path;
+          const destination = 'externalUrl' in item && (item as any).type === 'external_url' ? (item as any).externalUrl : item.path;
           const isActive = destination !== '#cart' && Boolean(destination) && (
             destination === '/'
               ? location.pathname === '/' 
@@ -88,8 +88,8 @@ export const MobileBottomNav: React.FC = () => {
             );
           }
 
-          if (item.linkType === 'external_url') return (
-            <a key={item.id} href={item.externalUrl} target={item.openInNewTab ? '_blank' : undefined} rel={item.openInNewTab ? 'noopener noreferrer' : undefined} className="flex flex-col items-center justify-center py-1 text-slate-500 transition hover:text-rose-600">
+          if ((item as any).type === 'external_url') return (
+            <a key={(item as any).id} href={(item as any).externalUrl} target={(item as any).openInNewTab ? '_blank' : undefined} rel={(item as any).openInNewTab ? 'noopener noreferrer' : undefined} className="flex flex-col items-center justify-center py-1 text-slate-500 transition hover:text-rose-600">
               <Icon className="h-5 w-5" /><span className="mt-1 max-w-full truncate px-1 text-[10px] font-bold">{item.label}</span>
             </a>
           );

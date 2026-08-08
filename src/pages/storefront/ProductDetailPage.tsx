@@ -456,7 +456,7 @@ export const ProductDetailPage: React.FC = () => {
               onClick={openLightbox}
               onPointerMove={handleZoomPointerMove}
               onPointerLeave={() => { setIsZooming(false); setZoomOrigin('50% 50%'); }}
-              className="group/gallery relative flex aspect-[4/3] sm:aspect-square w-full cursor-zoom-in items-center justify-center overflow-hidden rounded-2xl border border-slate-100 bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 focus-visible:ring-offset-2"
+              className="group/gallery relative flex aspect-square w-full cursor-zoom-in items-center justify-center overflow-hidden rounded-2xl border border-slate-100 bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 focus-visible:ring-offset-2"
               aria-label={`Enlarge ${product.name} image`}
             >
               <img
@@ -950,7 +950,7 @@ export const ProductDetailPage: React.FC = () => {
                 <>
                   {product.description && (
                     <div
-                      className="max-w-none space-y-4 leading-7 [&_a]:text-sky-600 [&_a]:underline [&_blockquote]:border-l-4 [&_blockquote]:border-slate-200 [&_blockquote]:pl-4 [&_h1]:mt-7 [&_h1]:text-2xl [&_h1]:font-black [&_h2]:mt-6 [&_h2]:text-xl [&_h2]:font-black [&_h3]:mt-5 [&_h3]:text-lg [&_h3]:font-bold [&_img]:h-auto [&_img]:max-w-full [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:my-3 [&_table]:block [&_table]:max-w-full [&_table]:overflow-x-auto [&_table]:border-collapse [&_td]:border [&_td]:border-slate-200 [&_td]:p-2 [&_th]:border [&_th]:border-slate-200 [&_th]:bg-slate-50 [&_th]:p-2 [&_ul]:list-disc [&_ul]:pl-6"
+                      className="max-w-none space-y-4 leading-7 whitespace-pre-wrap [&_a]:text-sky-600 [&_a]:underline [&_blockquote]:border-l-4 [&_blockquote]:border-slate-200 [&_blockquote]:pl-4 [&_h1]:mt-7 [&_h1]:text-2xl [&_h1]:font-black [&_h2]:mt-6 [&_h2]:text-xl [&_h2]:font-black [&_h3]:mt-5 [&_h3]:text-lg [&_h3]:font-bold [&_img]:h-auto [&_img]:max-w-full [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:my-3 [&_table]:block [&_table]:max-w-full [&_table]:overflow-x-auto [&_table]:border-collapse [&_td]:border [&_td]:border-slate-200 [&_td]:p-2 [&_th]:border [&_th]:border-slate-200 [&_th]:bg-slate-50 [&_th]:p-2 [&_ul]:list-disc [&_ul]:pl-6"
                       dangerouslySetInnerHTML={{ __html: product.description }}
                     />
                   )}

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { User, Package, MapPin, LogOut, Clock, XCircle, AlertCircle, CheckCircle2, Loader2, ArrowLeft } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../../context/ToastContext';
 import { Breadcrumbs } from '../../components/common/Breadcrumbs';
 import { SeoHead } from '../../components/common/SeoHead';
 import { formatPrice } from '../../utils/formatters';
@@ -10,6 +11,7 @@ import { useDialog } from '../../context/DialogContext';
 export const AccountPage: React.FC = () => {
   const { orders, settings } = useStore();
   const { customerProfile, isLoggedIn, openAuthModal, logout, isLoading } = useAuth();
+  const { showToast } = useToast();
   const [activeTab, setActiveTab] = useState<'orders' | 'profile'>('orders');
 
   if (isLoading) {

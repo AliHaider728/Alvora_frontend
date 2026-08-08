@@ -69,13 +69,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const logout = async () => {
-    try {
-      await api.logout();
-    } catch {
-      // Ignore errors on logout
-    }
     removeAuthToken();
     setCustomerProfile(null);
+    api.logout().catch(() => {});
   };
 
   const openAuthModal = (mode: 'login' | 'signup' = 'login') => {

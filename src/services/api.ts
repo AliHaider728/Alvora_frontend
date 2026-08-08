@@ -75,8 +75,8 @@ export const api = {
   // Auth
   login: (email: string, password: string) =>
     fetchJson<any>('/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) }),
-  register: (email: string, password: string) =>
-    fetchJson<any>('/auth/register', { method: 'POST', body: JSON.stringify({ email, password }) }),
+  register: (email: string, password: string, name: string) => 
+    fetchJson<any>('/auth/register', { method: 'POST', body: JSON.stringify({ email, password, name }) }),
   logout: () => fetchJson<any>('/auth/logout', { method: 'POST' }),
   getMe: () => fetchJson<any>('/auth/me'),
   forgotPassword: (email: string) => fetchJson<any>('/auth/forgot-password', { method: 'POST', body: JSON.stringify({ email }) }),

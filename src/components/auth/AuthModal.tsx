@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { X, Eye, EyeOff, AlertCircle, Loader2 } from 'lucide-react';
 import { api } from '../../services/api';
 import { useToast } from '../../context/ToastContext';
 import { useAuth } from '../../context/AuthContext';
@@ -17,6 +17,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultMo
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   
   // Form fields
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -28,6 +29,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultMo
 
   // Reset form when opened or mode changed
   useEffect(() => {
+    setName('');
     setEmail('');
     setPassword('');
     setConfirmPassword('');
@@ -44,6 +46,20 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultMo
     if (isOpen) window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
+
+  
+  const titles = {
+    'login': 'Welcome Back!',
+    'signup': 'Create an Account',
+    'forgot-password': 'Reset Password'
+  };
+
+  const subtitles = {
+    'login': 'Sign in to access your orders and wishlist.',
+    'signup': 'Join PlayBimboo to track orders and save your favorites.',
+    'forgot-password': 'Enter your email and we\'ll send you a link to reset your password.'
+  };
+  const [error, setError] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
@@ -62,7 +78,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultMo
     setIsSubmitting(true);
     try {
       if (mode === 'signup') {
-        await api.register(email, password);
+        await api.register(email, password, name);
         showToast('Account created successfully. Please sign in.', 'success');
         setMode('login');
       } else if (mode === 'forgot-password') {
@@ -79,58 +95,54 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultMo
         }
       }
     } catch (err: any) {
-      showToast(err.message || 'Authentication failed', 'error');
+      setError(err.message || 'An error occurred. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const titles = {
-    'login': 'Welcome Back!',
-    'signup': 'Create an Account',
-    'forgot-password': 'Reset Password'
-  };
-
-  const subtitles = {
-    'login': 'Sign in to access your orders and wishlist.',
-    'signup': 'Join PlayBimboo to track orders and save your favorites.',
-    'forgot-password': 'Enter your email and we\'ll send you a link to reset your password.'
-  };
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      {/* Backdrop overlay */}
-      <div 
-        className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity"
-        onClick={onClose}
-        aria-hidden="true"
-      />
+      <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={onClose} />
       
-      {/* Modal Card */}
-      <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden transform transition-all">
-        
-        {/* Header/Close */}
-        <div className="absolute top-4 right-4 z-10">
-          <button 
-            onClick={onClose}
-            className="p-2 bg-slate-50 hover:bg-slate-100 text-slate-500 rounded-full transition-colors"
-            aria-label="Close modal"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        <div className="p-8 sm:p-10 space-y-6">
-          <div className="text-center space-y-2">
-            <h2 className="font-heading font-black text-2xl text-slate-900">
-              {titles[mode]}
-            </h2>
-            <p className="text-xs text-slate-500 font-medium">
-              {subtitles[mode]}
-            </p>
+      <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+        <div className="p-6 sm:p-8">
+          <div className="flex justify-between items-start mb-6">
+            <div>
+              <h2 className="font-heading font-black text-2xl text-slate-900">{titles[mode]}</h2>
+              <p className="text-sm text-slate-500 mt-1">{subtitles[mode]}</p>
+            </div>
+            <button 
+              onClick={onClose}
+              className="p-2 -mr-2 -mt-2 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
           </div>
 
+          {error && (
+            <div className="mb-4 p-3 rounded-xl bg-rose-50 text-rose-600 text-sm font-medium flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0" />
+              <span>{error}</span>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-4">
+            {mode === 'signup' && (
+              <div>
+                <label className="text-xs font-bold text-slate-700 block mb-1">Full Name</label>
+                <input
+                  type="text"
+                  required
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  placeholder="John Doe"
+                  className="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-colors"
+                />
+              </div>
+            )}
             <div>
               <label className="text-xs font-bold text-slate-700 block mb-1">Email Address</label>
               <input
