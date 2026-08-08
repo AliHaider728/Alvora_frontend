@@ -143,7 +143,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
             </span>
           ) : (
             <>
-              {product.discountPercent && product.discountPercent > 0 && (
+              {(product.discountPercent ?? 0) > 0 && (
                 <span className="rounded-full bg-rose-500 px-3 py-1 text-[11px] font-extrabold tracking-wide text-white shadow-sm">
                   -{product.discountPercent}%
                 </span>
@@ -158,7 +158,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
                   NEW
                 </span>
               )}
-              {product.soldCount && product.soldCount >= 50 && (
+              {(product.soldCount ?? 0) >= 50 && (
                 <span className="rounded-full bg-orange-500 px-3 py-1 text-[11px] font-bold tracking-wide text-white shadow-sm flex items-center gap-1">
                   🔥 {product.soldCount}+ Sold
                 </span>

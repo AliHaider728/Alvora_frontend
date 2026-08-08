@@ -1091,12 +1091,14 @@ export const ProductDetailPage: React.FC = () => {
 
       {/* Related Products */}
       {apiRelatedProducts.length > 0 && (
-        <div className="mt-16 border-t border-slate-100 pt-12">
-          <h2 className="font-heading font-black text-2xl text-slate-900 mb-8 text-center sm:text-left">You May Also Like</h2>
-          <div className="grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-            {apiRelatedProducts.map(rp => (
-              <ProductCard key={rp.id || rp._id} product={rp} layout="compact" />
-            ))}
+        <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
+          <div className="mt-10 border-t border-slate-100 pt-10 sm:mt-16 sm:pt-12">
+            <h2 className="font-heading font-black text-2xl text-slate-900 mb-8 text-center sm:text-left">You May Also Like</h2>
+            <div className="grid grid-cols-1 items-stretch justify-items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+              {apiRelatedProducts.map(rp => (
+                <ProductCard key={rp.id || rp._id} product={rp} layout="compact" />
+              ))}
+            </div>
           </div>
         </div>
       )}
