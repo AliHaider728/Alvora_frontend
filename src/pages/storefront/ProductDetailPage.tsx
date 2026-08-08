@@ -91,8 +91,10 @@ export const ProductDetailPage: React.FC = () => {
   useScrollLock(lightboxOpen || sizeGuideModalOpen || reviewModalOpen);
 
   const [apiRelatedProducts, setApiRelatedProducts] = useState<any[]>([]);
+  const [relatedLoading, setRelatedLoading] = useState(true);
   const loadRelatedProducts = async (productId: string) => {
-    try { const res = await api.getRelatedProducts(productId); setApiRelatedProducts(res || []); } catch(e) { console.error(e); }
+    setRelatedLoading(true);
+    try { const res = await api.getRelatedProducts(productId); setApiRelatedProducts(res || []); } catch(e) { console.error(e); setApiRelatedProducts([]); } finally { setRelatedLoading(false); }
   };
   const loadProductReviews = async (productId: string) => {
     const result = await api.getProductReviews(productId);
@@ -147,6 +149,9 @@ export const ProductDetailPage: React.FC = () => {
     setNewUserName('');
     // Reset tab to default (tab availability effect will correct it if needed)
     setActiveTab('desc');
+    // Show skeleton again for related products on next product
+    setRelatedLoading(true);
+    setApiRelatedProducts([]);
   }, [product?.id]);
 
   const sanitizedSpecs = Object.entries(product?.specifications || {}).filter(
@@ -1123,15 +1128,35 @@ export const ProductDetailPage: React.FC = () => {
       )}
 
       {/* Related Products */}
-      {apiRelatedProducts.length > 0 && (
+      {(relatedLoading || apiRelatedProducts.length > 0) && (
         <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
           <div className="mt-10 border-t border-slate-100 pt-10 sm:mt-16 sm:pt-12">
             <h2 className="font-heading font-black text-2xl text-slate-900 mb-8 text-center sm:text-left">You May Also Like</h2>
-            <div className="grid grid-cols-1 items-stretch justify-items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-              {apiRelatedProducts.map(rp => (
-                <ProductCard key={rp.id || rp._id} product={rp} layout="compact" />
-              ))}
-            </div>
+            {relatedLoading ? (
+              <div className="grid grid-cols-1 items-stretch justify-items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+                {[0, 1, 2].map(i => (
+                  <div key={i} className="animate-pulse rounded-3xl border border-slate-100 bg-white overflow-hidden">
+                    <div className="aspect-square w-full bg-slate-200 rounded-t-3xl" />
+                    <div className="p-4 space-y-3">
+                      <div className="h-3 bg-slate-200 rounded-full w-1/3" />
+                      <div className="h-4 bg-slate-200 rounded-full w-3/4" />
+                      <div className="h-3 bg-slate-200 rounded-full w-1/2" />
+                      <div className="h-3 bg-slate-100 rounded-full w-2/3" />
+                      <div className="pt-2 flex items-center gap-3">
+                        <div className="h-8 bg-slate-200 rounded-2xl flex-1" />
+                        <div className="h-8 w-8 bg-slate-100 rounded-2xl shrink-0" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 items-stretch justify-items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+                {apiRelatedProducts.map(rp => (
+                  <ProductCard key={rp.id || rp._id} product={rp} layout="compact" />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}
