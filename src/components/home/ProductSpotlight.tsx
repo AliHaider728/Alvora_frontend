@@ -87,13 +87,17 @@ export const ProductSpotlight: React.FC<{ product: Product }> = ({ product }) =>
   };
 
   return (
-    <section aria-labelledby="product-spotlight-heading" className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+    <section aria-labelledby="product-spotlight-heading" className="mx-auto w-full max-w-7xl px-4 pt-16 pb-10 sm:px-6 sm:pt-20 sm:pb-14 lg:px-8 lg:pt-24">
       <div className="relative overflow-hidden rounded-[32px] border border-indigo-100 bg-gradient-to-br from-indigo-950 via-indigo-900 to-fuchsia-900 p-5 shadow-[0_28px_70px_-30px_rgba(49,46,129,0.65)] sm:p-8 lg:p-10">
         <div className="pointer-events-none absolute -right-24 -top-28 h-72 w-72 rounded-full bg-rose-400/20 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-28 left-1/3 h-64 w-64 rounded-full bg-sky-400/20 blur-3xl" />
         <div className="relative grid items-center gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
-          <Link to={`/product/${product.slug}`} className="group flex min-h-[300px] items-center justify-center overflow-hidden rounded-[26px] bg-white p-4 shadow-xl sm:min-h-[420px] sm:p-6" aria-label={`View ${product.name}`}>
-            <img src={getSafeImageSrc(product.images?.[0])} alt={product.name} className="max-h-[500px] w-full object-contain transition-transform duration-500 group-hover:scale-[1.025]" />
+          <Link to={`/product/${product.slug}`} className="group block min-h-[300px] w-full overflow-hidden rounded-[26px] shadow-xl sm:min-h-[420px]" aria-label={`View ${product.name}`}>
+            <img
+              src={getSafeImageSrc(product.images?.[0])}
+              alt={product.name}
+              className="h-full max-h-[500px] w-full object-cover transition-transform duration-500 group-hover:scale-[1.025]"
+            />
           </Link>
 
           <div className="text-white">
