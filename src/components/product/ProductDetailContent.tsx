@@ -1,5 +1,6 @@
 import React from 'react';
 import { Product } from '../../types';
+import { ProductImage } from '../common/ProductImage';
 
 const normalizeLegacyTemplateHtml = (html: string) =>
   html.replace(
@@ -189,7 +190,7 @@ export const ProductDetailContent: React.FC<{ product: Product }> = ({ product }
         if (block.type === 'divider') return <hr key={block.id} className="border-slate-200" />;
         if (block.type === 'image' && block.image) return (
           <figure key={block.id} className={`${width} ${alignment}`}>
-            <img src={block.image.secureUrl} alt={block.image.alt} loading="lazy" className="h-auto max-w-full rounded-2xl object-contain" />
+            <ProductImage src={block.image.secureUrl} alt={block.image.alt || ''} loading="lazy" className="h-auto max-w-full rounded-2xl object-contain" />
             {block.image.caption && <figcaption className="mt-2 text-xs text-slate-500">{block.image.caption}</figcaption>}
           </figure>
         );

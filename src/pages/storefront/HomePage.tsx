@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { ProductCard } from '../../components/common/ProductCard';
+import { ProductImage } from '../../components/common/ProductImage';
 import { ProductSpotlight } from '../../components/home/ProductSpotlight';
 import { TrustBadges } from '../../components/common/TrustBadges';
 import { SeoHead } from '../../components/common/SeoHead';

@@ -21,6 +21,7 @@ import {
 import { useStore } from '../../context/StoreContext';
 import { useToast } from '../../context/ToastContext';
 import { ProductCard } from '../../components/common/ProductCard';
+import { ProductImage } from '../../components/common/ProductImage';
 import { ReviewSummary } from '../../components/common/ReviewSummary';
 import { Breadcrumbs } from '../../components/common/Breadcrumbs';
 import { SeoHead } from '../../components/common/SeoHead';
@@ -479,7 +480,7 @@ export const ProductDetailPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 py-4 font-sans sm:py-6">
+    <div className="min-h-screen bg-slate-50 py-4 font-sans sm:py-6 overflow-x-hidden">
       <SeoHead product={product} />
 
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
@@ -756,7 +757,7 @@ export const ProductDetailPage: React.FC = () => {
                                   }`}
                                 >
                                   {t.imageUrl ? (
-                                    <img src={t.imageUrl} alt={t.label} className="w-full h-full object-contain" />
+                                    <ProductImage src={t.imageUrl} alt={t.label} className="w-full h-full object-contain" wrapperClassName="w-full h-full" />
                                   ) : (
                                     <span className="text-[10px] font-bold text-slate-400 block p-1 text-center leading-tight">No Img</span>
                                   )}

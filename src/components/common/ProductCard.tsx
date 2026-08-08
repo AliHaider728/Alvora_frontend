@@ -5,6 +5,7 @@ import { Product } from '../../types';
 import { useStore } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/formatters';
 import { getSafeImageSrc } from '../../utils/images';
+import { ProductImage } from './ProductImage';
 import { formatProductAgeGroups, formatProductCategories, getEffectiveProductAvailability, normalizeInventory } from '../../utils/products';
 import { ReviewSummary } from './ReviewSummary';
 import { useToast } from '../../context/ToastContext';
