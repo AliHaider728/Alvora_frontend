@@ -215,6 +215,21 @@ export const api = {
   deleteCategoryImage: (publicId: string) => fetchJson<{ deleted: boolean }>('/upload/category-image', {
     method: 'DELETE', body: JSON.stringify({ publicId })
   }),
+  uploadReviewImage: async (file: File) => {
+    const formData = new FormData();
+    formData.append('image', file);
+    const token = getAuthToken();
+    const res = await fetch(`${API_BASE_URL}/upload/review-image`, {
+      method: 'POST',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      body: formData,
+    });
+    if (!res.ok) {
+      const errorBody = await res.json().catch(() => ({ error: 'Failed to upload review image' }));
+      throw new Error(errorBody.error || 'Failed to upload review image');
+    }
+    return await res.json() as { secureUrl: string; url: string; publicId: string };
+  },
   getGlobalAttributes: () => fetchJson<any[]>('/global-attributes'),
   getGlobalAttributeUsage: (id: string) => fetchJson<{ productCount: number }>(`/global-attributes/${id}/usage`),
   createGlobalAttribute: (data: any) => fetchJson<any>('/global-attributes', { method: 'POST', body: JSON.stringify(data) }),

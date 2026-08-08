@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useStore } from '../../context/StoreContext';
+import { api } from '../../services/api';
 import { 
   MessageSquare, Search, Filter, Trash2, CheckCircle, 
   XCircle, MoreVertical, Edit, Star, StarHalf, ShieldCheck, 
-  ShoppingBag, Clock, AlertTriangle 
+  ShoppingBag, Clock, AlertTriangle, Plus, ImagePlus, Loader2
 } from 'lucide-react';
 import { Review } from '../../types';
 import { useToast } from '../../context/ToastContext';
@@ -11,7 +12,7 @@ import { useDialog } from '../../context/DialogContext';
 import { formatPrice } from '../../utils/formatters';
 
 export const AdminReviewsPage: React.FC = () => {
-  const { refreshAdminReviews, approveReview, rejectReview, deleteReview } = useStore();
+  const { refreshAdminReviews, addAdminReview, approveReview, rejectReview, deleteReview } = useStore();
   const { showToast } = useToast();
   const { confirm } = useDialog();
   
@@ -27,11 +28,74 @@ export const AdminReviewsPage: React.FC = () => {
   const [ratingFilter, setRatingFilter] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Add Review Modal State
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [newReview, setNewReview] = useState({
+    productId: '',
+    reviewerName: '',
+    rating: 5,
+    title: '',
+    content: '',
+    verifiedPurchase: true
+  });
+  const [reviewImageFile, setReviewImageFile] = useState<File | null>(null);
+  const [reviewImagePreview, setReviewImagePreview] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const limit = 20;
 
   useEffect(() => {
     fetchReviews();
   }, [page, statusFilter, sourceFilter, ratingFilter, searchQuery]);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setReviewImageFile(file);
+      setReviewImagePreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleAddReview = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newReview.productId || !newReview.reviewerName || !newReview.content) {
+      showToast('Please fill all required fields.', 'error');
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      let imageUrl = '';
+      let imagePublicId = '';
+
+      if (reviewImageFile) {
+        const uploadRes = await api.uploadReviewImage(reviewImageFile);
+        imageUrl = uploadRes.secureUrl || uploadRes.url;
+        imagePublicId = uploadRes.publicId;
+      }
+
+      // We need useStore to get addAdminReview but we already destructured it at the top
+      const res = await addAdminReview({
+        ...newReview,
+        imageUrl,
+        imagePublicId
+      });
+
+      if (res) {
+        showToast('Review added successfully', 'success');
+        setIsAddModalOpen(false);
+        setNewReview({ productId: '', reviewerName: '', rating: 5, title: '', content: '', verifiedPurchase: true });
+        setReviewImageFile(null);
+        setReviewImagePreview('');
+        fetchReviews();
+      } else {
+        showToast('Failed to add review', 'error');
+      }
+    } catch (err: any) {
+      showToast(err.message || 'Failed to add review', 'error');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const fetchReviews = async () => {
     setLoading(true);
@@ -114,14 +178,22 @@ export const AdminReviewsPage: React.FC = () => {
       <div className="p-4 md:p-8 max-w-[1600px] mx-auto min-h-full flex flex-col">
         {/* Header & Metrics */}
         <div className="mb-8">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="p-2.5 bg-rose-500 rounded-xl shadow-lg shadow-rose-500/20 text-white">
-              <MessageSquare className="w-6 h-6" />
+          <div className="flex items-center justify-between w-full flex-wrap gap-4">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-br from-rose-500 to-rose-600 text-white shadow-lg shadow-rose-200">
+                <MessageSquare className="w-6 h-6" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-heading font-black text-slate-900 tracking-tight">Review Moderation</h1>
+                <p className="text-sm font-medium text-slate-500 mt-1">Manage customer feedback and ratings</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-2xl font-heading font-black text-slate-900 tracking-tight">Review Moderation</h1>
-              <p className="text-sm font-medium text-slate-500 mt-1">Manage customer feedback and ratings</p>
-            </div>
+            <button 
+              onClick={() => setIsAddModalOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-rose-500 hover:bg-rose-600 text-white rounded-xl text-sm font-bold transition shadow-sm"
+            >
+              <Plus className="h-4 w-4" /> Add Review
+            </button>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -352,6 +424,88 @@ export const AdminReviewsPage: React.FC = () => {
           )}
         </div>
       </div>
+
+      {isAddModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden">
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+              <h2 className="font-heading font-black text-lg text-slate-900">Add Customer Review</h2>
+              <button onClick={() => setIsAddModalOpen(false)} className="text-slate-400 hover:text-slate-600">
+                <XCircle className="h-6 w-6" />
+              </button>
+            </div>
+            
+            <div className="p-6 overflow-y-auto">
+              <form id="addReviewForm" onSubmit={handleAddReview} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Product ID or Slug <span className="text-rose-500">*</span></label>
+                  <input type="text" required value={newReview.productId} onChange={e => setNewReview({...newReview, productId: e.target.value})} className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-rose-400" placeholder="e.g. magnetic-building-blocks or 60d5ecb..." />
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">Customer Name <span className="text-rose-500">*</span></label>
+                    <input type="text" required value={newReview.reviewerName} onChange={e => setNewReview({...newReview, reviewerName: e.target.value})} className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-rose-400" placeholder="e.g. Sarah M." />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">Rating</label>
+                    <select value={newReview.rating} onChange={e => setNewReview({...newReview, rating: Number(e.target.value)})} className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-rose-400">
+                      <option value="5">5 Stars</option>
+                      <option value="4">4 Stars</option>
+                      <option value="3">3 Stars</option>
+                      <option value="2">2 Stars</option>
+                      <option value="1">1 Star</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Review Title</label>
+                  <input type="text" value={newReview.title} onChange={e => setNewReview({...newReview, title: e.target.value})} className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-rose-400" placeholder="e.g. My kids love this!" />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Review Content <span className="text-rose-500">*</span></label>
+                  <textarea required rows={4} value={newReview.content} onChange={e => setNewReview({...newReview, content: e.target.value})} className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-rose-400" placeholder="Write the review text here..."></textarea>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <input type="checkbox" id="verifiedPurchase" checked={newReview.verifiedPurchase} onChange={e => setNewReview({...newReview, verifiedPurchase: e.target.checked})} className="rounded text-rose-500 focus:ring-rose-500" />
+                  <label htmlFor="verifiedPurchase" className="text-sm font-bold text-slate-700">Verified Purchase</label>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Review Image (Optional)</label>
+                  <div className="flex items-center gap-4">
+                    {reviewImagePreview ? (
+                      <div className="relative h-20 w-20 rounded-xl overflow-hidden border border-slate-200">
+                        <img src={reviewImagePreview} alt="Preview" className="w-full h-full object-cover" />
+                        <button type="button" onClick={() => { setReviewImageFile(null); setReviewImagePreview(''); }} className="absolute top-1 right-1 bg-white/80 rounded-full p-0.5 text-rose-500 hover:bg-white"><XCircle className="w-4 h-4" /></button>
+                      </div>
+                    ) : (
+                      <label className="flex h-20 w-20 cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 text-slate-400 hover:border-rose-300 hover:bg-rose-50 hover:text-rose-500">
+                        <ImagePlus className="h-6 w-6" />
+                        <span className="text-[10px] font-bold">Upload</span>
+                        <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handleImageChange} />
+                      </label>
+                    )}
+                  </div>
+                </div>
+
+              </form>
+            </div>
+            
+            <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-3">
+              <button type="button" onClick={() => setIsAddModalOpen(false)} className="px-4 py-2 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-200 transition">Cancel</button>
+              <button type="submit" form="addReviewForm" disabled={isSubmitting} className="flex items-center gap-2 px-6 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-sm font-bold transition disabled:opacity-70">
+                {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
+                Save Review
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

@@ -62,6 +62,7 @@ export interface ProductAttributeTerm {
   id: string;
   label: string;
   slug: string;
+  soldCount?: number;
   value: string;
   colorValue?: string;
   imageUrl?: string;
@@ -113,6 +114,7 @@ export interface Product {
   productType?: 'simple' | 'variable';
   name: string;
   slug: string;
+  soldCount?: number;
   sku?: string;
   price: number;
   originalPrice?: number;
@@ -176,6 +178,7 @@ export type ProductInput = Omit<
   'id' | 'originalPrice' | 'sku' | 'lowStockThreshold' | 'weight' | 'customDeliveryFee'
 > & {
   originalPrice?: number | null;
+  soldCount?: number | null;
   sku?: string | null;
   lowStockThreshold?: number | null;
   weight?: number | null;
@@ -239,6 +242,8 @@ export interface Review {
   content: string;
   rating: number;
   avatarUrl?: string;
+  imageUrl?: string;
+  imagePublicId?: string;
   verifiedPurchase: boolean;
   source: 'customer' | 'admin';
   status: 'pending' | 'approved' | 'rejected';

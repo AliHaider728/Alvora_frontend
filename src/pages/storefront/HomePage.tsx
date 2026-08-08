@@ -169,7 +169,7 @@ export const HomePage: React.FC = () => {
       )}
 
       {/* Shop by Category Section */}
-      {sectionByKey.categories?.enabled && <section style={{ order: sectionByKey.categories.order }} className="py-14 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {sectionByKey.categories?.enabled && <section style={{ order: sectionByKey.categories.order }} className="py-14 sm:py-16 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8">
           <div>
             <span className="text-xs font-extrabold uppercase tracking-wider text-rose-500 font-heading">
@@ -264,7 +264,7 @@ export const HomePage: React.FC = () => {
       </section>}
 
       {/* Featured / Bestseller Products Section */}
-      {sectionByKey.featuredProducts?.enabled && featuredProducts.length > 0 && <section style={{ order: sectionByKey.featuredProducts.order }} className="py-14 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {sectionByKey.featuredProducts?.enabled && featuredProducts.length > 0 && <section style={{ order: sectionByKey.featuredProducts.order }} className="py-14 sm:py-16 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8">
           <div>
             <span className="text-xs font-extrabold uppercase tracking-wider text-rose-500 font-heading flex items-center gap-1">
@@ -296,7 +296,7 @@ export const HomePage: React.FC = () => {
       </section>}
 
       {/* Brand Discovery Campaign Section */}
-      {sectionByKey.brandCampaign?.enabled && <section style={{ order: sectionByKey.brandCampaign.order }} className="py-10 w-full max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8">
+      {sectionByKey.brandCampaign?.enabled && <section style={{ order: sectionByKey.brandCampaign.order }} className="py-14 sm:py-16 w-full max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative w-full rounded-[28px] md:rounded-[36px] overflow-hidden flex flex-col justify-center min-h-[500px] md:h-[600px] lg:h-[650px] shadow-xl group">
           {/* Full Background Image */}
           <img 
@@ -369,7 +369,7 @@ export const HomePage: React.FC = () => {
       </section>}
 
       {/* New Arrivals Grid */}
-      {sectionByKey.newArrivals?.enabled && newArrivals.length > 0 && <section style={{ order: sectionByKey.newArrivals.order }} className="py-14 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {sectionByKey.newArrivals?.enabled && newArrivals.length > 0 && <section style={{ order: sectionByKey.newArrivals.order }} className="py-14 sm:py-16 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8">
           <div>
             <span className="text-xs font-extrabold uppercase tracking-wider text-sky-600 font-heading">

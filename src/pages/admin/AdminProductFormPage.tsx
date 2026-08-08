@@ -212,6 +212,7 @@ export const AdminProductFormPage: React.FC = () => {
   const [isBestseller, setIsBestseller] = useState(false);
   const [isNewArrival, setIsNewArrival] = useState(false);
   const [isSpotlight, setIsSpotlight] = useState(false);
+  const [soldCount, setSoldCount] = useState<number | ''>('');
   const [images, setImages] = useState<OrderedImage[]>([]);
   const [metaTitle, setMetaTitle] = useState('');
   const [metaDescription, setMetaDescription] = useState('');
@@ -341,7 +342,7 @@ export const AdminProductFormPage: React.FC = () => {
     regularPrice, salePrice, sku, trackInventory, stockQuantity, stockStatus, lowStockThreshold,
     productType, attributes, variations, defaultAttributes, defaultVariationId,
     ageGroups, material, safetyInfo, weight, deliveryType, customDeliveryFee,
-    status, isVisible, isFeatured, isBestseller, isNewArrival, isSpotlight, metaTitle, metaDescription, productDetailBlocks, productDetailCustomCss,
+    status, isVisible, isFeatured, isBestseller, isNewArrival, isSpotlight, soldCount, metaTitle, metaDescription, productDetailBlocks, productDetailCustomCss,
     images, isDirty, productLoadFailed, id
   ]);
 
@@ -392,6 +393,7 @@ export const AdminProductFormPage: React.FC = () => {
     setIsBestseller(editingProduct.isBestseller === true);
     setIsNewArrival(editingProduct.isNewArrival === true);
     setIsSpotlight(editingProduct.isSpotlight === true);
+    setSoldCount(editingProduct.soldCount ?? '');
     setImages((editingProduct.images || []).map((url, index) =>
       makeImage(
         url,
@@ -491,6 +493,7 @@ export const AdminProductFormPage: React.FC = () => {
             setIsBestseller(data.isBestseller || false);
             setIsNewArrival(data.isNewArrival || false);
             setIsSpotlight(data.isSpotlight || false);
+            setSoldCount(data.soldCount ?? '');
             setMetaTitle(data.metaTitle || '');
             setMetaDescription(data.metaDescription || '');
             setProductDetailBlocks(data.productDetailBlocks || []);
@@ -858,6 +861,7 @@ export const AdminProductFormPage: React.FC = () => {
       isNewArrival,
       isBestseller,
       isSpotlight,
+      soldCount: soldCount === '' ? null : soldCount,
       isVisible,
       status,
       weight: weight ?? null,
@@ -1172,6 +1176,10 @@ export const AdminProductFormPage: React.FC = () => {
                   <button type="button" role="switch" aria-label={option.label} aria-checked={option.value} onClick={() => { option.setValue(value => !value); markDirty(); }} className={`relative h-6 w-11 shrink-0 rounded-full transition ${option.value ? 'bg-rose-500' : 'bg-slate-200'}`}><span className={`absolute top-1 h-4 w-4 rounded-full bg-white shadow transition ${option.value ? 'left-6' : 'left-1'}`} /></button>
                 </div>
               ))}
+              <div className="flex items-center justify-between gap-4 border-t border-slate-100 pt-4 mt-4">
+                <div><span className="block text-xs font-bold text-slate-700">Sold Count (Social Proof)</span><span className="text-[10px] text-slate-400">Override the generated X+ Sold number</span></div>
+                <input type="number" min="0" placeholder="e.g. 150" value={soldCount} onChange={e => { setSoldCount(e.target.value === '' ? '' : parseInt(e.target.value, 10)); markDirty(); }} className="w-24 px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-rose-300 focus:ring-1 focus:ring-rose-300 transition" />
+              </div>
             </div>
           </FormCard>
 

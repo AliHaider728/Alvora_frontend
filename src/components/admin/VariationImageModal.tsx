@@ -60,7 +60,7 @@ export const VariationImageModal: React.FC<VariationImageModalProps> = ({
       <div className="w-full max-w-2xl bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
         <div className="flex items-center justify-between p-4 border-b border-slate-100 bg-slate-50">
           <h2 className="font-heading font-black text-lg text-slate-800">Variation Image</h2>
-          <button onClick={onClose} className="p-2 text-slate-400 hover:bg-slate-200 rounded-full transition-colors">
+          <button type="button" onClick={onClose} className="p-2 text-slate-400 hover:bg-slate-200 rounded-full transition-colors">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -71,7 +71,7 @@ export const VariationImageModal: React.FC<VariationImageModalProps> = ({
             {selectedImage ? (
               <div className="relative rounded-xl border border-slate-200 overflow-hidden bg-slate-50 aspect-video flex items-center justify-center max-w-sm">
                 <img src={selectedImage.url} alt="Variation Preview" className="max-w-full max-h-full object-contain" />
-                <button
+                <button type="button"
                   onClick={() => setSelectedImage(undefined)}
                   className="absolute top-2 right-2 p-1.5 bg-white rounded-md text-rose-500 shadow hover:bg-rose-50"
                   title="Remove Image"
@@ -125,7 +125,7 @@ export const VariationImageModal: React.FC<VariationImageModalProps> = ({
               ) : (
                 <div className="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto pr-1 custom-scrollbar">
                   {productImages.map((img, idx) => (
-                    <button
+                    <button type="button"
                       key={img.id || idx}
                       onClick={() => {
                         setSelectedImage({ url: img.url, publicId: img.publicId, alt: altText });
@@ -145,10 +145,10 @@ export const VariationImageModal: React.FC<VariationImageModalProps> = ({
         </div>
 
         <div className="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-3">
-          <button onClick={onClose} className="px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-200 rounded-lg transition-colors">
+          <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-200 rounded-lg transition-colors">
             Cancel
           </button>
-          <button onClick={handleSave} className="px-5 py-2 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow transition-colors">
+          <button type="button" onClick={handleSave} className="px-5 py-2 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow transition-colors">
             Confirm Image
           </button>
         </div>

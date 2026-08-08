@@ -224,14 +224,8 @@ export const ProductDetailPage: React.FC = () => {
     setOverrideImage(null);
     setActiveImageIndex(0);
 
-    if (variationImageUrl?.startsWith('https://')) {
-      void fetch(variationImageUrl, { method: 'HEAD' })
-        .then(response => {
-          if (isCurrent && response.ok) setOverrideImage(variationImageUrl);
-        })
-        .catch(() => {
-          // Keep the product's main image when a variation asset is unavailable.
-        });
+    if (variationImageUrl) {
+      setOverrideImage(variationImageUrl);
     }
 
     return () => {
@@ -502,9 +496,16 @@ export const ProductDetailPage: React.FC = () => {
             <div>
               {/* Category & Brand Header */}
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-rose-500 bg-rose-50 px-3 py-1 rounded-full">
-                  {product.brand}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold uppercase tracking-wider text-rose-500 bg-rose-50 px-3 py-1 rounded-full">
+                    {product.brand}
+                  </span>
+                  {product.soldCount && product.soldCount >= 50 && (
+                    <span className="text-xs font-bold tracking-wider text-white bg-orange-500 px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
+                      🔥 {product.soldCount}+ Sold
+                    </span>
+                  )}
+                </div>
                 <ReviewSummary rating={product.rating} reviewCount={product.reviewCount} />
               </div>
 
@@ -1013,12 +1014,12 @@ export const ProductDetailPage: React.FC = () => {
 
               {/* Reviews List */}
               <div className="space-y-4">
-                {productReviews.length === 0 ? (
+                {approvedReviews.length === 0 ? (
                   <p className="text-sm text-slate-500 text-center py-6">
                     Be the first parent to review this toy!
                   </p>
                 ) : (
-                  productReviews.map(review => (
+                  approvedReviews.map(review => (
                     <div key={review.id} className="p-4 rounded-2xl border border-slate-100 bg-white space-y-2">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
@@ -1050,6 +1051,17 @@ export const ProductDetailPage: React.FC = () => {
 
                       <h5 className="font-heading font-bold text-xs text-slate-900">{review.title}</h5>
                       <p className="text-xs text-slate-600 leading-relaxed">{review.content}</p>
+
+                      {review.imageUrl && (
+                        <div className="mt-3">
+                          <img 
+                            src={review.imageUrl} 
+                            alt="Customer review photo" 
+                            className="w-24 h-24 object-cover rounded-xl border border-slate-100 cursor-pointer hover:opacity-90 transition-opacity shadow-sm"
+                            onClick={() => window.open(review.imageUrl, '_blank')}
+                          />
+                        </div>
+                      )}
                     </div>
                   ))
                 )}
@@ -1057,7 +1069,6 @@ export const ProductDetailPage: React.FC = () => {
             </div>
           )}
         </div>
-
 
       </div>
 
@@ -1082,9 +1093,9 @@ export const ProductDetailPage: React.FC = () => {
       {apiRelatedProducts.length > 0 && (
         <div className="mt-16 border-t border-slate-100 pt-12">
           <h2 className="font-heading font-black text-2xl text-slate-900 mb-8 text-center sm:text-left">You May Also Like</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
             {apiRelatedProducts.map(rp => (
-              <ProductCard key={rp.id || rp._id} product={rp} />
+              <ProductCard key={rp.id || rp._id} product={rp} layout="compact" />
             ))}
           </div>
         </div>
