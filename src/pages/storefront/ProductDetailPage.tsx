@@ -480,7 +480,7 @@ export const ProductDetailPage: React.FC = () => {
                     }}
                     aria-label={`Show ${product.name} image ${idx + 1}`}
                     aria-current={!overrideImage && activeImageIndex === idx ? 'true' : undefined}
-                    className={`relative flex h-16 w-16 flex-shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 p-0.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 focus-visible:ring-offset-2 sm:h-20 sm:w-20 ${
+                    className={`relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 p-0.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 focus-visible:ring-offset-2 sm:h-20 sm:w-20 ${
                       (!overrideImage && activeImageIndex === idx) ? 'border-rose-500 bg-rose-50 shadow-sm' : 'border-slate-200 bg-white opacity-75 hover:opacity-100'
                     }`}
                   >
@@ -561,7 +561,7 @@ export const ProductDetailPage: React.FC = () => {
 
               {/* Delivery Charge Info Badge */}
               <div className="mb-3 flex items-center gap-2.5 rounded-2xl border border-sky-100 bg-sky-50 p-3 text-xs font-semibold text-sky-900">
-                <Truck className="w-4 h-4 text-sky-600 flex-shrink-0" />
+                <Truck className="w-4 h-4 text-sky-600 shrink-0" />
                 <span>
                   Delivery Fee:{' '}
                   {productDeliveryType === 'none' ? (
@@ -824,7 +824,7 @@ export const ProductDetailPage: React.FC = () => {
                     href={`https://wa.me/923107172222?text=${encodeURIComponent(`Hello, I am interested in this product:\nProduct: ${product.name}\nPrice: ${formatPrice(currentPrice, settings.currency)}\nLink: ${window.location.origin}/product/${product.slug}${Object.keys(selectedVariants).length > 0 ? `\nVariant: ${Object.values(selectedVariants).join(', ')}` : Object.values(selectedAttributes).filter(Boolean).length > 0 ? `\nOption: ${Object.values(selectedAttributes).filter(Boolean).join(', ')}` : ''}`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex h-12 w-14 flex-shrink-0 items-center justify-center rounded-2xl bg-[#25D366]/10 text-[#25D366] shadow-sm transition-colors hover:bg-[#25D366] hover:text-white sm:w-16"
+                    className="flex h-12 w-14 shrink-0 items-center justify-center rounded-2xl bg-[#25D366]/10 text-[#25D366] shadow-sm transition-colors hover:bg-[#25D366] hover:text-white sm:w-16"
                     title="Order via WhatsApp"
                     aria-label={`Order ${product.name} via WhatsApp`}
                   >
@@ -1023,7 +1023,7 @@ export const ProductDetailPage: React.FC = () => {
                     <div key={review.id} className="p-4 rounded-2xl border border-slate-100 bg-white space-y-2">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-slate-100">
+                          <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 bg-slate-100">
                             <img src={review.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(review.reviewerName)}&background=random`} alt="" className="w-full h-full object-cover" />
                           </div>
                           <div>
