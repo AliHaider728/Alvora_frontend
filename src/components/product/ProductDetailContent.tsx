@@ -171,7 +171,23 @@ export const ProductDetailContent: React.FC<{ product: Product }> = ({ product }
         );
         return (
           <article key={block.id} className={`${width} ${alignment} overflow-x-auto`}>
-            {block.heading && <h2 className="mb-3 font-heading text-2xl font-black text-slate-900">{block.heading}</h2>}
+            {block.heading && (
+              <h2 className="mb-3 font-heading text-2xl font-black text-slate-900">
+                {(() => {
+                  const match = block.heading.match(/^(\S+)\s+(.+)$/);
+                  // Check if the first word is just an emoji
+                  if (match && /\p{Emoji}/u.test(match[1])) {
+                    return (
+                      <span className="inline-flex items-center gap-2">
+                        <span className="shrink-0 leading-none">{match[1]}</span>
+                        <span>{match[2]}</span>
+                      </span>
+                    );
+                  }
+                  return block.heading;
+                })()}
+              </h2>
+            )}
             <div
               className="space-y-3 text-sm leading-7 text-slate-700 [&_a]:text-sky-600 [&_a]:underline [&_blockquote]:border-l-4 [&_blockquote]:border-slate-200 [&_blockquote]:pl-4 [&_img]:h-auto [&_img]:max-w-full [&_ol]:list-decimal [&_ol]:pl-6 [&_table]:min-w-full [&_td]:border [&_td]:p-2 [&_th]:border [&_th]:p-2 [&_ul]:list-disc [&_ul]:pl-6"
               dangerouslySetInnerHTML={{ __html: normalizeLegacyTemplateHtml(block.content || '') }}
