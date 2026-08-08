@@ -48,7 +48,7 @@ const getPlainDescription = (description: string) =>
 
 export const ProductDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const { products, addToCart, toggleWishlist, isInWishlist, refreshProducts, settings, submitCustomerReview } = useStore();
+  const { products, productsLoading, addToCart, toggleWishlist, isInWishlist, refreshProducts, settings, submitCustomerReview } = useStore();
   const { showToast } = useToast();
 
   const product = products.find(
@@ -309,6 +309,14 @@ export const ProductDetailPage: React.FC = () => {
       lightboxTriggerRef.current?.focus();
     };
   }, [lightboxOpen, lightboxImages.length]);
+
+  if (productsLoading && !product) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center p-6">
+        <Loader2 className="h-10 w-10 animate-spin text-rose-500" />
+      </div>
+    );
+  }
 
   if (!product) {
     return (

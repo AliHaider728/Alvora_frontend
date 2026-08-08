@@ -161,9 +161,10 @@ const normalizeCoupon = (coupon: any): Coupon => ({
   usedCount: Number(coupon.usedCount ?? coupon.usageCount ?? 0), isActive: coupon.isActive !== false
 });
 
-interface StoreContextType {
+export interface StoreContextType {
   // Data
   products: Product[];
+  productsLoading: boolean;
   categories: Category[];
   orders: Order[];
   customers: Customer[];
@@ -236,6 +237,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const initialProducts = saved ? JSON.parse(saved) : [];
     return initialProducts.map(normalizeProduct);
   });
+  const [productsLoading, setProductsLoading] = useState(true);
 
   const [categories, setCategories] = useState<Category[]>(() => {
     const saved = localStorage.getItem('playbimboo_categories');
@@ -376,6 +378,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         if (realCategories) setCategories(realCategories.map(normalizeCategory));
       } catch (err) {
         console.error('Failed to fetch public catalog data', err);
+      } finally {
+        setProductsLoading(false);
       }
     };
 
@@ -801,6 +805,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     <StoreContext.Provider
       value={{
         products,
+        productsLoading,
         categories,
         orders,
         customers,
