@@ -9,6 +9,16 @@ const normalizeLegacyTemplateHtml = (html: string) =>
   );
 
 const productDetailPolishCss = `
+  .product-custom-content[data-product-slug] .pb-desc {
+    margin-left: -16px;
+    margin-right: -16px;
+  }
+  @media (min-width: 640px) {
+    .product-custom-content[data-product-slug] .pb-desc {
+      margin-left: -24px;
+      margin-right: -24px;
+    }
+  }
   .product-custom-content[data-product-slug] .pb-desc .pb-hero {
     padding: 40px 24px 44px;
   }
@@ -67,6 +77,13 @@ const productDetailPolishCss = `
     height: 44px;
     margin-bottom: 12px;
     font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .product-custom-content[data-product-slug] .pb-desc .pb-feature-icon svg {
+    width: 24px;
+    height: 24px;
   }
   .product-custom-content[data-product-slug] .pb-desc .pb-size-card {
     padding: 24px;
@@ -85,6 +102,13 @@ const productDetailPolishCss = `
     width: 48px;
     height: 48px;
     font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .product-custom-content[data-product-slug] .pb-desc .pb-age-icon svg {
+    width: 28px;
+    height: 28px;
   }
   .product-custom-content[data-product-slug] .pb-desc .pb-gift-grid {
     gap: 10px;
