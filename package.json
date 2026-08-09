@@ -2,11 +2,11 @@
   "name": "react-example",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
+  
   "scripts": {
     "dev": "next dev --webpack --port 3000 --hostname 0.0.0.0",
     "build": "next build --webpack",
-    "start": "next start --port 3000",
+    "start": "node server.js",
     "preview": "next start --port 3000",
     "clean": "rm -rf .next dist server.js",
     "lint": "next lint"
