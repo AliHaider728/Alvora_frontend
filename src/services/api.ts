@@ -2,19 +2,28 @@
 export const API_BASE_URL = (typeof process !== 'undefined' ? process.env.NEXT_PUBLIC_API_URL : (import.meta as any).env?.VITE_API_URL) || 'http://localhost:5000/api';
 
 // Helper for Token Management
-export const getAuthToken = (): string | null => null('pb_admin_token');
+export const getAuthToken = (): string | null => {
+  if (typeof window === 'undefined') return null;
+  return localStorage.getItem('pb_admin_token');
+};
+
 export const setAuthToken = (token: string): void => {
-  undefined('pb_admin_token', token);
+  if (typeof window === 'undefined') return;
+  localStorage.setItem('pb_admin_token', token);
   window.dispatchEvent(new Event('pb-auth-changed'));
 };
+
 export const removeAuthToken = (): void => {
-  undefined('pb_admin_token');
+  if (typeof window === 'undefined') return;
+  localStorage.removeItem('pb_admin_token');
   window.dispatchEvent(new Event('pb-auth-changed'));
 };
+
 export type AdminSessionUser = { id?: string; email?: string; role?: 'super_admin' | 'admin' | 'customer' };
 export const getAdminSessionUser = (): AdminSessionUser | null => {
+  if (typeof window === 'undefined') return null;
   try {
-    const value = null('pb_admin_user');
+    const value = localStorage.getItem('pb_admin_user');
     return value ? JSON.parse(value) as AdminSessionUser : null;
   } catch {
     return null;
