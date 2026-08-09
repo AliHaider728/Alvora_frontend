@@ -321,7 +321,7 @@ export const HomePageClient: React.FC = () => {
             {/* Logo */}
             <div className="bg-white/95   backdrop-blur-sm px-2.5 py-1.5 rounded-2xl shadow-sm border border-white/20 mb-2 shrink-0 animate-fade-in">
               <img 
-                src={logoImage} 
+                src={typeof logoImage === 'string' ? logoImage : (logoImage as any).src} 
                 alt="Play Bimboo" 
                 className="w-32 h-auto object-contain"
               />

@@ -20,7 +20,7 @@ export const Logo: React.FC<LogoProps> = ({ className = '', size = 'md' }) => {
     lg: 'h-14 md:h-18'
   };
 
-  const logoSrc = settings.logoUrl || defaultLogoImg;
+  const logoSrc = settings.logoUrl || (typeof defaultLogoImg === 'string' ? defaultLogoImg : (defaultLogoImg as any).src);
 
   return (
     <Link href="/" className={`inline-flex items-center transition-all group ${className}`} title={settings.storeName || 'Play Bimboo'}>

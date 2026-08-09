@@ -1,5 +1,7 @@
+"use client";
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import Link from "next/link";
+
 import {
   Check,
   Truck,
@@ -23,14 +25,14 @@ import { formatPrice } from '../../utils/formatters';
 import { getProductDeliveryType } from '../../utils/products';
 import { getSafeImageSrc } from '../../utils/images';
 
-export const CheckoutPage: React.FC = () => {
+export const CheckoutPageClient: React.FC = () => {
   const [checkoutRequestId] = useState(() => {
-    const existing = sessionStorage.getItem('pb_checkout_request_id');
+    const existing = ((typeof window !== "undefined") ? sessionStorage : null)?.getItem('pb_checkout_request_id');
     if (existing) return existing;
     const generated = typeof crypto.randomUUID === 'function'
       ? crypto.randomUUID()
       : `pb_${Date.now()}_${Math.random().toString(36).slice(2)}`;
-    sessionStorage.setItem('pb_checkout_request_id', generated);
+    ((typeof window !== "undefined") ? sessionStorage : null)?.setItem('pb_checkout_request_id', generated);
     return generated;
   });
   const {
@@ -199,7 +201,7 @@ export const CheckoutPage: React.FC = () => {
       showToast('The order could not be placed. Please recheck stock and try again.', 'error');
       return;
     }
-    sessionStorage.removeItem('pb_checkout_request_id');
+    ((typeof window !== "undefined") ? sessionStorage : null)?.removeItem('pb_checkout_request_id');
     setCompletedOrder(created);
     setCurrentStep(3);
     const confirmationEmailSent = Boolean(created.confirmationEmailSentAt && created.confirmationEmailAccepted !== false);
@@ -219,7 +221,7 @@ export const CheckoutPage: React.FC = () => {
         </div>
         <h2 className="font-heading font-black text-2xl text-slate-800 mb-2">Your Basket is Empty</h2>
         <p className="text-sm text-slate-500 mb-6">Add toys to your basket before proceeding to checkout.</p>
-        <Link to="/category/all" className="px-6 py-3 rounded-2xl bg-rose-500 text-white font-heading font-bold text-sm">
+        <Link href="/category/all" className="px-6 py-3 rounded-2xl bg-rose-500 text-white font-heading font-bold text-sm">
           Explore Toys & Games
         </Link>
       </div>
@@ -353,15 +355,13 @@ export const CheckoutPage: React.FC = () => {
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
               {completedOrder.email && (
-                <Link
-                  to="/account"
+                <Link href="/account"
                   className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-slate-900 text-white font-heading font-bold text-sm shadow-md"
                 >
                   Track Order & Account
                 </Link>
               )}
-              <Link
-                to="/category/all"
+              <Link href="/category/all"
                 className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-rose-500 text-white font-heading font-bold text-sm shadow-md"
               >
                 Continue Shopping

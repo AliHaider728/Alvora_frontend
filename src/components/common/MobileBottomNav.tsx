@@ -100,10 +100,7 @@ export const MobileBottomNav: React.FC = () => {
             <Link
               key={item.key}
               href={item.path || '/'}
-              className={({ isActive: linkActive }) => `
-                flex flex-col items-center justify-center py-1 transition-all relative
-                ${linkActive || isActive ? 'text-rose-600 font-bold' : 'text-slate-500 hover:text-slate-800 font-semibold'}
-              `}
+              className={`flex flex-col items-center justify-center py-1 transition-all relative ${isActive ? 'text-rose-600 font-bold' : 'text-slate-500 hover:text-slate-800 font-semibold'}`}
             >
               <div className="relative">
                 <Icon className={`w-5 h-5 ${isActive ? 'text-rose-600 stroke-[2.5px]' : 'text-slate-600'}`} />

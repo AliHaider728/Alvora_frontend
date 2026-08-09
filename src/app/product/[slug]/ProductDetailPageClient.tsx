@@ -1,5 +1,8 @@
+"use client";
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import Link from "next/link";
+import { useParams } from "next/navigation";
+
 import {
   Star,
   ShoppingBag,
@@ -18,16 +21,16 @@ import {
   ZoomIn,
   Loader2
 } from 'lucide-react';
-import { useStore } from '../../context/StoreContext';
-import { useToast } from '../../context/ToastContext';
-import { ProductCard } from '../../components/common/ProductCard';
-import { ProductImage } from '../../components/common/ProductImage';
-import { ReviewSummary } from '../../components/common/ReviewSummary';
-import { Breadcrumbs } from '../../components/common/Breadcrumbs';
-import { SeoHead } from '../../components/common/SeoHead';
-import { formatPrice } from '../../utils/formatters';
-import { useScrollLock } from '../../hooks/useScrollLock';
-import { api, getLastApiError } from '../../services/api';
+import { useStore } from '../../../context/StoreContext';
+import { useToast } from '../../../context/ToastContext';
+import { ProductCard } from '../../../components/common/ProductCard';
+import { ProductImage } from '../../../components/common/ProductImage';
+import { ReviewSummary } from '../../../components/common/ReviewSummary';
+import { Breadcrumbs } from '../../../components/common/Breadcrumbs';
+
+import { formatPrice } from '../../../utils/formatters';
+import { useScrollLock } from '../../../hooks/useScrollLock';
+import { api, getLastApiError } from '../../../services/api';
 import {
   getEffectiveAvailableQuantity,
   getEffectiveProductAvailability,
@@ -39,15 +42,15 @@ import {
   isProductVisibleOnStorefront,
   isVariantOptionAvailable,
   normalizeInventory
-} from '../../utils/products';
-import { ProductDetailContent } from '../../components/product/ProductDetailContent';
-import { Review } from '../../types';
-import { getSafeImageSrc } from '../../utils/images';
+} from '../../../utils/products';
+import { ProductDetailContent } from '../../../components/product/ProductDetailContent';
+import { Review } from '../../../types';
+import { getSafeImageSrc } from '../../../utils/images';
 
 const getPlainDescription = (description: string) =>
   description.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 
-export const ProductDetailPage: React.FC = () => {
+export const ProductDetailPageClient: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const { products, productsLoading, addToCart, toggleWishlist, isInWishlist, refreshProducts, settings, submitCustomerReview } = useStore();
   const { showToast } = useToast();
@@ -324,7 +327,7 @@ export const ProductDetailPage: React.FC = () => {
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">
         <h2 className="font-heading font-black text-2xl text-slate-800 mb-2">Toy Not Found</h2>
         <p className="text-sm text-slate-500 mb-6">The toy you are looking for might have moved to another playhouse.</p>
-        <Link to="/category/all" className="px-6 py-3 rounded-2xl bg-rose-500 text-white font-heading font-bold text-sm">
+        <Link href="/category/all" className="px-6 py-3 rounded-2xl bg-rose-500 text-white font-heading font-bold text-sm">
           Explore All Toys
         </Link>
       </div>
@@ -481,7 +484,7 @@ export const ProductDetailPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 py-4 font-sans sm:py-6 overflow-x-hidden">
-      <SeoHead product={product} />
+      
 
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
         <Breadcrumbs items={breadcrumbItems} />

@@ -1,16 +1,19 @@
+"use client";
 import React, { useState, useMemo } from 'react';
-import { useParams, useSearchParams, Link } from 'react-router-dom';
+import Link from "next/link";
+import { useParams } from "next/navigation";
+
 import { Filter, SlidersHorizontal, Star, X, Check, ChevronDown, RotateCcw } from 'lucide-react';
-import { useStore } from '../../context/StoreContext';
-import { ProductCard } from '../../components/common/ProductCard';
-import { SkeletonCard } from '../../components/common/SkeletonCard';
-import { Breadcrumbs } from '../../components/common/Breadcrumbs';
-import { SeoHead } from '../../components/common/SeoHead';
-import { formatPrice } from '../../utils/formatters';
-import { AGE_GROUPS } from '../../data/mockData';
-import { AgeGroupCategory } from '../../types';
-import { getProductAgeGroups, isProductVisibleOnStorefront } from '../../utils/products';
-import { useScrollLock } from '../../hooks/useScrollLock';
+import { useStore } from '../../../context/StoreContext';
+import { ProductCard } from '../../../components/common/ProductCard';
+import { SkeletonCard } from '../../../components/common/SkeletonCard';
+import { Breadcrumbs } from '../../../components/common/Breadcrumbs';
+
+import { formatPrice } from '../../../utils/formatters';
+import { AGE_GROUPS } from '../../../data/mockData';
+import { AgeGroupCategory } from '../../../types';
+import { getProductAgeGroups, isProductVisibleOnStorefront } from '../../../utils/products';
+import { useScrollLock } from '../../../hooks/useScrollLock';
 
 const parseMultiValueParam = (value: string | null) =>
   value
@@ -20,7 +23,7 @@ const parseMultiValueParam = (value: string | null) =>
 const sameSelections = (left: string[], right: string[]) =>
   left.length === right.length && left.every((value, index) => value === right[index]);
 
-export const CategoryPage: React.FC = () => {
+export const CategoryPageClient: React.FC = () => {
   const { categorySlug } = useParams<{ categorySlug?: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
   const { products, categories } = useStore();
@@ -168,10 +171,7 @@ export const CategoryPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans py-6">
-      <SeoHead
-        title={currentCategoryObj ? currentCategoryObj.name : 'All Toys & Games Collection'}
-        description={currentCategoryObj?.description || 'Browse our complete catalog of action figures, STEM toys, plushies, and family games.'}
-      />
+      
 
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
         <Breadcrumbs items={breadcrumbItems} />
