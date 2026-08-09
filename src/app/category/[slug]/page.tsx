@@ -1,7 +1,22 @@
 import { CategoryPageClient } from "./CategoryPageClient";
+import { api } from "../../../services/api";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const slug = (await params).slug;
+  if (slug === 'all') {
+    return { title: 'All Toys | PlayBimboo', description: 'Explore all toys at PlayBimboo' };
+  }
+  try {
+    const categories = await api.getCategories();
+    const cat = categories.find((c: any) => c.slug === slug);
+    if (cat) {
+      return { 
+        title: `${cat.name} | PlayBimboo`,
+        description: cat.description || `Explore our selection of ${cat.name} toys.`
+      };
+    }
+  } catch (e) {}
+  
   return {
     title: `${slug} | PlayBimboo`,
   };
