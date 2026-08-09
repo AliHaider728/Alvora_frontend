@@ -43,7 +43,7 @@ import { getSafeImageSrc } from '../../utils/images';
 import { getVariationDisplayLabel, normalizeInventory } from '../../utils/products';
 import { ProductDetailContentBuilder } from '../../components/admin/ProductDetailContentBuilder';
 import { CategoryFormModal } from '../../components/admin/CategoryFormModal';
-import { AdminProductReviewsSection } from '../../components/admin/AdminProductReviewsSection';
+
 import { AttributesManager } from '../../components/admin/AttributesManager';
 import { VariationsGenerator } from '../../components/admin/VariationsGenerator';
 import { useDialog } from '../../context/DialogContext';
@@ -309,7 +309,7 @@ export const AdminProductFormPage: React.FC = () => {
 
   const stateRef = useRef<any>(null);
   stateRef.current = {
-    name, shortDescription, description, category, categoryId, categorySlug, categoryIds,
+    name, slug, slugManuallyEdited, shortDescription, description, category, categoryId, categorySlug, categoryIds,
     regularPrice, salePrice, sku, trackInventory, stockQuantity, stockStatus, lowStockThreshold,
     productType, attributes, variations, defaultAttributes, defaultVariationId,
     ageGroups, material, safetyInfo, weight, deliveryType, customDeliveryFee,
@@ -406,8 +406,21 @@ export const AdminProductFormPage: React.FC = () => {
     ));
     setMetaTitle(editingProduct.metaTitle || '');
     setMetaDescription(editingProduct.metaDescription || '');
-    setSlug(editingProduct.slug);
-    setSlugManuallyEdited(true);
+    
+    if (editingProduct.slug) {
+      setSlug(editingProduct.slug);
+      setSlugManuallyEdited(true);
+    } else {
+      let generatedSlug = slugify(editingProduct.name || '');
+      let counter = 1;
+      while (products.some(p => p.id !== id && p.slug === generatedSlug)) {
+        generatedSlug = `${slugify(editingProduct.name || '')}-${counter}`;
+        counter++;
+      }
+      setSlug(generatedSlug);
+      setSlugManuallyEdited(false);
+    }
+    
     if (!editingProduct.productDetailBlocks?.length && editingProduct.description) {
       setProductDetailBlocks([{
         id: crypto.randomUUID(),
@@ -455,6 +468,8 @@ export const AdminProductFormPage: React.FC = () => {
           if (restore) {
             const data = draft.formData;
             setName(data.name || '');
+            if (data.slug !== undefined) setSlug(data.slug);
+            if (data.slugManuallyEdited !== undefined) setSlugManuallyEdited(data.slugManuallyEdited);
             setShortDescription(data.shortDescription || '');
             setDescription(data.description || '');
             setCategory(data.category || '');
@@ -1145,7 +1160,7 @@ export const AdminProductFormPage: React.FC = () => {
             </div>
           </FormCard>
 
-          <AdminProductReviewsSection productId={isEditing ? id : undefined} />
+
 
           <ProductDetailContentBuilder
             blocks={productDetailBlocks}

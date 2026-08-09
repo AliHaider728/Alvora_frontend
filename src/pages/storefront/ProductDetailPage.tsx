@@ -175,7 +175,7 @@ export const ProductDetailPage: React.FC = () => {
     hasDesc && 'desc',
     hasSpecs && 'specs',
     hasSafety && 'safety',
-    hasReviews && 'reviews'
+    'reviews'
   ].filter(Boolean) as string[];
 
   useEffect(() => {
