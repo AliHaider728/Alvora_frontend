@@ -25,16 +25,16 @@ import { getAuthToken, removeAuthToken, api, isSuperAdmin } from '../../../servi
 
 export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = usePathname();
-  const navigate = useRouter();
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   const token = getAuthToken();
 
   useEffect(() => {
     if (!token) {
-      navigate('/admin/login', { replace: true });
+      router.replace('/admin/login');
     }
-  }, [token, navigate]);
+  }, [token, router]);
 
   const navItems = [
     { label: 'Dashboard', path: '/admin', icon: LayoutDashboard },
@@ -55,7 +55,7 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
     await api.logout();
     removeAuthToken();
     localStorage.removeItem('pb_admin_user');
-    navigate('/admin/login');
+    router.push('/admin/login');
   };
 
   if (!token) {

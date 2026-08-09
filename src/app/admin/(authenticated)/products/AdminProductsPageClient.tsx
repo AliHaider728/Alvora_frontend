@@ -17,7 +17,7 @@ export const AdminProductsPageClient: React.FC = () => {
   const { products, categories, updateProduct, deleteProduct, settings } = useStore();
   const { showToast } = useToast();
   const { confirm } = useDialog();
-  const navigate = useRouter();
+  const router = useRouter();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCatFilter, setSelectedCatFilter] = useState('all');
@@ -113,7 +113,7 @@ export const AdminProductsPageClient: React.FC = () => {
               <input type="file" accept=".csv" className="hidden" onChange={handleImportCSV} />
             </label>
             <button
-              onClick={() => navigate('/admin/products/new')}
+              onClick={() => router.push('/admin/products/new')}
               className="px-5 py-2.5 rounded-2xl bg-rose-500 hover:bg-rose-600 text-white font-heading font-bold text-xs flex items-center gap-2 shadow-md transition-all"
             >
               <Plus className="w-4 h-4" />
@@ -199,7 +199,7 @@ export const AdminProductsPageClient: React.FC = () => {
                   </td>
                   <td className="p-4 pr-6 text-right space-x-2">
                     <button
-                      onClick={() => navigate(`/admin/products/edit/${encodeURIComponent(prod.id)}`)}
+                      onClick={() => router.push(`/admin/products/edit/${encodeURIComponent(prod.id)}`)}
                       className="p-1.5 rounded-lg text-slate-600 hover:bg-slate-100"
                       title="Edit"
                     >

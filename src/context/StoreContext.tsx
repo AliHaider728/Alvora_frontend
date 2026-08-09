@@ -267,32 +267,28 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return saved ? JSON.parse(saved) : INITIAL_REVIEWS;
   });
 
-  const [settings, setSettings] = useState<StoreSettings>(() => {
-    const saved = (typeof window !== 'undefined' ? localStorage.getItem.bind(localStorage) : () => null)('playbimboo_settings');
+  const [settings, setSettings] = useState<StoreSettings>(() => normalizeStoreSettings(INITIAL_SETTINGS));
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    setIsHydrated(true);
+    const saved = localStorage.getItem('playbimboo_settings');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        // Cache-bust: if cached settings still contain any old/wrong contact values, discard them
-        const STALE_MARKERS = [
-          'Gulberg', 'Lahore', 'support@playbimboo', '+92 300', '923001234567',
-          '+327', 'Shafique Center, Gujranwala, Pakistan'
-        ];
+        const STALE_MARKERS = ['Gulberg', 'Lahore', 'support@playbimboo', '+92 300', '923001234567', '+327', 'Shafique Center, Gujranwala, Pakistan'];
         const settingsStr = JSON.stringify(parsed);
-        const isStale = STALE_MARKERS.some(marker => settingsStr.includes(marker));
-        if (isStale) {
-          (typeof window !== 'undefined' ? localStorage.removeItem.bind(localStorage) : () => {})('playbimboo_settings');
-          return normalizeStoreSettings(INITIAL_SETTINGS);
+        if (STALE_MARKERS.some(m => settingsStr.includes(m))) {
+          localStorage.removeItem('playbimboo_settings');
+        } else {
+          if (parsed.freeShippingThreshold === 50) parsed.freeShippingThreshold = 5000;
+          setSettings(normalizeStoreSettings(parsed));
         }
-        if (parsed.freeShippingThreshold === 50) {
-          parsed.freeShippingThreshold = 5000;
-        }
-        return normalizeStoreSettings(parsed);
       } catch {
-        (typeof window !== 'undefined' ? localStorage.removeItem.bind(localStorage) : () => {})('playbimboo_settings');
+        localStorage.removeItem('playbimboo_settings');
       }
     }
-    return normalizeStoreSettings(INITIAL_SETTINGS);
-  });
+  }, []);
 
   const [cart, setCart] = useState<CartItem[]>(() => {
     return readStoredCart();

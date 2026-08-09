@@ -121,7 +121,7 @@ export const Footer: React.FC = () => {
           {/* Column 1: Store Bio */}
           <div className="space-y-5">
             <img
-              src={playBimbooLogo}
+              src={typeof playBimbooLogo === 'string' ? playBimbooLogo : playBimbooLogo.src}
               alt="Play Bimboo"
               className="h-14 w-auto object-contain"
             />

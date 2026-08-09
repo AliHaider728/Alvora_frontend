@@ -7,7 +7,7 @@ import { Lock, ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
 import { api, setAuthToken } from '../../../services/api';
 
 export const AdminLoginPageClient: React.FC = () => {
-  const navigate = useRouter();
+  const router = useRouter();
   const [email, setEmail] = useState('playbimboo@gmail.com');
   const [password, setPassword] = useState('admin123');
   const [loading, setLoading] = useState(false);
@@ -23,7 +23,7 @@ export const AdminLoginPageClient: React.FC = () => {
       if (res && res.token) {
         setAuthToken(res.token);
         localStorage.setItem('pb_admin_user', JSON.stringify(res.user));
-        navigate('/admin');
+        router.push('/admin');
       } else {
         setError('Invalid admin credentials. Please check your email and password.');
       }
@@ -105,7 +105,7 @@ export const AdminLoginPageClient: React.FC = () => {
 
         <div className="text-center pt-2 border-t border-slate-100">
           <button
-            onClick={() => navigate('/')}
+            onClick={() => router.push('/')}
             className="text-xs text-slate-500 hover:text-slate-800 font-bold"
           >
             &larr; Return to Customer Storefront

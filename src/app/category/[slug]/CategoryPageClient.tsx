@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useMemo } from 'react';
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams, useRouter, usePathname } from "next/navigation";
 
 import { Filter, SlidersHorizontal, Star, X, Check, ChevronDown, RotateCcw } from 'lucide-react';
 import { useStore } from '../../../context/StoreContext';
@@ -25,7 +25,19 @@ const sameSelections = (left: string[], right: string[]) =>
 
 export const CategoryPageClient: React.FC = () => {
   const { categorySlug } = useParams<{ categorySlug?: string }>();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  
+  const setSearchParams = (newParams: URLSearchParams, options?: { replace?: boolean }) => {
+    const search = newParams.toString();
+    const query = search ? '?' + search : '';
+    if (options?.replace) {
+      router.replace(pathname + query, { scroll: false });
+    } else {
+      router.push(pathname + query, { scroll: false });
+    }
+  };
   const { products, categories } = useStore();
 
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);

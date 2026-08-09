@@ -168,7 +168,7 @@ const FieldError: React.FC<{ message?: string }> = ({ message }) =>
 
 export const AdminProductFormPageClient: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const navigate = useRouter();
+  const router = useRouter();
   const { products, categories, addProduct, updateProduct, addCategory } = useStore();
   const { showToast } = useToast();
   const { confirm } = useDialog();
@@ -567,12 +567,12 @@ export const AdminProductFormPageClient: React.FC = () => {
       void confirm({ title: 'You have unsaved changes.', description: 'Leaving now will discard the changes you have not saved.', cancelLabel: 'Stay on Page', confirmLabel: 'Discard Changes', destructive: true }).then(async leave => {
         if (!leave) return;
         await cleanupTemporaryUploads();
-        navigate(`${destination.pathname}${destination.search}${destination.hash}`);
+        router.push(`${destination.pathname}${destination.search}${destination.hash}`);
       });
     };
     document.addEventListener('click', warnBeforeLinkNavigation, true);
     return () => document.removeEventListener('click', warnBeforeLinkNavigation, true);
-  }, [confirm, isDirty, navigate]);
+  }, [confirm, isDirty, router]);
 
   const cleanupTemporaryUploads = async () => {
     const publicIds = [
@@ -586,7 +586,7 @@ export const AdminProductFormPageClient: React.FC = () => {
   const cancelEditing = async () => {
     if (isDirty && !await confirm({ title: 'You have unsaved changes.', description: 'Leaving now will discard the changes you have not saved.', cancelLabel: 'Stay on Page', confirmLabel: 'Discard Changes', destructive: true })) return;
     await cleanupTemporaryUploads();
-    navigate('/admin/products');
+    router.push('/admin/products');
   };
 
 
@@ -933,7 +933,7 @@ export const AdminProductFormPageClient: React.FC = () => {
 
     setIsDirty(false);
     showToast(`${isEditing ? 'Updated' : 'Created'} ${savedProduct.name} successfully.`, 'success');
-    navigate('/admin/products');
+    router.push('/admin/products');
     
     } catch (err: any) {
       showToast(err.message || 'An unexpected error occurred during save.', 'error');
@@ -949,7 +949,7 @@ export const AdminProductFormPageClient: React.FC = () => {
         <div>
           <Box className="mx-auto h-9 w-9 text-slate-300" />
           <h1 className="mt-3 font-heading text-lg font-black text-slate-900">Product not found</h1>
-          <button onClick={() => navigate('/admin/products')} className="mt-5 rounded-xl bg-slate-900 px-4 py-2.5 text-xs font-bold text-white">Back to Products</button>
+          <button onClick={() => router.push('/admin/products')} className="mt-5 rounded-xl bg-slate-900 px-4 py-2.5 text-xs font-bold text-white">Back to Products</button>
         </div>
       </div>
     );
