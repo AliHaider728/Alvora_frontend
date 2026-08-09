@@ -5,6 +5,7 @@ import { SortableContext, verticalListSortingStrategy, useSortable } from '@dnd-
 import { CSS } from '@dnd-kit/utilities';
 import { api } from '../../services/api';
 import { useToast } from '../../context/ToastContext';
+import { getSafeImageSrc } from '../../utils/images';
 
 interface Term {
   id: string;
@@ -52,7 +53,7 @@ function SortableTermItem({ term, onEdit, onDelete, displayType, inUseCount }: {
       
       {displayType === 'image_swatches' && term.imageUrl && (
         <div className="w-8 h-8 rounded-md border border-slate-200 overflow-hidden bg-slate-100 flex items-center justify-center">
-          <img src={term.imageUrl} alt={term.label} className="w-full h-full object-cover" />
+          <img src={getSafeImageSrc(term.imageUrl)} alt={term.label} className="w-full h-full object-cover" />
         </div>
       )}
 
@@ -521,7 +522,7 @@ export function AdminGlobalAttributesPage() {
                       </div>
                       {editingTerm.imageUrl && (
                          <div className="w-10 h-10 shrink-0 border border-slate-200 rounded-md overflow-hidden">
-                           <img src={editingTerm.imageUrl} alt="Preview" className="w-full h-full object-cover" />
+                           <img src={getSafeImageSrc(editingTerm.imageUrl)} alt="Preview" className="w-full h-full object-cover" />
                          </div>
                       )}
                     </div>

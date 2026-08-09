@@ -3,6 +3,7 @@ import { BarChart3, TrendingUp, PieChart, ShoppingBag } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { SeoHead } from '../../components/common/SeoHead';
 import { formatPrice } from '../../utils/formatters';
+import { getSafeImageSrc } from '../../utils/images';
 
 export const AdminReportsPage: React.FC = () => {
   const { categories, products, orders, settings } = useStore();
@@ -60,7 +61,7 @@ export const AdminReportsPage: React.FC = () => {
               <div key={p.id} className="pt-3 flex items-center justify-between text-xs">
                 <div className="flex items-center gap-3">
                   <span className="font-heading font-bold text-slate-400 w-4">#{i + 1}</span>
-                  <img src={p.images[0]} alt="" className="w-9 h-9 object-cover rounded-lg bg-slate-100" />
+                  <img src={getSafeImageSrc(p.images[0])} alt="" className="w-9 h-9 object-cover rounded-lg bg-slate-100" />
                   <div>
                     <span className="font-heading font-bold text-slate-900 block">{p.name}</span>
                     <span className="text-[10px] text-slate-400">{p.category}</span>

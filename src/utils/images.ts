@@ -1,4 +1,4 @@
-import fallbackImage from '../assets/images/promo_toys.jpg';
+import fallbackImage from '../assets/images/promo_toys.webp';
 
 export const getSafeImageSrc = (source?: string | null): string => {
   const url = source?.trim() || fallbackImage;

@@ -1,3 +1,4 @@
+import { getSafeImageSrc } from '../../utils/images';
 import React, { useState } from 'react';
 import { Play, Settings2, Trash2, Image as ImageIcon } from 'lucide-react';
 import { ProductAttribute, ProductVariation } from '../../types';
@@ -219,7 +220,7 @@ export const VariationsGenerator: React.FC<VariationsGeneratorProps> = ({ attrib
                   title="Variation Image"
                 >
                   {variation.image?.url ? (
-                    <img src={variation.image.url} alt="Variation" className="w-6 h-6 object-cover rounded-md" />
+                    <img src={getSafeImageSrc(variation.image.url)} alt="Variation" className="w-6 h-6 object-cover rounded-md" />
                   ) : (
                     <ImageIcon className="w-5 h-5 opacity-70" />
                   )}

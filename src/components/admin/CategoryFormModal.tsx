@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ImagePlus, Loader2, Trash2, X } from 'lucide-react';
+import { getSafeImageSrc } from '../../utils/images';
 import { Category } from '../../types';
 import { api, getLastApiError } from '../../services/api';
 import { useToast } from '../../context/ToastContext';
@@ -136,7 +137,7 @@ export const CategoryFormModal: React.FC<Props> = ({ category, categories, onClo
         <div className="md:col-span-2">
           <span className="text-xs font-bold text-slate-700">Category Image <span className="font-medium text-slate-400">(optional, JPG/PNG/WebP, max 5 MB)</span></span>
           <div className="mt-2 flex flex-wrap items-center gap-3">
-            {image ? <img src={image} alt="Category preview" className="h-20 w-20 rounded-2xl border object-cover" /> : <div className="flex h-20 w-20 items-center justify-center rounded-2xl border border-dashed text-slate-300"><ImagePlus /></div>}
+            {image ? <img src={getSafeImageSrc(image)} alt="Category preview" className="h-20 w-20 rounded-2xl border object-cover" /> : <div className="flex h-20 w-20 items-center justify-center rounded-2xl border border-dashed text-slate-300"><ImagePlus /></div>}
             <label className="cursor-pointer rounded-xl border border-slate-200 px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50">{uploading ? 'Uploading…' : image ? 'Replace Image' : 'Upload Image'}<input type="file" accept="image/jpeg,image/png,image/webp" disabled={uploading || saving} onChange={e => void uploadImage(e.target.files?.[0])} className="sr-only" /></label>
             {image && <button type="button" onClick={() => { void removeSelectedImage(); }} className="flex items-center gap-1 rounded-xl px-3 py-2.5 text-xs font-bold text-rose-600 hover:bg-rose-50"><Trash2 className="h-4 w-4" /> Remove</button>}
           </div>{errors.image && <span className="mt-1 block text-xs font-semibold text-rose-600">{errors.image}</span>}

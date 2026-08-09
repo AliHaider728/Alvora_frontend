@@ -18,7 +18,7 @@ import { useAuth } from '../../context/AuthContext';
 import Ballpit from '../Ballpit/Ballpit';
 
 // Adjust this import path to wherever the transparent logo file lives in your project
-import playBimbooLogo from '../../assets/images/playbimboo-logo.png';
+import playBimbooLogo from '../../assets/images/playbimboo-logo.webp';
 
 // ─────────────────────────────────────────────────────────
 // Hardcoded real store contact info.

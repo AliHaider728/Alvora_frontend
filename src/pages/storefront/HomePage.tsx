@@ -31,8 +31,8 @@ import { formatPrice } from '../../utils/formatters';
 import { getSafeImageSrc } from '../../utils/images';
 import { isProductVisibleOnStorefront } from '../../utils/products';
 import playBimbooVideo from '../../assets/newplaybimboo.mp4';
-import logoImage from '../../assets/images/play_bimboo_logo_1785311841625.jpg';
-import promoToysImage from '../../assets/images/promo_toys.jpg';
+import logoImage from '../../assets/images/play_bimboo_logo_1785311841625.webp';
+import promoToysImage from '../../assets/images/promo_toys.webp';
 
 export const HomePage: React.FC = () => {
   const { products, categories, settings } = useStore();

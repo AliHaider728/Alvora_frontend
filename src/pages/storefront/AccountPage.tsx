@@ -7,6 +7,7 @@ import { Breadcrumbs } from '../../components/common/Breadcrumbs';
 import { SeoHead } from '../../components/common/SeoHead';
 import { formatPrice } from '../../utils/formatters';
 import { useDialog } from '../../context/DialogContext';
+import { getSafeImageSrc } from '../../utils/images';
 
 export const AccountPage: React.FC = () => {
   const { orders, settings } = useStore();
@@ -137,7 +138,7 @@ export const AccountPage: React.FC = () => {
                         <div className="space-y-2">
                           {order.items.map((it, i) => (
                             <div key={i} className="flex items-center gap-3 text-xs sm:text-sm">
-                              <img src={it.image} alt="" className="w-10 h-10 object-cover rounded-lg bg-slate-100" />
+                              <img src={getSafeImageSrc(it.image)} alt="" className="w-10 h-10 object-cover rounded-lg bg-slate-100" />
                               <span className="flex-1 font-medium text-slate-800">
                                 {it.name} (Qty: {it.quantity}) {it.selectedVariant ? `[${it.selectedVariant}]` : ''}
                               </span>

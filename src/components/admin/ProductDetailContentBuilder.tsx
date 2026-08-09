@@ -7,6 +7,7 @@ import { ProductDetailBlock, ProductDetailBlockType } from '../../types';
 import { api } from '../../services/api';
 import { useToast } from '../../context/ToastContext';
 import { useDialog } from '../../context/DialogContext';
+import { getSafeImageSrc } from '../../utils/images';
 
 type Props = {
   blocks: ProductDetailBlock[];
@@ -156,7 +157,7 @@ export const ProductDetailContentBuilder: React.FC<Props> = ({
                   <label className="block text-xs font-bold text-slate-600 mt-3">Content (optional)<textarea rows={4} maxLength={2000} value={block.content || ''} onChange={event => update(block.id, { content: event.target.value })} className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm" placeholder="Block text content" /></label>
                 </>}
                 {['image', 'imageText', 'fullWidthImage', 'gallery', 'ctaBanner'].includes(block.type) && <>
-                  {block.image?.secureUrl && <img src={block.image.secureUrl} alt={block.image.alt || 'Product detail preview'} className="max-h-72 w-full rounded-xl bg-white object-contain" />}
+                  {block.image?.secureUrl && <img src={getSafeImageSrc(block.image.secureUrl)} alt={block.image.alt || 'Product detail preview'} className="max-h-72 w-full rounded-xl bg-white object-contain" />}
                   <label className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-indigo-300 bg-white px-4 py-3 text-xs font-bold text-indigo-600 mt-3">
                     {uploadingBlock === block.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImagePlus className="h-4 w-4" />}{block.image ? 'Replace image' : 'Upload primary media'}
                     <input type="file" className="hidden" accept="image/jpeg,image/png,image/webp" disabled={uploadingBlock === block.id} onChange={event => { void upload(block, event.target.files?.[0]); event.target.value = ''; }} />

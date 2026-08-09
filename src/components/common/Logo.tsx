@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useStore } from '../../context/StoreContext';
-import defaultLogoImg from '../../assets/images/play_bimboo_logo_1785311841625.jpg';
+import defaultLogoImg from '../../assets/images/play_bimboo_logo_1785311841625.webp';
 
 interface LogoProps {
   className?: string;

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Upload, Image as ImageIcon, Loader2 } from 'lucide-react';
 import { api } from '../../services/api';
+import { getSafeImageSrc } from '../../utils/images';
 
 interface VariationImageModalProps {
   isOpen: boolean;
@@ -70,7 +71,7 @@ export const VariationImageModal: React.FC<VariationImageModalProps> = ({
             <h3 className="text-sm font-bold text-slate-700 mb-3">Current Selection</h3>
             {selectedImage ? (
               <div className="relative rounded-xl border border-slate-200 overflow-hidden bg-slate-50 aspect-video flex items-center justify-center max-w-sm">
-                <img src={selectedImage.url} alt="Variation Preview" className="max-w-full max-h-full object-contain" />
+                <img src={getSafeImageSrc(selectedImage.url)} alt="Variation Preview" className="max-w-full max-h-full object-contain" />
                 <button type="button"
                   onClick={() => setSelectedImage(undefined)}
                   className="absolute top-2 right-2 p-1.5 bg-white rounded-md text-rose-500 shadow hover:bg-rose-50"
@@ -132,7 +133,7 @@ export const VariationImageModal: React.FC<VariationImageModalProps> = ({
                       }}
                       className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${selectedImage?.url === img.url ? 'border-indigo-500 ring-2 ring-indigo-500/20' : 'border-transparent hover:border-slate-300'}`}
                     >
-                      <img src={img.url} className="w-full h-full object-cover" alt="Gallery option" />
+                      <img src={getSafeImageSrc(img.url)} className="w-full h-full object-cover" alt="Gallery option" />
                       {idx === 0 && (
                         <span className="absolute bottom-0 inset-x-0 bg-slate-900/60 text-[9px] text-white font-bold text-center py-0.5">Main</span>
                       )}

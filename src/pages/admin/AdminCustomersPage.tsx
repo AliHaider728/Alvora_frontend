@@ -3,6 +3,7 @@ import { Users, Mail, Phone, Calendar } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { SeoHead } from '../../components/common/SeoHead';
 import { formatPrice } from '../../utils/formatters';
+import { getSafeImageSrc } from '../../utils/images';
 
 export const AdminCustomersPage: React.FC = () => {
   const { customers } = useStore();
@@ -33,7 +34,7 @@ export const AdminCustomersPage: React.FC = () => {
                 <tr key={cust.id} className="hover:bg-slate-50/80 transition-colors">
                   <td className="p-4 pl-6">
                     <div className="flex items-center gap-3">
-                      <img src={cust.avatar} alt="" className="w-9 h-9 rounded-full object-cover" />
+                      <img src={getSafeImageSrc(cust.avatar)} alt="" className="w-9 h-9 rounded-full object-cover" />
                       <div>
                         <span className="font-heading font-bold text-slate-900 block">{cust.name}</span>
                         <span className="text-[10px] text-slate-400">ID: {cust.id}</span>

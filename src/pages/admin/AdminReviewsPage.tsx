@@ -10,6 +10,7 @@ import { Review } from '../../types';
 import { useToast } from '../../context/ToastContext';
 import { useDialog } from '../../context/DialogContext';
 import { formatPrice } from '../../utils/formatters';
+import { getSafeImageSrc } from '../../utils/images';
 
 export const AdminReviewsPage: React.FC = () => {
   const { refreshAdminReviews, addAdminReview, approveReview, rejectReview, deleteReview } = useStore();
@@ -316,7 +317,7 @@ export const AdminReviewsPage: React.FC = () => {
                         <div className="flex gap-4">
                           <div className="w-12 h-12 bg-slate-100 rounded-xl overflow-hidden flex-shrink-0 border border-slate-200">
                             {(review as any).productThumbnail ? (
-                              <img src={(review as any).productThumbnail} alt="Product" className="w-full h-full object-cover" />
+                              <img src={getSafeImageSrc((review as any).productThumbnail)} alt="Product" className="w-full h-full object-cover" />
                             ) : (
                               <ShoppingBag className="w-5 h-5 text-slate-300 m-auto mt-3" />
                             )}
@@ -479,7 +480,7 @@ export const AdminReviewsPage: React.FC = () => {
                   <div className="flex items-center gap-4">
                     {reviewImagePreview ? (
                       <div className="relative h-20 w-20 rounded-xl overflow-hidden border border-slate-200">
-                        <img src={reviewImagePreview} alt="Preview" className="w-full h-full object-cover" />
+                        <img src={getSafeImageSrc(reviewImagePreview)} alt="Preview" className="w-full h-full object-cover" />
                         <button type="button" onClick={() => { setReviewImageFile(null); setReviewImagePreview(''); }} className="absolute top-1 right-1 bg-white/80 rounded-full p-0.5 text-rose-500 hover:bg-white"><XCircle className="w-4 h-4" /></button>
                       </div>
                     ) : (
