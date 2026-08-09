@@ -12,48 +12,48 @@ import { FloatingWhatsApp } from './components/common/FloatingWhatsApp';
 import { AuthModal } from './components/auth/AuthModal';
 
 // Storefront Pages
-import { HomePage } from './pages/storefront/HomePage';
-import { CategoryPage } from './pages/storefront/CategoryPage';
-import { ProductDetailPage } from './pages/storefront/ProductDetailPage';
-import { SearchResultsPage } from './pages/storefront/SearchResultsPage';
-import { WishlistPage } from './pages/storefront/WishlistPage';
-import { CheckoutPage } from './pages/storefront/CheckoutPage';
-import { AccountPage } from './pages/storefront/AccountPage';
-import { AboutPage } from './pages/storefront/AboutPage';
-import { ContactPage } from './pages/storefront/ContactPage';
-import { FaqPage } from './pages/storefront/FaqPage';
-import { NotFoundPage } from './pages/storefront/NotFoundPage';
-import { ResetPasswordPage } from './pages/storefront/ResetPasswordPage';
-import { ReturnPolicyPage } from './pages/storefront/ReturnPolicyPage';
+import { HomePage } from './vite_pages/storefront/HomePage';
+import { CategoryPage } from './vite_pages/storefront/CategoryPage';
+import { ProductDetailPage } from './vite_pages/storefront/ProductDetailPage';
+import { SearchResultsPage } from './vite_pages/storefront/SearchResultsPage';
+import { WishlistPage } from './vite_pages/storefront/WishlistPage';
+import { CheckoutPage } from './vite_pages/storefront/CheckoutPage';
+import { AccountPage } from './vite_pages/storefront/AccountPage';
+import { AboutPage } from './vite_pages/storefront/AboutPage';
+import { ContactPage } from './vite_pages/storefront/ContactPage';
+import { FaqPage } from './vite_pages/storefront/FaqPage';
+import { NotFoundPage } from './vite_pages/storefront/NotFoundPage';
+import { ResetPasswordPage } from './vite_pages/storefront/ResetPasswordPage';
+import { ReturnPolicyPage } from './vite_pages/storefront/ReturnPolicyPage';
 
 // Admin Pages
-import { AdminLayout } from './pages/admin/AdminLayout';
-import { AdminLoginPage } from './pages/admin/AdminLoginPage';
-import { AdminDashboardPage } from './pages/admin/AdminDashboardPage';
-import { AdminProductsPage } from './pages/admin/AdminProductsPage';
-import { AdminCategoriesPage } from './pages/admin/AdminCategoriesPage';
-import { AdminOrdersPage } from './pages/admin/AdminOrdersPage';
-import { AdminCustomersPage } from './pages/admin/AdminCustomersPage';
-import { AdminCouponsPage } from './pages/admin/AdminCouponsPage';
-import { AdminReportsPage } from './pages/admin/AdminReportsPage';
-import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
-import { AdminStoreAppearancePage } from './pages/admin/AdminStoreAppearancePage';
-import { AdminContactMessages } from './pages/admin/AdminContactMessages';
+import { AdminLayout } from './vite_pages/admin/AdminLayout';
+import { AdminLoginPage } from './vite_pages/admin/AdminLoginPage';
+import { AdminDashboardPage } from './vite_pages/admin/AdminDashboardPage';
+import { AdminProductsPage } from './vite_pages/admin/AdminProductsPage';
+import { AdminCategoriesPage } from './vite_pages/admin/AdminCategoriesPage';
+import { AdminOrdersPage } from './vite_pages/admin/AdminOrdersPage';
+import { AdminCustomersPage } from './vite_pages/admin/AdminCustomersPage';
+import { AdminCouponsPage } from './vite_pages/admin/AdminCouponsPage';
+import { AdminReportsPage } from './vite_pages/admin/AdminReportsPage';
+import { AdminSettingsPage } from './vite_pages/admin/AdminSettingsPage';
+import { AdminStoreAppearancePage } from './vite_pages/admin/AdminStoreAppearancePage';
+import { AdminContactMessages } from './vite_pages/admin/AdminContactMessages';
 
 const AdminReviewsPage = React.lazy(() =>
-  import('./pages/admin/AdminReviewsPage').then(module => ({
+  import('./vite_pages/admin/AdminReviewsPage').then(module => ({
     default: module.AdminReviewsPage
   }))
 );
 
 const AdminGlobalAttributesPage = React.lazy(() =>
-  import('./pages/admin/AdminGlobalAttributesPage').then(module => ({
+  import('./vite_pages/admin/AdminGlobalAttributesPage').then(module => ({
     default: module.AdminGlobalAttributesPage
   }))
 );
 
 const AdminProductFormPage = React.lazy(() =>
-  import('./pages/admin/AdminProductFormPage').then(module => ({
+  import('./vite_pages/admin/AdminProductFormPage').then(module => ({
     default: module.AdminProductFormPage
   }))
 );

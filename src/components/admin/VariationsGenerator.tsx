@@ -1,3 +1,4 @@
+"use client";
 import { getSafeImageSrc } from '../../utils/images';
 import React, { useState } from 'react';
 import { Play, Settings2, Trash2, Image as ImageIcon } from 'lucide-react';

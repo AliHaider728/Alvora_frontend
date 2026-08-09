@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from 'react';
 import { X, Upload, Image as ImageIcon, Loader2 } from 'lucide-react';
 import { api } from '../../services/api';

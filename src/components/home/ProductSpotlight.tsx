@@ -1,6 +1,8 @@
+"use client";
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowRight, Check, Loader2, PackageCheck, ShoppingBag, Sparkles } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter, usePathname, useParams } from 'next/navigation';
 import { useStore } from '../../context/StoreContext';
 import { Product } from '../../types';
 import { formatPrice } from '../../utils/formatters';
@@ -11,7 +13,7 @@ import { useToast } from '../../context/ToastContext';
 export const ProductSpotlight: React.FC<{ product: Product }> = ({ product }) => {
   const { addToCart, settings } = useStore();
   const { showToast } = useToast();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [cartActionState, setCartActionState] = useState<'idle' | 'adding' | 'added'>('idle');
   const cartActionLocked = useRef(false);
   const addTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -65,7 +67,7 @@ export const ProductSpotlight: React.FC<{ product: Product }> = ({ product }) =>
 
   const handlePrimaryAction = () => {
     if (!isAvailable || !canAddDirectly) {
-      navigate(`/product/${product.slug}`);
+      router.push(`/product/${product.slug}`);
       return;
     }
     if (cartActionLocked.current) return;
@@ -92,7 +94,7 @@ export const ProductSpotlight: React.FC<{ product: Product }> = ({ product }) =>
         <div className="pointer-events-none absolute -right-24 -top-28 h-72 w-72 rounded-full bg-rose-400/20 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-28 left-1/3 h-64 w-64 rounded-full bg-sky-400/20 blur-3xl" />
         <div className="relative grid items-center gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
-          <Link to={`/product/${product.slug}`} className="group block min-h-[300px] w-full overflow-hidden rounded-[26px] shadow-xl sm:min-h-[420px]" aria-label={`View ${product.name}`}>
+          <Link href={`/product/${product.slug}`} className="group block min-h-[300px] w-full overflow-hidden rounded-[26px] shadow-xl sm:min-h-[420px]" aria-label={`View ${product.name}`}>
             <img
               src={getSafeImageSrc(product.images?.[0])}
               alt={product.name}
@@ -154,7 +156,7 @@ export const ProductSpotlight: React.FC<{ product: Product }> = ({ product }) =>
                 {cartActionState === 'adding' ? <Loader2 className="h-5 w-5 animate-spin" /> : cartActionState === 'added' ? <Check className="h-5 w-5" /> : canAddDirectly ? <ShoppingBag className="h-5 w-5" /> : <PackageCheck className="h-5 w-5" />}
                 {cartActionState === 'adding' ? 'Adding...' : cartActionState === 'added' ? 'Added' : canAddDirectly ? isAvailable ? 'Add to Cart' : 'Out of Stock' : 'Choose Options'}
               </button>
-              <Link to={`/product/${product.slug}`} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-white/25 bg-white/10 px-6 text-sm font-black text-white backdrop-blur transition hover:bg-white/20">View Product <ArrowRight className="h-4 w-4" /></Link>
+              <Link href={`/product/${product.slug}`} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-white/25 bg-white/10 px-6 text-sm font-black text-white backdrop-blur transition hover:bg-white/20">View Product <ArrowRight className="h-4 w-4" /></Link>
             </div>
           </div>
         </div>

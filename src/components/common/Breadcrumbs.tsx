@@ -1,5 +1,7 @@
+"use client";
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter, usePathname, useParams } from 'next/navigation';
 import { ChevronRight, Home } from 'lucide-react';
 
 export interface BreadcrumbItem {
@@ -17,7 +19,7 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items }) => {
       <ol className="flex items-center flex-wrap gap-1.5 text-xs sm:text-sm font-medium text-slate-500">
         <li>
           <Link
-            to="/"
+            href="/"
             className="inline-flex items-center gap-1 hover:text-rose-500 transition-colors p-1 rounded-md hover:bg-rose-50"
           >
             <Home className="w-3.5 h-3.5" />
@@ -36,7 +38,7 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items }) => {
                 </span>
               ) : (
                 <Link
-                  to={item.path}
+                  href={item.path}
                   className="hover:text-rose-500 transition-colors p-1 rounded-md hover:bg-rose-50 line-clamp-1"
                 >
                   {item.label}

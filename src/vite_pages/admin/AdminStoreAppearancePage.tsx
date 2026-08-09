@@ -54,8 +54,8 @@ export const AdminStoreAppearancePage: React.FC = () => {
       if (!dirty) return;
       const anchor = (event.target as HTMLElement | null)?.closest('a');
       if (!anchor || anchor.target === '_blank') return;
-      const destination = new URL(anchor.href, window.location.href);
-      if (destination.origin !== window.location.origin || destination.pathname === window.location.pathname) return;
+      const destination = new URL(anchor.href, (typeof window !== 'undefined' ? window.location.href : ''));
+      if (destination.origin !== (typeof window !== 'undefined' ? window.location.origin : '') || destination.pathname === (typeof window !== 'undefined' ? window.location.pathname : '')) return;
       event.preventDefault(); event.stopPropagation();
       void confirm({ title: 'You have unsaved changes.', description: 'Leaving now will discard the appearance changes you have not saved.', cancelLabel: 'Stay on Page', confirmLabel: 'Discard Changes', destructive: true }).then(leave => { if (leave) window.location.assign(destination.href); });
     };

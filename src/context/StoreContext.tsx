@@ -1,3 +1,4 @@
+"use client";
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import {
   Product,
@@ -65,7 +66,7 @@ const consolidateCartItems = (items: unknown): CartItem[] => {
 
 const readStoredCart = (): CartItem[] => {
   try {
-    const saved = localStorage.getItem('playbimboo_cart');
+    const saved = (typeof window !== 'undefined' ? localStorage.getItem.bind(localStorage) : () => null)('playbimboo_cart');
     return saved ? consolidateCartItems(JSON.parse(saved)) : [];
   } catch {
     return [];
@@ -233,41 +234,41 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   // LocalStorage state initialization
   const [products, setProducts] = useState<Product[]>(() => {
-    const saved = localStorage.getItem('playbimboo_products');
+    const saved = (typeof window !== 'undefined' ? localStorage.getItem.bind(localStorage) : () => null)('playbimboo_products');
     const initialProducts = saved ? JSON.parse(saved) : [];
     return initialProducts.map(normalizeProduct);
   });
   const [productsLoading, setProductsLoading] = useState(true);
 
   const [categories, setCategories] = useState<Category[]>(() => {
-    const saved = localStorage.getItem('playbimboo_categories');
+    const saved = (typeof window !== 'undefined' ? localStorage.getItem.bind(localStorage) : () => null)('playbimboo_categories');
     const initialCategories = saved ? JSON.parse(saved) : INITIAL_CATEGORIES;
     return initialCategories.map(normalizeCategory);
   });
 
   const [orders, setOrders] = useState<Order[]>(() => {
-    const saved = localStorage.getItem('playbimboo_orders');
+    const saved = (typeof window !== 'undefined' ? localStorage.getItem.bind(localStorage) : () => null)('playbimboo_orders');
     const initialOrders = saved ? JSON.parse(saved) : INITIAL_ORDERS;
     return initialOrders.map(normalizeOrder);
   });
 
   const [customers, setCustomers] = useState<Customer[]>(() => {
-    const saved = localStorage.getItem('playbimboo_customers');
+    const saved = (typeof window !== 'undefined' ? localStorage.getItem.bind(localStorage) : () => null)('playbimboo_customers');
     return saved ? JSON.parse(saved) : INITIAL_CUSTOMERS;
   });
 
   const [coupons, setCoupons] = useState<Coupon[]>(() => {
-    const saved = localStorage.getItem('playbimboo_coupons');
+    const saved = (typeof window !== 'undefined' ? localStorage.getItem.bind(localStorage) : () => null)('playbimboo_coupons');
     return saved ? JSON.parse(saved) : INITIAL_COUPONS;
   });
 
   const [reviews, setReviews] = useState<Review[]>(() => {
-    const saved = localStorage.getItem('playbimboo_reviews');
+    const saved = (typeof window !== 'undefined' ? localStorage.getItem.bind(localStorage) : () => null)('playbimboo_reviews');
     return saved ? JSON.parse(saved) : INITIAL_REVIEWS;
   });
 
   const [settings, setSettings] = useState<StoreSettings>(() => {
-    const saved = localStorage.getItem('playbimboo_settings');
+    const saved = (typeof window !== 'undefined' ? localStorage.getItem.bind(localStorage) : () => null)('playbimboo_settings');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -279,7 +280,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         const settingsStr = JSON.stringify(parsed);
         const isStale = STALE_MARKERS.some(marker => settingsStr.includes(marker));
         if (isStale) {
-          localStorage.removeItem('playbimboo_settings');
+          (typeof window !== 'undefined' ? localStorage.removeItem.bind(localStorage) : () => {})('playbimboo_settings');
           return normalizeStoreSettings(INITIAL_SETTINGS);
         }
         if (parsed.freeShippingThreshold === 50) {
@@ -287,7 +288,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         }
         return normalizeStoreSettings(parsed);
       } catch {
-        localStorage.removeItem('playbimboo_settings');
+        (typeof window !== 'undefined' ? localStorage.removeItem.bind(localStorage) : () => {})('playbimboo_settings');
       }
     }
     return normalizeStoreSettings(INITIAL_SETTINGS);
@@ -298,7 +299,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   });
 
   const [wishlist, setWishlist] = useState<string[]>(() => {
-    const saved = localStorage.getItem('playbimboo_wishlist');
+    const saved = (typeof window !== 'undefined' ? localStorage.getItem.bind(localStorage) : () => null)('playbimboo_wishlist');
     return saved ? JSON.parse(saved) : [];
   });
 
@@ -391,35 +392,35 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   // Sync to localStorage
   useEffect(() => {
-    localStorage.setItem('playbimboo_products', JSON.stringify(products));
+    (typeof window !== 'undefined' ? localStorage.setItem.bind(localStorage) : () => {})('playbimboo_products', JSON.stringify(products));
   }, [products]);
 
   useEffect(() => {
-    localStorage.setItem('playbimboo_categories', JSON.stringify(categories));
+    (typeof window !== 'undefined' ? localStorage.setItem.bind(localStorage) : () => {})('playbimboo_categories', JSON.stringify(categories));
   }, [categories]);
 
   useEffect(() => {
-    localStorage.setItem('playbimboo_orders', JSON.stringify(orders));
+    (typeof window !== 'undefined' ? localStorage.setItem.bind(localStorage) : () => {})('playbimboo_orders', JSON.stringify(orders));
   }, [orders]);
 
   useEffect(() => {
-    localStorage.setItem('playbimboo_customers', JSON.stringify(customers));
+    (typeof window !== 'undefined' ? localStorage.setItem.bind(localStorage) : () => {})('playbimboo_customers', JSON.stringify(customers));
   }, [customers]);
 
   useEffect(() => {
-    localStorage.setItem('playbimboo_coupons', JSON.stringify(coupons));
+    (typeof window !== 'undefined' ? localStorage.setItem.bind(localStorage) : () => {})('playbimboo_coupons', JSON.stringify(coupons));
   }, [coupons]);
 
   useEffect(() => {
-    localStorage.setItem('playbimboo_reviews', JSON.stringify(reviews));
+    (typeof window !== 'undefined' ? localStorage.setItem.bind(localStorage) : () => {})('playbimboo_reviews', JSON.stringify(reviews));
   }, [reviews]);
 
   useEffect(() => {
-    localStorage.setItem('playbimboo_settings', JSON.stringify(settings));
+    (typeof window !== 'undefined' ? localStorage.setItem.bind(localStorage) : () => {})('playbimboo_settings', JSON.stringify(settings));
   }, [settings]);
 
   useEffect(() => {
-    localStorage.setItem('playbimboo_cart', JSON.stringify(cart));
+    (typeof window !== 'undefined' ? localStorage.setItem.bind(localStorage) : () => {})('playbimboo_cart', JSON.stringify(cart));
   }, [cart]);
 
   useEffect(() => {
@@ -436,7 +437,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('playbimboo_wishlist', JSON.stringify(wishlist));
+    (typeof window !== 'undefined' ? localStorage.setItem.bind(localStorage) : () => {})('playbimboo_wishlist', JSON.stringify(wishlist));
   }, [wishlist]);
 
   // Prune wishlist so it only ever reflects REAL, currently-existing products.

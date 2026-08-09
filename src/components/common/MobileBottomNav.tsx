@@ -1,12 +1,14 @@
+"use client";
 import React from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter, usePathname, useParams } from 'next/navigation';
 import { Home, LayoutGrid, ShoppingBag, Heart, User, Store, Info, Mail, Link2 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { orderedVisibleNavigation } from '../../config/storeAppearance';
 
 export const MobileBottomNav: React.FC = () => {
   const { cartTotalItems, wishlist, setIsCartOpen, settings, isCartOpen } = useStore();
-  const location = useLocation();
+  const pathname = usePathname();
 
   if (isCartOpen) return null;
 
@@ -52,8 +54,8 @@ export const MobileBottomNav: React.FC = () => {
           const destination = 'externalUrl' in item && (item as any).type === 'external_url' ? (item as any).externalUrl : item.path;
           const isActive = destination !== '#cart' && Boolean(destination) && (
             destination === '/'
-              ? location.pathname === '/' 
-              : location.pathname.startsWith(destination || '')
+              ? pathname === '/' 
+              : pathname.startsWith(destination || '')
           );
 
           if ('onClick' in item) {
@@ -95,9 +97,9 @@ export const MobileBottomNav: React.FC = () => {
           );
 
           return (
-            <NavLink
+            <Link
               key={item.key}
-              to={item.path || '/'}
+              href={item.path || '/'}
               className={({ isActive: linkActive }) => `
                 flex flex-col items-center justify-center py-1 transition-all relative
                 ${linkActive || isActive ? 'text-rose-600 font-bold' : 'text-slate-500 hover:text-slate-800 font-semibold'}
@@ -117,7 +119,7 @@ export const MobileBottomNav: React.FC = () => {
               {isActive && (
                 <span className="absolute top-0 w-8 h-0.5 bg-rose-500 rounded-full" />
               )}
-            </NavLink>
+            </Link>
           );
         })}
       </div>

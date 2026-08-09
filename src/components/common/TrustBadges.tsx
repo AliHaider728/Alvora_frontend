@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { ShieldCheck, Truck, RefreshCw, Gift } from 'lucide-react';
 

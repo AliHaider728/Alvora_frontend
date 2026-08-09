@@ -1,5 +1,7 @@
+"use client";
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter, usePathname, useParams } from 'next/navigation';
 import { X, ShoppingBag, Trash2, Plus, Minus, Tag, ArrowRight, ShieldCheck } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/formatters';
@@ -27,7 +29,7 @@ export const CartDrawer: React.FC = () => {
 
   useScrollLock(isCartOpen);
 
-  const navigate = useNavigate();
+  const router = useRouter();
 
   if (!isCartOpen) return null;
 
@@ -135,7 +137,7 @@ export const CartDrawer: React.FC = () => {
                     <div>
                       <div className="flex items-start justify-between gap-1">
                         <Link
-                          to={`/product/${item.product.slug}`}
+                          href={`/product/${item.product.slug}`}
                           onClick={() => setIsCartOpen(false)}
                           className="font-heading font-bold text-xs sm:text-sm text-slate-800 hover:text-rose-500 line-clamp-1"
                         >
@@ -272,7 +274,7 @@ export const CartDrawer: React.FC = () => {
               <button
                 onClick={() => {
                   setIsCartOpen(false);
-                  navigate('/checkout');
+                  router.push('/checkout');
                 }}
                 className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-rose-500 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white font-heading font-extrabold text-sm shadow-lg shadow-rose-200/60 flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-95"
               >

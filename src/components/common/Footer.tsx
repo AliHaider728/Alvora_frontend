@@ -1,5 +1,7 @@
+"use client";
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter, usePathname, useParams } from 'next/navigation';
 import {
   Mail,
   Phone,
@@ -183,31 +185,31 @@ export const Footer: React.FC = () => {
             </h4>
             <ul className="space-y-3 text-sm font-medium text-white/80">
               <li>
-                <Link to="/about" className="hover:text-rose-400 transition-colors relative group inline-block">
+                <Link href="/about" className="hover:text-rose-400 transition-colors relative group inline-block">
                   About Us
                   <span className="absolute left-0 -bottom-0.5 w-0 h-px bg-rose-400 transition-all group-hover:w-full" />
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="hover:text-rose-400 transition-colors relative group inline-block">
+                <Link href="/contact" className="hover:text-rose-400 transition-colors relative group inline-block">
                   Contact Us
                   <span className="absolute left-0 -bottom-0.5 w-0 h-px bg-rose-400 transition-all group-hover:w-full" />
                 </Link>
               </li>
               <li>
-                <Link to="/faq" className="hover:text-rose-400 transition-colors relative group inline-block">
+                <Link href="/faq" className="hover:text-rose-400 transition-colors relative group inline-block">
                   Frequently Asked Questions
                   <span className="absolute left-0 -bottom-0.5 w-0 h-px bg-rose-400 transition-all group-hover:w-full" />
                 </Link>
               </li>
               <li>
-                <Link to="/wishlist" className="hover:text-rose-400 transition-colors relative group inline-block">
+                <Link href="/wishlist" className="hover:text-rose-400 transition-colors relative group inline-block">
                   Saved Wishlist
                   <span className="absolute left-0 -bottom-0.5 w-0 h-px bg-rose-400 transition-all group-hover:w-full" />
                 </Link>
               </li>
               <li>
-                <Link to="/return-policy" className="hover:text-rose-400 transition-colors relative group inline-block">
+                <Link href="/return-policy" className="hover:text-rose-400 transition-colors relative group inline-block">
                   Return Policy
                   <span className="absolute left-0 -bottom-0.5 w-0 h-px bg-rose-400 transition-all group-hover:w-full" />
                 </Link>
@@ -251,7 +253,7 @@ export const Footer: React.FC = () => {
 
             {isLoggedIn ? (
               <Link
-                to="/account"
+                href="/account"
                 className="inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-linear-to-r from-rose-500 to-amber-500 hover:opacity-90 text-white font-heading font-bold text-xs shadow-md transition-opacity"
               >
                 <UserCircle2 className="w-3.5 h-3.5" />

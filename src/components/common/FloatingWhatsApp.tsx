@@ -1,16 +1,18 @@
+"use client";
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter, usePathname, useParams } from 'next/navigation';
 import { useStore } from '../../context/StoreContext';
 
 export const FloatingWhatsApp: React.FC = () => {
-  const location = useLocation();
+  const pathname = usePathname();
   const [isVisible, setIsVisible] = useState(true);
   const { isCartOpen } = useStore();
 
   useEffect(() => {
     const hiddenRoutes = ['/admin', '/checkout', '/login', '/product/'];
-    setIsVisible(!hiddenRoutes.some(route => location.pathname.startsWith(route)));
-  }, [location.pathname]);
+    setIsVisible(!hiddenRoutes.some(route => pathname.startsWith(route)));
+  }, [pathname]);
 
   if (!isVisible || isCartOpen) return null;
 

@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useRef, useState } from 'react';
 import { ImagePlus, Loader2, Trash2, X } from 'lucide-react';
 import { getSafeImageSrc } from '../../utils/images';

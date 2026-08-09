@@ -1,5 +1,7 @@
+"use client";
 import React, { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter, usePathname, useParams } from 'next/navigation';
 import { Heart, ShoppingBag, Eye, Check, Loader2 } from 'lucide-react';
 import { Product } from '../../types';
 import { useStore } from '../../context/StoreContext';
@@ -19,7 +21,7 @@ interface ProductCardProps {
 export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, layout = 'standard' }) => {
   const { addToCart, toggleWishlist, isInWishlist, settings } = useStore();
   const { showToast } = useToast();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [cartActionState, setCartActionState] = useState<'idle' | 'adding' | 'added'>('idle');
   const cartActionLocked = useRef(false);
   const addTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -85,7 +87,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
     e.stopPropagation();
     
     if (showViewProductOnly) {
-      navigate(`/product/${product.slug}`);
+      router.push(`/product/${product.slug}`);
       return;
     }
     
@@ -124,7 +126,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
       {/* ---------- IMAGE ---------- */}
       <div className="relative aspect-[1/1] w-full shrink-0 overflow-hidden bg-white">
         <Link
-          to={`/product/${product.slug}`}
+          href={`/product/${product.slug}`}
           className={`flex h-full w-full items-center justify-center ${compact ? 'p-2.5' : 'p-3 sm:p-4'}`}
           aria-label={`View ${product.name}`}
         >
@@ -213,7 +215,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
         </div>
 
         <Link
-          to={`/product/${product.slug}`}
+          href={`/product/${product.slug}`}
           className={`mt-2 line-clamp-2 font-bold leading-snug text-slate-900 transition-colors hover:text-rose-500 ${compact ? 'text-base sm:text-lg' : 'text-lg sm:text-xl'}`}
         >
           {product.name}
@@ -247,7 +249,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
         {/* ---------- ACTIONS ---------- */}
         <div className={`flex items-center gap-2 border-t border-slate-100 ${compact ? 'mt-3 pt-3' : 'mt-4 pt-4'}`}>
           <a
-            href={`https://wa.me/923107172222?text=${encodeURIComponent(`Hello, I am interested in this product:\nProduct: ${product.name}\nPrice: ${formatPrice(displayPrice, settings.currency)}\nLink: ${window.location.origin}/product/${product.slug}`)}`}
+            href={`https://wa.me/923107172222?text=${encodeURIComponent(`Hello, I am interested in this product:\nProduct: ${product.name}\nPrice: ${formatPrice(displayPrice, settings.currency)}\nLink: ${(typeof window !== 'undefined' ? window.location.origin : '')}/product/${product.slug}`)}`}
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}

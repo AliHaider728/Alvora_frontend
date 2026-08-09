@@ -1,3 +1,4 @@
+"use client";
 import React, { useMemo, useRef, useState } from 'react';
 import {
   ArrowDown, ArrowUp, ChevronDown, ChevronUp, Code2, Copy, ImagePlus,

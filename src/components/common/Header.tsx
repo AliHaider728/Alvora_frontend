@@ -1,5 +1,7 @@
+"use client";
 import React, { useState, useRef, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter, usePathname, useParams } from 'next/navigation';
 import {
   Search,
   ShoppingBag,
@@ -28,7 +30,7 @@ export const Header: React.FC = () => {
 
   const searchRef = useRef<HTMLDivElement>(null);
   const navigationRef = useRef<HTMLElement>(null);
-  const navigate = useNavigate();
+  const router = useRouter();
   const desktopNavigation = orderedVisibleNavigation(settings, 'desktop');
   const desktopRoots = desktopNavigation.filter(item => !item.parentId);
 
@@ -83,7 +85,7 @@ export const Header: React.FC = () => {
     e.preventDefault();
     if (searchQuery.trim()) {
       setIsSearchFocused(false);
-      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
     }
   };
 
@@ -209,7 +211,7 @@ export const Header: React.FC = () => {
                     {searchResults.map(prod => (
                       <Link
                         key={prod.id}
-                        to={`/product/${prod.slug}`}
+                        href={`/product/${prod.slug}`}
                         onClick={() => {
                           setIsSearchFocused(false);
                           setSearchQuery('');
@@ -247,7 +249,7 @@ export const Header: React.FC = () => {
 
             {/* Wishlist */}
             <Link
-              to="/wishlist"
+              href="/wishlist"
               className="hidden xl:flex items-center gap-2.5 group"
               title="Wishlist"
             >
@@ -282,5 +284,5 @@ const NavigationDestination: React.FC<{ item: StorefrontNavigationItem; classNam
   const content = <>{item.label}{item.badgeText && <span className="rounded-full bg-rose-100 px-1.5 py-0.5 text-[10px] font-black text-rose-600">{item.badgeText}</span>}</>;
   if (!item.enabled) return <span role="menuitem" aria-disabled="true" className={`${className} cursor-not-allowed text-slate-300`}>{content}</span>;
   if (item.linkType === 'external_url') return <a role="menuitem" href={item.externalUrl} target={item.openInNewTab ? '_blank' : undefined} rel={item.openInNewTab ? 'noopener noreferrer' : undefined} onClick={onNavigate} className={className}>{content}</a>;
-  return <Link role="menuitem" to={item.path || '/'} onClick={onNavigate} className={className}>{content}</Link>;
+  return <Link role="menuitem" href={item.path || '/'} onClick={onNavigate} className={className}>{content}</Link>;
 };

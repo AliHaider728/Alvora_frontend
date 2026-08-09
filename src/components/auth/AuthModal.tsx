@@ -1,9 +1,11 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import { X, Eye, EyeOff, AlertCircle, Loader2 } from 'lucide-react';
 import { api } from '../../services/api';
 import { useToast } from '../../context/ToastContext';
 import { useAuth } from '../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter, usePathname, useParams } from 'next/navigation';
 
 interface AuthModalProps {
   isOpen: boolean;

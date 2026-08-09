@@ -1,5 +1,7 @@
+"use client";
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter, usePathname, useParams } from 'next/navigation';
 import { useStore } from '../../context/StoreContext';
 import defaultLogoImg from '../../assets/images/play_bimboo_logo_1785311841625.webp';
 
@@ -21,7 +23,7 @@ export const Logo: React.FC<LogoProps> = ({ className = '', size = 'md' }) => {
   const logoSrc = settings.logoUrl || defaultLogoImg;
 
   return (
-    <Link to="/" className={`inline-flex items-center transition-all group ${className}`} title={settings.storeName || 'Play Bimboo'}>
+    <Link href="/" className={`inline-flex items-center transition-all group ${className}`} title={settings.storeName || 'Play Bimboo'}>
       {/* Brand Logo Image Only with transparent background */}
       <img
         src={logoSrc}

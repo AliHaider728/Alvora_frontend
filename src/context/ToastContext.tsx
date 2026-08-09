@@ -1,3 +1,4 @@
+"use client";
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { AlertCircle, CheckCircle2, Info, Loader2, TriangleAlert, X } from 'lucide-react';
 
