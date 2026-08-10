@@ -17,6 +17,7 @@ import {
   Plus
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
+import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 import { SeoHead } from '../../components/common/SeoHead';
 import { Breadcrumbs } from '../../components/common/Breadcrumbs';
@@ -47,6 +48,7 @@ export const CheckoutPageClient: React.FC = () => {
     updateCartQuantity
   } = useStore();
   const { showToast } = useToast();
+  const { customerProfile } = useAuth();
 
   useEffect(() => {
     if (cart.length === 0) return;
@@ -67,6 +69,13 @@ export const CheckoutPageClient: React.FC = () => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  
+  useEffect(() => {
+    if (customerProfile) {
+      setEmail(prev => prev || customerProfile.email || '');
+      setFullName(prev => prev || customerProfile.name || '');
+    }
+  }, [customerProfile]);
   const [street, setStreet] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
@@ -467,7 +476,7 @@ if (typeof window !== "undefined" && window.fbq) {
 
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-2">
                       <div>
-                        <label className="text-xs font-bold text-slate-700 block mb-1">Province / State (Optional)</label>
+                        <label className="text-xs font-bold text-slate-700 block mb-1">Province (Optional)</label>
                         <input
                           type="text"
                           value={state}
