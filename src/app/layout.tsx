@@ -3,6 +3,7 @@ import '../index.css';
 import { Providers } from './Providers';
 import { AuthModalWrapper } from './AuthModalWrapper';
 import { StorefrontLayoutWrapper } from '../components/common/StorefrontLayoutWrapper';
+import MetaPixel from '../components/analytics/MetaPixel';
 
 export const metadata = {
   title: 'Play Bimboo - Magical Toys, Games & Playland',
@@ -25,6 +26,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
       </head>
       <body className="font-sans antialiased bg-slate-50 text-slate-800 selection:bg-amber-200 selection:text-amber-900">
+        <MetaPixel />
         <Providers>
           <AuthModalWrapper />
           <StorefrontLayoutWrapper>

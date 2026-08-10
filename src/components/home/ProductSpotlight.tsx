@@ -9,6 +9,7 @@ import { formatPrice } from '../../utils/formatters';
 import { getSafeImageSrc } from '../../utils/images';
 import { formatProductAgeGroups, getEffectiveProductAvailability, normalizeInventory, getVariationDisplayLabel } from '../../utils/products';
 import { useToast } from '../../context/ToastContext';
+import { trackAddToCart } from "../../lib/metaPixel";
 
 export const ProductSpotlight: React.FC<{ product: Product }> = ({ product }) => {
   const { addToCart, settings } = useStore();
@@ -79,6 +80,15 @@ export const ProductSpotlight: React.FC<{ product: Product }> = ({ product }) =>
       } else {
         addToCart(product, 1);
       }
+
+      trackAddToCart({
+        id: product.id,
+        name: product.name,
+        price: currentPrice,
+        quantity: 1,
+        currency: settings.currency || "PKR",
+      });
+
       showToast(`Added ${product.name} to cart.`, 'success');
       setCartActionState('added');
       resetTimerRef.current = setTimeout(() => {
