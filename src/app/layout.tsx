@@ -9,7 +9,9 @@ export const metadata = {
   title: 'Play Bimboo - Magical Toys, Games & Playland',
   description: 'Discover endless play with Play Bimboo! Shop action figures, educational toys, board games, plush soft toys, and outdoor play.',
   icons: {
-    icon: '/logo.jpg',
+    icon: [
+      { url: '/logo.jpg', type: 'image/jpeg' }
+    ]
   }
 };
 
