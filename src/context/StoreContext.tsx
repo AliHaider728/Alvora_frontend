@@ -651,12 +651,20 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   const placeOrder = async (orderData: Omit<Order, 'id' | 'date'>) => {
-    const savedOrder = await api.createOrder({
+    const response = await api.createOrder({
       ...orderData,
       deliveryCharge: orderData.shipping,
       discountAmount: orderData.discount
     });
-    if (!savedOrder) return null;
+    if (!response) return null;
+
+    const savedOrder = response.order ? response.order : response;
+
+    if (response.token && typeof window !== 'undefined') {
+      const { setAuthToken } = require('../services/api');
+      setAuthToken(response.token);
+      window.dispatchEvent(new Event('pb-auth-changed'));
+    }
 
     const newOrder = normalizeOrder(savedOrder);
     setOrders(prev => [newOrder, ...prev]);
