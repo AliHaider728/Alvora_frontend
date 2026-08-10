@@ -75,7 +75,7 @@ async function fetchJson<T>(endpoint: string, options?: RequestInit): Promise<T 
     return await res.json();
   } catch (err: any) {
     lastApiError = err.message || 'Request failed';
-    console.warn(`[Backend API Warning] ${endpoint}:`, err.message);
+    console.error(`[Backend API Error] fetchJson failed for ${endpoint}:`, err);
     return null;
   }
 }

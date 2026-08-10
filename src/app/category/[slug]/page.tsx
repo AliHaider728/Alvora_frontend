@@ -1,5 +1,8 @@
+export const dynamic = 'force-dynamic';
 import { CategoryPageClient } from "./CategoryPageClient";
 import { api } from "../../../services/api";
+
+import { notFound } from "next/navigation";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const slug = (await params).slug;
@@ -8,12 +11,16 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
   try {
     const categories = await api.getCategories();
-    const cat = categories.find((c: any) => c.slug === slug);
-    if (cat) {
-      return { 
-        title: `${cat.name} | PlayBimboo`,
-        description: cat.description || `Explore our selection of ${cat.name} toys.`
-      };
+    if (!categories) {
+      console.error(`[generateMetadata] api.getCategories returned null`);
+    } else {
+      const cat = categories.find((c: any) => c.slug === slug);
+      if (cat) {
+        return { 
+          title: `${cat.name} | PlayBimboo`,
+          description: cat.description || `Explore our selection of ${cat.name} toys.`
+        };
+      }
     }
   } catch (e) {}
   
