@@ -38,8 +38,8 @@ const safeApiError = (status: number, backendMessage?: string) => {
     !/stack|mongodb|mongoose|smtp|cloudinary.*secret|api[_ -]?secret|node_modules|\\|\/src\//i.test(backendMessage)
     ? backendMessage : '';
   if (status === 400) return safeBackend || 'Please check the submitted information.';
-  if (status === 401) return 'Session expired. Please sign in again.';
-  if (status === 403) return 'You do not have permission to perform this action.';
+  if (status === 401) return safeBackend || 'Session expired. Please sign in again.';
+  if (status === 403) return safeBackend || 'You do not have permission to perform this action.';
   if (status === 404) return safeBackend || 'Requested item was not found.';
   if (status === 409) return safeBackend || 'This change conflicts with existing data.';
   if (status === 413) return 'File is too large.';
