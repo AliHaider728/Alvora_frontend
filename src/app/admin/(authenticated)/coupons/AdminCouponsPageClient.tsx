@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-import { Plus, Tag, Trash2, X, Percent, Check } from 'lucide-react';
+import { Plus, Trash2, X, Edit, Power, PowerOff } from 'lucide-react';
 import { useStore } from '../../../../context/StoreContext';
 import { Coupon } from '../../../../types';
 
@@ -15,25 +15,68 @@ export const AdminCouponsPageClient: React.FC = () => {
   const { confirm } = useDialog();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editId, setEditId] = useState<string | null>(null);
   const [code, setCode] = useState('');
   const [discountType, setDiscountType] = useState<'percentage' | 'flat'>('percentage');
   const [amount, setAmount] = useState(10);
   const [minSpend, setMinSpend] = useState(30);
   const [expiryDate, setExpiryDate] = useState('2026-12-31');
 
-  const handleCreate = async (e: React.FormEvent) => {
+  const openCreateModal = () => {
+    setEditId(null);
+    setCode('');
+    setDiscountType('percentage');
+    setAmount(10);
+    setMinSpend(30);
+    setExpiryDate('2026-12-31');
+    setIsModalOpen(true);
+  };
+
+  const openEditModal = (coup: Coupon) => {
+    setEditId(coup.id);
+    setCode(coup.code);
+    setDiscountType(coup.discountType);
+    setAmount(coup.amount);
+    setMinSpend(coup.minSpend);
+    setExpiryDate(coup.expiryDate || '');
+    setIsModalOpen(true);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const saved = await addCoupon({
-      code: code.toUpperCase(),
-      discountType,
-      amount: Number(amount),
-      minSpend: Number(minSpend),
-      expiryDate,
-      usageLimit: 500,
-      isActive: true
-    });
-    if (!saved) { showToast(getLastApiError() || 'Could not create the coupon.', 'error'); return; }
-    setIsModalOpen(false); setCode(''); showToast('Coupon created successfully.', 'success');
+    if (editId) {
+      const updated = await updateCoupon(editId, {
+        code: code.toUpperCase(),
+        discountType,
+        amount: Number(amount),
+        minSpend: Number(minSpend),
+        expiryDate
+      });
+      if (!updated) { showToast(getLastApiError() || 'Could not update coupon.', 'error'); return; }
+      showToast('Coupon updated successfully.', 'success');
+    } else {
+      const saved = await addCoupon({
+        code: code.toUpperCase(),
+        discountType,
+        amount: Number(amount),
+        minSpend: Number(minSpend),
+        expiryDate,
+        usageLimit: 500,
+        isActive: true
+      });
+      if (!saved) { showToast(getLastApiError() || 'Could not create the coupon.', 'error'); return; }
+      showToast('Coupon created successfully.', 'success');
+    }
+    setIsModalOpen(false);
+  };
+
+  const toggleStatus = async (coup: Coupon) => {
+    const updated = await updateCoupon(coup.id, { isActive: !coup.isActive });
+    if (!updated) {
+      showToast(getLastApiError() || 'Could not update status.', 'error');
+    } else {
+      showToast(`Coupon ${updated.isActive ? 'enabled' : 'disabled'}.`, 'success');
+    }
   };
 
   const removeCoupon = async (coupon: Coupon) => {
@@ -52,7 +95,7 @@ export const AdminCouponsPageClient: React.FC = () => {
           <p className="text-xs text-slate-500 font-medium">Create promotional discount codes and percentage vouchers.</p>
         </div>
         <button
-          onClick={() => setIsModalOpen(true)}
+          onClick={openCreateModal}
           className="px-5 py-2.5 rounded-2xl bg-rose-500 text-white font-heading font-bold text-xs flex items-center gap-2 shadow-md"
         >
           <Plus className="w-4 h-4" />
@@ -80,7 +123,21 @@ export const AdminCouponsPageClient: React.FC = () => {
               <p className="text-slate-400 text-[11px]">Used {coup.usedCount} times &bull; Expires {coup.expiryDate}</p>
             </div>
 
-            <div className="flex justify-end pt-2 border-t border-slate-100">
+            <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
+              <button
+                onClick={() => toggleStatus(coup)}
+                className={`p-1.5 rounded-lg text-xs flex items-center gap-1 font-bold ${coup.isActive ? 'text-amber-500 hover:bg-amber-50' : 'text-emerald-500 hover:bg-emerald-50'}`}
+              >
+                {coup.isActive ? <PowerOff className="w-3.5 h-3.5" /> : <Power className="w-3.5 h-3.5" />}
+                <span>{coup.isActive ? 'Disable' : 'Enable'}</span>
+              </button>
+              <button
+                onClick={() => openEditModal(coup)}
+                className="p-1.5 text-sky-500 hover:bg-sky-50 rounded-lg text-xs flex items-center gap-1 font-bold"
+              >
+                <Edit className="w-3.5 h-3.5" />
+                <span>Edit</span>
+              </button>
               <button
                 onClick={() => { void removeCoupon(coup); }}
                 className="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg text-xs flex items-center gap-1 font-bold"
@@ -97,13 +154,13 @@ export const AdminCouponsPageClient: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
           <div className="bg-white rounded-3xl max-w-md w-full p-6 relative shadow-2xl border border-slate-100 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="font-heading font-black text-lg text-slate-900">Create Promo Code</h3>
+              <h3 className="font-heading font-black text-lg text-slate-900">{editId ? 'Edit Promo Code' : 'Create Promo Code'}</h3>
               <button onClick={() => setIsModalOpen(false)} className="p-1 text-slate-400">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleCreate} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="text-xs font-bold text-slate-700 block mb-1">Coupon Code</label>
                 <input
@@ -175,7 +232,7 @@ export const AdminCouponsPageClient: React.FC = () => {
                   type="submit"
                   className="px-5 py-2 rounded-xl bg-rose-500 text-white font-bold text-xs shadow-md"
                 >
-                  Create Coupon
+                  {editId ? 'Update Coupon' : 'Create Coupon'}
                 </button>
               </div>
             </form>
