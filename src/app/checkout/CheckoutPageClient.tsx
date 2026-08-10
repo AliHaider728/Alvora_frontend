@@ -213,6 +213,26 @@ export const CheckoutPageClient: React.FC = () => {
       showToast('The order could not be placed. Please recheck stock and try again.', 'error');
       return;
     }
+
+    // Meta Pixel - Purchase
+    if (typeof window !== "undefined" && window.fbq) {
+      window.fbq("track", "Purchase", {
+        content_ids: created.items.map((item) => item.productId),
+        contents: created.items.map((item) => ({
+          id: item.productId,
+          quantity: item.quantity,
+          item_price: item.price,
+        })),
+        content_type: "product",
+        num_items: created.items.reduce(
+          (total, item) => total + item.quantity,
+          0
+        ),
+        value: created.total,
+        currency: settings.currency || "PKR",
+      });
+    }
+
     ((typeof window !== "undefined") ? sessionStorage : null)?.removeItem('pb_checkout_request_id');
     setCompletedOrder(created);
     setCurrentStep(2);
