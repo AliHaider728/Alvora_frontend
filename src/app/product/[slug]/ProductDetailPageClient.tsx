@@ -50,6 +50,12 @@ import { getSafeImageSrc } from '../../../utils/images';
 const getPlainDescription = (description: string) =>
   description.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 
+declare global {
+  interface Window {
+    fbq?: (...args: any[]) => void;
+  }
+}
+
 export const ProductDetailPageClient: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const { products, productsLoading, addToCart, toggleWishlist, isInWishlist, refreshProducts, settings, submitCustomerReview } = useStore();
@@ -138,7 +144,7 @@ export const ProductDetailPageClient: React.FC = () => {
     cartActionLocked.current = false;
     if (addTimerRef.current) { clearTimeout(addTimerRef.current); addTimerRef.current = null; }
     if (resetTimerRef.current) { clearTimeout(resetTimerRef.current); resetTimerRef.current = null; }
-    // Gallery zoom & lightbox
+    // Gallery zoom & lightbox  
     setIsZooming(false);
     setZoomOrigin('50% 50%');
     setLightboxOpen(false);
@@ -369,6 +375,18 @@ export const ProductDetailPageClient: React.FC = () => {
       : 0;
     currentPrice = product.price + totalVariantOffset;
   }
+
+  useEffect(() => {
+    if (!product?.id) return;
+    if (typeof window === "undefined" || !window.fbq) return;
+    window.fbq("track", "ViewContent", {
+      content_ids: [product.id],
+      content_name: product.name,
+      content_type: "product",
+      value: currentPrice,
+      currency: settings.currency || "PKR",
+    });
+  }, [product?.id]);
 
   const variantGroups = (product.variants || []).filter(group => group.options.length > 0);
   const allVariantsSelected = isVariable
