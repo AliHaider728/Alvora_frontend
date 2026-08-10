@@ -8,6 +8,7 @@ import { formatPrice } from '../../utils/formatters';
 import { getSafeImageSrc } from '../../utils/images';
 import { getVariationDisplayLabel } from '../../utils/products';
 import { useScrollLock } from '../../hooks/useScrollLock';
+import { trackInitiateCheckout } from "@/lib/metaPixel";
 
 export const CartDrawer: React.FC = () => {
   const {
@@ -273,6 +274,14 @@ export const CartDrawer: React.FC = () => {
             <div className="pt-2 flex flex-col gap-2">
               <button
                 onClick={() => {
+                  trackInitiateCheckout({
+                    items: cart.map((item) => ({
+                      id: item.product.id,
+                      quantity: item.quantity,
+                    })),
+                    value: cartSubtotal,
+                    currency: settings.currency || "PKR",
+                  });
                   setIsCartOpen(false);
                   router.push('/checkout');
                 }}

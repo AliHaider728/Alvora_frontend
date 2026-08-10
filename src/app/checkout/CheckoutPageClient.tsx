@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from "next/link";
 
 import {
@@ -24,6 +24,7 @@ import { Order } from '../../types';
 import { formatPrice } from '../../utils/formatters';
 import { getProductDeliveryType } from '../../utils/products';
 import { getSafeImageSrc } from '../../utils/images';
+import { trackInitiateCheckout } from "@/lib/metaPixel";
 
 export const CheckoutPageClient: React.FC = () => {
   const [checkoutRequestId] = useState(() => {
@@ -46,6 +47,18 @@ export const CheckoutPageClient: React.FC = () => {
     updateCartQuantity
   } = useStore();
   const { showToast } = useToast();
+
+  useEffect(() => {
+    if (cart.length === 0) return;
+    trackInitiateCheckout({
+      items: cart.map((item) => ({
+        id: item.product.id,
+        quantity: item.quantity,
+      })),
+      value: cartSubtotal,
+      currency: settings.currency || "PKR",
+    });
+  }, []);
 
   // Multi-step state: 1: Shipping & Customer, 2: Confirmation
   const [currentStep, setCurrentStep] = useState<1 | 2>(1);
