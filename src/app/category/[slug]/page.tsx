@@ -30,5 +30,16 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+  const slug = (await params).slug;
+
+  if (slug !== 'all') {
+    const categories = await api.getCategories();
+    const cat = categories?.find((c: any) => c.slug === slug);
+    if (!cat) {
+      console.error(`[Page] Category not found for slug: ${slug}`);
+      notFound();
+    }
+  }
+
   return <CategoryPageClient />;
 }
