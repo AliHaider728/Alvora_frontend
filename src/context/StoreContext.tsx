@@ -186,7 +186,7 @@ export interface StoreContextType {
 
   // Coupon
   appliedCoupon: Coupon | null;
-  applyCoupon: (code: string) => { success: boolean; message: string };
+  applyCoupon: (code: string) => Promise<{ success: boolean; message: string }>;
   removeCoupon: () => void;
   couponDiscountAmount: number;
 
@@ -534,20 +534,29 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, 0);
 
   // Coupon application logic
-  const applyCoupon = (code: string) => {
+  const applyCoupon = async (code: string) => {
     const trimmed = code.trim().toUpperCase();
-    const found = coupons.find(c => c.code.toUpperCase() === trimmed && c.isActive);
-    if (!found) {
-      return { success: false, message: 'Invalid or expired coupon code.' };
+    try {
+      const { api } = require('../services/api');
+      const res = await api.validateCoupon(trimmed, cartSubtotal);
+      if (res.valid) {
+        setAppliedCoupon({
+          id: res.code,
+          code: res.code,
+          discountType: res.discountType === 'percentage' ? 'percentage' : 'flat',
+          amount: res.discountValue,
+          minSpend: 0,
+          expiryDate: '',
+          usageLimit: 0,
+          usedCount: 0,
+          isActive: true
+        });
+        return { success: true, message: `Coupon ${res.code} applied successfully!` };
+      }
+    } catch (err: any) {
+      return { success: false, message: err.message || 'Invalid or expired coupon code.' };
     }
-    if (cartSubtotal < found.minSpend) {
-      return {
-        success: false,
-        message: `Minimum spend of ${formatPrice(found.minSpend)} required for this code.`
-      };
-    }
-    setAppliedCoupon(found);
-    return { success: true, message: `Coupon ${found.code} applied successfully!` };
+    return { success: false, message: 'Invalid or expired coupon code.' };
   };
 
   const removeCoupon = () => {

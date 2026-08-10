@@ -34,10 +34,10 @@ export const CartDrawer: React.FC = () => {
 
   if (!isCartOpen) return null;
 
-  const handleApplyCoupon = (e: React.FormEvent) => {
+  const handleApplyCoupon = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!couponCodeInput) return;
-    const res = applyCoupon(couponCodeInput);
+    const res = await applyCoupon(couponCodeInput);
     setCouponMsg(res);
     if (res.success) {
       setCouponCodeInput('');
