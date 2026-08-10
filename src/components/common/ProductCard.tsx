@@ -11,6 +11,7 @@ import { ProductImage } from './ProductImage';
 import { formatProductAgeGroups, formatProductCategories, getEffectiveProductAvailability, normalizeInventory } from '../../utils/products';
 import { ReviewSummary } from './ReviewSummary';
 import { useToast } from '../../context/ToastContext';
+import { trackAddToCart } from "../../lib/metaPixel";
 
 interface ProductCardProps {
   product: Product;
@@ -104,6 +105,19 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
       } else {
         addToCart(product, 1);
       }
+      
+      const priceToAdd = variationToUse 
+        ? (variationToUse.salePrice !== undefined && variationToUse.salePrice !== null ? variationToUse.salePrice : variationToUse.regularPrice) 
+        : product.price;
+
+      trackAddToCart({
+        id: product.id,
+        name: product.name,
+        price: priceToAdd || product.price,
+        quantity: 1,
+        currency: settings.currency || "PKR",
+      });
+
       showToast(`Added ${product.name} to cart.`, 'success');
       setCartActionState('added');
       resetTimerRef.current = setTimeout(() => {

@@ -21,6 +21,7 @@ import {
   ZoomIn,
   Loader2
 } from 'lucide-react';
+import { trackAddToCart } from "../../../lib/metaPixel";
 import { useStore } from '../../../context/StoreContext';
 import { useToast } from '../../../context/ToastContext';
 import { ProductCard } from '../../../components/common/ProductCard';
@@ -438,6 +439,13 @@ export const ProductDetailPageClient: React.FC = () => {
         const productToCart = totalVariantOffset ? { ...product, price: currentPrice } : product;
         addToCart(productToCart, quantity, formattedVariantString || undefined);
       }
+      trackAddToCart({
+        id: product.id,
+        name: product.name,
+        price: currentPrice,
+        quantity,
+        currency: settings.currency || "PKR",
+      });
       showToast(`Added ${quantity} x ${product.name} to cart.`, 'success');
       setCartActionState('added');
       resetTimerRef.current = setTimeout(() => {
