@@ -1,11 +1,12 @@
 import { execSync } from 'node:child_process';
-import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const rootDir = join(dirname(fileURLToPath(import.meta.url)), '..');
 const deployDir = join(rootDir, '..', 'deploy', 'playBimboo-frontend');
 const standaloneDir = join(rootDir, '.next', 'standalone');
+const zipPath = join(rootDir, '..', 'playBimboo-frontend-cpanel.zip');
 
 const cpanelServerWrapper = `'use strict';
 
@@ -16,6 +17,7 @@ const Module = require('module');
 const appRoot = __dirname;
 const localModules = path.join(appRoot, 'node_modules');
 const nextEntry = path.join(localModules, 'next', 'dist', 'server', 'next.js');
+const findUp = path.join(localModules, 'next', 'dist', 'compiled', 'find-up');
 
 process.chdir(appRoot);
 
@@ -24,9 +26,10 @@ process.env.NODE_PATH = [localModules, process.env.NODE_PATH]
   .join(path.delimiter);
 Module._initPaths();
 
-if (!fs.existsSync(nextEntry)) {
-  console.error('Missing bundled Next.js runtime:', nextEntry);
-  console.error('Re-upload the full zip and do NOT click Run NPM Install on cPanel.');
+if (!fs.existsSync(nextEntry) || !fs.existsSync(findUp)) {
+  console.error('Incomplete Next.js package detected.');
+  console.error('Expected:', findUp);
+  console.error('Delete node_modules, re-extract the full zip, and do NOT run NPM Install.');
   process.exit(1);
 }
 
@@ -90,6 +93,12 @@ startServer({
 
 const runtimePackages = ['next', 'react', 'react-dom', 'scheduler', 'styled-jsx'];
 
+function assertExists(filePath, label) {
+  if (!existsSync(filePath)) {
+    throw new Error(`Missing ${label}: ${filePath}`);
+  }
+}
+
 console.log('Building Next.js production bundle...');
 execSync('npm run build', { cwd: rootDir, stdio: 'inherit' });
 
@@ -111,11 +120,15 @@ if (existsSync(join(rootDir, '.env.production'))) {
   cpSync(join(rootDir, '.env.production'), join(deployDir, '.env'));
 }
 
-console.log('Copying full runtime packages (prevents incomplete cPanel npm installs)...');
+console.log('Copying full runtime packages...');
 for (const pkg of runtimePackages) {
   const source = join(rootDir, 'node_modules', pkg);
   if (!existsSync(source)) continue;
-  cpSync(source, join(deployDir, 'node_modules', pkg), { recursive: true });
+  const target = join(deployDir, 'node_modules', pkg);
+  if (existsSync(target)) {
+    rmSync(target, { recursive: true, force: true });
+  }
+  cpSync(source, target, { recursive: true });
 }
 
 writeFileSync(join(deployDir, 'server.js'), cpanelServerWrapper);
@@ -140,34 +153,57 @@ writeFileSync(
 );
 
 writeFileSync(join(deployDir, '.npmrc'), 'engine-strict=false\n');
+writeFileSync(
+  join(deployDir, 'CPANEL-README.txt'),
+  [
+    '1. Delete ALL old files in the app root, including node_modules.',
+    '2. Upload this zip and extract into the app root (flat, no subfolder).',
+    '3. Startup file = server.js',
+    '4. Node version = 20.x preferred.',
+    '5. Do NOT click Run NPM Install.',
+    '6. Start the app.',
+    '',
+    'If stderr shows missing next/dist/compiled/*, extraction was incomplete.',
+  ].join('\n')
+);
 
 const requiredFiles = [
-  join(deployDir, 'node_modules', 'next', 'dist', 'server', 'next.js'),
-  join(deployDir, 'node_modules', 'next', 'dist', 'server', 'lib', 'start-server.js'),
-  join(deployDir, '.next', 'required-server-files.json'),
+  [join(deployDir, 'node_modules', 'next', 'dist', 'server', 'next.js'), 'next.js'],
+  [join(deployDir, 'node_modules', 'next', 'dist', 'server', 'lib', 'start-server.js'), 'start-server.js'],
+  [join(deployDir, 'node_modules', 'next', 'dist', 'compiled', 'find-up'), 'find-up'],
+  [join(deployDir, '.next', 'required-server-files.json'), 'required-server-files.json'],
 ];
 
-for (const filePath of requiredFiles) {
-  if (!existsSync(filePath)) {
-    throw new Error(`Missing deployment file: ${filePath}`);
-  }
+for (const [filePath, label] of requiredFiles) {
+  assertExists(filePath, label);
 }
 
-const zipPath = join(rootDir, '..', 'playBimboo-frontend-cpanel.zip');
 if (existsSync(zipPath)) {
   rmSync(zipPath, { force: true });
 }
 
-console.log('Creating flat cPanel zip (no subfolder)...');
-if (process.platform === 'win32') {
-  const psDeployDir = deployDir.replace(/'/g, "''");
-  const psZipPath = zipPath.replace(/'/g, "''");
-  execSync(
-    `powershell -NoProfile -Command "Compress-Archive -Path '${psDeployDir}\\*' -DestinationPath '${psZipPath}' -Force"`,
-    { stdio: 'inherit' }
-  );
-} else {
-  execSync(`cd "${deployDir}" && zip -r "${zipPath}" .`, { stdio: 'inherit' });
+console.log('Creating flat zip with tar (more reliable than Compress-Archive)...');
+execSync(`tar -a -c -f "${zipPath}" -C "${deployDir}" .`, { stdio: 'inherit' });
+
+console.log('Verifying critical files inside zip...');
+const zipList = execSync(`tar -tf "${zipPath}"`, { encoding: 'utf8' });
+const mustContain = [
+  './node_modules/next/dist/compiled/find-up',
+  './node_modules/next/dist/server/next.js',
+  './server.js',
+  './next-server.js',
+];
+
+for (const entry of mustContain) {
+  const normalized = entry.replace(/^\.\//, '');
+  const found =
+    zipList.includes(entry) ||
+    zipList.includes(normalized) ||
+    zipList.includes(entry.replace(/\//g, '\\')) ||
+    zipList.includes(normalized.replace(/\//g, '\\'));
+  if (!found) {
+    throw new Error(`Zip is incomplete. Missing: ${entry}`);
+  }
 }
 
 console.log(`cPanel deploy folder ready: ${deployDir}`);
