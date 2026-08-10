@@ -1,6 +1,9 @@
+export const dynamic = 'force-dynamic';
 import { ProductDetailPageClient } from "./ProductDetailPageClient";
 import { api } from "../../../services/api";
 import { getEffectiveProductAvailability } from "../../../utils/products";
+
+import { notFound } from "next/navigation";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const slug = (await params).slug;
@@ -9,7 +12,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   try {
     const product = await api.getProduct(slug);
-    if (!product) throw new Error('Not found');
+    if (!product) {
+      console.error(`[generateMetadata] api.getProduct returned null for slug: ${slug}`);
+      return { title: `${slug} | PlayBimboo` };
+    }
 
     const finalTitle = product.metaTitle || `${product.name} | PlayBimboo`;
     const finalDesc = product.metaDescription || product.shortDescription || product.description || defaultDesc;
@@ -42,6 +48,10 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   
   try {
     const product = await api.getProduct(slug);
+    if (!product) {
+      console.error(`[Page] api.getProduct returned null for slug: ${slug}`);
+      notFound();
+    }
     if (product) {
       schemaData = {
         "@context": "https://schema.org/",
@@ -77,7 +87,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       }
     }
   } catch (e) {
-    // Ignore error
+    console.error(`[Page] Error fetching product for slug ${slug}:`, e);
+    notFound();
   }
 
   return (

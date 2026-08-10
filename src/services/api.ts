@@ -1,5 +1,5 @@
 // PlayBimboo Unified Backend API Client
-export const API_BASE_URL = (typeof process !== 'undefined' ? process.env.NEXT_PUBLIC_API_URL : (import.meta as any).env?.VITE_API_URL) || 'http://localhost:5000/api';
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
 // Helper for Token Management
 export const getAuthToken = (): string | null => {
@@ -75,7 +75,7 @@ async function fetchJson<T>(endpoint: string, options?: RequestInit): Promise<T 
     return await res.json();
   } catch (err: any) {
     lastApiError = err.message || 'Request failed';
-    console.warn(`[Backend API Warning] ${endpoint}:`, err.message);
+    console.error(`[Backend API Error] fetchJson failed for ${endpoint}:`, err);
     return null;
   }
 }

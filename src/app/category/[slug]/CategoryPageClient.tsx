@@ -24,7 +24,7 @@ const sameSelections = (left: string[], right: string[]) =>
   left.length === right.length && left.every((value, index) => value === right[index]);
 
 export const CategoryPageClient: React.FC = () => {
-  const { categorySlug } = useParams<{ categorySlug?: string }>();
+  const { slug: categorySlug } = useParams<{ slug?: string }>();
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
