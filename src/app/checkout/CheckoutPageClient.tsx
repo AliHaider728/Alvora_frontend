@@ -47,8 +47,8 @@ export const CheckoutPageClient: React.FC = () => {
   } = useStore();
   const { showToast } = useToast();
 
-  // Multi-step state: 1: Shipping & Customer, 2: Payment Review (COD), 3: Confirmation
-  const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
+  // Multi-step state: 1: Shipping & Customer, 2: Confirmation
+  const [currentStep, setCurrentStep] = useState<1 | 2>(1);
 
   // Form states
   const [fullName, setFullName] = useState('');
@@ -114,21 +114,20 @@ export const CheckoutPageClient: React.FC = () => {
   const taxFee = Math.round(cartSubtotal * settings.taxRate);
   const finalTotal = Math.max(0, cartSubtotal - couponDiscountAmount + shippingFee + taxFee);
 
-  const handleShippingSubmit = (e: React.FormEvent) => {
+  const handleShippingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (deliveryUnavailable) {
       showToast('One or more products are not available for delivery.', 'error');
       return;
     }
     if (fullName.trim() && phone.trim() && street.trim() && city.trim()) {
-      setCurrentStep(2);
+      await handlePaymentSubmit();
     } else {
       showToast('Please fill in all required shipping fields', 'error');
     }
   };
 
-  const handlePaymentSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handlePaymentSubmit = async () => {
     if (isPlacingOrder) return;
     setIsPlacingOrder(true);
     const created = await placeOrder({
@@ -203,7 +202,7 @@ export const CheckoutPageClient: React.FC = () => {
     }
     ((typeof window !== "undefined") ? sessionStorage : null)?.removeItem('pb_checkout_request_id');
     setCompletedOrder(created);
-    setCurrentStep(3);
+    setCurrentStep(2);
     const confirmationEmailSent = Boolean(created.confirmationEmailSentAt && created.confirmationEmailAccepted !== false);
     showToast(!email.trim()
       ? 'Order confirmed successfully.'
@@ -213,7 +212,7 @@ export const CheckoutPageClient: React.FC = () => {
       !email.trim() || confirmationEmailSent ? 'success' : 'warning');
   };
 
-  if (cart.length === 0 && currentStep !== 3) {
+  if (cart.length === 0 && currentStep !== 2) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">
         <div className="w-16 h-16 rounded-full bg-rose-50 text-rose-400 flex items-center justify-center mb-4">
@@ -252,45 +251,26 @@ export const CheckoutPageClient: React.FC = () => {
               <span className="text-center text-[10px] leading-tight sm:text-xs font-heading font-bold text-slate-800">Delivery Address</span>
             </div>
 
-            <div className={`mt-3.5 sm:mt-[18px] min-w-2 flex-1 h-1 mx-1 sm:mx-2 rounded-full ${currentStep >= 2 ? 'bg-rose-500' : 'bg-slate-200'}`} />
+            <div className={`mt-3.5 sm:mt-[18px] min-w-2 flex-1 h-1 mx-1 sm:mx-2 rounded-full ${currentStep === 2 ? 'bg-rose-500' : 'bg-slate-200'}`} />
 
             {/* Step 2 */}
             <div className="flex w-[72px] shrink-0 flex-col items-center gap-1 z-10 sm:w-auto">
               <div
                 className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-heading font-black text-xs transition-all ${
-                  currentStep >= 2
-                    ? 'bg-rose-500 text-white shadow-md shadow-rose-200'
-                    : 'bg-slate-100 text-slate-400'
-                }`}
-              >
-                {currentStep > 2 ? <Check className="w-5 h-5" /> : 2}
-              </div>
-              <span className="text-center text-[10px] leading-tight sm:text-xs font-heading font-bold text-slate-800">
-                <span className="sm:hidden">COD</span>
-                <span className="hidden sm:inline">Cash on Delivery (COD)</span>
-              </span>
-            </div>
-
-            <div className={`mt-3.5 sm:mt-[18px] min-w-2 flex-1 h-1 mx-1 sm:mx-2 rounded-full ${currentStep === 3 ? 'bg-rose-500' : 'bg-slate-200'}`} />
-
-            {/* Step 3 */}
-            <div className="flex w-[72px] shrink-0 flex-col items-center gap-1 z-10 sm:w-auto">
-              <div
-                className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-heading font-black text-xs transition-all ${
-                  currentStep === 3
+                  currentStep === 2
                     ? 'bg-emerald-500 text-white shadow-md shadow-emerald-200'
                     : 'bg-slate-100 text-slate-400'
                 }`}
               >
-                3
+                2
               </div>
               <span className="text-center text-[10px] leading-tight sm:text-xs font-heading font-bold text-slate-800">Confirmation</span>
             </div>
           </div>
         </div>
 
-        {/* STEP 3: ORDER CONFIRMATION */}
-        {currentStep === 3 && completedOrder ? (
+        {/* STEP 2: ORDER CONFIRMATION */}
+        {currentStep === 2 && completedOrder ? (
           <div className="bg-white rounded-3xl p-8 sm:p-12 border border-slate-100 shadow-xl max-w-3xl mx-auto text-center space-y-6">
             <div className="w-20 h-20 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto animate-bounce">
               <PackageCheck className="w-10 h-10" />
@@ -481,59 +461,6 @@ export const CheckoutPageClient: React.FC = () => {
 
                   <button
                     type="submit"
-                    className="w-full py-4 rounded-2xl bg-rose-500 hover:bg-rose-600 text-white font-heading font-extrabold text-base shadow-md flex items-center justify-center gap-2 transition-all"
-                  >
-                    <span>Proceed to Cash on Delivery (COD)</span>
-                    <ArrowRight className="w-5 h-5" />
-                  </button>
-                </form>
-              )}
-
-              {currentStep === 2 && (
-                <form onSubmit={handlePaymentSubmit} className="bg-white rounded-3xl p-4 sm:p-8 border border-slate-100 shadow-sm space-y-6">
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    <h2 className="font-heading font-black text-xl text-slate-900 flex items-center gap-2">
-                      <Banknote className="w-6 h-6 text-emerald-600" />
-                      <span>Payment Method</span>
-                    </h2>
-                    <button
-                      type="button"
-                      onClick={() => setCurrentStep(1)}
-                      className="text-xs font-bold text-rose-500 flex items-center gap-1"
-                    >
-                      <ArrowLeft className="w-4 h-4" /> Edit Address
-                    </button>
-                  </div>
-
-                  {/* Strictly Cash on Delivery Only */}
-                  <div className="p-4 sm:p-6 rounded-2xl bg-emerald-50 border-2 border-emerald-500 shadow-sm space-y-3">
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex min-w-0 items-start gap-3">
-                        <div className="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center">
-                          <Banknote className="w-6 h-6" />
-                        </div>
-                        <div className="min-w-0">
-                          <h4 className="font-heading font-extrabold text-base text-emerald-950">
-                            Cash on Delivery (COD)
-                          </h4>
-                          <p className="text-xs text-emerald-800">
-                            Pay in cash to the rider when your toy package arrives at your doorstep.
-                          </p>
-                        </div>
-                      </div>
-                      <span className="w-6 h-6 shrink-0 rounded-full bg-emerald-500 text-white flex items-center justify-center">
-                        <Check className="w-4 h-4" />
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-600 flex items-center gap-2">
-                    <ShieldCheck className="w-5 h-5 text-emerald-500 flex-shrink-0" />
-                    <span>No advance payment needed! Inspect package upon courier delivery.</span>
-                  </div>
-
-                  <button
-                    type="submit"
                     disabled={isPlacingOrder}
                     className="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-heading font-black text-lg shadow-xl flex items-center justify-center gap-2 transition-all hover:scale-[1.01]"
                   >
@@ -542,6 +469,7 @@ export const CheckoutPageClient: React.FC = () => {
                   </button>
                 </form>
               )}
+
             </div>
 
             {/* Sticky Order Summary Column */}
