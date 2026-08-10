@@ -321,6 +321,40 @@ export const ProductDetailPageClient: React.FC = () => {
     };
   }, [lightboxOpen, lightboxImages.length]);
 
+  useEffect(() => {
+    if (!product?.id) return;
+    if (typeof window === "undefined" || !window.fbq) return;
+
+    let trackPrice = product.price;
+    if (isVariable) {
+      if (currentVariation) {
+        trackPrice = currentVariation.salePrice !== undefined && currentVariation.salePrice !== null ? currentVariation.salePrice : currentVariation.regularPrice;
+      } else {
+        const allPrices = (product.variations || []).map(v => v.salePrice !== undefined && v.salePrice !== null ? v.salePrice : v.regularPrice);
+        trackPrice = allPrices.length > 0 ? Math.min(...allPrices) : product.price;
+      }
+    } else {
+      const trackOffset = product.variants
+        ? product.variants.reduce((sum, group) => {
+            const selectedOptName = selectedVariants[group.name];
+            if (!selectedOptName) return sum;
+            const foundOpt = group.options.find(o => o.name === selectedOptName);
+            return sum + (foundOpt?.priceOffset || 0);
+          }, 0)
+        : 0;
+      trackPrice = product.price + trackOffset;
+    }
+
+    window.fbq("track", "ViewContent", {
+      content_ids: [product.id],
+      content_name: product.name,
+      content_type: "product",
+      value: trackPrice,
+      currency: settings.currency || "PKR",
+    });
+  }, [product?.id]);
+
+
   if (productsLoading && !product) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center p-6">
@@ -376,18 +410,6 @@ export const ProductDetailPageClient: React.FC = () => {
       : 0;
     currentPrice = product.price + totalVariantOffset;
   }
-
-  useEffect(() => {
-    if (!product?.id) return;
-    if (typeof window === "undefined" || !window.fbq) return;
-    window.fbq("track", "ViewContent", {
-      content_ids: [product.id],
-      content_name: product.name,
-      content_type: "product",
-      value: currentPrice,
-      currency: settings.currency || "PKR",
-    });
-  }, [product?.id]);
 
   const variantGroups = (product.variants || []).filter(group => group.options.length > 0);
   const allVariantsSelected = isVariable
@@ -897,7 +919,7 @@ export const ProductDetailPageClient: React.FC = () => {
                 <div className="flex w-full gap-2">
                   {/* WhatsApp Button */}
                   <a
-                    href={`https://wa.me/923107172222?text=${encodeURIComponent(`Hello, I am interested in this product:\nProduct: ${product.name}\nPrice: ${formatPrice(currentPrice, settings.currency)}\nLink: ${(typeof window !== 'undefined' ? window.location.origin : '')}/product/${product.slug}${Object.keys(selectedVariants).length > 0 ? `\nVariant: ${Object.values(selectedVariants).join(', ')}` : Object.values(selectedAttributes).filter(Boolean).length > 0 ? `\nOption: ${Object.values(selectedAttributes).filter(Boolean).join(', ')}` : ''}`)}`}
+                    href={`https://wa.me/923107172222?text=${encodeURIComponent(`Hello, I am interested in this product:\nProduct: ${product.name}\nPrice: ${formatPrice(currentPrice, settings.currency)}\nLink: https://playbimboo.com/product/${product.slug}${Object.keys(selectedVariants).length > 0 ? `\nVariant: ${Object.values(selectedVariants).join(', ')}` : Object.values(selectedAttributes).filter(Boolean).length > 0 ? `\nOption: ${Object.values(selectedAttributes).filter(Boolean).join(', ')}` : ''}`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex h-12 w-14 shrink-0 items-center justify-center rounded-2xl bg-[#25D366]/10 text-[#25D366] shadow-sm transition-colors hover:bg-[#25D366] hover:text-white sm:w-16"
