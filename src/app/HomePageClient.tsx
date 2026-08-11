@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter, usePathname, useParams } from 'next/navigation';
 import {
   Sparkles,
@@ -41,21 +42,38 @@ export const HomePageClient: React.FC = () => {
   const [selectedQuickViewProduct, setSelectedQuickViewProduct] = useState<Product | null>(null);
   const [visibleNewArrivalsCount, setVisibleNewArrivalsCount] = useState(3);
   const [mounted, setMounted] = React.useState(false);
-  React.useEffect(() => setMounted(true), []);
+  const [isMobile, setIsMobile] = useState(true);
+
+  React.useEffect(() => {
+    setMounted(true);
+    const mql = window.matchMedia('(max-width: 1023px)');
+    setIsMobile(mql.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mql.addEventListener('change', handler);
+    return () => mql.removeEventListener('change', handler);
+  }, []);
 
   const visibleProducts = mounted ? products.filter(isProductVisibleOnStorefront) : [];
-  const featuredProducts = [...new Map(
-    visibleProducts.filter(p => p.isFeatured || p.isBestseller).map(product => [product.id, product])
-  ).values()].slice(0, 4);
-  const markedNewArrivals = visibleProducts.filter(p => p.isNewArrival);
-  const recentProducts = [...visibleProducts].sort((a, b) => {
-    const aOrder = a.displayOrder || 0;
-    const bOrder = b.displayOrder || 0;
-    if (aOrder !== bOrder) return aOrder - bOrder;
-    const aTime = Date.parse(a.createdAt || a.updatedAt || '');
-    const bTime = Date.parse(b.createdAt || b.updatedAt || '');
-    return (Number.isFinite(bTime) ? bTime : 0) - (Number.isFinite(aTime) ? aTime : 0);
-  });
+  
+  const featuredProducts = React.useMemo(() => {
+    return [...new Map(
+      visibleProducts.filter(p => p.isFeatured || p.isBestseller).map(product => [product.id, product])
+    ).values()].slice(0, 4);
+  }, [visibleProducts]);
+
+  const markedNewArrivals = React.useMemo(() => visibleProducts.filter(p => p.isNewArrival), [visibleProducts]);
+  
+  const recentProducts = React.useMemo(() => {
+    return [...visibleProducts].sort((a, b) => {
+      const aOrder = a.displayOrder || 0;
+      const bOrder = b.displayOrder || 0;
+      if (aOrder !== bOrder) return aOrder - bOrder;
+      const aTime = Date.parse(a.createdAt || a.updatedAt || '');
+      const bTime = Date.parse(b.createdAt || b.updatedAt || '');
+      return (Number.isFinite(bTime) ? bTime : 0) - (Number.isFinite(aTime) ? aTime : 0);
+    });
+  }, [visibleProducts]);
+
   const newArrivals = markedNewArrivals.length > 0 ? markedNewArrivals : recentProducts;
   const spotlightProduct = visibleProducts.find(p => p.isSpotlight);
   const sectionByKey = Object.fromEntries(settings.homepageSections.map(section => [section.key, section]));
@@ -93,11 +111,11 @@ export const HomePageClient: React.FC = () => {
             muted
             loop
             playsInline
-            preload="auto"
+            preload="metadata"
             poster={typeof promoToysImage === 'string' ? promoToysImage : promoToysImage.src}
             className="w-full h-full object-cover object-[42%_center]"
           >
-            <source src="/videos/hero-video.mp4" type="video/mp4" />
+            {!isMobile && <source src="/videos/hero-video.mp4" type="video/mp4" />}
           </video>
         </div>
 
@@ -206,11 +224,12 @@ export const HomePageClient: React.FC = () => {
               className="group bg-white rounded-3xl p-4 border border-slate-100 shadow-xs hover:shadow-xl hover:shadow-rose-100 hover:-translate-y-1.5 transition-all text-center flex flex-col items-center justify-between h-52"
             >
               <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-slate-50 mb-3">
-                <img
-                  src={getSafeImageSrc(cat.image)}
+                <Image
+                  src={getSafeImageSrc(cat.image) || '/placeholder.png'}
                   alt={cat.name}
-                  loading="lazy"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  fill
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
+                  className="object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-slate-900/0 transition-colors" />
                 <div className="absolute top-2 right-2 p-2 rounded-xl bg-white/90 backdrop-blur-md shadow-sm">
@@ -309,10 +328,12 @@ export const HomePageClient: React.FC = () => {
       {sectionByKey.brandCampaign?.enabled && <section style={{ order: sectionByKey.brandCampaign.order }} className="py-14 sm:py-16 w-full max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8 mt-6 sm:mt-10">
         <div className="relative w-full rounded-[28px] md:rounded-[36px] overflow-hidden flex flex-col justify-center min-h-125 md:h-[600px] lg:h-[650px] shadow-xl group">
           {/* Full Background Image */}
-          <img 
-              src={typeof promoToysImage === 'string' ? promoToysImage : (promoToysImage as any).src}
+          <Image 
+            src={promoToysImage}
             alt="Magical Learning Toys"
-            className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-1000 group-hover:scale-[1.02]"
+            fill
+            sizes="100vw"
+            className="object-cover object-center transition-transform duration-1000 group-hover:scale-[1.02]"
           />
           
           {/* Light Readability Overlay */}
