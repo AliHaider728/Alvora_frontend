@@ -33,7 +33,6 @@ import { Product } from '../types';
 import { formatPrice } from '../utils/formatters';
 import { getSafeImageSrc } from '../utils/images';
 import { isProductVisibleOnStorefront } from '../utils/products';
-import playBimbooVideo from '../assets/newplaybimboo.mp4';
 import logoImage from '../assets/images/play_bimboo_logo_1785311841625.webp';
 import promoToysImage from '../assets/images/promo_toys.webp';
 
@@ -115,7 +114,7 @@ export const HomePageClient: React.FC = () => {
             poster={typeof promoToysImage === 'string' ? promoToysImage : promoToysImage.src}
             className="w-full h-full object-cover object-[42%_center]"
           >
-            {!isMobile && <source src="/videos/hero-video.mp4" type="video/mp4" />}
+            {!isMobile && <source src="https://res.cloudinary.com/dn2bcvcvg/video/upload/v1786438386/newplaybimboo_xfnt47.mp4" type="video/mp4" />}
           </video>
         </div>
 
