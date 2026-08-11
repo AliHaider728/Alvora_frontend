@@ -69,7 +69,7 @@ export const CheckoutPageClient: React.FC = () => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  
+
   useEffect(() => {
     if (customerProfile) {
       setEmail(prev => prev || customerProfile.email || '');
@@ -140,6 +140,10 @@ export const CheckoutPageClient: React.FC = () => {
     e.preventDefault();
     if (deliveryUnavailable) {
       showToast('One or more products are not available for delivery.', 'error');
+      return;
+    }
+    if (phone.trim().length !== 11) {
+      showToast('Please enter a valid 11-digit phone number', 'error');
       return;
     }
     if (fullName.trim() && phone.trim() && street.trim() && city.trim()) {
@@ -223,7 +227,7 @@ export const CheckoutPageClient: React.FC = () => {
       return;
     }
 
-     
+
    // Meta Pixel - Purchase
 if (typeof window !== "undefined" && window.fbq) {
   const metaEventId = `purchase_${created.orderId || created.id}`;
@@ -346,12 +350,10 @@ if (typeof window !== "undefined" && window.fbq) {
                 {!completedOrder.email
                   ? <>Your order is safely recorded. Our team will contact you before dispatch.</>
                   : completedOrder.confirmationEmailAccepted !== false && completedOrder.confirmationEmailSentAt
-                  ? <>We’ve received your order and sent a confirmation receipt to <strong>{completedOrder.email}</strong>.</>
-                  : <>We’ve received your order successfully. The email could not be sent, but your order is safely recorded.</>}
+                  ? <>We've received your order and sent a confirmation receipt to <strong>{completedOrder.email}</strong>.</>
+                  : <>We've received your order successfully. The email could not be sent, but your order is safely recorded.</>}
               </p>
             </div>
-
-
 
             {/* Order Receipt Box */}
             <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 text-left space-y-4">
@@ -443,9 +445,12 @@ if (typeof window !== "undefined" && window.fbq) {
                       <input
                         type="tel"
                         required
-                        placeholder="e.g. 0327 6655557"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        maxLength={11}
+                        placeholder="e.g. 03276655557"
                         value={phone}
-                        onChange={e => setPhone(e.target.value)}
+                        onChange={e => setPhone(e.target.value.replace(/[^0-9]/g, '').slice(0, 11))}
                         className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 font-sans focus:outline-none focus:ring-2 focus:ring-rose-400"
                       />
                     </div>
@@ -488,8 +493,10 @@ if (typeof window !== "undefined" && window.fbq) {
                         <label className="text-xs font-bold text-slate-700 block mb-1">Postal Code (Optional)</label>
                         <input
                           type="text"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
                           value={postalCode}
-                          onChange={e => setPostalCode(e.target.value)}
+                          onChange={e => setPostalCode(e.target.value.replace(/[^0-9]/g, ''))}
                           className="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-200 font-sans focus:outline-none focus:ring-2 focus:ring-rose-400"
                         />
                       </div>

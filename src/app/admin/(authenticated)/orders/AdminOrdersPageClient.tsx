@@ -18,13 +18,82 @@ export const AdminOrdersPageClient: React.FC = () => {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [trackingInput, setTrackingInput] = useState('');
   const [updatingOrderId, setUpdatingOrderId] = useState('');
+  const [activeTab, setActiveTab] = useState('All');
+  const [selectedOrderIds, setSelectedOrderIds] = useState<Set<string>>(new Set());
+  const [isBulkUpdating, setIsBulkUpdating] = useState(false);
 
   const normalizedSearchQuery = searchQuery.trim().toLowerCase();
-  const filteredOrders = orders.filter(o =>
-    [o.id, o.customerName, o.email, o.status].some(value =>
+  const filteredOrders = orders.filter(o => {
+    const matchesTab = activeTab === 'All' || o.status === activeTab;
+    const matchesSearch = [o.id, o.customerName, o.email, o.status].some(value =>
       (value || '').toLowerCase().includes(normalizedSearchQuery)
-    )
-  );
+    );
+    return matchesTab && matchesSearch;
+  });
+
+  const handleBulkStatusChange = async (newStatus: Order['status']) => {
+    const accepted = await confirm({
+      title: `Mark ${selectedOrderIds.size} orders as ${newStatus}?`,
+      description: `All selected orders will be updated to ${newStatus}.`,
+      confirmLabel: 'Update Status',
+    });
+    if (!accepted) return;
+
+    setIsBulkUpdating(true);
+    let successCount = 0;
+    for (const orderId of Array.from(selectedOrderIds)) {
+      const result = await updateOrderStatus(orderId, newStatus);
+      if (result) successCount++;
+    }
+    setIsBulkUpdating(false);
+    
+    if (successCount === selectedOrderIds.size) {
+      showToast(`Successfully updated ${successCount} orders.`, 'success');
+    } else {
+      showToast(`Updated ${successCount} of ${selectedOrderIds.size} orders. Some failed.`, 'warning');
+    }
+    setSelectedOrderIds(new Set());
+  };
+
+  const handleBulkDelete = async () => {
+    const accepted = await confirm({
+      title: 'Delete Selected Orders?',
+      description: `Are you sure you want to delete ${selectedOrderIds.size} orders permanently? This action cannot be undone.`,
+      confirmLabel: 'Delete Orders',
+      destructive: true
+    });
+    if (!accepted) return;
+
+    setIsBulkUpdating(true);
+    let successCount = 0;
+    for (const orderId of Array.from(selectedOrderIds)) {
+      const result = await deleteOrder(orderId);
+      if (result) successCount++;
+    }
+    setIsBulkUpdating(false);
+
+    if (successCount === selectedOrderIds.size) {
+      showToast(`Successfully deleted ${successCount} orders.`, 'success');
+    } else {
+      showToast(`Deleted ${successCount} of ${selectedOrderIds.size} orders. Some failed.`, 'warning');
+    }
+    setSelectedOrderIds(new Set());
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedOrderIds.size === filteredOrders.length && filteredOrders.length > 0) {
+      setSelectedOrderIds(new Set());
+    } else {
+      setSelectedOrderIds(new Set(filteredOrders.map(o => o.id)));
+    }
+  };
+
+  const toggleSelectOrder = (orderId: string) => {
+    const next = new Set(selectedOrderIds);
+    if (next.has(orderId)) next.delete(orderId);
+    else next.add(orderId);
+    setSelectedOrderIds(next);
+  };
 
   const handleStatusChange = async (order: Order, newStatus: Order['status']) => {
     if (newStatus === order.status) { if (newStatus === 'Delivered') showToast('This order is already marked as delivered.', 'info'); return; }
@@ -88,25 +157,88 @@ export const AdminOrdersPageClient: React.FC = () => {
         </div>
       </div>
 
-      <div className="bg-white p-4 rounded-3xl border border-slate-200/80 shadow-xs max-w-sm">
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Search order ID or customer..."
-            value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-slate-200"
-          />
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+        <div className="bg-white p-4 rounded-3xl border border-slate-200/80 shadow-xs max-w-sm w-full sm:w-auto">
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search order ID or customer..."
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-slate-200"
+            />
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+          </div>
+        </div>
+
+        {/* Tabs */}
+        <div className="flex bg-white rounded-2xl p-1.5 border border-slate-200/80 shadow-xs overflow-x-auto w-full sm:w-auto">
+          {['All', 'Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'].map(tab => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`px-4 py-1.5 text-xs font-bold rounded-xl whitespace-nowrap transition-colors ${
+                activeTab === tab
+                  ? 'bg-slate-900 text-white'
+                  : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
         </div>
       </div>
+
+      {selectedOrderIds.size > 0 && (
+        <div className="bg-sky-50 border border-sky-100 rounded-2xl p-3 flex flex-wrap items-center justify-between gap-4">
+          <div className="text-xs font-bold text-sky-900 flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4" />
+            {selectedOrderIds.size} Order{selectedOrderIds.size > 1 ? 's' : ''} Selected
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-[10px] font-bold text-sky-700 uppercase tracking-wider mr-2 hidden sm:inline">Bulk Status:</span>
+            {['Processing', 'Shipped', 'Delivered', 'Cancelled'].map(status => (
+              <button
+                key={status}
+                disabled={isBulkUpdating}
+                onClick={() => void handleBulkStatusChange(status as Order['status'])}
+                className={`px-3 py-1.5 text-[11px] font-bold rounded-xl transition-colors border ${
+                  status === 'Processing' ? 'bg-amber-100 text-amber-800 border-amber-200 hover:bg-amber-200' :
+                  status === 'Shipped' ? 'bg-sky-100 text-sky-800 border-sky-200 hover:bg-sky-200' :
+                  status === 'Delivered' ? 'bg-emerald-100 text-emerald-800 border-emerald-200 hover:bg-emerald-200' :
+                  'bg-rose-100 text-rose-800 border-rose-200 hover:bg-rose-200'
+                } disabled:opacity-50`}
+              >
+                {status}
+              </button>
+            ))}
+            <div className="w-px h-6 bg-sky-200 mx-2 hidden sm:block" />
+            <button
+              disabled={isBulkUpdating}
+              onClick={() => void handleBulkDelete()}
+              className="px-3 py-1.5 text-[11px] font-bold rounded-xl bg-white border border-rose-200 text-rose-600 hover:bg-rose-50 flex items-center gap-1 transition-colors disabled:opacity-50"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              Delete Selected
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs text-slate-700">
             <thead className="bg-slate-50 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
               <tr>
-                <th className="p-4 pl-6">Order ID</th>
+                <th className="p-4 pl-6 w-12">
+                  <input
+                    type="checkbox"
+                    checked={filteredOrders.length > 0 && selectedOrderIds.size === filteredOrders.length}
+                    onChange={toggleSelectAll}
+                    className="rounded border-slate-300 text-sky-600 focus:ring-sky-500 cursor-pointer"
+                  />
+                </th>
+                <th className="p-4">Order ID</th>
                 <th className="p-4">Customer</th>
                 <th className="p-4">Date</th>
                 <th className="p-4">Payment</th>
@@ -118,7 +250,15 @@ export const AdminOrdersPageClient: React.FC = () => {
             <tbody className="divide-y divide-slate-100">
               {filteredOrders.map(order => (
                 <tr key={order.id || `${order.email}-${order.date}`} className="hover:bg-slate-50/80 transition-colors">
-                  <td className="p-4 pl-6 font-heading font-bold text-slate-900">{order.id}</td>
+                  <td className="p-4 pl-6 w-12">
+                    <input
+                      type="checkbox"
+                      checked={selectedOrderIds.has(order.id)}
+                      onChange={() => toggleSelectOrder(order.id)}
+                      className="rounded border-slate-300 text-sky-600 focus:ring-sky-500 cursor-pointer"
+                    />
+                  </td>
+                  <td className="p-4 font-heading font-bold text-slate-900">{order.id}</td>
                   <td className="p-4">
                     <span className="font-bold text-slate-800 block">{order.customerName}</span>
                     <span className="text-[10px] text-slate-400">{order.email}</span>
