@@ -165,6 +165,7 @@ export interface Product {
   customDeliveryFee?: number;
   metaTitle?: string;
   metaDescription?: string;
+  displayOrder?: number;
   productDetailBlocks?: ProductDetailBlock[];
   productDetailCustomCss?: string;
   productDetailScopedCss?: string;

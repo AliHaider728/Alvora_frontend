@@ -105,6 +105,7 @@ export const api = {
   getRelatedProducts: (idOrSlug: string) => fetchJson<any[]>(`/products/${idOrSlug}/related`),
   createProduct: (data: any) => fetchJson<any>('/products', { method: 'POST', body: JSON.stringify(data) }),
   updateProduct: (id: string, data: any) => fetchJson<any>(`/products/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  reorderProducts: (updates: { id: string, displayOrder: number }[]) => fetchJson<any>('/products/reorder', { method: 'PUT', body: JSON.stringify(updates) }),
   deleteProduct: (id: string) => fetchJson<any>(`/products/${id}`, { method: 'DELETE' }),
 
   // Categories

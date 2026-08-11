@@ -162,8 +162,8 @@ export const AdminDashboardPageClient: React.FC = () => {
             { day: 'Fri', val: 890 },
             { day: 'Sat', val: 1200 },
             { day: 'Sun', val: 950 },
-          ].map((bar, i) => (
-            <div key={i} className="flex-1 flex flex-col items-center gap-2 group">
+          ].map((bar) => (
+            <div key={bar.day} className="flex-1 flex flex-col items-center gap-2 group">
               <span className="text-[10px] font-bold text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity">
                 {formatPrice(bar.val)}
               </span>

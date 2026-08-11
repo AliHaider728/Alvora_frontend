@@ -1,12 +1,52 @@
 "use client";
 import React, { useState } from 'react';
-import { Plus, Search, Edit2, Trash2, Eye, EyeOff, UploadCloud, DownloadCloud } from 'lucide-react';
+import { Plus, Search, Edit2, Trash2, Eye, EyeOff, UploadCloud, DownloadCloud, GripVertical } from 'lucide-react';
 import { useRouter } from "next/navigation";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  useSortable
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+
+const SortableTableRow: React.FC<{
+  id: string;
+  disabled: boolean;
+  children: React.ReactNode;
+}> = ({ id, disabled, children }) => {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id, disabled });
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    ...(isDragging ? { zIndex: 50, position: 'relative' as any, backgroundColor: 'white', opacity: 0.9, boxShadow: '0 5px 15px rgba(0,0,0,0.1)' } : {})
+  };
+  return (
+    <tr ref={setNodeRef} style={style} className={`hover:bg-slate-50/80 transition-colors ${isDragging ? 'shadow-lg' : ''}`}>
+      <td className="p-4 pl-6 w-10">
+        <div {...(disabled ? {} : { ...attributes, ...listeners })} className={`p-1.5 rounded-lg shrink-0 ${!disabled ? 'text-slate-400 hover:text-slate-600 hover:bg-slate-100 cursor-grab active:cursor-grabbing' : 'text-slate-200 cursor-not-allowed'}`}>
+          <GripVertical className="w-4 h-4" />
+        </div>
+      </td>
+      {children}
+    </tr>
+  );
+};
 
 import { useStore } from '../../../../context/StoreContext';
 import { useToast } from '../../../../context/ToastContext';
 import { Product } from '../../../../types';
-import { API_BASE_URL, getLastApiError } from '../../../../services/api';
+import { api, API_BASE_URL, getLastApiError } from '../../../../services/api';
 
 import { formatPrice } from '../../../../utils/formatters';
 import { getSafeImageSrc } from '../../../../utils/images';
@@ -14,13 +54,45 @@ import { formatProductAgeGroups } from '../../../../utils/products';
 import { useDialog } from '../../../../context/DialogContext';
 
 export const AdminProductsPageClient: React.FC = () => {
-  const { products, categories, updateProduct, deleteProduct, settings } = useStore();
+  const { products, categories, updateProduct, deleteProduct, refreshProducts, settings } = useStore();
   const { showToast } = useToast();
   const { confirm } = useDialog();
   const router = useRouter();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCatFilter, setSelectedCatFilter] = useState('all');
+  const [isReordering, setIsReordering] = useState(false);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  );
+
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    setIsReordering(true);
+    const oldIndex = products.findIndex((p) => p.id === active.id);
+    const newIndex = products.findIndex((p) => p.id === over.id);
+
+    const newProducts = arrayMove(products, oldIndex, newIndex);
+    const updates = newProducts.map((p, idx) => ({ id: p.id, displayOrder: idx }));
+
+    try {
+      const res = await api.reorderProducts(updates);
+      if (res && res.success) {
+        showToast('Products reordered', 'success');
+        await refreshProducts();
+      } else {
+        showToast('Failed to reorder products', 'error');
+      }
+    } catch (e) {
+      showToast('Could not reorder products', 'error');
+    } finally {
+      setIsReordering(false);
+    }
+  };
 
   const filteredProducts = products.filter(p => {
     const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || p.brand.toLowerCase().includes(searchQuery.toLowerCase());
@@ -153,7 +225,8 @@ export const AdminProductsPageClient: React.FC = () => {
           <table className="w-full text-left text-xs text-slate-700">
             <thead className="bg-slate-50 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
               <tr>
-                <th className="p-4 pl-6">Toy</th>
+                <th className="p-4 pl-6 w-10"></th>
+                <th className="p-4">Toy</th>
                 <th className="p-4">Categories</th>
                 <th className="p-4">Age</th>
                 <th className="p-4">Price (PKR)</th>
@@ -162,10 +235,15 @@ export const AdminProductsPageClient: React.FC = () => {
                 <th className="p-4 pr-6 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
-              {filteredProducts.map(prod => (
-                <tr key={prod.id || prod.slug} className="hover:bg-slate-50/80 transition-colors">
-                  <td className="p-4 pl-6">
+            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+              <SortableContext items={filteredProducts.map(p => p.id)} strategy={verticalListSortingStrategy}>
+                <tbody className="divide-y divide-slate-100">
+              {filteredProducts.map(prod => {
+                const canMove = !searchQuery && selectedCatFilter === 'all' && !isReordering;
+
+                return (
+                <SortableTableRow key={prod.id || prod.slug} id={prod.id} disabled={!canMove}>
+                  <td className="p-4">
                     <div className="flex items-center gap-3">
                       <img src={getSafeImageSrc(prod.images?.[0])} alt="" className="w-10 h-10 object-cover rounded-xl bg-slate-100" />
                       <div>
@@ -213,9 +291,12 @@ export const AdminProductsPageClient: React.FC = () => {
                       <Trash2 className="w-4 h-4 text-rose-500" />
                     </button>
                   </td>
-                </tr>
-              ))}
-            </tbody>
+                </SortableTableRow>
+                );
+              })}
+              </tbody>
+            </SortableContext>
+          </DndContext>
           </table>
         </div>
       </div>

@@ -11,6 +11,7 @@ import {
   Truck,
   RotateCcw,
   Check,
+  BadgeCheck,
   Plus,
   Minus,
   MessageSquarePlus,
@@ -120,7 +121,7 @@ export const ProductDetailPageClient: React.FC = () => {
       title: String(review.title || ''),
       status: review.status || 'approved',
       content: String(review.content || review.comment || ''),
-      verifiedPurchase: Boolean(review.verifiedPurchase),
+      verifiedPurchase: Boolean((review as any).orderId || review.verifiedPurchase),
       source: review.source || 'customer'
     })));
   };
@@ -1128,12 +1129,11 @@ export const ProductDetailPageClient: React.FC = () => {
                             <div className="flex items-center gap-2">
                               <span className="font-bold text-sm text-slate-800">{review.reviewerName}</span>
                               {review.verifiedPurchase && (
-                                <span className="flex items-center text-[10px] text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-full font-medium">
-                                  <ShieldCheck className="w-3 h-3 mr-0.5" /> Verified
+                                <span className="flex items-center text-[10px] text-blue-600 font-semibold">
+                                  <BadgeCheck className="w-3.5 h-3.5 mr-0.5" /> Verified Purchase
                                 </span>
                               )}
                             </div>
-                            <span className="text-[10px] text-slate-400">{review.createdAt}</span>
                           </div>
                         </div>
 

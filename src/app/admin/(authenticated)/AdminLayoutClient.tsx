@@ -28,6 +28,9 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
   const router = useRouter();
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => setMounted(true), []);
 
   const token = getAuthToken();
 
@@ -58,6 +61,10 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
     localStorage.removeItem('pb_admin_user');
     router.push('/admin/login');
   };
+
+  if (!mounted) {
+    return null;
+  }
 
   if (!token) {
     return null;

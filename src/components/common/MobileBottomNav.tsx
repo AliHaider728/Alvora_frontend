@@ -10,6 +10,11 @@ export const MobileBottomNav: React.FC = () => {
   const { cartTotalItems, wishlist, setIsCartOpen, settings, isCartOpen } = useStore();
   const pathname = usePathname();
 
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
   if (isCartOpen) return null;
 
   const navItems = [
@@ -68,7 +73,7 @@ export const MobileBottomNav: React.FC = () => {
               >
                 <div className="relative">
                   <Icon className="w-5 h-5 text-slate-700 hover:text-rose-500" />
-                  {typeof item.badge === 'number' && item.badge > 0 && (
+                  {mounted && typeof item.badge === 'number' && item.badge > 0 && (
                     <span key={`cart-badge-${item.badge}`} className="cart-count-pop absolute -right-2 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-black text-white shadow-xs">
                       {item.badge > 99 ? '99+' : item.badge}
                     </span>
@@ -104,7 +109,7 @@ export const MobileBottomNav: React.FC = () => {
             >
               <div className="relative">
                 <Icon className={`w-5 h-5 ${isActive ? 'text-rose-600 stroke-[2.5px]' : 'text-slate-600'}`} />
-                {typeof item.badge === 'number' && item.badge > 0 && (
+                {mounted && typeof item.badge === 'number' && item.badge > 0 && (
                   <span key={`nav-badge-${item.key}-${item.badge}`} className="cart-count-pop absolute -right-2 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-black text-white shadow-xs">
                     {item.badge > 99 ? '99+' : item.badge}
                   </span>

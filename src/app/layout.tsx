@@ -11,7 +11,8 @@ export const metadata = {
   description: 'Discover endless play with Play Bimboo! Shop action figures, educational toys, board games, plush soft toys, and outdoor play.',
   icons: {
     icon: [
-      { url: '/logo.jpg', type: 'image/jpeg' }
+      { url: '/playbimbooLOGO_rounded.webp', type: 'image/webp' },
+      { url: '/favicon_rounded.ico', type: 'image/x-icon' }
     ]
   }
 };

@@ -49,6 +49,9 @@ export const HomePageClient: React.FC = () => {
   ).values()].slice(0, 4);
   const markedNewArrivals = visibleProducts.filter(p => p.isNewArrival);
   const recentProducts = [...visibleProducts].sort((a, b) => {
+    const aOrder = a.displayOrder || 0;
+    const bOrder = b.displayOrder || 0;
+    if (aOrder !== bOrder) return aOrder - bOrder;
     const aTime = Date.parse(a.createdAt || a.updatedAt || '');
     const bTime = Date.parse(b.createdAt || b.updatedAt || '');
     return (Number.isFinite(bTime) ? bTime : 0) - (Number.isFinite(aTime) ? aTime : 0);
@@ -91,9 +94,10 @@ export const HomePageClient: React.FC = () => {
             loop
             playsInline
             preload="auto"
+            poster={typeof promoToysImage === 'string' ? promoToysImage : promoToysImage.src}
             className="w-full h-full object-cover object-[42%_center]"
           >
-            <source src={playBimbooVideo} type="video/mp4" />
+            <source src="/videos/hero-video.mp4" type="video/mp4" />
           </video>
         </div>
 

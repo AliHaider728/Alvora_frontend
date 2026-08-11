@@ -20,6 +20,12 @@ import { getSafeImageSrc } from '../../utils/images';
 
 export const Header: React.FC = () => {
   const { cartTotalItems, wishlist, setIsCartOpen, products, settings } = useStore();
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [openMenuId, setOpenMenuId] = useState('');
@@ -270,8 +276,8 @@ export const Header: React.FC = () => {
               className="relative flex items-center gap-1.5 md:gap-2.5 px-3 md:px-6 py-2.5 md:py-3.5 rounded-full bg-gradient-to-r from-rose-500 to-rose-400 hover:from-rose-600 hover:to-rose-500 text-white shadow-[0_4px_14px_rgba(225,29,72,0.3)] transition-all duration-200 active:scale-95"
             >
               <ShoppingBag className="w-4 h-4 md:w-5 md:h-5" />
-              <span className="hidden whitespace-nowrap font-heading text-sm font-bold sm:inline-block md:text-base">Cart (<span key={`desktop-cart-${cartTotalItems}`} className="cart-count-pop inline-block">{cartTotalItems}</span>)</span>
-              <span key={`mobile-cart-${cartTotalItems}`} className="cart-count-pop inline-block whitespace-nowrap font-heading text-sm font-bold sm:hidden">{cartTotalItems}</span>
+              <span className="hidden whitespace-nowrap font-heading text-sm font-bold sm:inline-block md:text-base">Cart (<span key={`desktop-cart-${cartTotalItems}`} className="cart-count-pop inline-block">{mounted ? cartTotalItems : 0}</span>)</span>
+              <span key={`mobile-cart-${cartTotalItems}`} className="cart-count-pop inline-block whitespace-nowrap font-heading text-sm font-bold sm:hidden">{mounted ? cartTotalItems : 0}</span>
             </button>
           </div>
         </div>
