@@ -1,11 +1,13 @@
 import { MetadataRoute } from 'next'
 
+export const dynamic = 'force-dynamic';
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
   
   let products = [];
   try {
-    const res = await fetch(`${apiUrl}/products`);
+    const res = await fetch(`${apiUrl}/products`, { cache: 'no-store' });
     if (res.ok) {
       products = await res.json();
     }
