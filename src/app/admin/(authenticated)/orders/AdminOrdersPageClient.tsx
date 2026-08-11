@@ -240,6 +240,7 @@ export const AdminOrdersPageClient: React.FC = () => {
                 </th>
                 <th className="p-4">Order ID</th>
                 <th className="p-4">Customer</th>
+                <th className="p-4 min-w-[200px]">Items</th>
                 <th className="p-4">Date</th>
                 <th className="p-4">Payment</th>
                 <th className="p-4">Total</th>
@@ -262,6 +263,40 @@ export const AdminOrdersPageClient: React.FC = () => {
                   <td className="p-4">
                     <span className="font-bold text-slate-800 block">{order.customerName}</span>
                     <span className="text-[10px] text-slate-400">{order.email}</span>
+                  </td>
+                  <td className="p-4">
+                    <div className="flex flex-col gap-2 max-h-32 overflow-y-auto pr-2 custom-scrollbar">
+                      {(order.items || []).map((it, idx) => (
+                        <div key={`${it.productId || it.name || 'item'}-${idx}`} className="flex items-start gap-2 bg-slate-50 p-1.5 rounded-lg border border-slate-100">
+                          {it.image ? (
+                            <img src={it.image} alt={it.name || 'Product'} className="w-8 h-8 rounded object-cover border border-slate-200 shrink-0" />
+                          ) : (
+                            <div className="w-8 h-8 rounded bg-slate-200 border border-slate-300 flex items-center justify-center shrink-0">
+                              <span className="text-[8px] text-slate-500 font-bold uppercase">No Img</span>
+                            </div>
+                          )}
+                          <div className="flex flex-col min-w-0 flex-1">
+                            <span className="text-[11px] font-bold text-slate-800 line-clamp-1" title={it.name || 'Unknown Item'}>{it.name || 'Unknown Item'}</span>
+                            <div className="text-[10px] text-slate-500 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mt-0.5">
+                              <span className="font-bold text-slate-700">{it.quantity || 0}x</span>
+                              <span className="text-slate-600">{formatPrice(it.price || 0, settings.currency)}</span>
+                              
+                              {/* Legacy simple variant string */}
+                              {!it.selectedAttributes && it.selectedVariant && (
+                                <span className="text-slate-400">• {it.selectedVariant}</span>
+                              )}
+                              
+                              {/* New attribute-based variations */}
+                              {it.selectedAttributes && Object.values(it.selectedAttributes).map(v => (
+                                <span key={v as string} className="bg-slate-200/60 px-1 py-0.5 rounded text-[9px] text-slate-600 font-medium">
+                                  {v as string}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </td>
                   <td className="p-4 text-slate-500">{order.date}</td>
                   <td className="p-4 font-medium">{order.paymentMethod}</td>
