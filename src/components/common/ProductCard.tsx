@@ -148,7 +148,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
             src={getSafeImageSrc(cardImageUrl)}
             alt={product.name}
             loading="lazy"
-            className="h-full w-full object-contain object-center transition-transform duration-500 ease-out group-hover:scale-[1.06]"
+            className="h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.06]"
           />
         </Link>
 
