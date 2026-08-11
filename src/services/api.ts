@@ -123,6 +123,7 @@ export const api = {
   cancelOrder: (orderId: string) => fetchJson<any>(`/orders/${orderId}/cancel`, { method: 'POST' }),
   updateOrderStatus: (orderId: string, status: string) => fetchJson<any>(`/orders/${orderId}/status`, { method: 'PUT', body: JSON.stringify({ status }) }),
   updateOrderTracking: (orderId: string, trackingNumber: string) => fetchJson<any>(`/orders/${orderId}/tracking`, { method: 'PUT', body: JSON.stringify({ trackingNumber }) }),
+  deleteOrder: (orderId: string) => fetchJson<any>(`/orders/${orderId}`, { method: 'DELETE' }),
 
   // Coupons
   getCoupons: () => fetchJson<any[]>('/coupons'),

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-import { Eye, Search, Truck, X, CheckCircle2, Send } from 'lucide-react';
+import { Eye, Search, Truck, X, CheckCircle2, Send, Trash2 } from 'lucide-react';
 import { useStore } from '../../../../context/StoreContext';
 import { useToast } from '../../../../context/ToastContext';
 import { Order } from '../../../../types';
@@ -10,7 +10,7 @@ import { useDialog } from '../../../../context/DialogContext';
 import { getLastApiError } from '../../../../services/api';
 
 export const AdminOrdersPageClient: React.FC = () => {
-  const { orders, updateOrderStatus, updateOrderTracking, settings } = useStore();
+  const { orders, updateOrderStatus, updateOrderTracking, deleteOrder, settings } = useStore();
   const { showToast } = useToast();
   const { confirm } = useDialog();
 
@@ -61,6 +61,20 @@ export const AdminOrdersPageClient: React.FC = () => {
     if (!updated) { showToast(getLastApiError() || 'Could not save the tracking code.', 'error'); return; }
     showToast(`Tracking code saved for ${orderId}.`, 'success');
     if (selectedOrder) setSelectedOrder(updated);
+  };
+
+  const handleDeleteOrder = async (order: Order) => {
+    const accepted = await confirm({
+      title: 'Delete Order?',
+      description: `Are you sure you want to delete order ${order.id} permanently? This action cannot be undone.`,
+      confirmLabel: 'Delete Order',
+      destructive: true
+    });
+    if (!accepted) return;
+    
+    const result = await deleteOrder(order.id);
+    if (!result) { showToast(getLastApiError() || 'Failed to delete order.', 'error'); return; }
+    showToast(`Order ${order.id} deleted successfully.`, 'success');
   };
 
   return (
@@ -131,7 +145,7 @@ export const AdminOrdersPageClient: React.FC = () => {
                       <option value="Cancelled">Cancelled</option>
                     </select>
                   </td>
-                  <td className="p-4 pr-6 text-right">
+                  <td className="p-4 pr-6 text-right space-x-1">
                     <button
                       onClick={() => {
                         setSelectedOrder(order);
@@ -141,6 +155,13 @@ export const AdminOrdersPageClient: React.FC = () => {
                       title="View Order Details"
                     >
                       <Eye className="w-4 h-4 text-slate-700" />
+                    </button>
+                    <button
+                      onClick={() => { void handleDeleteOrder(order); }}
+                      className="p-1.5 rounded-lg text-rose-500 hover:bg-rose-50"
+                      title="Delete Order"
+                    >
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   </td>
                 </tr>
