@@ -39,6 +39,7 @@ import promoToysImage from '../assets/images/promo_toys.webp';
 export const HomePageClient: React.FC = () => {
   const { products, categories, settings } = useStore();
   const [selectedQuickViewProduct, setSelectedQuickViewProduct] = useState<Product | null>(null);
+  const [visibleNewArrivalsCount, setVisibleNewArrivalsCount] = useState(3);
   const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => setMounted(true), []);
 
@@ -52,7 +53,7 @@ export const HomePageClient: React.FC = () => {
     const bTime = Date.parse(b.createdAt || b.updatedAt || '');
     return (Number.isFinite(bTime) ? bTime : 0) - (Number.isFinite(aTime) ? aTime : 0);
   });
-  const newArrivals = (markedNewArrivals.length > 0 ? markedNewArrivals : recentProducts).slice(0, 4);
+  const newArrivals = markedNewArrivals.length > 0 ? markedNewArrivals : recentProducts;
   const spotlightProduct = visibleProducts.find(p => p.isSpotlight);
   const sectionByKey = Object.fromEntries(settings.homepageSections.map(section => [section.key, section]));
 
@@ -393,7 +394,7 @@ export const HomePageClient: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-          {newArrivals.slice(0, 3).map(product => (
+          {newArrivals.slice(0, visibleNewArrivalsCount).map(product => (
             <ProductCard
               key={product.id || product.slug}
               product={product}
@@ -402,6 +403,21 @@ export const HomePageClient: React.FC = () => {
             />
           ))}
         </div>
+
+        {visibleNewArrivalsCount < newArrivals.length ? (
+          <div className="mt-10 flex justify-center">
+            <button
+              onClick={() => setVisibleNewArrivalsCount(prev => prev + 3)}
+              className="px-6 py-2.5 rounded-xl border-2 border-sky-600 text-sky-600 font-bold hover:bg-sky-50 transition-colors"
+            >
+              Load More
+            </button>
+          </div>
+        ) : (
+          <div className="mt-10 flex justify-center">
+            <p className="text-sm font-semibold text-slate-500">You've seen it all!</p>
+          </div>
+        )}
       </section>}
 
       {/* Quick View Product Modal */}
