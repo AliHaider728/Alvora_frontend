@@ -40,9 +40,11 @@ const getCartLineKey = (
   productId: string,
   selectedVariant?: string,
   variationId?: string
-) => variationId
-  ? `${productId}::variation::${variationId}`
-  : `${productId}::legacy::${selectedVariant?.trim() || ''}`;
+) => {
+  return variationId
+    ? `${productId}::variation::${variationId}`
+    : `${productId}::legacy::${selectedVariant?.trim() || ''}`;
+};
 
 const consolidateCartItems = (items: unknown): CartItem[] => {
   if (!Array.isArray(items)) return [];
@@ -51,7 +53,7 @@ const consolidateCartItems = (items: unknown): CartItem[] => {
   for (const candidate of items) {
     if (!candidate || typeof candidate !== 'object') continue;
     const item = candidate as CartItem;
-    if (!item.product?.id) continue;
+    if (!item.product?.id || String(item.product.id).trim() === '' || String(item.product.id) === 'undefined') continue;
     const quantity = Math.max(1, Math.floor(Number(item.quantity) || 1));
     const key = getCartLineKey(item.product.id, item.selectedVariant, item.variationId);
     const existing = consolidated.get(key);
@@ -291,9 +293,13 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   }, []);
 
-  const [cart, setCart] = useState<CartItem[]>(() => {
-    return readStoredCart();
-  });
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [isCartHydrated, setIsCartHydrated] = useState(false);
+
+  useEffect(() => {
+    setCart(readStoredCart());
+    setIsCartHydrated(true);
+  }, []);
 
   const [wishlist, setWishlist] = useState<string[]>(() => {
     const saved = (typeof window !== 'undefined' ? localStorage.getItem.bind(localStorage) : () => null)('playbimboo_wishlist');
@@ -417,8 +423,10 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, [settings]);
 
   useEffect(() => {
-    (typeof window !== 'undefined' ? localStorage.setItem.bind(localStorage) : () => {})('playbimboo_cart', JSON.stringify(cart));
-  }, [cart]);
+    if (isCartHydrated) {
+      (typeof window !== 'undefined' ? localStorage.setItem.bind(localStorage) : () => {})('playbimboo_cart', JSON.stringify(cart));
+    }
+  }, [cart, isCartHydrated]);
 
   useEffect(() => {
     const syncCartFromAnotherTab = (event: StorageEvent) => {
@@ -452,6 +460,11 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   // Cart operations
   const addToCart = (product: Product, quantity = 1, selectedVariant?: string, variationId?: string) => {
+    if (!product || !product.id || String(product.id).trim() === '' || String(product.id) === 'undefined') {
+      console.error('[StoreContext] Critical Error: Rejected attempt to add malformed product to cart (missing valid id).', product);
+      return;
+    }
+
     setCart(prev => {
       const normalizedCart = consolidateCartItems(prev);
       const lineKey = getCartLineKey(product.id, selectedVariant, variationId);

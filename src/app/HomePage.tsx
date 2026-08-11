@@ -19,7 +19,7 @@ export const HomePage: React.FC<Props> = ({ products, categories, settings }) =>
   const visibleProducts = products.filter(p => p.status === 'published' && p.isVisible !== false);
   
   const featuredProducts = [...new Map(
-    visibleProducts.filter(p => p.isFeatured || p.isBestseller).map(product => [product._id || product.id, product])
+    visibleProducts.filter(p => p.isFeatured || p.isBestseller).map(product => [product.id, product])
   ).values()];
 
   const markedNewArrivals = visibleProducts.filter(p => p.isNewArrival);

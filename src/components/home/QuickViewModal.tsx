@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { ShoppingBag, Star, Shield, Package } from 'lucide-react';
 import { Product } from '../../types';
 import { getSafeImageSrc } from '../../utils/images';
@@ -13,6 +14,7 @@ interface Props {
 }
 
 export const QuickViewModal: React.FC<Props> = ({ product, onClose, onAddToCart }) => {
+  const router = useRouter();
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
       <div className="bg-white rounded-3xl max-w-2xl w-full p-6 relative shadow-2xl border border-slate-100 overflow-hidden max-h-[90vh] overflow-y-auto">
@@ -69,13 +71,26 @@ export const QuickViewModal: React.FC<Props> = ({ product, onClose, onAddToCart 
               </div>
             </div>
             <div className="pt-6">
-              <button
-                onClick={() => onAddToCart(product)}
-                className="w-full flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white py-3.5 rounded-xl font-bold transition-all hover:-translate-y-0.5 hover:shadow-lg"
-              >
-                <ShoppingBag className="w-5 h-5" />
-                Add to Cart
-              </button>
+              {product.productType === 'variable' ? (
+                <button
+                  onClick={() => {
+                    onClose();
+                    router.push(`/product/${product.slug}`);
+                  }}
+                  className="w-full flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white py-3.5 rounded-xl font-bold transition-all hover:-translate-y-0.5 hover:shadow-lg"
+                >
+                  <ShoppingBag className="w-5 h-5" />
+                  Select Options
+                </button>
+              ) : (
+                <button
+                  onClick={() => onAddToCart(product)}
+                  className="w-full flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white py-3.5 rounded-xl font-bold transition-all hover:-translate-y-0.5 hover:shadow-lg"
+                >
+                  <ShoppingBag className="w-5 h-5" />
+                  Add to Cart
+                </button>
+              )}
             </div>
           </div>
         </div>

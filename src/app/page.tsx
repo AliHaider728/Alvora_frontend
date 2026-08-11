@@ -20,7 +20,14 @@ async function fetchData() {
       fetch(`${API_URL}/settings`, fetchOpts)
     ]);
     
-    const products = productsRes.ok ? await productsRes.json() : [];
+    const rawProducts = productsRes.ok ? await productsRes.json() : [];
+    const products = Array.isArray(rawProducts) ? rawProducts.map((p: any) => {
+      const id = p.id || p._id || p.slug;
+      if (!id || String(id).trim() === '' || String(id) === 'undefined') {
+        console.error('[page.tsx] Error: Product missing valid identifier:', p.name || 'Unknown');
+      }
+      return { ...p, id: String(id || '') };
+    }).filter((p: any) => p.id && p.id.trim() !== '' && p.id !== 'undefined') : [];
     const categories = categoriesRes.ok ? await categoriesRes.json() : [];
     const settings = settingsRes.ok ? await settingsRes.json() : null;
     
