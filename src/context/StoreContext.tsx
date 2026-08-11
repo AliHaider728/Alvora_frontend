@@ -19,7 +19,7 @@ import {
   INITIAL_CUSTOMERS,
   INITIAL_COUPONS
 } from '../data/mockData';
-import { api, getAuthToken, isSuperAdmin } from '../services/api';
+import { api, getAuthToken, getLastApiError, isSuperAdmin } from '../services/api';
 import { formatPrice } from '../utils/formatters';
 import { normalizeStoreSettings } from '../config/storeAppearance';
 import { normalizeInventory, normalizeProductAgeGroups } from '../utils/products';
@@ -550,10 +550,12 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // Coupon application logic
   const applyCoupon = async (code: string) => {
     const trimmed = code.trim().toUpperCase();
+    if (!trimmed) {
+      return { success: false, message: 'Please enter a coupon code.' };
+    }
     try {
-      const { api } = require('../services/api');
       const res = await api.validateCoupon(trimmed, cartSubtotal);
-      if (res.valid) {
+      if (res && res.valid) {
         setAppliedCoupon({
           id: res.code,
           code: res.code,
@@ -567,10 +569,12 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         });
         return { success: true, message: `Coupon ${res.code} applied successfully!` };
       }
+      // res was null (backend returned non-2xx) or res.valid was falsy
+      const backendMsg = getLastApiError();
+      return { success: false, message: backendMsg || 'Invalid or expired coupon code.' };
     } catch (err: any) {
       return { success: false, message: err.message || 'Invalid or expired coupon code.' };
     }
-    return { success: false, message: 'Invalid or expired coupon code.' };
   };
 
   const removeCoupon = () => {
