@@ -17,7 +17,11 @@ import {
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { useAuth } from '../../context/AuthContext';
-import Ballpit from '../Ballpit/Ballpit';
+import dynamic from 'next/dynamic';
+
+const Ballpit = dynamic(() => import('../Ballpit/Ballpit'), {
+  ssr: false,
+});
 
 // Adjust this import path to wherever the transparent logo file lives in your project
 import playBimbooLogo from '../../assets/images/playbimboo-logo.webp';
