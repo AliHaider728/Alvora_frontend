@@ -43,6 +43,19 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <Script
+          id="meta-pixel-stub"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              !function(f,b,e,v,n,t,s)
+              {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+              n.queue=[];}(window,document,'script');
+            `,
+          }}
+        />
+        <Script
           id="gtm-script"
           strategy="lazyOnload"
           dangerouslySetInnerHTML={{
@@ -57,24 +70,25 @@ export default function RootLayout({
         />
 
         {GA_MEASUREMENT_ID && (
-          <>
-            <Script
-              strategy="lazyOnload"
-              src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-            />
-            <Script
-              id="google-analytics"
-              strategy="lazyOnload"
-              dangerouslySetInnerHTML={{
-                __html: `
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
-                  gtag('js', new Date());
-                  gtag('config', '${GA_MEASUREMENT_ID}');
-                `,
-              }}
-            />
-          </>
+          <Script
+            id="google-analytics-stub"
+            strategy="beforeInteractive"
+            dangerouslySetInnerHTML={{
+              __html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${GA_MEASUREMENT_ID}', { send_page_view: false }); // PageView handled by lazy load
+              `,
+            }}
+          />
+        )}
+        
+        {GA_MEASUREMENT_ID && (
+          <Script
+            strategy="lazyOnload"
+            src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          />
         )}
       </head>
       <body className={`font-sans antialiased bg-slate-50 text-slate-800 selection:bg-amber-200 selection:text-amber-900 ${fredoka.variable} ${plusJakartaSans.variable}`}>
