@@ -29,6 +29,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setIsLoading(false);
       return;
     }
+    setIsLoading(true);
     try {
       const profile = await api.getMe();
       if (profile && profile.role === 'customer') {

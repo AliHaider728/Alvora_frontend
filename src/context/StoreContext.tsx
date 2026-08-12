@@ -19,7 +19,7 @@ import {
   INITIAL_CUSTOMERS,
   INITIAL_COUPONS
 } from '../data/mockData';
-import { api, getAuthToken, getLastApiError, isSuperAdmin } from '../services/api';
+import { api, getAuthToken, setAuthToken, getLastApiError, isSuperAdmin } from '../services/api';
 import { formatPrice } from '../utils/formatters';
 import { normalizeStoreSettings } from '../config/storeAppearance';
 import { normalizeInventory, normalizeProductAgeGroups } from '../utils/products';
@@ -695,9 +695,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const savedOrder = response.order ? response.order : response;
 
     if (response.token && typeof window !== 'undefined') {
-      const { setAuthToken } = require('../services/api');
       setAuthToken(response.token);
-      window.dispatchEvent(new Event('pb-auth-changed'));
     }
 
     const newOrder = normalizeOrder(savedOrder);
