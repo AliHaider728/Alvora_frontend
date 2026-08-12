@@ -122,7 +122,7 @@ export const ProductSpotlight: React.FC<{ product: Product }> = ({ product }) =>
         <div className="relative grid items-center gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
           <Link href={`/product/${product.slug}`} className="group block w-full overflow-hidden rounded-[26px] shadow-xl" aria-label={`View ${product.name}`}>
             <img
-              src={getSafeImageSrc(product.images?.[0])}
+              src={getSafeImageSrc(product.images?.[0], { width: 600 })}
               alt={product.name}
               className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-[1.025]"
             />

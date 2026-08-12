@@ -7,6 +7,9 @@ interface ProductImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   alt: string;
   className?: string;
   wrapperClassName?: string;
+  width?: number;
+  height?: number;
+  crop?: string;
 }
 
 export const ProductImage: React.FC<ProductImageProps> = ({
@@ -15,10 +18,13 @@ export const ProductImage: React.FC<ProductImageProps> = ({
   className = '',
   wrapperClassName = '',
   loading = 'lazy',
+  width,
+  height,
+  crop,
   ...props
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const safeSrc = getSafeImageSrc(src);
+  const safeSrc = getSafeImageSrc(src, { width, height, crop });
 
   return (
     <div className={`relative overflow-hidden ${wrapperClassName}`}>

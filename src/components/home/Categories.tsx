@@ -46,7 +46,7 @@ export const Categories: React.FC<{ categories: Category[], sectionSettings: any
           >
             <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-slate-50 mb-3">
               <Image
-                src={getSafeImageSrc(cat.image) || '/placeholder.png'}
+                src={getSafeImageSrc(cat.image, { width: 400 }) || '/placeholder.png'}
                 alt={cat.name}
                 fill
                 sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter, usePathname, useParams } from 'next/navigation';
 import { useStore } from '../../context/StoreContext';
 import defaultLogoImg from '../../assets/images/play_bimboo_logo_1785311841625.webp';
+import { getSafeImageSrc } from '../../utils/images';
 
 interface LogoProps {
   className?: string;
@@ -20,7 +21,7 @@ export const Logo: React.FC<LogoProps> = ({ className = '', size = 'md' }) => {
     lg: 'h-14 md:h-18'
   };
 
-  const logoSrc = settings.logoUrl || (typeof defaultLogoImg === 'string' ? defaultLogoImg : (defaultLogoImg as any).src);
+  const logoSrc = getSafeImageSrc(settings.logoUrl || (typeof defaultLogoImg === 'string' ? defaultLogoImg : (defaultLogoImg as any).src), { width: 300 });
 
   return (
     <Link href="/" className={`inline-flex items-center transition-all group ${className}`} title={settings.storeName || 'Play Bimboo'}>

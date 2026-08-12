@@ -5,6 +5,21 @@ import { Providers } from './Providers';
 import { AuthModalWrapper } from './AuthModalWrapper';
 import { StorefrontLayoutWrapper } from '../components/common/StorefrontLayoutWrapper';
 import MetaPixel from '../components/analytics/MetaPixel';
+import { Fredoka, Plus_Jakarta_Sans } from 'next/font/google';
+
+const fredoka = Fredoka({ 
+  subsets: ['latin'], 
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-heading',
+  display: 'swap',
+});
+
+const plusJakartaSans = Plus_Jakarta_Sans({ 
+  subsets: ['latin'], 
+  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-sans',
+  display: 'swap',
+});
 
 export const metadata = {
   title: 'Play Bimboo - Magical Toys, Games & Playland',
@@ -40,9 +55,7 @@ export default function RootLayout({
             `,
           }}
         />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
         {GA_MEASUREMENT_ID && (
           <>
             <Script
@@ -64,7 +77,7 @@ export default function RootLayout({
           </>
         )}
       </head>
-      <body className="font-sans antialiased bg-slate-50 text-slate-800 selection:bg-amber-200 selection:text-amber-900">
+      <body className={`font-sans antialiased bg-slate-50 text-slate-800 selection:bg-amber-200 selection:text-amber-900 ${fredoka.variable} ${plusJakartaSans.variable}`}>
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-M49DLCLB"

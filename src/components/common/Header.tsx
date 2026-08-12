@@ -67,15 +67,22 @@ export const Header: React.FC = () => {
     
     // Smart Scroll logic
     let lastScrollY = window.scrollY;
+    let ticking = false;
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      setIsScrolled(currentScrollY > 20);
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        setIsScrolledDown(true);
-      } else if (currentScrollY < lastScrollY) {
-        setIsScrolledDown(false);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+          setIsScrolled(currentScrollY > 20);
+          if (currentScrollY > lastScrollY && currentScrollY > 100) {
+            setIsScrolledDown(true);
+          } else if (currentScrollY < lastScrollY) {
+            setIsScrolledDown(false);
+          }
+          lastScrollY = currentScrollY;
+          ticking = false;
+        });
+        ticking = true;
       }
-      lastScrollY = currentScrollY;
     };
     
     window.addEventListener('scroll', handleScroll, { passive: true });
