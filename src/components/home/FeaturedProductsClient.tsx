@@ -40,11 +40,12 @@ export const FeaturedProductsClient: React.FC<Props> = ({ products, sectionSetti
         </div>
 
         <div className="grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-          {products.map(product => (
+          {products.map((product, index) => (
             <ProductCard
               key={product.id || product.slug}
               product={product}
               layout="compact"
+              priority={index < 2}
               onQuickView={prod => setSelectedQuickViewProduct(prod)}
             />
           ))}

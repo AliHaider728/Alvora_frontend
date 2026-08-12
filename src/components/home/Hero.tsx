@@ -58,9 +58,9 @@ export const Hero: React.FC<{ sectionSettings: any }> = ({ sectionSettings }) =>
           {/* Social Proof Badges */}
           <div className="pt-4 flex items-center justify-center lg:justify-start gap-4">
             <div className="flex -space-x-3">
-              <img className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Parent 1" />
-              <img className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&q=80" alt="Parent 2" />
-              <img className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm" src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=100&q=80" alt="Parent 3" />
+              <img className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Parent 1" width={40} height={40} />
+              <img className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&q=80" alt="Parent 2" width={40} height={40} />
+              <img className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm" src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=100&q=80" alt="Parent 3" width={40} height={40} />
             </div>
             <div className="flex flex-col text-xs text-slate-600 font-medium text-left">
               <div className="flex text-amber-400 gap-0.5 mb-0.5">

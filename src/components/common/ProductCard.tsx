@@ -17,9 +17,10 @@ interface ProductCardProps {
   product: Product;
   onQuickView?: (product: Product) => void;
   layout?: 'standard' | 'compact';
+  priority?: boolean;
 }
 
-export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, layout = 'standard' }) => {
+export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, layout = 'standard', priority = false }) => {
   const { addToCart, toggleWishlist, isInWishlist, settings } = useStore();
   const { showToast } = useToast();
   const router = useRouter();
@@ -147,7 +148,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
           <img
             src={getSafeImageSrc(cardImageUrl, { width: 600 })}
             alt={product.name}
-            loading="lazy"
+            width={600}
+            height={600}
+            loading={priority ? "eager" : "lazy"}
+            fetchPriority={priority ? "high" : "auto"}
             className="h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.06]"
           />
         </Link>
@@ -263,10 +267,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
         {/* ---------- ACTIONS ---------- */}
         <div className={`flex items-center gap-2 border-t border-slate-100 ${compact ? 'mt-3 pt-3' : 'mt-4 pt-4'}`}>
           <a
-            href={`https://wa.me/923107172222?text=${encodeURIComponent(`Hello, I am interested in this product:\nProduct: ${product.name}\nPrice: ${formatPrice(displayPrice, settings.currency)}\nLink: ${(typeof window !== 'undefined' ? window.location.origin : '')}/product/${product.slug}`)}`}
+            href={`https://wa.me/923107172222?text=${encodeURIComponent(`Hello, I am interested in this product:\nProduct: ${product.name}\nPrice: ${formatPrice(displayPrice, settings.currency)}\nLink: /product/${product.slug}`)}`}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              const fullUrl = `${window.location.origin}/product/${product.slug}`;
+              const whatsappUrl = `https://wa.me/923107172222?text=${encodeURIComponent(`Hello, I am interested in this product:\nProduct: ${product.name}\nPrice: ${formatPrice(displayPrice, settings.currency)}\nLink: ${fullUrl}`)}`;
+              window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+            }}
             className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#25D366]/10 text-[#25D366] transition-colors duration-200 hover:bg-[#25D366] hover:text-white"
             title="Order via WhatsApp"
           >
