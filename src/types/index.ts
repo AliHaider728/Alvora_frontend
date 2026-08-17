@@ -131,9 +131,18 @@ export interface Bogo {
   label: string;
 }
 
+export interface FlatDiscount {
+  enabled: boolean;
+  minQty: number;
+  discountType: "fixed" | "percentage";
+  discountValue: number;
+  label: string;
+}
+
 export interface PricingOffers {
   quantityBreaks: QuantityBreaks;
   bogo: Bogo;
+  flatDiscount: FlatDiscount;
 }
 
 export interface Product {

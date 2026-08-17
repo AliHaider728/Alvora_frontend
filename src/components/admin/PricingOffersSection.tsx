@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { Plus, Trash2, Tag, Gift } from 'lucide-react';
+import { Plus, Trash2, Tag, Gift, BadgePercent } from 'lucide-react';
 import { PricingOffers, QuantityBreakTier } from '../../../types';
 
 // Re-use the same fieldClassName constant pattern from AdminProductFormPageClient
@@ -69,7 +69,8 @@ const emptyTier = (): QuantityBreakTier => ({
 
 const DEFAULT_OFFERS: PricingOffers = {
   quantityBreaks: { enabled: false, tiers: [] },
-  bogo: { enabled: false, buyQty: 2, getQty: 1, label: '' }
+  bogo: { enabled: false, buyQty: 2, getQty: 1, label: '' },
+  flatDiscount: { enabled: false, minQty: 2, discountType: 'fixed', discountValue: 0, label: '' }
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -84,8 +85,9 @@ interface Props {
 
 export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePrice }) => {
   const offers = value || DEFAULT_OFFERS;
-  const qb = offers.quantityBreaks;
-  const bogo = offers.bogo;
+  const qb = offers.quantityBreaks || DEFAULT_OFFERS.quantityBreaks;
+  const bogo = offers.bogo || DEFAULT_OFFERS.bogo;
+  const flatDiscount = offers.flatDiscount || DEFAULT_OFFERS.flatDiscount;
 
   // Sort tiers by minQty ascending for calculations and display
   const sortedTiersWithIndex = qb.tiers
@@ -103,6 +105,9 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
 
   const setBogo = (next: Partial<typeof bogo>) =>
     onChange({ ...offers, bogo: { ...bogo, ...next } });
+
+  const setFlatDiscount = (next: Partial<typeof flatDiscount>) =>
+    onChange({ ...offers, flatDiscount: { ...flatDiscount, ...next } });
 
   const addTier = () => {
     const lastQty = qb.tiers[qb.tiers.length - 1]?.minQty ?? 0;
@@ -125,6 +130,11 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
 
   // Auto-generate BOGO label from numbers when the label field is empty
   const bogoAutoLabel = `Buy ${bogo.buyQty}, Get ${bogo.getQty} Free`;
+
+  // Auto-generate Flat Discount label
+  const flatAutoLabel = flatDiscount.discountType === 'percentage'
+    ? `Buy ${flatDiscount.minQty}+, Save ${flatDiscount.discountValue}%/unit`
+    : `Buy ${flatDiscount.minQty}+, Save Rs. ${flatDiscount.discountValue}/unit`;
 
   return (
     <div className="space-y-8">
@@ -351,6 +361,113 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
                 ⚠ Buy Qty must be greater than Get Qty (e.g. Buy 2, Get 1).
               </p>
             )}
+          </div>
+        )}
+      </div>
+
+      {/* ── Section C: Flat Discount ──────────────────────────────────────── */}
+      <div className="space-y-4">
+        <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
+          <BadgePercent className="h-4 w-4 text-indigo-500" />
+          <h3 className="font-heading text-sm font-black text-slate-800 uppercase tracking-wider">
+            Flat Discount
+          </h3>
+        </div>
+
+        <Toggle
+          checked={flatDiscount.enabled}
+          onChange={enabled => setFlatDiscount({ enabled })}
+          label="Enable Flat Discount"
+          description="Apply a uniform discount (fixed Rs. or %) to every unit once a minimum quantity is reached."
+        />
+
+        {flatDiscount.enabled && (
+          <div className="space-y-4 pl-0 pt-1">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {/* Min Qty */}
+              <div>
+                <label className="mb-1.5 block text-xs font-bold text-slate-700">
+                  Minimum Quantity
+                </label>
+                <input
+                  type="number"
+                  min={1}
+                  value={flatDiscount.minQty}
+                  onChange={e => {
+                    const minQty = Math.max(1, Number(e.target.value));
+                    const wasAuto = flatDiscount.label === flatAutoLabel || flatDiscount.label === '';
+                    setFlatDiscount({
+                      minQty,
+                      label: wasAuto ? '' : flatDiscount.label
+                    });
+                  }}
+                  className={fieldCls}
+                />
+              </div>
+
+              {/* Discount Value */}
+              <div>
+                <label className="mb-1.5 block text-xs font-bold text-slate-700">
+                  Discount Value
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    min={0}
+                    value={flatDiscount.discountValue}
+                    onChange={e => {
+                      const discountValue = Math.max(0, Number(e.target.value));
+                      const wasAuto = flatDiscount.label === flatAutoLabel || flatDiscount.label === '';
+                      setFlatDiscount({
+                        discountValue,
+                        label: wasAuto ? '' : flatDiscount.label
+                      });
+                    }}
+                    className={`${fieldCls} pr-14`}
+                  />
+                  <div className="absolute inset-y-0 right-1 flex items-center">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const wasAuto = flatDiscount.label === flatAutoLabel || flatDiscount.label === '';
+                        setFlatDiscount({
+                          discountType: flatDiscount.discountType === 'fixed' ? 'percentage' : 'fixed',
+                          label: wasAuto ? '' : flatDiscount.label
+                        });
+                      }}
+                      className="flex h-7 items-center justify-center rounded-lg bg-slate-100 px-2 text-xs font-bold text-slate-600 hover:bg-slate-200"
+                    >
+                      {flatDiscount.discountType === 'fixed' ? 'Rs.' : '%'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Live preview */}
+              <div className="col-span-2 sm:col-span-1 flex items-end">
+                <div className="w-full rounded-xl border border-indigo-200 bg-indigo-50 px-3 py-2.5 text-sm font-bold text-indigo-800">
+                  🏷️ {flatAutoLabel}
+                </div>
+              </div>
+            </div>
+
+            {/* Custom label */}
+            <div>
+              <label className="mb-1.5 block text-xs font-bold text-slate-700">
+                Offer Label{' '}
+                <span className="font-normal text-slate-400">
+                  (leave empty to use auto-generated: &ldquo;{flatAutoLabel}&rdquo;)
+                </span>
+              </label>
+              <input
+                type="text"
+                maxLength={120}
+                placeholder={flatAutoLabel}
+                value={flatDiscount.label}
+                onChange={e => setFlatDiscount({ label: e.target.value })}
+                className={fieldCls}
+              />
+            </div>
           </div>
         )}
       </div>

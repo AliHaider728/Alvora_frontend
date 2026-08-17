@@ -17,9 +17,18 @@ export interface Bogo {
   label: string;
 }
 
+export interface FlatDiscount {
+  enabled: boolean;
+  minQty: number;
+  discountType: "fixed" | "percentage";
+  discountValue: number;
+  label: string;
+}
+
 export interface PricingOffers {
   quantityBreaks?: QuantityBreaks;
   bogo?: Bogo;
+  flatDiscount?: FlatDiscount;
 }
 
 export interface CartLineResult {
@@ -56,8 +65,29 @@ export const resolveCartLine = (
         
       labels.push(matchedTier.label || autoLabel);
     }
+  } else {
+    // 2. Flat Discount logic (only applies if Quantity Breaks didn't match a tier)
+    const flat = pricingOffers?.flatDiscount;
+    if (flat?.enabled && quantity >= flat.minQty) {
+      if (flat.discountType === 'percentage') {
+        const discountAmount = baseUnitPrice * (flat.discountValue / 100);
+        unitPrice = Math.max(0, baseUnitPrice - discountAmount);
+      } else {
+        unitPrice = Math.max(0, baseUnitPrice - flat.discountValue);
+      }
+
+      const flatSavedAmount = baseUnitPrice - unitPrice;
+      const flatAutoLabel = flat.discountType === 'percentage'
+        ? `Buy ${flat.minQty}+, Save ${flat.discountValue}%/unit`
+        : `Buy ${flat.minQty}+, Save Rs. ${flatSavedAmount}/unit`;
+
+      if (flatSavedAmount > 0) {
+        labels.push(flat.label || flatAutoLabel);
+      }
+    }
   }
 
+  // 3. BOGO logic (applies independently on top)
   const bogo = pricingOffers?.bogo;
   if (bogo?.enabled && bogo.buyQty >= 1 && bogo.getQty >= 1) {
     freeUnits = Math.floor(quantity / bogo.buyQty) * bogo.getQty;

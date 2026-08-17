@@ -51,6 +51,7 @@ import { Review } from '../../../types';
 import { getSafeImageSrc } from '../../../utils/images';
 import { QuantityBreaksSelector } from "../../../components/product/QuantityBreaksSelector";
 import { BogoBanner } from "../../../components/product/BogoBanner";
+import { FlatDiscountBanner } from "../../../components/product/FlatDiscountBanner";
 
 const getPlainDescription = (description: string) =>
   description.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
@@ -685,6 +686,18 @@ export const ProductDetailPageClient: React.FC = () => {
                   {/* BOGO Banner */}
                   {product.pricingOffers?.bogo?.enabled && (
                     <BogoBanner bogo={product.pricingOffers.bogo} selectedQuantity={quantity} />
+                  )}
+                  {/* Flat Discount Banner */}
+                  {product.pricingOffers?.flatDiscount?.enabled && (
+                    <FlatDiscountBanner 
+                      flatDiscount={product.pricingOffers.flatDiscount} 
+                      selectedQuantity={quantity} 
+                      isOverridden={
+                        product.pricingOffers?.quantityBreaks?.enabled && 
+                        Array.isArray(product.pricingOffers.quantityBreaks.tiers) && 
+                        product.pricingOffers.quantityBreaks.tiers.some(t => quantity >= t.minQty)
+                      }
+                    />
                   )}
                   {isVariable && !currentVariation && (
                     <span className="mt-1 block text-sm font-medium text-slate-500">
