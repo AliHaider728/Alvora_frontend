@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname, useParams } from 'next/navigation';
-import { X, ShoppingBag, Trash2, Plus, Minus, Tag, ArrowRight, ShieldCheck } from 'lucide-react';
+import { X, ShoppingBag, Trash2, Plus, Minus, Tag, ArrowRight, ShieldCheck, Gift } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/formatters';
 import { getSafeImageSrc } from '../../utils/images';

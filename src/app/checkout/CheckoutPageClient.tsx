@@ -14,7 +14,9 @@ import {
   Clock,
   UserCheck,
   Minus,
-  Plus
+  Plus,
+  Tag,
+  Gift
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { useAuth } from '../../context/AuthContext';

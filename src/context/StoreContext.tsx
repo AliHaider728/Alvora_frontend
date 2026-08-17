@@ -24,6 +24,7 @@ import { formatPrice } from '../utils/formatters';
 import { normalizeStoreSettings } from '../config/storeAppearance';
 import { normalizeInventory, normalizeProductAgeGroups } from '../utils/products';
 import { useToast } from './ToastContext';
+import { resolveCartLine } from '../lib/pricingOffers';
 
 type MongoRecord = {
   _id?: unknown;
