@@ -41,10 +41,20 @@ export const resolveCartLine = (
   const qb = pricingOffers?.quantityBreaks;
   if (qb?.enabled && Array.isArray(qb.tiers) && qb.tiers.length > 0) {
     const sortedTiers = [...qb.tiers].sort((a, b) => b.minQty - a.minQty);
+    const tier1Price = sortedTiers[sortedTiers.length - 1]?.pricePerUnit ?? baseUnitPrice;
+    
     const matchedTier = sortedTiers.find(tier => quantity >= tier.minQty);
     if (matchedTier) {
       unitPrice = matchedTier.pricePerUnit;
-      labels.push(matchedTier.label);
+      
+      const savePct = matchedTier.pricePerUnit < tier1Price ? 1 : 0;
+      const savedAmount = (tier1Price - matchedTier.pricePerUnit) * matchedTier.minQty;
+      
+      const autoLabel = savePct > 0 
+        ? `Buy ${matchedTier.minQty}, Save Rs. ${savedAmount}` 
+        : `Buy ${matchedTier.minQty}`;
+        
+      labels.push(matchedTier.label || autoLabel);
     }
   }
 

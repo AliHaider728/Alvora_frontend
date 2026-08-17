@@ -488,26 +488,39 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       }
 
       if (existing) {
-        return normalizedCart.map(item =>
-          getCartLineKey(item.product.id, item.selectedVariant, item.variationId) === lineKey
-            ? { 
-                ...item, 
-                quantity: item.quantity + quantity,
-                appliedOfferLabel: options?.appliedOfferLabel,
-                freeUnits: options?.freeUnits,
-                resolvedUnitPrice: options?.resolvedUnitPrice ?? item.resolvedUnitPrice
-              }
-            : item
-        );
+        return normalizedCart.map(item => {
+          if (getCartLineKey(item.product.id, item.selectedVariant, item.variationId) !== lineKey) return item;
+          const newQty = item.quantity + quantity;
+          const basePrice = getBasePrice(item);
+          const resolved = resolveCartLine(item.product.pricingOffers, basePrice, newQty);
+          return { 
+            ...item, 
+            quantity: newQty,
+            appliedOfferLabel: resolved.appliedLabel,
+            freeUnits: resolved.freeUnits,
+            resolvedUnitPrice: resolved.unitPrice
+          };
+        });
       }
-      return [...normalizedCart, { 
+
+      // It's a new item
+      const newItemBase: CartItem = { 
         product: enrichedProduct, 
         quantity, 
         selectedVariant, 
         variationId,
-        appliedOfferLabel: options?.appliedOfferLabel,
-        freeUnits: options?.freeUnits,
-        resolvedUnitPrice: options?.resolvedUnitPrice
+        appliedOfferLabel: '',
+        freeUnits: 0,
+        resolvedUnitPrice: 0
+      };
+      const basePrice = getBasePrice(newItemBase);
+      const resolved = resolveCartLine(enrichedProduct.pricingOffers, basePrice, quantity);
+      
+      return [...normalizedCart, { 
+        ...newItemBase,
+        appliedOfferLabel: resolved.appliedLabel,
+        freeUnits: resolved.freeUnits,
+        resolvedUnitPrice: resolved.unitPrice
       }];
     });
     setIsCartOpen(true);

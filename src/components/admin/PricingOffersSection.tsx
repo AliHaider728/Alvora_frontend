@@ -87,10 +87,15 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
   const qb = offers.quantityBreaks;
   const bogo = offers.bogo;
 
-  // Tier 1 price — if there are tiers, use the first one's price; else use basePrice
+  // Sort tiers by minQty ascending for calculations and display
+  const sortedTiersWithIndex = qb.tiers
+    .map((tier, index) => ({ tier, originalIndex: index }))
+    .sort((a, b) => a.tier.minQty - b.tier.minQty);
+
+  // Tier 1 price — lowest minQty tier's price, or basePrice if no tiers
   const tier1Price =
-    qb.tiers.length > 0
-      ? qb.tiers[0].pricePerUnit
+    sortedTiersWithIndex.length > 0
+      ? sortedTiersWithIndex[0].tier.pricePerUnit
       : basePrice;
 
   const setQb = (next: Partial<typeof qb>) =>
@@ -149,10 +154,10 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
             )}
 
             {/* Tier rows */}
-            <div className="space-y-2">
-              {qb.tiers.map((tier, i) => (
+            <div className="space-y-2 flex flex-col">
+              {sortedTiersWithIndex.map(({ tier, originalIndex }) => (
                 <div
-                  key={i}
+                  key={originalIndex}
                   className="grid grid-cols-[60px_1fr_1fr_1fr_48px_40px] gap-2 items-start rounded-2xl border border-slate-100 bg-slate-50/60 p-3"
                 >
                   {/* Min Qty */}
@@ -164,7 +169,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
                       type="number"
                       min={1}
                       value={tier.minQty}
-                      onChange={e => updateTier(i, { minQty: Number(e.target.value) })}
+                      onChange={e => updateTier(originalIndex, { minQty: Number(e.target.value) })}
                       className={smallFieldCls}
                     />
                   </div>
@@ -178,7 +183,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
                       type="number"
                       min={0}
                       value={tier.pricePerUnit}
-                      onChange={e => updateTier(i, { pricePerUnit: Number(e.target.value) })}
+                      onChange={e => updateTier(originalIndex, { pricePerUnit: Number(e.target.value) })}
                       className={smallFieldCls}
                     />
                   </div>
@@ -193,7 +198,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
                       maxLength={120}
                       placeholder={formatAutoLabel(tier.minQty, calcSaveAmount(tier1Price, tier.pricePerUnit, tier.minQty))}
                       value={tier.label}
-                      onChange={e => updateTier(i, { label: e.target.value })}
+                      onChange={e => updateTier(originalIndex, { label: e.target.value })}
                       className={smallFieldCls}
                     />
                   </div>
@@ -208,7 +213,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
                       maxLength={60}
                       placeholder="e.g. Most Popular"
                       value={tier.badge}
-                      onChange={e => updateTier(i, { badge: e.target.value })}
+                      onChange={e => updateTier(originalIndex, { badge: e.target.value })}
                       className={smallFieldCls}
                     />
                   </div>
@@ -219,7 +224,10 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
                       Save
                     </label>
                     <div className="flex h-9 items-center justify-center rounded-xl border border-slate-200 bg-emerald-50 px-2 text-xs font-bold text-emerald-700 whitespace-nowrap">
-                      {i === 0 ? 'base' : `Rs. ${calcSaveAmount(tier1Price, tier.pricePerUnit, tier.minQty)}`}
+                      {(() => {
+                        const saved = calcSaveAmount(tier1Price, tier.pricePerUnit, tier.minQty);
+                        return saved === 0 ? 'base' : `Rs. ${saved}`;
+                      })()}
                     </div>
                   </div>
 
@@ -227,8 +235,8 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
                   <div className="pt-5">
                     <button
                       type="button"
-                      onClick={() => removeTier(i)}
-                      aria-label={`Remove tier ${i + 1}`}
+                      onClick={() => removeTier(originalIndex)}
+                      aria-label={`Remove tier`}
                       className="flex h-9 w-9 items-center justify-center rounded-xl text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition-colors"
                     >
                       <Trash2 className="h-4 w-4" />
