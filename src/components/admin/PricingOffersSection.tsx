@@ -50,9 +50,14 @@ const Toggle: React.FC<{
 // ─────────────────────────────────────────────────────────────────────────────
 // Helpers
 // ─────────────────────────────────────────────────────────────────────────────
-const calcSavePct = (tier1Price: number, tierPrice: number): string => {
-  if (!tier1Price || tierPrice >= tier1Price) return '—';
-  return `${Math.round(((tier1Price - tierPrice) / tier1Price) * 100)}%`;
+const calcSaveAmount = (tier1Price: number, tierPrice: number, minQty: number): number => {
+  if (!tier1Price || tierPrice >= tier1Price) return 0;
+  return (tier1Price - tierPrice) * minQty;
+};
+
+const formatAutoLabel = (minQty: number, saveAmount: number): string => {
+  if (saveAmount > 0) return `Buy ${minQty}, Save Rs. ${saveAmount}`;
+  return `Buy ${minQty}`;
 };
 
 const emptyTier = (): QuantityBreakTier => ({
@@ -186,7 +191,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
                     <input
                       type="text"
                       maxLength={120}
-                      placeholder="e.g. Buy 2, Save 10%"
+                      placeholder={formatAutoLabel(tier.minQty, calcSaveAmount(tier1Price, tier.pricePerUnit, tier.minQty))}
                       value={tier.label}
                       onChange={e => updateTier(i, { label: e.target.value })}
                       className={smallFieldCls}
@@ -208,13 +213,13 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
                     />
                   </div>
 
-                  {/* Save % (read-only) */}
+                  {/* Save Rs (read-only) */}
                   <div>
                     <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-slate-500">
                       Save
                     </label>
-                    <div className="flex h-9 items-center justify-center rounded-xl border border-slate-200 bg-emerald-50 px-2 text-xs font-bold text-emerald-700">
-                      {i === 0 ? 'base' : calcSavePct(tier1Price, tier.pricePerUnit)}
+                    <div className="flex h-9 items-center justify-center rounded-xl border border-slate-200 bg-emerald-50 px-2 text-xs font-bold text-emerald-700 whitespace-nowrap">
+                      {i === 0 ? 'base' : `Rs. ${calcSaveAmount(tier1Price, tier.pricePerUnit, tier.minQty)}`}
                     </div>
                   </div>
 

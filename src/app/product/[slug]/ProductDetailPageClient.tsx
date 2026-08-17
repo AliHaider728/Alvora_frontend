@@ -415,6 +415,16 @@ export const ProductDetailPageClient: React.FC = () => {
     currentPrice = product.price + totalVariantOffset;
   }
 
+  // Derive dynamic display price based on active quantity tier
+  let displayPrice = currentPrice;
+  if (product.pricingOffers?.quantityBreaks?.enabled) {
+    const sortedTiers = [...(product.pricingOffers.quantityBreaks.tiers || [])].sort((a, b) => b.minQty - a.minQty);
+    const matchedTier = sortedTiers.find(t => quantity >= t.minQty);
+    if (matchedTier) {
+      displayPrice = matchedTier.pricePerUnit;
+    }
+  }
+
   const variantGroups = (product.variants || []).filter(group => group.options.length > 0);
   const allVariantsSelected = isVariable
     ? variationAttributes.length > 0 && variationAttributes.every(attr => Boolean(selectedAttributes[attr.slug]))
@@ -664,11 +674,11 @@ export const ProductDetailPageClient: React.FC = () => {
                 <div>
                   <div className="flex items-baseline gap-3">
                     <span className="font-heading text-2xl font-black text-slate-900 sm:text-3xl">
-                      {formatPrice(currentPrice, settings.currency)}
+                      {formatPrice(displayPrice, settings.currency)}
                     </span>
                     {(product.originalPrice ?? 0) > 0 && (
                       <div className="text-xl font-bold text-rose-500 line-through md:text-2xl">
-                        {formatPrice(currentOriginalPrice, settings.currency)}
+                        {formatPrice(currentOriginalPrice ?? product.originalPrice!, settings.currency)}
                       </div>
                     )}
                   </div>
@@ -676,9 +686,14 @@ export const ProductDetailPageClient: React.FC = () => {
                   {product.pricingOffers?.bogo?.enabled && (
                     <BogoBanner bogo={product.pricingOffers.bogo} selectedQuantity={quantity} />
                   )}
+                  {isVariable && !currentVariation && (
+                    <span className="mt-1 block text-sm font-medium text-slate-500">
+                      Prices vary by selection
+                    </span>
+                  )}
                   {(product.discountPercent ?? 0) > 0 && (
                     <span className="text-xs font-bold text-emerald-600">
-                      You save {formatPrice(product.originalPrice! - currentPrice, settings.currency)} ({product.discountPercent}% discount)
+                      You save {formatPrice(product.originalPrice! - displayPrice, settings.currency)} ({product.discountPercent}% discount)
                     </span>
                   )}
                 </div>
@@ -943,7 +958,7 @@ export const ProductDetailPageClient: React.FC = () => {
                   quantityBreaks={product.pricingOffers.quantityBreaks}
                   basePrice={currentPrice}
                   selectedQuantity={quantity}
-                  onTierSelect={(tier) => setQuantity(tier.minQty)}
+                  onTierSelect={(tier, isActive) => setQuantity(isActive ? 1 : tier.minQty)}
                 />
               ) : (
                 <div className="space-y-3 border-t border-slate-100 pt-3">
@@ -1042,7 +1057,7 @@ export const ProductDetailPageClient: React.FC = () => {
                     ) : (
                       <>
                         <ShoppingBag className="w-5 h-5" />
-                        <span>{!allVariantsSelected ? 'Select Options' : !canPurchase ? 'Sold Out' : `Add - ${formatPrice(currentPrice * quantity, settings.currency)}`}</span>
+                        <span>{!allVariantsSelected ? 'Select Options' : !canPurchase ? 'Sold Out' : `Add - ${formatPrice(displayPrice * quantity, settings.currency)}`}</span>
                       </>
                     )}
                   </button>

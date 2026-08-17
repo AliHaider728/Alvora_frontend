@@ -519,26 +519,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     ));
   };
 
-  const updateCartQuantity = (productId: string, quantity: number, selectedVariant?: string, variationId?: string) => {
-    if (quantity <= 0) {
-      removeFromCart(productId, selectedVariant, variationId);
-      return;
-    }
-    const lineKey = getCartLineKey(productId, selectedVariant, variationId);
-    setCart(prev =>
-      prev.map(item =>
-        getCartLineKey(item.product.id, item.selectedVariant, item.variationId) === lineKey ? { ...item, quantity } : item
-      )
-    );
-  };
-
-  const clearCart = () => {
-    setCart([]);
-    setAppliedCoupon(null);
-  };
-
-  const cartTotalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
-  const cartSubtotal = cart.reduce((acc, item) => {
+  const getBasePrice = (item: CartItem): number => {
     let price = item.product.price;
     if (item.product.productType === 'variable' && item.variationId) {
        const variation = item.product.variations?.find(v => String(v.id) === String(item.variationId));
@@ -558,6 +539,39 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
        }, 0);
        price += variantOffset;
     }
+    return price;
+  };
+
+  const updateCartQuantity = (productId: string, quantity: number, selectedVariant?: string, variationId?: string) => {
+    if (quantity <= 0) {
+      removeFromCart(productId, selectedVariant, variationId);
+      return;
+    }
+    const lineKey = getCartLineKey(productId, selectedVariant, variationId);
+    setCart(prev =>
+      prev.map(item => {
+        if (getCartLineKey(item.product.id, item.selectedVariant, item.variationId) !== lineKey) return item;
+        const basePrice = getBasePrice(item);
+        const resolved = resolveCartLine(item.product.pricingOffers, basePrice, quantity);
+        return { 
+          ...item, 
+          quantity,
+          resolvedUnitPrice: resolved.unitPrice,
+          freeUnits: resolved.freeUnits,
+          appliedOfferLabel: resolved.appliedLabel
+        };
+      })
+    );
+  };
+
+  const clearCart = () => {
+    setCart([]);
+    setAppliedCoupon(null);
+  };
+
+  const cartTotalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
+  const cartSubtotal = cart.reduce((acc, item) => {
+    let price = item.resolvedUnitPrice !== undefined ? item.resolvedUnitPrice : getBasePrice(item);
     return acc + price * item.quantity;
   }, 0);
 

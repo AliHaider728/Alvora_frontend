@@ -5,7 +5,7 @@ interface QuantityBreaksSelectorProps {
   quantityBreaks: QuantityBreaks;
   basePrice: number;
   selectedQuantity: number;
-  onTierSelect: (tier: QuantityBreakTier) => void;
+  onTierSelect: (tier: QuantityBreakTier, isActive: boolean) => void;
 }
 
 export const QuantityBreaksSelector: React.FC<QuantityBreaksSelectorProps> = ({
@@ -44,7 +44,7 @@ export const QuantityBreaksSelector: React.FC<QuantityBreaksSelectorProps> = ({
             <button
               key={tier.minQty}
               type="button"
-              onClick={() => onTierSelect(tier)}
+              onClick={() => onTierSelect(tier, isActive)}
               className={`relative flex flex-col items-start rounded-2xl border-2 p-4 text-left transition-all ${
                 isActive
                   ? 'border-rose-500 bg-rose-50/50 shadow-sm'
@@ -79,7 +79,7 @@ export const QuantityBreaksSelector: React.FC<QuantityBreaksSelectorProps> = ({
               {/* Label & Price */}
               <div className="mt-1 flex w-full flex-col">
                 <span className={`text-base font-bold leading-tight ${isActive ? 'text-rose-950' : 'text-slate-700'}`}>
-                  {tier.label}
+                  {tier.label || (savePct > 0 ? `Buy ${tier.minQty}, Save Rs. ${(tier1Price - tier.pricePerUnit) * tier.minQty}` : `Buy ${tier.minQty}`)}
                 </span>
                 <div className="mt-1.5 flex items-baseline gap-1.5">
                   <span className={`text-xl font-black ${isActive ? 'text-rose-600' : 'text-slate-900'}`}>

@@ -598,7 +598,7 @@ if (typeof window !== "undefined" && window.fbq) {
                         )}
 
                         {/* Pricing Offer Badges */}
-                        {(item.appliedOfferLabel || item.freeUnits) && (
+                        {!!(item.appliedOfferLabel || item.freeUnits) && (
                           <div className="mt-1 flex flex-col gap-1">
                             {item.appliedOfferLabel && (
                               <span className="inline-flex w-fit items-center rounded bg-rose-50 px-1.5 py-0.5 text-[9px] font-bold text-rose-600">
