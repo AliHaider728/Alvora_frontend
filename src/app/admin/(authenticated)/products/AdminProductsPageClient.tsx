@@ -222,7 +222,9 @@ export const AdminProductsPageClient: React.FC = () => {
       {/* Table */}
       <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-slate-700">
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <SortableContext items={filteredProducts.map(p => p.id)} strategy={verticalListSortingStrategy}>
+              <table className="w-full text-left text-xs text-slate-700">
             <thead className="bg-slate-50 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
               <tr>
                 <th className="p-4 pl-6 w-10"></th>
@@ -235,9 +237,7 @@ export const AdminProductsPageClient: React.FC = () => {
                 <th className="p-4 pr-6 text-right">Actions</th>
               </tr>
             </thead>
-            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-              <SortableContext items={filteredProducts.map(p => p.id)} strategy={verticalListSortingStrategy}>
-                <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100">
               {filteredProducts.map(prod => {
                 const canMove = !searchQuery && selectedCatFilter === 'all' && !isReordering;
 
@@ -295,9 +295,9 @@ export const AdminProductsPageClient: React.FC = () => {
                 );
               })}
               </tbody>
+              </table>
             </SortableContext>
           </DndContext>
-          </table>
         </div>
       </div>
 

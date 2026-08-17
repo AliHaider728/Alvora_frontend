@@ -109,6 +109,33 @@ export interface ProductVariation {
 
 export type DeliveryChargeType = 'store_threshold' | 'category' | 'fixed' | 'free' | 'none';
 
+// ── Pricing Offers ───────────────────────────────────────────────────────────
+export interface QuantityBreakTier {
+  minQty: number;
+  pricePerUnit: number;
+  label: string;
+  badge: string;
+}
+
+export interface QuantityBreaks {
+  enabled: boolean;
+  tiers: QuantityBreakTier[];
+}
+
+export interface Bogo {
+  enabled: boolean;
+  /** How many units the customer must buy to trigger one BOGO reward */
+  buyQty: number;
+  /** Free units awarded per BOGO trigger (must be < buyQty) */
+  getQty: number;
+  label: string;
+}
+
+export interface PricingOffers {
+  quantityBreaks: QuantityBreaks;
+  bogo: Bogo;
+}
+
 export interface Product {
   id: string;
   productType?: 'simple' | 'variable';
@@ -170,6 +197,7 @@ export interface Product {
   productDetailCustomCss?: string;
   productDetailScopedCss?: string;
   productSchemaVersion?: number;
+  pricingOffers?: PricingOffers;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -227,6 +255,12 @@ export interface CartItem {
   quantity: number;
   selectedVariant?: string; // Legacy
   variationId?: string;
+  /** Human-readable label of the applied pricing offer, e.g. "Buy 2, Save 10%" */
+  appliedOfferLabel?: string;
+  /** Number of free units awarded by a BOGO offer */
+  freeUnits?: number;
+  /** Server-resolved unit price (after QB tier discount). Falls back to product.price if no offer. */
+  resolvedUnitPrice?: number;
 }
 
 export interface WishlistItem {

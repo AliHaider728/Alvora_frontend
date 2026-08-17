@@ -200,8 +200,8 @@ export const AdminDashboardPageClient: React.FC = () => {
             </thead>
             <tbody className="divide-y divide-slate-100">
               {orders.slice(0, 5).map(order => (
-                <tr key={order.id} className="hover:bg-slate-50/80 transition-colors">
-                  <td className="p-4 pl-6 font-heading font-bold text-slate-900">{order.id}</td>
+                <tr key={order._id} className="hover:bg-slate-50/80 transition-colors">
+                  <td className="p-4 pl-6 font-heading font-bold text-slate-900">{order.orderId}</td>
                   <td className="p-4 font-medium">{order.customerName}</td>
                   <td className="p-4 text-slate-400">{order.date}</td>
                   <td className="p-4 font-bold text-slate-900">{formatPrice(order.total)}</td>

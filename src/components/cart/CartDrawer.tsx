@@ -102,7 +102,9 @@ export const CartDrawer: React.FC = () => {
                   : undefined;
                   
                 let itemPrice = item.product.price;
-                if (variation) {
+                if (item.resolvedUnitPrice !== undefined) {
+                  itemPrice = item.resolvedUnitPrice;
+                } else if (variation) {
                   itemPrice = variation.salePrice !== undefined && variation.salePrice !== null ? variation.salePrice : variation.regularPrice;
                 } else if (item.selectedVariant && item.product.variants) {
                   const selections = new Map(
@@ -169,7 +171,26 @@ export const CartDrawer: React.FC = () => {
                           {item.selectedVariant}
                         </span>
                       )}
+
+                      {/* Pricing Offer Badges */}
+                      {(item.appliedOfferLabel || item.freeUnits) && (
+                        <div className="mt-1.5 flex flex-col gap-1">
+                          {item.appliedOfferLabel && (
+                            <span className="inline-flex w-fit items-center rounded bg-rose-50 px-1.5 py-0.5 text-[10px] font-bold text-rose-600">
+                              <Tag className="mr-1 h-3 w-3" />
+                              {item.appliedOfferLabel}
+                            </span>
+                          )}
+                          {item.freeUnits ? (
+                            <span className="inline-flex w-fit items-center rounded bg-emerald-50 px-1.5 py-0.5 text-[10px] font-bold text-emerald-700">
+                              <Gift className="mr-1 h-3 w-3" />
+                              +{item.freeUnits} Free Unit{item.freeUnits > 1 ? 's' : ''} Included
+                            </span>
+                          ) : null}
+                        </div>
+                      )}
                     </div>
+
 
                     <div className="flex items-center justify-between mt-2">
                       <div className="flex items-center border border-slate-200 rounded-xl bg-white">

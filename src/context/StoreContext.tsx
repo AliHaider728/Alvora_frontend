@@ -179,7 +179,7 @@ export interface StoreContextType {
   cart: CartItem[];
   isCartOpen: boolean;
   setIsCartOpen: (open: boolean) => void;
-  addToCart: (product: Product, quantity?: number, selectedVariant?: string, variationId?: string) => void;
+  addToCart: (product: Product, quantity?: number, selectedVariant?: string, variationId?: string, options?: { appliedOfferLabel?: string; freeUnits?: number; resolvedUnitPrice?: number }) => void;
   removeFromCart: (productId: string, selectedVariant?: string, variationId?: string) => void;
   updateCartQuantity: (productId: string, quantity: number, selectedVariant?: string, variationId?: string) => void;
   clearCart: () => void;
@@ -459,7 +459,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, [products]);
 
   // Cart operations
-  const addToCart = (product: Product, quantity = 1, selectedVariant?: string, variationId?: string) => {
+  const addToCart = (product: Product, quantity = 1, selectedVariant?: string, variationId?: string, options?: { appliedOfferLabel?: string; freeUnits?: number; resolvedUnitPrice?: number }) => {
     if (!product || !product.id || String(product.id).trim() === '' || String(product.id) === 'undefined') {
       console.error('[StoreContext] Critical Error: Rejected attempt to add malformed product to cart (missing valid id).', product);
       return;
@@ -489,11 +489,25 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       if (existing) {
         return normalizedCart.map(item =>
           getCartLineKey(item.product.id, item.selectedVariant, item.variationId) === lineKey
-            ? { ...item, quantity: item.quantity + quantity, product: enrichedProduct }
+            ? { 
+                ...item, 
+                quantity: item.quantity + quantity,
+                appliedOfferLabel: options?.appliedOfferLabel,
+                freeUnits: options?.freeUnits,
+                resolvedUnitPrice: options?.resolvedUnitPrice ?? item.resolvedUnitPrice
+              }
             : item
         );
       }
-      return [...normalizedCart, { product: enrichedProduct, quantity, selectedVariant, variationId }];
+      return [...normalizedCart, { 
+        product: enrichedProduct, 
+        quantity, 
+        selectedVariant, 
+        variationId,
+        appliedOfferLabel: options?.appliedOfferLabel,
+        freeUnits: options?.freeUnits,
+        resolvedUnitPrice: options?.resolvedUnitPrice
+      }];
     });
     setIsCartOpen(true);
   };

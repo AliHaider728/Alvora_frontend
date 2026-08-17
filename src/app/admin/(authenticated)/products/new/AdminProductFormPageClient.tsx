@@ -39,12 +39,15 @@ import {
   ProductDetailBlock,
   ProductInput,
   ProductVariantGroup,
-  StockStatus
+  StockStatus,
+  PricingOffers
 } from '../../../../../types';
+
 import { getSafeImageSrc } from '../../../../../utils/images';
 import { getVariationDisplayLabel, normalizeInventory } from '../../../../../utils/products';
 import { ProductDetailContentBuilder } from '../../../../../components/admin/ProductDetailContentBuilder';
 import { CategoryFormModal } from '../../../../../components/admin/CategoryFormModal';
+import { PricingOffersSection } from '../../../../../components/admin/PricingOffersSection';
 
 import { AttributesManager } from '../../../../../components/admin/AttributesManager';
 import { VariationsGenerator } from '../../../../../components/admin/VariationsGenerator';
@@ -230,6 +233,13 @@ export const AdminProductFormPageClient: React.FC = () => {
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   const superAdmin = isSuperAdmin();
 
+  const DEFAULT_PRICING_OFFERS: PricingOffers = {
+    quantityBreaks: { enabled: false, tiers: [] },
+    bogo: { enabled: false, buyQty: 2, getQty: 1, label: '' }
+  };
+  const [pricingOffers, setPricingOffers] = useState<PricingOffers>(DEFAULT_PRICING_OFFERS);
+
+
   const markDirty = () => setIsDirty(true);
   const applyCategorySelection = (nextIds: string[]) => {
     const uniqueIds = [...new Set(nextIds)];
@@ -316,7 +326,7 @@ export const AdminProductFormPageClient: React.FC = () => {
     productType, attributes, variations, defaultAttributes, defaultVariationId,
     ageGroups, material, safetyInfo, weight, deliveryType, customDeliveryFee,
     status, isVisible, isFeatured, isBestseller, isNewArrival, isSpotlight, metaTitle, metaDescription, productDetailBlocks, productDetailCustomCss,
-    images
+    images, pricingOffers
   };
 
   useEffect(() => {
@@ -345,8 +355,9 @@ export const AdminProductFormPageClient: React.FC = () => {
     productType, attributes, variations, defaultAttributes, defaultVariationId,
     ageGroups, material, safetyInfo, weight, deliveryType, customDeliveryFee,
     status, isVisible, isFeatured, isBestseller, isNewArrival, isSpotlight, soldCount, metaTitle, metaDescription, productDetailBlocks, productDetailCustomCss,
-    images, isDirty, productLoadFailed, id
+    images, isDirty, productLoadFailed, id, pricingOffers
   ]);
+
 
   const initializeFromApi = () => {
     if (!editingProduct) return;
@@ -397,6 +408,7 @@ export const AdminProductFormPageClient: React.FC = () => {
     setIsSpotlight(editingProduct.isSpotlight === true);
     setSoldCount(editingProduct.soldCount ?? '');
     setImages((editingProduct.images || []).map((url, index) =>
+
       makeImage(
         url,
         String(index),
@@ -438,6 +450,16 @@ export const AdminProductFormPageClient: React.FC = () => {
       })));
     }
     setProductDetailCustomCss(editingProduct.productDetailCustomCss || '');
+    setSizeGuide(editingProduct.sizeGuide || '');
+    // Restore pricingOffers if the product has them, otherwise use defaults
+    if (editingProduct.pricingOffers) {
+      setPricingOffers({
+        quantityBreaks: editingProduct.pricingOffers.quantityBreaks || { enabled: false, tiers: [] },
+        bogo: editingProduct.pricingOffers.bogo || { enabled: false, buyQty: 2, getQty: 1, label: '' }
+      });
+    } else {
+      setPricingOffers(DEFAULT_PRICING_OFFERS);
+    }
     setIsDirty(false);
   };
 
@@ -904,7 +926,8 @@ export const AdminProductFormPageClient: React.FC = () => {
         } : undefined
       })),
       sizeGuide,
-      ...(superAdmin ? { productDetailCustomCss } : {})
+      ...(superAdmin ? { productDetailCustomCss } : {}),
+      pricingOffers
     };
 
     setIsSaving(true);
@@ -1142,6 +1165,22 @@ export const AdminProductFormPageClient: React.FC = () => {
               </FormCard>
             </>
           )}
+
+
+
+          {/* ── Pricing Offers ── */}
+          <FormCard
+            title="Pricing Offers"
+            description="Configure tiered pricing and BOGO deals shown on the product page. Both features are independent and can be enabled together."
+            icon={CircleDollarSign}
+          >
+            <PricingOffersSection
+              value={pricingOffers}
+              onChange={next => { setPricingOffers(next); markDirty(); }}
+              basePrice={salePrice !== undefined ? salePrice : regularPrice}
+            />
+          </FormCard>
+
 
 
           <FormCard title="Delivery & Shipping" icon={Truck}>

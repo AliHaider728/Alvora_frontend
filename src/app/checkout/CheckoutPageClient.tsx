@@ -553,8 +553,11 @@ if (typeof window !== "undefined" && window.fbq) {
                       : undefined;
 
                     let itemPrice = item.product.price;
-                    if (variation) {
+                    if (item.resolvedUnitPrice !== undefined) {
+                      itemPrice = item.resolvedUnitPrice;
+                    } else if (variation) {
                       itemPrice = variation.salePrice !== undefined && variation.salePrice !== null ? variation.salePrice : variation.regularPrice;
+
                     } else if (item.selectedVariant && item.product.variants) {
                       const selections = new Map(
                         item.selectedVariant.split(',').map(part => {
@@ -593,7 +596,27 @@ if (typeof window !== "undefined" && window.fbq) {
                         {!variation && item.selectedVariant && (
                            <span className="text-xs text-slate-400 block truncate">{item.selectedVariant}</span>
                         )}
+
+                        {/* Pricing Offer Badges */}
+                        {(item.appliedOfferLabel || item.freeUnits) && (
+                          <div className="mt-1 flex flex-col gap-1">
+                            {item.appliedOfferLabel && (
+                              <span className="inline-flex w-fit items-center rounded bg-rose-50 px-1.5 py-0.5 text-[9px] font-bold text-rose-600">
+                                <Tag className="mr-1 h-3 w-3" />
+                                {item.appliedOfferLabel}
+                              </span>
+                            )}
+                            {item.freeUnits ? (
+                              <span className="inline-flex w-fit items-center rounded bg-emerald-50 px-1.5 py-0.5 text-[9px] font-bold text-emerald-700">
+                                <Gift className="mr-1 h-3 w-3" />
+                                +{item.freeUnits} Free Unit{item.freeUnits > 1 ? 's' : ''}
+                              </span>
+                            ) : null}
+                          </div>
+                        )}
+
                         <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
+
                           <div className="flex items-center rounded-xl border border-slate-200 bg-white">
                             <button
                               type="button"
