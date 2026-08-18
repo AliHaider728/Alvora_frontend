@@ -11,7 +11,7 @@ declare global {
   }
 }
 
-const TIKTOK_PIXEL_ID = "DA255Q3C77U575JEDPEG";
+const TIKTOK_PIXEL_ID = process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID;
 
 export default function TikTokPixel() {
   const pathname = usePathname();
@@ -22,6 +22,8 @@ export default function TikTokPixel() {
       window.ttq.page();
     }
   }, [pathname]);
+
+  if (!TIKTOK_PIXEL_ID) return null;
 
   return (
     <>
