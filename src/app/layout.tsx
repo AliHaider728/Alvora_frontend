@@ -5,6 +5,7 @@ import { Providers } from './Providers';
 import { AuthModalWrapper } from './AuthModalWrapper';
 import { StorefrontLayoutWrapper } from '../components/common/StorefrontLayoutWrapper';
 import MetaPixel from '../components/analytics/MetaPixel';
+import TikTokPixel from '../components/analytics/TikTokPixel';
 import { Fredoka, Plus_Jakarta_Sans } from 'next/font/google';
 
 const fredoka = Fredoka({ 
@@ -101,6 +102,7 @@ export default function RootLayout({
           />
         </noscript>
         <MetaPixel />
+          <TikTokPixel />
         <Providers>
           <AuthModalWrapper />
           <StorefrontLayoutWrapper>
