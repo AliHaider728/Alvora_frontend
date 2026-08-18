@@ -27,7 +27,8 @@ import { Order } from '../../types';
 import { formatPrice } from '../../utils/formatters';
 import { getProductDeliveryType } from '../../utils/products';
 import { getSafeImageSrc } from '../../utils/images';
-import { trackInitiateCheckout } from "@/lib/metaPixel";
+import { trackInitiateCheckout } from "../../lib/metaPixel";
+import { trackTikTokInitiateCheckout, trackTikTokAddPaymentInfo, trackTikTokPurchase, trackTikTokPlaceAnOrder } from "../../lib/tiktokPixel";
 
 export const CheckoutPageClient: React.FC = () => {
   const [checkoutRequestId] = useState(() => {
@@ -55,6 +56,14 @@ export const CheckoutPageClient: React.FC = () => {
   useEffect(() => {
     if (cart.length === 0) return;
     trackInitiateCheckout({
+      items: cart.map((item) => ({
+        id: item.product.id,
+        quantity: item.quantity,
+      })),
+      value: cartSubtotal,
+      currency: settings.currency || "PKR",
+    });
+    trackTikTokInitiateCheckout({
       items: cart.map((item) => ({
         id: item.product.id,
         quantity: item.quantity,
@@ -158,6 +167,9 @@ export const CheckoutPageClient: React.FC = () => {
   const handlePaymentSubmit = async () => {
     if (isPlacingOrder) return;
     setIsPlacingOrder(true);
+    
+    trackTikTokAddPaymentInfo();
+
     const created = await placeOrder({
       customerName: fullName.trim(),
       email: email.trim(),
@@ -254,16 +266,29 @@ if (typeof window !== "undefined" && window.fbq) {
       ),
 
       value: created.total,
-
       currency: settings.currency || "PKR",
-    },
-
-    // Same ID will be sent from backend CAPI
-    {
-      eventID: metaEventId,
-    }
-  );
+    }, { eventID: metaEventId });
 }
+
+    trackTikTokPlaceAnOrder({
+      items: created.items.map((item) => ({
+        id: item.productId,
+        quantity: item.quantity,
+      })),
+      value: created.total,
+      currency: settings.currency || "PKR",
+      eventId: metaEventId,
+    });
+
+    trackTikTokPurchase({
+      items: created.items.map((item) => ({
+        id: item.productId,
+        quantity: item.quantity,
+      })),
+      value: created.total,
+      currency: settings.currency || "PKR",
+      eventId: metaEventId,
+    });
 
     ((typeof window !== "undefined") ? sessionStorage : null)?.removeItem('pb_checkout_request_id');
     setCompletedOrder(created);

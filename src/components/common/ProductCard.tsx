@@ -12,6 +12,7 @@ import { formatProductAgeGroups, formatProductCategories, getEffectiveProductAva
 import { ReviewSummary } from './ReviewSummary';
 import { useToast } from '../../context/ToastContext';
 import { trackAddToCart } from "../../lib/metaPixel";
+import { trackTikTokAddToCart } from "../../lib/tiktokPixel";
 
 interface ProductCardProps {
   product: Product;
@@ -112,6 +113,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
         : product.price;
 
       trackAddToCart({
+        id: product.id,
+        name: product.name,
+        price: priceToAdd || product.price,
+        quantity: 1,
+        currency: settings.currency || "PKR",
+      });
+
+      trackTikTokAddToCart({
         id: product.id,
         name: product.name,
         price: priceToAdd || product.price,

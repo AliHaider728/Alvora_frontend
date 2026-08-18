@@ -24,6 +24,8 @@ import { formatPrice } from '../utils/formatters';
 import { normalizeStoreSettings } from '../config/storeAppearance';
 import { normalizeInventory, normalizeProductAgeGroups } from '../utils/products';
 import { useToast } from './ToastContext';
+import { trackInitiateCheckout } from '../lib/metaPixel';
+import { trackTikTokAddToWishlist } from '../lib/tiktokPixel';
 import { resolveCartLine } from '../lib/pricingOffers';
 
 type MongoRecord = {
@@ -638,7 +640,19 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setWishlist(prev =>
       prev.includes(productId) ? prev.filter(id => id !== productId) : [...prev, productId]
     );
-    const productName = products.find(product => product.id === productId)?.name;
+
+    const product = products.find(p => p.id === productId);
+    const productName = product?.name;
+
+    if (isAdding && product) {
+      trackTikTokAddToWishlist({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        currency: settings.currency || "PKR"
+      });
+    }
+
     showToast(
       `${isAdding ? 'Added' : 'Removed'}${productName ? ` ${productName}` : ' product'} ${isAdding ? 'to' : 'from'} wishlist.`,
       isAdding ? 'success' : 'info'

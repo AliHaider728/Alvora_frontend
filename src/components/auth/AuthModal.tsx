@@ -4,6 +4,7 @@ import { X, Eye, EyeOff, AlertCircle, Loader2 } from 'lucide-react';
 import { api } from '../../services/api';
 import { useToast } from '../../context/ToastContext';
 import { useAuth } from '../../context/AuthContext';
+import { trackTikTokCompleteRegistration } from '../../lib/tiktokPixel';
 import Link from 'next/link';
 import { useRouter, usePathname, useParams } from 'next/navigation';
 
@@ -81,6 +82,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultMo
     try {
       if (mode === 'signup') {
         await api.register(email, password, name);
+        trackTikTokCompleteRegistration();
         showToast('Account created successfully. Please sign in.', 'success');
         setMode('login');
       } else if (mode === 'forgot-password') {

@@ -23,12 +23,17 @@ export default function TikTokPixel() {
     }
   }, [pathname]);
 
-  if (!TIKTOK_PIXEL_ID) return null;
+  if (!TIKTOK_PIXEL_ID) {
+    console.error("[TikTokPixel] NEXT_PUBLIC_TIKTOK_PIXEL_ID is undefined!");
+    return null;
+  }
+
+  console.log("[TikTokPixel] Initializing with ID:", TIKTOK_PIXEL_ID);
 
   return (
     <>
       {/* TikTok Pixel — base loader */}
-      <Script id="tiktok-pixel" strategy="lazyOnload">
+      <Script id="tiktok-pixel" strategy="afterInteractive">
         {`
           !function (w, d, t) {
             w.TiktokAnalyticsObject=t;

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Search, SlidersHorizontal } from 'lucide-react';
@@ -8,6 +8,7 @@ import { ProductCard } from '../../components/common/ProductCard';
 import { Breadcrumbs } from '../../components/common/Breadcrumbs';
 import { SeoHead } from '../../components/common/SeoHead';
 import { isProductVisibleOnStorefront } from '../../utils/products';
+import { trackTikTokSearch } from '../../lib/tiktokPixel';
 
 function SearchResultsContent() {
   const searchParams = useSearchParams();
@@ -15,6 +16,12 @@ function SearchResultsContent() {
   const { products } = useStore();
 
   const [sortBy, setSortBy] = useState<'featured' | 'price-low' | 'price-high'>('featured');
+
+  useEffect(() => {
+    if (query) {
+      trackTikTokSearch({ query });
+    }
+  }, [query]);
 
   const results = products.filter(p =>
     isProductVisibleOnStorefront(p) && (

@@ -23,6 +23,7 @@ import {
   Loader2
 } from 'lucide-react';
 import { trackAddToCart } from "../../../lib/metaPixel";
+import { trackTikTokViewContent, trackTikTokAddToCart } from "../../../lib/tiktokPixel";
 import { useStore } from '../../../context/StoreContext';
 import { useToast } from '../../../context/ToastContext';
 import { ProductCard } from '../../../components/common/ProductCard';
@@ -357,6 +358,13 @@ export const ProductDetailPageClient: React.FC = () => {
       value: trackPrice,
       currency: settings.currency || "PKR",
     });
+
+    trackTikTokViewContent({
+      id: product.id,
+      name: product.name,
+      price: trackPrice,
+      currency: settings.currency || "PKR",
+    });
   }, [product?.id]);
 
 
@@ -515,6 +523,14 @@ export const ProductDetailPageClient: React.FC = () => {
         );
       }
       trackAddToCart({
+        id: product.id,
+        name: product.name,
+        price: effectivePrice,
+        quantity,
+        currency: settings.currency || "PKR",
+      });
+
+      trackTikTokAddToCart({
         id: product.id,
         name: product.name,
         price: effectivePrice,
