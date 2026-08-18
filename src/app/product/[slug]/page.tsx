@@ -24,6 +24,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     return {
       title: finalTitle,
       description: finalDesc,
+      alternates: {
+        canonical: `https://playbimboo.com/product/${slug}`
+      },
       openGraph: {
         title: finalTitle,
         description: finalDesc,
