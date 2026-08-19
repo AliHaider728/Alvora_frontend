@@ -117,7 +117,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
         name: product.name,
         price: priceToAdd || product.price,
         quantity: 1,
-        currency: settings.currency || "PKR",
+        currency: "PKR",
       });
 
       trackTikTokAddToCart({
@@ -125,7 +125,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
         name: product.name,
         price: priceToAdd || product.price,
         quantity: 1,
-        currency: settings.currency || "PKR",
+        currency: "PKR",
       });
 
       showToast(`Added ${product.name} to cart.`, 'success');
@@ -333,3 +333,4 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
     </article>
   );
 };
+

@@ -356,14 +356,14 @@ export const ProductDetailPageClient: React.FC = () => {
       content_name: product.name,
       content_type: "product",
       value: trackPrice,
-      currency: settings.currency || "PKR",
+      currency: "PKR",
     });
 
     trackTikTokViewContent({
       id: product.id,
       name: product.name,
       price: trackPrice,
-      currency: settings.currency || "PKR",
+      currency: "PKR",
     });
   }, [product?.id]);
 
@@ -527,7 +527,7 @@ export const ProductDetailPageClient: React.FC = () => {
         name: product.name,
         price: effectivePrice,
         quantity,
-        currency: settings.currency || "PKR",
+        currency: "PKR",
       });
 
       trackTikTokAddToCart({
@@ -535,7 +535,7 @@ export const ProductDetailPageClient: React.FC = () => {
         name: product.name,
         price: effectivePrice,
         quantity,
-        currency: settings.currency || "PKR",
+        currency: "PKR",
       });
       showToast(`Added ${quantity} x ${product.name} to cart.`, 'success');
       setCartActionState('added');
@@ -1475,3 +1475,4 @@ export const ProductDetailPageClient: React.FC = () => {
     </div>
   );
 };
+

@@ -102,7 +102,7 @@ export const ProductSpotlight: React.FC<{ product: Product }> = ({ product }) =>
         name: product.name,
         price: currentPrice,
         quantity: 1,
-        currency: settings.currency || "PKR",
+        currency: "PKR",
       });
 
       showToast(`Added ${product.name} to cart.`, 'success');

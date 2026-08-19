@@ -302,7 +302,7 @@ export const CartDrawer: React.FC = () => {
                       quantity: item.quantity,
                     })),
                     value: cartSubtotal,
-                    currency: settings.currency || "PKR",
+                    currency: "PKR",
                   });
                   trackTikTokInitiateCheckout({
                     items: cart.map((item) => ({
@@ -310,7 +310,7 @@ export const CartDrawer: React.FC = () => {
                       quantity: item.quantity,
                     })),
                     value: cartSubtotal,
-                    currency: settings.currency || "PKR",
+                    currency: "PKR",
                   });
                   setIsCartOpen(false);
                   router.push('/checkout');
@@ -332,3 +332,4 @@ export const CartDrawer: React.FC = () => {
     </div>
   );
 };
+

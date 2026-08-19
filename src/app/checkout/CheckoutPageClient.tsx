@@ -61,7 +61,7 @@ export const CheckoutPageClient: React.FC = () => {
         quantity: item.quantity,
       })),
       value: cartSubtotal,
-      currency: settings.currency || "PKR",
+      currency: "PKR",
     });
     trackTikTokInitiateCheckout({
       items: cart.map((item) => ({
@@ -69,7 +69,7 @@ export const CheckoutPageClient: React.FC = () => {
         quantity: item.quantity,
       })),
       value: cartSubtotal,
-      currency: settings.currency || "PKR",
+      currency: "PKR",
     });
   }, []);
 
@@ -242,53 +242,60 @@ export const CheckoutPageClient: React.FC = () => {
     }
 
 
-   // Meta Pixel - Purchase
-if (typeof window !== "undefined" && window.fbq) {
-  const metaEventId = `purchase_${created.orderId || created.id}`;
+    // Meta Pixel - Purchase
+    const metaEventId = `purchase_${created.orderId || created.id}`;
 
-  window.fbq(
-    "track",
-    "Purchase",
-    {
-      content_ids: created.items.map((item) => item.productId),
+    if (typeof window !== "undefined" && window.fbq) {
+      try {
+        window.fbq(
+          "track",
+          "Purchase",
+          {
+            content_ids: created.items.map((item) => item.productId),
 
-      contents: created.items.map((item) => ({
-        id: item.productId,
-        quantity: item.quantity,
-        item_price: item.price,
-      })),
+            contents: created.items.map((item) => ({
+              id: item.productId,
+              quantity: item.quantity,
+              item_price: item.price,
+            })),
 
-      content_type: "product",
+            content_type: "product",
 
-      num_items: created.items.reduce(
-        (total, item) => total + item.quantity,
-        0
-      ),
+            num_items: created.items.reduce(
+              (total, item) => total + item.quantity,
+              0
+            ),
 
-      value: created.total,
-      currency: settings.currency || "PKR",
-    }, { eventID: metaEventId });
-}
+            value: created.total,
+            currency: "PKR",
+          }, { eventID: metaEventId });
+      } catch (err) {
+        console.error("Meta Pixel tracking error:", err);
+      }
+    }
+    try {
+      trackTikTokPlaceAnOrder({
+        items: created.items.map((item) => ({
+          id: item.productId,
+          quantity: item.quantity,
+        })),
+        value: created.total,
+        currency: "PKR",
+        eventId: metaEventId,
+      });
 
-    trackTikTokPlaceAnOrder({
-      items: created.items.map((item) => ({
-        id: item.productId,
-        quantity: item.quantity,
-      })),
-      value: created.total,
-      currency: settings.currency || "PKR",
-      eventId: metaEventId,
-    });
-
-    trackTikTokPurchase({
-      items: created.items.map((item) => ({
-        id: item.productId,
-        quantity: item.quantity,
-      })),
-      value: created.total,
-      currency: settings.currency || "PKR",
-      eventId: metaEventId,
-    });
+      trackTikTokPurchase({
+        items: created.items.map((item) => ({
+          id: item.productId,
+          quantity: item.quantity,
+        })),
+        value: created.total,
+        currency: "PKR",
+        eventId: metaEventId,
+      });
+    } catch (err) {
+      console.error("TikTok tracking error:", err);
+    }
 
     ((typeof window !== "undefined") ? sessionStorage : null)?.removeItem('pb_checkout_request_id');
     setCompletedOrder(created);

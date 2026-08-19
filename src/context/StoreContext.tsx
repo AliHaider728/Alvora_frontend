@@ -649,7 +649,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         id: product.id,
         name: product.name,
         price: product.price,
-        currency: settings.currency || "PKR"
+        currency: "PKR"
       });
     }
 
@@ -959,3 +959,4 @@ export const useStore = () => {
   }
   return context;
 };
+
