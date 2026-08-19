@@ -280,6 +280,12 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
+    if (USE_MOCK_DATA) {
+      console.warn('⚠️ [Alvora] RUNNING IN MOCK DATA MODE. Real backend API is bypassed. Set NEXT_PUBLIC_ALVORA_USE_MOCK_DATA=false to connect to backend.');
+    }
+  }, []);
+
+  useEffect(() => {
     setIsHydrated(true);
     const saved = localStorage.getItem('alvora_settings');
     if (saved) {

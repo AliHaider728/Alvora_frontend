@@ -45,7 +45,10 @@ async function fetchData() {
 export default async function Page() {
   const { products, categories, settings } = await fetchData();
   
-  const resolvedSettings = settings || MOCK_SETTINGS;
+  if (!settings && !USE_MOCK_DATA) {
+    return <div className="p-8 text-center text-red-500">Error: Unable to connect to the store backend. Please try again later.</div>;
+  }
 
-  return <HomePage products={products} categories={categories} settings={resolvedSettings} />;
+  // Use settings directly (it will be MOCK_SETTINGS if USE_MOCK_DATA is true, else from API)
+  return <HomePage products={products} categories={categories} settings={settings!} />;
 }

@@ -1,70 +1,111 @@
+"use client";
 import React from 'react';
 import Link from 'next/link';
-import { ShieldCheck, FlaskConical, Heart, Users } from 'lucide-react';
+import { FlaskConical, Leaf, Heart, Droplet } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useReducedMotion } from 'framer-motion';
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.1 }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }
+  }
+};
 
 export const HeroSection: React.FC = () => {
+  const shouldReduceMotion = useReducedMotion();
+  const animVariants = shouldReduceMotion ? {} : itemVariants;
+  const contVariants = shouldReduceMotion ? {} : containerVariants;
+
   return (
     <section className="bg-[#FAF6F2] relative w-full overflow-hidden">
       <div className="alvora-container">
-        <div className="flex flex-col lg:flex-row min-h-[70vh] lg:min-h-[90vh]">
+        <div className="flex flex-col lg:flex-row min-h-[70vh] lg:min-h-[85vh]">
           
           {/* Left Content */}
-          <div className="w-full lg:w-1/2 flex flex-col justify-center py-12 lg:py-20 lg:pr-12 z-10">
-            <span className="text-xs tracking-widest uppercase text-[#C48B80] font-semibold mb-6 block">
-              PURE INGREDIENTS. VISIBLE RESULTS.
-            </span>
-            
-            <h1 className="font-display text-5xl md:text-6xl lg:text-7xl text-[#1A1A1A] font-bold leading-[1.1] mb-6">
+          <motion.div 
+            className="w-full lg:w-1/2 flex flex-col justify-center py-12 lg:py-20 lg:pr-12 z-10"
+            variants={contVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+          >
+            <motion.h1 
+              variants={animVariants}
+              className="font-display text-5xl md:text-[5.5rem] text-[#1A1A1A] font-medium leading-[1.05] tracking-tight mb-6"
+            >
               Skincare,<br />Made Simple.
-            </h1>
+            </motion.h1>
             
-            <p className="text-base md:text-lg text-[#4D3D2D]/80 leading-relaxed max-w-lg mb-10">
-              Thoughtfully formulated skincare that nourishes, protects and brings out your most radiant skin.
-            </p>
+            <motion.p 
+              variants={animVariants}
+              className="text-base md:text-lg text-[#1A1A1A]/80 leading-relaxed max-w-sm mb-10"
+            >
+              Thoughtful formulas. Clinically tested. Made for real skin and real life.
+            </motion.p>
             
-            <div className="flex flex-col sm:flex-row items-center gap-4 mb-14">
-              <Link href="/category/all?sort=bestseller" className="btn-primary w-full sm:w-auto text-center px-8 py-3.5">
+            <motion.div variants={animVariants} className="flex flex-col sm:flex-row items-center gap-4 mb-16">
+              <Link 
+                href="/category/all?sort=bestseller" 
+                className="w-full sm:w-auto text-center px-8 py-3.5 bg-[#C48B80] hover:bg-[#a8746a] text-white text-xs font-semibold tracking-widest uppercase transition-colors rounded-full"
+              >
                 SHOP BEST SELLERS
               </Link>
-              <Link href="/category/all" className="btn-secondary w-full sm:w-auto text-center px-8 py-3.5">
-                EXPLORE SKINCARE
+              <Link 
+                href="/category/all" 
+                className="w-full sm:w-auto text-center px-8 py-3.5 border border-[#C48B80] text-[#C48B80] hover:bg-[#C48B80] hover:text-white text-xs font-semibold tracking-widest uppercase transition-colors rounded-full"
+              >
+                TAKE THE QUIZ
               </Link>
-            </div>
+            </motion.div>
             
             {/* Trust Indicators */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 border-t border-[#EDE5DC] pt-8">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-[#C48B80]" />
-                <span className="text-xs font-medium text-[#4D3D2D]">Clean<br/>Ingredients</span>
+            <motion.div variants={animVariants} className="grid grid-cols-4 gap-2 md:gap-6 pt-4 border-t border-[#EDE5DC]/60">
+              <div className="flex flex-col items-center text-center gap-3">
+                <FlaskConical className="w-6 h-6 text-[#1A1A1A]" strokeWidth={1.5} />
+                <span className="text-[9px] uppercase tracking-wider font-semibold text-[#1A1A1A]/70">Clinically<br/>Tested</span>
               </div>
-              <div className="flex items-center gap-2">
-                <FlaskConical className="w-5 h-5 text-[#C48B80]" />
-                <span className="text-xs font-medium text-[#4D3D2D]">Dermatologist<br/>Tested</span>
+              <div className="flex flex-col items-center text-center gap-3">
+                <Leaf className="w-6 h-6 text-[#1A1A1A]" strokeWidth={1.5} />
+                <span className="text-[9px] uppercase tracking-wider font-semibold text-[#1A1A1A]/70">Clean<br/>Ingredients</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Heart className="w-5 h-5 text-[#C48B80]" />
-                <span className="text-xs font-medium text-[#4D3D2D]">Cruelty<br/>Free</span>
+              <div className="flex flex-col items-center text-center gap-3">
+                <Heart className="w-6 h-6 text-[#1A1A1A]" strokeWidth={1.5} />
+                <span className="text-[9px] uppercase tracking-wider font-semibold text-[#1A1A1A]/70">Cruelty<br/>Free</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Users className="w-5 h-5 text-[#C48B80]" />
-                <span className="text-xs font-medium text-[#4D3D2D]">For All<br/>Skin Types</span>
+              <div className="flex flex-col items-center text-center gap-3">
+                <Droplet className="w-6 h-6 text-[#1A1A1A]" strokeWidth={1.5} />
+                <span className="text-[9px] uppercase tracking-wider font-semibold text-[#1A1A1A]/70">Sensitive<br/>Skin</span>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
-          {/* Right Image Placeholder */}
-          <div className="w-full lg:w-1/2 relative min-h-[400px] lg:min-h-full">
-            <div className="absolute inset-0 bg-gradient-to-tr from-[#F5EDE4] to-[#F1C9BD] lg:rounded-bl-[80px] overflow-hidden flex items-center justify-center">
-              {/* Decorative silhouette simulating a premium product cluster */}
-              <div className="relative w-64 h-64 md:w-80 md:h-80 bg-white/40 backdrop-blur-sm rounded-full flex flex-col items-center justify-center shadow-[0_20px_50px_rgba(196,139,128,0.15)] border border-white/60">
-                <span className="font-display text-3xl md:text-4xl text-[#4D3D2D] tracking-widest uppercase">
-                  ALVORA
-                </span>
-                <span className="text-[10px] tracking-widest text-[#4D3D2D]/60 uppercase mt-2">
-                  Premium Skincare
-                </span>
+          {/* Right Image Container */}
+          <div className="w-full lg:w-1/2 relative min-h-[400px] lg:min-h-full flex items-end justify-center lg:justify-end">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              viewport={{ once: true }}
+              className="w-full h-full max-h-[85%] lg:max-h-full bg-[#EADED2] rounded-t-full lg:rounded-tl-full lg:rounded-tr-none lg:rounded-bl-[100px] relative overflow-hidden flex items-end justify-center"
+            >
+              {/* Product cluster mockup */}
+              <div className="w-full h-full p-10 flex flex-col items-center justify-end">
+                 <div className="relative w-full max-w-sm aspect-square bg-black/5 backdrop-blur-md rounded-2xl flex items-center justify-center shadow-2xl border border-white/40 mb-10">
+                   <span className="font-display text-4xl text-[#1A1A1A]/40 tracking-widest uppercase">ALVORA</span>
+                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
 
         </div>

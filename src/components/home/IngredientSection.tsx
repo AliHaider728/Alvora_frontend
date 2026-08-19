@@ -1,72 +1,114 @@
+"use client";
 import React from 'react';
 import Link from 'next/link';
+import { motion, useReducedMotion } from 'framer-motion';
+import { Sparkles, Droplets, Leaf, ShieldCheck } from 'lucide-react';
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.2 }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { duration: 0.5, ease: "easeOut" }
+  }
+};
 
 export const IngredientSection: React.FC = () => {
+  const shouldReduceMotion = useReducedMotion();
+  const animVariants = shouldReduceMotion ? {} : itemVariants;
+  const contVariants = shouldReduceMotion ? {} : containerVariants;
+
   const ingredients = [
     {
       name: 'Niacinamide',
-      description: 'Brightens skin and minimizes pores.',
-      color: 'bg-[#F1C9BD]'
+      description: 'Visibly brightens skin tone and improves texture.',
+      color: 'bg-[#FDF0EC]', // very soft peach
+      iconColor: 'text-[#E1A492]',
+      icon: <Sparkles className="w-6 h-6" />
     },
     {
       name: 'Hyaluronic Acid',
-      description: 'Locks in moisture and plumps skin.',
-      color: 'bg-[#F5EDE4]'
+      description: 'Deeply hydrates and plumps the skin.',
+      color: 'bg-[#F0F5FA]', // soft blue
+      iconColor: 'text-[#8DB4D2]',
+      icon: <Droplets className="w-6 h-6" />
     },
     {
       name: 'Centella Asiatica',
-      description: 'Calms irritation and strengthens barrier.',
-      color: 'bg-[#E3E8E1]'
+      description: 'Calms irritation and supports skin repair.',
+      color: 'bg-[#F2F8ED]', // soft green
+      iconColor: 'text-[#9CBF86]',
+      icon: <Leaf className="w-6 h-6" />
     },
     {
       name: 'Ceramides',
-      description: 'Locks in moisture and protects skin barrier.',
-      color: 'bg-[#EADED2]'
+      description: 'Strengthen the skin barrier and lock in moisture.',
+      color: 'bg-[#FAF5EE]', // soft beige
+      iconColor: 'text-[#C9A98F]',
+      icon: <ShieldCheck className="w-6 h-6" />
     }
   ];
 
   return (
-    <section className="bg-white py-16 md:py-24">
+    <section className="bg-white py-20 md:py-28">
       <div className="alvora-container">
-        <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center">
+        <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 items-center">
           
           {/* Left: Text Content */}
           <div className="w-full lg:w-1/3">
-            <span className="text-xs tracking-widest uppercase text-[#A1A7AA] font-semibold mb-4 block">
-              SCIENCE & NATURE
-            </span>
             <h2 className="font-display text-4xl lg:text-5xl text-[#1A1A1A] font-medium leading-tight mb-6">
               Nature + Science<br />For Your Skin
             </h2>
-            <p className="text-[#4D3D2D]/80 leading-relaxed text-base mb-8">
-              We combine clean, potent ingredients with advanced skincare science to deliver visible, lasting results. Every formula is carefully crafted to be gentle yet highly effective.
+            <p className="text-[#1A1A1A]/70 leading-relaxed text-base mb-10">
+              We use powerful, clean ingredients backed by science to deliver visible results and lasting skin health.
             </p>
-            <Link href="/about" className="text-xs font-semibold tracking-widest text-[#1A1A1A] hover:text-[#C48B80] transition-colors border-b border-[#1A1A1A] hover:border-[#C48B80] pb-1 uppercase inline-flex items-center gap-2">
-              LEARN MORE &rarr;
+            <Link 
+              href="/about" 
+              className="group inline-flex items-center text-[10px] font-bold tracking-widest text-[#1A1A1A] uppercase relative"
+            >
+              <span>DISCOVER INGREDIENTS</span>
+              <span className="ml-2 group-hover:translate-x-1 transition-transform">&rarr;</span>
+              <span className="absolute -bottom-1 left-0 w-full h-[1px] bg-[#1A1A1A] scale-x-100 group-hover:scale-x-0 origin-left transition-transform duration-300"></span>
             </Link>
           </div>
 
           {/* Right: Ingredients Grid */}
           <div className="w-full lg:w-2/3">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <motion.div 
+              className="grid grid-cols-1 sm:grid-cols-2 gap-6"
+              variants={contVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+            >
               {ingredients.map((ing, i) => (
-                <div key={i} className="bg-[#FAF6F2] p-6 flex flex-col gap-4">
-                  {/* Circular Image Placeholder */}
-                  <div className={`w-16 h-16 rounded-full ${ing.color} flex items-center justify-center`}>
-                    {/* Add a subtle graphic or leave as clean color circle */}
-                    <div className="w-8 h-8 rounded-full bg-white/40 backdrop-blur-sm"></div>
+                <motion.div 
+                  key={i} 
+                  variants={animVariants}
+                  className="bg-white border border-[#EDE5DC] p-6 rounded-2xl flex items-start gap-5 hover:shadow-lg transition-shadow duration-300"
+                >
+                  <div className={`w-14 h-14 shrink-0 rounded-full ${ing.color} ${ing.iconColor} flex items-center justify-center`}>
+                    {ing.icon}
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-[#1A1A1A] text-base mb-1">
+                  <div className="pt-1">
+                    <h3 className="font-display text-lg text-[#1A1A1A] mb-1">
                       {ing.name}
                     </h3>
-                    <p className="text-sm text-[#4D3D2D]/80">
+                    <p className="text-sm text-[#1A1A1A]/60 leading-relaxed">
                       {ing.description}
                     </p>
                   </div>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
 
         </div>

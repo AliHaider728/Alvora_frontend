@@ -1,40 +1,100 @@
+"use client";
 import React from 'react';
+import Link from 'next/link';
+import { motion, useReducedMotion } from 'framer-motion';
 
 export const BrandIntro: React.FC = () => {
+  const shouldReduceMotion = useReducedMotion();
+  const variants = shouldReduceMotion ? {} : {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] } }
+  };
+
   return (
-    <section className="bg-white py-16 md:py-24 relative overflow-hidden">
-      <div className="alvora-container">
-        <div className="max-w-2xl mx-auto text-center flex flex-col items-center">
-          
-          {/* Decorative Top Line */}
-          <div className="flex items-center justify-center gap-3 mb-8">
-            <div className="w-12 h-[1px] bg-[#C48B80]"></div>
-            <div className="w-1.5 h-1.5 rounded-full bg-[#C48B80]"></div>
-            <div className="w-12 h-[1px] bg-[#C48B80]"></div>
+    <section className="bg-white overflow-hidden">
+      
+      {/* Block 1: Skincare rooted in balance */}
+      <div className="flex flex-col md:flex-row w-full min-h-[500px]">
+        <div className="w-full md:w-1/2 bg-[#F1C9BD] relative aspect-square md:aspect-auto">
+          {/* Image Placeholder */}
+          <div className="absolute inset-0 flex items-center justify-center bg-black/5 mix-blend-multiply">
+            <span className="font-display text-4xl text-[#1A1A1A]/20 italic">Texture Shot</span>
           </div>
-
-          <h2 className="font-display text-3xl md:text-4xl text-[#1A1A1A] font-medium leading-tight mb-6">
-            Thoughtfully Formulated.<br />Beautifully Simple.
-          </h2>
-
-          <p className="text-[#4D3D2D]/80 leading-relaxed text-base md:text-lg mb-10">
-            At Alvora, we believe healthy skin starts with gentle, effective formulas and the finest ingredients nature has to offer. No unnecessary steps. No harsh ingredients. Just results.
-          </p>
-
-          {/* Decorative Stamp */}
-          <div className="w-24 h-24 rounded-full border border-[#C48B80] flex items-center justify-center relative spin-slow">
-            <svg viewBox="0 0 100 100" className="w-full h-full text-[#C48B80] animate-spin-slow" style={{ animationDuration: '15s' }}>
-              <path id="curve" d="M 50, 50 m -35, 0 a 35,35 0 1,1 70,0 a 35,35 0 1,1 -70,0" fill="transparent" />
-              <text fontSize="10" letterSpacing="2" className="uppercase font-semibold fill-current">
-                <textPath href="#curve" startOffset="0">
-                  ✦ ALVORA SKINCARE ✦ CLEAN INGREDIENTS
-                </textPath>
-              </text>
-            </svg>
-          </div>
-
+        </div>
+        
+        <div className="w-full md:w-1/2 flex items-center justify-center p-12 lg:p-24 bg-white">
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={variants}
+            className="max-w-md w-full"
+          >
+            <h2 className="font-display text-4xl md:text-5xl text-[#1A1A1A] mb-6 leading-[1.1]">
+              Skincare rooted<br/>in balance
+            </h2>
+            <p className="text-[#1A1A1A]/80 leading-relaxed text-base mb-8">
+              At ALVORA, we blend clinically proven ingredients with the best of nature to support your skin's health today and tomorrow.
+            </p>
+            <Link 
+              href="/about" 
+              className="group inline-flex items-center text-[10px] font-bold tracking-widest text-[#1A1A1A] uppercase relative"
+            >
+              <span>OUR SCIENCE</span>
+              <span className="ml-2 group-hover:translate-x-1 transition-transform">&rarr;</span>
+              <span className="absolute -bottom-1 left-0 w-full h-[1px] bg-[#1A1A1A] scale-x-100 group-hover:scale-x-0 origin-left transition-transform duration-300"></span>
+            </Link>
+          </motion.div>
         </div>
       </div>
+
+      {/* Block 2: Better for your skin. Better for the planet. */}
+      <div className="flex flex-col md:flex-row-reverse w-full min-h-[500px]">
+        <div className="w-full md:w-1/2 bg-[#1A1A1A] relative aspect-square md:aspect-auto">
+          {/* Image Placeholder */}
+          <div className="absolute inset-0 flex items-center justify-center bg-white/5">
+             <span className="font-display text-4xl text-white/20 italic">Product Shot</span>
+          </div>
+        </div>
+        
+        <div className="w-full md:w-1/2 flex items-center justify-center p-12 lg:p-24 bg-[#FAF6F2]">
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={variants}
+            className="max-w-md w-full relative"
+          >
+            <h2 className="font-display text-4xl md:text-5xl text-[#1A1A1A] mb-6 leading-[1.1]">
+              Better for your skin.<br/>Better for the planet.
+            </h2>
+            <p className="text-[#1A1A1A]/80 leading-relaxed text-base mb-8 max-w-sm">
+              Sustainable choices. Responsible formulas. Beautiful results for you and the world we all share.
+            </p>
+            <Link 
+              href="/about" 
+              className="group inline-flex items-center text-[10px] font-bold tracking-widest text-[#1A1A1A] uppercase relative"
+            >
+              <span>OUR PROMISE</span>
+              <span className="ml-2 group-hover:translate-x-1 transition-transform">&rarr;</span>
+              <span className="absolute -bottom-1 left-0 w-full h-[1px] bg-[#1A1A1A] scale-x-100 group-hover:scale-x-0 origin-left transition-transform duration-300"></span>
+            </Link>
+
+            {/* Clean Ingredients Stamp */}
+            <div className="absolute -bottom-4 -right-4 md:-right-12 w-24 h-24 rounded-full border border-[#1A1A1A] flex items-center justify-center spin-slow hidden sm:flex">
+              <svg viewBox="0 0 100 100" className="w-full h-full text-[#1A1A1A] animate-spin-slow" style={{ animationDuration: '15s' }}>
+                <path id="curve-brand" d="M 50, 50 m -35, 0 a 35,35 0 1,1 70,0 a 35,35 0 1,1 -70,0" fill="transparent" />
+                <text fontSize="11" letterSpacing="1.5" className="uppercase font-semibold fill-current">
+                  <textPath href="#curve-brand" startOffset="0">
+                    ✦ CLEAN INGREDIENTS ✦
+                  </textPath>
+                </text>
+              </svg>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
     </section>
   );
 };

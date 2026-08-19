@@ -106,49 +106,25 @@ export const Header: React.FC = () => {
 
   return (
     <>
-      {/* ── Announcement Bar ── */}
-      <div
-        className="w-full overflow-hidden bg-[#FAF6F2] border-b border-[#EDE5DC] py-2 text-[#4D3D2D]"
-        aria-label="Store announcements"
-      >
-        <div className="flex whitespace-nowrap alvora-marquee-track w-max">
-          {[...Array(2)].map((_, i) => (
-            <div key={i} className="flex items-center gap-10 px-8">
-              <span className="text-xs font-semibold tracking-wide">
-                ✦&nbsp; Free Shipping All Over Pakistan
-              </span>
-              <span className="text-[#C48B80]">·</span>
-              <span className="text-xs font-semibold tracking-wide">
-                ✦&nbsp; Cash on Delivery Nationwide
-              </span>
-              <span className="text-[#C48B80]">·</span>
-              <span className="text-xs font-semibold tracking-wide">
-                ✦&nbsp; Clean Ingredients &nbsp;·&nbsp; Dermatologically Tested
-              </span>
-              <span className="text-[#C48B80]">·</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
       {/* ── Main Header ── */}
       <header
         className={`
-          sticky top-0 z-50 w-full bg-[#FAF6F2] border-b border-[#EDE5DC]
-          transition-transform duration-300 ease-out
+          fixed top-0 left-0 w-full z-40 bg-[#FAF6F2] transition-transform duration-300
           ${hideHeader ? '-translate-y-full' : 'translate-y-0'}
           ${isScrolled ? 'shadow-[0_1px_12px_0_rgb(0_0_0_/_0.05)]' : ''}
         `}
       >
+        {/* Top Banner */}
+        <div className="bg-[#C48B80] text-white text-[10px] font-semibold tracking-[0.15em] uppercase text-center py-2 px-4">
+          FREE SHIPPING ON ORDERS OVER $75 • 30-DAY RETURNS • SAMPLES WITH EVERY ORDER
+        </div>
+
         <div className="alvora-container">
           <div className="flex items-center justify-between h-16 md:h-18 gap-4">
 
-            {/* Logo */}
-            <Logo size="md" className="flex-shrink-0" />
-
-            {/* Desktop Nav — centered */}
+            {/* Desktop Nav — left */}
             <nav
-              className="hidden lg:flex items-center gap-8"
+              className="hidden lg:flex items-center gap-8 w-1/3"
               aria-label="Primary navigation"
             >
               {NAV_LINKS.map(link => (
@@ -156,7 +132,7 @@ export const Header: React.FC = () => {
                   key={link.href + link.label}
                   href={link.href}
                   className="
-                    font-body text-sm font-semibold tracking-wide
+                    font-body text-[11px] font-bold tracking-widest uppercase
                     text-[#1A1A1A] hover:text-[#C48B80]
                     transition-colors duration-200
                     relative after:absolute after:bottom-[-3px] after:left-0
@@ -170,8 +146,13 @@ export const Header: React.FC = () => {
               ))}
             </nav>
 
+            {/* Logo - center */}
+            <div className="w-1/3 flex justify-center">
+              <Logo size="md" className="flex-shrink-0" />
+            </div>
+
             {/* Right — Icons */}
-            <div className="flex items-center gap-1 md:gap-2 flex-shrink-0">
+            <div className="flex items-center justify-end gap-1 md:gap-2 flex-shrink-0 w-1/3">
 
               {/* Search icon */}
               <button

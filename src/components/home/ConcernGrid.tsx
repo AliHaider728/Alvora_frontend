@@ -1,76 +1,99 @@
+"use client";
 import React from 'react';
 import Link from 'next/link';
+import { motion, useReducedMotion } from 'framer-motion';
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.2 }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }
+  }
+};
 
 export const ConcernGrid: React.FC = () => {
+  const shouldReduceMotion = useReducedMotion();
+  const animVariants = shouldReduceMotion ? {} : itemVariants;
+  const contVariants = shouldReduceMotion ? {} : containerVariants;
+
   const concerns = [
     {
       id: 'hydration',
       name: 'Hydration',
-      subtext: 'Quench dry, thirsty skin.',
       link: '/category/all?tags=hydrating',
-      bgClass: 'bg-gradient-to-br from-[#F5EDE4] to-[#F1C9BD]',
-      textColor: 'text-[#4D3D2D]'
+      bgClass: 'bg-gradient-to-br from-[#8DB4D2] to-[#B0CEDB]'
     },
     {
       id: 'brightening',
       name: 'Brightening',
-      subtext: 'Reveal your natural glow.',
       link: '/category/all?tags=brightening',
-      bgClass: 'bg-gradient-to-br from-[#F1C9BD] to-[#C48B80]',
-      textColor: 'text-white'
+      bgClass: 'bg-gradient-to-br from-[#E1A492] to-[#F1C9BD]'
     },
     {
       id: 'acne',
       name: 'Acne & Blemishes',
-      subtext: 'Clear. Calm. Heal.',
       link: '/category/all?tags=acne',
-      bgClass: 'bg-gradient-to-br from-[#EDE5DC] to-[#A1A7AA]',
-      textColor: 'text-[#1A1A1A]'
+      bgClass: 'bg-gradient-to-br from-[#9CBF86] to-[#CDE2BA]'
     },
     {
       id: 'barrier',
       name: 'Skin Barrier',
-      subtext: 'Strengthen & Protect.',
       link: '/category/all?tags=barrier',
-      bgClass: 'bg-gradient-to-br from-[#C48B80] to-[#4D3D2D]',
-      textColor: 'text-white'
+      bgClass: 'bg-gradient-to-br from-[#EADED2] to-[#F5EDE4]'
     }
   ];
 
   return (
-    <section className="bg-white py-16 md:py-24">
+    <section className="bg-white py-10 md:py-20">
       <div className="alvora-container">
         
-        <div className="mb-10">
-          <h2 className="font-display text-2xl md:text-3xl text-[#1A1A1A] font-medium uppercase tracking-widest">
+        <div className="mb-12 flex flex-col items-center justify-center">
+          <h2 className="font-display text-3xl md:text-4xl text-[#1A1A1A] font-medium tracking-[0.1em] uppercase text-center">
             SHOP BY CONCERN
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        <motion.div 
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"
+          variants={contVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
           {concerns.map((concern) => (
-            <Link 
-              key={concern.id}
-              href={concern.link}
-              className={`group relative overflow-hidden aspect-[4/3] flex flex-col justify-end p-6 ${concern.bgClass} hover:shadow-lg transition-shadow duration-300`}
-            >
-              <div className="relative z-10 transition-transform duration-500 group-hover:-translate-y-2">
-                <h3 className={`font-display text-2xl mb-1 ${concern.textColor}`}>
-                  {concern.name}
-                </h3>
-                <p className={`text-xs mb-4 opacity-80 ${concern.textColor}`}>
-                  {concern.subtext}
-                </p>
-                <span className={`text-[10px] font-bold tracking-widest uppercase border-b pb-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${concern.textColor} border-current inline-block`}>
-                  SHOP NOW &rarr;
-                </span>
-              </div>
-              
-              {/* Subtle overlay effect on hover */}
-              <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            </Link>
+            <motion.div key={concern.id} variants={animVariants} className="h-full">
+              <Link 
+                href={concern.link}
+                className={`group relative overflow-hidden aspect-[4/3] flex flex-col justify-end p-8 ${concern.bgClass} transition-all duration-500 rounded-sm hover:shadow-xl`}
+              >
+                {/* Texture overlay (mocking actual image) */}
+                <div className="absolute inset-0 bg-black/10 mix-blend-overlay opacity-50 group-hover:scale-105 transition-transform duration-700"></div>
+                
+                {/* Gradient for text contrast */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+
+                <div className="relative z-10 transition-transform duration-500 group-hover:-translate-y-2">
+                  <h3 className="font-display text-3xl mb-2 text-white text-shadow-sm">
+                    {concern.name}
+                  </h3>
+                  <div className="flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-white/90">
+                    <span>SHOP NOW</span>
+                    <span className="transform group-hover:translate-x-1 transition-transform">&rarr;</span>
+                  </div>
+                </div>
+              </Link>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
       </div>
     </section>

@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import Link from 'next/link';
-import { Heart, ShoppingBag } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import { Product } from '../../types';
 import { useStore } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/formatters';
@@ -32,8 +32,8 @@ export const AlvoraProductCard: React.FC<Props> = ({ product }) => {
   const hasImage = product.images && product.images.length > 0;
 
   return (
-    <div className="group bg-white border border-[#EDE5DC] hover:shadow-lg transition-all duration-300 flex flex-col h-full">
-      <Link href={`/product/${product.slug}`} className="block relative aspect-[3/4] bg-[#F5EDE4] overflow-hidden">
+    <div className="group flex flex-col h-full bg-white transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)] overflow-hidden">
+      <Link href={`/product/${product.slug}`} className="block relative aspect-[4/5] bg-gradient-to-br from-[#F5EDE4] to-[#F1C9BD] overflow-hidden">
         {hasImage ? (
           <img
             src={product.images[0]}
@@ -41,57 +41,34 @@ export const AlvoraProductCard: React.FC<Props> = ({ product }) => {
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gradient-to-tr from-[#F5EDE4] to-[#F1C9BD]">
+          <div className="w-full h-full flex items-center justify-center">
             <span className="text-[#C48B80] font-display text-5xl opacity-40">
               {product.name.charAt(0)}
             </span>
           </div>
         )}
 
-        {/* Badges */}
+        {/* Badges - White Pill as in reference */}
         {product.isBestseller && (
-          <div className="absolute top-3 left-3 bg-[#C48B80] text-white text-[10px] font-bold tracking-widest uppercase px-2 py-1 z-10">
-            Best Seller
+          <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm border border-[#EDE5DC] text-[#1A1A1A] text-[9px] font-bold tracking-widest uppercase px-3 py-1 rounded-full z-10 shadow-sm">
+            BEST SELLER
           </div>
         )}
         {!product.isBestseller && product.isNewArrival && (
-          <div className="absolute top-3 left-3 bg-[#4D3D2D] text-white text-[10px] font-bold tracking-widest uppercase px-2 py-1 z-10">
-            New
+          <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm border border-[#EDE5DC] text-[#1A1A1A] text-[9px] font-bold tracking-widest uppercase px-3 py-1 rounded-full z-10 shadow-sm">
+            NEW
           </div>
         )}
-
-        {/* Wishlist */}
-        <button
-          onClick={handleWishlist}
-          className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm hover:bg-[#FAF6F2] transition-colors z-10"
-          aria-label="Toggle wishlist"
-        >
-          <Heart className={`w-4 h-4 ${inWishlist ? 'fill-[#C48B80] text-[#C48B80]' : 'text-[#4D3D2D]'}`} />
-        </button>
       </Link>
 
-      <div className="p-4 flex flex-col flex-grow">
-        <Link href={`/product/${product.slug}`} className="flex flex-col flex-grow">
-          <h3 className="font-display text-base font-semibold text-[#1A1A1A] leading-snug mb-1 group-hover:text-[#C48B80] transition-colors">
+      <div className="p-6 flex flex-col items-center text-center flex-grow">
+        <Link href={`/product/${product.slug}`} className="flex flex-col items-center flex-grow w-full">
+          <h3 className="font-display text-lg font-medium text-[#1A1A1A] leading-snug mb-2 group-hover:text-[#C48B80] transition-colors">
             {product.name}
           </h3>
-          <p className="text-xs text-[#A1A7AA] mb-2 line-clamp-1">
-            {product.shortDescription || product.category}
-          </p>
           
-          <div className="flex items-center gap-1 mb-2 mt-auto">
-            <div className="flex text-[#C48B80] text-[10px]">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <span key={star}>{star <= (product.rating || 5) ? '★' : '☆'}</span>
-              ))}
-            </div>
-            <span className="text-[10px] text-[#A1A7AA]">
-              ({product.reviewCount || 0})
-            </span>
-          </div>
-
-          <div className="flex items-baseline gap-2 mb-3">
-            <span className="text-[#C48B80] font-bold text-base">
+          <div className="flex items-baseline gap-2 mb-4">
+            <span className="text-[#C48B80] font-semibold text-base">
               {formatPrice(product.price, settings?.currency || 'Rs.')}
             </span>
             {product.compareAtPrice && product.compareAtPrice > product.price && (
@@ -105,22 +82,17 @@ export const AlvoraProductCard: React.FC<Props> = ({ product }) => {
         {needsSelection ? (
           <Link
             href={`/product/${product.slug}`}
-            className="w-full bg-[#1A1A1A] hover:bg-[#C48B80] text-white text-xs font-semibold tracking-wide uppercase py-2.5 transition-colors text-center"
+            className="w-4/5 mx-auto bg-[#1A1A1A] hover:bg-[#333] text-white text-[10px] font-bold tracking-widest uppercase py-3 px-6 rounded-full transition-colors text-center shadow-md hover:shadow-lg"
           >
-            Select Options
+            SELECT OPTIONS
           </Link>
         ) : (
           <button
             onClick={handleAddToCart}
             disabled={!product.inStock}
-            className="w-full flex items-center justify-center gap-2 bg-[#1A1A1A] hover:bg-[#C48B80] disabled:bg-[#A1A7AA] disabled:cursor-not-allowed text-white text-xs font-semibold tracking-wide uppercase py-2.5 transition-colors"
+            className="w-4/5 mx-auto bg-[#1A1A1A] hover:bg-[#333] disabled:bg-[#A1A7AA] disabled:cursor-not-allowed text-white text-[10px] font-bold tracking-widest uppercase py-3 px-6 rounded-full transition-colors text-center shadow-md hover:shadow-lg"
           >
-            {product.inStock ? (
-              <>
-                <ShoppingBag className="w-3.5 h-3.5" />
-                Add to Cart
-              </>
-            ) : 'Out of Stock'}
+            {product.inStock ? 'ADD TO CART' : 'OUT OF STOCK'}
           </button>
         )}
       </div>

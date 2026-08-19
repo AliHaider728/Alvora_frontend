@@ -1,45 +1,65 @@
 "use client";
 import React from 'react';
-import Link from 'next/link';
 import { Product, HomepageSectionSetting } from '../../types';
 import { AlvoraProductCard } from '../common/AlvoraProductCard';
+import { motion, useReducedMotion } from 'framer-motion';
 
 interface Props {
   products: Product[];
   sectionSettings?: HomepageSectionSetting;
 }
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.1 }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }
+  }
+};
+
 export const BestSellers: React.FC<Props> = ({ products, sectionSettings }) => {
-  const heading = sectionSettings?.heading || 'Best Sellers';
+  const heading = sectionSettings?.heading || 'BEST SELLERS';
   const displayProducts = products.filter(p => p.isBestseller || p.isFeatured).slice(0, 4);
+  const shouldReduceMotion = useReducedMotion();
+  const animVariants = shouldReduceMotion ? {} : itemVariants;
+  const contVariants = shouldReduceMotion ? {} : containerVariants;
 
   if (displayProducts.length === 0) return null;
 
   return (
-    <section className="bg-[#FAF6F2] py-16 md:py-24">
+    <section className="bg-[#FAF6F2] py-20 md:py-28">
       <div className="alvora-container">
         
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row items-center justify-between mb-10 gap-4">
-          <div>
-            <h2 className="font-display text-3xl md:text-4xl text-[#1A1A1A] font-medium uppercase tracking-wide">
-              {heading}
-            </h2>
-          </div>
-          <Link 
-            href={sectionSettings?.ctaLink || "/category/all"} 
-            className="text-xs font-semibold tracking-widest text-[#1A1A1A] hover:text-[#C48B80] transition-colors border-b border-[#1A1A1A] hover:border-[#C48B80] pb-1 uppercase"
-          >
-            {sectionSettings?.ctaLabel || 'View All'} &rarr;
-          </Link>
+        {/* Header - Centered */}
+        <div className="flex flex-col items-center justify-center mb-16">
+          <h2 className="font-display text-3xl md:text-4xl text-[#1A1A1A] font-medium tracking-[0.2em] uppercase text-center">
+            {heading}
+          </h2>
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        <motion.div 
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8"
+          variants={contVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
           {displayProducts.map(product => (
-            <AlvoraProductCard key={product.id} product={product} />
+            <motion.div key={product.id} variants={animVariants} className="h-full">
+              <AlvoraProductCard product={product} />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
       </div>
     </section>
