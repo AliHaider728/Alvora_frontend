@@ -19,7 +19,7 @@ export default function ReturnPolicyPage() {
             </div>
             <h1 className="font-heading font-black text-3xl text-slate-900">30-Day Happiness Guarantee</h1>
             <p className="text-slate-500 max-w-lg mx-auto">
-              We want you and your child to love every toy from Alvora Skincare.
+              We want you to love every product from Alvora Skincare.
             </p>
           </div>
 
@@ -31,7 +31,7 @@ export default function ReturnPolicyPage() {
               <div>
                 <h3 className="font-heading font-bold text-lg text-slate-900 mb-2">Our Return Policy</h3>
                 <p className="text-sm text-slate-600 leading-relaxed">
-                  If your child is not completely delighted with their toy, you can return it within 30 days of delivery in its original box for a full refund or exchange.
+                  If you are not completely delighted with your product, you can return it within 30 days of delivery in its original box for a full refund or exchange.
                 </p>
               </div>
             </div>

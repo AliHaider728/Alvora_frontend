@@ -200,7 +200,7 @@ export const CategoryPageClient: React.FC = () => {
             <p className="text-xs sm:text-sm text-white/90 mt-2 font-medium leading-relaxed">
               {currentCategoryObj
                 ? currentCategoryObj.description
-                : 'Explore our full spectrum of educational STEM toys, cuddly plushies, building sets, and action figures.'}
+                : 'Explore our full spectrum of premium skincare, serums, moisturizers, and cleansers.'}
             </p>
           </div>
         </div>
@@ -353,7 +353,7 @@ export const CategoryPageClient: React.FC = () => {
               </button>
 
               <span className="text-xs sm:text-sm font-medium text-slate-600">
-                Showing <strong className="text-slate-900 font-bold">{sortedProducts.length}</strong> toys found
+                Showing <strong className="text-slate-900 font-bold">{sortedProducts.length}</strong> products found
               </span>
 
               {/* Sort By Dropdown */}
@@ -387,7 +387,7 @@ export const CategoryPageClient: React.FC = () => {
                 </div>
                 <h3 className="font-heading font-bold text-lg text-slate-800">No Toys Found</h3>
                 <p className="text-xs text-slate-500 max-w-sm mx-auto">
-                  We couldn't find any toys matching your current filter choices. Try broadening your price range or clearing filters!
+                  We couldn't find any products matching your current filter choices. Try broadening your price range or clearing filters!
                 </p>
                 <button
                   onClick={resetFilters}

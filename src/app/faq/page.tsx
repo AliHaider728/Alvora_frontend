@@ -63,8 +63,8 @@ export default function FaqPage() {
       color: 'text-teal-500 bg-teal-50'
     },
     {
-      q: 'Are your toys safe for children?',
-      a: 'Yes. We carefully select quality toys that are suitable for children. Please follow the recommended age mentioned on each product page.',
+      q: 'Are your products safe for sensitive skin?',
+      a: 'Yes. We carefully select quality ingredients that are suitable for all skin types. Please follow the recommended age mentioned on each product page.',
       icon: ShieldCheck,
       color: 'text-lime-500 bg-lime-50'
     },

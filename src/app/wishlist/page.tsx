@@ -29,7 +29,7 @@ export default function WishlistPage() {
               <span>Saved Favorite Toys</span>
             </h1>
             <p className="text-xs text-slate-500 mt-1 font-medium">
-              You have {wishlistedProducts.length} toy(s) saved for later play.
+              You have {wishlistedProducts.length} product(s) saved in your wishlist.
             </p>
           </div>
         </div>
@@ -41,7 +41,7 @@ export default function WishlistPage() {
             </div>
             <h3 className="font-heading font-bold text-lg text-slate-800">Your Wishlist is Empty</h3>
             <p className="text-xs text-slate-500 max-w-sm mx-auto">
-              Tap the heart icon on any toy to save it to your wishlist!
+              Tap the heart icon on any product to save it to your wishlist!
             </p>
             <Link href="/category/all"
               className="inline-block px-6 py-2.5 rounded-2xl bg-rose-500 text-white font-heading font-bold text-xs"

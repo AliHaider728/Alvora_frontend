@@ -55,7 +55,7 @@ function SearchResultsContent() {
             <span>Search Results for "{query}"</span>
           </h1>
           <p className="text-xs text-slate-500 mt-1 font-medium">
-            Found {results.length} matching toy(s) in our catalog.
+            Found {results.length} matching product(s) in our catalog.
           </p>
         </div>
 

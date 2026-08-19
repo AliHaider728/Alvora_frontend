@@ -12,7 +12,7 @@ interface SeoHeadProps {
 
 export const SeoHead: React.FC<SeoHeadProps> = ({ title, description, product, canonicalUrl }) => {
   const defaultTitle = "Alvora Skincare - Premier Toy Store in Pakistan";
-  const defaultDesc = "Shop original building sets, STEM robotics, action figures, plush toys, and board games in Pakistan with Cash on Delivery & Free Express Shipping.";
+  const defaultDesc = "Shop premium skincare, serums, moisturizers, and cleansers in Pakistan with Cash on Delivery & Free Express Shipping.";
 
   const finalTitle = product?.metaTitle || (title ? `${title} | Alvora Skincare` : defaultTitle);
   const finalDesc = description || product?.metaDescription || product?.shortDescription || product?.description || defaultDesc;

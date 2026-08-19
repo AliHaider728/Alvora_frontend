@@ -19,6 +19,7 @@ import {
   INITIAL_CUSTOMERS,
   INITIAL_COUPONS
 } from '../data/mockData';
+import { USE_MOCK_DATA, MOCK_PRODUCTS, MOCK_CATEGORIES, MOCK_SETTINGS } from '../data/mock';
 import { api, getAuthToken, setAuthToken, getLastApiError, isSuperAdmin } from '../services/api';
 import { formatPrice } from '../utils/formatters';
 import { normalizeStoreSettings } from '../config/storeAppearance';
@@ -240,6 +241,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   // LocalStorage state initialization
   const [products, setProducts] = useState<Product[]>(() => {
+    if (USE_MOCK_DATA) return MOCK_PRODUCTS.map(normalizeProduct);
     const saved = (typeof window !== 'undefined' ? localStorage.getItem.bind(localStorage) : () => null)('alvora_products');
     const initialProducts = saved ? JSON.parse(saved) : [];
     return initialProducts.map(normalizeProduct);
@@ -247,6 +249,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [productsLoading, setProductsLoading] = useState(true);
 
   const [categories, setCategories] = useState<Category[]>(() => {
+    if (USE_MOCK_DATA) return MOCK_CATEGORIES.map(normalizeCategory);
     const saved = (typeof window !== 'undefined' ? localStorage.getItem.bind(localStorage) : () => null)('alvora_categories');
     const initialCategories = saved ? JSON.parse(saved) : INITIAL_CATEGORIES;
     return initialCategories.map(normalizeCategory);
@@ -329,6 +332,10 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // It is the sole authority for settings state in production.
   useEffect(() => {
     const fetchSettings = async () => {
+      if (USE_MOCK_DATA) {
+        setSettings(normalizeStoreSettings(MOCK_SETTINGS));
+        return;
+      }
       try {
         const result = await api.getSettings();
         if (result) {
@@ -375,6 +382,12 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     // ─── Public data (products + categories) — always fetch ───
     const fetchPublicData = async () => {
+      if (USE_MOCK_DATA) {
+        setProducts(MOCK_PRODUCTS.map(normalizeProduct));
+        setCategories(MOCK_CATEGORIES.map(normalizeCategory));
+        setProductsLoading(false);
+        return;
+      }
       try {
         const hasAdminSession = Boolean(getAuthToken());
         const [realProducts, realCategories] = await Promise.all([

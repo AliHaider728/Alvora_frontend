@@ -131,7 +131,7 @@ export const ContactPageClient: React.FC = () => {
             <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm space-y-4">
               <h1 className="font-heading font-black text-2xl text-slate-900">Get in Touch with Alvora Skincare</h1>
               <p className="text-xs text-slate-500 leading-relaxed font-medium">
-                Have questions about our toys, orders, delivery, or anything else? Send us a message and our team will get back to you as soon as possible.
+                Have questions about our skincare, orders, delivery, or anything else? Send us a message and our team will get back to you as soon as possible.
               </p>
 
               <div className="space-y-4 pt-4 border-t border-slate-100 text-xs text-slate-700">

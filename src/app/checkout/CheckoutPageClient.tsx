@@ -316,7 +316,7 @@ export const CheckoutPageClient: React.FC = () => {
           <ShoppingBag className="w-8 h-8" />
         </div>
         <h2 className="font-heading font-black text-2xl text-slate-800 mb-2">Your Basket is Empty</h2>
-        <p className="text-sm text-slate-500 mb-6">Add toys to your basket before proceeding to checkout.</p>
+        <p className="text-sm text-slate-500 mb-6">Add items to your bag before proceeding to checkout.</p>
         <Link href="/category/all" className="px-6 py-3 rounded-2xl bg-rose-500 text-white font-heading font-bold text-sm">
           Explore Toys & Games
         </Link>

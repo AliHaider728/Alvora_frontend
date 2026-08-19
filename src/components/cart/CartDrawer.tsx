@@ -87,7 +87,7 @@ export const CartDrawer: React.FC = () => {
                 </div>
                 <h3 className="font-heading font-bold text-lg text-slate-700 mb-1">Your Basket is Empty</h3>
                 <p className="text-xs text-slate-500 mb-6 max-w-xs">
-                  Discover our magical collection of toys, action figures, and educational games!
+                  Discover our premium collection of skincare and beauty products!
                 </p>
                 <button
                   onClick={() => setIsCartOpen(false)}

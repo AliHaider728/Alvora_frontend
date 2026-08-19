@@ -1,5 +1,6 @@
 import React from 'react';
 import { HomePage } from './HomePage';
+import { USE_MOCK_DATA, MOCK_PRODUCTS, MOCK_CATEGORIES, MOCK_SETTINGS } from '../data/mock';
 
 export const metadata = {
   title: 'Alvora Skincare - Premium Skincare Products',
@@ -9,8 +10,11 @@ export const metadata = {
 const API_URL = process.env.NEXT_PUBLIC_ALVORA_API_URL || 'http://localhost:6000/api';
 
 async function fetchData() {
+  if (USE_MOCK_DATA) {
+    return { products: MOCK_PRODUCTS, categories: MOCK_CATEGORIES, settings: MOCK_SETTINGS };
+  }
+
   // Using next: { revalidate: 60 } to cache the homepage for 60 seconds.
-  // This ensures fast loads for users while keeping products fresh shortly after admin updates.
   const fetchOpts = { next: { revalidate: 60 } };
   
   try {
@@ -41,9 +45,7 @@ async function fetchData() {
 export default async function Page() {
   const { products, categories, settings } = await fetchData();
   
-  if (!settings) {
-    return <div className="p-8 text-center">Unable to load store settings.</div>;
-  }
+  const resolvedSettings = settings || MOCK_SETTINGS;
 
-  return <HomePage products={products} categories={categories} settings={settings} />;
+  return <HomePage products={products} categories={categories} settings={resolvedSettings} />;
 }

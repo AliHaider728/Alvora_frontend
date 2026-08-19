@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       if (cat) {
         return { 
           title: `${cat.name} | Alvora Skincare`,
-          description: cat.description || `Explore our selection of ${cat.name} toys.`
+          description: cat.description || `Explore our selection of ${cat.name} products.`
         };
       }
     }

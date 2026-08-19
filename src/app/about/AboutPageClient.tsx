@@ -55,7 +55,7 @@ export const AboutPageClient: React.FC = () => {
             </div>
             <h3 className="font-heading font-black text-lg text-slate-900">100% Non-Toxic & Safe</h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Every single toy in our catalog undergoes rigorous safety testing for BPA, lead, and phthalates before reaching your child's hands.
+              Every single product in our catalog undergoes rigorous safety testing for BPA, lead, and phthalates before reaching your child's hands.
             </p>
           </div>
 
@@ -94,7 +94,7 @@ export const AboutPageClient: React.FC = () => {
                 Our journey began in a small workshop where we tested and curated the very best STEM kits, puzzles, and creative sets. Today, we're proud to serve thousands of families across the globe, bringing smiles and "aha!" moments to young explorers every single day.
               </p>
               <p>
-                We believe that every child is a natural innovator. With the right toys, they can build, discover, and learn the skills they need to shape the future. Thank you for being a part of our story!
+                We believe that every child is a natural innovator. With the right products, they can build, discover, and learn the skills they need to shape the future. Thank you for being a part of our story!
               </p>
             </div>
             <div className="flex items-center gap-4 pt-2">

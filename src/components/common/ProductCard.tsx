@@ -265,7 +265,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
           </p>
         ) : (
           <p className={`mt-2.5 line-clamp-2 leading-relaxed text-slate-400 ${compact ? 'text-xs' : 'text-sm'}`}>
-            A fun, quality toy selected for curious young minds.
+            A premium product formulated for healthy skin.
           </p>
         )}
 

@@ -380,7 +380,7 @@ export const ProductDetailPageClient: React.FC = () => {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">
         <h2 className="font-heading font-black text-2xl text-slate-800 mb-2">Toy Not Found</h2>
-        <p className="text-sm text-slate-500 mb-6">The toy you are looking for might have moved to another playhouse.</p>
+        <p className="text-sm text-slate-500 mb-6">The product you are looking for might have been discontinued or moved.</p>
         <Link href="/category/all" className="px-6 py-3 rounded-2xl bg-rose-500 text-white font-heading font-bold text-sm">
           Explore All Toys
         </Link>
@@ -1245,7 +1245,7 @@ export const ProductDetailPageClient: React.FC = () => {
               <div className="space-y-4">
                 {approvedReviews.length === 0 ? (
                   <p className="text-sm text-slate-500 text-center py-6">
-                    Be the first parent to review this toy!
+                    Be the first to review this product!
                   </p>
                 ) : (
                   approvedReviews.map(review => (
