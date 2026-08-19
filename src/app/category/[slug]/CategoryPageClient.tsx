@@ -5,7 +5,7 @@ import { useParams, useSearchParams, useRouter, usePathname } from "next/navigat
 
 import { Filter, SlidersHorizontal, Star, X, Check, ChevronDown, RotateCcw } from 'lucide-react';
 import { useStore } from '../../../context/StoreContext';
-import { ProductCard } from '../../../components/common/ProductCard';
+import { AlvoraProductCard } from '../../../components/common/AlvoraProductCard';
 import { SkeletonCard } from '../../../components/common/SkeletonCard';
 import { Breadcrumbs } from '../../../components/common/Breadcrumbs';
 
@@ -182,7 +182,7 @@ export const CategoryPageClient: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans py-6">
+    <div className="min-h-screen bg-[#FAF6F2] font-sans py-6">
       
 
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
@@ -191,10 +191,10 @@ export const CategoryPageClient: React.FC = () => {
         {/* Page Header */}
         <div className="bg-gradient-to-r from-sky-500 via-rose-500 to-amber-500 rounded-3xl p-6 sm:p-10 text-white shadow-lg mb-8 relative overflow-hidden">
           <div className="relative z-10 max-w-2xl">
-            <span className="text-xs font-extrabold uppercase tracking-widest text-yellow-200 font-heading">
+            <span className="text-xs font-extrabold uppercase tracking-widest text-yellow-200 font-display">
               Category Collection
             </span>
-            <h1 className="font-heading font-black text-3xl sm:text-4xl lg:text-5xl mt-1 text-white">
+            <h1 className="font-display font-medium text-4xl uppercase tracking-widest sm:text-4xl lg:text-5xl mt-1 text-white">
               {currentCategoryObj ? currentCategoryObj.name : 'All Toys & Games'}
             </h1>
             <p className="text-xs sm:text-sm text-white/90 mt-2 font-medium leading-relaxed">
@@ -208,9 +208,9 @@ export const CategoryPageClient: React.FC = () => {
         {/* Layout Grid: Sidebar + Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Desktop Filter Sidebar */}
-          <aside className="hidden lg:block space-y-6 bg-white p-6 rounded-3xl border border-slate-100 shadow-sm h-fit sticky top-24">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-              <div className="flex items-center gap-2 font-heading font-extrabold text-slate-900 text-base">
+          <aside className="hidden lg:block space-y-6 bg-white p-6 rounded-3xl border border-[#EDE5DC] shadow-sm h-fit sticky top-24">
+            <div className="flex items-center justify-between pb-4 border-b border-[#EDE5DC]">
+              <div className="flex items-center gap-2 font-display font-extrabold text-[#1A1A1A] text-base">
                 <Filter className="w-5 h-5 text-rose-500" />
                 <span>Filter Toys</span>
               </div>
@@ -225,7 +225,7 @@ export const CategoryPageClient: React.FC = () => {
 
             {/* Category Filter */}
             <div className="space-y-2">
-              <h3 className="font-heading font-bold text-xs uppercase tracking-wider text-slate-500">
+              <h3 className="font-display font-medium text-2xl uppercase tracking-widest text-xs uppercase tracking-wider text-[#1A1A1A]/60">
                 Category
               </h3>
               <div className="space-y-1">
@@ -235,7 +235,7 @@ export const CategoryPageClient: React.FC = () => {
                   className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold transition-colors ${
                     selectedCategories.length === 0
                       ? 'bg-rose-500 text-white'
-                      : 'text-slate-700 hover:bg-slate-100'
+                      : 'text-slate-700 hover:bg-[#F5EDE4]'
                   }`}
                 >
                   All Categories ({products.length})
@@ -248,7 +248,7 @@ export const CategoryPageClient: React.FC = () => {
                     className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold transition-colors flex items-center justify-between ${
                       selectedCategories.includes(cat.slug)
                         ? 'bg-rose-500 text-white font-bold'
-                        : 'text-slate-700 hover:bg-slate-100'
+                        : 'text-slate-700 hover:bg-[#F5EDE4]'
                     }`}
                   >
                     <span>{cat.name}</span>
@@ -259,8 +259,8 @@ export const CategoryPageClient: React.FC = () => {
             </div>
 
             {/* Age Group Filter */}
-            <div className="space-y-2 pt-4 border-t border-slate-100">
-              <h3 className="font-heading font-bold text-xs uppercase tracking-wider text-slate-500">
+            <div className="space-y-2 pt-4 border-t border-[#EDE5DC]">
+              <h3 className="font-display font-medium text-2xl uppercase tracking-widest text-xs uppercase tracking-wider text-[#1A1A1A]/60">
                 Age Recommendation
               </h3>
               <div className="grid grid-cols-2 gap-2">
@@ -270,7 +270,7 @@ export const CategoryPageClient: React.FC = () => {
                   className={`px-2.5 py-2 rounded-xl text-xs font-bold text-center transition-colors ${
                     selectedAges.length === 0
                       ? 'bg-sky-500 text-white'
-                      : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                      : 'bg-[#F5EDE4] text-slate-700 hover:bg-slate-200'
                   }`}
                 >
                   All Ages
@@ -283,7 +283,7 @@ export const CategoryPageClient: React.FC = () => {
                     className={`px-2.5 py-2 rounded-xl text-xs font-bold text-center transition-colors ${
                       selectedAges.includes(age.id)
                         ? 'bg-sky-500 text-white'
-                        : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                        : 'bg-[#F5EDE4] text-slate-700 hover:bg-slate-200'
                     }`}
                   >
                     {age.label}
@@ -293,12 +293,12 @@ export const CategoryPageClient: React.FC = () => {
             </div>
 
             {/* Price Filter */}
-            <div className="space-y-2 pt-4 border-t border-slate-100">
+            <div className="space-y-2 pt-4 border-t border-[#EDE5DC]">
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-[10px] font-black uppercase tracking-wider text-slate-500">
+                  <h3 className="text-[10px] font-black uppercase tracking-wider text-[#1A1A1A]/60">
                     Max Price
                   </h3>
-                  <span className="font-heading font-extrabold text-xs text-slate-900">
+                  <span className="font-display font-extrabold text-xs text-[#1A1A1A]">
                     {formatPrice(priceRange)}
                   </span>
                 </div>
@@ -319,8 +319,8 @@ export const CategoryPageClient: React.FC = () => {
 
 
             {/* Minimum Rating Filter */}
-            <div className="space-y-2 pt-4 border-t border-slate-100">
-              <h3 className="font-heading font-bold text-xs uppercase tracking-wider text-slate-500">
+            <div className="space-y-2 pt-4 border-t border-[#EDE5DC]">
+              <h3 className="font-display font-medium text-2xl uppercase tracking-widest text-xs uppercase tracking-wider text-[#1A1A1A]/60">
                 Minimum Rating
               </h3>
               <div className="space-y-1">
@@ -329,7 +329,7 @@ export const CategoryPageClient: React.FC = () => {
                     key={r}
                     onClick={() => setMinRating(r)}
                     className={`w-full flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors ${
-                      minRating === r ? 'bg-amber-100 text-amber-900 font-bold' : 'text-slate-600 hover:bg-slate-100'
+                      minRating === r ? 'bg-amber-100 text-amber-900 font-bold' : 'text-[#1A1A1A]/80 hover:bg-[#F5EDE4]'
                     }`}
                   >
                     <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
@@ -343,26 +343,26 @@ export const CategoryPageClient: React.FC = () => {
           {/* Main Content Area */}
           <main className="lg:col-span-3 space-y-6">
             {/* Controls Bar: Mobile Filter Button + Results Count + Sort Dropdown */}
-            <div className="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm flex flex-wrap items-center justify-between gap-4">
+            <div className="bg-white p-4 rounded-3xl border border-[#EDE5DC] shadow-sm flex flex-wrap items-center justify-between gap-4">
               <button
                 onClick={() => setMobileFilterOpen(true)}
-                className="lg:hidden flex items-center gap-2 px-4 py-2 rounded-2xl bg-rose-500 text-white font-heading font-bold text-xs"
+                className="lg:hidden flex items-center gap-2 px-4 py-2 rounded-2xl bg-rose-500 text-white font-display font-medium text-2xl uppercase tracking-widest text-xs"
               >
                 <SlidersHorizontal className="w-4 h-4" />
                 <span>Filter & Refine</span>
               </button>
 
-              <span className="text-xs sm:text-sm font-medium text-slate-600">
-                Showing <strong className="text-slate-900 font-bold">{sortedProducts.length}</strong> products found
+              <span className="text-xs sm:text-sm font-medium text-[#1A1A1A]/80">
+                Showing <strong className="text-[#1A1A1A] font-bold">{sortedProducts.length}</strong> products found
               </span>
 
               {/* Sort By Dropdown */}
               <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-500 font-medium hidden sm:inline">Sort by:</span>
+                <span className="text-xs text-[#1A1A1A]/60 font-medium hidden sm:inline">Sort by:</span>
                 <select
                   value={sortBy}
                   onChange={e => setSortBy(e.target.value as any)}
-                  className="px-3.5 py-2 text-xs font-heading font-bold rounded-2xl border border-slate-200 bg-slate-50 text-slate-800 focus:outline-none focus:ring-2 focus:ring-rose-400 cursor-pointer"
+                  className="px-3.5 py-2 text-xs font-display font-medium text-2xl uppercase tracking-widest rounded-2xl border border-[#EDE5DC] bg-[#FAF6F2] text-slate-800 focus:outline-none focus:ring-2 focus:ring-rose-400 cursor-pointer"
                 >
                   <option value="featured">Featured / Best Match</option>
                   <option value="price-low">Price: Low to High</option>
@@ -381,17 +381,17 @@ export const CategoryPageClient: React.FC = () => {
                 ))}
               </div>
             ) : sortedProducts.length === 0 ? (
-              <div className="bg-white rounded-3xl p-12 text-center border border-slate-100 space-y-4">
+              <div className="bg-white rounded-3xl p-12 text-center border border-[#EDE5DC] space-y-4">
                 <div className="w-16 h-16 rounded-full bg-rose-50 text-rose-400 flex items-center justify-center mx-auto">
                   <Filter className="w-8 h-8" />
                 </div>
-                <h3 className="font-heading font-bold text-lg text-slate-800">No Toys Found</h3>
-                <p className="text-xs text-slate-500 max-w-sm mx-auto">
+                <h3 className="font-display font-medium text-2xl uppercase tracking-widest text-lg text-slate-800">No Toys Found</h3>
+                <p className="text-xs text-[#1A1A1A]/60 max-w-sm mx-auto">
                   We couldn't find any products matching your current filter choices. Try broadening your price range or clearing filters!
                 </p>
                 <button
                   onClick={resetFilters}
-                  className="px-6 py-2.5 rounded-2xl bg-rose-500 text-white font-heading font-bold text-xs hover:bg-rose-600 transition-colors"
+                  className="px-6 py-2.5 rounded-2xl bg-rose-500 text-white font-display font-medium text-2xl uppercase tracking-widest text-xs hover:bg-rose-600 transition-colors"
                 >
                   Clear All Filters
                 </button>
@@ -399,7 +399,7 @@ export const CategoryPageClient: React.FC = () => {
             ) : (
               <div className="grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 lg:gap-6">
                 {sortedProducts.map(product => (
-                  <ProductCard key={product.id} product={product} />
+                  <AlvoraProductCard key={product.id} product={product} />
                 ))}
               </div>
             )}
@@ -416,8 +416,8 @@ export const CategoryPageClient: React.FC = () => {
           />
           <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
             <div className="w-screen max-w-xs bg-white shadow-2xl p-6 overflow-y-auto space-y-6">
-              <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-                <h3 className="font-heading font-bold text-base text-slate-900">Filter Toys</h3>
+              <div className="flex items-center justify-between pb-4 border-b border-[#EDE5DC]">
+                <h3 className="font-display font-medium text-2xl uppercase tracking-widest text-base text-[#1A1A1A]">Filter Toys</h3>
                 <button
                   onClick={() => setMobileFilterOpen(false)}
                   className="p-1 rounded-full text-slate-400 hover:text-slate-800"
@@ -428,7 +428,7 @@ export const CategoryPageClient: React.FC = () => {
 
               {/* Mobile Categories */}
               <div className="space-y-2">
-                <h4 className="font-heading font-bold text-xs uppercase text-slate-500">Category</h4>
+                <h4 className="font-display font-medium text-2xl uppercase tracking-widest text-xs uppercase text-[#1A1A1A]/60">Category</h4>
                 <div className="space-y-1">
                   <button
                     onClick={selectAllCategories}
@@ -451,13 +451,13 @@ export const CategoryPageClient: React.FC = () => {
               </div>
 
               {/* Mobile Age Groups */}
-              <div className="space-y-2 pt-4 border-t border-slate-100">
-                <h4 className="font-heading font-bold text-xs uppercase text-slate-500">Age Group</h4>
+              <div className="space-y-2 pt-4 border-t border-[#EDE5DC]">
+                <h4 className="font-display font-medium text-2xl uppercase tracking-widest text-xs uppercase text-[#1A1A1A]/60">Age Group</h4>
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     onClick={selectAllAges}
                     aria-pressed={selectedAges.length === 0}
-                    className={`px-2 py-2 rounded-xl text-xs font-bold ${selectedAges.length === 0 ? 'bg-sky-500 text-white' : 'bg-slate-100'}`}
+                    className={`px-2 py-2 rounded-xl text-xs font-bold ${selectedAges.length === 0 ? 'bg-sky-500 text-white' : 'bg-[#F5EDE4]'}`}
                   >
                     All Ages
                   </button>
@@ -466,7 +466,7 @@ export const CategoryPageClient: React.FC = () => {
                       key={age.id}
                       onClick={() => toggleAge(age.id)}
                       aria-pressed={selectedAges.includes(age.id)}
-                      className={`px-2 py-2 rounded-xl text-xs font-bold ${selectedAges.includes(age.id) ? 'bg-sky-500 text-white' : 'bg-slate-100'}`}
+                      className={`px-2 py-2 rounded-xl text-xs font-bold ${selectedAges.includes(age.id) ? 'bg-sky-500 text-white' : 'bg-[#F5EDE4]'}`}
                     >
                       {age.label}
                     </button>
@@ -474,16 +474,16 @@ export const CategoryPageClient: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 pt-4 border-t border-slate-100">
+              <div className="grid grid-cols-2 gap-2 pt-4 border-t border-[#EDE5DC]">
                 <button
                   onClick={resetFilters}
-                  className="w-full py-3 rounded-2xl bg-slate-100 text-slate-700 font-heading font-bold text-xs"
+                  className="w-full py-3 rounded-2xl bg-[#F5EDE4] text-slate-700 font-display font-medium text-2xl uppercase tracking-widest text-xs"
                 >
                   Reset
                 </button>
                 <button
                   onClick={() => setMobileFilterOpen(false)}
-                  className="w-full py-3 rounded-2xl bg-slate-900 text-white font-heading font-bold text-xs"
+                  className="w-full py-3 rounded-2xl bg-slate-900 text-white font-display font-medium text-2xl uppercase tracking-widest text-xs"
                 >
                   Apply & Close
                 </button>

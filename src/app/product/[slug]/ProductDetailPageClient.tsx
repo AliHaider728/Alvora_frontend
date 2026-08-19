@@ -26,7 +26,7 @@ import { trackAddToCart } from "../../../lib/metaPixel";
 import { trackTikTokViewContent, trackTikTokAddToCart } from "../../../lib/tiktokPixel";
 import { useStore } from '../../../context/StoreContext';
 import { useToast } from '../../../context/ToastContext';
-import { ProductCard } from '../../../components/common/ProductCard';
+import { AlvoraProductCard } from '../../../components/common/AlvoraProductCard';
 import { ProductImage } from '../../../components/common/ProductImage';
 import { ReviewSummary } from '../../../components/common/ReviewSummary';
 import { Breadcrumbs } from '../../../components/common/Breadcrumbs';
@@ -371,7 +371,7 @@ export const ProductDetailPageClient: React.FC = () => {
   if (productsLoading && !product) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center p-6">
-        <Loader2 className="h-10 w-10 animate-spin text-rose-500" />
+        <Loader2 className="h-10 w-10 animate-spin text-[#C48B80]" />
       </div>
     );
   }
@@ -379,9 +379,9 @@ export const ProductDetailPageClient: React.FC = () => {
   if (!product) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">
-        <h2 className="font-heading font-black text-2xl text-slate-800 mb-2">Toy Not Found</h2>
-        <p className="text-sm text-slate-500 mb-6">The product you are looking for might have been discontinued or moved.</p>
-        <Link href="/category/all" className="px-6 py-3 rounded-2xl bg-rose-500 text-white font-heading font-bold text-sm">
+        <h2 className="font-display font-black text-2xl text-[#1A1A1A]/90 mb-2">Toy Not Found</h2>
+        <p className="text-sm text-[#1A1A1A]/50 mb-6">The product you are looking for might have been discontinued or moved.</p>
+        <Link href="/category/all" className="px-6 py-3 rounded-2xl bg-[#C48B80] text-white font-display font-bold text-sm">
           Explore All Toys
         </Link>
       </div>
@@ -600,14 +600,14 @@ export const ProductDetailPageClient: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 py-4 font-sans sm:py-6 overflow-x-hidden">
+    <div className="min-h-screen bg-[#FAF6F2] py-4 font-sans sm:py-6 overflow-x-hidden">
       
 
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
         <Breadcrumbs items={breadcrumbItems} />
 
         {/* Top Detail Section: Gallery + Product Info */}
-        <div className="mb-5 grid grid-cols-1 items-start gap-5 rounded-3xl border border-slate-100 bg-white p-4 shadow-sm sm:p-6 lg:grid-cols-12 lg:gap-8">
+        <div className="mb-5 grid grid-cols-1 items-start gap-5 rounded-3xl border border-[#EDE5DC] bg-white p-4 shadow-sm sm:p-6 lg:grid-cols-12 lg:gap-8">
           {/* Left Column: Image Gallery */}
           <div className="self-start space-y-2.5 lg:col-span-6">
             {/* Main Preview Image with Hover Zoom Effect */}
@@ -617,7 +617,7 @@ export const ProductDetailPageClient: React.FC = () => {
               onClick={openLightbox}
               onPointerMove={handleZoomPointerMove}
               onPointerLeave={() => { setIsZooming(false); setZoomOrigin('50% 50%'); }}
-              className="group/gallery relative flex aspect-square w-full cursor-zoom-in items-center justify-center overflow-hidden rounded-2xl border border-slate-100 bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 focus-visible:ring-offset-2"
+              className="group/gallery relative flex aspect-square w-full cursor-zoom-in items-center justify-center overflow-hidden bg-[#F1C9BD] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C48B80] focus-visible:ring-offset-2"
               aria-label={`Enlarge ${product.name} image`}
             >
               <img
@@ -628,7 +628,7 @@ export const ProductDetailPageClient: React.FC = () => {
               />
               <span className="pointer-events-none absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-slate-950/70 px-3 py-1.5 text-[10px] font-bold text-white opacity-0 backdrop-blur transition-opacity group-hover/gallery:opacity-100"><ZoomIn className="h-3.5 w-3.5" /> Click to enlarge</span>
               {(product.discountPercent ?? 0) > 0 && (
-                <span className="absolute top-4 left-4 z-10 bg-rose-500 text-white font-heading font-extrabold text-xs px-3 py-1.5 rounded-full shadow-md">
+                <span className="absolute top-4 left-4 z-10 bg-[#C48B80] text-white font-display font-extrabold text-xs px-3 py-1.5 rounded-full shadow-md">
                   -{product.discountPercent}% OFF
                 </span>
               )}
@@ -647,8 +647,8 @@ export const ProductDetailPageClient: React.FC = () => {
                     }}
                     aria-label={`Show ${product.name} image ${idx + 1}`}
                     aria-current={!overrideImage && activeImageIndex === idx ? 'true' : undefined}
-                    className={`relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 p-0.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 focus-visible:ring-offset-2 sm:h-20 sm:w-20 ${
-                      (!overrideImage && activeImageIndex === idx) ? 'border-rose-500 bg-rose-50 shadow-sm' : 'border-slate-200 bg-white opacity-75 hover:opacity-100'
+                    className={`relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 p-0.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C48B80] focus-visible:ring-offset-2 sm:h-20 sm:w-20 ${
+                      (!overrideImage && activeImageIndex === idx) ? 'border-[#C48B80] bg-[#F1C9BD] shadow-sm' : 'border-[#EDE5DC] bg-white opacity-75 hover:opacity-100'
                     }`}
                   >
                     <img src={getSafeImageSrc(img)} alt={`${product.name} thumbnail ${idx + 1}`} className="h-full w-full object-contain" />
@@ -664,7 +664,7 @@ export const ProductDetailPageClient: React.FC = () => {
               {/* Category & Brand Header */}
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold uppercase tracking-wider text-rose-500 bg-rose-50 px-3 py-1 rounded-full">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#C48B80] bg-[#F1C9BD] px-3 py-1 rounded-full">
                     {product.brand}
                   </span>
                   {(product.soldCount ?? 0) >= 50 && (
@@ -677,24 +677,24 @@ export const ProductDetailPageClient: React.FC = () => {
               </div>
 
               {/* Product Title */}
-              <h1 className="mb-3 font-heading text-2xl font-black leading-tight text-slate-900 sm:text-3xl">
+              <h1 className="mb-3 font-display text-3xl font-medium leading-tight text-[#1A1A1A] sm:text-3xl">
                 {product.name}
               </h1>
 
-              <div className="mb-3 grid gap-1.5 rounded-2xl border border-slate-100 bg-slate-50/70 px-3 py-2.5 text-xs sm:grid-cols-2" aria-label="Product categories and recommended age groups">
-                <div><span className="font-black text-slate-700">Categories: </span><span className="font-semibold text-sky-700">{getProductCategoryNames(product).join(', ') || 'Uncategorized'}</span></div>
-                <div><span className="font-black text-slate-700">Age: </span><span className="font-semibold text-indigo-700">{formatProductAgeGroups(product).replace(/^Ages\s*/i, '')}</span></div>
+              <div className="mb-3 grid gap-1.5 rounded-2xl border border-[#EDE5DC] bg-[#FAF6F2]/70 px-3 py-2.5 text-xs sm:grid-cols-2" aria-label="Product categories and recommended age groups">
+                <div><span className="font-black text-[#1A1A1A]/80">Categories: </span><span className="font-semibold text-sky-700">{getProductCategoryNames(product).join(', ') || 'Uncategorized'}</span></div>
+                <div><span className="font-black text-[#1A1A1A]/80">Age: </span><span className="font-semibold text-indigo-700">{formatProductAgeGroups(product).replace(/^Ages\s*/i, '')}</span></div>
               </div>
 
               {/* Price & Stock */}
-              <div className="mb-3 flex flex-col items-start gap-3 rounded-2xl border border-slate-100 bg-slate-50 p-3 sm:flex-row sm:items-center sm:justify-between sm:p-4">
+              <div className="mb-3 flex flex-col items-start gap-3 rounded-2xl border border-[#EDE5DC] bg-[#FAF6F2] p-3 sm:flex-row sm:items-center sm:justify-between sm:p-4">
                 <div>
                   <div className="flex items-baseline gap-3">
-                    <span className="font-heading text-2xl font-black text-slate-900 sm:text-3xl">
+                    <span className="font-display text-3xl font-medium text-[#1A1A1A] sm:text-3xl">
                       {formatPrice(displayPrice, settings.currency)}
                     </span>
                     {(product.originalPrice ?? 0) > 0 && (
-                      <div className="text-xl font-bold text-rose-500 line-through md:text-2xl">
+                      <div className="text-xl font-bold text-[#C48B80] line-through md:text-2xl">
                         {formatPrice(currentOriginalPrice ?? product.originalPrice!, settings.currency)}
                       </div>
                     )}
@@ -716,7 +716,7 @@ export const ProductDetailPageClient: React.FC = () => {
                     />
                   )}
                   {isVariable && !currentVariation && (
-                    <span className="mt-1 block text-sm font-medium text-slate-500">
+                    <span className="mt-1 block text-sm font-medium text-[#1A1A1A]/50">
                       Prices vary by selection
                     </span>
                   )}
@@ -736,7 +736,7 @@ export const ProductDetailPageClient: React.FC = () => {
                     <span className={`w-2 h-2 rounded-full ${
                       ((isVariable ? (product.attributes?.length || 0) > 0 : variantGroups.length > 0) && !allVariantsSelected)
                         ? 'bg-amber-500'
-                        : effectiveAvailable ? 'bg-emerald-500' : 'bg-rose-500'
+                        : effectiveAvailable ? 'bg-emerald-500' : 'bg-[#C48B80]'
                     }`} />
                     {((isVariable ? (product.attributes?.length || 0) > 0 : variantGroups.length > 0) && !allVariantsSelected)
                       ? 'Select options to check stock'
@@ -768,15 +768,15 @@ export const ProductDetailPageClient: React.FC = () => {
               </div>
 
               {/* Description snippet */}
-              <p className="mb-3 font-sans text-sm leading-relaxed text-slate-600">
+              <p className="mb-3 font-sans text-sm leading-relaxed text-[#1A1A1A]/60">
                 {product.shortDescription || getPlainDescription(product.description).slice(0, 240)}
               </p>
 
               {/* Product Attributes (New Variable Workflow) */}
               {isVariable && product.attributes && product.attributes.length > 0 && (
-                <div className="mb-3 space-y-3 border-t border-slate-100 pt-3">
+                <div className="mb-3 space-y-3 border-t border-[#EDE5DC] pt-3">
                   <div className="mb-1.5 flex items-center justify-between">
-                    <h4 className="text-sm font-bold text-slate-900">Options</h4>
+                    <h4 className="text-sm font-bold text-[#1A1A1A]">Options</h4>
                     {product.sizeGuide && (
                       <button 
                         ref={sizeGuideTriggerRef}
@@ -807,9 +807,9 @@ export const ProductDetailPageClient: React.FC = () => {
 
                     return (
                       <div key={attr.id || attr.slug} className="space-y-2">
-                        <label className="text-xs font-heading font-extrabold text-slate-800 uppercase tracking-wider block">
+                        <label className="text-xs font-display font-extrabold text-[#1A1A1A]/90 uppercase tracking-wider block">
                           Select {attr.name}:
-                          <span className="ml-1 font-medium normal-case text-slate-600">
+                          <span className="ml-1 font-medium normal-case text-[#1A1A1A]/60">
                             {selectedLabel || 'Choose an option'}
                           </span>
                         </label>
@@ -818,7 +818,7 @@ export const ProductDetailPageClient: React.FC = () => {
                           <select
                             value={selectedAttributes[attr.slug] || ''}
                             onChange={(e) => handleAttributeSelect(attr.slug, e.target.value)}
-                            className="w-full sm:w-64 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100"
+                            className="w-full sm:w-64 rounded-xl border border-[#EDE5DC] bg-[#FAF6F2] px-3 py-2 text-sm text-[#1A1A1A]/90 outline-none focus:border-rose-400 focus:ring-2 focus:ring-[#F5EDE4]"
                           >
                             <option value="" disabled>Choose {attr.name}</option>
                             {terms.map(t => <option key={t.id} value={t.value}>{t.label}</option>)}
@@ -833,9 +833,9 @@ export const ProductDetailPageClient: React.FC = () => {
                                   value={t.value}
                                   checked={selectedAttributes[attr.slug] === t.value}
                                   onChange={() => handleAttributeSelect(attr.slug, t.value)}
-                                  className="text-rose-500 focus:ring-rose-500"
+                                  className="text-[#C48B80] focus:ring-rose-500"
                                 />
-                                <span className="text-sm font-medium text-slate-700">{t.label}</span>
+                                <span className="text-sm font-medium text-[#1A1A1A]/80">{t.label}</span>
                               </label>
                             ))}
                           </div>
@@ -855,10 +855,10 @@ export const ProductDetailPageClient: React.FC = () => {
                                   onClick={() => handleAttributeSelect(attr.slug, t.value)}
                                   className={`group/swatch flex min-w-[72px] items-center gap-2 rounded-xl border px-2.5 py-2 text-left transition-all ${
                                     !isOptionInStock
-                                      ? 'cursor-not-allowed border-slate-200 opacity-40'
+                                      ? 'cursor-not-allowed border-[#EDE5DC] opacity-40'
                                       : isSelected
-                                      ? 'border-slate-900 bg-slate-50 shadow-sm ring-1 ring-slate-900'
-                                      : 'border-slate-200 bg-white hover:border-slate-400'
+                                      ? 'border-slate-900 bg-[#FAF6F2] shadow-sm ring-1 ring-slate-900'
+                                      : 'border-[#EDE5DC] bg-white hover:border-slate-400'
                                   }`}
                                 >
                                   <span
@@ -867,10 +867,10 @@ export const ProductDetailPageClient: React.FC = () => {
                                     aria-hidden="true"
                                   >
                                   {!isOptionInStock && (
-                                      <span className="absolute inset-0 m-auto h-[2px] w-full origin-center rotate-45 bg-slate-500" />
+                                      <span className="absolute inset-0 m-auto h-[2px] w-full origin-center rotate-45 bg-[#FAF6F2]0" />
                                   )}
                                   </span>
-                                  <span className="max-w-24 truncate text-xs font-bold text-slate-700">{t.label}</span>
+                                  <span className="max-w-24 truncate text-xs font-bold text-[#1A1A1A]/80">{t.label}</span>
                                 </button>
                               );
                             })}
@@ -889,18 +889,18 @@ export const ProductDetailPageClient: React.FC = () => {
                                   aria-pressed={isSelected}
                                   disabled={!isOptionInStock}
                                   onClick={() => handleAttributeSelect(attr.slug, t.value)}
-                                  className={`relative w-12 h-12 rounded-xl border-2 overflow-hidden transition-all flex items-center justify-center p-0.5 bg-slate-50 ${
+                                  className={`relative w-12 h-12 rounded-xl border-2 overflow-hidden transition-all flex items-center justify-center p-0.5 bg-[#FAF6F2] ${
                                     !isOptionInStock
-                                      ? 'border-slate-200 opacity-50 cursor-not-allowed'
+                                      ? 'border-[#EDE5DC] opacity-50 cursor-not-allowed'
                                       : isSelected
-                                      ? 'border-rose-500 shadow-md ring-2 ring-rose-200 ring-offset-1'
-                                      : 'border-slate-200 hover:border-slate-300'
+                                      ? 'border-[#C48B80] shadow-md ring-2 ring-rose-200 ring-offset-1'
+                                      : 'border-[#EDE5DC] hover:border-slate-300'
                                   }`}
                                 >
                                   {t.imageUrl ? (
                                     <ProductImage src={t.imageUrl} alt={t.label} className="w-full h-full object-contain" wrapperClassName="w-full h-full" />
                                   ) : (
-                                    <span className="text-[10px] font-bold text-slate-400 block p-1 text-center leading-tight">No Img</span>
+                                    <span className="text-[10px] font-bold text-[#1A1A1A]/40 block p-1 text-center leading-tight">No Img</span>
                                   )}
                                   {!isOptionInStock && (
                                     <div className="absolute inset-0 m-auto w-full h-[2px] bg-slate-400 rotate-45 transform origin-center" />
@@ -925,10 +925,10 @@ export const ProductDetailPageClient: React.FC = () => {
                                   onClick={() => handleAttributeSelect(attr.slug, t.value)}
                                   className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                                     !isOptionInStock
-                                      ? 'bg-slate-50 text-slate-400 border border-slate-200 cursor-not-allowed opacity-60 line-through'
+                                      ? 'bg-[#FAF6F2] text-[#1A1A1A]/40 border border-[#EDE5DC] cursor-not-allowed opacity-60 line-through'
                                       : isSelected
                                       ? 'bg-slate-800 text-white shadow-sm ring-2 ring-slate-800 ring-offset-1'
-                                      : 'bg-white border border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50'
+                                      : 'bg-white border border-[#EDE5DC] text-[#1A1A1A]/80 hover:border-slate-300 hover:bg-[#FAF6F2]'
                                   }`}
                                 >
                                   {t.label}
@@ -945,10 +945,10 @@ export const ProductDetailPageClient: React.FC = () => {
 
               {/* Legacy Product Variants Selection */}
               {!isVariable && product.variants && product.variants.length > 0 && (
-                <div className="mb-3 space-y-3 border-t border-slate-100 pt-3">
+                <div className="mb-3 space-y-3 border-t border-[#EDE5DC] pt-3">
                   {product.variants.map((vGroup) => (
                     <div key={vGroup.id || vGroup.name} className="space-y-2">
-                      <label className="text-xs font-heading font-extrabold text-slate-800 uppercase tracking-wider block">
+                      <label className="text-xs font-display font-extrabold text-[#1A1A1A]/90 uppercase tracking-wider block">
                         Select {vGroup.name}:
                       </label>
                       <div className="flex flex-wrap gap-2">
@@ -965,10 +965,10 @@ export const ProductDetailPageClient: React.FC = () => {
                               onClick={() => handleVariantSelect(vGroup.name, opt.name)}
                               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                                 !isOptionInStock
-                                  ? 'bg-slate-100 text-slate-400 cursor-not-allowed opacity-60 line-through'
+                                  ? 'bg-[#F5EDE4] text-[#1A1A1A]/40 cursor-not-allowed opacity-60 line-through'
                                   : isSelected
-                                  ? 'bg-rose-500 text-white ring-2 ring-rose-200 shadow-sm'
-                                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                                  ? 'bg-[#C48B80] text-white ring-2 ring-rose-200 shadow-sm'
+                                  : 'bg-[#F5EDE4] text-[#1A1A1A]/80 hover:bg-[#EDE5DC]'
                               }`}
                             >
                               {opt.name}
@@ -990,24 +990,24 @@ export const ProductDetailPageClient: React.FC = () => {
                   onTierSelect={(tier, isActive) => setQuantity(isActive ? 1 : tier.minQty)}
                 />
               ) : (
-                <div className="space-y-3 border-t border-slate-100 pt-3">
+                <div className="space-y-3 border-t border-[#EDE5DC] pt-3">
                   <div className="flex items-center gap-3">
-                    <span className="font-heading font-bold text-xs text-slate-700 uppercase">Quantity:</span>
-                    <div className="flex items-center border border-slate-200 rounded-2xl bg-slate-50 p-1">
+                    <span className="font-display font-bold text-xs text-[#1A1A1A]/80 uppercase">Quantity:</span>
+                    <div className="flex items-center border border-[#EDE5DC] rounded-2xl bg-[#FAF6F2] p-1">
                       <button
                         type="button"
                         aria-label="Decrease quantity"
                         onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                        className="p-2 text-slate-600 hover:bg-white rounded-xl transition-colors"
+                        className="p-2 text-[#1A1A1A]/60 hover:bg-white rounded-xl transition-colors"
                       >
                         <Minus className="w-4 h-4" />
                       </button>
-                      <output aria-live="polite" className="px-4 font-heading text-sm font-bold text-slate-800">{quantity}</output>
+                      <output aria-live="polite" className="px-4 font-display text-sm font-bold text-[#1A1A1A]/90">{quantity}</output>
                       <button
                         type="button"
                         aria-label="Increase quantity"
                         onClick={() => setQuantity(quantity + 1)}
-                        className="p-2 text-slate-600 hover:bg-white rounded-xl transition-colors"
+                        className="p-2 text-[#1A1A1A]/60 hover:bg-white rounded-xl transition-colors"
                       >
                         <Plus className="w-4 h-4" />
                       </button>
@@ -1062,49 +1062,41 @@ export const ProductDetailPageClient: React.FC = () => {
                   
                   {/* Add to Cart CTA Button with bounce micro-interaction */}
                   <button
-                    onClick={handleAddToCart}
-                    disabled={!canPurchase || cartActionState !== 'idle'}
-                    aria-busy={cartActionState === 'adding'}
-                    className={`flex h-12 flex-1 items-center justify-center gap-2 rounded-2xl font-heading text-sm font-extrabold shadow-xl transition-all duration-300 active:scale-95 sm:text-base ${
-                      cartActionState === 'added'
-                        ? 'bg-emerald-500 text-white shadow-emerald-200'
-                        : !canPurchase
-                        ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
-                        : 'bg-rose-500 hover:bg-rose-600 text-white shadow-rose-200/80 hover:scale-[1.01]'
-                    }`}
-                  >
-                    {cartActionState === 'added' ? (
-                      <>
-                        <Check className="w-5 h-5" />
-                        <span>Added!</span>
-                      </>
-                    ) : cartActionState === 'adding' ? (
-                      <>
-                        <Loader2 className="h-5 w-5 animate-spin" />
-                        <span>Adding...</span>
-                      </>
-                    ) : (
-                      <>
-                        <ShoppingBag className="w-5 h-5" />
-                        <span>{!allVariantsSelected ? 'Select Options' : !canPurchase ? 'Sold Out' : `Add - ${formatPrice(displayPrice * quantity, settings.currency)}`}</span>
-                      </>
-                    )}
-                  </button>
+  type="button"
+  onClick={handleAddToCart}
+  disabled={cartActionLocked.current || (isVariable ? (product.attributes?.length || 0) > 0 && !allVariantsSelected : variantGroups.length > 0 && !allVariantsSelected) || !effectiveAvailable}
+  className="w-full bg-[#1A1A1A] text-white rounded-full py-4 text-xs font-bold tracking-widest hover:bg-black transition-colors mb-3 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+>
+  {cartActionState === 'adding' ? (
+    <><Loader2 className="h-4 w-4 animate-spin" /> ADDING...</>
+  ) : cartActionState === 'added' ? (
+    <><Check className="h-4 w-4" /> ADDED</>
+  ) : (
+    <>ADD TO CART</>
+  )}
+</button>
+<button 
+  type="button"
+  className="w-full border border-black/20 rounded-full py-3.5 flex items-center justify-center gap-2 hover:bg-black/5 transition-colors group"
+>
+  <span className="text-xs font-bold tracking-widest text-[#1A1A1A]">BUY WITH</span>
+  <span className="font-serif italic font-bold text-lg text-[#1A1A1A] group-hover:scale-105 transition-transform">shopPay</span>
+</button>
                 </div>
 
             </div>
 
             {/* Micro Guarantees */}
-            <div className="grid grid-cols-3 gap-1.5 border-t border-slate-100 pt-3 text-center text-[10px] text-slate-500 sm:gap-3 sm:text-xs">
-              <div className="rounded-2xl bg-slate-50 p-2 sm:p-2.5">
+            <div className="grid grid-cols-3 gap-1.5 border-t border-[#EDE5DC] pt-3 text-center text-[10px] text-[#1A1A1A]/50 sm:gap-3 sm:text-xs">
+              <div className="rounded-2xl bg-[#FAF6F2] p-2 sm:p-2.5">
                 <Truck className="w-4 h-4 mx-auto text-sky-500 mb-1" />
                 <span>Cash on Delivery</span>
               </div>
-              <div className="rounded-2xl bg-slate-50 p-2 sm:p-2.5">
+              <div className="rounded-2xl bg-[#FAF6F2] p-2 sm:p-2.5">
                 <ShieldCheck className="w-4 h-4 mx-auto text-emerald-500 mb-1" />
                 <span>100% Child Safe</span>
               </div>
-              <div className="rounded-2xl bg-slate-50 p-2 sm:p-2.5">
+              <div className="rounded-2xl bg-[#FAF6F2] p-2 sm:p-2.5">
                 <RotateCcw className="w-4 h-4 mx-auto text-amber-500 mb-1" />
                 <span>Easy 7-Day Returns</span>
               </div>
@@ -1113,17 +1105,17 @@ export const ProductDetailPageClient: React.FC = () => {
         </div>
 
         {/* Product Information Tabs */}
-        <div className="mb-8 rounded-3xl border border-slate-100 bg-white p-4 shadow-sm sm:p-6">
+        <div className="mb-8 rounded-3xl border border-[#EDE5DC] bg-white p-4 shadow-sm sm:p-6">
           {availableTabs.length > 1 && (
-            <div className="mb-5 flex gap-4 overflow-x-auto whitespace-nowrap border-b border-slate-200 scrollbar-hide sm:gap-8" role="tablist" aria-label="Product information">
+            <div className="mb-5 flex gap-4 overflow-x-auto whitespace-nowrap border-b border-[#EDE5DC] scrollbar-hide sm:gap-8" role="tablist" aria-label="Product information">
               {availableTabs.includes('desc') && (
                 <button
                   onClick={() => setActiveTab('desc')}
                   role="tab"
                   aria-selected={activeTab === 'desc'}
                   aria-controls="product-panel-desc"
-                  className={`pb-3 font-heading font-bold text-xs sm:text-sm uppercase tracking-wider border-b-2 transition-colors ${
-                    activeTab === 'desc' ? 'border-rose-500 text-rose-500' : 'border-transparent text-slate-500 hover:text-slate-800'
+                  className={`pb-3 font-display font-bold text-xs sm:text-sm uppercase tracking-wider border-b-2 transition-colors ${
+                    activeTab === 'desc' ? 'border-[#C48B80] text-[#C48B80]' : 'border-transparent text-[#1A1A1A]/50 hover:text-[#1A1A1A]/90'
                   }`}
                 >
                   Description & Features
@@ -1135,12 +1127,10 @@ export const ProductDetailPageClient: React.FC = () => {
                   role="tab"
                   aria-selected={activeTab === 'specs'}
                   aria-controls="product-panel-specs"
-                  className={`pb-3 font-heading font-bold text-xs sm:text-sm uppercase tracking-wider border-b-2 transition-colors ${
-                    activeTab === 'specs' ? 'border-rose-500 text-rose-500' : 'border-transparent text-slate-500 hover:text-slate-800'
+                  className={`pb-3 font-display font-bold text-xs sm:text-sm uppercase tracking-wider border-b-2 transition-colors ${
+                    activeTab === 'specs' ? 'border-[#C48B80] text-[#C48B80]' : 'border-transparent text-[#1A1A1A]/50 hover:text-[#1A1A1A]/90'
                   }`}
-                >
-                  Specifications
-                </button>
+                >Ingredients</button>
               )}
               {availableTabs.includes('safety') && (
                 <button
@@ -1148,8 +1138,8 @@ export const ProductDetailPageClient: React.FC = () => {
                   role="tab"
                   aria-selected={activeTab === 'safety'}
                   aria-controls="product-panel-safety"
-                  className={`pb-3 font-heading font-bold text-xs sm:text-sm uppercase tracking-wider border-b-2 transition-colors ${
-                    activeTab === 'safety' ? 'border-rose-500 text-rose-500' : 'border-transparent text-slate-500 hover:text-slate-800'
+                  className={`pb-3 font-display font-bold text-xs sm:text-sm uppercase tracking-wider border-b-2 transition-colors ${
+                    activeTab === 'safety' ? 'border-[#C48B80] text-[#C48B80]' : 'border-transparent text-[#1A1A1A]/50 hover:text-[#1A1A1A]/90'
                   }`}
                 >
                   Safety & Material Info
@@ -1161,8 +1151,8 @@ export const ProductDetailPageClient: React.FC = () => {
                   role="tab"
                   aria-selected={activeTab === 'reviews'}
                   aria-controls="product-panel-reviews"
-                  className={`pb-3 font-heading font-bold text-xs sm:text-sm uppercase tracking-wider border-b-2 transition-colors ${
-                    activeTab === 'reviews' ? 'border-rose-500 text-rose-500' : 'border-transparent text-slate-500 hover:text-slate-800'
+                  className={`pb-3 font-display font-bold text-xs sm:text-sm uppercase tracking-wider border-b-2 transition-colors ${
+                    activeTab === 'reviews' ? 'border-[#C48B80] text-[#C48B80]' : 'border-transparent text-[#1A1A1A]/50 hover:text-[#1A1A1A]/90'
                   }`}
                 >
                   Customer Reviews ({approvedReviews.length})
@@ -1173,21 +1163,21 @@ export const ProductDetailPageClient: React.FC = () => {
 
           {/* Tab 1: Description & Features */}
           {activeTab === 'desc' && (
-            <div id="product-panel-desc" role="tabpanel" className="space-y-4 text-sm leading-relaxed text-slate-700">
+            <div id="product-panel-desc" role="tabpanel" className="space-y-4 text-sm leading-relaxed text-[#1A1A1A]/80">
               {(product.productDetailBlocks || []).filter(b => b.enabled).length > 0 ? (
                 <ProductDetailContent product={product} />
               ) : (
                 <>
                   {product.description && (
                     <div
-                      className="max-w-none space-y-4 leading-7 whitespace-pre-wrap [&_a]:text-sky-600 [&_a]:underline [&_blockquote]:border-l-4 [&_blockquote]:border-slate-200 [&_blockquote]:pl-4 [&_h1]:mt-7 [&_h1]:text-2xl [&_h1]:font-black [&_h2]:mt-6 [&_h2]:text-xl [&_h2]:font-black [&_h3]:mt-5 [&_h3]:text-lg [&_h3]:font-bold [&_img]:h-auto [&_img]:max-w-full [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:my-3 [&_table]:block [&_table]:max-w-full [&_table]:overflow-x-auto [&_table]:border-collapse [&_td]:border [&_td]:border-slate-200 [&_td]:p-2 [&_th]:border [&_th]:border-slate-200 [&_th]:bg-slate-50 [&_th]:p-2 [&_ul]:list-disc [&_ul]:pl-6"
+                      className="max-w-none space-y-4 leading-7 whitespace-pre-wrap [&_a]:text-sky-600 [&_a]:underline [&_blockquote]:border-l-4 [&_blockquote]:border-[#EDE5DC] [&_blockquote]:pl-4 [&_h1]:mt-7 [&_h1]:text-2xl [&_h1]:font-black [&_h2]:mt-6 [&_h2]:text-xl [&_h2]:font-black [&_h3]:mt-5 [&_h3]:text-lg [&_h3]:font-bold [&_img]:h-auto [&_img]:max-w-full [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:my-3 [&_table]:block [&_table]:max-w-full [&_table]:overflow-x-auto [&_table]:border-collapse [&_td]:border [&_td]:border-[#EDE5DC] [&_td]:p-2 [&_th]:border [&_th]:border-[#EDE5DC] [&_th]:bg-[#FAF6F2] [&_th]:p-2 [&_ul]:list-disc [&_ul]:pl-6"
                       dangerouslySetInnerHTML={{ __html: product.description }}
                     />
                   )}
                   {product.features && product.features.length > 0 && (
                     <>
-                      <h4 className="font-heading font-bold text-sm text-slate-900 pt-2">Key Highlights:</h4>
-                      <ul className="space-y-2 list-disc list-inside text-slate-600">
+                      <h4 className="font-display font-bold text-sm text-[#1A1A1A] pt-2">Key Highlights:</h4>
+                      <ul className="space-y-2 list-disc list-inside text-[#1A1A1A]/60">
                         {product.features.map((feat, i) => (
                           <li key={i}>{feat}</li>
                         ))}
@@ -1203,9 +1193,9 @@ export const ProductDetailPageClient: React.FC = () => {
           {activeTab === 'specs' && (
             <div id="product-panel-specs" role="tabpanel" className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
               {sanitizedSpecs.map(([key, val]) => (
-                <div key={key} className="p-3.5 rounded-2xl bg-slate-50 flex justify-between">
-                  <span className="font-bold text-slate-600">{key}:</span>
-                  <span className="text-slate-900 font-medium">{val}</span>
+                <div key={key} className="p-3.5 rounded-2xl bg-[#FAF6F2] flex justify-between">
+                  <span className="font-bold text-[#1A1A1A]/60">{key}:</span>
+                  <span className="text-[#1A1A1A] font-medium">{val}</span>
                 </div>
               ))}
             </div>
@@ -1214,7 +1204,7 @@ export const ProductDetailPageClient: React.FC = () => {
           {/* Tab 3: Safety */}
           {activeTab === 'safety' && (
             <div id="product-panel-safety" role="tabpanel" className="space-y-2 rounded-2xl border border-emerald-100 bg-emerald-50 p-4 text-sm text-emerald-950">
-              <div className="flex items-center gap-2 font-heading font-bold text-emerald-800">
+              <div className="flex items-center gap-2 font-display font-bold text-emerald-800">
                 <ShieldCheck className="w-5 h-5 text-emerald-600" />
                 <span>Certified Child-Safe Standards</span>
               </div>
@@ -1225,16 +1215,16 @@ export const ProductDetailPageClient: React.FC = () => {
           {/* Tab 4: Reviews Section */}
           {activeTab === 'reviews' && (
             <div id="product-panel-reviews" role="tabpanel" className="space-y-6">
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-slate-50">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-[#FAF6F2]">
                 <div>
-                  <h4 className="font-heading font-bold text-base text-slate-900">
+                  <h4 className="font-display font-bold text-base text-[#1A1A1A]">
                     Customer Experience & Reviews
                   </h4>
                   <div className="mt-1"><ReviewSummary rating={product.rating} reviewCount={product.reviewCount} /></div>
                 </div>
                 <button
                   onClick={() => setReviewModalOpen(true)}
-                  className="px-5 py-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-heading font-bold text-xs flex items-center gap-2 shadow-sm"
+                  className="px-5 py-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-display font-bold text-xs flex items-center gap-2 shadow-sm"
                 >
                   <MessageSquarePlus className="w-4 h-4 text-amber-400" />
                   <span>Write a Review</span>
@@ -1244,20 +1234,20 @@ export const ProductDetailPageClient: React.FC = () => {
               {/* Reviews List */}
               <div className="space-y-4">
                 {approvedReviews.length === 0 ? (
-                  <p className="text-sm text-slate-500 text-center py-6">
+                  <p className="text-sm text-[#1A1A1A]/50 text-center py-6">
                     Be the first to review this product!
                   </p>
                 ) : (
                   approvedReviews.map(review => (
-                    <div key={review.id} className="p-4 rounded-2xl border border-slate-100 bg-white space-y-2">
+                    <div key={review.id} className="p-4 rounded-2xl border border-[#EDE5DC] bg-white space-y-2">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 bg-slate-100">
+                          <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 bg-[#F5EDE4]">
                             <img src={review.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(review.reviewerName)}&background=random`} alt="" className="w-full h-full object-cover" />
                           </div>
                           <div>
                             <div className="flex items-center gap-2">
-                              <span className="font-bold text-sm text-slate-800">{review.reviewerName}</span>
+                              <span className="font-bold text-sm text-[#1A1A1A]/90">{review.reviewerName}</span>
                               {review.verifiedPurchase && (
                                 <span className="flex items-center text-[10px] text-blue-600 font-semibold">
                                   <BadgeCheck className="w-3.5 h-3.5 mr-0.5" /> Verified Purchase
@@ -1271,21 +1261,21 @@ export const ProductDetailPageClient: React.FC = () => {
                           {[...Array(5)].map((_, i) => (
                             <Star
                               key={i}
-                              className={`w-3.5 h-3.5 ${i < review.rating ? 'fill-amber-400' : 'text-slate-200'}`}
+                              className={`w-3.5 h-3.5 ${i < review.rating ? 'fill-amber-400' : 'text-[#EDE5DC]'}`}
                             />
                           ))}
                         </div>
                       </div>
 
-                      <h5 className="font-heading font-bold text-xs text-slate-900">{review.title}</h5>
-                      <p className="text-xs text-slate-600 leading-relaxed">{review.content}</p>
+                      <h5 className="font-display font-bold text-xs text-[#1A1A1A]">{review.title}</h5>
+                      <p className="text-xs text-[#1A1A1A]/60 leading-relaxed">{review.content}</p>
 
                       {review.imageUrl && (
                         <div className="mt-3">
                           <img 
                             src={review.imageUrl} 
                             alt="Customer review photo" 
-                            className="w-24 h-24 object-cover rounded-xl border border-slate-100 cursor-pointer hover:opacity-90 transition-opacity shadow-sm"
+                            className="w-24 h-24 object-cover rounded-xl border border-[#EDE5DC] cursor-pointer hover:opacity-90 transition-opacity shadow-sm"
                             onClick={() => window.open(review.imageUrl, '_blank')}
                           />
                         </div>
@@ -1320,21 +1310,21 @@ export const ProductDetailPageClient: React.FC = () => {
       {/* Related Products */}
       {(relatedLoading || apiRelatedProducts.length > 0) && (
         <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
-          <div className="mt-10 border-t border-slate-100 pt-10 sm:mt-16 sm:pt-12">
-            <h2 className="font-heading font-black text-2xl text-slate-900 mb-8 text-center sm:text-left">You May Also Like</h2>
+          <div className="mt-10 border-t border-[#EDE5DC] pt-10 sm:mt-16 sm:pt-12">
+            <h2 className="font-display font-black text-2xl text-[#1A1A1A] mb-8 text-center sm:text-left">You May Also Like</h2>
             {relatedLoading ? (
               <div className="grid grid-cols-1 items-stretch justify-items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
                 {[0, 1, 2].map(i => (
-                  <div key={i} className="animate-pulse rounded-3xl border border-slate-100 bg-white overflow-hidden">
-                    <div className="aspect-square w-full bg-slate-200 rounded-t-3xl" />
+                  <div key={i} className="animate-pulse rounded-3xl border border-[#EDE5DC] bg-white overflow-hidden">
+                    <div className="aspect-square w-full bg-[#EDE5DC] rounded-t-3xl" />
                     <div className="p-4 space-y-3">
-                      <div className="h-3 bg-slate-200 rounded-full w-1/3" />
-                      <div className="h-4 bg-slate-200 rounded-full w-3/4" />
-                      <div className="h-3 bg-slate-200 rounded-full w-1/2" />
-                      <div className="h-3 bg-slate-100 rounded-full w-2/3" />
+                      <div className="h-3 bg-[#EDE5DC] rounded-full w-1/3" />
+                      <div className="h-4 bg-[#EDE5DC] rounded-full w-3/4" />
+                      <div className="h-3 bg-[#EDE5DC] rounded-full w-1/2" />
+                      <div className="h-3 bg-[#F5EDE4] rounded-full w-2/3" />
                       <div className="pt-2 flex items-center gap-3">
-                        <div className="h-8 bg-slate-200 rounded-2xl flex-1" />
-                        <div className="h-8 w-8 bg-slate-100 rounded-2xl shrink-0" />
+                        <div className="h-8 bg-[#EDE5DC] rounded-2xl flex-1" />
+                        <div className="h-8 w-8 bg-[#F5EDE4] rounded-2xl shrink-0" />
                       </div>
                     </div>
                   </div>
@@ -1354,26 +1344,26 @@ export const ProductDetailPageClient: React.FC = () => {
       {/* Write Review Modal */}
       {reviewModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 relative shadow-2xl border border-slate-100">
-            <h3 className="font-heading font-extrabold text-lg text-slate-900 mb-4">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 relative shadow-2xl border border-[#EDE5DC]">
+            <h3 className="font-display font-extrabold text-lg text-[#1A1A1A] mb-4">
               Write a Review for {product.name}
             </h3>
 
             <form onSubmit={handleReviewSubmit} className="space-y-4">
               <div>
-                <label className="text-xs font-bold text-slate-700 block mb-1">Your Name</label>
+                <label className="text-xs font-bold text-[#1A1A1A]/80 block mb-1">Your Name</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Jessica M."
                   value={newUserName}
                   onChange={e => setNewUserName(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 font-sans focus:outline-none focus:ring-2 focus:ring-rose-400"
+                  className="w-full px-3 py-2 text-xs rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-700 block mb-1">Rating</label>
+                <label className="text-xs font-bold text-[#1A1A1A]/80 block mb-1">Rating</label>
                 <div className="flex gap-2 text-amber-400">
                   {[1, 2, 3, 4, 5].map(star => (
                     <button
@@ -1382,32 +1372,32 @@ export const ProductDetailPageClient: React.FC = () => {
                       onClick={() => setNewRating(star)}
                       className="p-1 hover:scale-110 transition-transform"
                     >
-                      <Star className={`w-6 h-6 ${star <= newRating ? 'fill-amber-400' : 'text-slate-300'}`} />
+                      <Star className={`w-6 h-6 ${star <= newRating ? 'fill-amber-400' : 'text-[#EDE5DC]'}`} />
                     </button>
                   ))}
                 </div>
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-700 block mb-1">Review Headline</label>
+                <label className="text-xs font-bold text-[#1A1A1A]/80 block mb-1">Review Headline</label>
                 <input
                   type="text"
-                  placeholder="e.g. Kids love it!"
+                  placeholder="e.g. Glowing Skin!"
                   value={newTitle}
                   onChange={e => setNewTitle(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 font-sans focus:outline-none focus:ring-2 focus:ring-rose-400"
+                  className="w-full px-3 py-2 text-xs rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-700 block mb-1">Comments</label>
+                <label className="text-xs font-bold text-[#1A1A1A]/80 block mb-1">Comments</label>
                 <textarea
                   required
                   rows={4}
-                  placeholder="Share details about durability, play value, etc."
+                  placeholder="Share details about the texture, results, how you use it, etc."
                   value={newComment}
                   onChange={e => setNewComment(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 font-sans focus:outline-none focus:ring-2 focus:ring-rose-400"
+                  className="w-full px-3 py-2 text-xs rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
                 />
               </div>
 
@@ -1415,13 +1405,13 @@ export const ProductDetailPageClient: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setReviewModalOpen(false)}
-                  className="flex-1 py-2.5 rounded-xl bg-slate-100 text-slate-700 font-heading font-bold text-xs"
+                  className="flex-1 py-2.5 rounded-xl bg-[#F5EDE4] text-[#1A1A1A]/80 font-display font-bold text-xs"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 rounded-xl bg-rose-500 text-white font-heading font-bold text-xs hover:bg-rose-600 shadow-md"
+                  className="flex-1 py-2.5 rounded-xl bg-[#C48B80] text-white font-display font-bold text-xs hover:bg-black shadow-md"
                 >
                   Submit Review
                 </button>
@@ -1449,14 +1439,14 @@ export const ProductDetailPageClient: React.FC = () => {
           }}
           tabIndex={-1}
         >
-          <div className="bg-white rounded-3xl max-w-2xl w-full p-6 relative shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between mb-4 pb-4 border-b border-slate-100">
-              <h3 id="size-guide-title" className="font-heading font-extrabold text-xl text-slate-900">
+          <div className="bg-white rounded-3xl max-w-2xl w-full p-6 relative shadow-2xl border border-[#EDE5DC] max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-4 pb-4 border-b border-[#EDE5DC]">
+              <h3 id="size-guide-title" className="font-display font-extrabold text-xl text-[#1A1A1A]">
                 Size Guide
               </h3>
               <button 
                 onClick={() => setSizeGuideModalOpen(false)} 
-                className="text-slate-400 hover:text-slate-600 focus:outline-none focus:ring-2 focus:ring-rose-500 rounded-lg p-1"
+                className="text-[#1A1A1A]/40 hover:text-[#1A1A1A]/60 focus:outline-none focus:ring-2 focus:ring-rose-500 rounded-lg p-1"
                 aria-label="Close Size Guide"
               >
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1466,7 +1456,7 @@ export const ProductDetailPageClient: React.FC = () => {
             </div>
             
             <div 
-              className="prose prose-sm prose-slate max-w-none [&_table]:w-full [&_table]:min-w-[400px] overflow-x-auto [&_th]:bg-slate-50 [&_th]:text-left [&_th]:p-3 [&_td]:p-3 [&_td]:border-t [&_td]:border-slate-100"
+              className="prose prose-sm prose-slate max-w-none [&_table]:w-full [&_table]:min-w-[400px] overflow-x-auto [&_th]:bg-[#FAF6F2] [&_th]:text-left [&_th]:p-3 [&_td]:p-3 [&_td]:border-t [&_td]:border-[#EDE5DC]"
               dangerouslySetInnerHTML={{ __html: product.sizeGuide }}
             />
           </div>

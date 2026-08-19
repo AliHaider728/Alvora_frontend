@@ -6,6 +6,8 @@ import { Product } from '../../types';
 import { useStore } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/formatters';
 
+import Image from 'next/image';
+
 interface Props {
   product: Product;
 }
@@ -35,10 +37,12 @@ export const AlvoraProductCard: React.FC<Props> = ({ product }) => {
     <div className="group flex flex-col h-full bg-white transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)] overflow-hidden">
       <Link href={`/product/${product.slug}`} className="block relative aspect-[4/5] bg-gradient-to-br from-[#F5EDE4] to-[#F1C9BD] overflow-hidden">
         {hasImage ? (
-          <img
+          <Image
             src={product.images[0]}
             alt={product.name}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">

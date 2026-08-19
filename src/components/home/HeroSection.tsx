@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { FlaskConical, Leaf, Heart, Droplet } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useReducedMotion } from 'framer-motion';
@@ -99,10 +100,13 @@ export const HeroSection: React.FC = () => {
               viewport={{ once: true }}
               className="w-full h-full max-h-[85%] lg:max-h-full bg-[#EADED2] rounded-t-full lg:rounded-tl-full lg:rounded-tr-none lg:rounded-bl-[100px] relative overflow-hidden flex items-end justify-center"
             >
-              <img 
+              <Image 
                 src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1200&auto=format&fit=crop" 
                 alt="Alvora Skincare Routine" 
-                className="w-full h-full object-cover object-center absolute inset-0"
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover object-center"
+                priority
               />
             </motion.div>
           </div>

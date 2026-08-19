@@ -9,6 +9,8 @@ interface Props {
   product?: Product;
 }
 
+import Image from 'next/image';
+
 export const FeaturedProduct: React.FC<Props> = ({ product }) => {
   const { addToCart, settings } = useStore();
   const [qty, setQty] = React.useState(1);
@@ -26,10 +28,12 @@ export const FeaturedProduct: React.FC<Props> = ({ product }) => {
         {/* Left: Image Box */}
         <div className="w-full lg:w-1/2 bg-[#F1C9BD] relative flex items-center justify-center overflow-hidden min-h-[400px]">
           {product.images && product.images.length > 0 ? (
-            <img 
+            <Image 
               src={product.images[0]} 
               alt={product.name} 
-              className="w-full h-full object-cover absolute inset-0 z-10"
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-cover absolute inset-0 z-10"
             />
           ) : (
             <div className="w-72 h-[450px] bg-white/40 backdrop-blur-md border border-white/50 shadow-2xl flex flex-col items-center justify-center p-8 z-10">

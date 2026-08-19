@@ -1,8 +1,8 @@
 "use client";
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion, useReducedMotion } from 'framer-motion';
-
 export const BrandIntro: React.FC = () => {
   const shouldReduceMotion = useReducedMotion();
   const variants = shouldReduceMotion ? {} : {
@@ -16,10 +16,12 @@ export const BrandIntro: React.FC = () => {
       {/* Block 1: Skincare rooted in balance */}
       <div className="flex flex-col md:flex-row w-full min-h-[500px]">
         <div className="w-full md:w-1/2 bg-[#F1C9BD] relative aspect-square md:aspect-auto overflow-hidden">
-          <img 
+          <Image 
             src="https://images.unsplash.com/photo-1631729371254-42c2892f0e6e?q=80&w=800&auto=format&fit=crop" 
             alt="Cream texture" 
-            className="w-full h-full object-cover"
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover"
           />
         </div>
         
@@ -52,10 +54,12 @@ export const BrandIntro: React.FC = () => {
       {/* Block 2: Better for your skin. Better for the planet. */}
       <div className="flex flex-col md:flex-row-reverse w-full min-h-[500px]">
         <div className="w-full md:w-1/2 bg-[#1A1A1A] relative aspect-square md:aspect-auto overflow-hidden">
-          <img 
+          <Image 
             src="https://images.unsplash.com/photo-1629198728644-486161a0fb87?q=80&w=800&auto=format&fit=crop" 
             alt="Product in water" 
-            className="w-full h-full object-cover"
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover"
           />
         </div>
         
