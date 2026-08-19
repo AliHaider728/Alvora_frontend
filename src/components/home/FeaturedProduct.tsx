@@ -24,12 +24,12 @@ export const FeaturedProduct: React.FC<Props> = ({ product }) => {
       <div className="flex flex-col lg:flex-row w-full min-h-[70vh]">
         
         {/* Left: Image Box */}
-        <div className="w-full lg:w-1/2 bg-[#F1C9BD] relative flex items-center justify-center p-12 lg:p-24 overflow-hidden">
+        <div className="w-full lg:w-1/2 bg-[#F1C9BD] relative flex items-center justify-center overflow-hidden min-h-[400px]">
           {product.images && product.images.length > 0 ? (
             <img 
               src={product.images[0]} 
               alt={product.name} 
-              className="max-w-md w-full h-auto object-contain drop-shadow-2xl z-10"
+              className="w-full h-full object-cover absolute inset-0 z-10"
             />
           ) : (
             <div className="w-72 h-[450px] bg-white/40 backdrop-blur-md border border-white/50 shadow-2xl flex flex-col items-center justify-center p-8 z-10">
@@ -39,7 +39,7 @@ export const FeaturedProduct: React.FC<Props> = ({ product }) => {
           )}
 
           {/* Stamp */}
-          <div className="absolute top-12 right-12 w-28 h-28 rounded-full border border-white/40 flex items-center justify-center spin-slow text-white z-0 hidden md:flex">
+          <div className="absolute top-12 right-12 w-28 h-28 rounded-full border border-white/40 flex items-center justify-center spin-slow text-white z-20 hidden md:flex">
              <svg viewBox="0 0 100 100" className="w-full h-full animate-spin-slow" style={{ animationDuration: '20s' }}>
               <path id="curve-featured" d="M 50, 50 m -35, 0 a 35,35 0 1,1 70,0 a 35,35 0 1,1 -70,0" fill="transparent" />
               <text fontSize="10" letterSpacing="1.5" className="uppercase font-semibold fill-current">

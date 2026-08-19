@@ -99,12 +99,11 @@ export const HeroSection: React.FC = () => {
               viewport={{ once: true }}
               className="w-full h-full max-h-[85%] lg:max-h-full bg-[#EADED2] rounded-t-full lg:rounded-tl-full lg:rounded-tr-none lg:rounded-bl-[100px] relative overflow-hidden flex items-end justify-center"
             >
-              {/* Product cluster mockup */}
-              <div className="w-full h-full p-10 flex flex-col items-center justify-end">
-                 <div className="relative w-full max-w-sm aspect-square bg-black/5 backdrop-blur-md rounded-2xl flex items-center justify-center shadow-2xl border border-white/40 mb-10">
-                   <span className="font-display text-4xl text-[#1A1A1A]/40 tracking-widest uppercase">ALVORA</span>
-                 </div>
-              </div>
+              <img 
+                src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1200&auto=format&fit=crop" 
+                alt="Alvora Skincare Routine" 
+                className="w-full h-full object-cover object-center absolute inset-0"
+              />
             </motion.div>
           </div>
 

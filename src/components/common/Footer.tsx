@@ -18,22 +18,23 @@ const SHOP_LINKS = [
   { label: 'Serums',         href: '/category/serums' },
   { label: 'Moisturizers',   href: '/category/moisturizers' },
   { label: 'Cleansers',      href: '/category/cleansers' },
-];
-
-const CUSTOMER_CARE_LINKS = [
-  { label: 'Contact Us',          href: '/contact' },
-  { label: 'Shipping & Delivery', href: '/shipping' },
-  { label: 'Returns & Refunds',   href: '/return-policy' },
-  { label: 'FAQs',                href: '/faq' },
-  { label: 'Track Your Order',    href: '/account' },
+  { label: 'Shop All',       href: '/category/all' },
 ];
 
 const ABOUT_LINKS = [
-  { label: 'Our Story',    href: '/about' },
-  { label: 'Ingredients',  href: '/about#ingredients' },
+  { label: 'Our Story',      href: '/about' },
+  { label: 'Our Ingredients',href: '/about#ingredients' },
   { label: 'Sustainability', href: '/about#sustainability' },
-  { label: 'Reviews',      href: '/category/all#reviews' },
-  { label: 'Blog',         href: '/blog' },
+  { label: 'Careers',        href: '/careers' },
+  { label: 'Press',          href: '/press' },
+];
+
+const HELP_LINKS = [
+  { label: 'FAQs',                href: '/faq' },
+  { label: 'Shipping & Returns',  href: '/shipping' },
+  { label: 'Track Order',         href: '/account' },
+  { label: 'Contact Us',          href: '/contact' },
+  { label: '30-Day Guarantee',    href: '/return-policy' },
 ];
 
 export const Footer: React.FC = () => {
@@ -119,15 +120,15 @@ export const Footer: React.FC = () => {
 
           {/* Col 2 — Shop */}
           <div>
-            <h4 className="text-xs font-bold tracking-[0.14em] uppercase text-[#C48B80] mb-5">
-              Shop
+            <h4 className="text-[10px] font-bold tracking-widest uppercase text-[#1A1A1A] mb-5">
+              SHOP
             </h4>
             <ul className="flex flex-col gap-3">
               {SHOP_LINKS.map(l => (
                 <li key={l.href}>
                   <Link
                     href={l.href}
-                    className="text-sm text-[#4D3D2D]/80 hover:text-[#C48B80] transition-colors"
+                    className="text-xs font-semibold text-[#1A1A1A]/70 hover:text-[#C48B80] transition-colors"
                   >
                     {l.label}
                   </Link>
@@ -136,36 +137,36 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Col 3 — Customer Care */}
+          {/* Col 3 — About */}
           <div>
-            <h4 className="text-xs font-bold tracking-[0.14em] uppercase text-[#C48B80] mb-5">
-              Customer Care
-            </h4>
-            <ul className="flex flex-col gap-3">
-              {CUSTOMER_CARE_LINKS.map(l => (
-                <li key={l.href}>
-                  <Link
-                    href={l.href}
-                    className="text-sm text-[#4D3D2D]/80 hover:text-[#C48B80] transition-colors"
-                  >
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Col 4 — About */}
-          <div>
-            <h4 className="text-xs font-bold tracking-[0.14em] uppercase text-[#C48B80] mb-5">
-              About Alvora
+            <h4 className="text-[10px] font-bold tracking-widest uppercase text-[#1A1A1A] mb-5">
+              ABOUT
             </h4>
             <ul className="flex flex-col gap-3">
               {ABOUT_LINKS.map(l => (
                 <li key={l.href}>
                   <Link
                     href={l.href}
-                    className="text-sm text-[#4D3D2D]/80 hover:text-[#C48B80] transition-colors"
+                    className="text-xs font-semibold text-[#1A1A1A]/70 hover:text-[#C48B80] transition-colors"
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Col 4 — Help */}
+          <div>
+            <h4 className="text-[10px] font-bold tracking-widest uppercase text-[#1A1A1A] mb-5">
+              HELP
+            </h4>
+            <ul className="flex flex-col gap-3">
+              {HELP_LINKS.map(l => (
+                <li key={l.href}>
+                  <Link
+                    href={l.href}
+                    className="text-xs font-semibold text-[#1A1A1A]/70 hover:text-[#C48B80] transition-colors"
                   >
                     {l.label}
                   </Link>
@@ -176,11 +177,11 @@ export const Footer: React.FC = () => {
 
           {/* Col 5 — Newsletter */}
           <div>
-            <h4 className="text-xs font-bold tracking-[0.14em] uppercase text-[#C48B80] mb-5">
-              Stay In Touch
+            <h4 className="text-[10px] font-bold tracking-widest uppercase text-[#1A1A1A] mb-5">
+              STAY IN THE GLOW
             </h4>
-            <p className="text-sm text-[#4D3D2D]/80 leading-relaxed mb-4">
-              Get 10% off your first order and skincare tips.
+            <p className="text-xs text-[#1A1A1A]/70 leading-relaxed mb-4">
+              Signup for exclusive offers,<br/>skincare tips, and more.
             </p>
             <form onSubmit={handleSubscribe} className="flex flex-col gap-2">
               <label htmlFor="footer-email" className="sr-only">

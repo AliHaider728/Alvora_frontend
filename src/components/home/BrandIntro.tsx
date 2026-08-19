@@ -15,11 +15,12 @@ export const BrandIntro: React.FC = () => {
       
       {/* Block 1: Skincare rooted in balance */}
       <div className="flex flex-col md:flex-row w-full min-h-[500px]">
-        <div className="w-full md:w-1/2 bg-[#F1C9BD] relative aspect-square md:aspect-auto">
-          {/* Image Placeholder */}
-          <div className="absolute inset-0 flex items-center justify-center bg-black/5 mix-blend-multiply">
-            <span className="font-display text-4xl text-[#1A1A1A]/20 italic">Texture Shot</span>
-          </div>
+        <div className="w-full md:w-1/2 bg-[#F1C9BD] relative aspect-square md:aspect-auto overflow-hidden">
+          <img 
+            src="https://images.unsplash.com/photo-1631729371254-42c2892f0e6e?q=80&w=800&auto=format&fit=crop" 
+            alt="Cream texture" 
+            className="w-full h-full object-cover"
+          />
         </div>
         
         <div className="w-full md:w-1/2 flex items-center justify-center p-12 lg:p-24 bg-white">
@@ -50,11 +51,12 @@ export const BrandIntro: React.FC = () => {
 
       {/* Block 2: Better for your skin. Better for the planet. */}
       <div className="flex flex-col md:flex-row-reverse w-full min-h-[500px]">
-        <div className="w-full md:w-1/2 bg-[#1A1A1A] relative aspect-square md:aspect-auto">
-          {/* Image Placeholder */}
-          <div className="absolute inset-0 flex items-center justify-center bg-white/5">
-             <span className="font-display text-4xl text-white/20 italic">Product Shot</span>
-          </div>
+        <div className="w-full md:w-1/2 bg-[#1A1A1A] relative aspect-square md:aspect-auto overflow-hidden">
+          <img 
+            src="https://images.unsplash.com/photo-1629198728644-486161a0fb87?q=80&w=800&auto=format&fit=crop" 
+            alt="Product in water" 
+            className="w-full h-full object-cover"
+          />
         </div>
         
         <div className="w-full md:w-1/2 flex items-center justify-center p-12 lg:p-24 bg-[#FAF6F2]">
