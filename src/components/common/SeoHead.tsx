@@ -11,10 +11,10 @@ interface SeoHeadProps {
 }
 
 export const SeoHead: React.FC<SeoHeadProps> = ({ title, description, product, canonicalUrl }) => {
-  const defaultTitle = "PlayBimboo - Premier Toy Store in Pakistan";
+  const defaultTitle = "Alvora Skincare - Premier Toy Store in Pakistan";
   const defaultDesc = "Shop original building sets, STEM robotics, action figures, plush toys, and board games in Pakistan with Cash on Delivery & Free Express Shipping.";
 
-  const finalTitle = product?.metaTitle || (title ? `${title} | PlayBimboo` : defaultTitle);
+  const finalTitle = product?.metaTitle || (title ? `${title} | Alvora Skincare` : defaultTitle);
   const finalDesc = description || product?.metaDescription || product?.shortDescription || product?.description || defaultDesc;
   const currentUrl = canonicalUrl || (typeof window !== 'undefined' ? (typeof window !== 'undefined' ? window.location.href : '') : '');
   const imageUrl = product?.images[0] || 'https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=1200&q=80';
@@ -79,7 +79,7 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ title, description, product, c
           "availability": getEffectiveProductAvailability(product) ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
           "seller": {
             "@type": "Organization",
-            "name": "PlayBimboo"
+            "name": "Alvora Skincare"
           }
         },
         "aggregateRating": product.reviewCount > 0 ? {

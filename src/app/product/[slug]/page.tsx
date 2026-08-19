@@ -7,17 +7,17 @@ import { notFound } from "next/navigation";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const slug = (await params).slug;
-  const defaultTitle = "PlayBimboo - Premier Toy Store in Pakistan";
-  const defaultDesc = "Shop original building sets, STEM robotics, action figures, plush toys, and board games in Pakistan with Cash on Delivery & Free Express Shipping.";
+  const defaultTitle = "Alvora Skincare - Premium Skincare Products";
+  const defaultDesc = "Shop premium skincare products in Pakistan with Cash on Delivery & Free Express Shipping.";
 
   try {
     const product = await api.getProduct(slug);
     if (!product) {
       console.error(`[generateMetadata] api.getProduct returned null for slug: ${slug}`);
-      return { title: `${slug} | PlayBimboo` };
+      return { title: `${slug} | Alvora Skincare` };
     }
 
-    const finalTitle = product.metaTitle || `${product.name} | PlayBimboo`;
+    const finalTitle = product.metaTitle || `${product.name} | Alvora Skincare`;
     const finalDesc = product.metaDescription || product.shortDescription || product.description || defaultDesc;
     const imageUrl = product.images?.[0] || 'https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=1200&q=80';
     
@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       title: finalTitle,
       description: finalDesc,
       alternates: {
-        canonical: `https://playbimboo.com/product/${slug}`
+        canonical: `https://alvora.pk/product/${slug}`
       },
       openGraph: {
         title: finalTitle,
@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       }
     };
   } catch (e) {
-    return { title: `${slug} | PlayBimboo` };
+    return { title: `${slug} | Alvora Skincare` };
   }
 }
 
@@ -77,7 +77,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           "availability": getEffectiveProductAvailability(product) ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
           "seller": {
             "@type": "Organization",
-            "name": "PlayBimboo"
+            "name": "Alvora Skincare"
           }
         }
       };

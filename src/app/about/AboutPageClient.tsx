@@ -26,7 +26,7 @@ export const AboutPageClient: React.FC = () => {
   const { settings } = useStore();
   return (
     <div className="min-h-screen bg-slate-50 font-sans py-8">
-      <SeoHead title="About Play Bimboo Store" />
+      <SeoHead title="About Alvora Skincare Store" />
 
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
         <Breadcrumbs items={[{ label: 'About Us' }]} />
@@ -42,7 +42,7 @@ export const AboutPageClient: React.FC = () => {
               Inspiring Young Explorers Every Single Day!
             </h1>
             <p className="text-xs sm:text-base text-white/90 leading-relaxed font-medium">
-              Founded by passionate parents and educators, Play Bimboo exists to nurture creativity, wonder, and STEM problem-solving skills in children through safe, high-quality toys.
+              Founded by passionate parents and educators, Alvora Skincare exists to nurture creativity, wonder, and STEM problem-solving skills in children through safe, high-quality toys.
             </p>
           </div>
         </div>
@@ -84,11 +84,11 @@ export const AboutPageClient: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16 items-center">
           <div className="space-y-6">
             <h2 className="font-heading font-black text-2xl sm:text-3xl text-slate-900">
-              The Story Behind Play Bimboo
+              The Story Behind Alvora Skincare
             </h2>
             <div className="space-y-4 text-sm text-slate-600 leading-relaxed font-medium">
               <p>
-                It all started with a simple idea: toys shouldn't just be plastic distractions. They should be tools for growth, imagination, and family bonding. Play Bimboo was born out of a desire to create a magical space where parents could find high-quality, thoughtfully curated toys without compromising on safety or educational value.
+                It all started with a simple idea: toys shouldn't just be plastic distractions. They should be tools for growth, imagination, and family bonding. Alvora Skincare was born out of a desire to create a magical space where parents could find high-quality, thoughtfully curated toys without compromising on safety or educational value.
               </p>
               <p>
                 Our journey began in a small workshop where we tested and curated the very best STEM kits, puzzles, and creative sets. Today, we're proud to serve thousands of families across the globe, bringing smiles and "aha!" moments to young explorers every single day.
@@ -115,7 +115,7 @@ export const AboutPageClient: React.FC = () => {
             </div>
             <h2 className="font-heading font-black text-2xl text-slate-900">Join Our Play Community</h2>
             <p className="text-sm text-slate-500 max-w-sm">
-              Follow Play Bimboo on our official social channels to see toys in action, get exclusive offers, and share your magical moments!
+              Follow Alvora Skincare on our official social channels to see toys in action, get exclusive offers, and share your magical moments!
             </p>
 
             <div className="flex gap-4 pt-4">
@@ -200,7 +200,7 @@ export const AboutPageClient: React.FC = () => {
         </div>
 
         {/* ───────────────────────────────────────────── */}
-        {/* NEW SECTION: Why Choose Play Bimboo */}
+        {/* NEW SECTION: Why Choose Alvora Skincare */}
         {/* ───────────────────────────────────────────── */}
         <div className="mb-16">
           <div className="text-center max-w-xl mx-auto mb-10 space-y-3">
@@ -209,7 +209,7 @@ export const AboutPageClient: React.FC = () => {
               Why Choose Us
             </span>
             <h2 className="font-heading font-black text-2xl sm:text-3xl text-slate-900">
-              Why Families Choose Play Bimboo
+              Why Families Choose Alvora Skincare
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
               From the moment you order to the moment it lands in your child's hands, every step is built around safety, speed, and a little bit of magic.
@@ -267,9 +267,9 @@ export const AboutPageClient: React.FC = () => {
             <Quote className="w-7 h-7" />
           </div>
           <p className="max-w-2xl mx-auto font-heading font-bold text-base sm:text-xl text-slate-800 leading-relaxed">
-            "At Play Bimboo, we're passionate about creating unforgettable childhood moments through fun, safe, and engaging toys — chosen with care, so every playtime becomes a memory worth keeping."
+            "At Alvora Skincare, we're passionate about creating unforgettable childhood moments through fun, safe, and engaging toys — chosen with care, so every playtime becomes a memory worth keeping."
           </p>
-          <p className="mt-5 text-xs font-bold text-slate-500 uppercase tracking-wider">— The Play Bimboo Team</p>
+          <p className="mt-5 text-xs font-bold text-slate-500 uppercase tracking-wider">— The Alvora Skincare Team</p>
         </div>
       </div>
     </div>

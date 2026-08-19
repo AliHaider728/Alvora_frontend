@@ -91,7 +91,7 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
               </div>
               <div>
                 <span className="font-heading font-black text-white text-base block leading-tight">
-                  PlayBimboo
+                  Alvora Skincare
                 </span>
                 <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">
                   Admin Control
@@ -173,9 +173,9 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
               </div>
               <div className="hidden sm:block">
                 <span className="font-heading font-bold text-xs text-slate-900 block leading-tight">
-                  PlayBimboo Manager
+                  Alvora Skincare Manager
                 </span>
-                <span className="text-[10px] text-slate-500 font-medium">admin@playbimboo.com</span>
+                <span className="text-[10px] text-slate-500 font-medium">admin@alvora.pk</span>
               </div>
             </div>
           </div>

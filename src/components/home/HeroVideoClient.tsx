@@ -23,7 +23,7 @@ export const HeroVideoClient: React.FC = () => {
         poster="/herowebp-mobile.webp"
         className="w-full h-full object-cover object-[42%_center]"
       >
-        {!isMobile && <source src="https://res.cloudinary.com/dn2bcvcvg/video/upload/v1786438386/newplaybimboo_xfnt47.mp4" type="video/mp4" />}
+        {!isMobile && <source src="https://res.cloudinary.com/dn2bcvcvg/video/upload/v1786438386/newalvora.pk_xfnt47.mp4" type="video/mp4" />}
       </video>
     </div>
   );

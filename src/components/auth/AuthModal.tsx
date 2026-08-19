@@ -59,7 +59,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultMo
 
   const subtitles = {
     'login': 'Sign in to access your orders and wishlist.',
-    'signup': 'Join PlayBimboo to track orders and save your favorites.',
+    'signup': 'Join Alvora Skincare to track orders and save your favorites.',
     'forgot-password': 'Enter your email and we\'ll send you a link to reset your password.'
   };
   const [error, setError] = useState<string | null>(null);

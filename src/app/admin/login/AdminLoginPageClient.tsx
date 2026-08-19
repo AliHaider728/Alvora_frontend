@@ -8,7 +8,7 @@ import { api, setAuthToken, getLastApiError } from '../../../services/api';
 
 export const AdminLoginPageClient: React.FC = () => {
   const router = useRouter();
-  const [email, setEmail] = useState('playbimboo@gmail.com');
+  const [email, setEmail] = useState('admin@alvora.pk');
   const [password, setPassword] = useState('admin123');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -48,7 +48,7 @@ export const AdminLoginPageClient: React.FC = () => {
           <div className="w-14 h-14 rounded-2xl bg-amber-400 text-slate-950 font-black text-xl flex items-center justify-center mx-auto shadow-md">
             PB
           </div>
-          <h1 className="font-heading font-black text-2xl text-slate-900">PlayBimboo Admin Dashboard</h1>
+          <h1 className="font-heading font-black text-2xl text-slate-900">Alvora Skincare Admin Dashboard</h1>
           <p className="text-xs text-slate-500 font-medium">
             Sign in to manage inventory, customer orders, coupons, and sales reports.
           </p>
@@ -69,7 +69,7 @@ export const AdminLoginPageClient: React.FC = () => {
               value={email}
               onChange={e => setEmail(e.target.value)}
               required
-              placeholder="playbimboo@gmail.com"
+              placeholder="admin@alvora.pk"
               className="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 font-sans focus:outline-none focus:ring-2 focus:ring-slate-900"
             />
           </div>
@@ -104,7 +104,7 @@ export const AdminLoginPageClient: React.FC = () => {
 
         <div className="p-3 bg-amber-50 border border-amber-200 rounded-2xl text-[11px] text-amber-900 space-y-1">
           <p className="font-bold text-amber-950">Default Admin Seed Credentials:</p>
-          <p>Email: <code className="font-mono bg-white px-1 py-0.5 rounded text-rose-600 font-bold">playbimboo@gmail.com</code></p>
+          <p>Email: <code className="font-mono bg-white px-1 py-0.5 rounded text-rose-600 font-bold">admin@alvora.pk</code></p>
           <p>Password: <code className="font-mono bg-white px-1 py-0.5 rounded text-rose-600 font-bold">admin123</code></p>
         </div>
 

@@ -3,7 +3,7 @@ import { MetadataRoute } from 'next'
 export const dynamic = 'force-dynamic';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+  const apiUrl = process.env.NEXT_PUBLIC_ALVORA_API_URL || 'http://localhost:6000/api';
   
   let products = [];
   try {
@@ -16,15 +16,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   const productUrls = products.map((product: any) => ({
-    url: `https://playbimboo.com/product/${product.slug}`,
+    url: `https://alvora.pk/product/${product.slug}`,
     lastModified: new Date(product.updatedAt || Date.now()),
   }));
 
   const staticUrls = [
-    { url: 'https://playbimboo.com', lastModified: new Date() },
-    { url: 'https://playbimboo.com/shop', lastModified: new Date() },
-    { url: 'https://playbimboo.com/about', lastModified: new Date() },
-    { url: 'https://playbimboo.com/contact', lastModified: new Date() },
+    { url: 'https://alvora.pk', lastModified: new Date() },
+    { url: 'https://alvora.pk/shop', lastModified: new Date() },
+    { url: 'https://alvora.pk/about', lastModified: new Date() },
+    { url: 'https://alvora.pk/contact', lastModified: new Date() },
   ];
 
   return [...staticUrls, ...productUrls];

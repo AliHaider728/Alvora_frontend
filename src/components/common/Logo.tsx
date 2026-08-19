@@ -24,11 +24,11 @@ export const Logo: React.FC<LogoProps> = ({ className = '', size = 'md' }) => {
   const logoSrc = getSafeImageSrc(settings.logoUrl || (typeof defaultLogoImg === 'string' ? defaultLogoImg : (defaultLogoImg as any).src), { width: 300 });
 
   return (
-    <Link href="/" className={`inline-flex items-center transition-all group ${className}`} title={settings.storeName || 'Play Bimboo'}>
+    <Link href="/" className={`inline-flex items-center transition-all group ${className}`} title={settings.storeName || 'Alvora Skincare'}>
       {/* Brand Logo Image Only with transparent background */}
       <img
         src={logoSrc}
-        alt={settings.storeName || 'PlayBimboo'}
+        alt={settings.storeName || 'Alvora Skincare'}
         referrerPolicy="no-referrer"
         className={`${imageSizes[size]} w-auto object-contain bg-transparent transition-transform duration-300 group-hover:scale-105`}
       />

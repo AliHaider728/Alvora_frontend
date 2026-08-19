@@ -24,7 +24,7 @@ const Ballpit = dynamic(() => import('../Ballpit/Ballpit'), {
 });
 
 // Adjust this import path to wherever the transparent logo file lives in your project
-import playBimbooLogo from '../../assets/images/playbimboo-logo.webp';
+import alvoraLogo from '../../assets/images/alvora.pk-logo.webp';
 
 // ─────────────────────────────────────────────────────────
 // Hardcoded real store contact info.
@@ -36,7 +36,7 @@ import playBimbooLogo from '../../assets/images/playbimboo-logo.webp';
 // If these ever need to change, update them directly here.
 // ─────────────────────────────────────────────────────────
 const STORE_PHONE = '0310-7172222';
-const STORE_EMAIL = 'Sales@playbimboo.com';
+const STORE_EMAIL = 'Sales@alvora.pk';
 const STORE_ADDRESS = 'Mumtaz Market, Gujranwala';
 
 export const Footer: React.FC = () => {
@@ -125,12 +125,12 @@ export const Footer: React.FC = () => {
           {/* Column 1: Store Bio */}
           <div className="space-y-5">
             <img
-              src={typeof playBimbooLogo === 'string' ? playBimbooLogo : playBimbooLogo.src}
-              alt="Play Bimboo"
+              src={typeof alvoraLogo === 'string' ? alvoraLogo : alvoraLogo.src}
+              alt="Alvora Skincare"
               className="h-14 w-auto object-contain"
             />
             <p className="max-w-sm text-sm font-medium leading-relaxed text-white/80">
-              Play Bimboo is your magical destination for premium, non-toxic toys, creative STEM kits, action figures, and family board games. Inspiring young minds to explore, imagine, and grow!
+              Alvora Skincare is your magical destination for premium, non-toxic toys, creative STEM kits, action figures, and family board games. Inspiring young minds to explore, imagine, and grow!
             </p>
 
             {/* Social links */}

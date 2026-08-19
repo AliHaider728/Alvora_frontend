@@ -1,5 +1,5 @@
-// PlayBimboo Unified Backend API Client
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+// Alvora Skincare Unified Backend API Client
+export const API_BASE_URL = process.env.NEXT_PUBLIC_ALVORA_API_URL || 'http://localhost:6000/api';
 
 // Helper for Token Management
 export const getAuthToken = (): string | null => {

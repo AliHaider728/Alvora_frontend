@@ -880,7 +880,7 @@ export const AdminProductFormPageClient: React.FC = () => {
       categoryNames: categoryIds.map(selectedId => categories.find(item => item.id === selectedId)?.name).filter((value): value is string => Boolean(value)),
       categorySlugs: categoryIds.map(selectedId => categories.find(item => item.id === selectedId)?.slug).filter((value): value is string => Boolean(value)),
       ageGroups,
-      brand: editingProduct?.brand || 'PlayBimboo',
+      brand: editingProduct?.brand || 'Alvora Skincare',
       ...normalizeInventory({ trackInventory, stockQuantity, stockStatus }),
       stockQuantity: stockQuantity !== undefined ? Number(stockQuantity) : null,
       lowStockThreshold: lowStockThreshold ?? null,
@@ -1005,7 +1005,7 @@ export const AdminProductFormPageClient: React.FC = () => {
           <ChevronLeft className="h-4 w-4" /> Back to Products
         </button>
         <h1 className="font-heading text-2xl font-black text-slate-900 sm:text-3xl">{isEditing ? 'Edit Toy Product' : 'Add New Toy Product'}</h1>
-        <p className="mt-1 text-xs font-medium text-slate-500">{isEditing ? 'Update this product and publish changes to the PlayBimboo storefront.' : 'Create and publish a new product on the PlayBimboo storefront.'}</p>
+        <p className="mt-1 text-xs font-medium text-slate-500">{isEditing ? 'Update this product and publish changes to the Alvora Skincare storefront.' : 'Create and publish a new product on the Alvora Skincare storefront.'}</p>
       </div>
 
       <form onSubmit={handleSubmit} className="grid min-w-0 grid-cols-1 items-start gap-6 xl:grid-cols-[minmax(0,1.65fr)_minmax(320px,0.9fr)]">
@@ -1274,7 +1274,7 @@ export const AdminProductFormPageClient: React.FC = () => {
 
           <FormCard title="SEO Settings" icon={Search}>
             <div className="space-y-4">
-              <label><span className="mb-1.5 block text-xs font-bold text-slate-700">SEO Title</span><input value={metaTitle} maxLength={70} onChange={event => { setMetaTitle(event.target.value); markDirty(); }} className={fieldClassName} placeholder={`${name || 'Product name'} – PlayBimboo`} /><span className={`mt-1 block text-right text-[10px] ${metaTitle.length > 60 ? 'text-amber-600' : 'text-slate-400'}`}>{metaTitle.length}/60 recommended · 70 max</span></label>
+              <label><span className="mb-1.5 block text-xs font-bold text-slate-700">SEO Title</span><input value={metaTitle} maxLength={70} onChange={event => { setMetaTitle(event.target.value); markDirty(); }} className={fieldClassName} placeholder={`${name || 'Product name'} – Alvora Skincare`} /><span className={`mt-1 block text-right text-[10px] ${metaTitle.length > 60 ? 'text-amber-600' : 'text-slate-400'}`}>{metaTitle.length}/60 recommended · 70 max</span></label>
               <label><span className="mb-1.5 block text-xs font-bold text-slate-700">Meta Description</span><textarea rows={3} value={metaDescription} maxLength={180} onChange={event => { setMetaDescription(event.target.value); markDirty(); }} className={fieldClassName} placeholder="Short summary for search engines" /><span className={`mt-1 block text-right text-[10px] ${metaDescription.length > 160 ? 'text-amber-600' : 'text-slate-400'}`}>{metaDescription.length}/160 recommended · 180 max</span></label>
               <label><span className="mb-1.5 block text-xs font-bold text-slate-700">URL Slug</span><input value={slug} onChange={event => { const next = slugify(event.target.value); setSlug(next); setSlugManuallyEdited(next.length > 0); markDirty(); clearError('slug'); }} className={inputClass('slug')} placeholder="auto-generated-from-product-name" /><span className="mt-1 block break-all text-[10px] text-slate-400">/product/{slug || 'product-slug'}</span><FieldError message={errors.slug} /></label>
             </div>

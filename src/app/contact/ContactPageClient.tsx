@@ -46,7 +46,7 @@ const YouTubeIcon = ({ className }: { className?: string }) => (
 // (and in Footer.tsx to keep both in sync).
 // ─────────────────────────────────────────────────────────
 const STORE_PHONE = '0310-7172222';
-const STORE_EMAIL = 'Sales@playbimboo.com';
+const STORE_EMAIL = 'Sales@alvora.pk';
 const STORE_ADDRESS = 'Mumtaz Market, Gujranwala';
 
 export const ContactPageClient: React.FC = () => {
@@ -89,28 +89,28 @@ export const ContactPageClient: React.FC = () => {
     {
       key: 'facebook',
       label: 'Facebook',
-      href: settings.socialLinks?.facebook || 'https://facebook.com/playbimbootoys',
+      href: settings.socialLinks?.facebook || 'https://facebook.com/alvora.pk',
       icon: <FacebookIcon className="w-5 h-5" />,
       hoverClass: 'hover:text-blue-600'
     },
     {
       key: 'instagram',
       label: 'Instagram',
-      href: settings.socialLinks?.instagram || 'https://www.instagram.com/playbimbootoys',
+      href: settings.socialLinks?.instagram || 'https://www.instagram.com/alvora.pk',
       icon: <InstagramIcon className="w-5 h-5" />,
       hoverClass: 'hover:text-pink-600'
     },
     {
       key: 'youtube',
       label: 'YouTube',
-      href: settings.socialLinks?.youtube || 'https://youtube.com/@playbimboo',
+      href: settings.socialLinks?.youtube || 'https://youtube.com/@alvora.pk',
       icon: <YouTubeIcon className="w-5 h-5" />,
       hoverClass: 'hover:text-red-600'
     },
     {
       key: 'tiktok',
       label: 'TikTok',
-      href: settings.socialLinks?.tiktok || 'https://tiktok.com/@playbimbootoys',
+      href: settings.socialLinks?.tiktok || 'https://tiktok.com/@alvora.pk',
       icon: <TikTokIcon className="w-5 h-5" />,
       hoverClass: 'hover:text-slate-900'
     },
@@ -129,7 +129,7 @@ export const ContactPageClient: React.FC = () => {
 
             {/* Contact Information Card */}
             <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm space-y-4">
-              <h1 className="font-heading font-black text-2xl text-slate-900">Get in Touch with Play Bimboo</h1>
+              <h1 className="font-heading font-black text-2xl text-slate-900">Get in Touch with Alvora Skincare</h1>
               <p className="text-xs text-slate-500 leading-relaxed font-medium">
                 Have questions about our toys, orders, delivery, or anything else? Send us a message and our team will get back to you as soon as possible.
               </p>
@@ -184,7 +184,7 @@ export const ContactPageClient: React.FC = () => {
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={`Follow PlayBimboo on ${label}`}
+                    aria-label={`Follow Alvora Skincare on ${label}`}
                     className={`p-3 bg-slate-50 rounded-xl border border-slate-100 shadow-sm hover:shadow-md text-slate-500 ${hoverClass} transition-all`}
                   >
                     {icon}
@@ -204,7 +204,7 @@ export const ContactPageClient: React.FC = () => {
                 <div className="p-6 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-center space-y-2">
                   <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto animate-bounce" />
                   <h3 className="font-heading font-bold text-base">Message Sent Successfully!</h3>
-                  <p className="text-xs">Thank you for reaching out to Play Bimboo. We'll reply shortly!</p>
+                  <p className="text-xs">Thank you for reaching out to Alvora Skincare. We'll reply shortly!</p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">

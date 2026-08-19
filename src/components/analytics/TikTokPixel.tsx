@@ -11,7 +11,7 @@ declare global {
   }
 }
 
-const TIKTOK_PIXEL_ID = process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID;
+const TIKTOK_PIXEL_ID = process.env.NEXT_PUBLIC_ALVORA_TIKTOK_PIXEL_ID;
 
 export default function TikTokPixel() {
   const pathname = usePathname();

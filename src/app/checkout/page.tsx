@@ -1,7 +1,7 @@
 import { CheckoutPageClient } from "./CheckoutPageClient";
 
 export const metadata = {
-  title: "Checkout | PlayBimboo",
+  title: "Checkout | Alvora Skincare",
 };
 
 export default function Page() {

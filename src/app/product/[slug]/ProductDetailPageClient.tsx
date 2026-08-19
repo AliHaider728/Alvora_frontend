@@ -120,7 +120,7 @@ export const ProductDetailPageClient: React.FC = () => {
       ...review,
       id: String(review.id || review._id || ''),
       productId: String(review.productId || productId),
-      reviewerName: String(review.reviewerName || review.authorName || 'PlayBimboo customer'),
+      reviewerName: String(review.reviewerName || review.authorName || 'Alvora Skincare customer'),
       rating: Number(review.rating || 0),
       createdAt: String((review as any).createdAt || (review as any).date || '').slice(0, 10),
       title: String(review.title || ''),
@@ -1043,7 +1043,7 @@ export const ProductDetailPageClient: React.FC = () => {
                     const waAppliedOfferLabel = [waLabel, waBogoLabel].filter(Boolean).join(' · ');
                     const waVariantText = Object.keys(selectedVariants).length > 0 ? `\nVariant: ${Object.values(selectedVariants).join(', ')}` : Object.values(selectedAttributes).filter(Boolean).length > 0 ? `\nOption: ${Object.values(selectedAttributes).filter(Boolean).join(', ')}` : '';
                     const waOfferText = waAppliedOfferLabel ? `\nApplied Offer: ${waAppliedOfferLabel}` : '';
-                    const waMessage = `Hello, I am interested in this product:\nProduct: ${product.name}\nQuantity: ${quantity}\nPrice: ${formatPrice(waPrice, settings.currency)}\nLink: https://playbimboo.com/product/${product.slug}${waVariantText}${waOfferText}`;
+                    const waMessage = `Hello, I am interested in this product:\nProduct: ${product.name}\nQuantity: ${quantity}\nPrice: ${formatPrice(waPrice, settings.currency)}\nLink: https://alvora.pk/product/${product.slug}${waVariantText}${waOfferText}`;
 
                     return (
                       <a

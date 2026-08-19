@@ -23,11 +23,11 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata = {
-  title: 'Play Bimboo - Magical Toys, Games & Playland',
-  description: 'Discover endless play with Play Bimboo! Shop action figures, educational toys, board games, plush soft toys, and outdoor play.',
+  title: 'Alvora Skincare - Premium Skincare Products',
+  description: 'Discover premium skincare with Alvora. Shop our collection for glowing and healthy skin.',
   icons: {
     icon: [
-      { url: '/playbimbooLOGO_rounded.webp', type: 'image/webp' },
+      { url: '/favicon.ico', type: 'image/x-icon' },
       { url: '/favicon_rounded.ico', type: 'image/x-icon' }
     ]
   }
@@ -38,7 +38,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+  const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_ALVORA_GA_MEASUREMENT_ID;
 
   return (
     <html lang="en">

@@ -1,7 +1,7 @@
 import { AdminGlobalAttributesPageClient } from './AdminGlobalAttributesPageClient';
 
 export const metadata = {
-  title: 'AdminGlobalAttributesPage | PlayBimboo Admin',
+  title: 'AdminGlobalAttributesPage | Alvora Skincare Admin',
 };
 
 export default function Page() {

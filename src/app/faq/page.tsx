@@ -69,7 +69,7 @@ export default function FaqPage() {
       color: 'text-lime-500 bg-lime-50'
     },
     {
-      q: 'How can I contact PlayBimboo?',
+      q: 'How can I contact Alvora Skincare?',
       a: 'You can reach us through WhatsApp, email, or our Contact Us page. Our support team is always happy to assist you with your questions.',
       icon: MessageCircleQuestion,
       color: 'text-fuchsia-500 bg-fuchsia-50'
@@ -89,7 +89,7 @@ export default function FaqPage() {
           </div>
           <h1 className="font-heading font-black text-3xl text-slate-900">Frequently Asked Questions</h1>
           <p className="text-xs text-slate-500 max-w-md mx-auto">
-            Everything you need to know about Play Bimboo safety, shipping speeds, gift options, and easy returns.
+            Everything you need to know about Alvora Skincare safety, shipping speeds, gift options, and easy returns.
           </p>
         </div>
 

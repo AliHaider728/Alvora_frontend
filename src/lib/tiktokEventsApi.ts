@@ -13,8 +13,8 @@ export const sendTikTokEventToServer = async (
   reqIp?: string,
   reqUserAgent?: string
 ) => {
-  const pixelId = process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID;
-  const accessToken = process.env.TIKTOK_ACCESS_TOKEN;
+  const pixelId = process.env.NEXT_PUBLIC_ALVORA_TIKTOK_PIXEL_ID;
+  const accessToken = process.env.ALVORA_TIKTOK_ACCESS_TOKEN;
 
   if (!pixelId || !accessToken) {
     console.warn('[TikTok Events API] Missing credentials in Next.js backend');

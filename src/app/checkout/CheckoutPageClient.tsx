@@ -378,7 +378,7 @@ export const CheckoutPageClient: React.FC = () => {
                 Order Placed Successfully!
               </span>
               <h1 className="font-heading font-black text-3xl text-slate-900 mt-1">
-                Thank You for Shopping at PlayBimboo!
+                Thank You for Shopping at Alvora Skincare!
               </h1>
               <p className="text-sm text-slate-600 mt-2">
                 {!completedOrder.email

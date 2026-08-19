@@ -1,4 +1,4 @@
-import fallbackImage from '../assets/images/promo_toys.webp';
+import fallbackImage from '../assets/images/placeholder.webp';
 
 interface ImageOptions {
   width?: number;

@@ -1,7 +1,7 @@
 import { AdminStoreAppearancePageClient } from './AdminStoreAppearancePageClient';
 
 export const metadata = {
-  title: 'AdminStoreAppearancePage | PlayBimboo Admin',
+  title: 'AdminStoreAppearancePage | Alvora Skincare Admin',
 };
 
 export default function Page() {

@@ -2,11 +2,11 @@ import React from 'react';
 import { HomePage } from './HomePage';
 
 export const metadata = {
-  title: 'Play Bimboo - Magical Toys, Games & Playland',
-  description: 'Discover endless play with Play Bimboo! Shop action figures, educational toys, board games, plush soft toys, and outdoor play.',
+  title: 'Alvora Skincare - Premium Skincare Products',
+  description: 'Discover premium skincare with Alvora. Shop our collection for glowing and healthy skin.',
 };
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const API_URL = process.env.NEXT_PUBLIC_ALVORA_API_URL || 'http://localhost:6000/api';
 
 async function fetchData() {
   // Using next: { revalidate: 60 } to cache the homepage for 60 seconds.

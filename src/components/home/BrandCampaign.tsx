@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, Star, Atom, Lightbulb, Sparkles } from 'lucide-react';
-import promoToysImage from '../../assets/images/promo_toys.webp';
+import promoToysImage from '../../assets/images/placeholder.webp';
 import logoImage from '../../assets/images/play_bimboo_logo_1785311841625.webp';
 
 export const BrandCampaign: React.FC<{ sectionSettings: any }> = ({ sectionSettings }) => {
@@ -34,7 +34,7 @@ export const BrandCampaign: React.FC<{ sectionSettings: any }> = ({ sectionSetti
           <div className="bg-white/95 backdrop-blur-sm px-2.5 py-1.5 rounded-2xl shadow-sm border border-white/20 mb-2 shrink-0 animate-fade-in">
             <Image 
               src={logoImage} 
-              alt="Play Bimboo" 
+              alt="Alvora Skincare" 
               className="w-32 h-auto object-contain"
             />
           </div>
@@ -61,7 +61,7 @@ export const BrandCampaign: React.FC<{ sectionSettings: any }> = ({ sectionSetti
               href={sectionSettings.ctaLink || '/category/all'}
               className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-[20px] bg-linear-to-r from-yellow-400 to-amber-500 hover:from-yellow-300 hover:to-amber-400 text-slate-900 font-heading font-extrabold text-sm shadow-[0_8px_20px_-6px_rgba(251,191,36,0.6)] transition-all hover:scale-[1.02] active:scale-95"
             >
-              <span>{sectionSettings.ctaLabel || 'Explore PlayBimboo Favorites'}</span>
+              <span>{sectionSettings.ctaLabel || 'Explore Alvora Skincare Favorites'}</span>
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </Link>
             

@@ -1,7 +1,7 @@
 import { AdminReportsPageClient } from './AdminReportsPageClient';
 
 export const metadata = {
-  title: 'AdminReportsPage | PlayBimboo Admin',
+  title: 'AdminReportsPage | Alvora Skincare Admin',
 };
 
 export default function Page() {

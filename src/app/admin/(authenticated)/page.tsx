@@ -1,7 +1,7 @@
 import { AdminDashboardPageClient } from './AdminDashboardPageClient';
 
 export const metadata = {
-  title: 'AdminDashboardPage | PlayBimboo Admin',
+  title: 'AdminDashboardPage | Alvora Skincare Admin',
 };
 
 export default function Page() {

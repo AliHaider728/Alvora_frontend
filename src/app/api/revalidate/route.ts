@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
   const path = request.nextUrl.searchParams.get('path');
   const tag = request.nextUrl.searchParams.get('tag');
 
-  if (secret !== process.env.REVALIDATION_SECRET) {
+  if (secret !== process.env.ALVORA_REVALIDATION_SECRET) {
     return NextResponse.json({ message: 'Invalid token' }, { status: 401 });
   }
 

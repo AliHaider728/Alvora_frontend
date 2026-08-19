@@ -7,7 +7,7 @@ import { RefreshCw, CheckCircle, Clock, AlertTriangle } from 'lucide-react';
 export default function ReturnPolicyPage() {
   return (
     <div className="min-h-screen bg-slate-50 font-sans py-8">
-      <SeoHead title="Return Policy - PlayBimboo" />
+      <SeoHead title="Return Policy - Alvora Skincare" />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <Breadcrumbs items={[{ label: 'Return Policy' }]} />
@@ -19,7 +19,7 @@ export default function ReturnPolicyPage() {
             </div>
             <h1 className="font-heading font-black text-3xl text-slate-900">30-Day Happiness Guarantee</h1>
             <p className="text-slate-500 max-w-lg mx-auto">
-              We want you and your child to love every toy from PlayBimboo.
+              We want you and your child to love every toy from Alvora Skincare.
             </p>
           </div>
 

@@ -30,7 +30,7 @@ export const DEFAULT_HOMEPAGE_SECTIONS: HomepageSectionSetting[] = [
   { key: 'categories', name: 'Shop by Category', enabled: true, order: 1, heading: 'Shop by Category', subheading: 'Browse Collections', ctaLabel: 'View All Categories', ctaLink: '/category/all' },
   { key: 'ageGroups', name: 'Shop by Age Group', enabled: true, order: 2, heading: 'Shop by Age Group', subheading: 'Find perfectly developmental and age-appropriate toys designed for your child’s growth.' },
   { key: 'featuredProducts', name: 'Featured Products', enabled: true, order: 3, heading: 'Featured Toys & Bestsellers', subheading: 'Hot Picks', ctaLabel: 'Shop All Bestsellers', ctaLink: '/category/all' },
-  { key: 'brandCampaign', name: 'Play, Learn, Grow', enabled: true, order: 4, heading: 'Discover Toys That Make Learning Magical', subheading: 'From STEM kits and building sets to creative play essentials, PlayBimboo brings fun, skill-building toys that spark curiosity and joyful learning at every age.', ctaLabel: 'Explore PlayBimboo Favorites', ctaLink: '/category/all' },
+  { key: 'brandCampaign', name: 'Play, Learn, Grow', enabled: true, order: 4, heading: 'Discover Toys That Make Learning Magical', subheading: 'From STEM kits and building sets to creative play essentials, Alvora Skincare brings fun, skill-building toys that spark curiosity and joyful learning at every age.', ctaLabel: 'Explore Alvora Skincare Favorites', ctaLink: '/category/all' },
   { key: 'newArrivals', name: 'New Arrivals', enabled: true, order: 5, heading: 'New Arrivals & Restocks', subheading: 'Fresh In Store', ctaLabel: 'Browse New Additions', ctaLink: '/category/all' }
 ];
 
@@ -73,14 +73,14 @@ const mergeSections = (incoming?: Partial<HomepageSectionSetting>[]) => DEFAULT_
 }));
 
 export const normalizeStoreSettings = (settings: Partial<StoreSettings>): StoreSettings => ({
-  storeName: settings.storeName || 'PlayBimboo',
+  storeName: settings.storeName || 'Alvora Skincare',
   tagline: settings.tagline || 'Where Imagination Comes to Life',
-  email: settings.email || 'Sales@playbimboo.com',
+  email: settings.email || 'Sales@alvora.pk',
   phone: settings.phone || '0310-7172222',
   address: settings.address || 'Mumtaz Market, Gujranwala',
   currency: settings.currency || 'Rs.',
   logoUrl: settings.logoUrl,
-  metaTitle: settings.metaTitle || 'PlayBimboo - Premium Toys for Kids',
+  metaTitle: settings.metaTitle || 'Alvora Skincare - Premium Skincare Products',
   metaDescription: settings.metaDescription || '',
   freeShippingThreshold: Number(settings.freeShippingThreshold ?? 5000),
   standardShippingFee: Number(settings.standardShippingFee ?? settings.flatDeliveryRate ?? 200),
@@ -89,10 +89,10 @@ export const normalizeStoreSettings = (settings: Partial<StoreSettings>): StoreS
   storefrontNavigation: normalizeNavigation(settings.storefrontNavigation),
   homepageSections: mergeSections(settings.homepageSections),
   socialLinks: {
-    instagram: settings.socialLinks?.instagram || 'https://www.instagram.com/playbimbootoys',
-    facebook: settings.socialLinks?.facebook || 'https://facebook.com/playbimbootoys',
-    youtube: settings.socialLinks?.youtube || 'https://youtube.com/@playbimboo',
-    tiktok: settings.socialLinks?.tiktok || 'https://tiktok.com/@playbimbootoys'
+    instagram: settings.socialLinks?.instagram || 'https://www.instagram.com/alvora.pk',
+    facebook: settings.socialLinks?.facebook || 'https://facebook.com/alvora.pk',
+    youtube: settings.socialLinks?.youtube || 'https://youtube.com/@alvora.pk',
+    tiktok: settings.socialLinks?.tiktok || 'https://tiktok.com/@alvora.pk'
   }
 });
 

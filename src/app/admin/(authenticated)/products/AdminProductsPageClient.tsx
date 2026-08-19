@@ -113,7 +113,7 @@ export const AdminProductsPageClient: React.FC = () => {
       const url = URL.createObjectURL(await response.blob());
       const link = document.createElement('a');
       link.href = url;
-      link.download = 'playbimboo-products.csv';
+      link.download = 'alvora.pk-products.csv';
       link.click();
       URL.revokeObjectURL(url);
     } catch {
