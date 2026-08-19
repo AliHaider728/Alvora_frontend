@@ -1,160 +1,92 @@
 "use client";
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { useRouter, usePathname, useParams } from 'next/navigation';
-import {
-  Mail,
-  Phone,
-  MapPin,
-  Send,
-  CheckCircle2,
-  Heart,
-  Facebook,
-  Instagram,
-  Youtube,
-  PackageSearch,
-  UserCircle2
-} from 'lucide-react';
+import { Send, CheckCircle2, Instagram, Facebook, Youtube } from 'lucide-react';
+import { Logo } from './Logo';
 import { useStore } from '../../context/StoreContext';
 import { useAuth } from '../../context/AuthContext';
-import dynamic from 'next/dynamic';
 
-const Ballpit = dynamic(() => import('../Ballpit/Ballpit'), {
-  ssr: false,
-});
+/* ─────────────────────────────────────────────
+   ALVORA — Footer
+   Design reference: warm ivory/cream, logo top-left,
+   multi-column links, newsletter, social icons, clean bottom bar.
+   ───────────────────────────────────────────── */
 
-// Adjust this import path to wherever the transparent logo file lives in your project
-import alvoraLogo from '../../assets/images/alvora.pk-logo.webp';
+const SHOP_LINKS = [
+  { label: 'All Products',   href: '/category/all' },
+  { label: 'Best Sellers',   href: '/category/all?sort=bestseller' },
+  { label: 'Serums',         href: '/category/serums' },
+  { label: 'Moisturizers',   href: '/category/moisturizers' },
+  { label: 'Cleansers',      href: '/category/cleansers' },
+];
 
-// ─────────────────────────────────────────────────────────
-// Hardcoded real store contact info.
-// These are the confirmed real values — do NOT replace with
-// settings.phone / settings.email / settings.address, which
-// was the source of the data-flicker bug (settings context
-// loads async and could momentarily return stale/empty data,
-// overwriting these correct values after initial render).
-// If these ever need to change, update them directly here.
-// ─────────────────────────────────────────────────────────
-const STORE_PHONE = '0310-7172222';
-const STORE_EMAIL = 'Sales@alvora.pk';
-const STORE_ADDRESS = 'Mumtaz Market, Gujranwala';
+const CUSTOMER_CARE_LINKS = [
+  { label: 'Contact Us',          href: '/contact' },
+  { label: 'Shipping & Delivery', href: '/shipping' },
+  { label: 'Returns & Refunds',   href: '/return-policy' },
+  { label: 'FAQs',                href: '/faq' },
+  { label: 'Track Your Order',    href: '/account' },
+];
+
+const ABOUT_LINKS = [
+  { label: 'Our Story',    href: '/about' },
+  { label: 'Ingredients',  href: '/about#ingredients' },
+  { label: 'Sustainability', href: '/about#sustainability' },
+  { label: 'Reviews',      href: '/category/all#reviews' },
+  { label: 'Blog',         href: '/blog' },
+];
 
 export const Footer: React.FC = () => {
   const { settings } = useStore();
   const { isLoggedIn, openAuthModal } = useAuth();
-  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
-    if (newsletterEmail) {
+    if (email.trim()) {
       setSubscribed(true);
-      setNewsletterEmail('');
-      setTimeout(() => setSubscribed(false), 4000);
+      setEmail('');
+      setTimeout(() => setSubscribed(false), 5000);
     }
   };
 
   return (
-    <footer className="relative overflow-hidden bg-black pb-6 pt-10 font-sans text-slate-300 sm:pt-12">
-      {/* Ballpit background animation — sits behind everything, doesn't block clicks */}
-      <div className="pointer-events-none absolute inset-0 z-0 opacity-30" aria-hidden="true">
-        <Ballpit
-          count={60}
-          gravity={0}
-          friction={0.998}
-          wallBounce={0.95}
-          followCursor={false}
-          colors={[0xffffff, 0x8b5cf6, 0x18181b]} /* white -> vivid violet -> near-black, high contrast like the React Bits demo */
-          materialParams={{ metalness: 0.15, roughness: 0.35, clearcoat: 1, clearcoatRoughness: 0.1 }}
-          minSize={0.35}
-          maxSize={0.7}
-          size0={0.5}
-          ambientIntensity={1.4}
-          lightIntensity={300}
-        />
-      </div>
+    <footer className="bg-[#F5EDE4] border-t border-[#EDE5DC]" role="contentinfo">
 
-      {/* Light dark overlay — just enough to keep text readable without hiding the balls */}
-      <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-black/55 via-black/70 to-black/85" aria-hidden="true" />
+      {/* ── Main Footer Grid ── */}
+      <div className="alvora-container py-14 md:py-16">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr_1.5fr] lg:gap-8">
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        {/* Newsletter Banner */}
-        <div className="relative mb-8 overflow-hidden rounded-3xl bg-linear-to-r from-rose-500 via-amber-500 to-sky-500 p-5 text-white shadow-xl sm:p-7">
-          <div className="relative z-10 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-            <div className="max-w-xl">
-              <p className="font-heading font-black text-2xl sm:text-3xl mb-2 text-white drop-shadow-sm">
-                Subscribe to receive emails about new arrivals, exclusive offers, and latest updates.
-              </p>
-            </div>
-
-            <div className="w-full lg:w-auto lg:min-w-105">
-              <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3">
-                <label htmlFor="footer-newsletter-email" className="sr-only">Email address</label>
-                <input
-                  id="footer-newsletter-email"
-                  type="email"
-                  required
-                  placeholder="Enter your email address..."
-                  value={newsletterEmail}
-                  onChange={e => setNewsletterEmail(e.target.value)}
-                  className="px-5 py-3.5 rounded-2xl bg-white text-slate-900 placeholder-slate-400 font-medium text-sm focus:outline-none focus:ring-4 focus:ring-white/40 flex-1 shadow-inner"
-                />
-                <button
-                  type="submit"
-                  className="px-7 py-3.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-heading font-bold text-sm flex items-center justify-center gap-2 shadow-md transition-all active:scale-95"
-                >
-                  <span>Subscribe</span>
-                  <Send className="w-4 h-4" />
-                </button>
-              </form>
-
-              {subscribed && (
-                <div role="status" aria-live="polite" className="mt-3 flex items-center gap-2 rounded-xl bg-emerald-900/40 p-2.5 text-xs font-bold text-emerald-100">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-300 shrink-0" />
-                  <span>Yay! Check your inbox for your 15% OFF coupon code!</span>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Footer Grid: Brand / Customer Care / Connect */}
-        <div className="grid grid-cols-1 gap-8 border-b border-white/10 pb-8 md:grid-cols-3 md:gap-10">
-
-          {/* Column 1: Store Bio */}
-          <div className="space-y-5">
-            <img
-              src={typeof alvoraLogo === 'string' ? alvoraLogo : alvoraLogo.src}
-              alt="Alvora Skincare"
-              className="h-14 w-auto object-contain"
-            />
-            <p className="max-w-sm text-sm font-medium leading-relaxed text-white/80">
-              Alvora Skincare is your magical destination for premium, non-toxic toys, creative STEM kits, action figures, and family board games. Inspiring young minds to explore, imagine, and grow!
+          {/* Col 1 — Brand */}
+          <div className="flex flex-col gap-5">
+            <Logo size="md" />
+            <p className="text-sm text-[#4D3D2D]/80 leading-relaxed max-w-xs">
+              Thoughtfully formulated skincare that nourishes, protects and brings out your most radiant skin. Pure ingredients. Visible results. Naturally.
             </p>
 
             {/* Social links */}
-            <div className="flex items-center gap-2.5 pt-1">
-              {settings.socialLinks?.facebook && (
-                <a
-                  href={settings.socialLinks.facebook}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Facebook"
-                  className="w-9 h-9 rounded-full bg-white/5 hover:bg-linear-to-br hover:from-rose-500 hover:to-amber-500 flex items-center justify-center transition-colors"
-                >
-                  <Facebook className="w-4 h-4" />
-                </a>
-              )}
+            <div className="flex items-center gap-3 mt-1">
               {settings.socialLinks?.instagram && (
                 <a
                   href={settings.socialLinks.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Instagram"
-                  className="w-9 h-9 rounded-full bg-white/5 hover:bg-linear-to-br hover:from-rose-500 hover:to-amber-500 flex items-center justify-center transition-colors"
+                  aria-label="Alvora on Instagram"
+                  className="w-9 h-9 rounded-full border border-[#EDE5DC] bg-white flex items-center justify-center text-[#4D3D2D] hover:border-[#C48B80] hover:text-[#C48B80] transition-colors"
                 >
                   <Instagram className="w-4 h-4" />
+                </a>
+              )}
+              {settings.socialLinks?.facebook && (
+                <a
+                  href={settings.socialLinks.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Alvora on Facebook"
+                  className="w-9 h-9 rounded-full border border-[#EDE5DC] bg-white flex items-center justify-center text-[#4D3D2D] hover:border-[#C48B80] hover:text-[#C48B80] transition-colors"
+                >
+                  <Facebook className="w-4 h-4" />
                 </a>
               )}
               {settings.socialLinks?.youtube && (
@@ -162,8 +94,8 @@ export const Footer: React.FC = () => {
                   href={settings.socialLinks.youtube}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="YouTube"
-                  className="w-9 h-9 rounded-full bg-white/5 hover:bg-linear-to-br hover:from-rose-500 hover:to-amber-500 flex items-center justify-center transition-colors"
+                  aria-label="Alvora on YouTube"
+                  className="w-9 h-9 rounded-full border border-[#EDE5DC] bg-white flex items-center justify-center text-[#4D3D2D] hover:border-[#C48B80] hover:text-[#C48B80] transition-colors"
                 >
                   <Youtube className="w-4 h-4" />
                 </a>
@@ -173,135 +105,141 @@ export const Footer: React.FC = () => {
                   href={settings.socialLinks.tiktok}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="TikTok"
-                  className="w-9 h-9 rounded-full bg-white/5 hover:bg-linear-to-br hover:from-sky-400 hover:to-blue-500 flex items-center justify-center transition-colors"
+                  aria-label="Alvora on TikTok"
+                  className="w-9 h-9 rounded-full border border-[#EDE5DC] bg-white flex items-center justify-center text-[#4D3D2D] hover:border-[#C48B80] hover:text-[#C48B80] transition-colors"
                 >
-                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 2.22-1.15 4.39-2.95 5.73-1.74 1.3-4.04 1.81-6.17 1.34-2.11-.47-3.92-1.89-4.83-3.83-.93-1.95-.91-4.26.06-6.19.98-1.93 2.72-3.34 4.79-3.89.84-.22 1.7-.33 2.56-.31v4.06c-1.43.08-2.82.72-3.69 1.83-.88 1.1-1.12 2.65-.63 3.98.48 1.31 1.65 2.31 2.99 2.62 1.34.31 2.77.01 3.86-.78 1.12-.82 1.81-2.14 1.85-3.56.09-3.93.03-7.87.03-11.8V.02z"/></svg>
+                  {/* TikTok icon */}
+                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 2.22-1.15 4.39-2.95 5.73-1.74 1.3-4.04 1.81-6.17 1.34-2.11-.47-3.92-1.89-4.83-3.83-.93-1.95-.91-4.26.06-6.19.98-1.93 2.72-3.34 4.79-3.89.84-.22 1.7-.33 2.56-.31v4.06c-1.43.08-2.82.72-3.69 1.83-.88 1.1-1.12 2.65-.63 3.98.48 1.31 1.65 2.31 2.99 2.62 1.34.31 2.77.01 3.86-.78 1.12-.82 1.81-2.14 1.85-3.56.09-3.93.03-7.87.03-11.8V.02z"/>
+                  </svg>
                 </a>
               )}
             </div>
           </div>
 
-          {/* Column 2: Customer Care */}
+          {/* Col 2 — Shop */}
           <div>
-            <h4 className="font-heading font-bold text-white text-base uppercase tracking-wider mb-5">
-              Customer Care
+            <h4 className="text-xs font-bold tracking-[0.14em] uppercase text-[#C48B80] mb-5">
+              Shop
             </h4>
-            <ul className="space-y-3 text-sm font-medium text-white/80">
-              <li>
-                <Link href="/about" className="hover:text-rose-400 transition-colors relative group inline-block">
-                  About Us
-                  <span className="absolute left-0 -bottom-0.5 w-0 h-px bg-rose-400 transition-all group-hover:w-full" />
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="hover:text-rose-400 transition-colors relative group inline-block">
-                  Contact Us
-                  <span className="absolute left-0 -bottom-0.5 w-0 h-px bg-rose-400 transition-all group-hover:w-full" />
-                </Link>
-              </li>
-              <li>
-                <Link href="/faq" className="hover:text-rose-400 transition-colors relative group inline-block">
-                  Frequently Asked Questions
-                  <span className="absolute left-0 -bottom-0.5 w-0 h-px bg-rose-400 transition-all group-hover:w-full" />
-                </Link>
-              </li>
-              <li>
-                <Link href="/wishlist" className="hover:text-rose-400 transition-colors relative group inline-block">
-                  Saved Wishlist
-                  <span className="absolute left-0 -bottom-0.5 w-0 h-px bg-rose-400 transition-all group-hover:w-full" />
-                </Link>
-              </li>
-              <li>
-                <Link href="/return-policy" className="hover:text-rose-400 transition-colors relative group inline-block">
-                  Return Policy
-                  <span className="absolute left-0 -bottom-0.5 w-0 h-px bg-rose-400 transition-all group-hover:w-full" />
-                </Link>
-              </li>
+            <ul className="flex flex-col gap-3">
+              {SHOP_LINKS.map(l => (
+                <li key={l.href}>
+                  <Link
+                    href={l.href}
+                    className="text-sm text-[#4D3D2D]/80 hover:text-[#C48B80] transition-colors"
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Column 3: Contact + Account */}
-          <div className="space-y-6">
-            <div>
-              <h4 className="font-heading font-bold text-white text-base uppercase tracking-wider mb-5">
-                Get In Touch
-              </h4>
-              <div className="space-y-3 text-sm font-medium text-white/80">
-                <div className="flex items-center gap-2.5">
-                  <span className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
-                    <MapPin className="w-3.5 h-3.5 text-rose-400" />
-                  </span>
-                  <span>{STORE_ADDRESS}</span>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <span className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
-                    <Phone className="w-3.5 h-3.5 text-amber-400" />
-                  </span>
-                  <a href={`tel:+92${STORE_PHONE.replace(/[^0-9]/g, '').replace(/^0/, '')}`} className="hover:text-amber-400 transition-colors">
-                    {STORE_PHONE}
-                  </a>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <span className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
-                    <Mail className="w-3.5 h-3.5 text-sky-400" />
-                  </span>
-                  <div className="flex flex-col gap-1.5 pt-1">
-                    <a href={`mailto:${STORE_EMAIL}`} className="hover:text-sky-400 transition-colors leading-none">
-                      {STORE_EMAIL}
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
+          {/* Col 3 — Customer Care */}
+          <div>
+            <h4 className="text-xs font-bold tracking-[0.14em] uppercase text-[#C48B80] mb-5">
+              Customer Care
+            </h4>
+            <ul className="flex flex-col gap-3">
+              {CUSTOMER_CARE_LINKS.map(l => (
+                <li key={l.href}>
+                  <Link
+                    href={l.href}
+                    className="text-sm text-[#4D3D2D]/80 hover:text-[#C48B80] transition-colors"
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-            {isLoggedIn ? (
-              <Link
-                href="/account"
-                className="inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-linear-to-r from-rose-500 to-amber-500 hover:opacity-90 text-white font-heading font-bold text-xs shadow-md transition-opacity"
-              >
-                <UserCircle2 className="w-3.5 h-3.5" />
-                My Account
-              </Link>
-            ) : (
+          {/* Col 4 — About */}
+          <div>
+            <h4 className="text-xs font-bold tracking-[0.14em] uppercase text-[#C48B80] mb-5">
+              About Alvora
+            </h4>
+            <ul className="flex flex-col gap-3">
+              {ABOUT_LINKS.map(l => (
+                <li key={l.href}>
+                  <Link
+                    href={l.href}
+                    className="text-sm text-[#4D3D2D]/80 hover:text-[#C48B80] transition-colors"
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Col 5 — Newsletter */}
+          <div>
+            <h4 className="text-xs font-bold tracking-[0.14em] uppercase text-[#C48B80] mb-5">
+              Stay In Touch
+            </h4>
+            <p className="text-sm text-[#4D3D2D]/80 leading-relaxed mb-4">
+              Get 10% off your first order and skincare tips.
+            </p>
+            <form onSubmit={handleSubscribe} className="flex flex-col gap-2">
+              <label htmlFor="footer-email" className="sr-only">
+                Your email address
+              </label>
+              <input
+                id="footer-email"
+                type="email"
+                required
+                placeholder="Enter your email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                className="alvora-input text-sm py-2.5"
+              />
               <button
-                onClick={() => openAuthModal('login')}
-                className="inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-linear-to-r from-rose-500 to-amber-500 hover:opacity-90 text-white font-heading font-bold text-xs shadow-md transition-opacity"
+                type="submit"
+                className="
+                  flex items-center justify-center gap-2
+                  w-full py-2.5 px-4
+                  bg-[#C48B80] hover:bg-[#4D3D2D]
+                  text-white text-sm font-semibold tracking-wide
+                  transition-colors duration-200
+                "
               >
-                <UserCircle2 className="w-3.5 h-3.5" />
-                Login / Sign Up
+                Subscribe
+                <Send className="w-3.5 h-3.5" />
               </button>
+            </form>
+
+            {subscribed && (
+              <div
+                role="status"
+                aria-live="polite"
+                className="mt-3 flex items-center gap-2 text-xs text-[#4D3D2D] font-medium"
+              >
+                <CheckCircle2 className="w-4 h-4 text-[#C48B80] flex-shrink-0" />
+                <span>You&apos;re subscribed! Check your inbox for your discount.</span>
+              </div>
             )}
           </div>
         </div>
-
-        {/* Footer Bottom Bar */}
-        <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-sm text-white/60">
-          <p className="flex items-center gap-1.5 text-center md:text-left">
-            &copy; {new Date().getFullYear()} {settings.storeName}. All rights reserved.
-          </p>
-
-          <p className="flex items-center gap-1.5 text-center md:text-right text-white/50">
-            <span>Designed &amp; Developed by</span>
-            <a
-              href="https://tecnosphere.com.pk/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="relative inline-block font-heading font-bold bg-linear-to-r from-rose-400 via-amber-400 to-sky-400 bg-clip-text text-transparent bg-[length:200%_auto] animate-[shine_4s_linear_infinite] transition-opacity hover:opacity-80"
-            >
-              TecnoSphere
-            </a>
-          </p>
-        </div>
       </div>
 
-      {/* Local keyframes for the credit-link shine animation */}
-      <style>{`
-        @keyframes shine {
-          0% { background-position: 0% center; }
-          100% { background-position: 200% center; }
-        }
-      `}</style>
+      {/* ── Bottom Bar ── */}
+      <div className="border-t border-[#EDE5DC]">
+        <div className="alvora-container py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-xs text-[#A1A7AA] text-center sm:text-left">
+            &copy; {new Date().getFullYear()} Alvora Skincare. All Rights Reserved.
+          </p>
+          <div className="flex items-center gap-5">
+            <Link href="/privacy-policy" className="text-xs text-[#A1A7AA] hover:text-[#C48B80] transition-colors">
+              Privacy Policy
+            </Link>
+            <Link href="/return-policy" className="text-xs text-[#A1A7AA] hover:text-[#C48B80] transition-colors">
+              Terms of Service
+            </Link>
+          </div>
+        </div>
+      </div>
     </footer>
   );
 };

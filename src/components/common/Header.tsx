@@ -1,301 +1,436 @@
 "use client";
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter, usePathname, useParams } from 'next/navigation';
-import {
-  Search,
-  ShoppingBag,
-  Heart,
-  User,
-  X,
-  ChevronDown
-} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Search, ShoppingBag, Heart, User, X, Menu } from 'lucide-react';
 import { Logo } from './Logo';
 import { useStore } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/formatters';
 import { isProductVisibleOnStorefront } from '../../utils/products';
-import { orderedVisibleNavigation } from '../../config/storeAppearance';
-import { StorefrontNavigationItem } from '../../types';
 import { getSafeImageSrc } from '../../utils/images';
+import { useAuth } from '../../context/AuthContext';
+
+/* ─────────────────────────────────────────────
+   ALVORA — Primary Navigation
+   Design reference: minimal ivory bar, logo left,
+   links center, icons right.
+   ───────────────────────────────────────────── */
+
+const NAV_LINKS = [
+  { label: 'Shop',         href: '/category/all' },
+  { label: 'Best Sellers', href: '/category/all?sort=bestseller' },
+  { label: 'Skincare',     href: '/category/all' },
+  { label: 'About',        href: '/about' },
+];
 
 export const Header: React.FC = () => {
   const { cartTotalItems, wishlist, setIsCartOpen, products, settings } = useStore();
+  const { isLoggedIn, openAuthModal } = useAuth();
+  const router = useRouter();
+
+  // Hydration guard
   const [mounted, setMounted] = useState(false);
-  
+  useEffect(() => setMounted(true), []);
+
+  // Search
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const searchRef = useRef<HTMLDivElement>(null);
+
+  // Mobile drawer
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  // Scroll behaviour
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [hideHeader, setHideHeader] = useState(false);
+  const lastScrollY = useRef(0);
+
   useEffect(() => {
-    setMounted(true);
+    const onScroll = () => {
+      const y = window.scrollY;
+      setIsScrolled(y > 10);
+      setHideHeader(y > lastScrollY.current && y > 120);
+      lastScrollY.current = y;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const [searchQuery, setSearchQuery] = useState('');
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const [openMenuId, setOpenMenuId] = useState('');
-  
-  // Smart Scroll state
-  const [isScrolledDown, setIsScrolledDown] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+  // Open search → focus input
+  useEffect(() => {
+    if (searchOpen) {
+      setTimeout(() => searchInputRef.current?.focus(), 60);
+    } else {
+      setSearchQuery('');
+    }
+  }, [searchOpen]);
 
-  const searchRef = useRef<HTMLDivElement>(null);
-  const navigationRef = useRef<HTMLElement>(null);
-  const router = useRouter();
-  const desktopNavigation = orderedVisibleNavigation(settings, 'desktop');
-  const desktopRoots = desktopNavigation.filter(item => !item.parentId);
+  // Close search on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setSearchOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
 
-  // Filter search autosuggest results
+  // Lock body scroll when mobile drawer is open
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileOpen]);
+
+  // Search results
   const searchResults = searchQuery.trim()
     ? products
         .filter(p =>
           isProductVisibleOnStorefront(p) && (
             p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            p.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            p.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            p.tags.some(t => t.toLowerCase().includes(searchQuery.toLowerCase()))
+            p.category?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            p.tags?.some(t => t.toLowerCase().includes(searchQuery.toLowerCase()))
           )
         )
-        .slice(0, 5)
+        .slice(0, 6)
     : [];
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
-        setIsSearchFocused(false);
-      }
-      if (navigationRef.current && !navigationRef.current.contains(e.target as Node)) setOpenMenuId('');
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    const handleEscape = (event: KeyboardEvent) => { if (event.key === 'Escape') setOpenMenuId(''); };
-    document.addEventListener('keydown', handleEscape);
-    
-    // Smart Scroll logic
-    let lastScrollY = window.scrollY;
-    let ticking = false;
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const currentScrollY = window.scrollY;
-          setIsScrolled(currentScrollY > 20);
-          if (currentScrollY > lastScrollY && currentScrollY > 100) {
-            setIsScrolledDown(true);
-          } else if (currentScrollY < lastScrollY) {
-            setIsScrolledDown(false);
-          }
-          lastScrollY = currentScrollY;
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-    
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleEscape);
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      setIsSearchFocused(false);
+      setSearchOpen(false);
       router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
     }
   };
 
   return (
-    <header 
-      className={`sticky top-0 z-50 transition-all duration-300 ease-out border-b border-slate-100
-        ${isScrolledDown ? '-translate-y-full' : 'translate-y-0'} 
-        ${isScrolled ? 'bg-slate-50/80 backdrop-blur-lg shadow-sm' : 'bg-slate-50 shadow-xs'}`}
-    >
-      {/* Top Announcement Bar - Infinite Marquee */}
-      <div className="bg-white text-slate-600 py-2 border-b border-slate-100 overflow-hidden relative">
-        <style>{`
-          @keyframes announcement-marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-          }
-          .announcement-track {
-            animation: announcement-marquee 22s linear infinite;
-          }
-          .announcement-track:hover {
-            animation-play-state: paused;
-          }
-        `}</style>
-        <div className="flex whitespace-nowrap announcement-track w-max">
+    <>
+      {/* ── Announcement Bar ── */}
+      <div
+        className="w-full overflow-hidden bg-[#FAF6F2] border-b border-[#EDE5DC] py-2 text-[#4D3D2D]"
+        aria-label="Store announcements"
+      >
+        <div className="flex whitespace-nowrap alvora-marquee-track w-max">
           {[...Array(2)].map((_, i) => (
-            <div key={i} className="flex items-center gap-8 px-4">
-              <span className="flex items-center gap-1.5 text-xs sm:text-sm font-bold">
-                <span>🚚</span> Free Shipping All Over Pakistan
+            <div key={i} className="flex items-center gap-10 px-8">
+              <span className="text-xs font-semibold tracking-wide">
+                ✦&nbsp; Free Shipping All Over Pakistan
               </span>
-              <span className="text-slate-300">|</span>
-              <span className="flex items-center gap-1.5 text-xs sm:text-sm font-bold">
-                <span>💳</span> Cash on Delivery (COD) Nationwide
+              <span className="text-[#C48B80]">·</span>
+              <span className="text-xs font-semibold tracking-wide">
+                ✦&nbsp; Cash on Delivery Nationwide
               </span>
-              <span className="text-slate-300">|</span>
-              <span className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-slate-500">
-                <span className="text-amber-400">⭐</span> Rated 4.9/5 by 12,000+ happy parents
+              <span className="text-[#C48B80]">·</span>
+              <span className="text-xs font-semibold tracking-wide">
+                ✦&nbsp; Clean Ingredients &nbsp;·&nbsp; Dermatologically Tested
               </span>
-              <span className="text-slate-300">|</span>
+              <span className="text-[#C48B80]">·</span>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Main Navigation Bar */}
-      <div className="max-w-[1560px] mx-auto px-2 sm:px-6 lg:px-8 py-0">
-        <div className="bg-white rounded-b-3xl sm:rounded-3xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] border border-slate-100 px-4 md:px-8 py-3 md:py-4 flex items-center justify-between gap-3 md:gap-6 xl:gap-10 mt-0 sm:mt-4 mb-0 relative z-50">
-          
-          {/* Logo Component - Left */}
-          <div className="flex-shrink-0 flex items-center justify-start">
-            <Logo size="md" className="scale-95 md:scale-110 origin-left" />
-          </div>
+      {/* ── Main Header ── */}
+      <header
+        className={`
+          sticky top-0 z-50 w-full bg-[#FAF6F2] border-b border-[#EDE5DC]
+          transition-transform duration-300 ease-out
+          ${hideHeader ? '-translate-y-full' : 'translate-y-0'}
+          ${isScrolled ? 'shadow-[0_1px_12px_0_rgb(0_0_0_/_0.05)]' : ''}
+        `}
+      >
+        <div className="alvora-container">
+          <div className="flex items-center justify-between h-16 md:h-18 gap-4">
 
-          {/* Consolidated Desktop Nav */}
-          <nav ref={navigationRef} className="hidden xl:flex items-center gap-8 text-base font-heading font-bold text-slate-600 flex-shrink-0 ml-4">
-            {desktopRoots.map(item => {
-              const children = desktopNavigation.filter(child => child.parentId === item.id && child.visible);
-              return item.menuType === 'dropdown' && children.length > 0 ? (
-              <div key={item.id} className="relative" onMouseEnter={() => item.enabled && setOpenMenuId(item.id)} onMouseLeave={() => setOpenMenuId('')}>
-                <button
-                  type="button"
-                  disabled={!item.enabled}
-                  aria-disabled={!item.enabled}
-                  aria-expanded={openMenuId === item.id}
-                  aria-haspopup="menu"
-                  onClick={() => item.enabled && setOpenMenuId(openMenuId === item.id ? '' : item.id)}
-                  onKeyDown={event => { if (event.key === 'ArrowDown' && item.enabled) { event.preventDefault(); setOpenMenuId(item.id); setTimeout(() => navigationRef.current?.querySelector<HTMLElement>(`[data-menu="${item.id}"] a, [data-menu="${item.id}"] button`)?.focus(), 0); } }}
-                  className="flex items-center gap-1.5 py-1 transition-colors hover:text-rose-500 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-rose-500 disabled:cursor-not-allowed disabled:text-slate-300"
-                  title={item.enabled ? undefined : 'Coming soon'}
-                >
-                  <span>{item.label}</span>
-                  {item.badgeText && <span className="rounded-full bg-rose-100 px-1.5 py-0.5 text-[10px] font-black text-rose-600">{item.badgeText}</span>}
-                  <ChevronDown className="w-4 h-4" />
-                </button>
-                {item.enabled && openMenuId === item.id && <div data-menu={item.id} role="menu" className="absolute left-0 top-full z-50 w-64 rounded-2xl border border-slate-100 bg-white p-2 shadow-xl">
-                  {children.map(child => <NavigationDestination key={child.id} item={child} onNavigate={() => setOpenMenuId('')} className="flex items-center justify-between rounded-xl px-4 py-3 text-base font-semibold text-slate-600 transition-colors hover:bg-rose-50 hover:text-rose-600 focus-visible:outline-2 focus-visible:outline-rose-500" />)}
-                </div>}
-              </div>
-            ) : item.enabled ? (
-              <NavigationDestination key={item.id} item={item} className="flex items-center gap-1.5 transition-colors hover:text-rose-500 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-rose-500" />
-            ) : (
-              <span key={item.id} aria-disabled="true" title="Coming soon" className="flex cursor-not-allowed items-center gap-1.5 text-slate-300">
-                {item.label}{item.badgeText && <span className="rounded-full bg-slate-100 px-1.5 py-0.5 text-[10px]">{item.badgeText}</span>}
-              </span>
-            );})}
-          </nav>
+            {/* Logo */}
+            <Logo size="md" className="flex-shrink-0" />
 
-          {/* Search Bar with Autosuggest - Mobile & Desktop */}
-          <div ref={searchRef} className="flex-1 min-w-0 xl:max-w-xl relative mx-auto block">
-            <form onSubmit={handleSearchSubmit} className="w-full relative flex items-center">
-              <Search className="w-4 h-4 md:w-5 md:h-5 text-slate-400 absolute left-3 md:left-4 pointer-events-none" />
-              <input
-                type="text"
-                placeholder="Search toys..."
-                value={searchQuery}
-                onChange={e => {
-                  setSearchQuery(e.target.value);
-                  setIsSearchFocused(true);
-                }}
-                onFocus={() => setIsSearchFocused(true)}
-                className="w-full pl-9 md:pl-11 pr-8 md:pr-10 py-2.5 md:py-3.5 bg-slate-50 hover:bg-slate-100 focus:bg-white border border-slate-200 focus:border-rose-300 rounded-full text-sm md:text-base font-medium text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-rose-50 transition-all truncate"
-              />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => setSearchQuery('')}
-                  className="absolute right-2 top-2 md:right-3.5 md:top-3.5 p-0.5 text-slate-400 hover:text-slate-600 rounded-full"
+            {/* Desktop Nav — centered */}
+            <nav
+              className="hidden lg:flex items-center gap-8"
+              aria-label="Primary navigation"
+            >
+              {NAV_LINKS.map(link => (
+                <Link
+                  key={link.href + link.label}
+                  href={link.href}
+                  className="
+                    font-body text-sm font-semibold tracking-wide
+                    text-[#1A1A1A] hover:text-[#C48B80]
+                    transition-colors duration-200
+                    relative after:absolute after:bottom-[-3px] after:left-0
+                    after:h-px after:w-0 after:bg-[#C48B80]
+                    after:transition-[width] after:duration-250
+                    hover:after:w-full
+                  "
                 >
-                  <X className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+
+            {/* Right — Icons */}
+            <div className="flex items-center gap-1 md:gap-2 flex-shrink-0">
+
+              {/* Search icon */}
+              <button
+                onClick={() => setSearchOpen(v => !v)}
+                aria-label="Search"
+                className="
+                  p-2 rounded-full text-[#1A1A1A] hover:text-[#C48B80]
+                  hover:bg-[#F5EDE4] transition-colors duration-200
+                "
+              >
+                <Search className="w-5 h-5" />
+              </button>
+
+              {/* Account */}
+              {isLoggedIn ? (
+                <Link
+                  href="/account"
+                  aria-label="My Account"
+                  className="
+                    hidden sm:flex p-2 rounded-full text-[#1A1A1A]
+                    hover:text-[#C48B80] hover:bg-[#F5EDE4] transition-colors
+                  "
+                >
+                  <User className="w-5 h-5" />
+                </Link>
+              ) : (
+                <button
+                  onClick={() => openAuthModal('login')}
+                  aria-label="Sign In"
+                  className="
+                    hidden sm:flex p-2 rounded-full text-[#1A1A1A]
+                    hover:text-[#C48B80] hover:bg-[#F5EDE4] transition-colors
+                  "
+                >
+                  <User className="w-5 h-5" />
                 </button>
               )}
-            </form>
 
-            {/* Live Search Autosuggest Dropdown */}
-            {isSearchFocused && searchQuery.trim().length > 0 && (
-              <div className="absolute top-full left-0 md:right-0 w-[280px] md:w-auto mt-2 bg-white rounded-2xl shadow-xl border border-slate-100 p-3 z-50 overflow-hidden">
-                <div className="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider px-2 mb-2">
-                  Top Matching Toys
-                </div>
-                {searchResults.length === 0 ? (
-                  <p className="text-sm text-slate-500 p-3 text-center">No matching toys found.</p>
-                ) : (
-                  <div className="space-y-1">
-                    {searchResults.map(prod => (
-                      <Link
-                        key={prod.id}
-                        href={`/product/${prod.slug}`}
-                        onClick={() => {
-                          setIsSearchFocused(false);
-                          setSearchQuery('');
-                        }}
-                        className="flex items-center gap-3 p-2 rounded-xl hover:bg-rose-50/80 transition-colors"
-                      >
-                        <img
-                          src={getSafeImageSrc(prod.images[0])}
-                          alt={prod.name}
-                          className="w-8 h-8 md:w-12 md:h-12 object-cover rounded-lg bg-slate-100"
-                        />
-                        <div className="flex-1 min-w-0">
-                          <h4 className="text-xs md:text-sm font-heading font-bold text-slate-800 truncate">
-                            {prod.name}
-                          </h4>
-                          <span className="text-[9px] md:text-xs text-sky-600 font-semibold truncate block">{prod.category || 'Uncategorized'}</span>
-                        </div>
-                        <span className="text-[10px] md:text-sm font-bold text-slate-900 ml-1">{formatPrice(prod.price, settings.currency)}</span>
-                      </Link>
-                    ))}
-                    <button
-                      onClick={handleSearchSubmit}
-                      className="w-full text-center text-xs md:text-sm font-bold text-rose-500 hover:text-rose-600 py-2 pt-2 border-t border-slate-100 mt-1"
-                    >
-                      View all results for "{searchQuery}" &rarr;
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-
-          {/* Quick Actions & Cart / Wishlist */}
-          <div className="flex items-center justify-end gap-2 md:gap-4 lg:gap-7 flex-shrink-0">
-
-            {/* Wishlist */}
-            <Link
-              href="/wishlist"
-              className="hidden xl:flex items-center gap-2.5 group"
-              title="Wishlist"
-            >
-              <div className="relative p-2.5 rounded-full bg-slate-50 group-hover:bg-rose-50 text-slate-600 transition-colors">
-                <Heart className="w-5 h-5 md:w-6 md:h-6" />
-                {wishlist.length > 0 && (
-                  <span className="absolute -top-1 -right-1 w-4.5 h-4.5 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center shadow-xs">
+              {/* Wishlist */}
+              <Link
+                href="/wishlist"
+                aria-label="Wishlist"
+                className="
+                  hidden sm:flex relative p-2 rounded-full text-[#1A1A1A]
+                  hover:text-[#C48B80] hover:bg-[#F5EDE4] transition-colors
+                "
+              >
+                <Heart className="w-5 h-5" />
+                {mounted && wishlist.length > 0 && (
+                  <span className="
+                    absolute top-0.5 right-0.5 w-4 h-4 rounded-full
+                    bg-[#C48B80] text-white text-[9px] font-bold
+                    flex items-center justify-center
+                  ">
                     {wishlist.length}
                   </span>
                 )}
-              </div>
-              <span className="text-base font-heading font-bold text-slate-900">Wishlist</span>
-            </Link>
+              </Link>
 
-            {/* Cart Drawer Trigger Button */}
-            <button
-              onClick={() => setIsCartOpen(true)}
-              className="relative flex items-center gap-1.5 md:gap-2.5 px-3 md:px-6 py-2.5 md:py-3.5 rounded-full bg-gradient-to-r from-rose-500 to-rose-400 hover:from-rose-600 hover:to-rose-500 text-white shadow-[0_4px_14px_rgba(225,29,72,0.3)] transition-all duration-200 active:scale-95"
-            >
-              <ShoppingBag className="w-4 h-4 md:w-5 md:h-5" />
-              <span className="hidden whitespace-nowrap font-heading text-sm font-bold sm:inline-block md:text-base">Cart (<span key={`desktop-cart-${cartTotalItems}`} className="cart-count-pop inline-block">{mounted ? cartTotalItems : 0}</span>)</span>
-              <span key={`mobile-cart-${cartTotalItems}`} className="cart-count-pop inline-block whitespace-nowrap font-heading text-sm font-bold sm:hidden">{mounted ? cartTotalItems : 0}</span>
-            </button>
+              {/* Cart */}
+              <button
+                onClick={() => setIsCartOpen(true)}
+                aria-label={`Cart, ${mounted ? cartTotalItems : 0} items`}
+                className="
+                  relative flex items-center gap-2 px-4 py-2
+                  bg-[#C48B80] hover:bg-[#4D3D2D] text-white
+                  text-sm font-semibold tracking-wide
+                  transition-colors duration-200
+                "
+              >
+                <ShoppingBag className="w-4 h-4 flex-shrink-0" />
+                <span className="hidden sm:inline">Bag</span>
+                {mounted && cartTotalItems > 0 && (
+                  <span
+                    key={cartTotalItems}
+                    className="cart-count-pop inline-flex items-center justify-center w-5 h-5 rounded-full bg-white text-[#C48B80] text-[10px] font-bold"
+                  >
+                    {cartTotalItems}
+                  </span>
+                )}
+              </button>
+
+              {/* Mobile burger */}
+              <button
+                onClick={() => setMobileOpen(true)}
+                aria-label="Open menu"
+                className="
+                  lg:hidden p-2 rounded-full text-[#1A1A1A]
+                  hover:bg-[#F5EDE4] transition-colors
+                "
+              >
+                <Menu className="w-5 h-5" />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    </header>
-  );
-};
 
-const NavigationDestination: React.FC<{ item: StorefrontNavigationItem; className: string; onNavigate?: () => void }> = ({ item, className, onNavigate }) => {
-  const content = <>{item.label}{item.badgeText && <span className="rounded-full bg-rose-100 px-1.5 py-0.5 text-[10px] font-black text-rose-600">{item.badgeText}</span>}</>;
-  if (!item.enabled) return <span role="menuitem" aria-disabled="true" className={`${className} cursor-not-allowed text-slate-300`}>{content}</span>;
-  if (item.linkType === 'external_url') return <a role="menuitem" href={item.externalUrl} target={item.openInNewTab ? '_blank' : undefined} rel={item.openInNewTab ? 'noopener noreferrer' : undefined} onClick={onNavigate} className={className}>{content}</a>;
-  return <Link role="menuitem" href={item.path || '/'} onClick={onNavigate} className={className}>{content}</Link>;
+        {/* ── Search Overlay ── */}
+        {searchOpen && (
+          <div
+            ref={searchRef}
+            className="border-t border-[#EDE5DC] bg-[#FAF6F2] py-4"
+          >
+            <div className="alvora-container">
+              <form onSubmit={handleSearchSubmit} className="relative flex items-center">
+                <Search className="absolute left-4 w-4 h-4 text-[#A1A7AA] pointer-events-none" />
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  placeholder="Search skincare products…"
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  className="
+                    w-full pl-11 pr-12 py-3
+                    bg-white border border-[#EDE5DC]
+                    focus:border-[#C48B80] focus:ring-2 focus:ring-[#C48B80]/15
+                    text-sm text-[#1A1A1A] placeholder-[#A1A7AA]
+                    outline-none transition-all
+                  "
+                />
+                <button
+                  type="button"
+                  onClick={() => setSearchOpen(false)}
+                  aria-label="Close search"
+                  className="absolute right-4 text-[#A1A7AA] hover:text-[#1A1A1A]"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </form>
+
+              {/* Live Results */}
+              {searchResults.length > 0 && (
+                <div className="mt-3 bg-white border border-[#EDE5DC] shadow-lg">
+                  {searchResults.map(prod => (
+                    <Link
+                      key={prod.id}
+                      href={`/product/${prod.slug}`}
+                      onClick={() => setSearchOpen(false)}
+                      className="flex items-center gap-3 px-4 py-3 hover:bg-[#FAF6F2] transition-colors border-b border-[#EDE5DC] last:border-0"
+                    >
+                      <img
+                        src={getSafeImageSrc(prod.images?.[0])}
+                        alt={prod.name}
+                        className="w-10 h-10 object-cover flex-shrink-0 bg-[#F5EDE4]"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-semibold text-[#1A1A1A] truncate">{prod.name}</p>
+                        <p className="text-xs text-[#A1A7AA]">{prod.category}</p>
+                      </div>
+                      <span className="text-sm font-bold text-[#C48B80] flex-shrink-0">
+                        {formatPrice(prod.price, settings?.currency || 'Rs.')}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              )}
+              {searchQuery.trim() && searchResults.length === 0 && (
+                <p className="mt-3 text-sm text-[#A1A7AA] text-center py-2">
+                  No products found for &ldquo;{searchQuery}&rdquo;
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+      </header>
+
+      {/* ── Mobile Drawer ── */}
+      {/* Backdrop */}
+      <div
+        className={`
+          fixed inset-0 z-[60] bg-black/40 backdrop-blur-sm transition-opacity duration-300
+          ${mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
+        `}
+        onClick={() => setMobileOpen(false)}
+        aria-hidden="true"
+      />
+
+      {/* Drawer panel */}
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Navigation menu"
+        className={`
+          fixed top-0 right-0 h-full w-80 max-w-[90vw] z-[61]
+          bg-[#FAF6F2] shadow-2xl flex flex-col
+          transition-transform duration-300 ease-out
+          ${mobileOpen ? 'translate-x-0' : 'translate-x-full'}
+        `}
+      >
+        {/* Drawer header */}
+        <div className="flex items-center justify-between px-6 py-5 border-b border-[#EDE5DC]">
+          <Logo size="sm" />
+          <button
+            onClick={() => setMobileOpen(false)}
+            aria-label="Close menu"
+            className="p-2 text-[#1A1A1A] hover:text-[#C48B80] transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Drawer links */}
+        <nav className="flex-1 overflow-y-auto py-6 px-6 flex flex-col gap-1">
+          {NAV_LINKS.map(link => (
+            <Link
+              key={link.href + link.label}
+              href={link.href}
+              onClick={() => setMobileOpen(false)}
+              className="
+                py-3 text-base font-semibold text-[#1A1A1A]
+                border-b border-[#EDE5DC] hover:text-[#C48B80]
+                transition-colors
+              "
+            >
+              {link.label}
+            </Link>
+          ))}
+          <Link
+            href="/wishlist"
+            onClick={() => setMobileOpen(false)}
+            className="py-3 text-base font-semibold text-[#1A1A1A] border-b border-[#EDE5DC] hover:text-[#C48B80] transition-colors flex items-center justify-between"
+          >
+            <span>Wishlist</span>
+            {mounted && wishlist.length > 0 && (
+              <span className="text-xs font-bold bg-[#C48B80] text-white px-2 py-0.5 rounded-full">
+                {wishlist.length}
+              </span>
+            )}
+          </Link>
+          {isLoggedIn ? (
+            <Link href="/account" onClick={() => setMobileOpen(false)} className="py-3 text-base font-semibold text-[#1A1A1A] hover:text-[#C48B80] transition-colors">
+              My Account
+            </Link>
+          ) : (
+            <button
+              onClick={() => { setMobileOpen(false); openAuthModal('login'); }}
+              className="py-3 text-base font-semibold text-[#1A1A1A] hover:text-[#C48B80] transition-colors text-left"
+            >
+              Sign In / Register
+            </button>
+          )}
+        </nav>
+
+        {/* Drawer CTA */}
+        <div className="px-6 pb-8 pt-4 border-t border-[#EDE5DC]">
+          <button
+            onClick={() => { setMobileOpen(false); setIsCartOpen(true); }}
+            className="btn-primary w-full flex items-center justify-center gap-2"
+          >
+            <ShoppingBag className="w-4 h-4" />
+            View Bag
+            {mounted && cartTotalItems > 0 && (
+              <span className="bg-white text-[#C48B80] rounded-full w-5 h-5 text-xs font-bold flex items-center justify-center">
+                {cartTotalItems}
+              </span>
+            )}
+          </button>
+        </div>
+      </div>
+    </>
+  );
 };

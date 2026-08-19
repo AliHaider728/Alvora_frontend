@@ -1,10 +1,8 @@
 "use client";
 import React from 'react';
 import Link from 'next/link';
-import { useRouter, usePathname, useParams } from 'next/navigation';
-import { useStore } from '../../context/StoreContext';
-import defaultLogoImg from '../../assets/images/play_bimboo_logo_1785311841625.webp';
-import { getSafeImageSrc } from '../../utils/images';
+import Image from 'next/image';
+import alvoraLogoOfficial from '../../assets/images/alvora-logo-official.png';
 
 interface LogoProps {
   className?: string;
@@ -12,25 +10,33 @@ interface LogoProps {
   size?: 'sm' | 'md' | 'lg';
 }
 
-export const Logo: React.FC<LogoProps> = ({ className = '', size = 'md' }) => {
-  const { settings } = useStore();
+const sizeMap = {
+  sm: { height: 36, className: 'h-9' },
+  md: { height: 44, className: 'h-11' },
+  lg: { height: 56, className: 'h-14' },
+};
 
-  const imageSizes = {
-    sm: 'h-8 md:h-9',
-    md: 'h-11 md:h-13',
-    lg: 'h-14 md:h-18'
-  };
-
-  const logoSrc = getSafeImageSrc(settings.logoUrl || (typeof defaultLogoImg === 'string' ? defaultLogoImg : (defaultLogoImg as any).src), { width: 300 });
+export const Logo: React.FC<LogoProps> = ({ className = '', variant = 'dark', size = 'md' }) => {
+  const { height, className: sizeClass } = sizeMap[size];
 
   return (
-    <Link href="/" className={`inline-flex items-center transition-all group ${className}`} title={settings.storeName || 'Alvora Skincare'}>
-      {/* Brand Logo Image Only with transparent background */}
-      <img
-        src={logoSrc}
-        alt={settings.storeName || 'Alvora Skincare'}
-        referrerPolicy="no-referrer"
-        className={`${imageSizes[size]} w-auto object-contain bg-transparent transition-transform duration-300 group-hover:scale-105`}
+    <Link
+      href="/"
+      className={`inline-flex items-center transition-opacity hover:opacity-80 ${className}`}
+      title="Alvora Skincare — Home"
+    >
+      <Image
+        src={alvoraLogoOfficial}
+        alt="Alvora Skincare"
+        height={height}
+        width={height * 2.2} /* aspect ratio ~2.2:1 for the logo */
+        className={`${sizeClass} w-auto object-contain`}
+        priority
+        style={{
+          /* On ivory/peach backgrounds the logo reads well naturally.
+             On dark footer, we add a slight brightness boost. */
+          filter: variant === 'light' ? 'brightness(0) invert(1)' : 'none',
+        }}
       />
     </Link>
   );
