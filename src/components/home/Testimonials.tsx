@@ -71,15 +71,15 @@ export const Testimonials: React.FC<Props> = ({ reviews }) => {
         </div>
 
         {/* Reviews Grid */}
-        <motion.div 
+        <div 
           className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8"
-          variants={contVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
+          
+          
+          
+          
         >
           {realisticReviews.map((review) => (
-            <motion.div key={review.id} variants={animVariants} className="bg-white border border-[#EDE5DC] p-8 flex flex-col h-full rounded-sm">
+            <div key={review.id}  className="bg-white border border-[#EDE5DC] p-8 flex flex-col h-full rounded-sm">
               <Quote className="w-8 h-8 text-[#1A1A1A] mb-6 fill-current" strokeWidth={0} />
               
               <p className="text-[#1A1A1A]/80 leading-relaxed text-base flex-grow mb-8 font-display italic">
@@ -103,9 +103,9 @@ export const Testimonials: React.FC<Props> = ({ reviews }) => {
                   )}
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
 
       </div>
     </section>

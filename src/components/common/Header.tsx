@@ -46,6 +46,22 @@ export const Header: React.FC = () => {
   const [hideHeader, setHideHeader] = useState(false);
   const lastScrollY = useRef(0);
 
+  // ── Header height measurement (fixes content hiding behind fixed header) ──
+  const headerRef = useRef<HTMLElement>(null);
+  const [headerHeight, setHeaderHeight] = useState(0);
+
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+
+    const updateHeight = () => setHeaderHeight(el.offsetHeight);
+    updateHeight();
+
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [searchOpen]); // re-measure when search overlay expands/collapses the header
+
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY;
@@ -108,6 +124,7 @@ export const Header: React.FC = () => {
     <>
       {/* ── Main Header ── */}
       <header
+        ref={headerRef}
         className={`
           fixed top-0 left-0 w-full z-40 bg-[#FAF6F2] transition-transform duration-300
           ${hideHeader ? '-translate-y-full' : 'translate-y-0'}
@@ -318,6 +335,12 @@ export const Header: React.FC = () => {
           </div>
         )}
       </header>
+
+      {/* ── Spacer ──
+          Reserves exactly as much space as the fixed header takes up,
+          so page content (hero, etc.) never renders underneath it.
+          Height updates automatically via ResizeObserver above. */}
+      <div style={{ height: headerHeight }} aria-hidden="true" />
 
       {/* ── Mobile Drawer ── */}
       {/* Backdrop */}

@@ -2,7 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Sparkles, Droplets, Leaf, ShieldCheck } from 'lucide-react';
+import Image from 'next/image';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -32,28 +32,28 @@ export const IngredientSection: React.FC = () => {
       description: 'Visibly brightens skin tone and improves texture.',
       color: 'bg-[#FDF0EC]', // very soft peach
       iconColor: 'text-[#E1A492]',
-      icon: <Sparkles className="w-6 h-6" />
+      icon: <Image src="/images/icons/icon-niacinamide.svg" alt="Niacinamide" width={24} height={24} className="opacity-70" />
     },
     {
       name: 'Hyaluronic Acid',
       description: 'Deeply hydrates and plumps the skin.',
       color: 'bg-[#F0F5FA]', // soft blue
       iconColor: 'text-[#8DB4D2]',
-      icon: <Droplets className="w-6 h-6" />
+      icon: <Image src="/images/icons/icon-hyaluronic-acid.svg" alt="Hyaluronic Acid" width={24} height={24} className="opacity-70" />
     },
     {
       name: 'Centella Asiatica',
       description: 'Calms irritation and supports skin repair.',
       color: 'bg-[#F2F8ED]', // soft green
       iconColor: 'text-[#9CBF86]',
-      icon: <Leaf className="w-6 h-6" />
+      icon: <Image src="/images/icons/icon-centella.svg" alt="Centella Asiatica" width={24} height={24} className="opacity-70" />
     },
     {
       name: 'Ceramides',
       description: 'Strengthen the skin barrier and lock in moisture.',
       color: 'bg-[#FAF5EE]', // soft beige
       iconColor: 'text-[#C9A98F]',
-      icon: <ShieldCheck className="w-6 h-6" />
+      icon: <Image src="/images/icons/icon-ceramides.svg" alt="Ceramides" width={24} height={24} className="opacity-70" />
     }
   ];
 
