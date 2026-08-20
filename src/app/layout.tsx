@@ -28,7 +28,7 @@ const lato = Lato({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Alvora Skincare — Pure Ingredients. Visible Results.',
+    default: 'Alvora Skincare - Premium Skincare',
     template: '%s | Alvora Skincare',
   },
   description:
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     siteName: 'Alvora Skincare',
-    title: 'Alvora Skincare — Pure Ingredients. Visible Results.',
+    title: 'Alvora Skincare - Premium Skincare',
     description:
       'Thoughtfully formulated skincare that nourishes, protects and brings out your most radiant skin.',
   },
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     description: 'Premium skincare formulated with pure ingredients.',
   },
   icons: {
-    icon: '/favicon.ico',
+    icon: '/alvora-logo.png',
   },
 };
 

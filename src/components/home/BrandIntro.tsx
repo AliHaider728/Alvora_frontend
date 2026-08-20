@@ -55,7 +55,7 @@ export const BrandIntro: React.FC = () => {
       <div className="flex flex-col md:flex-row-reverse w-full min-h-[500px]">
         <div className="w-full md:w-1/2 bg-[#1A1A1A] relative aspect-square md:aspect-auto overflow-hidden">
           <Image 
-            src="https://images.unsplash.com/photo-1629198728644-486161a0fb87?q=80&w=800&auto=format&fit=crop" 
+            src="/images/temp/TEMP_PLACEHOLDER.svg" 
             alt="Product in water" 
             fill
             sizes="(max-width: 768px) 100vw, 50vw"

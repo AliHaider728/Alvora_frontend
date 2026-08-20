@@ -101,7 +101,7 @@ export const HeroSection: React.FC = () => {
               className="w-full h-full max-h-[85%] lg:max-h-full bg-[#EADED2] rounded-t-full lg:rounded-tl-full lg:rounded-tr-none lg:rounded-bl-[100px] relative overflow-hidden flex items-end justify-center"
             >
               <Image 
-                src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1200&auto=format&fit=crop" 
+                src="/images/hero/alvora-hero.png" 
                 alt="Alvora Skincare Routine" 
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"

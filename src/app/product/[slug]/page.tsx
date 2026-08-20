@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
     const finalTitle = product.metaTitle || `${product.name} | Alvora Skincare`;
     const finalDesc = product.metaDescription || product.shortDescription || product.description || defaultDesc;
-    const imageUrl = product.images?.[0] || 'https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=1200&q=80';
+    const imageUrl = product.images?.[0] || '/images/hero/alvora-hero.png';
     
     return {
       title: finalTitle,

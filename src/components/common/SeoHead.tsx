@@ -17,7 +17,7 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ title, description, product, c
   const finalTitle = product?.metaTitle || (title ? `${title} | Alvora Skincare` : defaultTitle);
   const finalDesc = description || product?.metaDescription || product?.shortDescription || product?.description || defaultDesc;
   const currentUrl = canonicalUrl || (typeof window !== 'undefined' ? (typeof window !== 'undefined' ? window.location.href : '') : '');
-  const imageUrl = product?.images[0] || 'https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=1200&q=80';
+  const imageUrl = product?.images[0] || '/images/hero/alvora-hero.png';
 
   useEffect(() => {
     // Update Document Title

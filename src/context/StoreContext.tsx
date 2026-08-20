@@ -795,7 +795,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             name: orderData.customerName,
             email: orderData.email,
             phone: orderData.phone,
-            avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
+            avatar: '/images/hero/alvora-hero.png',
             ordersCount: 1,
             totalSpent: orderData.total,
             joinedDate: new Date().toISOString().split('T')[0],
