@@ -30,25 +30,25 @@ export const ConcernGrid: React.FC = () => {
       id: 'hydration',
       name: 'Hydration',
       link: '/category/all?tags=hydrating',
-      bgClass: 'bg-gradient-to-br from-[#8DB4D2] to-[#B0CEDB]'
+      bgClass: 'bg-[#C48B80]' // Terracotta
     },
     {
       id: 'brightening',
       name: 'Brightening',
       link: '/category/all?tags=brightening',
-      bgClass: 'bg-gradient-to-br from-[#E1A492] to-[#F1C9BD]'
+      bgClass: 'bg-[#B8664C]' // Deeper Terracotta
     },
     {
       id: 'acne',
       name: 'Acne & Blemishes',
       link: '/category/all?tags=acne',
-      bgClass: 'bg-gradient-to-br from-[#9CBF86] to-[#CDE2BA]'
+      bgClass: 'bg-[#8C6B61]' // Muted Warm Brown
     },
     {
       id: 'barrier',
       name: 'Skin Barrier',
       link: '/category/all?tags=barrier',
-      bgClass: 'bg-gradient-to-br from-[#EADED2] to-[#F5EDE4]'
+      bgClass: 'bg-[#EADED2]' // Warm beige
     }
   ];
 
@@ -78,8 +78,10 @@ export const ConcernGrid: React.FC = () => {
                 {/* Texture overlay (mocking actual image) */}
                 <div className="absolute inset-0 bg-black/10 mix-blend-overlay opacity-50 group-hover:scale-105 transition-transform duration-700"></div>
                 
-                {/* Gradient for text contrast */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                {/* Solid charcoal overlay for consistent text contrast */}
+                <div className="absolute inset-0 bg-[#1A1A1A]/40 group-hover:bg-[#1A1A1A]/50 transition-colors duration-500"></div>
+                {/* Gradient for extra pop at the bottom */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A]/70 via-[#1A1A1A]/20 to-transparent"></div>
 
                 <div className="relative z-10 transition-transform duration-500 group-hover:-translate-y-2">
                   <h3 className="font-display text-3xl mb-2 text-white text-shadow-sm">

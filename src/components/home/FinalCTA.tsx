@@ -59,8 +59,7 @@ export const FinalCTA: React.FC = () => {
         </div>
       </div>
       
-      {/* Background soft pattern */}
-      <div className="absolute inset-0 opacity-20 bg-gradient-to-r from-black/10 to-transparent mix-blend-overlay"></div>
+      
     </section>
   );
 };
