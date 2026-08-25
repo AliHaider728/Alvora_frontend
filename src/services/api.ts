@@ -1,4 +1,12 @@
 // Alvora Skincare Unified Backend API Client
+
+import { MOCK_PRODUCTS } from '../data/mock/products';
+import { MOCK_CATEGORIES } from '../data/mock/categories';
+import { MOCK_SETTINGS } from '../data/mock/settings';
+import { MOCK_REVIEWS } from '../data/mock/reviews';
+
+const USE_MOCK_DATA = process.env.NEXT_PUBLIC_ALVORA_USE_MOCK_DATA === 'true';
+
 export const API_BASE_URL = process.env.NEXT_PUBLIC_ALVORA_API_URL || 'http://localhost:6000/api';
 
 // Helper for Token Management
@@ -101,7 +109,13 @@ export const api = {
     return fetchJson<any[]>(`/products?${query}`);
   },
 
-  getProduct: (idOrSlug: string) => fetchJson<any>(`/products/${idOrSlug}`),
+  getProduct: async (idOrSlug: string) => {
+    if (USE_MOCK_DATA) {
+      const p = MOCK_PRODUCTS.find(p => p.id === idOrSlug || p.slug === idOrSlug);
+      return p ? Promise.resolve(p) : Promise.resolve(null);
+    }
+    return fetchJson<any>(`/products/${idOrSlug}`);
+  },
   getRelatedProducts: (idOrSlug: string) => fetchJson<any[]>(`/products/${idOrSlug}/related`),
   createProduct: (data: any) => fetchJson<any>('/products', { method: 'POST', body: JSON.stringify(data) }),
   updateProduct: (id: string, data: any) => fetchJson<any>(`/products/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
@@ -109,7 +123,10 @@ export const api = {
   deleteProduct: (id: string) => fetchJson<any>(`/products/${id}`, { method: 'DELETE' }),
 
   // Categories
-  getCategories: () => fetchJson<any[]>('/categories'),
+  getCategories: async () => {
+    if (USE_MOCK_DATA) return Promise.resolve(MOCK_CATEGORIES);
+    return fetchJson<any[]>('/categories');
+  },
   getAdminCategories: () => fetchJson<any[]>('/categories/admin/all'),
   createCategory: (data: any) => fetchJson<any>('/categories', { method: 'POST', body: JSON.stringify(data) }),
   updateCategory: (id: string, data: any) => fetchJson<any>(`/categories/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
@@ -151,7 +168,10 @@ export const api = {
   updateContactStatus: (id: string, status: string) => fetchJson<any>(`/contact/${id}/status`, { method: 'PUT', body: JSON.stringify({ status }) }),
 
   // Settings
-  getSettings: () => fetchJson<any>('/settings'),
+  getSettings: async () => {
+    if (USE_MOCK_DATA) return Promise.resolve(MOCK_SETTINGS);
+    return fetchJson<any>('/settings');
+  },
   getAdminAppearance: () => fetchJson<any>('/settings/appearance/admin'),
   updateSettings: (data: any) => fetchJson<any>('/settings', { method: 'PUT', body: JSON.stringify(data) }),
   updateAppearance: (data: any) => fetchJson<any>('/settings/appearance', { method: 'PUT', body: JSON.stringify(data) }),
