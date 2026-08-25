@@ -129,23 +129,26 @@ export const HeroSection: React.FC = () => {
             whileInView={shouldReduceMotion ? undefined : { opacity: 1, x: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
             viewport={{ once: true }}
-            className="relative min-h-[470px] lg:min-h-[690px] w-full"
+            className="relative min-h-[470px] overflow-hidden lg:min-h-[690px]"
           >
-            {/* Peach visual background with organic sweeping curve */}
-            <div className="absolute inset-y-0 right-0 w-full lg:w-[115%] bg-[#EFCDBE] rounded-l-none lg:rounded-l-[150px] xl:rounded-l-[250px] -z-0" />
+            {/* Peach visual background */}
+            <div className="absolute inset-0 bg-[#EFCDBE]" />
+
+            {/* Organic left curve */}
+            <div className="absolute -left-[17%] -top-[8%] z-[1] h-[55%] w-[38%] rounded-[50%] bg-[#FAF6F2]" />
 
             {/* Soft light */}
             <div className="absolute right-[5%] top-[8%] z-[1] h-[55%] w-[70%] rounded-full bg-white/25 blur-3xl" />
 
             {/* PRODUCT IMAGE */}
-            <div className="absolute inset-0 z-10 lg:-left-[15%]">
+            <div className="absolute inset-0 z-10">
               <Image
                 src="/images/hero/alvora-hero.png"
                 alt="ALVORA skincare products"
                 fill
                 priority
-                sizes="(max-width: 1024px) 100vw, 65vw"
-                className="object-cover object-bottom lg:object-[center_bottom]"
+                sizes="(max-width: 1024px) 100vw, 57vw"
+                className="object-contain object-center lg:object-cover lg:object-right"
               />
             </div>
 
