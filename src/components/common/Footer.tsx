@@ -125,7 +125,7 @@ export const Footer: React.FC = () => {
             </h4>
             <ul className="flex flex-col gap-3">
               {SHOP_LINKS.map(l => (
-                <li key={l.href}>
+                <li key={l.href + l.label}>
                   <Link
                     href={l.href}
                     className="text-xs font-semibold text-[#1A1A1A]/70 hover:text-[#C48B80] transition-colors"
@@ -144,7 +144,7 @@ export const Footer: React.FC = () => {
             </h4>
             <ul className="flex flex-col gap-3">
               {ABOUT_LINKS.map(l => (
-                <li key={l.href}>
+                <li key={l.href + l.label}>
                   <Link
                     href={l.href}
                     className="text-xs font-semibold text-[#1A1A1A]/70 hover:text-[#C48B80] transition-colors"
@@ -163,7 +163,7 @@ export const Footer: React.FC = () => {
             </h4>
             <ul className="flex flex-col gap-3">
               {HELP_LINKS.map(l => (
-                <li key={l.href}>
+                <li key={l.href + l.label}>
                   <Link
                     href={l.href}
                     className="text-xs font-semibold text-[#1A1A1A]/70 hover:text-[#C48B80] transition-colors"

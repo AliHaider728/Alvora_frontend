@@ -24,11 +24,14 @@ export default function TikTokPixel() {
   }, [pathname]);
 
   if (!TIKTOK_PIXEL_ID) {
-    console.error("[TikTokPixel] NEXT_PUBLIC_TIKTOK_PIXEL_ID is undefined!");
+    if (process.env.NODE_ENV === "development" && typeof window !== "undefined") {
+      if (!(window as any).__tiktok_warned) {
+        console.warn("[TikTokPixel] NEXT_PUBLIC_ALVORA_TIKTOK_PIXEL_ID is undefined. Pixel loading disabled.");
+        (window as any).__tiktok_warned = true;
+      }
+    }
     return null;
   }
-
-  console.log("[TikTokPixel] Initializing with ID:", TIKTOK_PIXEL_ID);
 
   return (
     <>
