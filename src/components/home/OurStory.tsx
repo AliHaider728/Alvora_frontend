@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Leaf, Recycle, HeartHandshake } from 'lucide-react';
 
 export const OurStory: React.FC = () => {
@@ -9,17 +10,8 @@ export const OurStory: React.FC = () => {
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center">
           
           {/* Left: Image Placeholder */}
-          <div className="w-full lg:w-1/2 relative min-h-[400px] lg:min-h-[600px] bg-gradient-to-tr from-[#F1C9BD] to-[#F5EDE4] overflow-hidden">
-             {/* Decorative element serving as placeholder for lifestyle image */}
-             <div className="absolute inset-0 flex items-center justify-center opacity-30">
-               <div className="w-[150%] h-[150%] rounded-full border border-white/40 -translate-x-1/4 -translate-y-1/4"></div>
-               <div className="absolute w-[100%] h-[100%] rounded-full border border-white/60 translate-x-1/4 translate-y-1/4"></div>
-             </div>
-             
-             <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
-                <span className="font-display text-4xl text-[#4D3D2D]/60 tracking-wider">Beauty in</span>
-                <span className="font-display text-5xl text-[#4D3D2D]/80 tracking-wider italic mt-2">Simplicity</span>
-             </div>
+          <div className="w-full lg:w-1/2 relative min-h-[400px] lg:min-h-[600px] overflow-hidden">
+             <Image src="/images/our-story-lifestyle.jpg" alt="Alvora Skincare lifestyle" fill className="object-cover" />
           </div>
 
           {/* Right: Content */}

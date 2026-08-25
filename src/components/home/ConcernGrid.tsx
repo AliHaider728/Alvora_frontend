@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion, useReducedMotion } from 'framer-motion';
 
 const containerVariants = {
@@ -30,25 +31,25 @@ export const ConcernGrid: React.FC = () => {
       id: 'hydration',
       name: 'Hydration',
       link: '/category/all?tags=hydrating',
-      bgClass: 'bg-[#C48B80]' // Terracotta
+      image: '/images/concern-hydration.jpg'
     },
     {
       id: 'brightening',
       name: 'Brightening',
       link: '/category/all?tags=brightening',
-      bgClass: 'bg-[#B8664C]' // Deeper Terracotta
+      image: '/images/concern-brightening.jpg'
     },
     {
       id: 'acne',
       name: 'Acne & Blemishes',
       link: '/category/all?tags=acne',
-      bgClass: 'bg-[#8C6B61]' // Muted Warm Brown
+      image: '/images/concern-acne.jpg'
     },
     {
       id: 'barrier',
       name: 'Skin Barrier',
       link: '/category/all?tags=barrier',
-      bgClass: 'bg-[#EADED2]' // Warm beige
+      image: '/images/concern-barrier.jpg'
     }
   ];
 
@@ -83,7 +84,7 @@ export const ConcernGrid: React.FC = () => {
                 {/* Gradient for extra pop at the bottom */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A]/70 via-[#1A1A1A]/20 to-transparent"></div>
 
-                <div className="relative z-10 transition-transform duration-500 group-hover:-translate-y-2">
+                <div className="relative z-20 transition-transform duration-500 group-hover:-translate-y-2">
                   <h3 className="font-display text-3xl mb-2 text-white text-shadow-sm">
                     {concern.name}
                   </h3>
