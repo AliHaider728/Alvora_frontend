@@ -11,7 +11,7 @@ export const OurStory: React.FC = () => {
           
           {/* Left: Image Placeholder */}
           <div className="w-full lg:w-1/2 relative min-h-[400px] lg:min-h-[600px] overflow-hidden">
-             <Image src="/images/our-story-lifestyle.jpg" alt="Alvora Skincare lifestyle" fill className="object-cover" />
+             <Image src="/images/our-story-lifestyle.jpg" alt="Alvora Skincare lifestyle" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
           </div>
 
           {/* Right: Content */}

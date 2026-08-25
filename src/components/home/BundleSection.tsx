@@ -106,7 +106,7 @@ export const BundleSection: React.FC = () => {
                   <div className="flex -space-x-12 relative z-0 group-hover:scale-105 transition-transform duration-500">
                     {bundleProducts.slice(0, 3).map((p, i) => (
                       <div key={p.id} className="relative w-32 h-40 drop-shadow-lg" style={{ zIndex: 3 - i }}>
-                        <Image src={p.images[0]} alt={p.name} fill className="object-contain" />
+                        <Image src={p.images[0]} alt={p.name} fill sizes="150px" className="object-contain" />
                       </div>
                     ))}
                   </div>

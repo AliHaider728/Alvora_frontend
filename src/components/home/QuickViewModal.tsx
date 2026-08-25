@@ -30,6 +30,7 @@ export const QuickViewModal: React.FC<Props> = ({ product, onClose, onAddToCart 
               src={getSafeImageSrc(product.images?.[0]) || '/placeholder.png'}
               alt={product.name}
               fill
+              sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover"
             />
           </div>
