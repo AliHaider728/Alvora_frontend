@@ -1,26 +1,22 @@
 "use client";
-import React, { useState, useRef, useEffect } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { Search, ShoppingBag, Heart, User, X, Menu } from 'lucide-react';
-import { Logo } from './Logo';
-import { useStore } from '../../context/StoreContext';
-import { formatPrice } from '../../utils/formatters';
-import { isProductVisibleOnStorefront } from '../../utils/products';
-import { getSafeImageSrc } from '../../utils/images';
-import { useAuth } from '../../context/AuthContext';
 
-/* ─────────────────────────────────────────────
-   ALVORA — Primary Navigation
-   Design reference: minimal ivory bar, logo left,
-   links center, icons right.
-   ───────────────────────────────────────────── */
+import React, { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Search, ShoppingBag, Heart, User, X, Menu } from "lucide-react";
+
+import { Logo } from "./Logo";
+import { useStore } from "../../context/StoreContext";
+import { formatPrice } from "../../utils/formatters";
+import { isProductVisibleOnStorefront } from "../../utils/products";
+import { getSafeImageSrc } from "../../utils/images";
+import { useAuth } from "../../context/AuthContext";
 
 const NAV_LINKS = [
-  { label: 'Shop',         href: '/category/all' },
-  { label: 'Best Sellers', href: '/category/all?sort=bestseller' },
-  { label: 'Skincare',     href: '/category/all' },
-  { label: 'About',        href: '/about' },
+  { label: "Shop", href: "/category/all" },
+  { label: "Best Sellers", href: "/category/all?sort=bestseller" },
+  { label: "Skincare", href: "/category/all" },
+  { label: "About", href: "/about" },
 ];
 
 export const Header: React.FC = () => {
@@ -28,183 +24,170 @@ export const Header: React.FC = () => {
   const { isLoggedIn, openAuthModal } = useAuth();
   const router = useRouter();
 
-  // Hydration guard
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-
-  // Search
   const [searchOpen, setSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
-
-  // Mobile drawer
-  const [mobileOpen, setMobileOpen] = useState(false);
-
-  // Scroll behaviour
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [hideHeader, setHideHeader] = useState(false);
-  const lastScrollY = useRef(0);
-
-  // ── Header height measurement (fixes content hiding behind fixed header) ──
   const headerRef = useRef<HTMLElement>(null);
+
   const [headerHeight, setHeaderHeight] = useState(0);
 
   useEffect(() => {
-    const el = headerRef.current;
-    if (!el) return;
+    setMounted(true);
+  }, []);
 
-    const updateHeight = () => setHeaderHeight(el.offsetHeight);
+  // Measure header height
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+
+    const updateHeight = () => setHeaderHeight(header.offsetHeight);
     updateHeight();
 
     const observer = new ResizeObserver(updateHeight);
-    observer.observe(el);
+    observer.observe(header);
+
     return () => observer.disconnect();
-  }, [searchOpen]); // re-measure when search overlay expands/collapses the header
-
-  useEffect(() => {
-    const onScroll = () => {
-      const y = window.scrollY;
-      setIsScrolled(y > 10);
-      setHideHeader(y > lastScrollY.current && y > 120);
-      lastScrollY.current = y;
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  // Open search → focus input
-  useEffect(() => {
-    if (searchOpen) {
-      setTimeout(() => searchInputRef.current?.focus(), 60);
-    } else {
-      setSearchQuery('');
-    }
   }, [searchOpen]);
 
-  // Close search on outside click
+  // Scroll state
   useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+    const handleScroll = () => setIsScrolled(window.scrollY > 8);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Search focus
+  useEffect(() => {
+    if (searchOpen) {
+      const timer = window.setTimeout(() => searchInputRef.current?.focus(), 80);
+      return () => window.clearTimeout(timer);
+    }
+    setSearchQuery("");
+  }, [searchOpen]);
+
+  // Close search when clicking outside
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
         setSearchOpen(false);
       }
     };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
 
-  // Lock body scroll when mobile drawer is open
+  // Lock body while mobile menu is open
   useEffect(() => {
-    document.body.style.overflow = mobileOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [mobileOpen]);
 
   // Search results
   const searchResults = searchQuery.trim()
     ? products
-        .filter(p =>
-          isProductVisibleOnStorefront(p) && (
-            p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            p.category?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            p.tags?.some(t => t.toLowerCase().includes(searchQuery.toLowerCase()))
-          )
-        )
+        .filter((product) => {
+          if (!isProductVisibleOnStorefront(product)) return false;
+          const query = searchQuery.toLowerCase();
+          return (
+            product.name.toLowerCase().includes(query) ||
+            product.category?.toLowerCase().includes(query) ||
+            product.tags?.some((tag) => tag.toLowerCase().includes(query))
+          );
+        })
         .slice(0, 6)
     : [];
 
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      setSearchOpen(false);
-      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
-    }
+  const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const query = searchQuery.trim();
+    if (!query) return;
+    setSearchOpen(false);
+    router.push(`/search?q=${encodeURIComponent(query)}`);
   };
 
   return (
     <>
-      {/* ── Main Header ── */}
+      {/* FIXED HEADER */}
       <header
         ref={headerRef}
-        className={`
-          fixed top-0 left-0 w-full z-40 bg-[#FAF6F2] transition-transform duration-300
-          ${hideHeader ? '-translate-y-full' : 'translate-y-0'}
-          ${isScrolled ? 'shadow-[0_1px_12px_0_rgb(0_0_0_/_0.05)]' : ''}
-        `}
+        className={`fixed inset-x-0 top-0 z-50 bg-[#FAF6F2] text-[#241916] transition-shadow duration-300 ${isScrolled ? "shadow-[0_4px_24px_rgba(36,25,22,0.06)]" : ""}`}
       >
-        {/* Top Banner */}
-        <div className="bg-[#C48B80] text-white text-[10px] font-semibold tracking-[0.15em] uppercase text-center py-2 px-4">
-          FREE SHIPPING ON ORDERS OVER $75 • 30-DAY RETURNS • SAMPLES WITH EVERY ORDER
+        {/* SHIPPING BAR */}
+        <div className="flex min-h-[32px] items-center justify-center bg-[#C87355] px-4 text-center text-[11px] font-medium uppercase tracking-[0.14em] text-white sm:min-h-[34px] sm:text-xs">
+          FREE SHIPPING ON ORDERS OVER $75
+          <span className="mx-2 opacity-60">•</span>
+          30-DAY RETURNS
+          <span className="mx-2 hidden opacity-60 sm:inline">•</span>
+          <span className="hidden sm:inline">SAMPLES WITH EVERY ORDER</span>
         </div>
 
-        <div className="alvora-container">
-          <div className="flex items-center justify-between h-16 md:h-18 gap-4">
-
-            {/* Desktop Nav — left */}
-            <nav
-              className="hidden lg:flex items-center gap-10 xl:gap-14 w-1/3"
-              aria-label="Primary navigation"
-            >
-              {NAV_LINKS.map(link => (
+        {/* MAIN NAVIGATION */}
+        <div className="mx-auto w-full max-w-[1500px] px-5 sm:px-8 lg:px-12">
+          <div className="relative flex h-[76px] items-center justify-between lg:h-[84px]">
+            {/* LEFT NAVIGATION */}
+            <nav aria-label="Primary navigation" className="hidden items-center gap-7 lg:flex xl:gap-9">
+              {NAV_LINKS.map((link) => (
                 <Link
-                  key={link.href + link.label}
+                  key={`${link.href}-${link.label}`}
                   href={link.href}
-                  className="
-                    font-body text-[11px] font-bold tracking-[0.2em] uppercase
-                    text-[#1A1A1A] hover:text-[#C48B80]
-                    transition-colors duration-200
-                    relative after:absolute after:bottom-[-3px] after:left-0
-                    after:h-px after:w-0 after:bg-[#C48B80]
-                    after:transition-[width] after:duration-250
-                    hover:after:w-full
-                  "
+                  className="relative text-[13px] font-medium uppercase tracking-[0.11em] text-[#2A211E] transition-colors duration-200 hover:text-[#A86249] after:absolute after:-bottom-2 after:left-0 after:h-px after:w-0 after:bg-[#A86249] after:transition-all after:duration-300 hover:after:w-full"
                 >
                   {link.label}
                 </Link>
               ))}
             </nav>
 
-            {/* Logo - center */}
-            <div className="w-1/3 flex justify-center">
-              <Logo size="md" className="flex-shrink-0" />
+            {/* MOBILE MENU BUTTON */}
+            <button
+              type="button"
+              onClick={() => setMobileOpen(true)}
+              aria-label="Open navigation menu"
+              className="rounded-full p-2 text-[#241916] transition-colors hover:bg-[#F2E7DF] lg:hidden"
+            >
+              <Menu className="h-5 w-5" strokeWidth={1.4} />
+            </button>
+
+            {/* CENTER LOGO */}
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+              <Logo size="md" className="block" />
             </div>
 
-            {/* Right — Icons */}
-            <div className="flex items-center justify-end gap-1 md:gap-2 flex-shrink-0 w-1/3">
-
-              {/* Search icon */}
+            {/* RIGHT ACTIONS */}
+            <div className="ml-auto flex items-center gap-1 sm:gap-2">
+              {/* Search */}
               <button
-                onClick={() => setSearchOpen(v => !v)}
+                type="button"
+                onClick={() => setSearchOpen((value) => !value)}
                 aria-label="Search"
-                className="
-                  p-2 rounded-full text-[#1A1A1A] hover:text-[#C48B80]
-                  hover:bg-[#F5EDE4] transition-colors duration-200
-                "
+                className="rounded-full p-2 text-[#241916] transition-colors hover:bg-[#F2E7DF] hover:text-[#A86249]"
               >
-                <Search className="w-5 h-5" />
+                <Search className="h-[19px] w-[19px]" strokeWidth={1.35} />
               </button>
 
               {/* Account */}
               {isLoggedIn ? (
                 <Link
                   href="/account"
-                  aria-label="My Account"
-                  className="
-                    hidden sm:flex p-2 rounded-full text-[#1A1A1A]
-                    hover:text-[#C48B80] hover:bg-[#F5EDE4] transition-colors
-                  "
+                  aria-label="My account"
+                  className="hidden rounded-full p-2 text-[#241916] transition-colors hover:bg-[#F2E7DF] hover:text-[#A86249] sm:flex"
                 >
-                  <User className="w-5 h-5" />
+                  <User className="h-[19px] w-[19px]" strokeWidth={1.35} />
                 </Link>
               ) : (
                 <button
-                  onClick={() => openAuthModal('login')}
-                  aria-label="Sign In"
-                  className="
-                    hidden sm:flex p-2 rounded-full text-[#1A1A1A]
-                    hover:text-[#C48B80] hover:bg-[#F5EDE4] transition-colors
-                  "
+                  type="button"
+                  onClick={() => openAuthModal("login")}
+                  aria-label="Sign in"
+                  className="hidden rounded-full p-2 text-[#241916] transition-colors hover:bg-[#F2E7DF] hover:text-[#A86249] sm:flex"
                 >
-                  <User className="w-5 h-5" />
+                  <User className="h-[19px] w-[19px]" strokeWidth={1.35} />
                 </button>
               )}
 
@@ -212,18 +195,11 @@ export const Header: React.FC = () => {
               <Link
                 href="/wishlist"
                 aria-label="Wishlist"
-                className="
-                  hidden sm:flex relative p-2 rounded-full text-[#1A1A1A]
-                  hover:text-[#C48B80] hover:bg-[#F5EDE4] transition-colors
-                "
+                className="relative hidden rounded-full p-2 text-[#241916] transition-colors hover:bg-[#F2E7DF] hover:text-[#A86249] sm:flex"
               >
-                <Heart className="w-5 h-5" />
+                <Heart className="h-[19px] w-[19px]" strokeWidth={1.35} />
                 {mounted && wishlist.length > 0 && (
-                  <span className="
-                    absolute top-0.5 right-0.5 w-4 h-4 rounded-full
-                    bg-[#C48B80] text-white text-[9px] font-bold
-                    flex items-center justify-center
-                  ">
+                  <span className="absolute right-0 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#C87355] px-1 text-[9px] font-bold text-white">
                     {wishlist.length}
                   </span>
                 )}
@@ -231,207 +207,173 @@ export const Header: React.FC = () => {
 
               {/* Cart */}
               <button
+                type="button"
                 onClick={() => setIsCartOpen(true)}
-                aria-label={`Cart, ${mounted ? cartTotalItems : 0} items`}
-                className="
-                  relative p-2 rounded-full text-[#1A1A1A]
-                  hover:text-[#C48B80] hover:bg-[#F5EDE4] transition-colors
-                "
+                aria-label={`Shopping bag, ${mounted ? cartTotalItems : 0} items`}
+                className="relative rounded-full p-2 text-[#241916] transition-colors hover:bg-[#F2E7DF] hover:text-[#A86249]"
               >
-                <ShoppingBag className="w-5 h-5 flex-shrink-0" />
+                <ShoppingBag className="h-[19px] w-[19px]" strokeWidth={1.35} />
                 {mounted && cartTotalItems > 0 && (
-                  <span
-                    key={cartTotalItems}
-                    className="absolute top-0.5 right-0.5 w-4 h-4 rounded-full bg-[#C48B80] text-white text-[9px] font-bold flex items-center justify-center cart-count-pop"
-                  >
+                  <span className="absolute right-0 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#C87355] px-1 text-[9px] font-bold text-white">
                     {cartTotalItems}
                   </span>
                 )}
-              </button>
-
-              {/* Mobile burger */}
-              <button
-                onClick={() => setMobileOpen(true)}
-                aria-label="Open menu"
-                className="
-                  lg:hidden p-2 rounded-full text-[#1A1A1A]
-                  hover:bg-[#F5EDE4] transition-colors
-                "
-              >
-                <Menu className="w-5 h-5" />
               </button>
             </div>
           </div>
         </div>
 
-        {/* ── Search Overlay ── */}
+        {/* SEARCH PANEL */}
         {searchOpen && (
-          <div
-            ref={searchRef}
-            className="border-t border-[#EDE5DC] bg-[#FAF6F2] py-4"
-          >
-            <div className="alvora-container">
-              <form onSubmit={handleSearchSubmit} className="relative flex items-center">
-                <Search className="absolute left-4 w-4 h-4 text-[#A1A7AA] pointer-events-none" />
+          <div ref={searchRef} className="border-t border-[#E7D9D0] bg-[#FAF6F2] px-5 py-4 sm:px-8 lg:px-12">
+            <div className="mx-auto max-w-[1500px]">
+              <form onSubmit={handleSearchSubmit} className="relative">
+                <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#9A8177]" strokeWidth={1.5} />
                 <input
                   ref={searchInputRef}
                   type="text"
-                  placeholder="Search skincare products…"
                   value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
-                  className="
-                    w-full pl-11 pr-12 py-3
-                    bg-white border border-[#EDE5DC]
-                    focus:border-[#C48B80] focus:ring-2 focus:ring-[#C48B80]/15
-                    text-sm text-[#1A1A1A] placeholder-[#A1A7AA]
-                    outline-none transition-all
-                  "
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  placeholder="Search skincare products..."
+                  className="h-12 w-full border border-[#E2D2C9] bg-white pl-11 pr-12 text-sm text-[#241916] outline-none transition-colors placeholder:text-[#AA958B] focus:border-[#C87355]"
                 />
                 <button
                   type="button"
                   onClick={() => setSearchOpen(false)}
                   aria-label="Close search"
-                  className="absolute right-4 text-[#A1A7AA] hover:text-[#1A1A1A]"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-2 text-[#806960] hover:bg-[#F2E7DF]"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="h-4 w-4" strokeWidth={1.5} />
                 </button>
               </form>
 
-              {/* Live Results */}
               {searchResults.length > 0 && (
-                <div className="mt-3 bg-white border border-[#EDE5DC] shadow-lg">
-                  {searchResults.map(prod => (
+                <div className="mt-3 overflow-hidden border border-[#E2D2C9] bg-white">
+                  {searchResults.map((product) => (
                     <Link
-                      key={prod.id}
-                      href={`/product/${prod.slug}`}
+                      key={product.id}
+                      href={`/product/${product.slug}`}
                       onClick={() => setSearchOpen(false)}
-                      className="flex items-center gap-3 px-4 py-3 hover:bg-[#FAF6F2] transition-colors border-b border-[#EDE5DC] last:border-0"
+                      className="flex items-center gap-3 border-b border-[#EEE3DC] px-4 py-3 last:border-b-0 hover:bg-[#FAF6F2]"
                     >
                       <img
-                        src={getSafeImageSrc(prod.images?.[0])}
-                        alt={prod.name}
-                        className="w-10 h-10 object-cover flex-shrink-0 bg-[#F5EDE4]"
+                        src={getSafeImageSrc(product.images?.[0])}
+                        alt={product.name}
+                        className="h-11 w-11 shrink-0 bg-[#F5EDE4] object-cover"
                       />
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold text-[#1A1A1A] truncate">{prod.name}</p>
-                        <p className="text-xs text-[#A1A7AA]">{prod.category}</p>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-medium text-[#241916]">{product.name}</p>
+                        <p className="mt-0.5 text-xs text-[#998279]">{product.category}</p>
                       </div>
-                      <span className="text-sm font-bold text-[#C48B80] flex-shrink-0">
-                        {formatPrice(prod.price, settings?.currency || 'Rs.')}
+                      <span className="shrink-0 text-sm font-medium text-[#A86249]">
+                        {formatPrice(product.price, settings?.currency || "Rs.")}
                       </span>
                     </Link>
                   ))}
                 </div>
               )}
+
               {searchQuery.trim() && searchResults.length === 0 && (
-                <p className="mt-3 text-sm text-[#A1A7AA] text-center py-2">
-                  No products found for &ldquo;{searchQuery}&rdquo;
-                </p>
+                <p className="py-4 text-center text-sm text-[#998279]">No products found for &ldquo;{searchQuery}&rdquo;</p>
               )}
             </div>
           </div>
         )}
       </header>
 
-      {/* ── Spacer ──
-          Reserves exactly as much space as the fixed header takes up,
-          so page content (hero, etc.) never renders underneath it.
-          Height updates automatically via ResizeObserver above. */}
+      {/* HEADER SPACER — keeps the hero below the fixed header */}
       <div style={{ height: headerHeight }} aria-hidden="true" />
 
-      {/* ── Mobile Drawer ── */}
-      {/* Backdrop */}
+      {/* MOBILE DRAWER BACKDROP */}
       <div
-        className={`
-          fixed inset-0 z-[60] bg-black/40 backdrop-blur-sm transition-opacity duration-300
-          ${mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
-        `}
+        className={`fixed inset-0 z-[60] bg-black/35 backdrop-blur-[2px] transition-opacity duration-300 ${mobileOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
         onClick={() => setMobileOpen(false)}
         aria-hidden="true"
       />
 
-      {/* Drawer panel */}
-      <div
+      {/* MOBILE DRAWER */}
+      <aside
         role="dialog"
         aria-modal="true"
-        aria-label="Navigation menu"
-        className={`
-          fixed top-0 right-0 h-full w-80 max-w-[90vw] z-[61]
-          bg-[#FAF6F2] shadow-2xl flex flex-col
-          transition-transform duration-300 ease-out
-          ${mobileOpen ? 'translate-x-0' : 'translate-x-full'}
-        `}
+        aria-label="Mobile navigation"
+        className={`fixed right-0 top-0 z-[61] flex h-full w-[320px] max-w-[88vw] flex-col bg-[#FAF6F2] shadow-2xl transition-transform duration-300 ${mobileOpen ? "translate-x-0" : "translate-x-full"}`}
       >
-        {/* Drawer header */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-[#EDE5DC]">
+        <div className="flex items-center justify-between border-b border-[#E7D9D0] px-6 py-5">
           <Logo size="sm" />
           <button
+            type="button"
             onClick={() => setMobileOpen(false)}
             aria-label="Close menu"
-            className="p-2 text-[#1A1A1A] hover:text-[#C48B80] transition-colors"
+            className="rounded-full p-2 text-[#241916] hover:bg-[#F2E7DF]"
           >
-            <X className="w-5 h-5" />
+            <X className="h-5 w-5" strokeWidth={1.4} />
           </button>
         </div>
 
-        {/* Drawer links */}
-        <nav className="flex-1 overflow-y-auto py-6 px-6 flex flex-col gap-1">
-          {NAV_LINKS.map(link => (
+        <nav className="flex-1 overflow-y-auto px-6 py-6">
+          {NAV_LINKS.map((link) => (
             <Link
-              key={link.href + link.label}
+              key={`${link.href}-${link.label}`}
               href={link.href}
               onClick={() => setMobileOpen(false)}
-              className="
-                py-3 text-base font-semibold text-[#1A1A1A]
-                border-b border-[#EDE5DC] hover:text-[#C48B80]
-                transition-colors
-              "
+              className="flex border-b border-[#E7D9D0] py-4 text-sm font-medium uppercase tracking-[0.1em] text-[#241916]"
             >
               {link.label}
             </Link>
           ))}
+
           <Link
             href="/wishlist"
             onClick={() => setMobileOpen(false)}
-            className="py-3 text-base font-semibold text-[#1A1A1A] border-b border-[#EDE5DC] hover:text-[#C48B80] transition-colors flex items-center justify-between"
+            className="flex items-center justify-between border-b border-[#E7D9D0] py-4 text-sm font-medium uppercase tracking-[0.1em] text-[#241916]"
           >
-            <span>Wishlist</span>
+            Wishlist
             {mounted && wishlist.length > 0 && (
-              <span className="text-xs font-bold bg-[#C48B80] text-white px-2 py-0.5 rounded-full">
-                {wishlist.length}
-              </span>
+              <span className="rounded-full bg-[#C87355] px-2 py-0.5 text-[10px] font-bold text-white">{wishlist.length}</span>
             )}
           </Link>
+
           {isLoggedIn ? (
-            <Link href="/account" onClick={() => setMobileOpen(false)} className="py-3 text-base font-semibold text-[#1A1A1A] hover:text-[#C48B80] transition-colors">
+            <Link
+              href="/account"
+              onClick={() => setMobileOpen(false)}
+              className="flex border-b border-[#E7D9D0] py-4 text-sm font-medium uppercase tracking-[0.1em] text-[#241916]"
+            >
               My Account
             </Link>
           ) : (
             <button
-              onClick={() => { setMobileOpen(false); openAuthModal('login'); }}
-              className="py-3 text-base font-semibold text-[#1A1A1A] hover:text-[#C48B80] transition-colors text-left"
+              type="button"
+              onClick={() => {
+                setMobileOpen(false);
+                openAuthModal("login");
+              }}
+              className="flex w-full border-b border-[#E7D9D0] py-4 text-left text-sm font-medium uppercase tracking-[0.1em] text-[#241916]"
             >
               Sign In / Register
             </button>
           )}
         </nav>
 
-        {/* Drawer CTA */}
-        <div className="px-6 pb-8 pt-4 border-t border-[#EDE5DC]">
+        <div className="border-t border-[#E7D9D0] p-6">
           <button
-            onClick={() => { setMobileOpen(false); setIsCartOpen(true); }}
-            className="btn-primary w-full flex items-center justify-center gap-2"
+            type="button"
+            onClick={() => {
+              setMobileOpen(false);
+              setIsCartOpen(true);
+            }}
+            className="flex h-12 w-full items-center justify-center gap-2 bg-[#A86249] text-xs font-semibold uppercase tracking-[0.14em] text-white transition-colors hover:bg-[#8E4D39]"
           >
-            <ShoppingBag className="w-4 h-4" />
+            <ShoppingBag className="h-4 w-4" strokeWidth={1.4} />
             View Bag
             {mounted && cartTotalItems > 0 && (
-              <span className="bg-white text-[#C48B80] rounded-full w-5 h-5 text-xs font-bold flex items-center justify-center">
+              <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-white px-1 text-[9px] font-bold text-[#A86249]">
                 {cartTotalItems}
               </span>
             )}
           </button>
         </div>
-      </div>
+      </aside>
     </>
   );
 };
