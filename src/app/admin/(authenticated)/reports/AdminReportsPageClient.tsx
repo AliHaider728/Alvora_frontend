@@ -50,11 +50,11 @@ export const AdminReportsPageClient: React.FC = () => {
           </div>
         </div>
 
-        {/* Top Performing Toys */}
+        {/* Top Performing Products */}
         <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs space-y-4">
           <h3 className="font-heading font-black text-base text-slate-900 flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-emerald-500" />
-            <span>Top Performing Toys This Month</span>
+            <span>Top Performing Products This Month</span>
           </h3>
 
           <div className="space-y-3 divide-y divide-slate-100">

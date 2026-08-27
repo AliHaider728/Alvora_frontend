@@ -19,7 +19,7 @@ export const INITIAL_SETTINGS: StoreSettings = {
 };
 
 // AgeGroups are preserved technically to avoid breaking old TypeScript definitions.
-// However, the actual usage for Alvora may vary and shouldn't display toys.
+// However, the actual usage for Alvora may vary and shouldn't display products.
 export const AGE_GROUPS: AgeGroupOption[] = [
   { id: '0-2', name: 'Sensitive Skin', label: 'Sensitive', range: '0-2', color: 'bg-rose-50 text-rose-700 border-rose-200', icon: 'Shield' },
   { id: '3-5', name: 'Dry Skin', label: 'Dry', range: '3-5', color: 'bg-amber-50 text-amber-700 border-amber-200', icon: 'Droplet' },

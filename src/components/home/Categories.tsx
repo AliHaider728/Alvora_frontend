@@ -9,9 +9,9 @@ const categoryIcons: Record<string, React.ReactNode> = {
   'building-sets': <Boxes className="w-6 h-6 text-amber-500" />,
   'action-figures': <Shield className="w-6 h-6 text-rose-500" />,
   'educational-stem': <GraduationCap className="w-6 h-6 text-sky-500" />,
-  'soft-toys': <Heart className="w-6 h-6 text-pink-500" />,
-  'outdoor-toys': <Sun className="w-6 h-6 text-emerald-500" />,
-  'board-games': <Dices className="w-6 h-6 text-purple-500" />
+  'skincare-sets': <Heart className="w-6 h-6 text-pink-500" />,
+  'suncare': <Sun className="w-6 h-6 text-emerald-500" />,
+  'accessories': <Dices className="w-6 h-6 text-purple-500" />
 };
 
 export const Categories: React.FC<{ categories: Category[], sectionSettings: any }> = ({ categories, sectionSettings }) => {

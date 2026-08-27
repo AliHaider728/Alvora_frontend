@@ -382,7 +382,7 @@ export const ProductDetailPageClient: React.FC = () => {
         <h2 className="font-display font-black text-2xl text-[#1A1A1A]/90 mb-2">Toy Not Found</h2>
         <p className="text-sm text-[#1A1A1A]/50 mb-6">The product you are looking for might have been discontinued or moved.</p>
         <Link href="/category/all" className="px-6 py-3 rounded-2xl bg-[#C48B80] text-white font-display font-bold text-sm">
-          Explore All Toys
+          Explore All Products
         </Link>
       </div>
     );

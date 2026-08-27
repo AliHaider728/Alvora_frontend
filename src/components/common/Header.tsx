@@ -129,8 +129,8 @@ export const Header: React.FC = () => {
         </div>
 
         {/* MAIN NAVIGATION */}
-        <div className="mx-auto w-full max-w-[1500px] px-5 sm:px-8 lg:px-12">
-          <div className="relative flex h-[76px] items-center justify-between lg:h-[84px]">
+        <div className="mx-auto w-full max-w-375 px-5 sm:px-8 lg:px-12">
+          <div className="relative flex h-19 items-center justify-between lg:h-21">
             {/* LEFT NAVIGATION */}
             <nav aria-label="Primary navigation" className="hidden items-center gap-7 lg:flex xl:gap-9">
               {NAV_LINKS.map((link) => (
@@ -168,7 +168,7 @@ export const Header: React.FC = () => {
                 aria-label="Search"
                 className="rounded-full p-2 text-[#241916] transition-colors hover:bg-[#F2E7DF] hover:text-[#A86249]"
               >
-                <Search className="h-[19px] w-[19px]" strokeWidth={1.35} />
+                <Search className="h-[19px] w-4.75" strokeWidth={1.35} />
               </button>
 
               {/* Account */}
@@ -178,7 +178,7 @@ export const Header: React.FC = () => {
                   aria-label="My account"
                   className="hidden rounded-full p-2 text-[#241916] transition-colors hover:bg-[#F2E7DF] hover:text-[#A86249] sm:flex"
                 >
-                  <User className="h-[19px] w-[19px]" strokeWidth={1.35} />
+                  <User className="h-4.75 w-4.75" strokeWidth={1.35} />
                 </Link>
               ) : (
                 <button
@@ -187,7 +187,7 @@ export const Header: React.FC = () => {
                   aria-label="Sign in"
                   className="hidden rounded-full p-2 text-[#241916] transition-colors hover:bg-[#F2E7DF] hover:text-[#A86249] sm:flex"
                 >
-                  <User className="h-[19px] w-[19px]" strokeWidth={1.35} />
+                  <User className="h-4.75 w-4.75" strokeWidth={1.35} />
                 </button>
               )}
 
@@ -212,7 +212,7 @@ export const Header: React.FC = () => {
                 aria-label={`Shopping bag, ${mounted ? cartTotalItems : 0} items`}
                 className="relative rounded-full p-2 text-[#241916] transition-colors hover:bg-[#F2E7DF] hover:text-[#A86249]"
               >
-                <ShoppingBag className="h-[19px] w-[19px]" strokeWidth={1.35} />
+                <ShoppingBag className="h-4.75 w-4.75" strokeWidth={1.35} />
                 {mounted && cartTotalItems > 0 && (
                   <span className="absolute right-0 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#C87355] px-1 text-[9px] font-bold text-white">
                     {cartTotalItems}
@@ -225,8 +225,8 @@ export const Header: React.FC = () => {
 
         {/* SEARCH PANEL */}
         {searchOpen && (
-          <div ref={searchRef} className="border-t border-[#E7D9D0] bg-[#FAF6F2] px-5 py-4 sm:px-8 lg:px-12">
-            <div className="mx-auto max-w-[1500px]">
+          <div ref={searchRef} className="border-t border-[#E7D9D0] bg-alvora-ivory px-5 py-4 sm:px-8 lg:px-12">
+            <div className="mx-auto max-w-375">
               <form onSubmit={handleSearchSubmit} className="relative">
                 <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#9A8177]" strokeWidth={1.5} />
                 <input
@@ -254,12 +254,12 @@ export const Header: React.FC = () => {
                       key={product.id}
                       href={`/product/${product.slug}`}
                       onClick={() => setSearchOpen(false)}
-                      className="flex items-center gap-3 border-b border-[#EEE3DC] px-4 py-3 last:border-b-0 hover:bg-[#FAF6F2]"
+                      className="flex items-center gap-3 border-b border-[#EEE3DC] px-4 py-3 last:border-b-0 hover:bg-alvora-ivory"
                     >
                       <img
                         src={getSafeImageSrc(product.images?.[0])}
                         alt={product.name}
-                        className="h-11 w-11 shrink-0 bg-[#F5EDE4] object-cover"
+                        className="h-11 w-11 shrink-0 bg-alvora-cream object-cover"
                       />
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-medium text-[#241916]">{product.name}</p>
@@ -286,7 +286,7 @@ export const Header: React.FC = () => {
 
       {/* MOBILE DRAWER BACKDROP */}
       <div
-        className={`fixed inset-0 z-[60] bg-black/35 backdrop-blur-[2px] transition-opacity duration-300 ${mobileOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
+        className={`fixed inset-0 z-60 bg-black/35 backdrop-blur-[2px] transition-opacity duration-300 ${mobileOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
         onClick={() => setMobileOpen(false)}
         aria-hidden="true"
       />
@@ -296,7 +296,7 @@ export const Header: React.FC = () => {
         role="dialog"
         aria-modal="true"
         aria-label="Mobile navigation"
-        className={`fixed right-0 top-0 z-[61] flex h-full w-[320px] max-w-[88vw] flex-col bg-[#FAF6F2] shadow-2xl transition-transform duration-300 ${mobileOpen ? "translate-x-0" : "translate-x-full"}`}
+        className={`fixed right-0 top-0 z-61 flex h-full w-[320px] max-w-[88vw] flex-col bg-alvora-ivory shadow-2xl transition-transform duration-300 ${mobileOpen ? "translate-x-0" : "translate-x-full"}`}
       >
         <div className="flex items-center justify-between border-b border-[#E7D9D0] px-6 py-5">
           <Logo size="sm" />
@@ -316,7 +316,7 @@ export const Header: React.FC = () => {
               key={`${link.href}-${link.label}`}
               href={link.href}
               onClick={() => setMobileOpen(false)}
-              className="flex border-b border-[#E7D9D0] py-4 text-sm font-medium uppercase tracking-[0.1em] text-[#241916]"
+              className="flex border-b border-[#E7D9D0] py-4 text-sm font-medium uppercase tracking-widest text-[#241916]"
             >
               {link.label}
             </Link>
@@ -325,7 +325,7 @@ export const Header: React.FC = () => {
           <Link
             href="/wishlist"
             onClick={() => setMobileOpen(false)}
-            className="flex items-center justify-between border-b border-[#E7D9D0] py-4 text-sm font-medium uppercase tracking-[0.1em] text-[#241916]"
+            className="flex items-center justify-between border-b border-[#E7D9D0] py-4 text-sm font-medium uppercase tracking-widest text-[#241916]"
           >
             Wishlist
             {mounted && wishlist.length > 0 && (
@@ -337,7 +337,7 @@ export const Header: React.FC = () => {
             <Link
               href="/account"
               onClick={() => setMobileOpen(false)}
-              className="flex border-b border-[#E7D9D0] py-4 text-sm font-medium uppercase tracking-[0.1em] text-[#241916]"
+              className="flex border-b border-[#E7D9D0] py-4 text-sm font-medium uppercase tracking-widest text-[#241916]"
             >
               My Account
             </Link>
@@ -348,7 +348,7 @@ export const Header: React.FC = () => {
                 setMobileOpen(false);
                 openAuthModal("login");
               }}
-              className="flex w-full border-b border-[#E7D9D0] py-4 text-left text-sm font-medium uppercase tracking-[0.1em] text-[#241916]"
+              className="flex w-full border-b border-[#E7D9D0] py-4 text-left text-sm font-medium uppercase tracking-widest text-[#241916]"
             >
               Sign In / Register
             </button>

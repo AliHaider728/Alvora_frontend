@@ -58,7 +58,7 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
   const handleSignOut = async () => {
     await api.logout();
     removeAuthToken();
-    localStorage.removeItem('pb_admin_user');
+    localStorage.removeItem('alvora_admin_user');
     router.push('/admin/login');
   };
 

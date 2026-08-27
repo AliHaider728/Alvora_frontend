@@ -9,7 +9,7 @@ import { api, setAuthToken, getLastApiError } from '../../../services/api';
 export const AdminLoginPageClient: React.FC = () => {
   const router = useRouter();
   const [email, setEmail] = useState('admin@alvora.pk');
-  const [password, setPassword] = useState('admin123');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -22,7 +22,7 @@ export const AdminLoginPageClient: React.FC = () => {
       const res = await api.login(email, password);
       if (res && res.token) {
         setAuthToken(res.token);
-        localStorage.setItem('pb_admin_user', JSON.stringify(res.user));
+        localStorage.setItem('alvora_admin_user', JSON.stringify(res.user));
         router.push('/admin');
       } else {
         const apiError = getLastApiError();
@@ -43,13 +43,13 @@ export const AdminLoginPageClient: React.FC = () => {
     <div className="min-h-screen bg-slate-900 font-sans flex items-center justify-center p-4">
       
 
-      <div className="bg-white rounded-3xl p-8 sm:p-10 border border-slate-200 shadow-2xl max-w-md w-full space-y-6">
+      <div className="bg-white rounded-sm p-8 sm:p-10 border border-[#E7D9D0] shadow-2xl max-w-md w-full space-y-6">
         <div className="text-center space-y-2">
-          <div className="w-14 h-14 rounded-2xl bg-amber-400 text-slate-950 font-black text-xl flex items-center justify-center mx-auto shadow-md">
-            PB
+          <div className="w-14 h-14 rounded-full bg-[#C48B80] text-white font-display font-medium text-2xl flex items-center justify-center mx-auto shadow-sm">
+            A
           </div>
-          <h1 className="font-heading font-black text-2xl text-slate-900">Alvora Skincare Admin Dashboard</h1>
-          <p className="text-xs text-slate-500 font-medium">
+          <h1 className="font-display font-medium text-3xl text-[#241916]">Alvora Admin Dashboard</h1>
+          <p className="text-xs text-[#1A1A1A]/70 font-medium">
             Sign in to manage inventory, customer orders, coupons, and sales reports.
           </p>
         </div>
@@ -70,7 +70,7 @@ export const AdminLoginPageClient: React.FC = () => {
               onChange={e => setEmail(e.target.value)}
               required
               placeholder="admin@alvora.pk"
-              className="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 font-sans focus:outline-none focus:ring-2 focus:ring-slate-900"
+              className="w-full px-4 py-2.5 text-xs rounded-xl border border-[#E7D9D0] font-sans focus:outline-none focus:ring-2 focus:ring-slate-900"
             />
           </div>
 
@@ -82,7 +82,7 @@ export const AdminLoginPageClient: React.FC = () => {
               onChange={e => setPassword(e.target.value)}
               required
               placeholder="••••••••••••"
-              className="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 font-sans focus:outline-none focus:ring-2 focus:ring-slate-900"
+              className="w-full px-4 py-2.5 text-xs rounded-xl border border-[#E7D9D0] font-sans focus:outline-none focus:ring-2 focus:ring-slate-900"
             />
           </div>
 
@@ -111,7 +111,7 @@ export const AdminLoginPageClient: React.FC = () => {
         <div className="text-center pt-2 border-t border-slate-100">
           <button
             onClick={() => router.push('/')}
-            className="text-xs text-slate-500 hover:text-slate-800 font-bold"
+            className="text-xs text-[#1A1A1A]/70 hover:text-slate-800 font-bold"
           >
             &larr; Return to Customer Storefront
           </button>

@@ -26,7 +26,7 @@ export default function WishlistPage() {
           <div>
             <h1 className="font-heading font-black text-2xl sm:text-3xl text-slate-900 flex items-center gap-2">
               <Heart className="w-7 h-7 text-rose-500 fill-rose-500" />
-              <span>Saved Favorite Toys</span>
+              <span>Saved Favorite Products</span>
             </h1>
             <p className="text-xs text-slate-500 mt-1 font-medium">
               You have {wishlistedProducts.length} product(s) saved in your wishlist.
@@ -46,7 +46,7 @@ export default function WishlistPage() {
             <Link href="/category/all"
               className="inline-block px-6 py-2.5 rounded-2xl bg-rose-500 text-white font-heading font-bold text-xs"
             >
-              Discover Toys
+              Discover Products
             </Link>
           </div>
         ) : (

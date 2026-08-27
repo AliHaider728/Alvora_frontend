@@ -237,6 +237,7 @@ export interface StoreContextType {
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
 
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [bundles, setBundles] = useState<Bundle[]>([]);
   const { showToast } = useToast();
 
   // LocalStorage state initialization
@@ -320,6 +321,19 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
+
+  
+  useEffect(() => {
+    const fetchBundles = async () => {
+      try {
+        const res = await api.getBundles();
+        if (res && res.bundles) setBundles(res.bundles);
+      } catch (err) {
+        console.error('Failed to fetch bundles:', err);
+      }
+    };
+    fetchBundles();
+  }, []);
 
   const refreshProducts = async () => {
     const realProducts = await api.getProducts();
@@ -914,8 +928,9 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   return (
-        <StoreContext.Provider
-      value={{
+        <StoreContext.Provider value={{
+        bundles,
+
         products: isHydrated ? products : [],
         productsLoading,
         categories: isHydrated ? categories : INITIAL_CATEGORIES,

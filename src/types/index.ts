@@ -439,3 +439,17 @@ export interface HomepageSectionSetting {
   ctaLabel?: string;
   ctaLink?: string;
 }
+
+export interface Bundle {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  image?: string;
+  discountPercent: number;
+  isActive: boolean;
+  displayOrder: number;
+  originalTotalPrice?: number;
+  currentPrice?: number;
+  products?: any[];
+}

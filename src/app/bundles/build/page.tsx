@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { useStore } from '../../../context/StoreContext';
 import { formatPrice } from '../../../utils/formatters';
-import { StorefrontLayoutWrapper } from '../../../components/common/StorefrontLayoutWrapper';
 import { Product } from '../../../types';
 import { Minus, Plus } from 'lucide-react';
 
@@ -65,7 +64,7 @@ export default function BuildBundlePage() {
   const flatSelectedProducts = selectedItems.flatMap(item => Array(item.quantity).fill(item.product));
 
   return (
-    <StorefrontLayoutWrapper>
+    <>
       <div className="bg-[#FAF6F2] min-h-screen py-24">
         <div className="alvora-container">
           
@@ -216,6 +215,6 @@ export default function BuildBundlePage() {
           </div>
         </div>
       </div>
-    </StorefrontLayoutWrapper>
+    </>
   );
 }

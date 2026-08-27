@@ -4,6 +4,7 @@ import { MOCK_PRODUCTS } from '../data/mock/products';
 import { MOCK_CATEGORIES } from '../data/mock/categories';
 import { MOCK_SETTINGS } from '../data/mock/settings';
 import { MOCK_REVIEWS } from '../data/mock/reviews';
+import { MOCK_BUNDLES } from '../data/mock/bundles';
 
 const USE_MOCK_DATA = process.env.NEXT_PUBLIC_ALVORA_USE_MOCK_DATA === 'true';
 
@@ -31,7 +32,7 @@ export type AdminSessionUser = { id?: string; email?: string; role?: 'super_admi
 export const getAdminSessionUser = (): AdminSessionUser | null => {
   if (typeof window === 'undefined') return null;
   try {
-    const value = localStorage.getItem('pb_admin_user');
+    const value = localStorage.getItem('alvora_admin_user');
     return value ? JSON.parse(value) as AdminSessionUser : null;
   } catch {
     return null;
@@ -270,5 +271,24 @@ export const api = {
   updateGlobalAttributeTerm: (attrId: string, termId: string, data: any) => fetchJson<any>(`/global-attributes/${attrId}/terms/${termId}`, { method: 'PUT', body: JSON.stringify(data) }),
   deleteGlobalAttributeTerm: (attrId: string, termId: string) => fetchJson<any>(`/global-attributes/${attrId}/terms/${termId}`, { method: 'DELETE' }),
   reorderGlobalAttributeTerms: (attrId: string, data: any) => fetchJson<any>(`/global-attributes/${attrId}/reorder-terms`, { method: 'PUT', body: JSON.stringify(data) }),
-  uploadProductImage: (formData: FormData) => fetchJson<{ secureUrl: string }>('/upload/product-image', { method: 'POST', body: formData })
+  uploadProductImage: (formData: FormData) => fetchJson<{ secureUrl: string }>('/upload/product-image', { method: 'POST', body: formData }),
+
+  // BUNDLES
+  getBundles: async () => {
+    if (USE_MOCK_DATA) {
+      return { bundles: MOCK_BUNDLES };
+    }
+    try {
+      const res = await fetch(`${API_BASE_URL}/bundles`, {
+        cache: "no-store",
+        headers: { "Accept": "application/json" }
+      });
+      if (!res.ok) throw new Error("Failed to fetch bundles");
+      return res.json();
+    } catch (error: any) {
+      console.error("getBundles error:", error);
+      lastApiError = error.message;
+      return { bundles: [] };
+    }
+  }
 };

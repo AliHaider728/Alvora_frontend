@@ -114,7 +114,7 @@ export const AdminDashboardPageClient: React.FC = () => {
         <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs flex items-center justify-between">
           <div>
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
-              Active Toys
+              Active Products
             </span>
             <span className="font-heading font-black text-2xl text-slate-900 mt-1 block">
               {products.length}

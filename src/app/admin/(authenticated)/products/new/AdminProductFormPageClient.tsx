@@ -1223,7 +1223,7 @@ export const AdminProductFormPageClient: React.FC = () => {
                 <button type="button" role="switch" aria-checked={isFeatured} onClick={() => { setIsFeatured(value => !value); markDirty(); }} className={`relative h-6 w-11 rounded-full transition ${isFeatured ? 'bg-rose-500' : 'bg-slate-200'}`}><span className={`absolute top-1 h-4 w-4 rounded-full bg-white shadow transition ${isFeatured ? 'left-6' : 'left-1'}`} /></button>
               </div>
               {[
-                { label: 'Bestseller', help: 'Include in Featured Toys & Bestsellers', value: isBestseller, setValue: setIsBestseller },
+                { label: 'Bestseller', help: 'Include in Featured Products & Bestsellers', value: isBestseller, setValue: setIsBestseller },
                 { label: 'New Arrival', help: 'Include in New Arrivals & Restocks', value: isNewArrival, setValue: setIsNewArrival },
                 { label: 'Homepage Spotlight', help: 'Large homepage promotion; replaces the current spotlight', value: isSpotlight, setValue: setIsSpotlight }
               ].map(option => (

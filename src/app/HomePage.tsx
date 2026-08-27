@@ -9,7 +9,6 @@ import { IngredientSection } from '../components/home/IngredientSection';
 import { FeaturedProduct } from '../components/home/FeaturedProduct';
 import { Testimonials } from '../components/home/Testimonials';
 import { ConcernGrid } from '../components/home/ConcernGrid';
-import { OurStory } from '../components/home/OurStory';
 import { FinalCTA } from '../components/home/FinalCTA';
 import { MOCK_REVIEWS } from '../data/mock/reviews';
 
@@ -40,7 +39,6 @@ export const HomePage: React.FC<Props> = ({ products, categories, settings }) =>
       {featuredProduct && <FeaturedProduct product={featuredProduct} />}
       <Testimonials reviews={MOCK_REVIEWS} />
       <ConcernGrid />
-      <OurStory />
       <FinalCTA />
     </div>
   );

@@ -169,7 +169,7 @@ export const AdminProductsPageClient: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="font-heading font-black text-2xl text-slate-900">Products Catalog</h1>
-          <p className="text-xs text-slate-500 font-medium">Manage toys, PKR pricing, inventory stock, visibility, and delivery charge logic.</p>
+          <p className="text-xs text-slate-500 font-medium">Manage products, PKR pricing, inventory stock, visibility, and delivery charge logic.</p>
         </div>
         <div className="flex flex-wrap gap-2">
             <button

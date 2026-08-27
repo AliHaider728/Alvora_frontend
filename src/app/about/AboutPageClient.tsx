@@ -1,276 +1,221 @@
 "use client";
 import React from 'react';
-import {
-  Rocket,
-  Heart,
-  ShieldCheck,
-  Sparkles,
-  Award,
-  Play,
-  Youtube,
-  Instagram,
-  Facebook,
-  Users,
-  Star,
-  Clock,
-  Truck,
-  PackageCheck,
-  LayoutGrid,
-  Quote
-} from 'lucide-react';
-import { Breadcrumbs } from '../../components/common/Breadcrumbs';
-import { SeoHead } from '../../components/common/SeoHead';
-import { useStore } from '../../context/StoreContext';
+import Image from 'next/image';
+import { ShieldCheck, Leaf, HeartHandshake, Instagram, Facebook, Users, Star, PackageCheck, Clock, Sparkles, Truck, Heart, LayoutGrid, Quote, Droplet } from 'lucide-react';
 
 export const AboutPageClient: React.FC = () => {
-  const { settings } = useStore();
   return (
-    <div className="min-h-screen bg-slate-50 font-sans py-8">
-      <SeoHead title="About Alvora Skincare Store" />
-
-      <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
-        <Breadcrumbs items={[{ label: 'About Us' }]} />
-
-        {/* Hero Section */}
-        <div className="bg-gradient-to-r from-amber-400 via-rose-500 to-sky-500 rounded-3xl p-8 sm:p-14 text-white shadow-xl mb-12 text-center relative overflow-hidden">
-          <div className="relative z-10 max-w-2xl mx-auto space-y-4">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 text-yellow-200 text-xs font-bold uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5" />
-              Our Story & Mission
+    <div className="alvora-container min-h-screen py-12 md:py-20">
+      <div className="max-w-6xl mx-auto">
+        
+        {/* HERO BANNER */}
+        <div className="bg-[#FAF6F2] border border-[#E7D9D0] rounded-sm p-10 sm:p-16 mb-16 text-center shadow-sm relative overflow-hidden flex flex-col items-center justify-center">
+          <div className="relative z-10 max-w-3xl">
+            <span className="text-[10px] tracking-widest uppercase text-[#A86249] font-bold mb-4 block">
+              Our Mission
             </span>
-            <h1 className="font-heading font-black text-3xl sm:text-5xl text-white">
-              Inspiring Young Explorers Every Single Day!
+            <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl text-[#241916] font-medium leading-tight mb-6">
+              Skincare Rooted in Care, Backed by Science
             </h1>
-            <p className="text-xs sm:text-base text-white/90 leading-relaxed font-medium">
-              Founded by passionate parents and educators, Alvora Skincare exists to nurture creativity, wonder, and STEM problem-solving skills in children through safe, high-quality toys.
+            <p className="text-[#241916]/70 leading-relaxed text-base sm:text-lg max-w-2xl mx-auto">
+              Founded on the belief that beauty should be uncompromising. We formulate clean, effective skincare that respects your skin's natural barrier and delivers visible, radiant results without harsh chemicals.
             </p>
           </div>
         </div>
 
-        {/* Values Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-          <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm text-center space-y-3">
-            <div className="w-14 h-14 rounded-2xl bg-rose-100 text-rose-500 flex items-center justify-center mx-auto">
+        {/* THREE FEATURE CARDS */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-20">
+          <div className="bg-white p-8 sm:p-10 rounded-sm border border-[#E7D9D0] shadow-sm text-center flex flex-col items-center">
+            <div className="w-16 h-16 rounded-full bg-[#F1C9BD] text-[#A86249] flex items-center justify-center mb-6">
+              <Leaf className="w-7 h-7" />
+            </div>
+            <h3 className="font-display text-xl text-[#241916] mb-3">Clean, Non-Toxic Ingredients</h3>
+            <p className="text-[#1A1A1A]/70 text-sm leading-relaxed">
+              We never use parabens, sulfates, or artificial fragrances. Only skin-loving ingredients that nourish and protect.
+            </p>
+          </div>
+
+          <div className="bg-white p-8 sm:p-10 rounded-sm border border-[#E7D9D0] shadow-sm text-center flex flex-col items-center">
+            <div className="w-16 h-16 rounded-full bg-[#EFCDBE] text-[#A86249] flex items-center justify-center mb-6">
               <ShieldCheck className="w-7 h-7" />
             </div>
-            <h3 className="font-heading font-black text-lg text-slate-900">100% Non-Toxic & Safe</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              Every single product in our catalog undergoes rigorous safety testing for BPA, lead, and phthalates before reaching your child's hands.
+            <h3 className="font-display text-xl text-[#241916] mb-3">Dermatologist Approved</h3>
+            <p className="text-[#1A1A1A]/70 text-sm leading-relaxed">
+              Every formula is rigorously tested to ensure it is safe, effective, and gentle enough for even the most sensitive skin.
             </p>
           </div>
 
-          <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm text-center space-y-3">
-            <div className="w-14 h-14 rounded-2xl bg-sky-100 text-sky-500 flex items-center justify-center mx-auto">
-              <Rocket className="w-7 h-7" />
+          <div className="bg-white p-8 sm:p-10 rounded-sm border border-[#E7D9D0] shadow-sm text-center flex flex-col items-center">
+            <div className="w-16 h-16 rounded-full bg-[#FAF6F2] text-[#A86249] flex items-center justify-center mb-6">
+              <HeartHandshake className="w-7 h-7" />
             </div>
-            <h3 className="font-heading font-black text-lg text-slate-900">STEM Learning First</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              We collaborate with educators to curate hands-on building sets, coding kits, and logic puzzles that encourage brain growth.
-            </p>
-          </div>
-
-          <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm text-center space-y-3">
-            <div className="w-14 h-14 rounded-2xl bg-amber-100 text-amber-500 flex items-center justify-center mx-auto">
-              <Award className="w-7 h-7" />
-            </div>
-            <h3 className="font-heading font-black text-lg text-slate-900">Happiness Guaranteed</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              We stand by our 30-day hassle-free return policy. If your kid isn't thrilled, our customer support will make it right!
+            <h3 className="font-display text-xl text-[#241916] mb-3">Happiness Guaranteed</h3>
+            <p className="text-[#1A1A1A]/70 text-sm leading-relaxed">
+              We stand behind our products. If your skin doesn't love our formulas, our support team is here to make it right.
             </p>
           </div>
         </div>
 
-        {/* Brand Story & Video Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16 items-center">
-          <div className="space-y-6">
-            <h2 className="font-heading font-black text-2xl sm:text-3xl text-slate-900">
+        {/* THE STORY BEHIND ALVORA SKINCARE */}
+        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16 mb-24">
+          <div className="w-full lg:w-1/2 relative aspect-[4/3] rounded-sm overflow-hidden shadow-md">
+            <Image 
+              src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=1200&auto=format&fit=crop"
+              alt="Premium Skincare"
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-cover"
+            />
+          </div>
+          <div className="w-full lg:w-1/2 space-y-6">
+            <span className="text-[10px] tracking-widest uppercase text-[#A86249] font-bold block">
+              Our Story
+            </span>
+            <h2 className="font-display text-3xl sm:text-4xl text-[#241916] font-medium leading-tight">
               The Story Behind Alvora Skincare
             </h2>
-            <div className="space-y-4 text-sm text-slate-600 leading-relaxed font-medium">
+            <div className="space-y-4 text-[#1A1A1A]/70 leading-relaxed text-sm sm:text-base">
               <p>
-                It all started with a simple idea: toys shouldn't just be plastic distractions. They should be tools for growth, imagination, and family bonding. Alvora Skincare was born out of a desire to create a magical space where parents could find high-quality, thoughtfully curated toys without compromising on safety or educational value.
+                It all started with a simple idea: skincare shouldn't be a compromise between efficacy and safety. We noticed the market was flooded with harsh chemical treatments or natural products that simply didn't work. Alvora Skincare was born out of a desire to bridge that gap.
               </p>
               <p>
-                Our journey began in a small workshop where we tested and curated the very best STEM kits, puzzles, and creative sets. Today, we're proud to serve thousands of families across the globe, bringing smiles and "aha!" moments to young explorers every single day.
-              </p>
-              <p>
-                We believe that every child is a natural innovator. With the right products, they can build, discover, and learn the skills they need to shape the future. Thank you for being a part of our story!
+                We spent years researching and partnering with top dermatologists to develop formulas that treat real skin concerns — from hyperpigmentation to barrier repair — using clean, scientifically-backed ingredients. We believe in transparency, sustainability, and giving you the radiant skin you deserve.
               </p>
             </div>
-            <div className="flex items-center gap-4 pt-2">
-              <div className="flex -space-x-4">
-                <img className="w-12 h-12 rounded-full border-4 border-white object-cover bg-slate-200" src="https://i.pravatar.cc/100?img=1" alt="Founder 1" />
-                <img className="w-12 h-12 rounded-full border-4 border-white object-cover bg-slate-200" src="https://i.pravatar.cc/100?img=5" alt="Founder 2" />
+            
+            <div className="pt-4 flex items-center gap-4">
+              <div className="w-12 h-12 rounded-full bg-[#F5EDE4] overflow-hidden relative">
+                 {/* Optional Avatar */}
+                 <div className="w-full h-full bg-[#EFCDBE]" />
               </div>
-              <div className="text-xs font-bold text-slate-700">
-                <p>Sarah & James</p>
-                <p className="text-slate-500 font-medium">Co-Founders</p>
+              <div>
+                <p className="font-display text-[#241916] font-medium text-lg">Sarah & James</p>
+                <p className="text-xs text-[#A86249] uppercase tracking-widest font-bold">Co-Founders</p>
               </div>
             </div>
           </div>
+        </div>
 
-          <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm flex flex-col justify-center items-center text-center space-y-6">
-            <div className="w-16 h-16 rounded-full bg-rose-50 flex items-center justify-center text-rose-500 mb-2">
-              <Youtube className="w-8 h-8" />
-            </div>
-            <h2 className="font-heading font-black text-2xl text-slate-900">Join Our Play Community</h2>
-            <p className="text-sm text-slate-500 max-w-sm">
-              Follow Alvora Skincare on our official social channels to see toys in action, get exclusive offers, and share your magical moments!
+        {/* JOIN OUR COMMUNITY BOX */}
+        <div className="bg-[#FAF6F2] rounded-sm p-8 sm:p-12 mb-20 flex flex-col md:flex-row items-center justify-between gap-8 border border-[#E7D9D0]">
+          <div className="max-w-xl text-center md:text-left">
+            <h3 className="font-display text-2xl sm:text-3xl text-[#241916] mb-3">Join Our Community</h3>
+            <p className="text-[#1A1A1A]/70 text-sm leading-relaxed">
+              Follow Alvora Skincare on our official social channels to see real results, get exclusive skincare tips, and share your glowing journey!
             </p>
+          </div>
+          <div className="flex items-center gap-4 flex-shrink-0">
+            <a href="#" className="w-12 h-12 rounded-full bg-white text-[#A86249] flex items-center justify-center hover:bg-[#A86249] hover:text-white transition-colors shadow-sm border border-[#E7D9D0]">
+              <Instagram className="w-5 h-5" />
+            </a>
+            <a href="#" className="w-12 h-12 rounded-full bg-white text-[#A86249] flex items-center justify-center hover:bg-[#A86249] hover:text-white transition-colors shadow-sm border border-[#E7D9D0]">
+              <Facebook className="w-5 h-5" />
+            </a>
+          </div>
+        </div>
 
-            <div className="flex gap-4 pt-4">
-              {settings.socialLinks?.youtube && (
-                <a
-                  href={settings.socialLinks.youtube}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-12 h-12 rounded-full bg-rose-50 hover:bg-rose-500 text-rose-500 hover:text-white flex items-center justify-center transition-all shadow-sm"
-                >
-                  <Youtube className="w-5 h-5" />
-                </a>
-              )}
-              {settings.socialLinks?.instagram && (
-                <a
-                  href={settings.socialLinks.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-12 h-12 rounded-full bg-rose-50 hover:bg-rose-500 text-rose-500 hover:text-white flex items-center justify-center transition-all shadow-sm"
-                >
-                  <Instagram className="w-5 h-5" />
-                </a>
-              )}
-              {settings.socialLinks?.facebook && (
-                <a
-                  href={settings.socialLinks.facebook}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-12 h-12 rounded-full bg-rose-50 hover:bg-rose-500 text-rose-500 hover:text-white flex items-center justify-center transition-all shadow-sm"
-                >
-                  <Facebook className="w-5 h-5" />
-                </a>
-              )}
-              {settings.socialLinks?.tiktok && (
-                <a
-                  href={settings.socialLinks.tiktok}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-12 h-12 rounded-full bg-rose-50 hover:bg-rose-500 text-rose-500 hover:text-white flex items-center justify-center transition-all shadow-sm"
-                >
-                  <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 2.22-1.15 4.39-2.95 5.73-1.74 1.3-4.04 1.81-6.17 1.34-2.11-.47-3.92-1.89-4.83-3.83-.93-1.95-.91-4.26.06-6.19.98-1.93 2.72-3.34 4.79-3.89.84-.22 1.7-.33 2.56-.31v4.06c-1.43.08-2.82.72-3.69 1.83-.88 1.1-1.12 2.65-.63 3.98.48 1.31 1.65 2.31 2.99 2.62 1.34.31 2.77.01 3.86-.78 1.12-.82 1.81-2.14 1.85-3.56.09-3.93.03-7.87.03-11.8V.02z"/></svg>
-                </a>
-              )}
+        {/* STATS BAR */}
+        <div className="bg-[#1A1A1A] p-8 sm:p-12 mb-20">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="text-center space-y-3">
+              <div className="w-12 h-12 rounded-full bg-[#2A2A2A] text-[#F1C9BD] flex items-center justify-center mx-auto">
+                <Users className="w-5 h-5" />
+              </div>
+              <p className="font-display text-3xl sm:text-4xl text-white">12,000+</p>
+              <p className="text-[10px] sm:text-xs text-white/60 font-bold uppercase tracking-widest">Happy Customers</p>
+            </div>
+            <div className="text-center space-y-3">
+              <div className="w-12 h-12 rounded-full bg-[#2A2A2A] text-[#F1C9BD] flex items-center justify-center mx-auto">
+                <Star className="w-5 h-5" />
+              </div>
+              <p className="font-display text-3xl sm:text-4xl text-white">4.9/5</p>
+              <p className="text-[10px] sm:text-xs text-white/60 font-bold uppercase tracking-widest">Average Rating</p>
+            </div>
+            <div className="text-center space-y-3">
+              <div className="w-12 h-12 rounded-full bg-[#2A2A2A] text-[#F1C9BD] flex items-center justify-center mx-auto">
+                <PackageCheck className="w-5 h-5" />
+              </div>
+              <p className="font-display text-3xl sm:text-4xl text-white">500+</p>
+              <p className="text-[10px] sm:text-xs text-white/60 font-bold uppercase tracking-widest">Products Curated</p>
+            </div>
+            <div className="text-center space-y-3">
+              <div className="w-12 h-12 rounded-full bg-[#2A2A2A] text-[#F1C9BD] flex items-center justify-center mx-auto">
+                <Clock className="w-5 h-5" />
+              </div>
+              <p className="font-display text-3xl sm:text-4xl text-white">2-4 Days</p>
+              <p className="text-[10px] sm:text-xs text-white/60 font-bold uppercase tracking-widest">Nationwide Delivery</p>
             </div>
           </div>
         </div>
 
-        {/* ───────────────────────────────────────────── */}
-        {/* NEW SECTION: Trust / Stats Bar */}
-        {/* ───────────────────────────────────────────── */}
-        <div className="rounded-3xl bg-slate-900 p-8 sm:p-10 mb-16 shadow-xl">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
-            <div className="text-center space-y-2">
-              <div className="w-12 h-12 rounded-2xl bg-white/10 text-amber-300 flex items-center justify-center mx-auto">
-                <Users className="w-6 h-6" />
-              </div>
-              <p className="font-heading font-black text-2xl sm:text-3xl text-white">12,000+</p>
-              <p className="text-[11px] sm:text-xs text-white/60 font-medium">Happy Parents</p>
-            </div>
-            <div className="text-center space-y-2">
-              <div className="w-12 h-12 rounded-2xl bg-white/10 text-rose-300 flex items-center justify-center mx-auto">
-                <Star className="w-6 h-6" />
-              </div>
-              <p className="font-heading font-black text-2xl sm:text-3xl text-white">4.9/5</p>
-              <p className="text-[11px] sm:text-xs text-white/60 font-medium">Average Rating</p>
-            </div>
-            <div className="text-center space-y-2">
-              <div className="w-12 h-12 rounded-2xl bg-white/10 text-sky-300 flex items-center justify-center mx-auto">
-                <PackageCheck className="w-6 h-6" />
-              </div>
-              <p className="font-heading font-black text-2xl sm:text-3xl text-white">500+</p>
-              <p className="text-[11px] sm:text-xs text-white/60 font-medium">Toys Curated</p>
-            </div>
-            <div className="text-center space-y-2">
-              <div className="w-12 h-12 rounded-2xl bg-white/10 text-emerald-300 flex items-center justify-center mx-auto">
-                <Clock className="w-6 h-6" />
-              </div>
-              <p className="font-heading font-black text-2xl sm:text-3xl text-white">2-4 Days</p>
-              <p className="text-[11px] sm:text-xs text-white/60 font-medium">Nationwide Delivery</p>
-            </div>
-          </div>
-        </div>
-
-        {/* ───────────────────────────────────────────── */}
-        {/* NEW SECTION: Why Choose Alvora Skincare */}
-        {/* ───────────────────────────────────────────── */}
-        <div className="mb-16">
-          <div className="text-center max-w-xl mx-auto mb-10 space-y-3">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 text-sky-500 text-xs font-bold uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5" />
+        {/* WHY CHOOSE ALVORA SKINCARE */}
+        <div className="mb-20">
+          <div className="text-center max-w-2xl mx-auto mb-12 space-y-4">
+            <span className="text-[10px] tracking-widest uppercase text-[#A86249] font-bold block">
               Why Choose Us
             </span>
-            <h2 className="font-heading font-black text-2xl sm:text-3xl text-slate-900">
-              Why Families Choose Alvora Skincare
+            <h2 className="font-display text-3xl sm:text-4xl text-[#241916] font-medium leading-tight">
+              Why Customers Choose Alvora Skincare
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
-              From the moment you order to the moment it lands in your child's hands, every step is built around safety, speed, and a little bit of magic.
+            <p className="text-[#1A1A1A]/70 text-sm sm:text-base leading-relaxed">
+              From the moment you order to the moment you see the glow in the mirror, every step is built around safety, efficacy, and a premium experience.
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-500 flex items-center justify-center">
-                <PackageCheck className="w-6 h-6" />
+            <div className="bg-white p-8 rounded-sm border border-[#E7D9D0] shadow-sm space-y-4 text-center flex flex-col items-center">
+              <div className="w-12 h-12 rounded-full bg-[#FAF6F2] text-[#A86249] flex items-center justify-center">
+                <PackageCheck className="w-5 h-5" />
               </div>
-              <h3 className="font-heading font-bold text-sm text-slate-900">Sustainable Packaging</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
+              <h3 className="font-display text-lg text-[#241916]">Sustainable Packaging</h3>
+              <p className="text-xs text-[#1A1A1A]/70 leading-relaxed">
                 Every order is carefully packed in protective, eco-conscious packaging so it arrives safe and sound.
               </p>
             </div>
 
-            <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-sky-100 text-sky-500 flex items-center justify-center">
-                <Truck className="w-6 h-6" />
+            <div className="bg-white p-8 rounded-sm border border-[#E7D9D0] shadow-sm space-y-4 text-center flex flex-col items-center">
+              <div className="w-12 h-12 rounded-full bg-[#FAF6F2] text-[#A86249] flex items-center justify-center">
+                <Truck className="w-5 h-5" />
               </div>
-              <h3 className="font-heading font-bold text-sm text-slate-900">Fast Delivery Across Pakistan</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
+              <h3 className="font-display text-lg text-[#241916]">Fast Delivery Across Pakistan</h3>
+              <p className="text-xs text-[#1A1A1A]/70 leading-relaxed">
                 Quick and reliable delivery straight to your doorstep, nationwide, with Cash on Delivery available.
               </p>
             </div>
 
-            <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-rose-100 text-rose-500 flex items-center justify-center">
-                <Heart className="w-6 h-6" />
+            <div className="bg-white p-8 rounded-sm border border-[#E7D9D0] shadow-sm space-y-4 text-center flex flex-col items-center">
+              <div className="w-12 h-12 rounded-full bg-[#FAF6F2] text-[#A86249] flex items-center justify-center">
+                <Heart className="w-5 h-5" />
               </div>
-              <h3 className="font-heading font-bold text-sm text-slate-900">Safe Materials for Kids</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                Every toy is selected with your child's safety in mind, using non-toxic, quality-tested materials.
+              <h3 className="font-display text-lg text-[#241916]">Gentle, Skin-Safe Ingredients</h3>
+              <p className="text-xs text-[#1A1A1A]/70 leading-relaxed">
+                Every product is selected with your skin's health in mind, using non-toxic, clinically-tested formulations.
               </p>
             </div>
 
-            <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-500 flex items-center justify-center">
-                <LayoutGrid className="w-6 h-6" />
+            <div className="bg-white p-8 rounded-sm border border-[#E7D9D0] shadow-sm space-y-4 text-center flex flex-col items-center">
+              <div className="w-12 h-12 rounded-full bg-[#FAF6F2] text-[#A86249] flex items-center justify-center">
+                <Droplet className="w-5 h-5" />
               </div>
-              <h3 className="font-heading font-bold text-sm text-slate-900">A Toy for Every Explorer</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                Explore RC toys, STEM kits, dolls, puzzles, and more — curated for every age and interest.
+              <h3 className="font-display text-lg text-[#241916]">A Formula for Every Skin Type</h3>
+              <p className="text-xs text-[#1A1A1A]/70 leading-relaxed">
+                Explore hydrating serums, clarifying toners, barrier creams, and more — curated for every skin concern.
               </p>
             </div>
           </div>
         </div>
 
-        {/* ───────────────────────────────────────────── */}
-        {/* NEW SECTION: Our Promise Quote */}
-        {/* ───────────────────────────────────────────── */}
-        <div className="bg-gradient-to-br from-sky-50 via-white to-rose-50 rounded-3xl border border-slate-100 shadow-sm p-8 sm:p-12 mb-4 text-center relative overflow-hidden">
-          <div className="w-14 h-14 rounded-2xl bg-white shadow-sm text-rose-400 flex items-center justify-center mx-auto mb-5">
-            <Quote className="w-7 h-7" />
+        {/* OUR PROMISE QUOTE */}
+        <div className="bg-[#EFCDBE]/20 rounded-sm border border-[#EFCDBE] p-10 sm:p-16 text-center">
+          <div className="w-14 h-14 rounded-full bg-white text-[#A86249] flex items-center justify-center mx-auto mb-6 shadow-sm border border-[#E7D9D0]">
+            <Quote className="w-6 h-6" />
           </div>
-          <p className="max-w-2xl mx-auto font-heading font-bold text-base sm:text-xl text-slate-800 leading-relaxed">
-            "At Alvora Skincare, we're passionate about creating unforgettable childhood moments through fun, safe, and engaging toys — chosen with care, so every playtime becomes a memory worth keeping."
+          <p className="max-w-3xl mx-auto font-display text-xl sm:text-2xl text-[#241916] leading-relaxed">
+            "At Alvora Skincare, we're passionate about empowering you to feel confident in your own skin through clean, effective, and beautifully crafted formulas — because your skin deserves the best."
           </p>
-          <p className="mt-5 text-xs font-bold text-slate-500 uppercase tracking-wider">— The Alvora Skincare Team</p>
+          <p className="mt-8 text-[10px] font-bold text-[#A86249] uppercase tracking-widest">— The Alvora Skincare Team</p>
         </div>
+        
       </div>
     </div>
   );

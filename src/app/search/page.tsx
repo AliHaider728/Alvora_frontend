@@ -78,14 +78,14 @@ function SearchResultsContent() {
             <div className="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto">
               <Search className="w-8 h-8" />
             </div>
-            <h3 className="font-heading font-bold text-lg text-slate-800">No Toys Match Your Search</h3>
+            <h3 className="font-heading font-bold text-lg text-slate-800">No Products Match Your Search</h3>
             <p className="text-xs text-slate-500 max-w-sm mx-auto">
               Try searching for terms like "blocks", "robot", "plush", or "puzzle".
             </p>
             <Link href="/category/all"
               className="inline-block px-6 py-2.5 rounded-2xl bg-rose-500 text-white font-heading font-bold text-xs"
             >
-              Browse All Toys
+              Browse All Products
             </Link>
           </div>
         ) : (

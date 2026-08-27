@@ -31,24 +31,28 @@ export const ConcernGrid: React.FC = () => {
       id: 'hydration',
       name: 'Hydration',
       link: '/category/all?tags=hydrating',
+      bgClass: 'bg-[#C48B80]',
       image: '/images/concern-hydration.jpg'
     },
     {
       id: 'brightening',
       name: 'Brightening',
       link: '/category/all?tags=brightening',
+      bgClass: 'bg-[#F1C9BD]',
       image: '/images/concern-brightening.jpg'
     },
     {
       id: 'acne',
       name: 'Acne & Blemishes',
       link: '/category/all?tags=acne',
+      bgClass: 'bg-[#A86249]',
       image: '/images/concern-acne.jpg'
     },
     {
       id: 'barrier',
       name: 'Skin Barrier',
       link: '/category/all?tags=barrier',
+      bgClass: 'bg-[#EFCDBE]',
       image: '/images/concern-barrier.jpg'
     }
   ];

@@ -43,10 +43,10 @@ export const HeroSection: React.FC = () => {
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <section className="relative w-full overflow-hidden bg-[#FAF6F2]">
+    <section className="relative w-full overflow-hidden bg-alvora-ivory">
       <div className="mx-auto w-full max-w-[1600px]">
         {/* HERO GRID */}
-        <div className="grid min-h-[620px] grid-cols-1 lg:grid-cols-[43%_57%] lg:min-h-[690px]">
+        <div className="grid min-h-155 grid-cols-1 lg:grid-cols-[43%_57%] lg:min-h-172.5">
           {/* LEFT CONTENT */}
           <motion.div
             variants={shouldReduceMotion ? undefined : containerVariants}
@@ -66,7 +66,7 @@ export const HeroSection: React.FC = () => {
             {/* Heading */}
             <motion.h1
               variants={shouldReduceMotion ? undefined : itemVariants}
-              className="max-w-[650px] font-display text-[58px] font-medium leading-[0.92] tracking-[-0.04em] text-[#211815] sm:text-[72px] md:text-[82px] lg:text-[72px] xl:text-[88px]"
+              className="max-w-162.5 font-display text-[58px] font-medium leading-[0.92] tracking-[-0.04em] text-[#211815] sm:text-[72px] md:text-[82px] lg:text-[72px] xl:text-[88px]"
             >
               Skincare,
               <br />
@@ -76,7 +76,7 @@ export const HeroSection: React.FC = () => {
             {/* Description */}
             <motion.p
               variants={shouldReduceMotion ? undefined : itemVariants}
-              className="mt-7 max-w-[410px] text-[13px] leading-6 text-[#604C43] sm:text-[14px] sm:leading-7"
+              className="mt-7 max-w-102.5 text-[13px] leading-6 text-[#604C43] sm:text-[14px] sm:leading-7"
             >
               Thoughtful formulas. Clinically tested.
               <br />
@@ -103,7 +103,7 @@ export const HeroSection: React.FC = () => {
             {/* TRUST ITEMS */}
             <motion.div
               variants={shouldReduceMotion ? undefined : itemVariants}
-              className="mt-12 max-w-[500px] border-t border-[#241916]/10 pt-6"
+              className="mt-12 max-w-125 border-t border-[#241916]/10 pt-6"
             >
               <div className="grid grid-cols-4">
                 {trustItems.map(({ icon: Icon, title, subtitle }, index) => (
@@ -112,7 +112,7 @@ export const HeroSection: React.FC = () => {
                     className={`flex flex-col items-center text-center ${index !== 0 ? "border-l border-[#241916]/10" : ""}`}
                   >
                     <Icon className="mb-2 h-[22px] w-[22px] text-[#9E624D]" strokeWidth={1.1} />
-                    <span className="text-[8px] font-medium uppercase leading-[1.5] tracking-[0.12em] text-[#342721]">
+                    <span className="text-[8px] font-medium uppercase leading-normal tracking-[0.12em] text-[#342721]">
                       {title}
                       <br />
                       {subtitle}
@@ -129,21 +129,21 @@ export const HeroSection: React.FC = () => {
             whileInView={shouldReduceMotion ? undefined : { opacity: 1, x: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
             viewport={{ once: true }}
-            className="relative min-h-[470px] overflow-hidden lg:min-h-[690px]"
+            className="relative min-h-117.5 overflow-hidden lg:min-h-172.5"
           >
             {/* Peach visual background */}
             <div className="absolute inset-0 bg-[#EFCDBE]" />
 
             {/* Organic left curve */}
-            <div className="absolute -left-[17%] -top-[8%] z-[1] h-[55%] w-[38%] rounded-[50%] bg-[#FAF6F2]" />
+            <div className="absolute left-[-17%] -top-[8%] z-1 h-[55%] w-[38%] rounded-[50%] bg-alvora-ivory" />
 
             {/* Soft light */}
-            <div className="absolute right-[5%] top-[8%] z-[1] h-[55%] w-[70%] rounded-full bg-white/25 blur-3xl" />
+            <div className="absolute right-[5%] top-[8%] z-1 h-[55%] w-[70%] rounded-full bg-white/25 blur-3xl" />
 
             {/* PRODUCT IMAGE */}
             <div className="absolute inset-0 z-10">
               <Image
-                src="/images/hero/alvora-hero.png"
+                src="https://images.unsplash.com/photo-1615397323731-0160b73c944d?auto=format&fit=crop&w=1200&q=80"
                 alt="ALVORA skincare products"
                 fill
                 priority
@@ -153,8 +153,8 @@ export const HeroSection: React.FC = () => {
             </div>
 
             {/* BADGE */}
-            <div className="absolute right-[6%] top-[12%] z-20 flex h-[96px] w-[96px] items-center justify-center rounded-full border border-[#B9765E] bg-[#F8E8DF]/80 backdrop-blur-sm sm:h-[110px] sm:w-[110px] lg:h-[116px] lg:w-[116px]">
-              <div className="absolute inset-[7px] rounded-full border border-[#B9765E]/60" />
+            <div className="absolute right-[6%] top-[12%] z-20 flex h-24 w-24 items-center justify-center rounded-full border border-[#B9765E] bg-[#F8E8DF]/80 backdrop-blur-sm sm:h-[110px] sm:w-[110px] lg:h-[116px] lg:w-[116px]">
+              <div className="absolute inset-1.75 rounded-full border border-[#B9765E]/60" />
               <div className="relative text-center">
                 <span className="block text-[7px] uppercase tracking-[0.16em] text-[#965D49]">Dermatologist</span>
                 <Leaf className="mx-auto my-2 h-5 w-5 text-[#A9654E]" strokeWidth={1} />

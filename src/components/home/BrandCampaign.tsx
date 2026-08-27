@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, Star, Atom, Lightbulb, Sparkles } from 'lucide-react';
-import promoToysImage from '../../assets/images/placeholder.webp';
+import promoproductsImage from '../../assets/images/placeholder.webp';
 import logoImage from '../../assets/images/play_bimboo_logo_1785311841625.webp';
 
 export const BrandCampaign: React.FC<{ sectionSettings: any }> = ({ sectionSettings }) => {
@@ -13,8 +13,8 @@ export const BrandCampaign: React.FC<{ sectionSettings: any }> = ({ sectionSetti
       <div className="relative w-full rounded-[28px] md:rounded-[36px] overflow-hidden flex flex-col justify-center min-h-125 md:h-[600px] lg:h-[650px] shadow-xl group">
         {/* Full Background Image */}
         <Image 
-          src={promoToysImage}
-          alt="Magical Learning Toys"
+          src={promoproductsImage}
+          alt="Premium Skincare"
           fill
           sizes="100vw"
           className="object-cover object-center transition-transform duration-1000 group-hover:scale-[1.02]"
