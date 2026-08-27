@@ -131,24 +131,24 @@ export const HeroSection: React.FC = () => {
             viewport={{ once: true }}
             className="relative min-h-117.5 overflow-hidden lg:min-h-172.5"
           >
-            {/* Peach visual background */}
-            <div className="absolute inset-0 bg-[#EFCDBE]" />
+            
 
-            {/* Organic left curve */}
-            <div className="absolute left-[-17%] -top-[8%] z-1 h-[55%] w-[38%] rounded-[50%] bg-alvora-ivory" />
+            
 
-            {/* Soft light */}
-            <div className="absolute right-[5%] top-[8%] z-1 h-[55%] w-[70%] rounded-full bg-white/25 blur-3xl" />
+            
 
             {/* PRODUCT IMAGE */}
-            <div className="absolute inset-0 z-10">
+            <div 
+              className="absolute inset-0 z-10 overflow-hidden" 
+              style={{ borderRadius: "30% 0% 0% 30% / 40% 0% 0% 30%" }}
+            >
               <Image
-                src="/images/hero/alvora-hero.jpg"
+                src="/images/hero/alvora-hero.png"
                 alt="ALVORA skincare products"
                 fill
                 priority
                 sizes="(max-width: 1024px) 100vw, 57vw"
-                className="object-contain object-center lg:object-cover lg:object-right"
+                className="object-cover object-center"
               />
             </div>
 
