@@ -72,7 +72,7 @@ export const ConcernGrid: React.FC = () => {
           variants={contVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, margin: "0px" }}
         >
           {concerns.map((concern) => (
             <motion.div key={concern.id} variants={animVariants} className="h-full">

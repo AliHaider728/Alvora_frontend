@@ -117,10 +117,10 @@ export const Header: React.FC = () => {
       {/* FIXED HEADER */}
       <header
         ref={headerRef}
-        className={`fixed inset-x-0 top-0 z-50 bg-[#FAF6F2] text-[#241916] transition-shadow duration-300 ${isScrolled ? "shadow-[0_4px_24px_rgba(36,25,22,0.06)]" : ""}`}
+        className={`fixed inset-x-0 top-0 z-50 bg-alvora-ivory text-[#241916] transition-shadow duration-300 ${isScrolled ? "shadow-[0_4px_24px_rgba(36,25,22,0.06)]" : ""}`}
       >
         {/* SHIPPING BAR */}
-        <div className="flex min-h-[32px] items-center justify-center bg-[#C87355] px-4 text-center text-[11px] font-medium uppercase tracking-[0.14em] text-white sm:min-h-[34px] sm:text-xs">
+        <div className="flex min-h-8 items-center justify-center bg-[#C87355] px-4 text-center text-[11px] font-medium uppercase tracking-[0.14em] text-white sm:min-h-[34px] sm:text-xs">
           FREE SHIPPING ON ORDERS OVER $75
           <span className="mx-2 opacity-60">•</span>
           30-DAY RETURNS
@@ -168,7 +168,7 @@ export const Header: React.FC = () => {
                 aria-label="Search"
                 className="rounded-full p-2 text-[#241916] transition-colors hover:bg-[#F2E7DF] hover:text-[#A86249]"
               >
-                <Search className="h-[19px] w-4.75" strokeWidth={1.35} />
+                <Search className="h-4.75 w-4.75" strokeWidth={1.35} />
               </button>
 
               {/* Account */}
@@ -197,7 +197,7 @@ export const Header: React.FC = () => {
                 aria-label="Wishlist"
                 className="relative hidden rounded-full p-2 text-[#241916] transition-colors hover:bg-[#F2E7DF] hover:text-[#A86249] sm:flex"
               >
-                <Heart className="h-[19px] w-[19px]" strokeWidth={1.35} />
+                <Heart className="h-4.75 w-4.75" strokeWidth={1.35} />
                 {mounted && wishlist.length > 0 && (
                   <span className="absolute right-0 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#C87355] px-1 text-[9px] font-bold text-white">
                     {wishlist.length}

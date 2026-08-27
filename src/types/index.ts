@@ -453,3 +453,13 @@ export interface Bundle {
   currentPrice?: number;
   products?: any[];
 }
+
+export interface AudioReview {
+  id: string;
+  customerName: string;
+  audioUrl: string;
+  duration: string;
+  displayOrder: number;
+  isActive: boolean;
+  createdAt: string;
+}

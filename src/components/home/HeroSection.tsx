@@ -143,7 +143,7 @@ export const HeroSection: React.FC = () => {
             {/* PRODUCT IMAGE */}
             <div className="absolute inset-0 z-10">
               <Image
-                src="https://images.unsplash.com/photo-1615397323731-0160b73c944d?auto=format&fit=crop&w=1200&q=80"
+                src="/images/hero/alvora-hero.jpg"
                 alt="ALVORA skincare products"
                 fill
                 priority
