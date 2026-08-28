@@ -112,7 +112,7 @@ export default function AccountPage() {
           <main className="lg:col-span-3">
             {activeTab === 'orders' && (
               <div className="space-y-4">
-                <h2 className="font-heading font-black text-xl text-slate-900 mb-4">Your Recent Toy Orders</h2>
+                <h2 className="font-heading font-black text-xl text-slate-900 mb-4">Your Recent Orders</h2>
                 {customerOrders.length === 0 ? (
                   <p className="text-xs text-slate-500 p-6 bg-white rounded-3xl text-center">No past orders found.</p>
                 ) : (

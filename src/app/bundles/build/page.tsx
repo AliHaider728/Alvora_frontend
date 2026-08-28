@@ -140,7 +140,7 @@ export default function BuildBundlePage() {
                           <button 
                             onClick={() => handleAddProduct(product)}
                             disabled={isDisabledForAdd}
-                            className="w-full h-full flex items-center justify-center border border-[#E7D9D0] text-[#241916] text-[10px] font-bold tracking-widest uppercase rounded-full hover:border-[#A86249] hover:text-[#A86249] transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:border-[#E7D9D0] disabled:hover:text-[#241916]"
+                            className="w-full h-full flex items-center justify-center border border-[#E7D9D0] text-[#241916] text-[9px] sm:text-[10px] font-bold tracking-wider sm:tracking-widest px-1 sm:px-0 uppercase rounded-full hover:border-[#A86249] hover:text-[#A86249] transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:border-[#E7D9D0] disabled:hover:text-[#241916] whitespace-nowrap overflow-hidden text-ellipsis"
                           >
                             Add to Routine
                           </button>

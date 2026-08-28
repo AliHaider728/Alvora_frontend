@@ -138,10 +138,7 @@ export const HeroSection: React.FC = () => {
             
 
             {/* PRODUCT IMAGE */}
-            <div 
-              className="absolute inset-0 z-10 overflow-hidden" 
-              style={{ borderRadius: "30% 0% 0% 30% / 40% 0% 0% 30%" }}
-            >
+            <div className="absolute inset-0 z-10">
               <Image
                 src="/images/hero/alvora-hero.png"
                 alt="ALVORA skincare products"

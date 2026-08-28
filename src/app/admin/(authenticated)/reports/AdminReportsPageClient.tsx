@@ -15,7 +15,7 @@ export const AdminReportsPageClient: React.FC = () => {
 
       <div>
         <h1 className="font-heading font-black text-2xl text-slate-900">Sales Reports & Category Breakdown</h1>
-        <p className="text-xs text-slate-500 font-medium">In-depth revenue trends, category distribution, and top toy sales.</p>
+        <p className="text-xs text-slate-500 font-medium">In-depth revenue trends, category distribution, and top product sales.</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

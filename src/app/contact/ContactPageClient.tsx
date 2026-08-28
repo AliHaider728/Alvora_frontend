@@ -236,7 +236,7 @@ export const ContactPageClient: React.FC = () => {
                     <input
                       type="text"
                       required
-                      placeholder="e.g. Order Tracking or Toy Suggestion"
+                      placeholder="e.g. Order Tracking or Product Question"
                       value={subject}
                       onChange={e => setSubject(e.target.value)}
                       className="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200"

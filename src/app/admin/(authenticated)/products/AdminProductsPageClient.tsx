@@ -189,7 +189,7 @@ export const AdminProductsPageClient: React.FC = () => {
               className="px-5 py-2.5 rounded-2xl bg-rose-500 hover:bg-rose-600 text-white font-heading font-bold text-xs flex items-center gap-2 shadow-md transition-all"
             >
               <Plus className="w-4 h-4" />
-              <span>Add New Toy</span>
+              <span>Add New Product</span>
             </button>
           </div>
       </div>
@@ -199,7 +199,7 @@ export const AdminProductsPageClient: React.FC = () => {
         <div className="relative flex-1 max-w-sm">
           <input
             type="text"
-            placeholder="Search by toy name or brand..."
+            placeholder="Search by product name or brand..."
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             className="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-slate-200"
@@ -228,7 +228,7 @@ export const AdminProductsPageClient: React.FC = () => {
             <thead className="bg-slate-50 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
               <tr>
                 <th className="p-4 pl-6 w-10"></th>
-                <th className="p-4">Toy</th>
+                <th className="p-4">Product</th>
                 <th className="p-4">Categories</th>
                 <th className="p-4">Age</th>
                 <th className="p-4">Price (PKR)</th>

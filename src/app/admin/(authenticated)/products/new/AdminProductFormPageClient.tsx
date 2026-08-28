@@ -1004,7 +1004,7 @@ export const AdminProductFormPageClient: React.FC = () => {
         <button type="button" onClick={cancelEditing} className="mb-2 inline-flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-rose-600">
           <ChevronLeft className="h-4 w-4" /> Back to Products
         </button>
-        <h1 className="font-heading text-2xl font-black text-slate-900 sm:text-3xl">{isEditing ? 'Edit Toy Product' : 'Add New Toy Product'}</h1>
+        <h1 className="font-heading text-2xl font-black text-slate-900 sm:text-3xl">{isEditing ? 'Edit Product' : 'Add New Product'}</h1>
         <p className="mt-1 text-xs font-medium text-slate-500">{isEditing ? 'Update this product and publish changes to the Alvora Skincare storefront.' : 'Create and publish a new product on the Alvora Skincare storefront.'}</p>
       </div>
 

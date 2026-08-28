@@ -67,7 +67,7 @@ export const AdminDashboardPageClient: React.FC = () => {
         <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-center justify-between text-xs text-amber-900">
           <div className="flex items-center gap-2 font-semibold">
             <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0" />
-            <span>Low Stock Alert: {lowStockProducts.length} toy product(s) have fewer than 20 units remaining.</span>
+            <span>Low Stock Alert: {lowStockProducts.length} product(s) have fewer than 20 units remaining.</span>
           </div>
           <Link href="/admin/products" className="font-bold underline text-amber-800 hover:text-amber-950">
             Manage Inventory &rarr;

@@ -120,8 +120,8 @@ export const Header: React.FC = () => {
         className={`fixed inset-x-0 top-0 z-50 bg-alvora-ivory text-[#241916] transition-shadow duration-300 ${isScrolled ? "shadow-[0_4px_24px_rgba(36,25,22,0.06)]" : ""}`}
       >
         {/* SHIPPING BAR */}
-        <div className="flex min-h-8 items-center justify-center bg-[#C87355] px-4 text-center text-[11px] font-medium uppercase tracking-[0.14em] text-white sm:min-h-[34px] sm:text-xs">
-          FREE SHIPPING ON ORDERS OVER $75
+        <div className="flex min-h-8 items-center justify-center bg-[#C87355] px-4 text-center text-[11px] font-medium uppercase tracking-[0.14em] text-white sm:min-h-8.5 sm:text-xs">
+          FREE SHIPPING ON ORDERS OVER {settings?.freeShippingThreshold ? formatPrice(settings.freeShippingThreshold, settings.currency) : 'RS. 5,000'}
           <span className="mx-2 opacity-60">•</span>
           30-DAY RETURNS
           <span className="mx-2 hidden opacity-60 sm:inline">•</span>
@@ -260,7 +260,7 @@ export const Header: React.FC = () => {
                         src={getSafeImageSrc(product.images?.[0])}
                         alt={product.name}
                         className="h-11 w-11 shrink-0 bg-alvora-cream object-cover"
-                      />
+                      />   
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-medium text-[#241916]">{product.name}</p>
                         <p className="mt-0.5 text-xs text-[#998279]">{product.category}</p>
