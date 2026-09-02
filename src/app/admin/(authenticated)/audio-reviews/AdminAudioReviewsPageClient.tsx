@@ -31,7 +31,7 @@ export default function AdminAudioReviewsPageClient() {
 
   const fetchReviews = async () => {
     try {
-      const res = await fetch("${API_BASE_URL}/audio-reviews/admin", { headers: { Authorization: `Bearer ${localStorage.getItem("alvora_admin_token")}` } });
+      const res = await fetch(`${API_BASE_URL}/audio-reviews/admin`, { headers: { Authorization: `Bearer ${localStorage.getItem("alvora_admin_token")}` } });
       const data = await res.json();
       setReviews(data);
     } catch (err) {
@@ -93,7 +93,7 @@ export default function AdminAudioReviewsPageClient() {
 
         // Fetch wrapper to handle FormData (axios handles it fine if we just pass formData, but api.post might need custom headers or config, let's use standard fetch just in case or api.post)
         const token = localStorage.getItem('alvora_admin_token');
-        const res = await fetch('${API_BASE_URL}/audio-reviews', {
+        const res = await fetch(`${API_BASE_URL}/audio-reviews`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`
