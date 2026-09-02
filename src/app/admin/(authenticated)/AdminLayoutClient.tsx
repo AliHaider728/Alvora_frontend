@@ -19,7 +19,9 @@ import {
   MessageSquare,
   Mail,
   Menu,
-  X as CloseIcon
+  X as CloseIcon,
+  Mic,
+  Gift
 } from 'lucide-react';
 import { getAuthToken, removeAuthToken, api, isSuperAdmin } from '../../../services/api';
 
@@ -48,7 +50,9 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
     { label: 'Orders', path: '/admin/orders', icon: ShoppingBag },
     { label: 'Customers', path: '/admin/customers', icon: Users },
     { label: 'Reviews', path: '/admin/reviews', icon: MessageSquare },
+    { label: 'Voice Reviews', path: '/admin/audio-reviews', icon: Mic },
     { label: 'Contact Messages', path: '/admin/contact-messages', icon: Mail },
+    { label: 'Bundles', path: '/admin/bundles', icon: Gift },
     { label: 'Coupons & Deals', path: '/admin/coupons', icon: Tag },
     { label: 'Sales Reports', path: '/admin/reports', icon: BarChart3 },
     { label: 'Store Settings', path: '/admin/settings', icon: Settings },

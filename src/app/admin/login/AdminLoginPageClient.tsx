@@ -27,7 +27,7 @@ export const AdminLoginPageClient: React.FC = () => {
       } else {
         const apiError = getLastApiError();
         if (apiError && apiError.toLowerCase().includes('failed to fetch')) {
-          setError('Backend API is unreachable. Please verify the backend server is running on port 5000.');
+          setError('Backend API is unreachable. Please verify the backend server is running on the configured port.');
         } else {
           setError(apiError || 'Invalid admin credentials. Please check your email and password.');
         }

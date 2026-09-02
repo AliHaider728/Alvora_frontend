@@ -8,7 +8,7 @@ import { MOCK_BUNDLES } from '../data/mock/bundles';
 
 const USE_MOCK_DATA = process.env.NEXT_PUBLIC_ALVORA_USE_MOCK_DATA === 'true';
 
-export const API_BASE_URL = process.env.NEXT_PUBLIC_ALVORA_API_URL || 'http://localhost:6000/api';
+export const API_BASE_URL = process.env.NEXT_PUBLIC_ALVORA_API_URL || 'http://localhost:5001/api';
 
 // Helper for Token Management
 export const getAuthToken = (): string | null => {
@@ -290,5 +290,8 @@ export const api = {
       lastApiError = error.message;
       return { bundles: [] };
     }
-  }
+  },
+  createBundle: (data: any) => fetchJson<{ success: boolean, bundleId: string }>('/bundles', { method: 'POST', body: JSON.stringify(data) }),
+  updateBundle: (id: string, data: any) => fetchJson<{ success: boolean }>(`/bundles/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  deleteBundle: (id: string) => fetchJson<{ success: boolean }>(`/bundles/${id}`, { method: 'DELETE' })
 };
