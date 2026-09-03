@@ -8,6 +8,7 @@ import { BestSellers } from '../components/home/BestSellers';
 import { IngredientSection } from '../components/home/IngredientSection';
 import { FeaturedProduct } from '../components/home/FeaturedProduct';
 import { Testimonials } from '../components/home/Testimonials';
+import { AudioReviews } from '../components/home/AudioReviews';
 import { ConcernGrid } from '../components/home/ConcernGrid';
 import { FinalCTA } from '../components/home/FinalCTA';
 import { MOCK_REVIEWS } from '../data/mock/reviews';
@@ -38,6 +39,7 @@ export const HomePage: React.FC<Props> = ({ products, categories, settings }) =>
       <IngredientSection />
       {featuredProduct && <FeaturedProduct product={featuredProduct} />}
       <Testimonials reviews={MOCK_REVIEWS} />
+      <AudioReviews />
       <ConcernGrid />
       <FinalCTA />
     </div>
