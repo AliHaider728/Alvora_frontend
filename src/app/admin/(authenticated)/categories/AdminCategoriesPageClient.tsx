@@ -24,7 +24,7 @@ export const AdminCategoriesPageClient: React.FC = () => {
   const [productResolution, setProductResolution] = useState<'uncategorized' | 'reassign'>('uncategorized');
   const [navigationResolution, setNavigationResolution] = useState<'remove' | 'reassign'>('remove');
   const [targetCategoryId, setTargetCategoryId] = useState('');
-  const allowed = isSuperAdmin();
+  const allowed = true; // allow normal admins to access categories
 
   const visibleCategories = useMemo(() => categories
     .filter(category => `${category.name} ${category.slug} ${category.shortDescription || ''}`.toLowerCase().includes(search.trim().toLowerCase()))

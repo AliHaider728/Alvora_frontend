@@ -183,64 +183,32 @@ export default function AdminAudioReviewsPageClient() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Customer Name *</label>
-                <input
-                  type="text"
-                  required
-                  value={customerName}
-                  onChange={(e) => setCustomerName(e.target.value)}
-                  className="w-full rounded-md border-gray-300 shadow-sm focus:border-[#C48B80] focus:ring-[#C48B80] sm:text-sm p-2 border"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Duration Text (e.g. 0:20)</label>
-                <input
-                  type="text"
-                  required
-                  value={duration}
-                  onChange={(e) => setDuration(e.target.value)}
-                  className="w-full rounded-md border-gray-300 shadow-sm focus:border-[#C48B80] focus:ring-[#C48B80] sm:text-sm p-2 border"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Display Order</label>
-                <input
-                  type="number"
-                  required
-                  value={displayOrder}
-                  onChange={(e) => setDisplayOrder(e.target.value)}
-                  className="w-full rounded-md border-gray-300 shadow-sm focus:border-[#C48B80] focus:ring-[#C48B80] sm:text-sm p-2 border"
-                />
-              </div>
-              
-              <div className="flex items-center pt-6">
-                <label className="flex items-center space-x-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={isActive}
-                    onChange={(e) => setIsActive(e.target.checked)}
-                    className="rounded border-gray-300 text-[#C48B80] focus:ring-[#C48B80]"
-                  />
-                  <span className="text-sm font-medium text-gray-700">Active (visible on storefront)</span>
-                </label>
-              </div>
-            </div>
-
-            {!editingId && (
+            {!editingId ? (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Audio File (MP3/WAV) *</label>
                 <input
                   type="file"
                   accept="audio/*"
-                  onChange={(e) => setFile(e.target.files?.[0] || null)}
+                  onChange={(e) => {
+                    const selectedFile = e.target.files?.[0] || null;
+                    setFile(selectedFile);
+                    if (selectedFile) {
+                      setCustomerName("Alvora Customer");
+                      const url = URL.createObjectURL(selectedFile);
+                      const audio = new Audio(url);
+                      audio.addEventListener('loadedmetadata', () => {
+                        const mins = Math.floor(audio.duration / 60);
+                        const secs = Math.floor(audio.duration % 60);
+                        setDuration(`${mins}:${secs.toString().padStart(2, '0')}`);
+                      });
+                    }
+                  }}
                   className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-[#F1C9BD] file:text-[#A86249] hover:file:bg-[#EFCDBE]"
                 />
                 <p className="mt-1 text-xs text-gray-500">File will be uploaded to Cloudflare R2.</p>
               </div>
+            ) : (
+              <p className="text-sm text-gray-600">Editing is restricted in simplified mode. Please delete and re-upload if needed.</p>
             )}
 
             <div className="flex justify-end pt-4">

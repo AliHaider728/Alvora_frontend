@@ -1333,7 +1333,7 @@ export const ProductDetailPageClient: React.FC = () => {
             ) : (
               <div className="grid grid-cols-1 items-stretch justify-items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
                 {apiRelatedProducts.map(rp => (
-                  <ProductCard key={rp.id || rp._id} product={rp} layout="compact" />
+                  <AlvoraProductCard key={rp.id || rp._id} product={rp} />
                 ))}
               </div>
             )}
