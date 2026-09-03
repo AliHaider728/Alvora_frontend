@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Plus, Trash2, Edit2, Play, Pause, Save, X } from "lucide-react";
-import { api, API_BASE_URL } from "../../../../services/api";
+import { api, API_BASE_URL, getAuthToken } from "../../../../services/api";
 import { AudioReview } from "../../../../types";
 
 export default function AdminAudioReviewsPageClient() {
@@ -31,12 +31,19 @@ export default function AdminAudioReviewsPageClient() {
 
   const fetchReviews = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/audio-reviews/admin`, { headers: { Authorization: `Bearer ${localStorage.getItem("alvora_admin_token")}` } });
+      const token = getAuthToken();
+      const res = await fetch(`${API_BASE_URL}/audio-reviews/admin`, { 
+        headers: { Authorization: `Bearer ${token}` } 
+      });
       const data = await res.json();
-      setReviews(data);
-    } catch (err) {
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to fetch audio reviews");
+      }
+      setReviews(Array.isArray(data) ? data : []);
+    } catch (err: any) {
       console.error(err);
-      setError("Failed to fetch audio reviews");
+      setError(err.message || "Failed to fetch audio reviews");
+      setReviews([]);
     } finally {
       setLoading(false);
     }
@@ -72,7 +79,7 @@ export default function AdminAudioReviewsPageClient() {
     setError("");
     try {
       if (editingId) {
-        await fetch(`${API_BASE_URL}/audio-reviews/${editingId}`, { method: "PUT", headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem("alvora_admin_token")}` }, body: JSON.stringify({
+        await fetch(`${API_BASE_URL}/audio-reviews/${editingId}`, { method: "PUT", headers: { "Content-Type": "application/json", Authorization: `Bearer ${getAuthToken()}` }, body: JSON.stringify({
           customerName,
           duration,
           displayOrder: parseInt(displayOrder, 10),
@@ -92,7 +99,7 @@ export default function AdminAudioReviewsPageClient() {
         formData.append("audio", file);
 
         // Fetch wrapper to handle FormData (axios handles it fine if we just pass formData, but api.post might need custom headers or config, let's use standard fetch just in case or api.post)
-        const token = localStorage.getItem('alvora_admin_token');
+        const token = getAuthToken();
         const res = await fetch(`${API_BASE_URL}/audio-reviews`, {
           method: 'POST',
           headers: {
@@ -118,7 +125,7 @@ export default function AdminAudioReviewsPageClient() {
   const handleDelete = async (id: string) => {
     if (!window.confirm("Delete this audio review?")) return;
     try {
-      await fetch(`${API_BASE_URL}/audio-reviews/${id}`, { method: "DELETE", headers: { Authorization: `Bearer ${localStorage.getItem("alvora_admin_token")}` } });
+      await fetch(`${API_BASE_URL}/audio-reviews/${id}`, { method: "DELETE", headers: { Authorization: `Bearer ${getAuthToken()}` } });
       fetchReviews();
     } catch (err) {
       console.error(err);
