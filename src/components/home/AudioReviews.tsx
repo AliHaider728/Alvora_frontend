@@ -64,7 +64,7 @@ export const AudioReviews: React.FC = () => {
               <div 
                 key={i} 
                 className="w-[2px] rounded-full bg-white transition-all duration-150"
-                style={{ height: \`\${h}px\` }}
+                style={{ height: `${h}px` }}
               />
             );
           })}
@@ -79,7 +79,7 @@ export const AudioReviews: React.FC = () => {
 
   return (
     <section className="py-12 bg-white overflow-hidden">
-      <style dangerouslySetInnerHTML={{__html: \`
+      <style dangerouslySetInnerHTML={{__html: `
         @keyframes marquee {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
@@ -98,7 +98,7 @@ export const AudioReviews: React.FC = () => {
         .group:hover .animate-marquee-reverse {
           animation-play-state: paused;
         }
-      \`}} />
+      `}} />
       <div className="alvora-container">
         
         <div className="flex items-center justify-center mb-10">
@@ -119,14 +119,14 @@ export const AudioReviews: React.FC = () => {
           {/* Row 1 - Left */}
           <div className="w-[200%] sm:w-max flex animate-marquee gap-4">
             {row1.map((r, i) => (
-              <PlayerPill key={\`r1-\${r.id}-\${i}\`} r={r} isPlaying={playingId === r.id} />
+              <PlayerPill key={`r1-${r.id}-${i}`} r={r} isPlaying={playingId === r.id} />
             ))}
           </div>
 
           {/* Row 2 - Right */}
           <div className="w-[200%] sm:w-max flex animate-marquee-reverse gap-4">
             {row2Duplicated.map((r, i) => (
-              <PlayerPill key={\`r2-\${r.id}-\${i}\`} r={r} isPlaying={playingId === r.id} />
+              <PlayerPill key={`r2-${r.id}-${i}`} r={r} isPlaying={playingId === r.id} />
             ))}
           </div>
         </div>
