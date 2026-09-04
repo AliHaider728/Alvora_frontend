@@ -190,7 +190,7 @@ export const CategoryPageClient: React.FC = () => {
         <Breadcrumbs items={breadcrumbItems} />
 
         {/* Page Header */}
-        <div className="relative w-full h-[260px] lg:h-[320px] mb-8 bg-[#E9E1D9] overflow-hidden rounded-xl flex items-center">
+        <div className="relative w-full h-[320px] md:h-[380px] lg:h-[420px] mb-8 bg-[#E9E1D9] overflow-hidden rounded-xl flex items-center">
           {/* Background Image positioned on the right */}
           <div className="absolute right-0 top-0 bottom-0 w-full md:w-[80%]">
             <Image 
