@@ -13,11 +13,11 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     if (product.inStock) {
-      addToCart(product.id, 1);
+      addToCart(product, 1);
     }
   };
 
-  const needsSelection = product.hasVariations || (product.options && product.options.length > 0);
+  const needsSelection = (product.variations && product.variations.length > 0) ;
 
   return (
     <div className="group relative bg-white flex flex-col h-full border border-[#EDE5DC] hover:shadow-md transition-shadow duration-300">
@@ -87,9 +87,9 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
             <span className="text-[#C87355] font-bold text-[15px] sm:text-base">
               {formatPrice(product.price, settings?.currency || 'Rs.')}
             </span>
-            {product.compareAtPrice && product.compareAtPrice > product.price && (
+            {product.originalPrice && product.originalPrice > product.price && (
               <span className="text-[11px] sm:text-xs text-[#A1A7AA] line-through">
-                {formatPrice(product.compareAtPrice, settings?.currency || 'Rs.')}
+                {formatPrice(product.originalPrice, settings?.currency || 'Rs.')}
               </span>
             )}
           </div>
