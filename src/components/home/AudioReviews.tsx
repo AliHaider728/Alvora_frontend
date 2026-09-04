@@ -74,8 +74,8 @@ export const AudioReviews: React.FC = () => {
             );
           })}
         </div>
-        <span className="text-[9px] text-gray-400 font-medium truncate pr-2" title={r.customerName}>
-          {r.customerName} • {r.duration || '0:15'}
+        <span className="text-[10px] text-gray-400 font-medium truncate pr-2">
+          {r.duration || '0:15'}
         </span>
       </div>
       <button className="w-7 h-7 rounded-full bg-[#0ea5e9] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">
