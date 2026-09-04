@@ -41,13 +41,18 @@ export const AudioReviews: React.FC = () => {
 
   if (loading || reviews.length === 0) return null;
 
-  // Split reviews into two arrays for two rows if there are enough, otherwise duplicate
-  const row1 = [...reviews, ...reviews, ...reviews].slice(0, Math.max(6, reviews.length * 2));
-  const row2 = [...reviews].reverse();
-  const row2Duplicated = [...row2, ...row2, ...row2].slice(0, Math.max(6, reviews.length * 2));
+  // Duplicate reviews enough times to ensure the container height is exceeded 
+  // for a smooth infinite scroll (at least 20 items per column)
+  const baseRepeated = Array(15).fill(reviews).flat();
+  
+  // Prepare 4 columns with slight variations in order
+  const col1 = [...baseRepeated];
+  const col2 = [...baseRepeated].reverse();
+  const col3 = [...baseRepeated.slice(2), ...baseRepeated.slice(0, 2)];
+  const col4 = [...baseRepeated].reverse().slice(1).concat([...baseRepeated].reverse().slice(0, 1));
 
-  const PlayerPill = ({ r, isPlaying }: { r: AudioReview, isPlaying: boolean }) => (
-    <div className="flex items-center gap-3 bg-[#1e272e] rounded-full p-2 pr-4 w-[320px] shadow-sm flex-shrink-0 cursor-pointer hover:bg-[#2c3e50] transition-colors" onClick={() => togglePlay(r.audioUrl, r.id)}>
+  const PlayerPill = ({ r, isPlaying, uniqueKey }: { r: AudioReview, isPlaying: boolean, uniqueKey: string }) => (
+    <div key={uniqueKey} className="flex items-center gap-3 bg-[#1e272e] rounded-full p-2 pr-4 w-full shadow-sm flex-shrink-0 cursor-pointer hover:bg-[#2c3e50] transition-colors" onClick={() => togglePlay(r.audioUrl, r.id)}>
       <div className="w-10 h-10 rounded-full bg-[#E5E7EB] flex items-center justify-center flex-shrink-0 text-gray-500">
         <User className="w-5 h-5" />
       </div>
@@ -69,7 +74,9 @@ export const AudioReviews: React.FC = () => {
             );
           })}
         </div>
-        <span className="text-[9px] text-gray-400 font-medium">{r.duration || '0:15'}</span>
+        <span className="text-[9px] text-gray-400 font-medium truncate pr-2" title={r.customerName}>
+          {r.customerName} • {r.duration || '0:15'}
+        </span>
       </div>
       <button className="w-7 h-7 rounded-full bg-[#0ea5e9] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">
         1x
@@ -78,35 +85,40 @@ export const AudioReviews: React.FC = () => {
   );
 
   return (
-    <section className="py-12 bg-white overflow-hidden">
+    <section className="py-16 bg-[#111] overflow-hidden">
       <style dangerouslySetInnerHTML={{__html: `
-        @keyframes marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
+        @keyframes scroll-down {
+          0% { transform: translateY(-50%); }
+          100% { transform: translateY(0); }
         }
-        @keyframes marquee-reverse {
-          0% { transform: translateX(-50%); }
-          100% { transform: translateX(0); }
+        @keyframes scroll-up {
+          0% { transform: translateY(0); }
+          100% { transform: translateY(-50%); }
         }
-        .animate-marquee {
-          animation: marquee 30s linear infinite;
+        .animate-scroll-down {
+          animation: scroll-down 45s linear infinite;
         }
-        .animate-marquee-reverse {
-          animation: marquee-reverse 30s linear infinite;
+        .animate-scroll-up {
+          animation: scroll-up 45s linear infinite;
         }
-        .group:hover .animate-marquee,
-        .group:hover .animate-marquee-reverse {
+        .group:hover .animate-scroll-down,
+        .group:hover .animate-scroll-up {
           animation-play-state: paused;
+        }
+        .mask-vertical-fades {
+          mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+          -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
         }
       `}} />
       <div className="alvora-container">
         
-        <div className="flex items-center justify-center mb-10">
-          <div className="h-[1px] bg-gray-300 flex-1 max-w-[200px]"></div>
-          <h2 className="font-display text-xl md:text-2xl text-[#1A1A1A] text-center font-bold px-6">
-            User Audio Reviews
+        <div className="flex flex-col items-center justify-center mb-12">
+          <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full border border-amber-500/30 text-amber-500 text-sm font-semibold mb-4 bg-amber-500/10">
+            <span className="mr-2">⚡</span> Testimonials
+          </div>
+          <h2 className="font-display text-3xl md:text-4xl text-white text-center font-bold px-6">
+            Customer Reviews
           </h2>
-          <div className="h-[1px] bg-gray-300 flex-1 max-w-[200px]"></div>
         </div>
 
         <audio 
@@ -115,20 +127,37 @@ export const AudioReviews: React.FC = () => {
           className="hidden" 
         />
 
-        <div className="flex flex-col gap-4 group cursor-default">
-          {/* Row 1 - Left */}
-          <div className="w-[200%] sm:w-max flex animate-marquee gap-4">
-            {row1.map((r, i) => (
-              <PlayerPill key={`r1-${r.id}-${i}`} r={r} isPlaying={playingId === r.id} />
+        {/* 4 Column Vertical Masonry Layout */}
+        <div className="relative h-[650px] overflow-hidden flex gap-4 lg:gap-6 justify-center mask-vertical-fades group cursor-default">
+          
+          {/* Column 1 - Top to Bottom (Down) */}
+          <div className="flex-1 max-w-[280px] lg:max-w-[320px] flex flex-col gap-4 animate-scroll-down">
+            {col1.map((r, i) => (
+              <PlayerPill key={`col1-${r.id}-${i}`} r={r} isPlaying={playingId === r.id} uniqueKey={`c1-${i}`} />
             ))}
           </div>
 
-          {/* Row 2 - Right */}
-          <div className="w-[200%] sm:w-max flex animate-marquee-reverse gap-4">
-            {row2Duplicated.map((r, i) => (
-              <PlayerPill key={`r2-${r.id}-${i}`} r={r} isPlaying={playingId === r.id} />
+          {/* Column 2 - Bottom to Top (Up) */}
+          <div className="flex-1 max-w-[280px] lg:max-w-[320px] hidden sm:flex flex-col gap-4 animate-scroll-up">
+            {col2.map((r, i) => (
+              <PlayerPill key={`col2-${r.id}-${i}`} r={r} isPlaying={playingId === r.id} uniqueKey={`c2-${i}`} />
             ))}
           </div>
+
+          {/* Column 3 - Top to Bottom (Down) */}
+          <div className="flex-1 max-w-[280px] lg:max-w-[320px] hidden md:flex flex-col gap-4 animate-scroll-down">
+            {col3.map((r, i) => (
+              <PlayerPill key={`col3-${r.id}-${i}`} r={r} isPlaying={playingId === r.id} uniqueKey={`c3-${i}`} />
+            ))}
+          </div>
+
+          {/* Column 4 - Bottom to Top (Up) */}
+          <div className="flex-1 max-w-[280px] lg:max-w-[320px] hidden lg:flex flex-col gap-4 animate-scroll-up">
+            {col4.map((r, i) => (
+              <PlayerPill key={`col4-${r.id}-${i}`} r={r} isPlaying={playingId === r.id} uniqueKey={`c4-${i}`} />
+            ))}
+          </div>
+
         </div>
       </div>
     </section>
