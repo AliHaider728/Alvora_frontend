@@ -375,7 +375,7 @@ export const CategoryPageClient: React.FC = () => {
 
             {/* Product Grid */}
             {loading ? (
-              <div className="grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 lg:gap-6">
+              <div className="grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
                 {[...Array(6)].map((_, i) => (
                   <SkeletonCard key={i} />
                 ))}
@@ -397,7 +397,7 @@ export const CategoryPageClient: React.FC = () => {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 lg:gap-6">
+              <div className="grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
                 {sortedProducts.map(product => (
                   <AlvoraProductCard key={product.id} product={product} />
                 ))}
