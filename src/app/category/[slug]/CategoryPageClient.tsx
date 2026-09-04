@@ -190,17 +190,16 @@ export const CategoryPageClient: React.FC = () => {
         <Breadcrumbs items={breadcrumbItems} />
 
         {/* Page Header */}
-        <div className="relative w-full h-[280px] mb-8 bg-[#F5EDE4] overflow-hidden flex items-center justify-center text-center border-b border-t border-[#EDE5DC]">
-          <Image src="/images/shop-banner.png" alt="Skincare Collection" fill className="object-cover object-center opacity-90" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#F5EDE4]/95 via-[#F5EDE4]/80 to-[#F5EDE4]/20 z-10"></div>
-          <div className="relative z-20 px-6 max-w-2xl">
-            <span className="text-[10px] tracking-widest uppercase text-[#C87355] font-bold mb-3 block drop-shadow-sm">
+        <div className="relative w-full h-[280px] mb-8 bg-[#F5EDE4] overflow-hidden flex items-center justify-start text-left border border-[#EDE5DC] rounded-sm">
+          <Image src="/images/shop-banner.png" alt="Skincare Collection" fill className="object-cover object-center" priority />
+          <div className="relative z-20 px-8 md:px-16 max-w-2xl">
+            <span className="text-[10px] tracking-widest uppercase text-[#C87355] font-bold mb-3 block">
               COLLECTION
             </span>
-            <h1 className="font-display text-4xl lg:text-5xl text-[#1A1A1A] font-medium leading-tight mb-4 drop-shadow-sm">
+            <h1 className="font-display text-4xl lg:text-5xl text-[#1A1A1A] font-medium leading-tight mb-4">
               {currentCategoryObj ? currentCategoryObj.name : 'All Products'}
             </h1>
-            <p className="text-[#1A1A1A]/90 text-sm font-medium leading-relaxed max-w-lg mx-auto drop-shadow-sm">
+            <p className="text-[#1A1A1A]/80 text-[15px] font-medium leading-relaxed max-w-md">
               {currentCategoryObj
                 ? currentCategoryObj.description
                 : 'Explore our full spectrum of premium skincare, serums, moisturizers, and cleansers.'}
