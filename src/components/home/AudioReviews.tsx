@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { Play, Pause } from "lucide-react";
+import { Play, Pause, User } from "lucide-react";
 import { api, API_BASE_URL } from "../../services/api";
 import { AudioReview } from "../../types";
 
