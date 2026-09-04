@@ -128,31 +128,31 @@ export const AudioReviews: React.FC = () => {
         />
 
         {/* 4 Column Vertical Masonry Layout - Edge to Edge */}
-        <div className="relative h-[650px] w-full overflow-hidden flex gap-4 lg:gap-6 justify-center mask-vertical-fades group cursor-default px-4">
+        <div className="relative h-[450px] w-full overflow-hidden flex gap-4 lg:gap-8 justify-center mask-vertical-fades group cursor-default px-4">
           
           {/* Column 1 - Top to Bottom (Down) */}
-          <div className="flex-1 flex flex-col gap-4 animate-scroll-down">
+          <div className="flex-1 flex flex-col gap-6 animate-scroll-down">
             {col1.map((r, i) => (
               <PlayerPill key={`col1-${r.id}-${i}`} r={r} isPlaying={playingId === r.id} uniqueKey={`c1-${i}`} />
             ))}
           </div>
 
           {/* Column 2 - Bottom to Top (Up) */}
-          <div className="flex-1 hidden sm:flex flex-col gap-4 animate-scroll-up">
+          <div className="flex-1 hidden sm:flex flex-col gap-6 animate-scroll-up">
             {col2.map((r, i) => (
               <PlayerPill key={`col2-${r.id}-${i}`} r={r} isPlaying={playingId === r.id} uniqueKey={`c2-${i}`} />
             ))}
           </div>
 
           {/* Column 3 - Top to Bottom (Down) */}
-          <div className="flex-1 hidden md:flex flex-col gap-4 animate-scroll-down">
+          <div className="flex-1 hidden md:flex flex-col gap-6 animate-scroll-down">
             {col3.map((r, i) => (
               <PlayerPill key={`col3-${r.id}-${i}`} r={r} isPlaying={playingId === r.id} uniqueKey={`c3-${i}`} />
             ))}
           </div>
 
           {/* Column 4 - Bottom to Top (Up) */}
-          <div className="flex-1 hidden lg:flex flex-col gap-4 animate-scroll-up">
+          <div className="flex-1 hidden lg:flex flex-col gap-6 animate-scroll-up">
             {col4.map((r, i) => (
               <PlayerPill key={`col4-${r.id}-${i}`} r={r} isPlaying={playingId === r.id} uniqueKey={`c4-${i}`} />
             ))}
