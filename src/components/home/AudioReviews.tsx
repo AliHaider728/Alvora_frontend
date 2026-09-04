@@ -52,33 +52,33 @@ export const AudioReviews: React.FC = () => {
   const col4 = [...baseRepeated].reverse().slice(1).concat([...baseRepeated].reverse().slice(0, 1));
 
   const PlayerPill = ({ r, isPlaying, uniqueKey }: { r: AudioReview, isPlaying: boolean, uniqueKey: string }) => (
-    <div key={uniqueKey} className="flex items-center gap-3 bg-[#1A1A1A] rounded-full p-2 pr-4 w-full shadow-sm flex-shrink-0 cursor-pointer hover:bg-[#2A2A2A] transition-colors" onClick={() => togglePlay(r.audioUrl, r.id)}>
-      <div className="w-10 h-10 rounded-full bg-[#333] flex items-center justify-center flex-shrink-0 text-[#F1C9BD] font-medium text-lg uppercase">
-        {r.customerName.charAt(0)}
+    <div key={uniqueKey} className="flex items-center gap-3 bg-[#1e272e] rounded-full p-2 pr-4 w-full shadow-sm flex-shrink-0 cursor-pointer hover:bg-[#2c3e50] transition-colors" onClick={() => togglePlay(r.audioUrl, r.id)}>
+      <div className="w-10 h-10 rounded-full bg-[#E5E7EB] flex items-center justify-center flex-shrink-0 text-gray-500">
+        <User className="w-5 h-5" />
       </div>
-      <button className="w-8 h-8 rounded-full bg-[#C48B80] text-white flex items-center justify-center hover:bg-[#A86249] transition-colors flex-shrink-0">
+      <button className="text-gray-300 hover:text-white flex-shrink-0">
         {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current ml-0.5" />}
       </button>
-      <div className="flex-1 flex flex-col justify-center h-full gap-0.5 mx-1">
-        <div className="flex items-center gap-[2px] h-4 overflow-hidden">
-          {[...Array(20)].map((_, i) => {
+      <div className="flex-1 flex flex-col justify-center h-full gap-0.5">
+        <div className="flex items-center gap-[2px] h-4 overflow-hidden opacity-60">
+          {[...Array(24)].map((_, i) => {
             const h = isPlaying 
               ? Math.max(2, Math.random() * 12)
-              : [3,6,9,12,8,14,10,6,12,8,4,3,3,6,9,12,8,14,10,6][i];
+              : [3,6,9,12,8,14,10,6,12,8,4,3,3,6,9,12,8,14,10,6,12,8,4,3][i];
             return (
               <div 
                 key={i} 
-                className={`w-[2px] rounded-full transition-all duration-150 ${isPlaying ? 'bg-[#F1C9BD]' : 'bg-[#444]'}`}
+                className="w-[2px] rounded-full bg-white transition-all duration-150"
                 style={{ height: `${h}px` }}
               />
             );
           })}
         </div>
-        <span className="text-[10px] text-[#A1A7AA] font-medium truncate" title={r.customerName}>
+        <span className="text-[9px] text-gray-400 font-medium truncate pr-2" title={r.customerName}>
           {r.customerName} • {r.duration || '0:15'}
         </span>
       </div>
-      <button className="w-7 h-7 rounded-full bg-[#333] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">
+      <button className="w-7 h-7 rounded-full bg-[#0ea5e9] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">
         1x
       </button>
     </div>
