@@ -52,7 +52,7 @@ export const AudioReviews: React.FC = () => {
   const col4 = [...baseRepeated].reverse().slice(1).concat([...baseRepeated].reverse().slice(0, 1));
 
   const PlayerPill = ({ r, isPlaying, uniqueKey }: { r: AudioReview, isPlaying: boolean, uniqueKey: string }) => (
-    <div key={uniqueKey} className="flex items-center gap-3 bg-[#1e272e] rounded-full p-2 pr-4 w-full shadow-sm flex-shrink-0 cursor-pointer hover:bg-[#2c3e50] transition-colors" onClick={() => togglePlay(r.audioUrl, r.id)}>
+    <div key={uniqueKey} className="player-pill flex items-center gap-3 bg-[#1e272e] rounded-full p-2 pr-4 w-full shadow-sm flex-shrink-0 cursor-pointer hover:bg-[#2c3e50] transition-colors" onClick={() => togglePlay(r.audioUrl, r.id)}>
       <div className="w-10 h-10 rounded-full bg-[#E5E7EB] flex items-center justify-center flex-shrink-0 text-gray-500">
         <User className="w-5 h-5" />
       </div>
@@ -101,8 +101,8 @@ export const AudioReviews: React.FC = () => {
         .animate-scroll-up {
           animation: scroll-up 45s linear infinite;
         }
-        .group:hover .animate-scroll-down,
-        .group:hover .animate-scroll-up {
+        .group:has(.player-pill:hover) .animate-scroll-down,
+        .group:has(.player-pill:hover) .animate-scroll-up {
           animation-play-state: paused;
         }
         .mask-vertical-fades {
