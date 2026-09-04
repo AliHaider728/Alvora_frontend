@@ -29,6 +29,7 @@ export const Header: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
 
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
@@ -56,7 +57,19 @@ export const Header: React.FC = () => {
 
   // Scroll state
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 8);
+    let lastScroll = window.scrollY;
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      setIsScrolled(currentScrollY > 8);
+      
+      if (currentScrollY <= 80) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(currentScrollY < lastScroll);
+      }
+      lastScroll = currentScrollY;
+    };
+    
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -117,7 +130,7 @@ export const Header: React.FC = () => {
       {/* FIXED HEADER */}
       <header
         ref={headerRef}
-        className={`fixed inset-x-0 top-0 z-50 bg-alvora-ivory text-[#241916] transition-shadow duration-300 ${isScrolled ? "shadow-[0_4px_24px_rgba(36,25,22,0.06)]" : ""}`}
+        className={`fixed inset-x-0 top-0 z-50 bg-alvora-ivory text-[#241916] transition-all duration-300 ease-in-out ${isScrolled ? "shadow-[0_4px_24px_rgba(36,25,22,0.06)]" : ""} ${isVisible ? "translate-y-0" : "-translate-y-full"}`}
       >
         {/* SHIPPING BAR */}
         <div className="flex min-h-8 items-center justify-center bg-[#C87355] px-4 text-center text-[11px] font-medium uppercase tracking-[0.14em] text-white sm:min-h-8.5 sm:text-xs">
