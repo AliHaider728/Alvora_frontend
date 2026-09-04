@@ -62,7 +62,7 @@ export const Footer: React.FC = () => {
           {/* Col 1 — Brand */}
           <div className="flex flex-col gap-5">
             <Logo size="md" />
-            <p className="text-sm text-[#4D3D2D]/80 leading-relaxed max-w-xs">
+            <p className="text-[15px] lg:text-base text-[#4D3D2D]/80 leading-relaxed max-w-xs">
               Thoughtfully formulated skincare that nourishes, protects and brings out your most radiant skin. Pure ingredients. Visible results. Naturally.
             </p>
 
@@ -120,15 +120,15 @@ export const Footer: React.FC = () => {
 
           {/* Col 2 — Shop */}
           <div>
-            <h4 className="text-[10px] font-bold tracking-widest uppercase text-[#1A1A1A] mb-5">
+            <h4 className="text-[13px] lg:text-[14px] font-bold tracking-wider uppercase text-[#1A1A1A] mb-6">
               SHOP
             </h4>
-            <ul className="flex flex-col gap-3">
+            <ul className="flex flex-col gap-4 lg:gap-5">
               {SHOP_LINKS.map(l => (
                 <li key={l.href + l.label}>
                   <Link
                     href={l.href}
-                    className="text-xs font-semibold text-[#1A1A1A]/70 hover:text-[#C48B80] transition-colors"
+                    className="text-[15px] lg:text-base font-medium text-[#1A1A1A]/80 hover:text-[#C48B80] transition-colors"
                   >
                     {l.label}
                   </Link>
@@ -139,15 +139,15 @@ export const Footer: React.FC = () => {
 
           {/* Col 3 — About */}
           <div>
-            <h4 className="text-[10px] font-bold tracking-widest uppercase text-[#1A1A1A] mb-5">
+            <h4 className="text-[13px] lg:text-[14px] font-bold tracking-wider uppercase text-[#1A1A1A] mb-6">
               ABOUT
             </h4>
-            <ul className="flex flex-col gap-3">
+            <ul className="flex flex-col gap-4 lg:gap-5">
               {ABOUT_LINKS.map(l => (
                 <li key={l.href + l.label}>
                   <Link
                     href={l.href}
-                    className="text-xs font-semibold text-[#1A1A1A]/70 hover:text-[#C48B80] transition-colors"
+                    className="text-[15px] lg:text-base font-medium text-[#1A1A1A]/80 hover:text-[#C48B80] transition-colors"
                   >
                     {l.label}
                   </Link>
@@ -158,15 +158,15 @@ export const Footer: React.FC = () => {
 
           {/* Col 4 — Help */}
           <div>
-            <h4 className="text-[10px] font-bold tracking-widest uppercase text-[#1A1A1A] mb-5">
+            <h4 className="text-[13px] lg:text-[14px] font-bold tracking-wider uppercase text-[#1A1A1A] mb-6">
               HELP
             </h4>
-            <ul className="flex flex-col gap-3">
+            <ul className="flex flex-col gap-4 lg:gap-5">
               {HELP_LINKS.map(l => (
                 <li key={l.href + l.label}>
                   <Link
                     href={l.href}
-                    className="text-xs font-semibold text-[#1A1A1A]/70 hover:text-[#C48B80] transition-colors"
+                    className="text-[15px] lg:text-base font-medium text-[#1A1A1A]/80 hover:text-[#C48B80] transition-colors"
                   >
                     {l.label}
                   </Link>
@@ -177,10 +177,10 @@ export const Footer: React.FC = () => {
 
           {/* Col 5 — Newsletter */}
           <div>
-            <h4 className="text-[10px] font-bold tracking-widest uppercase text-[#1A1A1A] mb-5">
+            <h4 className="text-[13px] lg:text-[14px] font-bold tracking-wider uppercase text-[#1A1A1A] mb-6">
               STAY IN THE GLOW
             </h4>
-            <p className="text-xs text-[#1A1A1A]/70 leading-relaxed mb-4">
+            <p className="text-[15px] lg:text-base text-[#1A1A1A]/80 leading-relaxed mb-5">
               Signup for exclusive offers,<br/>skincare tips, and more.
             </p>
             <form onSubmit={handleSubscribe} className="flex flex-col gap-2">
