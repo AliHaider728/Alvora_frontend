@@ -190,10 +190,23 @@ export const CategoryPageClient: React.FC = () => {
         <Breadcrumbs items={breadcrumbItems} />
 
         {/* Page Header */}
-        <div className="relative w-full h-[280px] mb-8 bg-[#F5EDE4] overflow-hidden flex items-center justify-start text-left border border-[#EDE5DC] rounded-sm">
-          <Image src="/images/shop-banner.png" alt="Skincare Collection" fill className="object-cover object-center" priority />
+        <div className="relative w-full h-[260px] lg:h-[320px] mb-8 bg-[#E9E1D9] overflow-hidden rounded-xl flex items-center">
+          {/* Background Image positioned on the right */}
+          <div className="absolute right-0 top-0 bottom-0 w-full md:w-[80%]">
+            <Image 
+              src="/images/shop-banner.png" 
+              alt="Skincare Collection" 
+              fill 
+              className="object-cover object-right" 
+              priority 
+            />
+            {/* Gradient mask to blend the image smoothly into the left solid color */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#E9E1D9] via-[#E9E1D9]/80 to-transparent sm:via-[#E9E1D9]/40"></div>
+          </div>
+
+          {/* Text Content */}
           <div className="relative z-20 px-8 md:px-16 max-w-2xl">
-            <span className="text-[10px] tracking-widest uppercase text-[#C87355] font-bold mb-3 block">
+            <span className="text-xs tracking-widest uppercase text-[#B95C41] font-bold mb-3 block">
               COLLECTION
             </span>
             <h1 className="font-display text-4xl lg:text-5xl text-[#1A1A1A] font-medium leading-tight mb-4">
