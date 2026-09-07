@@ -3,7 +3,7 @@ import { SeoHead } from '../components/common/SeoHead';
 import { Product, Category, StoreSettings } from '../types';
 import { HeroSection } from '../components/home/HeroSection';
 import { BundleSection } from '../components/home/BundleSection';
-import { BrandIntro } from '../components/home/BrandIntro';
+
 import { BestSellers } from '../components/home/BestSellers';
 import { IngredientSection } from '../components/home/IngredientSection';
 import { FeaturedProduct } from '../components/home/FeaturedProduct';
@@ -34,7 +34,6 @@ export const HomePage: React.FC<Props> = ({ products, categories, settings }) =>
 
       <HeroSection />
       <BundleSection />
-      <BrandIntro />
       <BestSellers products={visibleProducts} sectionSettings={sectionByKey.featuredProducts} />
       <IngredientSection />
       {featuredProduct && <FeaturedProduct product={featuredProduct} />}
