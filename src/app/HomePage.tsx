@@ -2,6 +2,7 @@ import React from 'react';
 import { SeoHead } from '../components/common/SeoHead';
 import { Product, Category, StoreSettings } from '../types';
 import { HeroSection } from '../components/home/HeroSection';
+import { CrissCrossMarquee } from '../components/home/CrissCrossMarquee';
 import { BundleSection } from '../components/home/BundleSection';
 
 import { BestSellers } from '../components/home/BestSellers';
@@ -33,6 +34,7 @@ export const HomePage: React.FC<Props> = ({ products, categories, settings }) =>
       />
 
       <HeroSection />
+      <CrissCrossMarquee />
       <BundleSection />
       <BestSellers products={visibleProducts} sectionSettings={sectionByKey.featuredProducts} />
       <IngredientSection />
