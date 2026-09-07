@@ -8,14 +8,12 @@ interface Props {
 }
 
 const Word = ({ children, progress, range }: { children: string, progress: MotionValue<number>, range: [number, number] }) => {
-  // Interpolate from a solid grey to white text
-  const color = useTransform(progress, range, ["#A1A7AA", "#FFFFFF"]);
-  // Interpolate from transparent to solid Terracotta highlight
-  const backgroundColor = useTransform(progress, range, ["transparent", "#C87355"]);
+  // Interpolate from light grey to dark brand color
+  const color = useTransform(progress, range, ["#A1A7AA", "#1A1A1A"]);
   
   return (
     <motion.span 
-      style={{ color, backgroundColor }} 
+      style={{ color }} 
       className="inline"
     >
       {children}
