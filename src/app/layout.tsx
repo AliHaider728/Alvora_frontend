@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     description: 'Premium skincare formulated with pure ingredients.',
   },
   icons: {
-    icon: '/alvora-logo.png',
+    icon: '/favicon-rounded.png',
   },
 };
 
