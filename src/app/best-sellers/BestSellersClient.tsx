@@ -9,7 +9,7 @@ export default function BestSellersClient() {
   const { products } = useStore();
 
   const bestSellers = useMemo(() => {
-    return products.filter(p => p.isBestseller && p.isVisible);
+    return products.filter(p => p.isVisible);
   }, [products]);
 
   return (
