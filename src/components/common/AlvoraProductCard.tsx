@@ -8,7 +8,7 @@ import { formatPrice } from '../../utils/formatters';
 import { getSafeImageSrc } from '../../utils/images';
 
 export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: Product, layout?: 'standard' | 'compact' }) => {
-  const { addToCart, settings } = useStore();
+  const { addToCart, settings, toggleWishlist, isInWishlist } = useStore();
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -47,11 +47,11 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
 
         {/* Top Right Action - Wishlist */}
         <button 
-          className="absolute top-3 right-3 z-10 text-white hover:text-rose-500 transition-colors drop-shadow-md"
+          className={`absolute top-3 right-3 z-10 transition-colors drop-shadow-md ${isInWishlist(product.id) ? 'text-rose-500' : 'text-white hover:text-rose-500'}`}
           aria-label="Add to Wishlist"
-          onClick={(e) => e.preventDefault()}
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleWishlist(product.id); }}
         >
-          <Heart className="w-6 h-6" strokeWidth={1.5} />
+          <Heart className="w-6 h-6" strokeWidth={1.5} fill={isInWishlist(product.id) ? 'currentColor' : 'none'} />
         </button>
 
         {/* Bottom Right Actions - Quick View & Compare */}
