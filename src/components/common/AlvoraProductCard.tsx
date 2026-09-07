@@ -97,21 +97,27 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
 
         <div className="flex gap-2 mt-auto">
           {needsSelection ? (
-            <Link
-              href={`/product/${product.slug}`}
-              className="flex-1 bg-[#C87355] hover:bg-[#A86249] text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase py-3 px-2 rounded-sm transition-colors text-center shadow-sm"
-            >
-              SELECT OPTIONS
-            </Link>
-          ) : (
-            <button
-              onClick={handleAddToCart}
-              disabled={!product.inStock}
-              className="flex-1 bg-[#C87355] hover:bg-[#A86249] disabled:bg-[#A1A7AA] disabled:cursor-not-allowed text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase py-3 px-2 rounded-sm transition-colors text-center shadow-sm"
-            >
-              {product.inStock ? 'ADD TO CART' : 'OUT OF STOCK'}
-            </button>
-          )}
+              <Link
+                href={`/product/${product.slug}`}
+                className="flex-1 bg-[#C87355] hover:bg-[#A86249] text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase py-3 px-2 rounded-sm transition-colors flex items-center justify-center shadow-sm text-center"
+              >
+                SELECT OPTIONS
+              </Link>
+            ) : product.inStock ? (
+              <Link
+                href={`/product/${product.slug}`}
+                className="flex-1 bg-[#C87355] hover:bg-[#A86249] text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase py-3 px-2 rounded-sm transition-colors flex items-center justify-center shadow-sm text-center"
+              >
+                VIEW DETAIL
+              </Link>
+            ) : (
+              <button
+                disabled
+                className="flex-1 bg-[#A1A7AA] cursor-not-allowed text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase py-3 px-2 rounded-sm transition-colors text-center shadow-sm"
+              >
+                OUT OF STOCK
+              </button>
+            )}
           <button 
             onClick={needsSelection ? undefined : handleAddToCart}
             className="w-10 sm:w-12 flex items-center justify-center border border-[#EDE5DC] hover:border-[#C87355] bg-white text-gray-500 hover:text-[#C87355] rounded-sm transition-colors shadow-sm"
