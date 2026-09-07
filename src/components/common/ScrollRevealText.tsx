@@ -8,19 +8,18 @@ interface Props {
 }
 
 const Word = ({ children, progress, range }: { children: string, progress: MotionValue<number>, range: [number, number] }) => {
-  const opacity = useTransform(progress, range, [0, 1]);
+  // Interpolate from muted grey to white text
+  const color = useTransform(progress, range, ["rgba(26, 26, 26, 0.25)", "rgba(255, 255, 255, 1)"]);
+  // Interpolate from transparent to solid Terracotta highlight
+  const backgroundColor = useTransform(progress, range, ["rgba(200, 115, 85, 0)", "rgba(200, 115, 85, 1)"]);
+  
   return (
-    <span className="relative inline-block mr-[0.25em] mt-[0.1em]">
-      {/* Background (muted) word */}
-      <span className="text-[#1A1A1A] opacity-20">{children}</span>
-      {/* Foreground (brand color) word revealed on scroll */}
-      <motion.span 
-        style={{ opacity }} 
-        className="absolute left-0 top-0 text-[#1A1A1A]"
-      >
-        {children}
-      </motion.span>
-    </span>
+    <motion.span 
+      style={{ color, backgroundColor }} 
+      className="inline transition-colors duration-75"
+    >
+      {children}
+    </motion.span>
   );
 };
 
@@ -31,7 +30,8 @@ export const ScrollRevealText: React.FC<Props> = ({ text, className = "" }) => {
     offset: ["start start", "end end"] 
   });
 
-  const words = text.split(" ");
+  // Preserve spaces so the background highlight is continuous
+  const words = text.split(" ").map((w, i, arr) => w + (i === arr.length - 1 ? "" : " "));
 
   return (
     <div className={className}>
@@ -51,7 +51,7 @@ export const ScrollRevealText: React.FC<Props> = ({ text, className = "" }) => {
         </motion.p>
       </div>
 
-      {/* ─── DESKTOP VIEW (Pinned Scroll Reveal) ─── */}
+      {/* ─── DESKTOP VIEW (Pinned Scroll Highlight) ─── */}
       <div ref={containerRef} className="hidden md:block relative w-full h-[250vh]">
         <div className="sticky top-0 h-screen flex flex-col items-center justify-center px-16 lg:px-24 overflow-hidden">
           
@@ -59,7 +59,7 @@ export const ScrollRevealText: React.FC<Props> = ({ text, className = "" }) => {
             Our Philosophy
           </span>
 
-          <p className="flex flex-wrap justify-center text-center font-display text-4xl lg:text-5xl xl:text-6xl leading-[1.3] font-medium max-w-6xl mx-auto">
+          <p className="text-center font-display text-4xl lg:text-5xl xl:text-6xl leading-[1.6] font-medium max-w-6xl mx-auto whitespace-pre-wrap">
             {words.map((word, i) => {
               const start = 0.1 + (i / words.length) * 0.8;
               const end = start + (1 / words.length) * 0.8;
