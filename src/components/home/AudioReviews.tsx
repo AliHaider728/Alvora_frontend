@@ -96,10 +96,10 @@ export const AudioReviews: React.FC = () => {
           100% { transform: translateY(-50%); }
         }
         .animate-scroll-down {
-          animation: scroll-down 45s linear infinite;
+          animation: scroll-down 30s linear infinite;
         }
         .animate-scroll-up {
-          animation: scroll-up 45s linear infinite;
+          animation: scroll-up 30s linear infinite;
         }
         .group:has(.player-pill:hover) .animate-scroll-down,
         .group:has(.player-pill:hover) .animate-scroll-up {
