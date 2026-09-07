@@ -26,10 +26,10 @@ export const DEFAULT_STOREFRONT_NAVIGATION: StorefrontNavigationItem[] = [
 ];
 
 export const DEFAULT_HOMEPAGE_SECTIONS: HomepageSectionSetting[] = [
-  { key: 'hero', name: 'Hero', enabled: true, order: 0, heading: 'Skincare, Made Simple.', subheading: 'Thoughtfully formulated skincare that nourishes, protects and brings out your most radiant skin.', ctaLabel: 'Shop Best Sellers', ctaLink: '/category/all' },
+  { key: 'hero', name: 'Hero', enabled: true, order: 0, heading: 'Skincare, Made Simple.', subheading: 'Thoughtfully formulated skincare that nourishes, protects and brings out your most radiant skin.', ctaLabel: 'Shop Best Sellers', ctaLink: '/best-sellers' },
   { key: 'categories', name: 'Shop by Category', enabled: true, order: 1, heading: 'Shop by Category', subheading: 'Explore our skincare range', ctaLabel: 'View All Categories', ctaLink: '/category/all' },
   { key: 'ageGroups', name: 'Shop by Skin Type', enabled: true, order: 2, heading: 'Shop by Skin Type', subheading: 'Find products formulated for your specific skin needs.' },
-  { key: 'featuredProducts', name: 'Featured Products', enabled: true, order: 3, heading: 'Best Sellers', subheading: 'Loved by Thousands', ctaLabel: 'View All', ctaLink: '/category/all' },
+  { key: 'featuredProducts', name: 'Featured Products', enabled: true, order: 3, heading: 'Best Sellers', subheading: 'Loved by Thousands', ctaLabel: 'View All', ctaLink: '/best-sellers' },
   { key: 'brandCampaign', name: 'Nature + Science', enabled: true, order: 4, heading: 'Nature + Science For Your Skin', subheading: 'We combine clean, potent ingredients with advanced skincare science to deliver visible, lasting results.', ctaLabel: 'Learn More', ctaLink: '/about' },
   { key: 'newArrivals', name: 'New Arrivals', enabled: true, order: 5, heading: 'New Arrivals', subheading: 'Fresh formulations', ctaLabel: 'Browse New', ctaLink: '/category/all' }
 ];

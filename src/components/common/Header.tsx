@@ -14,7 +14,7 @@ import { useAuth } from "../../context/AuthContext";
 
 const NAV_LINKS = [
   { label: "Shop", href: "/category/all" },
-  { label: "Best Sellers", href: "/category/all?sort=bestseller" },
+  { label: "Best Sellers", href: "/best-sellers" },
   { label: "Skincare", href: "/category/all" },
   { label: "About", href: "/about" },
 ];
