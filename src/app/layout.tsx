@@ -56,7 +56,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_ALVORA_GA_MEASUREMENT_ID;
 
   return (
-    <html lang="en" className={`${playfairDisplay.variable} ${lato.variable}`}>
+    <html lang="en" className={`${playfairDisplay.variable} ${lato.variable}`} data-scroll-behavior="smooth">
       <head>
         {/* Meta Pixel stub — loads fbq global before any pixel fires */}
         <Script
