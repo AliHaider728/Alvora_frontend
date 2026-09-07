@@ -11,12 +11,12 @@ const Word = ({ children, progress, range }: { children: string, progress: Motio
   // Interpolate from a solid grey to white text
   const color = useTransform(progress, range, ["#A1A7AA", "#FFFFFF"]);
   // Interpolate from transparent to solid Terracotta highlight
-  const backgroundColor = useTransform(progress, range, ["rgba(200, 115, 85, 0)", "rgba(200, 115, 85, 1)"]);
+  const backgroundColor = useTransform(progress, range, ["transparent", "#C87355"]);
   
   return (
     <motion.span 
       style={{ color, backgroundColor }} 
-      className="inline transition-colors duration-75"
+      className="inline"
     >
       {children}
     </motion.span>
