@@ -22,12 +22,29 @@ export const BundleSection: React.FC = () => {
     if (!bundles || bundles.length === 0) return null;
 
   const handleAddBundle = (bundle: Bundle) => {
-    if (bundle.products) {
-      bundle.products.forEach(p => {
-        addToCart(p, p.bundle_quantity || 1);
-      });
-      setIsCartOpen(true);
-    }
+    const bundleProduct: any = {
+      id: bundle.id,
+      productType: 'bundle',
+      bundleData: bundle,
+      name: bundle.name,
+      slug: bundle.slug,
+      price: bundle.currentPrice || 0,
+      originalPrice: bundle.originalTotalPrice || 0,
+      images: bundle.image ? [bundle.image] : [],
+      inStock: true,
+      category: 'Bundles',
+      categorySlug: 'bundles',
+      sku: `BUNDLE-${bundle.id}`,
+      rating: 5,
+      reviewCount: 0,
+      tags: [],
+      features: [],
+      safetyInfo: '',
+      specifications: {},
+      ageGroups: []
+    };
+    addToCart(bundleProduct, 1);
+    setIsCartOpen(true);
   };
 
   return (

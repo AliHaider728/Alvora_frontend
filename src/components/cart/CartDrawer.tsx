@@ -141,7 +141,7 @@ export const CartDrawer: React.FC = () => {
                     <div>
                       <div className="flex items-start justify-between gap-1">
                         <Link
-                          href={`/product/${item.product.slug}`}
+                          href={item.product.productType === 'bundle' ? '#' : `/product/${item.product.slug}`}
                           onClick={() => setIsCartOpen(false)}
                           className="font-display font-bold text-xs sm:text-sm text-[#1A1A1A]/90 hover:text-[#C48B80] line-clamp-1"
                         >
@@ -155,6 +155,19 @@ export const CartDrawer: React.FC = () => {
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
+
+                      {item.product.productType === 'bundle' && item.product.bundleData?.products && (
+                        <div className="mt-1 mb-1">
+                          <details className="text-xs text-[#1A1A1A]/60">
+                            <summary className="cursor-pointer font-medium hover:text-[#C87355] transition-colors">Includes: {item.product.bundleData.products.length} items</summary>
+                            <ul className="mt-1.5 pl-3 list-disc space-y-0.5 border-l-2 border-[#EDE5DC] ml-1">
+                              {item.product.bundleData.products.map((bp: any, idx: number) => (
+                                <li key={idx} className="pl-1">{bp.name} (x{bp.bundle_quantity || 1})</li>
+                              ))}
+                            </ul>
+                          </details>
+                        </div>
+                      )}
 
                       <span className="text-[10px] text-sky-600 font-semibold uppercase block">
                         {item.product.category || 'Uncategorized'}

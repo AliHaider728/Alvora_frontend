@@ -147,7 +147,8 @@ export interface PricingOffers {
 
 export interface Product {
   id: string;
-  productType?: 'simple' | 'variable';
+  productType?: 'simple' | 'variable' | 'bundle';
+  bundleData?: Bundle;
   name: string;
   slug: string;
   soldCount?: number;
