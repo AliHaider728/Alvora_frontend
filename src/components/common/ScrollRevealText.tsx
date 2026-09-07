@@ -8,8 +8,8 @@ interface Props {
 }
 
 const Word = ({ children, progress, range }: { children: string, progress: MotionValue<number>, range: [number, number] }) => {
-  // Interpolate from muted grey to white text
-  const color = useTransform(progress, range, ["rgba(26, 26, 26, 0.25)", "rgba(255, 255, 255, 1)"]);
+  // Interpolate from a solid grey to white text
+  const color = useTransform(progress, range, ["#A1A7AA", "#FFFFFF"]);
   // Interpolate from transparent to solid Terracotta highlight
   const backgroundColor = useTransform(progress, range, ["rgba(200, 115, 85, 0)", "rgba(200, 115, 85, 1)"]);
   
@@ -37,7 +37,7 @@ export const ScrollRevealText: React.FC<Props> = ({ text, className = "" }) => {
     <div className={className}>
       {/* ─── MOBILE VIEW (Simple Fade-in) ─── */}
       <div className="md:hidden py-24 px-6 flex flex-col items-center justify-center">
-        <span className="text-xs tracking-[0.3em] uppercase text-[#C87355] font-bold mb-8 block text-center">
+        <span className="text-xs tracking-[0.3em] uppercase text-[#C87355] font-bold mb-6 block text-center">
           Our Philosophy
         </span>
         <motion.p 
@@ -45,7 +45,7 @@ export const ScrollRevealText: React.FC<Props> = ({ text, className = "" }) => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-[#1A1A1A] leading-relaxed text-2xl font-display text-center"
+          className="text-[#1A1A1A] leading-relaxed text-xl font-display text-center"
         >
           {text}
         </motion.p>
@@ -55,11 +55,11 @@ export const ScrollRevealText: React.FC<Props> = ({ text, className = "" }) => {
       <div ref={containerRef} className="hidden md:block relative w-full h-[250vh]">
         <div className="sticky top-0 h-screen flex flex-col items-center justify-center px-16 lg:px-24 overflow-hidden">
           
-          <span className="text-xs tracking-[0.3em] uppercase text-[#C87355] font-bold mb-12 block">
+          <span className="text-xs tracking-[0.3em] uppercase text-[#C87355] font-bold mb-8 block">
             Our Philosophy
           </span>
 
-          <p className="text-center font-display text-4xl lg:text-5xl xl:text-6xl leading-[1.6] font-medium max-w-6xl mx-auto whitespace-pre-wrap">
+          <p className="text-center font-display text-2xl md:text-3xl lg:text-4xl leading-[1.7] font-medium max-w-5xl mx-auto whitespace-pre-wrap">
             {words.map((word, i) => {
               const start = 0.1 + (i / words.length) * 0.8;
               const end = start + (1 / words.length) * 0.8;
