@@ -85,7 +85,7 @@ export const AudioReviews: React.FC = () => {
   );
 
   return (
-    <section className="py-16 bg-[#FAF6F2] overflow-hidden">
+    <section className="py-12 bg-[#FAF6F2] overflow-hidden">
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes scroll-down {
           0% { transform: translateY(-50%); }
@@ -113,7 +113,7 @@ export const AudioReviews: React.FC = () => {
       <div className="w-full">
         
         <div className="alvora-container">
-          <div className="flex flex-col items-center justify-center mb-12">
+          <div className="flex flex-col items-center justify-center mb-10">
             <h2 className="font-display text-3xl md:text-4xl text-[#1A1A1A] text-center font-bold px-6">
               Hear From Our Community
             </h2>
@@ -128,7 +128,7 @@ export const AudioReviews: React.FC = () => {
         />
 
         {/* 4 Column Vertical Masonry Layout - Edge to Edge */}
-        <div className="relative h-[450px] w-full overflow-hidden flex gap-4 lg:gap-8 justify-center mask-vertical-fades group cursor-default px-4">
+        <div className="relative h-[360px] md:h-[380px] w-full overflow-hidden flex gap-4 lg:gap-8 justify-center mask-vertical-fades group cursor-default px-4">
           
           {/* Column 1 - Top to Bottom (Down) */}
           <div className="flex-1 flex flex-col gap-6 animate-scroll-down">
