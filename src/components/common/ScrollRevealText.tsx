@@ -34,7 +34,7 @@ export const ScrollRevealText: React.FC<Props> = ({ text, className = "" }) => {
   return (
     <div className={className}>
       {/* ─── MOBILE VIEW (Simple Fade-in) ─── */}
-      <div className="md:hidden py-24 px-6 flex flex-col items-center justify-center">
+      <div className="md:hidden py-16 px-6 flex flex-col items-center justify-center">
         <span className="text-xs tracking-[0.3em] uppercase text-[#C87355] font-bold mb-6 block text-center">
           Our Philosophy
         </span>
@@ -50,8 +50,8 @@ export const ScrollRevealText: React.FC<Props> = ({ text, className = "" }) => {
       </div>
 
       {/* ─── DESKTOP VIEW (Pinned Scroll Highlight) ─── */}
-      <div ref={containerRef} className="hidden md:block relative w-full h-[250vh]">
-        <div className="sticky top-0 h-screen flex flex-col items-center justify-center px-12 lg:px-24 overflow-hidden">
+      <div ref={containerRef} className="hidden md:block relative w-full h-[150vh]">
+        <div className="sticky top-0 h-[80vh] flex flex-col items-center justify-center px-12 lg:px-24 overflow-hidden pt-12">
           
           <span className="text-xs tracking-[0.3em] uppercase text-[#C87355] font-bold mb-8 block">
             Our Philosophy

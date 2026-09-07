@@ -51,7 +51,7 @@ export const BundleSection: React.FC = () => {
     <section id="bundles-section" className="bg-white overflow-hidden">
       
       {/* Header Section */}
-      <div className="bg-[#FAF6F2] py-20 border-t border-[#E7D9D0]">
+      <div className="bg-[#FAF6F2] py-12 md:py-16 border-t border-[#E7D9D0]">
         <div className="alvora-container">
           <div className="flex flex-col items-center justify-center text-center">
             <span className="text-[10px] tracking-widest uppercase text-[#A86249] font-bold mb-4 block">

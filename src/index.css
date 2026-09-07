@@ -425,9 +425,6 @@
 .alvora-marquee-track {
   animation: alvora-marquee 26s linear infinite;
 }
-.alvora-marquee-track:hover {
-  animation-play-state: paused;
-}
 
 /* ── Smooth reveal on scroll (CSS only) ── */
 @keyframes fadeSlideUp {
