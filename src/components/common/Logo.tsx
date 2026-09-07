@@ -29,6 +29,7 @@ export const Logo: React.FC<LogoProps> = ({
         src="/images/logo.png" 
         alt="Alvora Skincare"
         fill
+        sizes="(max-width: 768px) 160px, 240px"
         className="object-contain object-center transition-opacity duration-300 hover:opacity-80"
         priority
       />
