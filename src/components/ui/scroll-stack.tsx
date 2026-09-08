@@ -10,7 +10,7 @@ export function ScrollStack({ children }: { children: React.ReactNode[] }) {
   });
 
   return (
-    <div ref={containerRef} className="relative w-full" style={{ height: calc(vh + 100vh) }}>
+    <div ref={containerRef} className="relative w-full" style={{ height: "calc(" + (children.length * 100) + "vh + 100vh)" }}>
       {React.Children.map(children, (child, index) => {
         const targetScale = 1 - ((children.length - index) * 0.05);
         return (
