@@ -1084,7 +1084,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
   type="button"
   onClick={handleAddToCart}
   disabled={cartActionLocked.current || (isVariable ? (product.attributes?.length || 0) > 0 && !allVariantsSelected : variantGroups.length > 0 && !allVariantsSelected) || !effectiveAvailable}
-  className="w-full bg-[#1A1A1A] text-white rounded-full py-4 text-xs font-bold tracking-widest hover:bg-black transition-colors mb-3 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+  className="w-full bg-[#1A1A1A] text-white rounded-full py-4 text-xs font-bold tracking-widest hover:bg-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
 >
   {cartActionState === 'adding' ? (
     <><Loader2 className="h-4 w-4 animate-spin" /> ADDING...</>
@@ -1094,13 +1094,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
     <>ADD TO CART</>
   )}
 </button>
-<button 
-  type="button"
-  className="w-full border border-black/20 rounded-full py-3.5 flex items-center justify-center gap-2 hover:bg-black/5 transition-colors group"
->
-  <span className="text-xs font-bold tracking-widest text-[#1A1A1A]">BUY WITH</span>
-  <span className="font-serif italic font-bold text-lg text-[#1A1A1A] group-hover:scale-105 transition-transform">shopPay</span>
-</button>
+
                 </div>
 
             </div>
@@ -1479,5 +1473,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
     </div>
   );
 };
+
+
 
 
