@@ -1,4 +1,4 @@
-"use client";
+"use client";`nimport { revalidateProductPage } from "../app/actions/revalidate";
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import {
   Product,
@@ -702,6 +702,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const normalizedProduct = normalizeProduct(savedProduct);
     setProducts(prev => [normalizedProduct, ...prev]);
     await refreshProducts();
+    await revalidateProductPage(normalizedProduct.slug || normalizedProduct.id);
     return normalizedProduct;
   };
 
@@ -712,6 +713,16 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const normalizedProduct = normalizeProduct(savedProduct);
     setProducts(prev => prev.map(p => (p.id === id ? normalizedProduct : p)));
     await refreshProducts();
+    
+    // Trigger on-demand revalidation to clear the ISR cache
+    try {
+      if (normalizedProduct.slug || normalizedProduct.id) {
+        await revalidateProductPage(normalizedProduct.slug || normalizedProduct.id);
+      }
+    } catch (err) {
+      console.error('Failed to trigger revalidation:', err);
+    }
+    
     return normalizedProduct;
   };
 
@@ -993,4 +1004,5 @@ export const useStore = () => {
   }
   return context;
 };
+
 

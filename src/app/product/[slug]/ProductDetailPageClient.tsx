@@ -670,7 +670,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                       (!overrideImage && activeImageIndex === idx) ? 'border-[#C48B80] bg-[#F1C9BD] shadow-sm' : 'border-[#EDE5DC] bg-white opacity-75 hover:opacity-100'
                     }`}
                   >
-                    <img src={getSafeImageSrc(img)} alt={`${product.name} thumbnail ${idx + 1}`} className="h-full w-full object-contain" />
+                    <Image src={getSafeImageSrc(img)} alt={`${product.name} thumbnail ${idx + 1}`} fill sizes="80px" className="object-contain" />
                   </button>
                 ))}
               </div>
@@ -1261,9 +1261,9 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                     <div key={review.id} className="p-4 rounded-2xl border border-[#EDE5DC] bg-white space-y-2">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 bg-[#F5EDE4]">
-                            <img src={review.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(review.reviewerName)}&background=random`} alt="" className="w-full h-full object-cover" />
-                          </div>
+                          <div className="relative w-10 h-10 rounded-full overflow-hidden shrink-0 bg-[#F5EDE4]">
+                                <Image src={review.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(review.reviewerName)}&background=random`} alt={review.reviewerName} fill sizes="40px" className="object-cover" unoptimized />
+                              </div>
                           <div>
                             <div className="flex items-center gap-2">
                               <span className="font-bold text-sm text-[#1A1A1A]/90">{review.reviewerName}</span>
@@ -1291,12 +1291,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
 
                       {review.imageUrl && (
                         <div className="mt-3">
-                          <img 
-                            src={review.imageUrl} 
-                            alt="Customer review photo" 
-                            className="w-24 h-24 object-cover rounded-xl border border-[#EDE5DC] cursor-pointer hover:opacity-90 transition-opacity shadow-sm"
-                            onClick={() => window.open(review.imageUrl, '_blank')}
-                          />
+                          <div className="relative w-24 h-24"><Image src={review.imageUrl} alt="Customer review photo" fill sizes="96px" className="object-cover rounded-xl border border-[#EDE5DC] cursor-pointer hover:opacity-90 transition-opacity shadow-sm" onClick={() => window.open(review.imageUrl, `_blank`)} unoptimized /></div>
                         </div>
                       )}
                     </div>
@@ -1320,7 +1315,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
         >
           <button ref={lightboxCloseRef} type="button" onClick={() => setLightboxOpen(false)} className="absolute right-4 top-4 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white ring-1 ring-white/20 backdrop-blur transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white" aria-label="Close image gallery"><X className="h-6 w-6" /></button>
           {lightboxImages.length > 1 && <button type="button" onClick={() => setLightboxIndex(index => (index - 1 + lightboxImages.length) % lightboxImages.length)} className="absolute left-3 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white ring-1 ring-white/20 backdrop-blur transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white sm:left-6" aria-label="Previous product image"><ChevronLeft className="h-7 w-7" /></button>}
-          <img src={getSafeImageSrc(lightboxImages[lightboxIndex])} alt={`${product.name} image ${lightboxIndex + 1} of ${lightboxImages.length}`} className="max-h-[88vh] max-w-[92vw] object-contain" />
+          <Image src={getSafeImageSrc(lightboxImages[lightboxIndex])} alt={`${product.name} image ${lightboxIndex + 1} of ${lightboxImages.length}`} fill className="object-contain" />
           {lightboxImages.length > 1 && <button type="button" onClick={() => setLightboxIndex(index => (index + 1) % lightboxImages.length)} className="absolute right-3 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white ring-1 ring-white/20 backdrop-blur transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white sm:right-6" aria-label="Next product image"><ChevronRight className="h-7 w-7" /></button>}
           <span className="absolute bottom-4 rounded-full bg-black/40 px-3 py-1.5 text-xs font-bold text-white" aria-live="polite">{lightboxIndex + 1} / {lightboxImages.length}</span>
         </div>
@@ -1484,4 +1479,5 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
     </div>
   );
 };
+
 

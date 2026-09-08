@@ -13,6 +13,10 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'ui-avatars.com',
+      },
+      {
+        protocol: 'https',
         hostname: 'pub-fa55f0bf8e7849ed8ba56609eb8c4e60.r2.dev',
       }
     ],
@@ -40,3 +44,4 @@ const nextConfig = {
 };
 
 export default nextConfig;
+
