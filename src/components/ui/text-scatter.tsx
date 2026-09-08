@@ -26,7 +26,7 @@ export function TextScatter({ text, className = "", scatterMultiplier = 1 }: Tex
 
   return (
     <div 
-      className={inline-block cursor-default select-none }
+      className={"inline-block cursor-default select-none " + className}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{ WebkitTapHighlightColor: 'transparent' }}
