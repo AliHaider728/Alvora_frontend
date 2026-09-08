@@ -1,4 +1,5 @@
-"use client";`nimport { revalidateProductPage } from "../app/actions/revalidate";
+"use client";
+import { revalidateProductPage } from "../app/actions/revalidate";
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import {
   Product,
@@ -1004,5 +1005,6 @@ export const useStore = () => {
   }
   return context;
 };
+
 
 
