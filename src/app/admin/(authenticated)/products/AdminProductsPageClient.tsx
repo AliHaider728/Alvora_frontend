@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React, { useState } from 'react';
 import { Plus, Search, Edit2, Trash2, Eye, EyeOff, UploadCloud, DownloadCloud, GripVertical } from 'lucide-react';
 import { useRouter } from "next/navigation";
@@ -32,9 +32,9 @@ const SortableTableRow: React.FC<{
     ...(isDragging ? { zIndex: 50, position: 'relative' as any, backgroundColor: 'white', opacity: 0.9, boxShadow: '0 5px 15px rgba(0,0,0,0.1)' } : {})
   };
   return (
-    <tr ref={setNodeRef} style={style} className={`hover:bg-slate-50/80 transition-colors ${isDragging ? 'shadow-lg' : ''}`}>
+    <tr ref={setNodeRef} style={style} className={`hover:bg-[#FAF6F2]/80 transition-colors ${isDragging ? 'shadow-lg' : ''}`}>
       <td className="p-4 pl-6 w-10">
-        <div {...(disabled ? {} : { ...attributes, ...listeners })} className={`p-1.5 rounded-lg shrink-0 ${!disabled ? 'text-slate-400 hover:text-slate-600 hover:bg-slate-100 cursor-grab active:cursor-grabbing' : 'text-slate-200 cursor-not-allowed'}`}>
+        <div {...(disabled ? {} : { ...attributes, ...listeners })} className={`p-1.5 rounded-lg shrink-0 ${!disabled ? 'text-[#1A1A1A]/40 hover:text-[#1A1A1A]/70 hover:bg-[#FAF6F2] cursor-grab active:cursor-grabbing' : 'text-slate-200 cursor-not-allowed'}`}>
           <GripVertical className="w-4 h-4" />
         </div>
       </td>
@@ -134,7 +134,7 @@ export const AdminProductsPageClient: React.FC = () => {
         body: formData
       });
       if (res.ok) {
-        showToast('Products imported successfully. Refreshing the catalog…', 'success');
+        showToast('Products imported successfully. Refreshing the catalogâ€¦', 'success');
         window.location.reload();
       } else {
         showToast('Failed to import products. Check the CSV and try again.', 'error');
@@ -168,25 +168,25 @@ export const AdminProductsPageClient: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-heading font-black text-2xl text-slate-900">Products Catalog</h1>
-          <p className="text-xs text-slate-500 font-medium">Manage products, PKR pricing, inventory stock, visibility, and delivery charge logic.</p>
+          <h1 className="font-heading font-black text-2xl text-[#1A1A1A]">Products Catalog</h1>
+          <p className="text-xs text-[#1A1A1A]/50 font-medium">Manage products, PKR pricing, inventory stock, visibility, and delivery charge logic.</p>
         </div>
         <div className="flex flex-wrap gap-2">
             <button
               onClick={() => { void handleExportCSV(); }}
-              className="px-4 py-2.5 rounded-2xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs flex items-center gap-2 shadow-sm transition-all"
+              className="px-4 py-2.5 rounded-2xl bg-white border border-[#E7D9D0] hover:bg-[#FAF6F2] text-[#1A1A1A]/80 font-bold text-xs flex items-center gap-2 shadow-sm transition-all"
             >
               <DownloadCloud className="w-4 h-4" />
               <span>Export CSV</span>
             </button>
-            <label className="cursor-pointer px-4 py-2.5 rounded-2xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs flex items-center gap-2 shadow-sm transition-all">
+            <label className="cursor-pointer px-4 py-2.5 rounded-2xl bg-white border border-[#E7D9D0] hover:bg-[#FAF6F2] text-[#1A1A1A]/80 font-bold text-xs flex items-center gap-2 shadow-sm transition-all">
               <UploadCloud className="w-4 h-4" />
               <span>Import CSV</span>
               <input type="file" accept=".csv" className="hidden" onChange={handleImportCSV} />
             </label>
             <button
               onClick={() => router.push('/admin/products/new')}
-              className="px-5 py-2.5 rounded-2xl bg-rose-500 hover:bg-rose-600 text-white font-heading font-bold text-xs flex items-center gap-2 shadow-md transition-all"
+              className="px-5 py-2.5 rounded-2xl bg-[#C48B80] hover:bg-[#A86249] text-white font-heading font-bold text-xs flex items-center gap-2 shadow-md transition-all"
             >
               <Plus className="w-4 h-4" />
               <span>Add New Product</span>
@@ -195,22 +195,22 @@ export const AdminProductsPageClient: React.FC = () => {
       </div>
 
       {/* Filter controls */}
-      <div className="bg-white p-4 rounded-3xl border border-slate-200/80 shadow-xs flex flex-wrap items-center justify-between gap-4">
+      <div className="bg-white p-4 rounded-3xl border border-[#E7D9D0]/80 shadow-xs flex flex-wrap items-center justify-between gap-4">
         <div className="relative flex-1 max-w-sm">
           <input
             type="text"
             placeholder="Search by product name or brand..."
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-slate-200"
+            className="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-[#E7D9D0]"
           />
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+          <Search className="w-4 h-4 text-[#1A1A1A]/40 absolute left-3 top-2.5" />
         </div>
 
         <select
           value={selectedCatFilter}
           onChange={e => setSelectedCatFilter(e.target.value)}
-          className="px-3 py-2 text-xs font-bold rounded-xl border border-slate-200 bg-white"
+          className="px-3 py-2 text-xs font-bold rounded-xl border border-[#E7D9D0] bg-white"
         >
           <option value="all">All Categories</option>
           {categories.map(c => (
@@ -220,12 +220,12 @@ export const AdminProductsPageClient: React.FC = () => {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden">
+      <div className="bg-white rounded-3xl border border-[#E7D9D0]/80 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
             <SortableContext items={filteredProducts.map(p => p.id)} strategy={verticalListSortingStrategy}>
-              <table className="w-full text-left text-xs text-slate-700">
-            <thead className="bg-slate-50 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+              <table className="w-full text-left text-xs text-[#1A1A1A]/80">
+            <thead className="bg-[#FAF6F2] text-[#1A1A1A]/40 font-bold uppercase tracking-wider text-[10px]">
               <tr>
                 <th className="p-4 pl-6 w-10"></th>
                 <th className="p-4">Product</th>
@@ -245,16 +245,16 @@ export const AdminProductsPageClient: React.FC = () => {
                 <SortableTableRow key={prod.id || prod.slug} id={prod.id} disabled={!canMove}>
                   <td className="p-4">
                     <div className="flex items-center gap-3">
-                      <img src={getSafeImageSrc(prod.images?.[0])} alt="" className="w-10 h-10 object-cover rounded-xl bg-slate-100" />
+                      <img src={getSafeImageSrc(prod.images?.[0])} alt="" className="w-10 h-10 object-cover rounded-xl bg-[#FAF6F2]" />
                       <div>
-                        <span className="font-heading font-bold text-slate-900 block">{prod.name}</span>
-                        <span className="text-[10px] text-slate-400">{prod.brand}</span>
+                        <span className="font-heading font-bold text-[#1A1A1A] block">{prod.name}</span>
+                        <span className="text-[10px] text-[#1A1A1A]/40">{prod.brand}</span>
                       </div>
                     </div>
                   </td>
-                  <td className="p-4 font-semibold text-sky-600">{prod.category || 'Uncategorized'}{(prod.categoryNames?.length || 0) > 1 && <span className="ml-1 text-[10px] text-slate-400">+{prod.categoryNames!.length - 1}</span>}</td>
+                  <td className="p-4 font-semibold text-sky-600">{prod.category || 'Uncategorized'}{(prod.categoryNames?.length || 0) > 1 && <span className="ml-1 text-[10px] text-[#1A1A1A]/40">+{prod.categoryNames!.length - 1}</span>}</td>
                   <td className="p-4 font-bold">{formatProductAgeGroups(prod)}</td>
-                  <td className="p-4 font-bold text-slate-900">{formatPrice(prod.price, settings.currency)}</td>
+                  <td className="p-4 font-bold text-[#1A1A1A]">{formatPrice(prod.price, settings.currency)}</td>
                   <td className="p-4">
                     <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
                       prod.inStock ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
@@ -268,7 +268,7 @@ export const AdminProductsPageClient: React.FC = () => {
                       className={`px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all ${
                         prod.isVisible !== false
                           ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                          : 'bg-slate-100 text-slate-500 border border-slate-200'
+                          : 'bg-[#FAF6F2] text-[#1A1A1A]/50 border border-[#E7D9D0]'
                       }`}
                     >
                       {prod.isVisible !== false ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
@@ -278,17 +278,17 @@ export const AdminProductsPageClient: React.FC = () => {
                   <td className="p-4 pr-6 text-right space-x-2">
                     <button
                       onClick={() => router.push(`/admin/products/edit/${encodeURIComponent(prod.id)}`)}
-                      className="p-1.5 rounded-lg text-slate-600 hover:bg-slate-100"
+                      className="p-1.5 rounded-lg text-[#1A1A1A]/70 hover:bg-[#FAF6F2]"
                       title="Edit"
                     >
                       <Edit2 className="w-4 h-4 text-sky-600" />
                     </button>
                     <button
                       onClick={() => { void handleDelete(prod.id, prod.name); }}
-                      className="p-1.5 rounded-lg text-slate-600 hover:bg-rose-50"
+                      className="p-1.5 rounded-lg text-[#1A1A1A]/70 hover:bg-[#FAF6F2]"
                       title="Delete"
                     >
-                      <Trash2 className="w-4 h-4 text-rose-500" />
+                      <Trash2 className="w-4 h-4 text-[#C48B80]" />
                     </button>
                   </td>
                 </SortableTableRow>
@@ -304,3 +304,4 @@ export const AdminProductsPageClient: React.FC = () => {
     </div>
   );
 };
+

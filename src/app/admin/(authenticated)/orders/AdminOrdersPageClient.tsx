@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React, { useState } from 'react';
 import { Eye, Search, Truck, X, CheckCircle2, Send, Trash2 } from 'lucide-react';
 import { useStore } from '../../../../context/StoreContext';
@@ -101,7 +101,7 @@ export const AdminOrdersPageClient: React.FC = () => {
     const accepted = await confirm({
       title: isDelivered ? 'Mark this order as delivered?' : isCancelled ? 'Cancel this order?' : `Mark this order as ${newStatus.toLowerCase()}?`,
       description: isDelivered
-        ? `Order ${order.id} for ${order.customerName} (${order.email}) is currently ${order.status}. The customer’s delivery email will be sent if it has not already been sent.`
+        ? `Order ${order.id} for ${order.customerName} (${order.email}) is currently ${order.status}. The customerâ€™s delivery email will be sent if it has not already been sent.`
         : isCancelled ? 'The order status will change to Cancelled. Tracked product and variant stock will be restored where applicable.'
         : `Order ${order.id} will move from ${order.status} to ${newStatus}.`,
       cancelLabel: isDelivered ? 'Not Yet' : isCancelled ? 'Keep Order' : 'Keep Current Status',
@@ -152,35 +152,35 @@ export const AdminOrdersPageClient: React.FC = () => {
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-heading font-black text-2xl text-slate-900">Orders Management</h1>
-          <p className="text-xs text-slate-500 font-medium">Fulfill customer orders, update delivery statuses, and issue tracking numbers.</p>
+          <h1 className="font-heading font-black text-2xl text-[#1A1A1A]">Orders Management</h1>
+          <p className="text-xs text-[#1A1A1A]/50 font-medium">Fulfill customer orders, update delivery statuses, and issue tracking numbers.</p>
         </div>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-        <div className="bg-white p-4 rounded-3xl border border-slate-200/80 shadow-xs max-w-sm w-full sm:w-auto">
+        <div className="bg-white p-4 rounded-3xl border border-[#E7D9D0]/80 shadow-xs max-w-sm w-full sm:w-auto">
           <div className="relative">
             <input
               type="text"
               placeholder="Search order ID or customer..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-slate-200"
+              className="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-[#E7D9D0]"
             />
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+            <Search className="w-4 h-4 text-[#1A1A1A]/40 absolute left-3 top-2.5" />
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="flex bg-white rounded-2xl p-1.5 border border-slate-200/80 shadow-xs overflow-x-auto w-full sm:w-auto">
+        <div className="flex bg-white rounded-2xl p-1.5 border border-[#E7D9D0]/80 shadow-xs overflow-x-auto w-full sm:w-auto">
           {['All', 'Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'].map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`px-4 py-1.5 text-xs font-bold rounded-xl whitespace-nowrap transition-colors ${
                 activeTab === tab
-                  ? 'bg-slate-900 text-white'
-                  : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
+                  ? 'bg-[#1A1A1A] text-white'
+                  : 'text-[#1A1A1A]/50 hover:text-[#1A1A1A]/80 hover:bg-[#FAF6F2]'
               }`}
             >
               {tab}
@@ -206,7 +206,7 @@ export const AdminOrdersPageClient: React.FC = () => {
                   status === 'Processing' ? 'bg-amber-100 text-amber-800 border-amber-200 hover:bg-amber-200' :
                   status === 'Shipped' ? 'bg-sky-100 text-sky-800 border-sky-200 hover:bg-sky-200' :
                   status === 'Delivered' ? 'bg-emerald-100 text-emerald-800 border-emerald-200 hover:bg-emerald-200' :
-                  'bg-rose-100 text-rose-800 border-rose-200 hover:bg-rose-200'
+                  'bg-rose-100 text-rose-800 border-[#E7D9D0] hover:bg-rose-200'
                 } disabled:opacity-50`}
               >
                 {status}
@@ -216,7 +216,7 @@ export const AdminOrdersPageClient: React.FC = () => {
             <button
               disabled={isBulkUpdating}
               onClick={() => void handleBulkDelete()}
-              className="px-3 py-1.5 text-[11px] font-bold rounded-xl bg-white border border-rose-200 text-rose-600 hover:bg-rose-50 flex items-center gap-1 transition-colors disabled:opacity-50"
+              className="px-3 py-1.5 text-[11px] font-bold rounded-xl bg-white border border-[#E7D9D0] text-[#A86249] hover:bg-[#FAF6F2] flex items-center gap-1 transition-colors disabled:opacity-50"
             >
               <Trash2 className="w-3.5 h-3.5" />
               Delete Selected
@@ -225,17 +225,17 @@ export const AdminOrdersPageClient: React.FC = () => {
         </div>
       )}
 
-      <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden">
+      <div className="bg-white rounded-3xl border border-[#E7D9D0]/80 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-slate-700">
-            <thead className="bg-slate-50 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+          <table className="w-full text-left text-xs text-[#1A1A1A]/80">
+            <thead className="bg-[#FAF6F2] text-[#1A1A1A]/40 font-bold uppercase tracking-wider text-[10px]">
               <tr>
                 <th className="p-4 pl-6 w-12">
                   <input
                     type="checkbox"
                     checked={filteredOrders.length > 0 && selectedOrderIds.size === filteredOrders.length}
                     onChange={toggleSelectAll}
-                    className="rounded border-slate-300 text-sky-600 focus:ring-sky-500 cursor-pointer"
+                    className="rounded border-[#E7D9D0] text-sky-600 focus:ring-sky-500 cursor-pointer"
                   />
                 </th>
                 <th className="p-4">Order ID</th>
@@ -250,45 +250,45 @@ export const AdminOrdersPageClient: React.FC = () => {
             </thead>
             <tbody className="divide-y divide-slate-100">
               {filteredOrders.map(order => (
-                <tr key={order.id || `${order.email}-${order.date}`} className="hover:bg-slate-50/80 transition-colors">
+                <tr key={order.id || `${order.email}-${order.date}`} className="hover:bg-[#FAF6F2]/80 transition-colors">
                   <td className="p-4 pl-6 w-12">
                     <input
                       type="checkbox"
                       checked={selectedOrderIds.has(order.id)}
                       onChange={() => toggleSelectOrder(order.id)}
-                      className="rounded border-slate-300 text-sky-600 focus:ring-sky-500 cursor-pointer"
+                      className="rounded border-[#E7D9D0] text-sky-600 focus:ring-sky-500 cursor-pointer"
                     />
                   </td>
-                  <td className="p-4 font-heading font-bold text-slate-900">{order.id}</td>
+                  <td className="p-4 font-heading font-bold text-[#1A1A1A]">{order.id}</td>
                   <td className="p-4">
-                    <span className="font-bold text-slate-800 block">{order.customerName}</span>
-                    <span className="text-[10px] text-slate-400">{order.email}</span>
+                    <span className="font-bold text-[#1A1A1A] block">{order.customerName}</span>
+                    <span className="text-[10px] text-[#1A1A1A]/40">{order.email}</span>
                   </td>
                   <td className="p-4">
                     <div className="flex flex-col gap-2 max-h-32 overflow-y-auto pr-2 custom-scrollbar">
                       {(order.items || []).map((it, idx) => (
-                        <div key={`${it.productId || it.name || 'item'}-${idx}`} className="flex items-start gap-2 bg-slate-50 p-1.5 rounded-lg border border-slate-100">
+                        <div key={`${it.productId || it.name || 'item'}-${idx}`} className="flex items-start gap-2 bg-[#FAF6F2] p-1.5 rounded-lg border border-[#E7D9D0]">
                           {it.image ? (
-                            <img src={it.image} alt={it.name || 'Product'} className="w-8 h-8 rounded object-cover border border-slate-200 shrink-0" />
+                            <img src={it.image} alt={it.name || 'Product'} className="w-8 h-8 rounded object-cover border border-[#E7D9D0] shrink-0" />
                           ) : (
-                            <div className="w-8 h-8 rounded bg-slate-200 border border-slate-300 flex items-center justify-center shrink-0">
-                              <span className="text-[8px] text-slate-500 font-bold uppercase">No Img</span>
+                            <div className="w-8 h-8 rounded bg-slate-200 border border-[#E7D9D0] flex items-center justify-center shrink-0">
+                              <span className="text-[8px] text-[#1A1A1A]/50 font-bold uppercase">No Img</span>
                             </div>
                           )}
                           <div className="flex flex-col min-w-0 flex-1">
-                            <span className="text-[11px] font-bold text-slate-800 line-clamp-1" title={it.name || 'Unknown Item'}>{it.name || 'Unknown Item'}</span>
-                            <div className="text-[10px] text-slate-500 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mt-0.5">
-                              <span className="font-bold text-slate-700">{it.quantity || 0}x</span>
-                              <span className="text-slate-600">{formatPrice(it.price || 0, settings.currency)}</span>
+                            <span className="text-[11px] font-bold text-[#1A1A1A] line-clamp-1" title={it.name || 'Unknown Item'}>{it.name || 'Unknown Item'}</span>
+                            <div className="text-[10px] text-[#1A1A1A]/50 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mt-0.5">
+                              <span className="font-bold text-[#1A1A1A]/80">{it.quantity || 0}x</span>
+                              <span className="text-[#1A1A1A]/70">{formatPrice(it.price || 0, settings.currency)}</span>
                               
                               {/* Legacy simple variant string */}
                               {!it.selectedAttributes && it.selectedVariant && (
-                                <span className="text-slate-400">• {it.selectedVariant}</span>
+                                <span className="text-[#1A1A1A]/40">â€¢ {it.selectedVariant}</span>
                               )}
                               
                               {/* New attribute-based variations */}
                               {it.selectedAttributes && Object.values(it.selectedAttributes).map(v => (
-                                <span key={v as string} className="bg-slate-200/60 px-1 py-0.5 rounded text-[9px] text-slate-600 font-medium">
+                                <span key={v as string} className="bg-slate-200/60 px-1 py-0.5 rounded text-[9px] text-[#1A1A1A]/70 font-medium">
                                   {v as string}
                                 </span>
                               ))}
@@ -298,9 +298,9 @@ export const AdminOrdersPageClient: React.FC = () => {
                       ))}
                     </div>
                   </td>
-                  <td className="p-4 text-slate-500">{order.date}</td>
+                  <td className="p-4 text-[#1A1A1A]/50">{order.date}</td>
                   <td className="p-4 font-medium">{order.paymentMethod}</td>
-                  <td className="p-4 font-bold text-slate-900">{formatPrice(order.total, settings.currency)}</td>
+                  <td className="p-4 font-bold text-[#1A1A1A]">{formatPrice(order.total, settings.currency)}</td>
                   <td className="p-4">
                     <select
                       value={order.status}
@@ -310,7 +310,7 @@ export const AdminOrdersPageClient: React.FC = () => {
                         order.status === 'Delivered' ? 'bg-emerald-100 text-emerald-800' :
                         order.status === 'Shipped' ? 'bg-sky-100 text-sky-800' :
                         order.status === 'Cancelled' ? 'bg-rose-100 text-rose-800' :
-                        order.status === 'Processing' ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-700'
+                        order.status === 'Processing' ? 'bg-amber-100 text-amber-800' : 'bg-[#FAF6F2] text-[#1A1A1A]/80'
                       }`}
                     >
                       <option value="Pending">Pending</option>
@@ -326,14 +326,14 @@ export const AdminOrdersPageClient: React.FC = () => {
                         setSelectedOrder(order);
                         setTrackingInput(order.trackingNumber || '');
                       }}
-                      className="p-1.5 rounded-lg text-slate-600 hover:bg-slate-100"
+                      className="p-1.5 rounded-lg text-[#1A1A1A]/70 hover:bg-[#FAF6F2]"
                       title="View Order Details"
                     >
-                      <Eye className="w-4 h-4 text-slate-700" />
+                      <Eye className="w-4 h-4 text-[#1A1A1A]/80" />
                     </button>
                     <button
                       onClick={() => { void handleDeleteOrder(order); }}
-                      className="p-1.5 rounded-lg text-rose-500 hover:bg-rose-50"
+                      className="p-1.5 rounded-lg text-[#C48B80] hover:bg-[#FAF6F2]"
                       title="Delete Order"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -348,23 +348,23 @@ export const AdminOrdersPageClient: React.FC = () => {
 
       {/* Order Detail Modal */}
       {selectedOrder && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 relative shadow-2xl border border-slate-100 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1A1A1A]/60 backdrop-blur-xs">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 relative shadow-2xl border border-[#E7D9D0] space-y-4">
+            <div className="flex items-center justify-between border-b border-[#E7D9D0] pb-3">
               <div>
-                <span className="text-[10px] font-bold uppercase text-slate-400">Order Receipt</span>
-                <h3 className="font-heading font-black text-lg text-slate-900">{selectedOrder.id}</h3>
+                <span className="text-[10px] font-bold uppercase text-[#1A1A1A]/40">Order Receipt</span>
+                <h3 className="font-heading font-black text-lg text-[#1A1A1A]">{selectedOrder.id}</h3>
               </div>
-              <button onClick={() => setSelectedOrder(null)} className="p-1 text-slate-400">
+              <button onClick={() => setSelectedOrder(null)} className="p-1 text-[#1A1A1A]/40">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <div className="space-y-3 text-xs">
-              <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200">
-                <span className="font-bold text-slate-800 block mb-1">Shipping Address:</span>
-                <p className="text-slate-600">{selectedOrder.shippingAddress.fullName} ({selectedOrder.shippingAddress.phone})</p>
-                <p className="text-slate-600">{selectedOrder.shippingAddress.street}, {selectedOrder.shippingAddress.city}, {selectedOrder.shippingAddress.state} {selectedOrder.shippingAddress.postalCode}</p>
+              <div className="p-3 rounded-2xl bg-[#FAF6F2] border border-[#E7D9D0]">
+                <span className="font-bold text-[#1A1A1A] block mb-1">Shipping Address:</span>
+                <p className="text-[#1A1A1A]/70">{selectedOrder.shippingAddress.fullName} ({selectedOrder.shippingAddress.phone})</p>
+                <p className="text-[#1A1A1A]/70">{selectedOrder.shippingAddress.street}, {selectedOrder.shippingAddress.city}, {selectedOrder.shippingAddress.state} {selectedOrder.shippingAddress.postalCode}</p>
               </div>
 
               {/* Courier Tracking */}
@@ -388,9 +388,9 @@ export const AdminOrdersPageClient: React.FC = () => {
               </div>
 
               <div className="space-y-2">
-                <span className="font-bold text-slate-800 block">Items Purchased:</span>
+                <span className="font-bold text-[#1A1A1A] block">Items Purchased:</span>
                 {selectedOrder.items.map((it, idx) => (
-                  <div key={`${it.productId || it.name}-${it.selectedVariant || 'default'}-${idx}`} className="flex items-center justify-between text-slate-700">
+                  <div key={`${it.productId || it.name}-${it.selectedVariant || 'default'}-${idx}`} className="flex items-center justify-between text-[#1A1A1A]/80">
                     <div className="flex flex-col">
                       <span>
                         {it.quantity}x {it.name}
@@ -398,25 +398,25 @@ export const AdminOrdersPageClient: React.FC = () => {
                       {it.selectedAttributes && (
                         <div className="mt-0.5 flex flex-wrap gap-1">
                           {Object.entries(it.selectedAttributes).map(([k, v]) => (
-                            <span key={k} className="text-[9px] font-bold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">
+                            <span key={k} className="text-[9px] font-bold text-[#1A1A1A]/50 bg-[#FAF6F2] px-1.5 py-0.5 rounded border border-[#E7D9D0]">
                               {v}
                             </span>
                           ))}
                         </div>
                       )}
                       {!it.selectedAttributes && it.selectedVariant && (
-                        <span className="text-[10px] text-slate-500">{it.selectedVariant}</span>
+                        <span className="text-[10px] text-[#1A1A1A]/50">{it.selectedVariant}</span>
                       )}
-                      {it.sku && <span className="text-[9px] text-slate-400 mt-0.5 font-mono">SKU: {it.sku}</span>}
+                      {it.sku && <span className="text-[9px] text-[#1A1A1A]/40 mt-0.5 font-mono">SKU: {it.sku}</span>}
                     </div>
-                    <span className="font-bold text-slate-900">{formatPrice(it.price * it.quantity, settings.currency)}</span>
+                    <span className="font-bold text-[#1A1A1A]">{formatPrice(it.price * it.quantity, settings.currency)}</span>
                   </div>
                 ))}
               </div>
 
-              <div className="pt-2 border-t border-slate-100 flex justify-between font-heading font-black text-slate-900 text-sm">
+              <div className="pt-2 border-t border-[#E7D9D0] flex justify-between font-heading font-black text-[#1A1A1A] text-sm">
                 <span>Total Amount (COD):</span>
-                <span className="text-rose-600">{formatPrice(selectedOrder.total, settings.currency)}</span>
+                <span className="text-[#A86249]">{formatPrice(selectedOrder.total, settings.currency)}</span>
               </div>
             </div>
           </div>
@@ -425,3 +425,4 @@ export const AdminOrdersPageClient: React.FC = () => {
     </div>
   );
 };
+

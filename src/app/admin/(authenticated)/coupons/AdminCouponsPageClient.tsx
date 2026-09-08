@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React, { useState } from 'react';
 import { Plus, Trash2, X, Edit, Power, PowerOff } from 'lucide-react';
 import { useStore } from '../../../../context/StoreContext';
@@ -91,12 +91,12 @@ export const AdminCouponsPageClient: React.FC = () => {
 
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-heading font-black text-2xl text-slate-900">Promo Coupons & Deals</h1>
-          <p className="text-xs text-slate-500 font-medium">Create promotional discount codes and percentage vouchers.</p>
+          <h1 className="font-heading font-black text-2xl text-[#1A1A1A]">Promo Coupons & Deals</h1>
+          <p className="text-xs text-[#1A1A1A]/50 font-medium">Create promotional discount codes and percentage vouchers.</p>
         </div>
         <button
           onClick={openCreateModal}
-          className="px-5 py-2.5 rounded-2xl bg-rose-500 text-white font-heading font-bold text-xs flex items-center gap-2 shadow-md"
+          className="px-5 py-2.5 rounded-2xl bg-[#C48B80] text-white font-heading font-bold text-xs flex items-center gap-2 shadow-md"
         >
           <Plus className="w-4 h-4" />
           <span>Create New Coupon</span>
@@ -105,28 +105,28 @@ export const AdminCouponsPageClient: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {coupons.map(coup => (
-          <div key={coup.id} className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs space-y-3 relative overflow-hidden">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <span className="font-mono font-black text-base text-slate-900 bg-slate-100 px-3 py-1 rounded-xl">
+          <div key={coup.id} className="bg-white rounded-3xl p-6 border border-[#E7D9D0]/80 shadow-xs space-y-3 relative overflow-hidden">
+            <div className="flex items-center justify-between border-b border-[#E7D9D0] pb-3">
+              <span className="font-mono font-black text-base text-[#1A1A1A] bg-[#FAF6F2] px-3 py-1 rounded-xl">
                 {coup.code}
               </span>
-              <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${coup.isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-500'}`}>
+              <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${coup.isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-[#FAF6F2] text-[#1A1A1A]/50'}`}>
                 {coup.isActive ? 'Active' : 'Disabled'}
               </span>
             </div>
 
             <div className="space-y-1 text-xs">
-              <span className="font-heading font-black text-xl text-rose-500 block">
+              <span className="font-heading font-black text-xl text-[#C48B80] block">
                 {coup.discountType === 'percentage' ? `${coup.amount}% OFF` : `${formatPrice(coup.amount)} OFF`}
               </span>
-              <p className="text-slate-500 font-medium">Min spend: {formatPrice(coup.minSpend)}</p>
-              <p className="text-slate-400 text-[11px]">Used {coup.usedCount} times &bull; Expires {coup.expiryDate}</p>
+              <p className="text-[#1A1A1A]/50 font-medium">Min spend: {formatPrice(coup.minSpend)}</p>
+              <p className="text-[#1A1A1A]/40 text-[11px]">Used {coup.usedCount} times &bull; Expires {coup.expiryDate}</p>
             </div>
 
-            <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
+            <div className="flex justify-end gap-2 pt-2 border-t border-[#E7D9D0]">
               <button
                 onClick={() => toggleStatus(coup)}
-                className={`p-1.5 rounded-lg text-xs flex items-center gap-1 font-bold ${coup.isActive ? 'text-amber-500 hover:bg-amber-50' : 'text-emerald-500 hover:bg-emerald-50'}`}
+                className={`p-1.5 rounded-lg text-xs flex items-center gap-1 font-bold ${coup.isActive ? 'text-[#C48B80] hover:bg-amber-50' : 'text-emerald-500 hover:bg-emerald-50'}`}
               >
                 {coup.isActive ? <PowerOff className="w-3.5 h-3.5" /> : <Power className="w-3.5 h-3.5" />}
                 <span>{coup.isActive ? 'Disable' : 'Enable'}</span>
@@ -140,7 +140,7 @@ export const AdminCouponsPageClient: React.FC = () => {
               </button>
               <button
                 onClick={() => { void removeCoupon(coup); }}
-                className="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg text-xs flex items-center gap-1 font-bold"
+                className="p-1.5 text-[#C48B80] hover:bg-[#FAF6F2] rounded-lg text-xs flex items-center gap-1 font-bold"
               >
                 <Trash2 className="w-3.5 h-3.5" />
                 <span>Delete</span>
@@ -151,71 +151,71 @@ export const AdminCouponsPageClient: React.FC = () => {
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 relative shadow-2xl border border-slate-100 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="font-heading font-black text-lg text-slate-900">{editId ? 'Edit Promo Code' : 'Create Promo Code'}</h3>
-              <button onClick={() => setIsModalOpen(false)} className="p-1 text-slate-400">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1A1A1A]/60 backdrop-blur-xs">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 relative shadow-2xl border border-[#E7D9D0] space-y-4">
+            <div className="flex items-center justify-between border-b border-[#E7D9D0] pb-3">
+              <h3 className="font-heading font-black text-lg text-[#1A1A1A]">{editId ? 'Edit Promo Code' : 'Create Promo Code'}</h3>
+              <button onClick={() => setIsModalOpen(false)} className="p-1 text-[#1A1A1A]/40">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="text-xs font-bold text-slate-700 block mb-1">Coupon Code</label>
+                <label className="text-xs font-bold text-[#1A1A1A]/80 block mb-1">Coupon Code</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. TOYFUN20"
                   value={code}
                   onChange={e => setCode(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 uppercase font-mono"
+                  className="w-full px-3 py-2 text-xs rounded-xl border border-[#E7D9D0] uppercase font-mono"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs font-bold text-slate-700 block mb-1">Discount Type</label>
+                  <label className="text-xs font-bold text-[#1A1A1A]/80 block mb-1">Discount Type</label>
                   <select
                     value={discountType}
                     onChange={e => setDiscountType(e.target.value as any)}
-                    className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 bg-white"
+                    className="w-full px-3 py-2 text-xs rounded-xl border border-[#E7D9D0] bg-white"
                   >
                     <option value="percentage">Percentage (%)</option>
                     <option value="flat">Flat Amount (Rs.)</option>
                   </select>
                 </div>
                 <div>
-                  <label className="text-xs font-bold text-slate-700 block mb-1">Amount</label>
+                  <label className="text-xs font-bold text-[#1A1A1A]/80 block mb-1">Amount</label>
                   <input
                     type="number"
                     required
                     value={amount}
                     onChange={e => setAmount(Number(e.target.value))}
-                    className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200"
+                    className="w-full px-3 py-2 text-xs rounded-xl border border-[#E7D9D0]"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs font-bold text-slate-700 block mb-1">Min Spend (Rs.)</label>
+                  <label className="text-xs font-bold text-[#1A1A1A]/80 block mb-1">Min Spend (Rs.)</label>
                   <input
                     type="number"
                     required
                     value={minSpend}
                     onChange={e => setMinSpend(Number(e.target.value))}
-                    className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200"
+                    className="w-full px-3 py-2 text-xs rounded-xl border border-[#E7D9D0]"
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-bold text-slate-700 block mb-1">Expiry Date</label>
+                  <label className="text-xs font-bold text-[#1A1A1A]/80 block mb-1">Expiry Date</label>
                   <input
                     type="date"
                     required
                     value={expiryDate}
                     onChange={e => setExpiryDate(e.target.value)}
-                    className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200"
+                    className="w-full px-3 py-2 text-xs rounded-xl border border-[#E7D9D0]"
                   />
                 </div>
               </div>
@@ -224,13 +224,13 @@ export const AdminCouponsPageClient: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs"
+                  className="px-4 py-2 rounded-xl bg-[#FAF6F2] text-[#1A1A1A]/80 font-bold text-xs"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-rose-500 text-white font-bold text-xs shadow-md"
+                  className="px-5 py-2 rounded-xl bg-[#C48B80] text-white font-bold text-xs shadow-md"
                 >
                   {editId ? 'Update Coupon' : 'Create Coupon'}
                 </button>
@@ -242,3 +242,4 @@ export const AdminCouponsPageClient: React.FC = () => {
     </div>
   );
 };
+

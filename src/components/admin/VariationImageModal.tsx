@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React, { useState } from 'react';
 import { X, Upload, Image as ImageIcon, Loader2 } from 'lucide-react';
 import { api } from '../../services/api';
@@ -58,31 +58,31 @@ export const VariationImageModal: React.FC<VariationImageModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#1A1A1A]/50 backdrop-blur-sm">
       <div className="w-full max-w-2xl bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
-        <div className="flex items-center justify-between p-4 border-b border-slate-100 bg-slate-50">
-          <h2 className="font-heading font-black text-lg text-slate-800">Variation Image</h2>
-          <button type="button" onClick={onClose} className="p-2 text-slate-400 hover:bg-slate-200 rounded-full transition-colors">
+        <div className="flex items-center justify-between p-4 border-b border-[#E7D9D0] bg-[#FAF6F2]">
+          <h2 className="font-heading font-black text-lg text-[#1A1A1A]">Variation Image</h2>
+          <button type="button" onClick={onClose} className="p-2 text-[#1A1A1A]/40 hover:bg-slate-200 rounded-full transition-colors">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         <div className="p-6 overflow-y-auto">
           <div className="mb-6">
-            <h3 className="text-sm font-bold text-slate-700 mb-3">Current Selection</h3>
+            <h3 className="text-sm font-bold text-[#1A1A1A]/80 mb-3">Current Selection</h3>
             {selectedImage ? (
-              <div className="relative rounded-xl border border-slate-200 overflow-hidden bg-slate-50 aspect-video flex items-center justify-center max-w-sm">
+              <div className="relative rounded-xl border border-[#E7D9D0] overflow-hidden bg-[#FAF6F2] aspect-video flex items-center justify-center max-w-sm">
                 <img src={getSafeImageSrc(selectedImage.url)} alt="Variation Preview" className="max-w-full max-h-full object-contain" />
                 <button type="button"
                   onClick={() => setSelectedImage(undefined)}
-                  className="absolute top-2 right-2 p-1.5 bg-white rounded-md text-rose-500 shadow hover:bg-rose-50"
+                  className="absolute top-2 right-2 p-1.5 bg-white rounded-md text-[#C48B80] shadow hover:bg-[#FAF6F2]"
                   title="Remove Image"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </div>
             ) : (
-              <div className="rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 p-6 flex flex-col items-center justify-center text-slate-400">
+              <div className="rounded-xl border-2 border-dashed border-[#E7D9D0] bg-[#FAF6F2] p-6 flex flex-col items-center justify-center text-[#1A1A1A]/40">
                 <ImageIcon className="w-8 h-8 mb-2 opacity-50" />
                 <p className="text-sm font-medium">No image selected</p>
                 <p className="text-xs">Select from gallery or upload a new one</p>
@@ -93,21 +93,21 @@ export const VariationImageModal: React.FC<VariationImageModalProps> = ({
           {selectedImage && (
             <div className="mb-6">
               <label className="block">
-                <span className="block text-xs font-bold text-slate-700 mb-1.5">Alt Text</span>
+                <span className="block text-xs font-bold text-[#1A1A1A]/80 mb-1.5">Alt Text</span>
                 <input
                   type="text"
                   value={altText}
                   onChange={e => setAltText(e.target.value)}
                   placeholder="Describe the image for screen readers and SEO"
-                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none"
+                  className="w-full rounded-lg border border-[#E7D9D0] px-3 py-2 text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none"
                 />
               </label>
             </div>
           )}
 
-          <div className="grid grid-cols-2 gap-6 pt-6 border-t border-slate-100">
+          <div className="grid grid-cols-2 gap-6 pt-6 border-t border-[#E7D9D0]">
             <div>
-              <h3 className="text-sm font-bold text-slate-700 mb-3">Upload New</h3>
+              <h3 className="text-sm font-bold text-[#1A1A1A]/80 mb-3">Upload New</h3>
               <label className="flex items-center justify-center gap-2 w-full p-4 border-2 border-dashed border-indigo-200 rounded-xl bg-indigo-50 text-indigo-600 hover:bg-indigo-100 hover:border-indigo-300 cursor-pointer transition-colors font-medium text-sm">
                 {isUploading ? (
                   <><Loader2 className="w-5 h-5 animate-spin" /> Uploading...</>
@@ -119,9 +119,9 @@ export const VariationImageModal: React.FC<VariationImageModalProps> = ({
             </div>
 
             <div>
-              <h3 className="text-sm font-bold text-slate-700 mb-3">Select from Gallery</h3>
+              <h3 className="text-sm font-bold text-[#1A1A1A]/80 mb-3">Select from Gallery</h3>
               {productImages.length === 0 ? (
-                <div className="p-4 text-center text-sm text-slate-500 bg-slate-50 rounded-xl border border-slate-200">
+                <div className="p-4 text-center text-sm text-[#1A1A1A]/50 bg-[#FAF6F2] rounded-xl border border-[#E7D9D0]">
                   No existing product images available.
                 </div>
               ) : (
@@ -132,11 +132,11 @@ export const VariationImageModal: React.FC<VariationImageModalProps> = ({
                       onClick={() => {
                         setSelectedImage({ url: img.url, publicId: img.publicId, alt: altText });
                       }}
-                      className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${selectedImage?.url === img.url ? 'border-indigo-500 ring-2 ring-indigo-500/20' : 'border-transparent hover:border-slate-300'}`}
+                      className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${selectedImage?.url === img.url ? 'border-indigo-500 ring-2 ring-indigo-500/20' : 'border-transparent hover:border-[#E7D9D0]'}`}
                     >
                       <img src={getSafeImageSrc(img.url)} className="w-full h-full object-cover" alt="Gallery option" />
                       {idx === 0 && (
-                        <span className="absolute bottom-0 inset-x-0 bg-slate-900/60 text-[9px] text-white font-bold text-center py-0.5">Main</span>
+                        <span className="absolute bottom-0 inset-x-0 bg-[#1A1A1A]/60 text-[9px] text-white font-bold text-center py-0.5">Main</span>
                       )}
                     </button>
                   ))}
@@ -146,8 +146,8 @@ export const VariationImageModal: React.FC<VariationImageModalProps> = ({
           </div>
         </div>
 
-        <div className="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-3">
-          <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-200 rounded-lg transition-colors">
+        <div className="p-4 border-t border-[#E7D9D0] bg-[#FAF6F2] flex justify-end gap-3">
+          <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-bold text-[#1A1A1A]/70 hover:bg-slate-200 rounded-lg transition-colors">
             Cancel
           </button>
           <button type="button" onClick={handleSave} className="px-5 py-2 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow transition-colors">
@@ -158,3 +158,4 @@ export const VariationImageModal: React.FC<VariationImageModalProps> = ({
     </div>
   );
 };
+

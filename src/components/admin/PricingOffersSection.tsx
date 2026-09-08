@@ -1,18 +1,18 @@
-"use client";
+﻿"use client";
 import React from 'react';
 import { Plus, Trash2, Tag, Gift, BadgePercent } from 'lucide-react';
 import { PricingOffers, QuantityBreakTier } from '../../../types';
 
 // Re-use the same fieldClassName constant pattern from AdminProductFormPageClient
 const fieldCls =
-  'w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 outline-none transition focus:border-rose-400 focus:ring-2 focus:ring-rose-100';
+  'w-full rounded-xl border border-[#E7D9D0] bg-white px-3 py-2.5 text-sm text-[#1A1A1A] outline-none transition focus:border-rose-400 focus:ring-2 focus:ring-rose-100';
 
 const smallFieldCls =
-  'w-full rounded-xl border border-slate-200 bg-white px-2.5 py-2 text-sm text-slate-800 outline-none transition focus:border-rose-400 focus:ring-2 focus:ring-rose-100';
+  'w-full rounded-xl border border-[#E7D9D0] bg-white px-2.5 py-2 text-sm text-[#1A1A1A] outline-none transition focus:border-rose-400 focus:ring-2 focus:ring-rose-100';
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Toggle — matches the style used elsewhere in the admin panel
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Toggle â€” matches the style used elsewhere in the admin panel
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const Toggle: React.FC<{
   checked: boolean;
   onChange: (next: boolean) => void;
@@ -29,7 +29,7 @@ const Toggle: React.FC<{
       />
       <div
         className={`h-5 w-9 rounded-full transition-colors duration-200 ${
-          checked ? 'bg-rose-500' : 'bg-slate-200'
+          checked ? 'bg-[#C48B80]' : 'bg-slate-200'
         }`}
       />
       <div
@@ -39,17 +39,17 @@ const Toggle: React.FC<{
       />
     </div>
     <div>
-      <span className="text-sm font-bold text-slate-800">{label}</span>
+      <span className="text-sm font-bold text-[#1A1A1A]">{label}</span>
       {description && (
-        <p className="mt-0.5 text-xs text-slate-500">{description}</p>
+        <p className="mt-0.5 text-xs text-[#1A1A1A]/50">{description}</p>
       )}
     </div>
   </label>
 );
 
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Helpers
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const calcSaveAmount = (tier1Price: number, tierPrice: number, minQty: number): number => {
   if (!tier1Price || tierPrice >= tier1Price) return 0;
   return (tier1Price - tierPrice) * minQty;
@@ -73,9 +73,9 @@ const DEFAULT_OFFERS: PricingOffers = {
   flatDiscount: { enabled: false, minQty: 2, discountType: 'fixed', discountValue: 0, label: '' }
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // PricingOffersSection
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 interface Props {
   value: PricingOffers;
   onChange: (next: PricingOffers) => void;
@@ -94,7 +94,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
     .map((tier, index) => ({ tier, originalIndex: index }))
     .sort((a, b) => a.tier.minQty - b.tier.minQty);
 
-  // Tier 1 price — lowest minQty tier's price, or basePrice if no tiers
+  // Tier 1 price â€” lowest minQty tier's price, or basePrice if no tiers
   const tier1Price =
     sortedTiersWithIndex.length > 0
       ? sortedTiersWithIndex[0].tier.pricePerUnit
@@ -139,11 +139,11 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
   return (
     <div className="space-y-8">
 
-      {/* ── Section A: Quantity Breaks ───────────────────────────────────── */}
+      {/* â”€â”€ Section A: Quantity Breaks â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <div className="space-y-4">
-        <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
-          <Tag className="h-4 w-4 text-rose-500" />
-          <h3 className="font-heading text-sm font-black text-slate-800 uppercase tracking-wider">
+        <div className="flex items-center gap-2 border-b border-[#E7D9D0] pb-3">
+          <Tag className="h-4 w-4 text-[#C48B80]" />
+          <h3 className="font-heading text-sm font-black text-[#1A1A1A] uppercase tracking-wider">
             Quantity Breaks
           </h3>
         </div>
@@ -158,7 +158,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
         {qb.enabled && (
           <div className="space-y-3 pl-0 pt-1">
             {qb.tiers.length === 0 && (
-              <p className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-400">
+              <p className="rounded-2xl border border-dashed border-[#E7D9D0] bg-[#FAF6F2] px-4 py-3 text-xs text-[#1A1A1A]/40">
                 No tiers yet. Click &ldquo;Add Tier&rdquo; to create your first pricing tier.
               </p>
             )}
@@ -168,11 +168,11 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
               {sortedTiersWithIndex.map(({ tier, originalIndex }) => (
                 <div
                   key={originalIndex}
-                  className="grid grid-cols-[60px_1fr_1fr_1fr_48px_40px] gap-2 items-start rounded-2xl border border-slate-100 bg-slate-50/60 p-3"
+                  className="grid grid-cols-[60px_1fr_1fr_1fr_48px_40px] gap-2 items-start rounded-2xl border border-[#E7D9D0] bg-[#FAF6F2]/60 p-3"
                 >
                   {/* Min Qty */}
                   <div>
-                    <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                    <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-[#1A1A1A]/50">
                       Min Qty
                     </label>
                     <input
@@ -186,7 +186,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
 
                   {/* Price / Unit */}
                   <div>
-                    <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                    <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-[#1A1A1A]/50">
                       Price/Unit
                     </label>
                     <input
@@ -200,7 +200,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
 
                   {/* Label */}
                   <div>
-                    <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                    <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-[#1A1A1A]/50">
                       Label
                     </label>
                     <input
@@ -215,7 +215,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
 
                   {/* Badge */}
                   <div>
-                    <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                    <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-[#1A1A1A]/50">
                       Badge
                     </label>
                     <input
@@ -230,10 +230,10 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
 
                   {/* Save Rs (read-only) */}
                   <div>
-                    <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                    <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-[#1A1A1A]/50">
                       Save
                     </label>
-                    <div className="flex h-9 items-center justify-center rounded-xl border border-slate-200 bg-emerald-50 px-2 text-xs font-bold text-emerald-700 whitespace-nowrap">
+                    <div className="flex h-9 items-center justify-center rounded-xl border border-[#E7D9D0] bg-emerald-50 px-2 text-xs font-bold text-emerald-700 whitespace-nowrap">
                       {(() => {
                         const saved = calcSaveAmount(tier1Price, tier.pricePerUnit, tier.minQty);
                         return saved === 0 ? 'base' : `Rs. ${saved}`;
@@ -247,7 +247,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
                       type="button"
                       onClick={() => removeTier(originalIndex)}
                       aria-label={`Remove tier`}
-                      className="flex h-9 w-9 items-center justify-center rounded-xl text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition-colors"
+                      className="flex h-9 w-9 items-center justify-center rounded-xl text-[#1A1A1A]/40 hover:bg-[#FAF6F2] hover:text-[#A86249] transition-colors"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
@@ -259,7 +259,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
             <button
               type="button"
               onClick={addTier}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-dashed border-slate-300 bg-white px-4 py-2 text-xs font-bold text-slate-600 hover:border-rose-400 hover:text-rose-600 transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-dashed border-[#E7D9D0] bg-white px-4 py-2 text-xs font-bold text-[#1A1A1A]/70 hover:border-rose-400 hover:text-[#A86249] transition-colors"
             >
               <Plus className="h-3.5 w-3.5" />
               Add Tier
@@ -268,11 +268,11 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
         )}
       </div>
 
-      {/* ── Section B: BOGO ──────────────────────────────────────────────── */}
+      {/* â”€â”€ Section B: BOGO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <div className="space-y-4">
-        <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
+        <div className="flex items-center gap-2 border-b border-[#E7D9D0] pb-3">
           <Gift className="h-4 w-4 text-emerald-500" />
-          <h3 className="font-heading text-sm font-black text-slate-800 uppercase tracking-wider">
+          <h3 className="font-heading text-sm font-black text-[#1A1A1A] uppercase tracking-wider">
             Buy X Get Y Free (BOGO)
           </h3>
         </div>
@@ -281,7 +281,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
           checked={bogo.enabled}
           onChange={enabled => setBogo({ enabled })}
           label="Enable Buy X Get Y Free"
-          description="Award free units when a customer buys a qualifying quantity. Repeating — buying 4 on a 'Buy 2 Get 1' offer yields 2 free units."
+          description="Award free units when a customer buys a qualifying quantity. Repeating â€” buying 4 on a 'Buy 2 Get 1' offer yields 2 free units."
         />
 
         {bogo.enabled && (
@@ -289,7 +289,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
               {/* Buy Qty */}
               <div>
-                <label className="mb-1.5 block text-xs font-bold text-slate-700">
+                <label className="mb-1.5 block text-xs font-bold text-[#1A1A1A]/80">
                   Buy Qty (paid)
                 </label>
                 <input
@@ -311,7 +311,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
 
               {/* Get Qty */}
               <div>
-                <label className="mb-1.5 block text-xs font-bold text-slate-700">
+                <label className="mb-1.5 block text-xs font-bold text-[#1A1A1A]/80">
                   Get Qty (free)
                 </label>
                 <input
@@ -333,16 +333,16 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
               {/* Live preview */}
               <div className="col-span-2 sm:col-span-1 flex items-end">
                 <div className="w-full rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2.5 text-sm font-bold text-emerald-800">
-                  🎁 {bogoAutoLabel}
+                  ðŸŽ {bogoAutoLabel}
                 </div>
               </div>
             </div>
 
             {/* Custom label */}
             <div>
-              <label className="mb-1.5 block text-xs font-bold text-slate-700">
+              <label className="mb-1.5 block text-xs font-bold text-[#1A1A1A]/80">
                 Offer Label{' '}
-                <span className="font-normal text-slate-400">
+                <span className="font-normal text-[#1A1A1A]/40">
                   (leave empty to use auto-generated: &ldquo;{bogoAutoLabel}&rdquo;)
                 </span>
               </label>
@@ -358,18 +358,18 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
 
             {bogo.buyQty <= bogo.getQty && (
               <p className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-bold text-amber-800">
-                ⚠ Buy Qty must be greater than Get Qty (e.g. Buy 2, Get 1).
+                âš  Buy Qty must be greater than Get Qty (e.g. Buy 2, Get 1).
               </p>
             )}
           </div>
         )}
       </div>
 
-      {/* ── Section C: Flat Discount ──────────────────────────────────────── */}
+      {/* â”€â”€ Section C: Flat Discount â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <div className="space-y-4">
-        <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
+        <div className="flex items-center gap-2 border-b border-[#E7D9D0] pb-3">
           <BadgePercent className="h-4 w-4 text-indigo-500" />
-          <h3 className="font-heading text-sm font-black text-slate-800 uppercase tracking-wider">
+          <h3 className="font-heading text-sm font-black text-[#1A1A1A] uppercase tracking-wider">
             Flat Discount
           </h3>
         </div>
@@ -386,7 +386,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
               {/* Min Qty */}
               <div>
-                <label className="mb-1.5 block text-xs font-bold text-slate-700">
+                <label className="mb-1.5 block text-xs font-bold text-[#1A1A1A]/80">
                   Minimum Quantity
                 </label>
                 <input
@@ -407,7 +407,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
 
               {/* Discount Value */}
               <div>
-                <label className="mb-1.5 block text-xs font-bold text-slate-700">
+                <label className="mb-1.5 block text-xs font-bold text-[#1A1A1A]/80">
                   Discount Value
                 </label>
                 <div className="relative">
@@ -435,7 +435,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
                           label: wasAuto ? '' : flatDiscount.label
                         });
                       }}
-                      className="flex h-7 items-center justify-center rounded-lg bg-slate-100 px-2 text-xs font-bold text-slate-600 hover:bg-slate-200"
+                      className="flex h-7 items-center justify-center rounded-lg bg-[#FAF6F2] px-2 text-xs font-bold text-[#1A1A1A]/70 hover:bg-slate-200"
                     >
                       {flatDiscount.discountType === 'fixed' ? 'Rs.' : '%'}
                     </button>
@@ -446,16 +446,16 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
               {/* Live preview */}
               <div className="col-span-2 sm:col-span-1 flex items-end">
                 <div className="w-full rounded-xl border border-indigo-200 bg-indigo-50 px-3 py-2.5 text-sm font-bold text-indigo-800">
-                  🏷️ {flatAutoLabel}
+                  ðŸ·ï¸ {flatAutoLabel}
                 </div>
               </div>
             </div>
 
             {/* Custom label */}
             <div>
-              <label className="mb-1.5 block text-xs font-bold text-slate-700">
+              <label className="mb-1.5 block text-xs font-bold text-[#1A1A1A]/80">
                 Offer Label{' '}
-                <span className="font-normal text-slate-400">
+                <span className="font-normal text-[#1A1A1A]/40">
                   (leave empty to use auto-generated: &ldquo;{flatAutoLabel}&rdquo;)
                 </span>
               </label>
@@ -474,3 +474,4 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
     </div>
   );
 };
+

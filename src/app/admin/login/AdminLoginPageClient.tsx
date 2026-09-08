@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React, { useState } from 'react';
 import { useRouter } from "next/navigation";
 
@@ -40,7 +40,7 @@ export const AdminLoginPageClient: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 font-sans flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#1A1A1A] font-sans flex items-center justify-center p-4">
       
 
       <div className="bg-white rounded-sm p-8 sm:p-10 border border-[#E7D9D0] shadow-2xl max-w-md w-full space-y-6">
@@ -55,15 +55,15 @@ export const AdminLoginPageClient: React.FC = () => {
         </div>
 
         {error && (
-          <div className="p-3 bg-rose-50 border border-rose-200 rounded-2xl flex items-center gap-2 text-xs text-rose-700 font-semibold">
-            <AlertCircle className="w-4 h-4 text-rose-500 shrink-0" />
+          <div className="p-3 bg-[#FAF6F2] border border-[#E7D9D0] rounded-2xl flex items-center gap-2 text-xs text-rose-700 font-semibold">
+            <AlertCircle className="w-4 h-4 text-[#C48B80] shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="text-xs font-bold text-slate-700 block mb-1">Admin Email</label>
+            <label className="text-xs font-bold text-[#1A1A1A]/80 block mb-1">Admin Email</label>
             <input
               type="email"
               value={email}
@@ -75,13 +75,13 @@ export const AdminLoginPageClient: React.FC = () => {
           </div>
 
           <div>
-            <label className="text-xs font-bold text-slate-700 block mb-1">Password</label>
+            <label className="text-xs font-bold text-[#1A1A1A]/80 block mb-1">Password</label>
             <input
               type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}
               required
-              placeholder="••••••••••••"
+              placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
               className="w-full px-4 py-2.5 text-xs rounded-xl border border-[#E7D9D0] font-sans focus:outline-none focus:ring-2 focus:ring-slate-900"
             />
           </div>
@@ -89,14 +89,14 @@ export const AdminLoginPageClient: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-heading font-extrabold text-xs shadow-md flex items-center justify-center gap-2 transition-all disabled:opacity-50"
+            className="w-full py-3.5 rounded-2xl bg-[#1A1A1A] hover:bg-[#333333] text-white font-heading font-extrabold text-xs shadow-md flex items-center justify-center gap-2 transition-all disabled:opacity-50"
           >
             {loading ? (
-              <Loader2 className="w-4 h-4 animate-spin text-amber-400" />
+              <Loader2 className="w-4 h-4 animate-spin text-[#C48B80]" />
             ) : (
               <>
                 <span>Sign In to Admin Panel</span>
-                <ArrowRight className="w-4 h-4 text-amber-400" />
+                <ArrowRight className="w-4 h-4 text-[#C48B80]" />
               </>
             )}
           </button>
@@ -104,14 +104,14 @@ export const AdminLoginPageClient: React.FC = () => {
 
         <div className="p-3 bg-amber-50 border border-amber-200 rounded-2xl text-[11px] text-amber-900 space-y-1">
           <p className="font-bold text-amber-950">Default Admin Seed Credentials:</p>
-          <p>Email: <code className="font-mono bg-white px-1 py-0.5 rounded text-rose-600 font-bold">admin@alvora.pk</code></p>
-          <p>Password: <code className="font-mono bg-white px-1 py-0.5 rounded text-rose-600 font-bold">admin123</code></p>
+          <p>Email: <code className="font-mono bg-white px-1 py-0.5 rounded text-[#A86249] font-bold">admin@alvora.pk</code></p>
+          <p>Password: <code className="font-mono bg-white px-1 py-0.5 rounded text-[#A86249] font-bold">admin123</code></p>
         </div>
 
-        <div className="text-center pt-2 border-t border-slate-100">
+        <div className="text-center pt-2 border-t border-[#E7D9D0]">
           <button
             onClick={() => router.push('/')}
-            className="text-xs text-[#1A1A1A]/70 hover:text-slate-800 font-bold"
+            className="text-xs text-[#1A1A1A]/70 hover:text-[#1A1A1A] font-bold"
           >
             &larr; Return to Customer Storefront
           </button>

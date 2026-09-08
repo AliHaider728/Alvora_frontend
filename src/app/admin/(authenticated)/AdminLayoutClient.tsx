@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React, { useEffect } from 'react';
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
@@ -75,29 +75,29 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
   }
 
   return (
-    <div className="admin-shell min-h-screen bg-slate-100 font-sans text-slate-800 flex">
+    <div className="admin-shell min-h-screen bg-[#FAF6F2] font-sans text-[#1A1A1A] flex">
       {/* Mobile Sidebar Overlay */}
       {mobileMenuOpen && (
         <div 
-          className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 lg:hidden"
+          className="fixed inset-0 bg-[#1A1A1A]/60 backdrop-blur-sm z-40 lg:hidden"
           onClick={() => setMobileMenuOpen(false)}
         />
       )}
       
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-slate-300 flex flex-col justify-between p-4 border-r border-slate-800 transition-transform duration-300 ease-in-out lg:translate-x-0 overflow-y-auto ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#F5EDE4] text-[#1A1A1A]/70 flex flex-col justify-between p-4 border-r border-[#E7D9D0] transition-transform duration-300 ease-in-out lg:translate-x-0 overflow-y-auto ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div>
           {/* Logo Header */}
-          <div className="flex items-center justify-between pb-6 pt-2 px-2 border-b border-slate-800 mb-4">
+          <div className="flex items-center justify-between pb-6 pt-2 px-2 border-b border-[#E7D9D0] mb-4">
             <Link href="/admin" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2">
-              <div className="p-2 rounded-xl bg-amber-400 text-slate-950 font-black">
+              <div className="p-2 rounded-xl bg-[#C48B80] text-white font-black">
                 PB
               </div>
               <div>
-                <span className="font-heading font-black text-white text-base block leading-tight">
+                <span className="font-heading font-black text-[#1A1A1A] text-base block leading-tight">
                   Alvora Skincare
                 </span>
-                <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">
+                <span className="text-[10px] text-[#1A1A1A]/50 uppercase font-bold tracking-wider">
                   Admin Control
                 </span>
               </div>
@@ -116,8 +116,8 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
                   onClick={() => setMobileMenuOpen(false)}
                   className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-colors ${
                     isActive
-                      ? 'bg-rose-500 text-white shadow-md'
-                      : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
+                      ? 'bg-[#C48B80] text-white shadow-md'
+                      : 'text-[#1A1A1A]/70 hover:bg-white hover:text-[#1A1A1A]'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -129,19 +129,19 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
         </div>
 
         {/* Sidebar Footer */}
-        <div className="pt-4 border-t border-slate-800 space-y-2">
+        <div className="pt-4 border-t border-[#E7D9D0] space-y-2">
           <Link
             href="/"
             target="_blank"
-            className="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-slate-800 text-slate-300 text-xs font-bold hover:bg-slate-700 transition-colors"
+            className="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-white text-[#1A1A1A] text-xs font-bold hover:bg-[#FAF6F2] border border-[#E7D9D0] transition-colors"
           >
             <span>View Live Storefront</span>
-            <ExternalLink className="w-3.5 h-3.5 text-amber-400" />
+            <ExternalLink className="w-3.5 h-3.5 text-[#C48B80]" />
           </Link>
 
           <button
             onClick={handleSignOut}
-            className="w-full flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold text-rose-400 hover:bg-rose-950/40 transition-colors"
+            className="w-full flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold text-red-500 hover:bg-red-50 transition-colors"
           >
             <LogOut className="w-4 h-4" />
             <span>Sign Out Manager</span>
@@ -152,34 +152,34 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
       {/* Main Container */}
       <div className="flex-1 flex flex-col min-w-0 lg:ml-64">
         {/* Top Header Bar */}
-        <header className="h-16 bg-white border-b border-slate-200 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 shadow-xs">
+        <header className="h-16 bg-white border-b border-[#E7D9D0] px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 shadow-xs">
           <div className="flex items-center gap-4">
             <button 
-              className="lg:hidden p-2 -ml-2 rounded-xl text-slate-600 hover:bg-slate-100"
+              className="lg:hidden p-2 -ml-2 rounded-xl text-[#1A1A1A]/70 hover:bg-[#FAF6F2]"
               onClick={() => setMobileMenuOpen(true)}
             >
               <Menu className="w-5 h-5" />
             </button>
-            <span className="font-heading font-extrabold text-sm text-slate-900">
+            <span className="font-heading font-extrabold text-sm text-[#1A1A1A]">
               {navItems.find(i => i.path === pathname)?.label || 'Admin Management'}
             </span>
           </div>
 
           <div className="flex items-center gap-4">
-            <button className="relative p-2 rounded-full hover:bg-slate-100 text-slate-600">
+            <button className="relative p-2 rounded-full hover:bg-[#FAF6F2] text-[#1A1A1A]/70">
               <Bell className="w-5 h-5" />
-              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-rose-500" />
+              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#C48B80]" />
             </button>
 
-            <div className="flex items-center gap-3 pl-4 border-l border-slate-200">
-              <div className="w-8 h-8 rounded-full bg-slate-900 text-amber-400 flex items-center justify-center font-bold text-xs">
+            <div className="flex items-center gap-3 pl-4 border-l border-[#E7D9D0]">
+              <div className="w-8 h-8 rounded-full bg-[#C48B80] text-white flex items-center justify-center font-bold text-xs">
                 PB
               </div>
               <div className="hidden sm:block">
-                <span className="font-heading font-bold text-xs text-slate-900 block leading-tight">
+                <span className="font-heading font-bold text-xs text-[#1A1A1A] block leading-tight">
                   Alvora Skincare Manager
                 </span>
-                <span className="text-[10px] text-slate-500 font-medium">admin@alvora.pk</span>
+                <span className="text-[10px] text-[#1A1A1A]/50 font-medium">admin@alvora.pk</span>
               </div>
             </div>
           </div>
@@ -193,3 +193,6 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
     </div>
   );
 };
+
+
+
