@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
@@ -14,6 +14,7 @@ import { useAuth } from "../../context/AuthContext";
 
 const NAV_LINKS = [
   { label: "SHOP", href: "/category/all", hasDropdown: true },
+  { label: "BEST SELLERS", href: "/best-sellers" },
   { label: "SKINCARE", href: "/category/all" },
   { label: "ABOUT", href: "/about" },
 ];
