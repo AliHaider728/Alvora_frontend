@@ -119,10 +119,19 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
   const [newUserName, setNewUserName] = useState('');
   const [productReviews, setProductReviews] = useState<Review[]>(initialReviews);
 
+  useEffect(() => {
+    setProductReviews(initialReviews || []);
+  }, [initialReviews]);
+
   useScrollLock(lightboxOpen || sizeGuideModalOpen || reviewModalOpen);
 
   const [apiRelatedProducts, setApiRelatedProducts] = useState<any[]>(initialRelatedProducts);
   const [relatedLoading, setRelatedLoading] = useState(!initialRelatedProducts || initialRelatedProducts.length === 0);
+
+  useEffect(() => {
+    setApiRelatedProducts(initialRelatedProducts || []);
+    setRelatedLoading(!initialRelatedProducts || initialRelatedProducts.length === 0);
+  }, [initialRelatedProducts]);
   const loadRelatedProducts = async (productId: string) => {
     if (initialRelatedProducts && initialRelatedProducts.length > 0) return; // Skip if loaded by SSR
     setRelatedLoading(true);
@@ -182,9 +191,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
     setNewUserName('');
     // Reset tab to default (tab availability effect will correct it if needed)
     setActiveTab('desc');
-    // Show skeleton again for related products on next product
-    setRelatedLoading(true);
-    setApiRelatedProducts([]);
+    // If SSR provides new related products for the next product, we sync it via a separate effect, so do not wipe it here.
   }, [product?.id]);
 
   const sanitizedSpecs = useMemo(() => Object.entries(product?.specifications || {}).filter(
@@ -1473,6 +1480,9 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
     </div>
   );
 };
+
+
+
 
 
 
