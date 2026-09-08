@@ -100,9 +100,11 @@ export const BundleSection: React.FC = () => {
                 variants={variants}
                 className="max-w-md w-full"
               >
-                <h2 className="font-display text-4xl md:text-5xl text-[#1A1A1A] mb-6 leading-[1.1]">
-                  {bundle.name}
-                </h2>
+                <Link href={`/bundles/${bundle.slug}`}>
+                  <h2 className="font-display text-4xl md:text-5xl text-[#1A1A1A] mb-6 leading-[1.1] hover:text-[#A86249] transition-colors">
+                    {bundle.name}
+                  </h2>
+                </Link>
                 <p className="text-[#1A1A1A]/80 leading-relaxed text-base mb-8">
                   {bundle.description}
                 </p>
@@ -127,12 +129,20 @@ export const BundleSection: React.FC = () => {
                     <span className="text-base text-[#1A1A1A]/40 line-through pb-0.5">{formatPrice(bundle.originalTotalPrice || 0)}</span>
                   </div>
 
-                  <button 
-                    onClick={() => handleAddBundle(bundle)}
-                    className="w-full sm:w-auto px-8 py-4 bg-[#A86249] hover:bg-[#8C4A35] text-white text-[11px] font-bold tracking-widest uppercase transition-colors rounded-full"
-                  >
-                    Add to Cart
-                  </button>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <button 
+                      onClick={() => handleAddBundle(bundle)}
+                      className="w-full sm:w-auto flex-1 px-8 py-4 bg-[#A86249] hover:bg-[#8C4A35] text-white text-[11px] font-bold tracking-widest uppercase transition-colors rounded-full"
+                    >
+                      Add to Cart
+                    </button>
+                    <Link 
+                      href={`/bundles/${bundle.slug}`}
+                      className="w-full sm:w-auto flex-1 px-8 py-4 bg-transparent border border-[#A86249] text-[#A86249] hover:bg-[#A86249] hover:text-white flex items-center justify-center text-[11px] font-bold tracking-widest uppercase transition-colors rounded-full text-center"
+                    >
+                      View Details
+                    </Link>
+                  </div>
                 </div>
               </motion.div>
             </div>
