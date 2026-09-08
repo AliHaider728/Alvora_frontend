@@ -13,7 +13,7 @@ import { getSafeImageSrc } from "../../utils/images";
 import { useAuth } from "../../context/AuthContext";
 
 const NAV_LINKS = [
-  { label: "SHOP", href: "/category/all", hasDropdown: true },
+  { label: "SHOP", href: "/category/all" },
   { label: "BEST SELLERS", href: "/best-sellers" },
   { label: "SKINCARE", href: "/category/all" },
   { label: "ABOUT", href: "/about" },
