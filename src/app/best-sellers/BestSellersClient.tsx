@@ -6,11 +6,7 @@ import { AlvoraProductCard } from '../../components/common/AlvoraProductCard';
 import { useStore } from '../../context/StoreContext';
 import { TextScatter } from '../../components/ui/text-scatter';
 
-// Dynamic import to avoid SSR issues with Three.js
-const OrganicSphere = dynamic(
-  () => import('../../components/common/OrganicSphere').then(mod => ({ default: mod.OrganicSphere })),
-  { ssr: false }
-);
+
 
 export default function BestSellersClient() {
   const { products } = useStore();
@@ -23,7 +19,6 @@ export default function BestSellersClient() {
     <div className="min-h-screen bg-[#FAF6F2]">
       {/* 3D Hero Section */}
       <section className="relative w-full h-[75vh] min-h-[550px] flex items-center justify-center overflow-hidden">
-        <OrganicSphere />
         
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto flex flex-col items-center">
           <span className="text-xs md:text-sm tracking-[0.25em] uppercase text-[#C87355] font-bold mb-4 block">
@@ -32,9 +27,9 @@ export default function BestSellersClient() {
           <h1 className="font-display text-5xl md:text-7xl lg:text-8xl text-[#1A1A1A] font-medium leading-tight mb-6 tracking-wide">
             <TextScatter text="Best Sellers" scatterMultiplier={1.5} />
           </h1>
-          <p className="text-[#1A1A1A]/70 text-base md:text-lg font-medium leading-relaxed max-w-2xl mx-auto">
+          <div className="text-[#1A1A1A]/70 text-base md:text-lg font-medium leading-relaxed max-w-2xl mx-auto">
             <TextScatter text="Discover the science-backed formulations our community loves the most. Experience visible results with our top-rated skincare essentials." scatterMultiplier={0.6} />
-          </p>
+          </div>
         </div>
       </section>
 
@@ -60,4 +55,5 @@ export default function BestSellersClient() {
     </div>
   );
 }
+
 
