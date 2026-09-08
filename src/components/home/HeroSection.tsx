@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React from "react";
 import Link from "next/link";
@@ -75,23 +75,7 @@ export const HeroSection: React.FC = () => {
           </motion.div>
         </div>
 
-        {/* Bottom Left: Collection Name */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.8 }}
-          className="absolute bottom-8 left-5 sm:left-8 lg:left-12"
-        >
-          <div className="flex flex-col gap-2">
-            <span className="font-display text-xl italic text-[#241916]">01</span>
-            <div className="flex items-center gap-4">
-              <div className="h-px w-12 bg-[#8C7B74]" />
-            </div>
-            <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#8C7B74]">
-              RADIANCE COLLECTION
-            </span>
-          </div>
-        </motion.div>
+
 
         {/* Bottom Right: Scroll Down */}
         <motion.div 
