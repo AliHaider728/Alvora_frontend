@@ -11,10 +11,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   try {
     const bundle = await api.getBundle(slug);
     if (!bundle) {
-      return { title: Bundle | Alvora Skincare };
+      return { title: `Bundle | Alvora Skincare` };
     }
 
-    const finalTitle = ${bundle.name} | Alvora Skincare Bundles;
+    const finalTitle = `${bundle.name} | Alvora Skincare Bundles`;
     const finalDesc = bundle.description || defaultDesc;
     const imageUrl = bundle.image || '/images/hero/alvora-hero.png';
     
@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       title: finalTitle,
       description: finalDesc,
       alternates: {
-        canonical: https://alvora.pk/bundles/ + slug
+        canonical: `https://alvora.pk/bundles/${slug}`
       },
       openGraph: {
         title: finalTitle,
@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       }
     };
   } catch (e) {
-    return { title: Bundle | Alvora Skincare };
+    return { title: `Bundle | Alvora Skincare` };
   }
 }
 
@@ -66,7 +66,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     reviews = await api.getProductReviews(bundle.id).catch(() => []);
 
   } catch (e) {
-    console.error([Page] Error fetching bundle for slug  + slug + :, e);
+    console.error(`[Page] Error fetching bundle for slug ${slug}:`, e);
     notFound();
   }
 
