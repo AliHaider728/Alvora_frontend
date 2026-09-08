@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -6,7 +6,6 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { useStore } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/formatters';
 import { Bundle } from '../../types';
-import { ScrollStack } from '../ui/scroll-stack';
 
 export const BundleSection: React.FC = () => {
   const { bundles, addToCart, setIsCartOpen } = useStore();
@@ -69,14 +68,13 @@ export const BundleSection: React.FC = () => {
       </div>
 
       {/* Alternating Split Layout for Bundles */}
-      <ScrollStack>
       {bundles.map((bundle, index) => {
         const isReverse = index % 2 === 1;
         const bgClass = isReverse ? 'bg-[#FAF6F2]' : 'bg-white';
         const imageBgClass = isReverse ? 'bg-[#1A1A1A]' : 'bg-[#F1C9BD]';
 
         return (
-          <div key={bundle.id} className={`flex flex-col ${isReverse ? 'md:flex-row-reverse' : 'md:flex-row'} w-full h-full`}>
+          <div key={bundle.id} className={`flex flex-col ${isReverse ? 'md:flex-row-reverse' : 'md:flex-row'} w-full min-h-[500px]`}>
             {/* Image Side */}
             <div className={`w-full md:w-1/2 ${imageBgClass} relative aspect-square md:aspect-auto overflow-hidden`}>
               {bundle.image && (
@@ -141,7 +139,6 @@ export const BundleSection: React.FC = () => {
           </div>
         );
       })}
-      </ScrollStack>
 
       {/* Build Your Own Bundle CTA */}
       <div className="bg-[#EFCDBE]/20 py-20 border-t border-[#EFCDBE]">
@@ -171,5 +168,3 @@ export const BundleSection: React.FC = () => {
     </section>
   );
 };
-
-
