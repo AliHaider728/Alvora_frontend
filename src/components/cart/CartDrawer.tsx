@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname, useParams } from 'next/navigation';
@@ -169,7 +169,7 @@ export const CartDrawer: React.FC = () => {
                         </div>
                       )}
 
-                      <span className="text-[10px] text-sky-600 font-semibold uppercase block">
+                      <span className="text-[10px] text-[#C48B80] font-semibold uppercase block">
                         {item.product.category || 'Uncategorized'}
                       </span>
                       
@@ -345,4 +345,5 @@ export const CartDrawer: React.FC = () => {
     </div>
   );
 };
+
 

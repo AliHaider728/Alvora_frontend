@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Heart, Eye, ArrowLeftRight, ShoppingCart } from 'lucide-react';
@@ -22,7 +22,7 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
   return (
     <div className="group relative bg-white flex flex-col h-full border border-[#EDE5DC] hover:shadow-md transition-shadow duration-300">
       {/* Image Container */}
-      <Link href={`/product/${product.slug}`} className="relative aspect-[4/5] bg-[#F5EDE4] overflow-hidden block">
+      <Link href={`/product/${product.slug}`} className="relative aspect-square bg-[#F5EDE4] overflow-hidden block">
         <Image
           src={getSafeImageSrc(product.images[0])}
           alt={product.name}
@@ -130,3 +130,4 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
     </div>
   );
 };
+

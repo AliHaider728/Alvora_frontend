@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -19,7 +19,7 @@ export const FinalCTA: React.FC = () => {
   };
   
   return (
-    <section className="relative py-24 md:py-32 overflow-hidden border-y border-[#1A1A1A]">
+    <section className="relative py-16 md:py-20 overflow-hidden border-y border-[#1A1A1A]">
       {/* Background Image */}
       <div 
         className="absolute inset-0 z-0 bg-[url('/images/our-story-lifestyle.jpg')] bg-cover bg-center"
@@ -99,7 +99,7 @@ export const FinalCTA: React.FC = () => {
                 <path id="curve-cta" d="M 50, 50 m -35, 0 a 35,35 0 1,1 70,0 a 35,35 0 1,1 -70,0" fill="transparent" />
                 <text fontSize="10" letterSpacing="1.5" className="uppercase font-semibold fill-current">
                   <textPath href="#curve-cta" startOffset="0">
-                    • CLEAN INGREDIENTS • CONSCIOUS BEAUTY
+                    â€¢ CLEAN INGREDIENTS â€¢ CONSCIOUS BEAUTY
                   </textPath>
                 </text>
               </svg>
@@ -111,3 +111,4 @@ export const FinalCTA: React.FC = () => {
     </section>
   );
 };
+
