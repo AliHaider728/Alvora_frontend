@@ -34,7 +34,7 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
         {/* Badges */}
         <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
           {product.isBestseller && (
-            <span className="bg-[#C87355] text-white text-[9px] font-bold tracking-widest uppercase px-2 py-1 rounded-xl shadow-sm">
+            <span className="bg-gradient-to-r from-[#C87355] to-[#E2A08C] text-white text-[9px] font-bold tracking-widest uppercase px-2 py-1 rounded-xl shadow-sm">
               BESTSELLER
             </span>
           )}
@@ -99,14 +99,14 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
           {needsSelection ? (
               <Link
                 href={`/product/${product.slug}`}
-                className="flex-1 bg-[#C87355] hover:bg-[#A86249] text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase py-3 px-2 rounded-xl transition-colors flex items-center justify-center shadow-sm text-center"
+                className="flex-1 bg-gradient-to-r from-[#C87355] to-[#E2A08C] hover:from-[#A86249] hover:to-[#C87355] text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase py-3 px-2 rounded-xl transition-colors flex items-center justify-center shadow-sm text-center"
               >
                 SELECT OPTIONS
               </Link>
             ) : product.inStock ? (
               <Link
                 href={`/product/${product.slug}`}
-                className="flex-1 bg-[#C87355] hover:bg-[#A86249] text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase py-3 px-2 rounded-xl transition-colors flex items-center justify-center shadow-sm text-center"
+                className="flex-1 bg-gradient-to-r from-[#C87355] to-[#E2A08C] hover:from-[#A86249] hover:to-[#C87355] text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase py-3 px-2 rounded-xl transition-colors flex items-center justify-center shadow-sm text-center"
               >
                 VIEW DETAIL
               </Link>
@@ -130,5 +130,6 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
     </div>
   );
 };
+
 
 

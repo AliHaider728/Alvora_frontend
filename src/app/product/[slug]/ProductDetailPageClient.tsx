@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React, { useEffect, useState, useMemo } from 'react';
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -165,7 +165,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
   // from the previous product leaks into the next one unless explicitly reset here.
   useEffect(() => {
     if (!product?.id) return;
-    // Gallery state — this was the confirmed root cause of the stale image bug
+    // Gallery state â€” this was the confirmed root cause of the stale image bug
     setActiveImageIndex(0);
     setOverrideImage(null);
     // Quantity & variant selections
@@ -404,7 +404,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">
         <h2 className="font-display font-black text-2xl text-[#1A1A1A]/90 mb-2">Product Not Found</h2>
         <p className="text-sm text-[#1A1A1A]/50 mb-6">The product you are looking for might have been discontinued or moved.</p>
-        <Link href="/category/all" className="px-6 py-3 rounded-2xl bg-[#C48B80] text-white font-display font-bold text-sm">
+        <Link href="/category/all" className="px-6 py-3 rounded-2xl bg-gradient-to-r from-[#C48B80] to-[#E2A08C] text-white font-display font-bold text-sm">
           Explore All Products
         </Link>
       </div>
@@ -525,7 +525,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
         }
       }
 
-      const appliedOfferLabel = [qbLabel, bogoLabel].filter(Boolean).join(' · ');
+      const appliedOfferLabel = [qbLabel, bogoLabel].filter(Boolean).join(' Â· ');
 
       if (isVariable) {
         addToCart(
@@ -654,7 +654,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
               />
               <span className="pointer-events-none absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-slate-950/70 px-3 py-1.5 text-[10px] font-bold text-white opacity-0 backdrop-blur transition-opacity group-hover/gallery:opacity-100"><ZoomIn className="h-3.5 w-3.5" /> Click to enlarge</span>
               {(product.discountPercent ?? 0) > 0 && (
-                <span className="absolute top-4 left-4 z-10 bg-[#C48B80] text-white font-display font-extrabold text-xs px-3 py-1.5 rounded-full shadow-md">
+                <span className="absolute top-4 left-4 z-10 bg-gradient-to-r from-[#C48B80] to-[#E2A08C] text-white font-display font-extrabold text-xs px-3 py-1.5 rounded-full shadow-md">
                   -{product.discountPercent}% OFF
                 </span>
               )}
@@ -695,7 +695,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                   </span>
                   {(product.soldCount ?? 0) >= 50 && (
                     <span className="text-xs font-bold tracking-wider text-white bg-orange-500 px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
-                      🔥 {product.soldCount}+ Sold
+                      ðŸ”¥ {product.soldCount}+ Sold
                     </span>
                   )}
                 </div>
@@ -993,7 +993,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                                 !isOptionInStock
                                   ? 'bg-[#F5EDE4] text-[#1A1A1A]/40 cursor-not-allowed opacity-60 line-through'
                                   : isSelected
-                                  ? 'bg-[#C48B80] text-white ring-2 ring-rose-200 shadow-sm'
+                                  ? 'bg-gradient-to-r from-[#C48B80] to-[#E2A08C] text-white ring-2 ring-rose-200 shadow-sm'
                                   : 'bg-[#F5EDE4] text-[#1A1A1A]/80 hover:bg-[#EDE5DC]'
                               }`}
                             >
@@ -1066,7 +1066,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                         waBogoLabel = freeUnits === 1 ? `${waBogoLabel} (1 free unit applied)` : `${waBogoLabel} (${freeUnits} free units applied)`;
                       }
                     }
-                    const waAppliedOfferLabel = [waLabel, waBogoLabel].filter(Boolean).join(' · ');
+                    const waAppliedOfferLabel = [waLabel, waBogoLabel].filter(Boolean).join(' Â· ');
                     const waVariantText = Object.keys(selectedVariants).length > 0 ? `\nVariant: ${Object.values(selectedVariants).join(', ')}` : Object.values(selectedAttributes).filter(Boolean).length > 0 ? `\nOption: ${Object.values(selectedAttributes).filter(Boolean).join(', ')}` : '';
                     const waOfferText = waAppliedOfferLabel ? `\nApplied Offer: ${waAppliedOfferLabel}` : '';
                     const waMessage = `Hello, I am interested in this product:\nProduct: ${product.name}\nQuantity: ${quantity}\nPrice: ${formatPrice(waPrice, settings.currency)}\nLink: https://alvora.pk/product/${product.slug}${waVariantText}${waOfferText}`;
@@ -1426,7 +1426,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 rounded-xl bg-[#C48B80] text-white font-display font-bold text-xs hover:bg-black shadow-md"
+                  className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-[#C48B80] to-[#E2A08C] text-white font-display font-bold text-xs hover:bg-black shadow-md"
                 >
                   Submit Review
                 </button>
@@ -1480,6 +1480,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
     </div>
   );
 };
+
 
 
 

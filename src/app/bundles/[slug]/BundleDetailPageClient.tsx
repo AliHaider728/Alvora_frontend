@@ -125,7 +125,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
                   initial={{ opacity: 0, scale: 0.5 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.3, type: "spring" }}
-                  className="absolute top-6 left-6 bg-[#C48B80] text-white text-[11px] font-bold px-4 py-2 uppercase tracking-widest rounded-full shadow-lg"
+                  className="absolute top-6 left-6 bg-gradient-to-r from-[#C48B80] to-[#E2A08C] text-white text-[11px] font-bold px-4 py-2 uppercase tracking-widest rounded-full shadow-lg"
                 >
                   Save {bundle.discountPercent}%
                 </motion.div>
@@ -251,7 +251,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
               >
-                <div className="w-12 h-12 rounded-full bg-[#C48B80] text-white flex items-center justify-center font-display text-xl mb-6 shadow-md z-10">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#C48B80] to-[#E2A08C] text-white flex items-center justify-center font-display text-xl mb-6 shadow-md z-10">
                   {idx + 1}
                 </div>
                 {idx !== bundle.products.length - 1 && (
@@ -368,7 +368,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
               </div>
               <div className="flex gap-4 pt-4">
                 <button type="button" onClick={() => setReviewModalOpen(false)} className="flex-1 py-4 rounded-full bg-[#FAF6F2] text-[#1A1A1A] font-bold text-xs uppercase tracking-widest hover:bg-gray-200 transition-colors">Cancel</button>
-                <button type="submit" className="flex-1 py-4 rounded-full bg-[#C48B80] text-white font-bold text-xs uppercase tracking-widest hover:bg-black transition-colors">Submit</button>
+                <button type="submit" className="flex-1 py-4 rounded-full bg-gradient-to-r from-[#C48B80] to-[#E2A08C] text-white font-bold text-xs uppercase tracking-widest hover:bg-black transition-colors">Submit</button>
               </div>
             </form>
           </div>
@@ -377,3 +377,4 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
     </div>
   );
 }
+

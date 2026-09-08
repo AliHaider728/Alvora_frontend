@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
@@ -138,11 +138,11 @@ export const Header: React.FC = () => {
       >
         {/* SHIPPING BAR */}
         {!isHome && (
-          <div className="flex min-h-8 items-center justify-center bg-[#C87355] px-4 text-center text-[11px] font-medium uppercase tracking-[0.14em] text-white sm:min-h-8.5 sm:text-xs">
+          <div className="flex min-h-8 items-center justify-center bg-gradient-to-r from-[#C87355] via-[#E2A08C] to-[#C87355] px-4 text-center text-[11px] font-medium uppercase tracking-[0.14em] text-white sm:min-h-8.5 sm:text-xs">
             FREE SHIPPING ON ORDERS OVER {settings?.freeShippingThreshold ? formatPrice(settings.freeShippingThreshold, settings.currency) : 'RS. 5,000'}
-            <span className="mx-2 opacity-60">â€¢</span>
+            <span className="mx-2 opacity-60">Ã¢â‚¬Â¢</span>
             30-DAY RETURNS
-            <span className="mx-2 hidden opacity-60 sm:inline">â€¢</span>
+            <span className="mx-2 hidden opacity-60 sm:inline">Ã¢â‚¬Â¢</span>
             <span className="hidden sm:inline">SAMPLES WITH EVERY ORDER</span>
           </div>
         )}
@@ -219,7 +219,7 @@ export const Header: React.FC = () => {
               >
                 <Heart className="h-4.75 w-4.75" strokeWidth={1.35} />
                 {mounted && wishlist.length > 0 && (
-                  <span className="absolute right-0 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#C87355] px-1 text-[9px] font-bold text-white">
+                  <span className="absolute right-0 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-gradient-to-tr from-[#C87355] to-[#E2A08C] px-1 text-[9px] font-bold text-white">
                     {wishlist.length}
                   </span>
                 )}
@@ -234,7 +234,7 @@ export const Header: React.FC = () => {
               >
                 <ShoppingBag className="h-4.75 w-4.75" strokeWidth={1.35} />
                 {mounted && cartTotalItems > 0 && (
-                  <span className="absolute right-0 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#C87355] px-1 text-[9px] font-bold text-white">
+                  <span className="absolute right-0 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-gradient-to-tr from-[#C87355] to-[#E2A08C] px-1 text-[9px] font-bold text-white">
                     {cartTotalItems}
                   </span>
                 )}
@@ -350,7 +350,7 @@ export const Header: React.FC = () => {
           >
             Wishlist
             {mounted && wishlist.length > 0 && (
-              <span className="rounded-full bg-[#C87355] px-2 py-0.5 text-[10px] font-bold text-white">{wishlist.length}</span>
+              <span className="rounded-full bg-gradient-to-tr from-[#C87355] to-[#E2A08C] px-2 py-0.5 text-[10px] font-bold text-white">{wishlist.length}</span>
             )}
           </Link>
 
@@ -383,7 +383,7 @@ export const Header: React.FC = () => {
               setMobileOpen(false);
               setIsCartOpen(true);
             }}
-            className="flex h-12 w-full items-center justify-center gap-2 bg-[#A86249] text-xs font-semibold uppercase tracking-[0.14em] text-white transition-colors hover:bg-[#8E4D39]"
+            className="flex h-12 w-full items-center justify-center gap-2 bg-gradient-to-r from-[#C87355] to-[#E2A08C] hover:from-[#A86249] hover:to-[#C87355] text-xs font-semibold uppercase tracking-[0.14em] text-white transition-all"
           >
             <ShoppingBag className="h-4 w-4" strokeWidth={1.4} />
             View Bag
@@ -398,6 +398,7 @@ export const Header: React.FC = () => {
     </>
   );
 };
+
 
 
 

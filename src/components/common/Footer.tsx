@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Send, CheckCircle2, Instagram, Facebook, Youtube } from 'lucide-react';
@@ -6,11 +6,11 @@ import { Logo } from './Logo';
 import { useStore } from '../../context/StoreContext';
 import { useAuth } from '../../context/AuthContext';
 
-/* ─────────────────────────────────────────────
-   ALVORA — Footer
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+   ALVORA â€” Footer
    Design reference: warm ivory/cream, logo top-left,
    multi-column links, newsletter, social icons, clean bottom bar.
-   ───────────────────────────────────────────── */
+   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 const SHOP_LINKS = [
   { label: 'All Products',   href: '/category/all' },
@@ -55,11 +55,11 @@ export const Footer: React.FC = () => {
   return (
     <footer className="bg-[#F5EDE4] border-t border-[#EDE5DC]" role="contentinfo">
 
-      {/* ── Main Footer Grid ── */}
+      {/* â”€â”€ Main Footer Grid â”€â”€ */}
       <div className="alvora-container py-14 md:py-16">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr_1.5fr] lg:gap-8">
 
-          {/* Col 1 — Brand */}
+          {/* Col 1 â€” Brand */}
           <div className="flex flex-col gap-5">
             <Logo size="md" />
             <p className="text-[15px] lg:text-base text-[#4D3D2D]/80 leading-relaxed max-w-xs">
@@ -118,7 +118,7 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Col 2 — Shop */}
+          {/* Col 2 â€” Shop */}
           <div>
             <h4 className="text-[13px] lg:text-[14px] font-bold tracking-wider uppercase text-[#1A1A1A] mb-6">
               SHOP
@@ -137,7 +137,7 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Col 3 — About */}
+          {/* Col 3 â€” About */}
           <div>
             <h4 className="text-[13px] lg:text-[14px] font-bold tracking-wider uppercase text-[#1A1A1A] mb-6">
               ABOUT
@@ -156,7 +156,7 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Col 4 — Help */}
+          {/* Col 4 â€” Help */}
           <div>
             <h4 className="text-[13px] lg:text-[14px] font-bold tracking-wider uppercase text-[#1A1A1A] mb-6">
               HELP
@@ -175,7 +175,7 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Col 5 — Newsletter */}
+          {/* Col 5 â€” Newsletter */}
           <div>
             <h4 className="text-[13px] lg:text-[14px] font-bold tracking-wider uppercase text-[#1A1A1A] mb-6">
               STAY IN THE GLOW
@@ -201,7 +201,7 @@ export const Footer: React.FC = () => {
                 className="
                   flex items-center justify-center gap-2
                   w-full py-2.5 px-4
-                  bg-[#C48B80] hover:bg-[#4D3D2D]
+                  bg-gradient-to-r from-[#C48B80] to-[#E2A08C] hover:from-[#4D3D2D] hover:to-[#4D3D2D]
                   text-white text-sm font-semibold tracking-wide
                   transition-colors duration-200
                 "
@@ -225,7 +225,7 @@ export const Footer: React.FC = () => {
         </div>
       </div>
 
-      {/* ── Bottom Bar ── */}
+      {/* â”€â”€ Bottom Bar â”€â”€ */}
       <div className="border-t border-[#EDE5DC]">
         <div className="alvora-container py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-[#A1A7AA] text-center sm:text-left">

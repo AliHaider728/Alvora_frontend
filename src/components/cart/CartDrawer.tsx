@@ -91,7 +91,7 @@ export const CartDrawer: React.FC = () => {
                 </p>
                 <button
                   onClick={() => setIsCartOpen(false)}
-                  className="px-6 py-3 rounded-full bg-[#1A1A1A] text-white tracking-widest font-display font-bold text-sm hover:bg-[#C48B80] shadow-md transition-all"
+                  className="px-6 py-3 rounded-full bg-gradient-to-r from-[#1A1A1A] to-[#333333] hover:from-[#C87355] hover:to-[#E2A08C] text-white tracking-widest font-display font-bold text-sm shadow-md transition-all"
                 >
                   Start Shopping
                 </button>
@@ -326,7 +326,7 @@ export const CartDrawer: React.FC = () => {
                   setIsCartOpen(false);
                   router.push('/checkout');
                 }}
-                className="w-full py-3.5 rounded-full bg-[#1A1A1A] hover:bg-[#C48B80] text-white font-display font-bold tracking-widest text-sm shadow-md flex items-center justify-center gap-2 transition-all"
+                className="w-full py-3.5 rounded-full bg-gradient-to-r from-[#1A1A1A] to-[#333333] hover:from-[#C87355] hover:to-[#E2A08C] text-white font-display font-bold tracking-widest text-sm shadow-md flex items-center justify-center gap-2 transition-all"
               >
                 <span>Proceed to Checkout</span>
                 <ArrowRight className="w-4 h-4" />
@@ -343,6 +343,7 @@ export const CartDrawer: React.FC = () => {
     </div>
   );
 };
+
 
 
 

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -86,7 +86,7 @@ export const BundleSection: React.FC = () => {
                   className="object-cover"
                 />
               )}
-              <div className="absolute top-6 left-6 md:top-8 md:left-8 bg-[#A86249] text-white text-[10px] font-bold px-4 py-2 uppercase tracking-widest z-10 rounded-full shadow-sm">
+              <div className="absolute top-6 left-6 md:top-8 md:left-8 bg-gradient-to-tr from-[#C87355] to-[#E2A08C] text-white text-[10px] font-bold px-4 py-2 uppercase tracking-widest z-10 rounded-full shadow-sm">
                 Save {bundle.discountPercent}%
               </div>
             </div>
@@ -132,7 +132,7 @@ export const BundleSection: React.FC = () => {
                   <div className="flex flex-col sm:flex-row gap-3">
                     <button 
                       onClick={() => handleAddBundle(bundle)}
-                      className="w-full sm:w-auto flex-1 px-8 py-4 bg-[#A86249] hover:bg-[#8C4A35] text-white text-[11px] font-bold tracking-widest uppercase transition-colors rounded-full"
+                      className="w-full sm:w-auto flex-1 px-8 py-4 bg-gradient-to-r from-[#C87355] to-[#E2A08C] hover:from-[#A86249] hover:to-[#C87355] text-white text-[11px] font-bold tracking-widest uppercase transition-colors rounded-full"
                     >
                       Add to Cart
                     </button>
@@ -168,7 +168,7 @@ export const BundleSection: React.FC = () => {
             </div>
             <Link 
               href="/bundles/build"
-              className="flex-shrink-0 px-8 py-4 bg-[#A86249] hover:bg-[#8C4A35] text-white text-[11px] font-bold tracking-widest uppercase transition-colors rounded-full"
+              className="flex-shrink-0 px-8 py-4 bg-gradient-to-r from-[#C87355] to-[#E2A08C] hover:from-[#A86249] hover:to-[#C87355] text-white text-[11px] font-bold tracking-widest uppercase transition-colors rounded-full"
             >
               Create Your Routine
             </Link>
@@ -178,3 +178,4 @@ export const BundleSection: React.FC = () => {
     </section>
   );
 };
+
