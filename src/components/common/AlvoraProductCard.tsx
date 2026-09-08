@@ -20,9 +20,9 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
   const needsSelection = (product.variations && product.variations.length > 0) ;
 
   return (
-    <div className="group relative bg-white flex flex-col h-full border border-[#EDE5DC] hover:shadow-md transition-shadow duration-300">
+    <div className="group relative bg-white rounded-2xl flex flex-col h-full border border-[#EDE5DC] hover:shadow-md transition-shadow duration-300">
       {/* Image Container */}
-      <Link href={`/product/${product.slug}`} className="relative aspect-square bg-[#F5EDE4] overflow-hidden block">
+      <Link href={`/product/${product.slug}`} className="relative aspect-square bg-[#F5EDE4] overflow-hidden block rounded-t-2xl">
         <Image
           src={getSafeImageSrc(product.images[0])}
           alt={product.name}
@@ -34,12 +34,12 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
         {/* Badges */}
         <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
           {product.isBestseller && (
-            <span className="bg-[#C87355] text-white text-[9px] font-bold tracking-widest uppercase px-2 py-1 rounded-sm shadow-sm">
+            <span className="bg-[#C87355] text-white text-[9px] font-bold tracking-widest uppercase px-2 py-1 rounded-xl shadow-sm">
               BESTSELLER
             </span>
           )}
           {!product.isBestseller && product.isNewArrival && (
-            <span className="bg-[#D4A373] text-white text-[9px] font-bold tracking-widest uppercase px-2 py-1 rounded-sm shadow-sm">
+            <span className="bg-[#D4A373] text-white text-[9px] font-bold tracking-widest uppercase px-2 py-1 rounded-xl shadow-sm">
               NEW
             </span>
           )}
@@ -99,28 +99,28 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
           {needsSelection ? (
               <Link
                 href={`/product/${product.slug}`}
-                className="flex-1 bg-[#C87355] hover:bg-[#A86249] text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase py-3 px-2 rounded-sm transition-colors flex items-center justify-center shadow-sm text-center"
+                className="flex-1 bg-[#C87355] hover:bg-[#A86249] text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase py-3 px-2 rounded-xl transition-colors flex items-center justify-center shadow-sm text-center"
               >
                 SELECT OPTIONS
               </Link>
             ) : product.inStock ? (
               <Link
                 href={`/product/${product.slug}`}
-                className="flex-1 bg-[#C87355] hover:bg-[#A86249] text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase py-3 px-2 rounded-sm transition-colors flex items-center justify-center shadow-sm text-center"
+                className="flex-1 bg-[#C87355] hover:bg-[#A86249] text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase py-3 px-2 rounded-xl transition-colors flex items-center justify-center shadow-sm text-center"
               >
                 VIEW DETAIL
               </Link>
             ) : (
               <button
                 disabled
-                className="flex-1 bg-[#A1A7AA] cursor-not-allowed text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase py-3 px-2 rounded-sm transition-colors text-center shadow-sm"
+                className="flex-1 bg-[#A1A7AA] cursor-not-allowed text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase py-3 px-2 rounded-xl transition-colors text-center shadow-sm"
               >
                 OUT OF STOCK
               </button>
             )}
           <button 
             onClick={needsSelection ? undefined : handleAddToCart}
-            className="w-10 sm:w-12 flex items-center justify-center border border-[#EDE5DC] hover:border-[#C87355] bg-white text-gray-500 hover:text-[#C87355] rounded-sm transition-colors shadow-sm"
+            className="w-10 sm:w-12 flex items-center justify-center border border-[#EDE5DC] hover:border-[#C87355] bg-white text-gray-500 hover:text-[#C87355] rounded-xl transition-colors shadow-sm"
             aria-label="Quick Add"
           >
             <ShoppingCart className="w-4 h-4" />
@@ -130,4 +130,5 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
     </div>
   );
 };
+
 

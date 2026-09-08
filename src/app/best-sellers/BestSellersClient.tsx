@@ -18,7 +18,7 @@ export default function BestSellersClient() {
   return (
     <div className="min-h-screen bg-[#FAF6F2]">
       {/* 3D Hero Section */}
-      <section className="relative w-full py-32 min-h-[400px] flex items-center justify-center overflow-hidden">
+      <section className="relative w-full pt-24 pb-12 min-h-[250px] flex items-center justify-center overflow-hidden">
         
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto flex flex-col items-center">
           <span className="text-xs md:text-sm tracking-[0.25em] uppercase text-[#C87355] font-bold mb-4 block">
@@ -34,7 +34,7 @@ export default function BestSellersClient() {
       </section>
 
       {/* Product Grid Section */}
-      <section className="py-10 px-4 sm:px-6 lg:px-8 max-w-[1400px] mx-auto">
+      <section className="pb-16 pt-4 px-4 sm:px-6 lg:px-8 max-w-[1400px] mx-auto">
         <div className="flex items-center justify-between mb-10">
           <h2 className="font-display text-3xl text-[#1A1A1A] font-medium">Cult Favorites</h2>
           <span className="text-sm font-medium text-gray-500">{bestSellers.length} Products</span>
@@ -55,6 +55,7 @@ export default function BestSellersClient() {
     </div>
   );
 }
+
 
 
 

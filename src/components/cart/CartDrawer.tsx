@@ -169,9 +169,7 @@ export const CartDrawer: React.FC = () => {
                         </div>
                       )}
 
-                      <span className="text-[10px] text-[#C48B80] font-semibold uppercase block">
-                        {item.product.category || 'Uncategorized'}
-                      </span>
+                      {item.product.category && item.product.category !== "Uncategorized" && (<span className="text-[10px] text-[#C48B80] font-semibold uppercase block tracking-wider mt-0.5">{item.product.category}</span>)}
                       
                       {variation && (
                         <div className="mt-1 flex flex-wrap gap-1">
@@ -345,5 +343,6 @@ export const CartDrawer: React.FC = () => {
     </div>
   );
 };
+
 
 
