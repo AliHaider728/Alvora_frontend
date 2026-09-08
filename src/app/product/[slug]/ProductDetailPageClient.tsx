@@ -26,11 +26,10 @@ import { trackAddToCart } from "../../../lib/metaPixel";
 import { trackTikTokViewContent, trackTikTokAddToCart } from "../../../lib/tiktokPixel";
 import { useStore } from '../../../context/StoreContext';
 import { useToast } from '../../../context/ToastContext';
-import { AlvoraProductCard } from '../../../components/common/AlvoraProductCard';
-import { ProductImage } from '../../../components/common/ProductImage';
-import { ReviewSummary } from '../../../components/common/ReviewSummary';
 import { Breadcrumbs } from '../../../components/common/Breadcrumbs';
 
+import Image from "next/image";
+import dynamic from 'next/dynamic';
 import { formatPrice } from '../../../utils/formatters';
 import { useScrollLock } from '../../../hooks/useScrollLock';
 import { api, getLastApiError } from '../../../services/api';
@@ -48,11 +47,15 @@ import {
   getVariantImages
 } from '../../../utils/products';
 import { ProductDetailContent } from '../../../components/product/ProductDetailContent';
-import { Review } from '../../../types';
+import { Review, Product } from '../../../types';
 import { getSafeImageSrc } from '../../../utils/images';
-import { QuantityBreaksSelector } from "../../../components/product/QuantityBreaksSelector";
-import { BogoBanner } from "../../../components/product/BogoBanner";
-import { FlatDiscountBanner } from "../../../components/product/FlatDiscountBanner";
+
+// Dynamically import below-the-fold and non-critical components to reduce initial JS payload
+const AlvoraProductCard = dynamic(() => import('../../../components/common/AlvoraProductCard').then(mod => mod.AlvoraProductCard), { ssr: false });
+const ReviewSummary = dynamic(() => import('../../../components/common/ReviewSummary').then(mod => mod.ReviewSummary), { ssr: false });
+const QuantityBreaksSelector = dynamic(() => import('../../../components/product/QuantityBreaksSelector').then(mod => mod.QuantityBreaksSelector), { ssr: false });
+const BogoBanner = dynamic(() => import('../../../components/product/BogoBanner').then(mod => mod.BogoBanner), { ssr: false });
+const FlatDiscountBanner = dynamic(() => import('../../../components/product/FlatDiscountBanner').then(mod => mod.FlatDiscountBanner), { ssr: false });
 
 const getPlainDescription = (description: string) =>
   description.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
@@ -63,12 +66,23 @@ declare global {
   }
 }
 
-export const ProductDetailPageClient: React.FC = () => {
+interface ProductDetailPageClientProps {
+  initialProduct?: Product | null;
+  initialReviews?: Review[];
+  initialRelatedProducts?: any[];
+}
+
+export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = ({ 
+  initialProduct,
+  initialReviews = [],
+  initialRelatedProducts = []
+}) => {
   const { slug } = useParams<{ slug: string }>();
   const { products, productsLoading, addToCart, toggleWishlist, isInWishlist, refreshProducts, settings, submitCustomerReview } = useStore();
   const { showToast } = useToast();
 
-  const product = products.find(
+  // Favor the SSR injected product to avoid waterfall, fallback to store if not provided
+  const product = initialProduct || products.find(
     p => (p.slug === slug || p.id === slug) && isProductVisibleOnStorefront(p)
   );
 
@@ -103,17 +117,19 @@ export const ProductDetailPageClient: React.FC = () => {
   const [newTitle, setNewTitle] = useState('');
   const [newComment, setNewComment] = useState('');
   const [newUserName, setNewUserName] = useState('');
-  const [productReviews, setProductReviews] = useState<Review[]>([]);
+  const [productReviews, setProductReviews] = useState<Review[]>(initialReviews);
 
   useScrollLock(lightboxOpen || sizeGuideModalOpen || reviewModalOpen);
 
-  const [apiRelatedProducts, setApiRelatedProducts] = useState<any[]>([]);
-  const [relatedLoading, setRelatedLoading] = useState(true);
+  const [apiRelatedProducts, setApiRelatedProducts] = useState<any[]>(initialRelatedProducts);
+  const [relatedLoading, setRelatedLoading] = useState(!initialRelatedProducts || initialRelatedProducts.length === 0);
   const loadRelatedProducts = async (productId: string) => {
+    if (initialRelatedProducts && initialRelatedProducts.length > 0) return; // Skip if loaded by SSR
     setRelatedLoading(true);
     try { const res = await api.getRelatedProducts(productId); setApiRelatedProducts(res || []); } catch(e) { console.error(e); setApiRelatedProducts([]); } finally { setRelatedLoading(false); }
   };
   const loadProductReviews = async (productId: string) => {
+    if (initialReviews && initialReviews.length > 0) return; // Skip if loaded by SSR
     const result = await api.getProductReviews(productId);
     if (!result) return;
     setProductReviews(result.map(review => ({
@@ -614,17 +630,20 @@ export const ProductDetailPageClient: React.FC = () => {
             <button
               ref={lightboxTriggerRef}
               type="button"
-              onClick={openLightbox}
               onPointerMove={handleZoomPointerMove}
               onPointerLeave={() => { setIsZooming(false); setZoomOrigin('50% 50%'); }}
+              onClick={openLightbox}
               className="group/gallery relative flex aspect-square w-full cursor-zoom-in items-center justify-center overflow-hidden bg-[#F1C9BD] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C48B80] focus-visible:ring-offset-2"
               aria-label={`Enlarge ${product.name} image`}
             >
-              <img
+              <Image
                 src={getSafeImageSrc(activeImageUrl)}
                 alt={product.name}
                 style={{ transformOrigin: zoomOrigin }}
-                className={`h-full w-full object-contain object-center transition-transform duration-200 ease-out motion-reduce:transition-none ${isZooming ? 'scale-[1.75]' : 'scale-100'}`}
+                className={`object-contain object-center transition-transform duration-200 ease-out motion-reduce:transition-none ${isZooming ? 'scale-[1.75]' : 'scale-100'}`}
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
               <span className="pointer-events-none absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-slate-950/70 px-3 py-1.5 text-[10px] font-bold text-white opacity-0 backdrop-blur transition-opacity group-hover/gallery:opacity-100"><ZoomIn className="h-3.5 w-3.5" /> Click to enlarge</span>
               {(product.discountPercent ?? 0) > 0 && (

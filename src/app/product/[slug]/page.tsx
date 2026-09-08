@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+export const revalidate = 60; // Enable ISR (Incremental Static Regeneration) instead of force-dynamic for massive performance boost
 import { ProductDetailPageClient } from "./ProductDetailPageClient";
 import { api } from "../../../services/api";
 import { getEffectiveProductAvailability } from "../../../utils/products";
@@ -47,47 +47,60 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const slug = (await params).slug;
+  
+  let product = null;
+  let reviews = [];
+  let relatedProducts = [];
   let schemaData = null;
   
   try {
-    const product = await api.getProduct(slug);
+    // Parallel data fetching instead of sequential waterfall
+    const [fetchedProduct, fetchedReviews, fetchedRelated] = await Promise.all([
+      api.getProduct(slug),
+      api.getProductReviews(slug).catch(() => []),
+      api.getRelatedProducts(slug).catch(() => [])
+    ]);
+
+    product = fetchedProduct;
+    reviews = fetchedReviews || [];
+    relatedProducts = fetchedRelated || [];
+
     if (!product) {
       console.error(`[Page] api.getProduct returned null for slug: ${slug}`);
       notFound();
     }
-    if (product) {
-      schemaData = {
-        "@context": "https://schema.org/",
-        "@type": "Product",
-        "name": product.name,
-        "image": product.images,
-        "description": product.description,
-        "sku": product.sku || product.id,
-        "brand": {
-          "@type": "Brand",
-          "name": product.brand
-        },
-        "category": (product.categoryNames?.length ? product.categoryNames : [product.category]).filter(Boolean).join(', '),
-        "offers": {
-          "@type": "Offer",
-          "priceCurrency": "PKR",
-          "price": product.price,
-          "priceValidUntil": "2027-12-31",
-          "itemCondition": "https://schema.org/NewCondition",
-          "availability": getEffectiveProductAvailability(product) ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-          "seller": {
-            "@type": "Organization",
-            "name": "Alvora Skincare"
-          }
+    
+    schemaData = {
+      "@context": "https://schema.org/",
+      "@type": "Product",
+      "name": product.name,
+      "image": product.images,
+      "description": product.description,
+      "sku": product.sku || product.id,
+      "brand": {
+        "@type": "Brand",
+        "name": product.brand
+      },
+      "category": (product.categoryNames?.length ? product.categoryNames : [product.category]).filter(Boolean).join(', '),
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "PKR",
+        "price": product.price,
+        "priceValidUntil": "2027-12-31",
+        "itemCondition": "https://schema.org/NewCondition",
+        "availability": getEffectiveProductAvailability(product) ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+        "seller": {
+          "@type": "Organization",
+          "name": "Alvora Skincare"
         }
-      };
-      if (product.reviewCount > 0) {
-        schemaData.aggregateRating = {
-          "@type": "AggregateRating",
-          "ratingValue": product.rating,
-          "reviewCount": product.reviewCount
-        };
       }
+    };
+    if (product.reviewCount > 0) {
+      schemaData.aggregateRating = {
+        "@type": "AggregateRating",
+        "ratingValue": product.rating,
+        "reviewCount": product.reviewCount
+      };
     }
   } catch (e) {
     console.error(`[Page] Error fetching product for slug ${slug}:`, e);
@@ -102,7 +115,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
         />
       )}
-      <ProductDetailPageClient />
+      <ProductDetailPageClient 
+        initialProduct={product} 
+        initialReviews={reviews}
+        initialRelatedProducts={relatedProducts}
+      />
     </>
   );
 }

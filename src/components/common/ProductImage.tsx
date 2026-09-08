@@ -1,8 +1,9 @@
 "use client";
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { getSafeImageSrc } from '../../utils/images';
 
-interface ProductImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+interface ProductImageProps extends Omit<React.ImgHTMLAttributes<HTMLImageElement>, 'src' | 'width' | 'height'> {
   src?: string | null;
   alt: string;
   className?: string;
@@ -10,6 +11,7 @@ interface ProductImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   width?: number;
   height?: number;
   crop?: string;
+  priority?: boolean;
 }
 
 export const ProductImage: React.FC<ProductImageProps> = ({
@@ -17,10 +19,11 @@ export const ProductImage: React.FC<ProductImageProps> = ({
   alt,
   className = '',
   wrapperClassName = '',
-  loading = 'lazy',
+  loading,
   width,
   height,
   crop,
+  priority = false,
   ...props
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -34,13 +37,14 @@ export const ProductImage: React.FC<ProductImageProps> = ({
       />
       
       {/* Actual image */}
-      <img
+      <Image
         src={safeSrc}
         alt={alt}
-        loading={loading}
+        fill
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        priority={priority}
         onLoad={() => setIsLoaded(true)}
-        className={`transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'} ${className}`}
-        {...props}
+        className={`object-cover transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'} ${className}`}
       />
     </div>
   );
