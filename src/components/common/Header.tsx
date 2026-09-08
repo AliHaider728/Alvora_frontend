@@ -1,9 +1,9 @@
-"use client";
+﻿"use client";
 
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Search, ShoppingBag, Heart, User, X, Menu } from "lucide-react";
+import { useRouter, usePathname } from "next/navigation";
+import { Search, ShoppingBag, Heart, User, X, Menu, ChevronDown } from "lucide-react";
 
 import { Logo } from "./Logo";
 import { useStore } from "../../context/StoreContext";
@@ -13,16 +13,17 @@ import { getSafeImageSrc } from "../../utils/images";
 import { useAuth } from "../../context/AuthContext";
 
 const NAV_LINKS = [
-  { label: "Shop", href: "/category/all" },
-  { label: "Best Sellers", href: "/best-sellers" },
-  { label: "Skincare", href: "/category/all" },
-  { label: "About", href: "/about" },
+  { label: "SHOP", href: "/category/all", hasDropdown: true },
+  { label: "SKINCARE", href: "/category/all" },
+  { label: "ABOUT", href: "/about" },
 ];
 
 export const Header: React.FC = () => {
   const { cartTotalItems, wishlist, setIsCartOpen, products, settings } = useStore();
   const { isLoggedIn, openAuthModal } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
+  const isHome = pathname === '/';
 
   const [mounted, setMounted] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -130,16 +131,20 @@ export const Header: React.FC = () => {
       {/* FIXED HEADER */}
       <header
         ref={headerRef}
-        className={`fixed inset-x-0 top-0 z-50 bg-alvora-ivory text-[#241916] transition-all duration-300 ease-in-out ${isScrolled ? "shadow-[0_4px_24px_rgba(36,25,22,0.06)]" : ""} ${isVisible ? "translate-y-0" : "-translate-y-full"}`}
+        className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ease-in-out ${
+          isHome && !isScrolled ? "bg-transparent text-[#241916]" : "bg-alvora-ivory text-[#241916]"
+        } ${isScrolled ? "shadow-[0_4px_24px_rgba(36,25,22,0.06)]" : ""} ${isVisible ? "translate-y-0" : "-translate-y-full"}`}
       >
         {/* SHIPPING BAR */}
-        <div className="flex min-h-8 items-center justify-center bg-[#C87355] px-4 text-center text-[11px] font-medium uppercase tracking-[0.14em] text-white sm:min-h-8.5 sm:text-xs">
-          FREE SHIPPING ON ORDERS OVER {settings?.freeShippingThreshold ? formatPrice(settings.freeShippingThreshold, settings.currency) : 'RS. 5,000'}
-          <span className="mx-2 opacity-60">•</span>
-          30-DAY RETURNS
-          <span className="mx-2 hidden opacity-60 sm:inline">•</span>
-          <span className="hidden sm:inline">SAMPLES WITH EVERY ORDER</span>
-        </div>
+        {!isHome && (
+          <div className="flex min-h-8 items-center justify-center bg-[#C87355] px-4 text-center text-[11px] font-medium uppercase tracking-[0.14em] text-white sm:min-h-8.5 sm:text-xs">
+            FREE SHIPPING ON ORDERS OVER {settings?.freeShippingThreshold ? formatPrice(settings.freeShippingThreshold, settings.currency) : 'RS. 5,000'}
+            <span className="mx-2 opacity-60">â€¢</span>
+            30-DAY RETURNS
+            <span className="mx-2 hidden opacity-60 sm:inline">â€¢</span>
+            <span className="hidden sm:inline">SAMPLES WITH EVERY ORDER</span>
+          </div>
+        )}
 
         {/* MAIN NAVIGATION */}
         <div className="mx-auto w-full max-w-375 px-5 sm:px-8 lg:px-12">
@@ -147,14 +152,15 @@ export const Header: React.FC = () => {
             {/* LEFT NAVIGATION */}
             <nav aria-label="Primary navigation" className="hidden items-center gap-7 lg:flex xl:gap-9">
               {NAV_LINKS.map((link) => (
-                <Link
-                  key={`${link.href}-${link.label}`}
-                  href={link.href}
-                  className="relative text-[13px] font-medium uppercase tracking-[0.11em] text-[#2A211E] transition-colors duration-200 hover:text-[#A86249] after:absolute after:-bottom-2 after:left-0 after:h-px after:w-0 after:bg-[#A86249] after:transition-all after:duration-300 hover:after:w-full"
-                >
-                  {link.label}
-                </Link>
-              ))}
+                  <Link
+                    key={`${link.href}-${link.label}`}
+                    href={link.href}
+                    className="relative flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-[0.15em] text-[#2A211E] transition-colors duration-200 hover:text-[#A86249]"
+                  >
+                    {link.label}
+                    {link.hasDropdown && <ChevronDown className="h-3 w-3 opacity-60" strokeWidth={2} />}
+                  </Link>
+                ))}
             </nav>
 
             {/* MOBILE MENU BUTTON */}
@@ -294,8 +300,8 @@ export const Header: React.FC = () => {
         )}
       </header>
 
-      {/* HEADER SPACER — keeps the hero below the fixed header */}
-      <div style={{ height: headerHeight }} aria-hidden="true" />
+      {/* HEADER SPACER - keeps the content below the fixed header */}
+      {!isHome && <div style={{ height: headerHeight }} aria-hidden="true" />}
 
       {/* MOBILE DRAWER BACKDROP */}
       <div
@@ -324,16 +330,17 @@ export const Header: React.FC = () => {
         </div>
 
         <nav className="flex-1 overflow-y-auto px-6 py-6">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={`${link.href}-${link.label}`}
-              href={link.href}
-              onClick={() => setMobileOpen(false)}
-              className="flex border-b border-[#E7D9D0] py-4 text-sm font-medium uppercase tracking-widest text-[#241916]"
-            >
-              {link.label}
-            </Link>
-          ))}
+            {NAV_LINKS.map((link) => (
+              <Link
+                key={`${link.href}-${link.label}`}
+                href={link.href}
+                onClick={() => setMobileOpen(false)}
+                className="flex items-center justify-between border-b border-[#E7D9D0] py-4 text-sm font-medium uppercase tracking-widest text-[#241916]"
+              >
+                {link.label}
+                {link.hasDropdown && <ChevronDown className="h-4 w-4 opacity-50" />}
+              </Link>
+            ))}
 
           <Link
             href="/wishlist"
@@ -390,3 +397,7 @@ export const Header: React.FC = () => {
     </>
   );
 };
+
+
+
+
