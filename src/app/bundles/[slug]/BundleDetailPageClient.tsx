@@ -107,7 +107,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
                 <button 
                   key={idx}
                   onClick={() => setActiveImage(img)}
-                  className={"relative w-16 h-16 shrink-0 rounded-xl overflow-hidden border-2 transition-all " + (activeImage === img ? 'border-[#C48B80]' : 'border-transparent opacity-70 hover:opacity-100')}
+                  className={`relative w-16 h-16 shrink-0 rounded-xl overflow-hidden border-2 transition-all ${activeImage === img ? 'border-[#C48B80]' : 'border-transparent opacity-70 hover:opacity-100'}`}
                 >
                   <Image src={img} alt="Thumbnail" fill className="object-cover" />
                 </button>
@@ -297,7 +297,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     <div className="relative w-12 h-12 rounded-full overflow-hidden shrink-0 bg-[#F5EDE4]">
-                      <Image src={review.avatarUrl || https://ui-avatars.com/api/?name= + encodeURIComponent(review.reviewerName) + &background=random} alt={review.reviewerName} fill className="object-cover" unoptimized />
+                      <Image src={review.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(review.reviewerName)}&background=random`} alt={review.reviewerName} fill className="object-cover" unoptimized />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
@@ -310,7 +310,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
                       </div>
                       <div className="flex gap-0.5 mt-1">
                         {[...Array(5)].map((_, i) => (
-                          <Star key={i} className={"w-3.5 h-3.5 " + (i < review.rating ? 'fill-amber-400 text-amber-400' : 'text-[#EDE5DC]')} />
+                          <Star key={i} className={`w-3.5 h-3.5 ${i < review.rating ? 'fill-amber-400 text-amber-400' : 'text-[#EDE5DC]'}`} />
                         ))}
                       </div>
                     </div>
@@ -357,7 +357,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
                 <div className="flex gap-2">
                   {[1,2,3,4,5].map(star => (
                     <button type="button" key={star} onClick={() => setNewRating(star)}>
-                      <Star className={"w-6 h-6 " + (star <= newRating ? 'fill-amber-400 text-amber-400' : 'text-gray-300')} />
+                      <Star className={`w-6 h-6 ${star <= newRating ? 'fill-amber-400 text-amber-400' : 'text-gray-300'}`} />
                     </button>
                   ))}
                 </div>
