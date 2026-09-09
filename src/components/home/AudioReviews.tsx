@@ -54,19 +54,19 @@ export const AudioReviews: React.FC = () => {
 
   if (loading || reviews.length === 0) return null;
 
-  // Ensure enough items to fill the 380px container (approx 10 items minimum)
-  const minItemsToFill = 10;
+  // Guarantee enough items to overflow the new smaller container height safely.
+  // 15 items ensures the array is ~1200px tall. The half-shift is 600px, which safely clears the 240px wrapper.
+  const minItemsToFill = 15;
   const repeatCount = Math.ceil(minItemsToFill / Math.max(reviews.length, 1));
   const baseBlock = Array(repeatCount).fill(reviews).flat();
 
-  // Create perfectly duplicate blocks for seamless loops
   const getColumnItems = (offset: number) => {
     const rotated = [...baseBlock.slice(offset), ...baseBlock.slice(0, offset)];
-    return [...rotated, ...rotated]; // Exactly duplicated once
+    return [...rotated, ...rotated]; // Exactly duplicated once for seamless scroll
   };
   
   const col1 = getColumnItems(0);
-  const col2 = getColumnItems(1).reverse(); // Reverse for visual variety, but since it's exactly duplicated, loop holds
+  const col2 = getColumnItems(1).reverse(); 
   const col3 = getColumnItems(2);
   const col4 = getColumnItems(3).reverse();
 
@@ -75,7 +75,7 @@ export const AudioReviews: React.FC = () => {
       <div className="w-10 h-10 rounded-full bg-[#E5E7EB] flex items-center justify-center flex-shrink-0 text-gray-500">
         <User className="w-5 h-5" />
       </div>
-      <button className="text-gray-300 hover:text-white flex-shrink-0">
+      <button className="text-gray-300 hover:text-white flex-shrink-0 transition-colors">
         {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current ml-0.5" />}
       </button>
       <div className="flex-1 flex flex-col justify-center h-full gap-0.5">
@@ -106,8 +106,6 @@ export const AudioReviews: React.FC = () => {
   return (
     <section className="py-12 bg-[#FAF6F2] overflow-hidden">
       <style dangerouslySetInnerHTML={{__html: `
-        /* The exact math for a seamless loop on a flex column with gap-6 (24px).
-           We translate by exactly half the container height minus half the gap (12px). */
         @keyframes scroll-down {
           0% { transform: translateY(calc(-50% - 12px)); }
           100% { transform: translateY(0); }
@@ -121,10 +119,6 @@ export const AudioReviews: React.FC = () => {
         }
         .animate-scroll-up {
           animation: scroll-up 20s linear infinite;
-        }
-        .group:has(.player-pill:hover) .animate-scroll-down,
-        .group:has(.player-pill:hover) .animate-scroll-up {
-          animation-play-state: paused;
         }
         .mask-vertical-fades {
           mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
@@ -148,8 +142,8 @@ export const AudioReviews: React.FC = () => {
           className="hidden" 
         />
 
-        {/* 4 Column Vertical Masonry Layout - Edge to Edge */}
-        <div className="relative h-[360px] md:h-[380px] w-full overflow-hidden flex gap-4 lg:gap-8 justify-center mask-vertical-fades group cursor-default px-4">
+        {/* Reverted to Edge-to-Edge 4 Column Masonry Layout - Adjusted height to fit ~3 items */}
+        <div className="relative h-[220px] md:h-[240px] w-full overflow-hidden flex gap-4 lg:gap-8 justify-center mask-vertical-fades group cursor-default px-4">
           
           {/* Column 1 - Top to Bottom (Down) */}
           <div className="flex-1 flex flex-col gap-6 animate-scroll-down">

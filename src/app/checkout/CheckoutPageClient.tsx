@@ -564,7 +564,7 @@ export const CheckoutPageClient: React.FC = () => {
                     disabled={isPlacingOrder}
                     className="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-display font-black text-lg shadow-xl flex items-center justify-center gap-2 transition-all hover:scale-[1.01]"
                   >
-                    <span>{isPlacingOrder ? 'Placing Orderâ€¦' : `Confirm Order & Pay ${formatPrice(finalTotal, settings.currency)} on Delivery`}</span>
+                    <span>{isPlacingOrder ? 'Placing Order…' : `Confirm Order & Pay ${formatPrice(finalTotal, settings.currency)} on Delivery`}</span>
                     {isPlacingOrder ? <span className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" /> : <Check className="w-6 h-6" />}
                   </button>
                 </form>

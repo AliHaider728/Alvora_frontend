@@ -3,23 +3,23 @@
 @import "shadcn/tailwind.css";
 
 /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-   ALVORA SKINCARE â€” DESIGN SYSTEM
+   ALVORA SKINCARE — DESIGN SYSTEM
    Phase 1: Color, Typography, Global Tokens
    â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
-/* Google Fonts loaded in layout.tsx via next/font â€” no @import needed here */
+/* Google Fonts loaded in layout.tsx via next/font — no @import needed here */
 
 @custom-variant dark (&:is(.dark *));
 
 /* â”€â”€ Alvora Semantic CSS Custom Properties â”€â”€ */
 :root {
   /* Brand Palette (from design-system reference) */
-  --alvora-ivory:        #FAF6F2;     /* #FAF6F2 â€” warm page background */
-  --alvora-cream:        #F5EDE4;     /* #F5EDE4 â€” section alt background */
-  --alvora-peach:        #F1C9BD;     /* soft peach â€” #F1C9BD */
+  --alvora-ivory:        #FAF6F2;     /* #FAF6F2 — warm page background */
+  --alvora-cream:        #F5EDE4;     /* #F5EDE4 — section alt background */
+  --alvora-peach:        #F1C9BD;     /* soft peach — #F1C9BD */
   --alvora-terracotta:   #C48B80;     /* primary CTA / accent */
-  --alvora-mocha:        #4D3D2D;     /* #4D3D2D â€” deep warm brown */
-  --alvora-taupe:        #A1A7AA;     /* #A1A7AA â€” muted text */
+  --alvora-mocha:        #4D3D2D;     /* #4D3D2D — deep warm brown */
+  --alvora-taupe:        #A1A7AA;     /* #A1A7AA — muted text */
   --alvora-charcoal:     #1A1A1A;     /* near-black headings / body */
   --alvora-white:        #FFFFFF;
 
@@ -70,7 +70,7 @@
   --ring:                 #C48B80;
   --radius:               0.625rem;
 
-  /* Sidebar (admin) â€” keep neutral */
+  /* Sidebar (admin) — keep neutral */
   --sidebar:                      #FFFFFF;
   --sidebar-foreground:           #1A1A1A;
   --sidebar-primary:              #C48B80;

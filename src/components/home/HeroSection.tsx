@@ -24,7 +24,7 @@ export const HeroSection: React.FC = () => {
           >
             <div className="h-px w-12 bg-[#8C7B74]" />
             <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#8C7B74]">
-              PURE ï¿½ NATURAL ï¿½ EFFECTIVE
+              PURE • NATURAL • EFFECTIVE
             </span>
           </motion.div>
 
@@ -47,7 +47,7 @@ export const HeroSection: React.FC = () => {
             className="mb-10 max-w-sm text-sm leading-relaxed text-[#5C4F4A] md:text-base"
           >
             Thoughtfully crafted skincare with nature's<br />
-            finest ingredients ï¿½ for a calmer, clearer,<br />
+            finest ingredients — for a calmer, clearer,<br />
             more radiant you.
           </motion.p>
 

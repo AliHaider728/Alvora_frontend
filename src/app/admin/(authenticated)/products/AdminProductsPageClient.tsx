@@ -134,7 +134,7 @@ export const AdminProductsPageClient: React.FC = () => {
         body: formData
       });
       if (res.ok) {
-        showToast('Products imported successfully. Refreshing the catalogâ€¦', 'success');
+        showToast('Products imported successfully. Refreshing the catalog…', 'success');
         window.location.reload();
       } else {
         showToast('Failed to import products. Check the CSV and try again.', 'error');

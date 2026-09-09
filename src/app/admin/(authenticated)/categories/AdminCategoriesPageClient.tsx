@@ -55,7 +55,7 @@ export const AdminCategoriesPageClient: React.FC = () => {
     const ordered = [...categories].sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
     const index = ordered.findIndex(item => item.id === category.id); const target = index + direction;
     if (target < 0 || target >= ordered.length) return;
-    const loading = toast.loading('Saving category orderâ€¦');
+    const loading = toast.loading('Saving category order…');
     const other = ordered[target];
     const [first, second] = await Promise.all([
       updateCategory(category.id, { displayOrder: other.displayOrder ?? target }),
@@ -76,7 +76,7 @@ export const AdminCategoriesPageClient: React.FC = () => {
     
     <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><div><h1 className="font-heading text-2xl font-black text-[#1A1A1A]">Categories</h1><p className="text-xs font-medium text-[#1A1A1A]/50">Database-driven collections used across products, filters, homepage and navigation.</p></div><button type="button" onClick={() => setEditing(null)} className="flex items-center justify-center gap-2 rounded-2xl bg-[#C48B80] px-5 py-2.5 text-xs font-bold text-white shadow-md"><Plus className="h-4 w-4" /> Add Category</button></div>
     <div className="flex flex-col gap-3 rounded-2xl border border-[#E7D9D0] bg-white p-4 sm:flex-row sm:items-center">
-      <label className="relative min-w-0 flex-1"><Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#1A1A1A]/40" /><input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search categoriesâ€¦" className="w-full rounded-xl border border-[#E7D9D0] py-2.5 pl-9 pr-3 text-sm" /></label>
+      <label className="relative min-w-0 flex-1"><Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#1A1A1A]/40" /><input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search categories…" className="w-full rounded-xl border border-[#E7D9D0] py-2.5 pl-9 pr-3 text-sm" /></label>
       <div className="flex flex-wrap gap-1 rounded-xl bg-[#FAF6F2] p-1">{(['all', 'active', 'hidden', 'featured'] as Filter[]).map(value => <button key={value} type="button" onClick={() => setFilter(value)} className={`rounded-lg px-3 py-2 text-xs font-bold capitalize ${filter === value ? 'bg-white text-[#1A1A1A] shadow-sm' : 'text-[#1A1A1A]/50'}`}>{value}</button>)}</div>
     </div>
     {visibleCategories.length ? <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">{visibleCategories.map((category, index) => <article key={category.id} className="rounded-3xl border border-[#E7D9D0] bg-white p-5 shadow-xs">

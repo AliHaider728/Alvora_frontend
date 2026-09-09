@@ -165,7 +165,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
   // from the previous product leaks into the next one unless explicitly reset here.
   useEffect(() => {
     if (!product?.id) return;
-    // Gallery state â€” this was the confirmed root cause of the stale image bug
+    // Gallery state — this was the confirmed root cause of the stale image bug
     setActiveImageIndex(0);
     setOverrideImage(null);
     // Quantity & variant selections
@@ -525,7 +525,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
         }
       }
 
-      const appliedOfferLabel = [qbLabel, bogoLabel].filter(Boolean).join(' Â• ');
+      const appliedOfferLabel = [qbLabel, bogoLabel].filter(Boolean).join(' • ');
 
       if (isVariable) {
         addToCart(
@@ -1066,7 +1066,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                         waBogoLabel = freeUnits === 1 ? `${waBogoLabel} (1 free unit applied)` : `${waBogoLabel} (${freeUnits} free units applied)`;
                       }
                     }
-                    const waAppliedOfferLabel = [waLabel, waBogoLabel].filter(Boolean).join(' Â• ');
+                    const waAppliedOfferLabel = [waLabel, waBogoLabel].filter(Boolean).join(' • ');
                     const waVariantText = Object.keys(selectedVariants).length > 0 ? `\nVariant: ${Object.values(selectedVariants).join(', ')}` : Object.values(selectedAttributes).filter(Boolean).length > 0 ? `\nOption: ${Object.values(selectedAttributes).filter(Boolean).join(', ')}` : '';
                     const waOfferText = waAppliedOfferLabel ? `\nApplied Offer: ${waAppliedOfferLabel}` : '';
                     const waMessage = `Hello, I am interested in this product:\nProduct: ${product.name}\nQuantity: ${quantity}\nPrice: ${formatPrice(waPrice, settings.currency)}\nLink: https://alvora.pk/product/${product.slug}${waVariantText}${waOfferText}`;

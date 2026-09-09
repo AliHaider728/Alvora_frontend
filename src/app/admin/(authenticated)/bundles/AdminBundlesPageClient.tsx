@@ -23,7 +23,7 @@ export const AdminBundlesPageClient = () => {
         api.getProducts()
       ]);
       setBundles(bundlesRes.bundles || []);
-      setProducts(productsRes.products || []);
+      setProducts(Array.isArray(productsRes) ? productsRes : productsRes.products || []);
     } catch (e) {
       console.error(e);
     } finally {

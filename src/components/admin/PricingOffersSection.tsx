@@ -11,7 +11,7 @@ const smallFieldCls =
   'w-full rounded-xl border border-[#E7D9D0] bg-white px-2.5 py-2 text-sm text-[#1A1A1A] outline-none transition focus:border-rose-400 focus:ring-2 focus:ring-rose-100';
 
 // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// Toggle â€” matches the style used elsewhere in the admin panel
+// Toggle — matches the style used elsewhere in the admin panel
 // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const Toggle: React.FC<{
   checked: boolean;
@@ -94,7 +94,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
     .map((tier, index) => ({ tier, originalIndex: index }))
     .sort((a, b) => a.tier.minQty - b.tier.minQty);
 
-  // Tier 1 price â€” lowest minQty tier's price, or basePrice if no tiers
+  // Tier 1 price — lowest minQty tier's price, or basePrice if no tiers
   const tier1Price =
     sortedTiersWithIndex.length > 0
       ? sortedTiersWithIndex[0].tier.pricePerUnit
@@ -281,7 +281,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
           checked={bogo.enabled}
           onChange={enabled => setBogo({ enabled })}
           label="Enable Buy X Get Y Free"
-          description="Award free units when a customer buys a qualifying quantity. Repeating â€” buying 4 on a 'Buy 2 Get 1' offer yields 2 free units."
+          description="Award free units when a customer buys a qualifying quantity. Repeating — buying 4 on a 'Buy 2 Get 1' offer yields 2 free units."
         />
 
         {bogo.enabled && (

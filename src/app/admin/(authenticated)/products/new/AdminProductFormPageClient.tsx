@@ -981,7 +981,7 @@ export const AdminProductFormPageClient: React.FC = () => {
   if (isEditing && !editingProduct) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center rounded-3xl border border-[#E7D9D0] bg-white">
-        <div className="text-center"><Loader2 className="mx-auto h-7 w-7 animate-spin text-[#C48B80]" /><p className="mt-3 text-sm font-bold text-[#1A1A1A]/70">Loading product detailsâ€¦</p></div>
+        <div className="text-center"><Loader2 className="mx-auto h-7 w-7 animate-spin text-[#C48B80]" /><p className="mt-3 text-sm font-bold text-[#1A1A1A]/70">Loading product details…</p></div>
       </div>
     );
   }
@@ -1047,7 +1047,7 @@ export const AdminProductFormPageClient: React.FC = () => {
                   <label className="relative block">
                     <span className="sr-only">Search categories</span>
                     <Search className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-[#1A1A1A]/40" />
-                    <input value={categorySearch} onChange={event => setCategorySearch(event.target.value)} className="w-full rounded-xl border border-[#E7D9D0] bg-white py-2 pl-9 pr-3 text-xs outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100" placeholder="Search categoriesâ€¦" />
+                    <input value={categorySearch} onChange={event => setCategorySearch(event.target.value)} className="w-full rounded-xl border border-[#E7D9D0] bg-white py-2 pl-9 pr-3 text-xs outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100" placeholder="Search categories…" />
                   </label>
                   <div className="mt-2 grid max-h-44 gap-2 overflow-y-auto pr-1 sm:grid-cols-2" role="group" aria-label="Product categories">
                     {categories.filter(item => item.isActive !== false && item.name.toLowerCase().includes(categorySearch.trim().toLowerCase())).map(item => {
@@ -1247,7 +1247,7 @@ export const AdminProductFormPageClient: React.FC = () => {
                 {images[0] ? (
                   <div className="relative overflow-hidden rounded-2xl border border-[#E7D9D0] bg-[#FAF6F2]"><img src={getSafeImageSrc(images[0].url)} alt="Main product preview" className="aspect-[4/3] w-full object-cover" /><div className="absolute inset-x-0 bottom-0 flex gap-2 bg-[#1A1A1A]/70 p-2 backdrop-blur"><label className="flex flex-1 cursor-pointer items-center justify-center gap-1 rounded-lg bg-white px-2 py-2 text-[10px] font-bold text-[#1A1A1A]/80"><ImagePlus className="h-3.5 w-3.5" /> Replace<input type="file" className="hidden" accept="image/jpeg,image/png,image/webp" disabled={uploadingTarget !== null} onChange={event => { void uploadImages(Array.from(event.target.files || []), 'main'); event.target.value = ''; }} /></label><button type="button" onClick={() => { void removeImage(images[0].id); }} className="rounded-lg bg-white px-2.5 text-[#C48B80]" aria-label="Remove main image"><Trash2 className="h-4 w-4" /></button></div></div>
                 ) : (
-                  <label className={`flex aspect-[4/3] cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed bg-[#FAF6F2] text-center transition hover:border-indigo-300 hover:bg-indigo-50/40 ${errors.images ? 'border-rose-400' : 'border-[#E7D9D0]'}`}><input type="file" className="hidden" accept="image/jpeg,image/png,image/webp" disabled={uploadingTarget !== null} onChange={event => { void uploadImages(Array.from(event.target.files || []), 'main'); event.target.value = ''; }} />{uploadingTarget === 'main' ? <Loader2 className="h-7 w-7 animate-spin text-[#C48B80]" /> : <ImageIcon className="h-7 w-7 text-indigo-500" />}<span className="mt-2 text-xs font-bold text-[#1A1A1A]/70">Upload main image</span><span className="mt-1 text-[10px] text-[#1A1A1A]/40">JPG, PNG, WebP Â• Max 5MB</span></label>
+                  <label className={`flex aspect-[4/3] cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed bg-[#FAF6F2] text-center transition hover:border-indigo-300 hover:bg-indigo-50/40 ${errors.images ? 'border-rose-400' : 'border-[#E7D9D0]'}`}><input type="file" className="hidden" accept="image/jpeg,image/png,image/webp" disabled={uploadingTarget !== null} onChange={event => { void uploadImages(Array.from(event.target.files || []), 'main'); event.target.value = ''; }} />{uploadingTarget === 'main' ? <Loader2 className="h-7 w-7 animate-spin text-[#C48B80]" /> : <ImageIcon className="h-7 w-7 text-indigo-500" />}<span className="mt-2 text-xs font-bold text-[#1A1A1A]/70">Upload main image</span><span className="mt-1 text-[10px] text-[#1A1A1A]/40">JPG, PNG, WebP • Max 5MB</span></label>
                 )}
                 <FieldError message={errors.images} />
               </div>
@@ -1275,8 +1275,8 @@ export const AdminProductFormPageClient: React.FC = () => {
 
           <FormCard title="SEO Settings" icon={Search}>
             <div className="space-y-4">
-              <label><span className="mb-1.5 block text-xs font-bold text-[#1A1A1A]/80">SEO Title</span><input value={metaTitle} maxLength={70} onChange={event => { setMetaTitle(event.target.value); markDirty(); }} className={fieldClassName} placeholder={`${name || 'Product name'} â€• Alvora Skincare`} /><span className={`mt-1 block text-right text-[10px] ${metaTitle.length > 60 ? 'text-[#C48B80]' : 'text-[#1A1A1A]/40'}`}>{metaTitle.length}/60 recommended Â• 70 max</span></label>
-              <label><span className="mb-1.5 block text-xs font-bold text-[#1A1A1A]/80">Meta Description</span><textarea rows={3} value={metaDescription} maxLength={180} onChange={event => { setMetaDescription(event.target.value); markDirty(); }} className={fieldClassName} placeholder="Short summary for search engines" /><span className={`mt-1 block text-right text-[10px] ${metaDescription.length > 160 ? 'text-[#C48B80]' : 'text-[#1A1A1A]/40'}`}>{metaDescription.length}/160 recommended Â• 180 max</span></label>
+              <label><span className="mb-1.5 block text-xs font-bold text-[#1A1A1A]/80">SEO Title</span><input value={metaTitle} maxLength={70} onChange={event => { setMetaTitle(event.target.value); markDirty(); }} className={fieldClassName} placeholder={`${name || 'Product name'} "• Alvora Skincare`} /><span className={`mt-1 block text-right text-[10px] ${metaTitle.length > 60 ? 'text-[#C48B80]' : 'text-[#1A1A1A]/40'}`}>{metaTitle.length}/60 recommended • 70 max</span></label>
+              <label><span className="mb-1.5 block text-xs font-bold text-[#1A1A1A]/80">Meta Description</span><textarea rows={3} value={metaDescription} maxLength={180} onChange={event => { setMetaDescription(event.target.value); markDirty(); }} className={fieldClassName} placeholder="Short summary for search engines" /><span className={`mt-1 block text-right text-[10px] ${metaDescription.length > 160 ? 'text-[#C48B80]' : 'text-[#1A1A1A]/40'}`}>{metaDescription.length}/160 recommended • 180 max</span></label>
               <label><span className="mb-1.5 block text-xs font-bold text-[#1A1A1A]/80">URL Slug</span><input value={slug} onChange={event => { const next = slugify(event.target.value); setSlug(next); setSlugManuallyEdited(next.length > 0); markDirty(); clearError('slug'); }} className={inputClass('slug')} placeholder="auto-generated-from-product-name" /><span className="mt-1 block break-all text-[10px] text-[#1A1A1A]/40">/product/{slug || 'product-slug'}</span><FieldError message={errors.slug} /></label>
             </div>
           </FormCard>
@@ -1284,7 +1284,7 @@ export const AdminProductFormPageClient: React.FC = () => {
 
         <div className="sticky bottom-4 z-20 flex flex-col-reverse gap-3 rounded-2xl border border-[#E7D9D0] bg-white/95 p-4 shadow-xl backdrop-blur sm:flex-row sm:justify-end xl:col-span-2">
           <button type="button" disabled={isSaving} onClick={() => { void cancelEditing(); }} className="rounded-xl bg-[#FAF6F2] px-5 py-3 text-xs font-bold text-[#1A1A1A]/80 disabled:opacity-50">Cancel</button>
-          <button type="submit" disabled={isSaving || uploadingTarget !== null} className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#C48B80] px-6 py-3 text-xs font-bold text-white shadow-md transition hover:bg-[#A86249] disabled:cursor-not-allowed disabled:opacity-60">{isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}{isSaving ? 'Savingâ€¦' : isEditing ? 'Update Product' : 'Save Product'}</button>
+          <button type="submit" disabled={isSaving || uploadingTarget !== null} className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#C48B80] px-6 py-3 text-xs font-bold text-white shadow-md transition hover:bg-[#A86249] disabled:cursor-not-allowed disabled:opacity-60">{isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}{isSaving ? 'Saving…' : isEditing ? 'Update Product' : 'Save Product'}</button>
         </div>
       </form>
     </div>

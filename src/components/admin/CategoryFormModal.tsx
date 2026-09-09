@@ -71,7 +71,7 @@ export const CategoryFormModal: React.FC<Props> = ({ category, categories, onClo
     if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) { setErrors(v => ({ ...v, image: 'Use a JPG, PNG, or WebP image.' })); return; }
     if (file.size > 5 * 1024 * 1024) { setErrors(v => ({ ...v, image: 'Image must be 5 MB or smaller.' })); return; }
     setUploading(true);
-    const loadingId = toast.loading('Uploading category imageâ€¦');
+    const loadingId = toast.loading('Uploading category image…');
     try {
       const uploaded = await api.uploadCategoryImage(file);
       if (newUploadId) await api.deleteCategoryImage(newUploadId);
@@ -139,7 +139,7 @@ export const CategoryFormModal: React.FC<Props> = ({ category, categories, onClo
           <span className="text-xs font-bold text-[#1A1A1A]/80">Category Image <span className="font-medium text-[#1A1A1A]/40">(optional, JPG/PNG/WebP, max 5 MB)</span></span>
           <div className="mt-2 flex flex-wrap items-center gap-3">
             {image ? <img src={getSafeImageSrc(image)} alt="Category preview" className="h-20 w-20 rounded-2xl border object-cover" /> : <div className="flex h-20 w-20 items-center justify-center rounded-2xl border border-dashed text-slate-300"><ImagePlus /></div>}
-            <label className="cursor-pointer rounded-xl border border-[#E7D9D0] px-4 py-2.5 text-xs font-bold text-[#1A1A1A]/80 hover:bg-[#FAF6F2]">{uploading ? 'Uploadingâ€¦' : image ? 'Replace Image' : 'Upload Image'}<input type="file" accept="image/jpeg,image/png,image/webp" disabled={uploading || saving} onChange={e => void uploadImage(e.target.files?.[0])} className="sr-only" /></label>
+            <label className="cursor-pointer rounded-xl border border-[#E7D9D0] px-4 py-2.5 text-xs font-bold text-[#1A1A1A]/80 hover:bg-[#FAF6F2]">{uploading ? 'Uploading…' : image ? 'Replace Image' : 'Upload Image'}<input type="file" accept="image/jpeg,image/png,image/webp" disabled={uploading || saving} onChange={e => void uploadImage(e.target.files?.[0])} className="sr-only" /></label>
             {image && <button type="button" onClick={() => { void removeSelectedImage(); }} className="flex items-center gap-1 rounded-xl px-3 py-2.5 text-xs font-bold text-[#A86249] hover:bg-[#FAF6F2]"><Trash2 className="h-4 w-4" /> Remove</button>}
           </div>{errors.image && <span className="mt-1 block text-xs font-semibold text-[#A86249]">{errors.image}</span>}
         </div>
@@ -152,7 +152,7 @@ export const CategoryFormModal: React.FC<Props> = ({ category, categories, onClo
         {!compact && <><label className="text-xs font-bold text-[#1A1A1A]/80">SEO Title<input value={seoTitle} maxLength={120} onChange={e => setSeoTitle(e.target.value)} className={input} /></label><label className="text-xs font-bold text-[#1A1A1A]/80">Meta Description<textarea rows={2} value={metaDescription} maxLength={320} onChange={e => setMetaDescription(e.target.value)} className={input} /></label></>}
         <div className="flex flex-col-reverse gap-2 border-t border-[#E7D9D0] pt-4 md:col-span-2 sm:flex-row sm:justify-end">
           <button type="button" onClick={() => void safeClose()} disabled={saving || uploading} className="rounded-xl bg-[#FAF6F2] px-5 py-2.5 text-xs font-bold text-[#1A1A1A]/80">Cancel</button>
-          <button type="submit" disabled={saving || uploading} className="flex items-center justify-center gap-2 rounded-xl bg-[#C48B80] px-5 py-2.5 text-xs font-bold text-white disabled:opacity-50">{saving && <Loader2 className="h-4 w-4 animate-spin" />}{saving ? 'Savingâ€¦' : 'Save Category'}</button>
+          <button type="submit" disabled={saving || uploading} className="flex items-center justify-center gap-2 rounded-xl bg-[#C48B80] px-5 py-2.5 text-xs font-bold text-white disabled:opacity-50">{saving && <Loader2 className="h-4 w-4 animate-spin" />}{saving ? 'Saving…' : 'Save Category'}</button>
         </div>
       </form>
     </div>

@@ -199,7 +199,7 @@ export const AdminSettingsPageClient: React.FC = () => {
           className="px-8 py-3.5 rounded-2xl bg-[#1A1A1A] hover:bg-[#333333] text-white font-heading font-extrabold text-xs shadow-md flex items-center gap-2 disabled:opacity-50"
         >
           <Save className="w-4 h-4 text-[#C48B80]" />
-          <span>{saving ? 'Savingâ€¦' : 'Save Store Settings'}</span>
+          <span>{saving ? 'Saving…' : 'Save Store Settings'}</span>
         </button>
       </form>
     </div>

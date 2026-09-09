@@ -7,7 +7,7 @@ import { useStore } from '../../context/StoreContext';
 import { useAuth } from '../../context/AuthContext';
 
 /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-   ALVORA â€” Footer
+   ALVORA — Footer
    Design reference: warm ivory/cream, logo top-left,
    multi-column links, newsletter, social icons, clean bottom bar.
    â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
@@ -59,7 +59,7 @@ export const Footer: React.FC = () => {
       <div className="alvora-container py-14 md:py-16">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr_1.5fr] lg:gap-8">
 
-          {/* Col 1 â€” Brand */}
+          {/* Col 1 — Brand */}
           <div className="flex flex-col gap-5">
             <Logo size="md" />
             <p className="text-[15px] lg:text-base text-[#4D3D2D]/80 leading-relaxed max-w-xs">
@@ -118,7 +118,7 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Col 2 â€” Shop */}
+          {/* Col 2 — Shop */}
           <div>
             <h4 className="text-[13px] lg:text-[14px] font-bold tracking-wider uppercase text-[#1A1A1A] mb-6">
               SHOP
@@ -137,7 +137,7 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Col 3 â€” About */}
+          {/* Col 3 — About */}
           <div>
             <h4 className="text-[13px] lg:text-[14px] font-bold tracking-wider uppercase text-[#1A1A1A] mb-6">
               ABOUT
@@ -156,7 +156,7 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Col 4 â€” Help */}
+          {/* Col 4 — Help */}
           <div>
             <h4 className="text-[13px] lg:text-[14px] font-bold tracking-wider uppercase text-[#1A1A1A] mb-6">
               HELP
@@ -175,7 +175,7 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Col 5 â€” Newsletter */}
+          {/* Col 5 — Newsletter */}
           <div>
             <h4 className="text-[13px] lg:text-[14px] font-bold tracking-wider uppercase text-[#1A1A1A] mb-6">
               STAY IN THE GLOW

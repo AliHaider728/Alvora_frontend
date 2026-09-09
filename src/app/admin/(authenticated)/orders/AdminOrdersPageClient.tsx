@@ -101,7 +101,7 @@ export const AdminOrdersPageClient: React.FC = () => {
     const accepted = await confirm({
       title: isDelivered ? 'Mark this order as delivered?' : isCancelled ? 'Cancel this order?' : `Mark this order as ${newStatus.toLowerCase()}?`,
       description: isDelivered
-        ? `Order ${order.id} for ${order.customerName} (${order.email}) is currently ${order.status}. The customerâ€™s delivery email will be sent if it has not already been sent.`
+        ? `Order ${order.id} for ${order.customerName} (${order.email}) is currently ${order.status}. The customer's delivery email will be sent if it has not already been sent.`
         : isCancelled ? 'The order status will change to Cancelled. Tracked product and variant stock will be restored where applicable.'
         : `Order ${order.id} will move from ${order.status} to ${newStatus}.`,
       cancelLabel: isDelivered ? 'Not Yet' : isCancelled ? 'Keep Order' : 'Keep Current Status',
