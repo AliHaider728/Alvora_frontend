@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect, useRef } from "react";
 import { Play, Pause, User } from "lucide-react";
@@ -39,17 +39,36 @@ export const AudioReviews: React.FC = () => {
     }
   };
 
+  const formatDuration = (val: any) => {
+    if (!val) return '0:15';
+    const str = String(val);
+    if (str.includes(':')) return str;
+    const sec = parseInt(str, 10);
+    if (!isNaN(sec)) {
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      return `${m}:${s.toString().padStart(2, '0')}`;
+    }
+    return '0:15';
+  };
+
   if (loading || reviews.length === 0) return null;
 
-  // Duplicate reviews enough times to ensure the container height is exceeded 
-  // for a smooth infinite scroll (at least 20 items per column)
-  const baseRepeated = Array(15).fill(reviews).flat();
+  // Ensure enough items to fill the 380px container (approx 10 items minimum)
+  const minItemsToFill = 10;
+  const repeatCount = Math.ceil(minItemsToFill / Math.max(reviews.length, 1));
+  const baseBlock = Array(repeatCount).fill(reviews).flat();
+
+  // Create perfectly duplicate blocks for seamless loops
+  const getColumnItems = (offset: number) => {
+    const rotated = [...baseBlock.slice(offset), ...baseBlock.slice(0, offset)];
+    return [...rotated, ...rotated]; // Exactly duplicated once
+  };
   
-  // Prepare 4 columns with slight variations in order
-  const col1 = [...baseRepeated];
-  const col2 = [...baseRepeated].reverse();
-  const col3 = [...baseRepeated.slice(2), ...baseRepeated.slice(0, 2)];
-  const col4 = [...baseRepeated].reverse().slice(1).concat([...baseRepeated].reverse().slice(0, 1));
+  const col1 = getColumnItems(0);
+  const col2 = getColumnItems(1).reverse(); // Reverse for visual variety, but since it's exactly duplicated, loop holds
+  const col3 = getColumnItems(2);
+  const col4 = getColumnItems(3).reverse();
 
   const PlayerPill = ({ r, isPlaying, uniqueKey }: { r: AudioReview, isPlaying: boolean, uniqueKey: string }) => (
     <div key={uniqueKey} className="player-pill flex items-center gap-3 bg-[#1e272e] rounded-full p-2 pr-4 w-full shadow-sm flex-shrink-0 cursor-pointer hover:bg-[#2c3e50] transition-colors" onClick={() => togglePlay(r.audioUrl, r.id)}>
@@ -75,7 +94,7 @@ export const AudioReviews: React.FC = () => {
           })}
         </div>
         <span className="text-[10px] text-gray-400 font-medium truncate pr-2">
-          {r.duration || '0:15'}
+          {formatDuration(r.duration)}
         </span>
       </div>
       <button className="w-7 h-7 rounded-full bg-[#0ea5e9] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">
@@ -87,19 +106,21 @@ export const AudioReviews: React.FC = () => {
   return (
     <section className="py-12 bg-[#FAF6F2] overflow-hidden">
       <style dangerouslySetInnerHTML={{__html: `
+        /* The exact math for a seamless loop on a flex column with gap-6 (24px).
+           We translate by exactly half the container height minus half the gap (12px). */
         @keyframes scroll-down {
-          0% { transform: translateY(-50%); }
+          0% { transform: translateY(calc(-50% - 12px)); }
           100% { transform: translateY(0); }
         }
         @keyframes scroll-up {
           0% { transform: translateY(0); }
-          100% { transform: translateY(-50%); }
+          100% { transform: translateY(calc(-50% - 12px)); }
         }
         .animate-scroll-down {
-          animation: scroll-down 15s linear infinite;
+          animation: scroll-down 20s linear infinite;
         }
         .animate-scroll-up {
-          animation: scroll-up 15s linear infinite;
+          animation: scroll-up 20s linear infinite;
         }
         .group:has(.player-pill:hover) .animate-scroll-down,
         .group:has(.player-pill:hover) .animate-scroll-up {
