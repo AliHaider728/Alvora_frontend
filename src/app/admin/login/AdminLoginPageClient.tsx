@@ -49,11 +49,11 @@ export const AdminLoginPageClient: React.FC = () => {
           src="/images/admin/login-bg.png" 
           alt="Alvora Skincare Admin"
           fill
-          className="object-cover"
+          className="object-cover object-[15%_100%] lg:object-[20%_100%]"
           priority
         />
         
-        <div className="relative z-10 w-full max-w-lg flex flex-col h-full justify-between pt-6">
+        <div className="relative z-10 w-full max-w-lg flex flex-col h-full justify-between pt-2 lg:pt-4">
           <div>
             {/* Eyebrow */}
             <div className="flex items-center gap-3 mb-8">
@@ -64,13 +64,13 @@ export const AdminLoginPageClient: React.FC = () => {
             </div>
 
             {/* Main Headline */}
-            <h1 className="font-display text-[3.5rem] lg:text-[4.5rem] leading-[1.05] mb-6 text-[#1A1A1A]">
+            <h1 className="font-display text-[3rem] lg:text-[3.5rem] leading-[1.05] mb-6 text-[#1A1A1A]">
               Pure Ingredients.<br/>
               <span className="text-[#A86249]">Visible Results.</span>
             </h1>
 
             {/* Paragraph */}
-            <p className="text-[#4A403A] text-[15px] font-medium leading-relaxed max-w-[340px] mb-12">
+            <p className="text-[#4A403A] text-[15px] font-medium leading-relaxed max-w-[300px] mb-8">
               Manage your Alvora storefront, orders, and products through our secure admin dashboard.
             </p>
 
