@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React from "react";
 import Link from "next/link";
@@ -13,7 +13,7 @@ export const HeroSection: React.FC = () => {
         We add padding-top to ensure the content starts safely below the header,
         but the background itself starts from the very top of the page.
       */}
-      <div className="mx-auto flex min-h-screen max-w-375 flex-col justify-center px-5 pt-24 sm:px-8 lg:px-12">
+      <div className="mx-auto flex min-h-screen max-w-375 flex-col justify-center px-5 pt-36 lg:pt-40 sm:px-8 lg:px-12">
         <div className="max-w-xl pb-16">
           {/* Eyebrow */}
           <motion.div 
@@ -24,7 +24,7 @@ export const HeroSection: React.FC = () => {
           >
             <div className="h-px w-12 bg-[#8C7B74]" />
             <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#8C7B74]">
-              PURE � NATURAL � EFFECTIVE
+              PURE ï¿½ NATURAL ï¿½ EFFECTIVE
             </span>
           </motion.div>
 
@@ -47,7 +47,7 @@ export const HeroSection: React.FC = () => {
             className="mb-10 max-w-sm text-sm leading-relaxed text-[#5C4F4A] md:text-base"
           >
             Thoughtfully crafted skincare with nature's<br />
-            finest ingredients � for a calmer, clearer,<br />
+            finest ingredients ï¿½ for a calmer, clearer,<br />
             more radiant you.
           </motion.p>
 
