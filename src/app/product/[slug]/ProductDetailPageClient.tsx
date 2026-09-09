@@ -394,7 +394,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
   if (productsLoading && !product) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center p-6">
-        <Loader2 className="h-10 w-10 animate-spin text-[#C48B80]" />
+        <Loader2 className="h-10 w-10 animate-spin text-[#9C4122]" />
       </div>
     );
   }
@@ -404,7 +404,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">
         <h2 className="font-display font-black text-2xl text-[#1A1A1A]/90 mb-2">Product Not Found</h2>
         <p className="text-sm text-[#1A1A1A]/50 mb-6">The product you are looking for might have been discontinued or moved.</p>
-        <Link href="/category/all" className="px-6 py-3 rounded-2xl bg-gradient-to-r from-[#C48B80] to-[#E2A08C] text-white font-display font-bold text-sm">
+        <Link href="/category/all" className="px-6 py-3 rounded-2xl bg-gradient-to-r from-[#9C4122] to-[#B34E28] text-white font-display font-bold text-sm">
           Explore All Products
         </Link>
       </div>
@@ -654,7 +654,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
               />
               <span className="pointer-events-none absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-slate-950/70 px-3 py-1.5 text-[10px] font-bold text-white opacity-0 backdrop-blur transition-opacity group-hover/gallery:opacity-100"><ZoomIn className="h-3.5 w-3.5" /> Click to enlarge</span>
               {(product.discountPercent ?? 0) > 0 && (
-                <span className="absolute top-4 left-4 z-10 bg-gradient-to-r from-[#C48B80] to-[#E2A08C] text-white font-display font-extrabold text-xs px-3 py-1.5 rounded-full shadow-md">
+                <span className="absolute top-4 left-4 z-10 bg-gradient-to-r from-[#9C4122] to-[#B34E28] text-white font-display font-extrabold text-xs px-3 py-1.5 rounded-full shadow-md">
                   -{product.discountPercent}% OFF
                 </span>
               )}
@@ -674,7 +674,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                     aria-label={`Show ${product.name} image ${idx + 1}`}
                     aria-current={!overrideImage && activeImageIndex === idx ? 'true' : undefined}
                     className={`relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 p-0.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C48B80] focus-visible:ring-offset-2 sm:h-20 sm:w-20 ${
-                      (!overrideImage && activeImageIndex === idx) ? 'border-[#C48B80] bg-[#F1C9BD] shadow-sm' : 'border-[#EDE5DC] bg-white opacity-75 hover:opacity-100'
+                      (!overrideImage && activeImageIndex === idx) ? 'border-[#9C4122] bg-[#F1C9BD] shadow-sm' : 'border-[#EDE5DC] bg-white opacity-75 hover:opacity-100'
                     }`}
                   >
                     <Image src={getSafeImageSrc(img)} alt={`${product.name} thumbnail ${idx + 1}`} fill sizes="80px" className="object-contain" />
@@ -690,7 +690,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
               {/* Category & Brand Header */}
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#C48B80] bg-[#F1C9BD] px-3 py-1 rounded-full">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#9C4122] bg-[#F1C9BD] px-3 py-1 rounded-full">
                     {product.brand}
                   </span>
                   {(product.soldCount ?? 0) >= 50 && (
@@ -720,7 +720,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                       {formatPrice(displayPrice, settings.currency)}
                     </span>
                     {(product.originalPrice ?? 0) > 0 && (
-                      <div className="text-xl font-bold text-[#C48B80] line-through md:text-2xl">
+                      <div className="text-xl font-bold text-[#9C4122] line-through md:text-2xl">
                         {formatPrice(currentOriginalPrice ?? product.originalPrice!, settings.currency)}
                       </div>
                     )}
@@ -762,7 +762,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                     <span className={`w-2 h-2 rounded-full ${
                       ((isVariable ? (product.attributes?.length || 0) > 0 : variantGroups.length > 0) && !allVariantsSelected)
                         ? 'bg-amber-500'
-                        : effectiveAvailable ? 'bg-emerald-500' : 'bg-[#C48B80]'
+                        : effectiveAvailable ? 'bg-emerald-500' : 'bg-[#9C4122]'
                     }`} />
                     {((isVariable ? (product.attributes?.length || 0) > 0 : variantGroups.length > 0) && !allVariantsSelected)
                       ? 'Select options to check stock'
@@ -859,7 +859,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                                   value={t.value}
                                   checked={selectedAttributes[attr.slug] === t.value}
                                   onChange={() => handleAttributeSelect(attr.slug, t.value)}
-                                  className="text-[#C48B80] focus:ring-rose-500"
+                                  className="text-[#9C4122] focus:ring-rose-500"
                                 />
                                 <span className="text-sm font-medium text-[#1A1A1A]/80">{t.label}</span>
                               </label>
@@ -919,7 +919,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                                     !isOptionInStock
                                       ? 'border-[#EDE5DC] opacity-50 cursor-not-allowed'
                                       : isSelected
-                                      ? 'border-[#C48B80] shadow-md ring-2 ring-rose-200 ring-offset-1'
+                                      ? 'border-[#9C4122] shadow-md ring-2 ring-rose-200 ring-offset-1'
                                       : 'border-[#EDE5DC] hover:border-slate-300'
                                   }`}
                                 >
@@ -993,7 +993,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                                 !isOptionInStock
                                   ? 'bg-[#F5EDE4] text-[#1A1A1A]/40 cursor-not-allowed opacity-60 line-through'
                                   : isSelected
-                                  ? 'bg-gradient-to-r from-[#C48B80] to-[#E2A08C] text-white ring-2 ring-rose-200 shadow-sm'
+                                  ? 'bg-gradient-to-r from-[#9C4122] to-[#B34E28] text-white ring-2 ring-rose-200 shadow-sm'
                                   : 'bg-[#F5EDE4] text-[#1A1A1A]/80 hover:bg-[#EDE5DC]'
                               }`}
                             >
@@ -1135,7 +1135,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                   aria-selected={activeTab === 'desc'}
                   aria-controls="product-panel-desc"
                   className={`pb-3 font-display font-bold text-xs sm:text-sm uppercase tracking-wider border-b-2 transition-colors ${
-                    activeTab === 'desc' ? 'border-[#C48B80] text-[#C48B80]' : 'border-transparent text-[#1A1A1A]/50 hover:text-[#1A1A1A]/90'
+                    activeTab === 'desc' ? 'border-[#9C4122] text-[#9C4122]' : 'border-transparent text-[#1A1A1A]/50 hover:text-[#1A1A1A]/90'
                   }`}
                 >
                   Description & Features
@@ -1148,7 +1148,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                   aria-selected={activeTab === 'specs'}
                   aria-controls="product-panel-specs"
                   className={`pb-3 font-display font-bold text-xs sm:text-sm uppercase tracking-wider border-b-2 transition-colors ${
-                    activeTab === 'specs' ? 'border-[#C48B80] text-[#C48B80]' : 'border-transparent text-[#1A1A1A]/50 hover:text-[#1A1A1A]/90'
+                    activeTab === 'specs' ? 'border-[#9C4122] text-[#9C4122]' : 'border-transparent text-[#1A1A1A]/50 hover:text-[#1A1A1A]/90'
                   }`}
                 >Ingredients</button>
               )}
@@ -1159,7 +1159,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                   aria-selected={activeTab === 'safety'}
                   aria-controls="product-panel-safety"
                   className={`pb-3 font-display font-bold text-xs sm:text-sm uppercase tracking-wider border-b-2 transition-colors ${
-                    activeTab === 'safety' ? 'border-[#C48B80] text-[#C48B80]' : 'border-transparent text-[#1A1A1A]/50 hover:text-[#1A1A1A]/90'
+                    activeTab === 'safety' ? 'border-[#9C4122] text-[#9C4122]' : 'border-transparent text-[#1A1A1A]/50 hover:text-[#1A1A1A]/90'
                   }`}
                 >
                   Safety & Material Info
@@ -1172,7 +1172,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                   aria-selected={activeTab === 'reviews'}
                   aria-controls="product-panel-reviews"
                   className={`pb-3 font-display font-bold text-xs sm:text-sm uppercase tracking-wider border-b-2 transition-colors ${
-                    activeTab === 'reviews' ? 'border-[#C48B80] text-[#C48B80]' : 'border-transparent text-[#1A1A1A]/50 hover:text-[#1A1A1A]/90'
+                    activeTab === 'reviews' ? 'border-[#9C4122] text-[#9C4122]' : 'border-transparent text-[#1A1A1A]/50 hover:text-[#1A1A1A]/90'
                   }`}
                 >
                   Customer Reviews ({approvedReviews.length})
@@ -1426,7 +1426,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-[#C48B80] to-[#E2A08C] text-white font-display font-bold text-xs hover:bg-black shadow-md"
+                  className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-[#9C4122] to-[#B34E28] text-white font-display font-bold text-xs hover:bg-black shadow-md"
                 >
                   Submit Review
                 </button>
@@ -1480,6 +1480,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
     </div>
   );
 };
+
 
 
 

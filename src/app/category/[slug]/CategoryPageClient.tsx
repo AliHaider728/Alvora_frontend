@@ -226,12 +226,12 @@ export const CategoryPageClient: React.FC = () => {
           <aside className="hidden lg:block space-y-6 bg-white p-6 rounded-sm border border-[#E7D9D0] shadow-sm h-fit sticky top-24">
             <div className="flex items-center justify-between pb-4 border-b border-[#EDE5DC]">
               <div className="flex items-center gap-2 font-display font-extrabold text-[#1A1A1A] text-base">
-                <Filter className="w-5 h-5 text-rose-500" />
+                <Filter className="w-5 h-5 text-[#9C4122]" />
                 <span>Filter Products</span>
               </div>
               <button
                 onClick={resetFilters}
-                className="text-xs font-bold text-rose-500 hover:text-rose-600 flex items-center gap-1"
+                className="text-xs font-bold text-[#9C4122] hover:text-[#7A321A] flex items-center gap-1"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 Reset
@@ -249,7 +249,7 @@ export const CategoryPageClient: React.FC = () => {
                   aria-pressed={selectedCategories.length === 0}
                   className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold transition-colors ${
                     selectedCategories.length === 0
-                      ? 'bg-gradient-to-r from-[#C48B80] to-[#E2A08C] text-white'
+                      ? 'bg-gradient-to-r from-[#9C4122] to-[#B34E28] text-white'
                       : 'text-[#241916]/80 hover:bg-[#F5EDE4]'
                   }`}
                 >
@@ -262,7 +262,7 @@ export const CategoryPageClient: React.FC = () => {
                     aria-pressed={selectedCategories.includes(cat.slug)}
                     className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold transition-colors flex items-center justify-between ${
                       selectedCategories.includes(cat.slug)
-                        ? 'bg-gradient-to-r from-[#C48B80] to-[#E2A08C] text-white font-bold'
+                        ? 'bg-gradient-to-r from-[#9C4122] to-[#B34E28] text-white font-bold'
                         : 'text-[#241916]/80 hover:bg-[#F5EDE4]'
                     }`}
                   >
@@ -284,7 +284,7 @@ export const CategoryPageClient: React.FC = () => {
                   aria-pressed={selectedAges.length === 0}
                   className={`px-2.5 py-2 rounded-xl text-xs font-bold text-center transition-colors ${
                     selectedAges.length === 0
-                      ? 'bg-gradient-to-r from-[#C48B80] to-[#E2A08C] text-white'
+                      ? 'bg-gradient-to-r from-[#9C4122] to-[#B34E28] text-white'
                       : 'bg-[#F5EDE4] text-[#241916]/80 hover:bg-slate-200'
                   }`}
                 >
@@ -297,7 +297,7 @@ export const CategoryPageClient: React.FC = () => {
                     aria-pressed={selectedAges.includes(age.id)}
                     className={`px-2.5 py-2 rounded-xl text-xs font-bold text-center transition-colors ${
                       selectedAges.includes(age.id)
-                        ? 'bg-gradient-to-r from-[#C48B80] to-[#E2A08C] text-white'
+                        ? 'bg-gradient-to-r from-[#9C4122] to-[#B34E28] text-white'
                         : 'bg-[#F5EDE4] text-[#241916]/80 hover:bg-slate-200'
                     }`}
                   >
@@ -361,7 +361,7 @@ export const CategoryPageClient: React.FC = () => {
             <div className="bg-white p-4 rounded-sm border border-[#EDE5DC] shadow-sm flex flex-wrap items-center justify-between gap-4">
               <button
                 onClick={() => setMobileFilterOpen(true)}
-                className="lg:hidden flex items-center gap-2 px-4 py-2 rounded-2xl bg-gradient-to-r from-[#C48B80] to-[#E2A08C] text-white font-display font-medium text-2xl uppercase tracking-widest text-xs"
+                className="lg:hidden flex items-center gap-2 px-4 py-2 rounded-2xl bg-gradient-to-r from-[#9C4122] to-[#B34E28] text-white font-display font-medium text-2xl uppercase tracking-widest text-xs"
               >
                 <SlidersHorizontal className="w-4 h-4" />
                 <span>Filter & Refine</span>
@@ -397,7 +397,7 @@ export const CategoryPageClient: React.FC = () => {
               </div>
             ) : sortedProducts.length === 0 ? (
               <div className="bg-white rounded-sm p-12 text-center border border-[#EDE5DC] space-y-4">
-                <div className="w-16 h-16 rounded-full bg-[#FAF6F2] text-[#C48B80] flex items-center justify-center mx-auto">
+                <div className="w-16 h-16 rounded-full bg-[#FAF6F2] text-[#9C4122] flex items-center justify-center mx-auto">
                   <Filter className="w-8 h-8" />
                 </div>
                 <h3 className="font-display font-medium text-2xl uppercase tracking-widest text-lg text-[#1A1A1A]">No Products Found</h3>
@@ -406,7 +406,7 @@ export const CategoryPageClient: React.FC = () => {
                 </p>
                 <button
                   onClick={resetFilters}
-                  className="px-6 py-2.5 rounded-2xl bg-gradient-to-r from-[#C48B80] to-[#E2A08C] text-white font-display font-medium text-2xl uppercase tracking-widest text-xs hover:bg-[#A86249] transition-colors"
+                  className="px-6 py-2.5 rounded-2xl bg-gradient-to-r from-[#9C4122] to-[#B34E28] text-white font-display font-medium text-2xl uppercase tracking-widest text-xs hover:bg-[#A86249] transition-colors"
                 >
                   Clear All Filters
                 </button>
@@ -448,7 +448,7 @@ export const CategoryPageClient: React.FC = () => {
                   <button
                     onClick={selectAllCategories}
                     aria-pressed={selectedCategories.length === 0}
-                    className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold ${selectedCategories.length === 0 ? 'bg-gradient-to-r from-[#C48B80] to-[#E2A08C] text-white' : 'text-[#241916]/80'}`}
+                    className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold ${selectedCategories.length === 0 ? 'bg-gradient-to-r from-[#9C4122] to-[#B34E28] text-white' : 'text-[#241916]/80'}`}
                   >
                     All Categories
                   </button>
@@ -457,7 +457,7 @@ export const CategoryPageClient: React.FC = () => {
                       key={cat.id}
                       onClick={() => toggleCategory(cat.slug)}
                       aria-pressed={selectedCategories.includes(cat.slug)}
-                      className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold ${selectedCategories.includes(cat.slug) ? 'bg-gradient-to-r from-[#C48B80] to-[#E2A08C] text-white font-bold' : 'text-[#241916]/80'}`}
+                      className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold ${selectedCategories.includes(cat.slug) ? 'bg-gradient-to-r from-[#9C4122] to-[#B34E28] text-white font-bold' : 'text-[#241916]/80'}`}
                     >
                       {cat.name}
                     </button>
@@ -472,7 +472,7 @@ export const CategoryPageClient: React.FC = () => {
                   <button
                     onClick={selectAllAges}
                     aria-pressed={selectedAges.length === 0}
-                    className={`px-2 py-2 rounded-xl text-xs font-bold ${selectedAges.length === 0 ? 'bg-gradient-to-r from-[#C48B80] to-[#E2A08C] text-white' : 'bg-[#F5EDE4]'}`}
+                    className={`px-2 py-2 rounded-xl text-xs font-bold ${selectedAges.length === 0 ? 'bg-gradient-to-r from-[#9C4122] to-[#B34E28] text-white' : 'bg-[#F5EDE4]'}`}
                   >
                     All Ages
                   </button>
@@ -481,7 +481,7 @@ export const CategoryPageClient: React.FC = () => {
                       key={age.id}
                       onClick={() => toggleAge(age.id)}
                       aria-pressed={selectedAges.includes(age.id)}
-                      className={`px-2 py-2 rounded-xl text-xs font-bold ${selectedAges.includes(age.id) ? 'bg-gradient-to-r from-[#C48B80] to-[#E2A08C] text-white' : 'bg-[#F5EDE4]'}`}
+                      className={`px-2 py-2 rounded-xl text-xs font-bold ${selectedAges.includes(age.id) ? 'bg-gradient-to-r from-[#9C4122] to-[#B34E28] text-white' : 'bg-[#F5EDE4]'}`}
                     >
                       {age.label}
                     </button>
@@ -510,6 +510,7 @@ export const CategoryPageClient: React.FC = () => {
     </div>
   );
 };
+
 
 
 

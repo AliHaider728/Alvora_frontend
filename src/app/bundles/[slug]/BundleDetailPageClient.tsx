@@ -107,7 +107,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
                 <button 
                   key={idx}
                   onClick={() => setActiveImage(img)}
-                  className={`relative w-16 h-16 shrink-0 rounded-xl overflow-hidden border-2 transition-all ${activeImage === img ? 'border-[#C48B80]' : 'border-transparent opacity-70 hover:opacity-100'}`}
+                  className={`relative w-16 h-16 shrink-0 rounded-xl overflow-hidden border-2 transition-all ${activeImage === img ? 'border-[#9C4122]' : 'border-transparent opacity-70 hover:opacity-100'}`}
                 >
                   <Image src={img} alt="Thumbnail" fill className="object-cover" />
                 </button>
@@ -125,7 +125,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
                   initial={{ opacity: 0, scale: 0.5 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.3, type: "spring" }}
-                  className="absolute top-6 left-6 bg-gradient-to-r from-[#C48B80] to-[#E2A08C] text-white text-[11px] font-bold px-4 py-2 uppercase tracking-widest rounded-full shadow-lg"
+                  className="absolute top-6 left-6 bg-gradient-to-r from-[#9C4122] to-[#B34E28] text-white text-[11px] font-bold px-4 py-2 uppercase tracking-widest rounded-full shadow-lg"
                 >
                   Save {bundle.discountPercent}%
                 </motion.div>
@@ -136,7 +136,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
           {/* Info */}
           <div className="flex flex-col justify-center space-y-6">
             <motion.div initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.1 } } }}>
-              <motion.span variants={staggerVariants} className="text-xs tracking-[0.25em] uppercase text-[#C87355] font-bold block mb-2">
+              <motion.span variants={staggerVariants} className="text-xs tracking-[0.25em] uppercase text-[#9C4122] font-bold block mb-2">
                 Curated Bundle
               </motion.span>
               <motion.h1 variants={staggerVariants} className="font-display text-4xl lg:text-5xl text-[#1A1A1A] font-medium leading-tight mb-4">
@@ -150,7 +150,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
               </motion.p>
               
               <motion.div variants={staggerVariants} className="flex items-center gap-4 mb-8">
-                <span className="text-3xl font-medium text-[#C48B80]">{formatPrice(bundle.currentPrice || 0)}</span>
+                <span className="text-3xl font-medium text-[#9C4122]">{formatPrice(bundle.currentPrice || 0)}</span>
                 {(bundle.originalTotalPrice || 0) > (bundle.currentPrice || 0) && (
                   <span className="text-xl text-[#1A1A1A]/40 line-through">{formatPrice(bundle.originalTotalPrice || 0)}</span>
                 )}
@@ -198,7 +198,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
                   <span>Bundle Price:</span>
                   <span>{formatPrice(bundle.currentPrice || 0)}</span>
                 </div>
-                <div className="flex justify-between text-[#C48B80] font-bold bg-[#FAF6F2] p-3 rounded-xl mt-4">
+                <div className="flex justify-between text-[#9C4122] font-bold bg-[#FAF6F2] p-3 rounded-xl mt-4">
                   <span>You Save:</span>
                   <span>{formatPrice((bundle.originalTotalPrice || 0) - (bundle.currentPrice || 0))}</span>
                 </div>
@@ -224,7 +224,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
                   <div className="flex flex-col justify-center">
                     <span className="text-[10px] uppercase tracking-widest text-[#1A1A1A]/50 font-bold mb-1">Full Size</span>
                     <h4 className="font-display text-lg text-[#1A1A1A] mb-1">{prod.name}</h4>
-                    <span className="text-sm font-medium text-[#C48B80]">{formatPrice(prod.price)}</span>
+                    <span className="text-sm font-medium text-[#9C4122]">{formatPrice(prod.price)}</span>
                   </div>
                 </motion.div>
               ))}
@@ -251,7 +251,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
               >
-                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#C48B80] to-[#E2A08C] text-white flex items-center justify-center font-display text-xl mb-6 shadow-md z-10">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#9C4122] to-[#B34E28] text-white flex items-center justify-center font-display text-xl mb-6 shadow-md z-10">
                   {idx + 1}
                 </div>
                 {idx !== bundle.products.length - 1 && (
@@ -368,7 +368,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
               </div>
               <div className="flex gap-4 pt-4">
                 <button type="button" onClick={() => setReviewModalOpen(false)} className="flex-1 py-4 rounded-full bg-[#FAF6F2] text-[#1A1A1A] font-bold text-xs uppercase tracking-widest hover:bg-gray-200 transition-colors">Cancel</button>
-                <button type="submit" className="flex-1 py-4 rounded-full bg-gradient-to-r from-[#C48B80] to-[#E2A08C] text-white font-bold text-xs uppercase tracking-widest hover:bg-black transition-colors">Submit</button>
+                <button type="submit" className="flex-1 py-4 rounded-full bg-gradient-to-r from-[#9C4122] to-[#B34E28] text-white font-bold text-xs uppercase tracking-widest hover:bg-black transition-colors">Submit</button>
               </div>
             </form>
           </div>
@@ -377,4 +377,5 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
     </div>
   );
 }
+
 

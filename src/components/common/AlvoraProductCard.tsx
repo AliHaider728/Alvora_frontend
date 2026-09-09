@@ -34,7 +34,7 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
         {/* Badges */}
         <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
           {product.isBestseller && (
-            <span className="bg-gradient-to-r from-[#C87355] to-[#E2A08C] text-white text-[9px] font-bold tracking-widest uppercase px-2 py-1 rounded-xl shadow-sm">
+            <span className="bg-[#9C4122] text-white text-[9px] font-bold tracking-widest uppercase px-2 py-1 rounded-xl shadow-sm">
               BESTSELLER
             </span>
           )}
@@ -47,7 +47,7 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
 
         {/* Top Right Action - Wishlist */}
         <button 
-          className={`absolute top-3 right-3 z-10 transition-colors drop-shadow-md ${isInWishlist(product.id) ? 'text-rose-500' : 'text-white hover:text-rose-500'}`}
+          className={`absolute top-3 right-3 z-10 transition-colors drop-shadow-md ${isInWishlist(product.id) ? 'text-[#9C4122]' : 'text-white hover:text-[#9C4122]'}`}
           aria-label="Add to Wishlist"
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleWishlist(product.id); }}
         >
@@ -56,10 +56,10 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
 
         {/* Bottom Right Actions - Quick View & Compare */}
         <div className="absolute bottom-3 right-3 flex items-center gap-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-2 group-hover:translate-y-0">
-          <button className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-gray-700 hover:text-[#C48B80] shadow-sm" title="Quick View" onClick={(e) => e.preventDefault()}>
+          <button className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-gray-700 hover:text-[#9C4122] shadow-sm" title="Quick View" onClick={(e) => e.preventDefault()}>
             <Eye className="w-4 h-4" />
           </button>
-          <button className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-gray-700 hover:text-[#C48B80] shadow-sm" title="Compare" onClick={(e) => e.preventDefault()}>
+          <button className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-gray-700 hover:text-[#9C4122] shadow-sm" title="Compare" onClick={(e) => e.preventDefault()}>
             <ArrowLeftRight className="w-4 h-4" />
           </button>
         </div>
@@ -68,12 +68,12 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
       {/* Content Container */}
       <div className="p-4 flex flex-col flex-grow text-left">
         <Link href={`/product/${product.slug}`} className="flex flex-col flex-grow">
-          <h3 className="font-display font-medium text-[15px] sm:text-base text-[#1A1A1A] leading-tight mb-1 group-hover:text-[#C48B80] transition-colors">
+          <h3 className="font-display font-medium text-[15px] sm:text-base text-[#1A1A1A] leading-tight mb-1 group-hover:text-[#9C4122] transition-colors">
             {product.name}
           </h3>
           
           <div className="flex items-center gap-1.5 mb-2">
-            <div className="flex text-[#C48B80]">
+            <div className="flex text-[#9C4122]">
               {[...Array(5)].map((_, i) => (
                 <svg key={i} className="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -84,7 +84,7 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
           </div>
 
           <div className="flex items-baseline gap-2 mb-4">
-            <span className="text-[#C87355] font-bold text-[15px] sm:text-base">
+            <span className="text-[#9C4122] font-bold text-[15px] sm:text-base">
               {formatPrice(product.price, settings?.currency || 'Rs.')}
             </span>
             {product.originalPrice && product.originalPrice > product.price && (
@@ -99,14 +99,14 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
           {needsSelection ? (
               <Link
                 href={`/product/${product.slug}`}
-                className="flex-1 bg-gradient-to-r from-[#C87355] to-[#E2A08C] hover:from-[#A86249] hover:to-[#C87355] text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase py-3 px-2 rounded-xl transition-colors flex items-center justify-center shadow-sm text-center"
+                className="flex-1 bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#7A321A] hover:to-[#9C4122] text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase py-3 px-2 rounded-xl transition-colors flex items-center justify-center shadow-sm text-center"
               >
                 SELECT OPTIONS
               </Link>
             ) : product.inStock ? (
               <Link
                 href={`/product/${product.slug}`}
-                className="flex-1 bg-gradient-to-r from-[#C87355] to-[#E2A08C] hover:from-[#A86249] hover:to-[#C87355] text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase py-3 px-2 rounded-xl transition-colors flex items-center justify-center shadow-sm text-center"
+                className="flex-1 bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#7A321A] hover:to-[#9C4122] text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase py-3 px-2 rounded-xl transition-colors flex items-center justify-center shadow-sm text-center"
               >
                 VIEW DETAIL
               </Link>
@@ -120,7 +120,7 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
             )}
           <button 
             onClick={needsSelection ? undefined : handleAddToCart}
-            className="w-10 sm:w-12 flex items-center justify-center border border-[#EDE5DC] hover:border-[#C87355] bg-white text-gray-500 hover:text-[#C87355] rounded-xl transition-colors shadow-sm"
+            className="w-10 sm:w-12 flex items-center justify-center border border-[#EDE5DC] hover:border-[#9C4122] bg-white text-gray-500 hover:text-[#9C4122] rounded-xl transition-colors shadow-sm"
             aria-label="Quick Add"
           >
             <ShoppingCart className="w-4 h-4" />
@@ -130,6 +130,7 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
     </div>
   );
 };
+
 
 
 

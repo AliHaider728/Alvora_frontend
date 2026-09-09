@@ -54,7 +54,7 @@ export const BundleSection: React.FC = () => {
       <div className="bg-[#FAF6F2] py-12 md:py-16 border-t border-[#E7D9D0]">
         <div className="alvora-container">
           <div className="flex flex-col items-center justify-center text-center">
-            <span className="text-[10px] tracking-widest uppercase text-[#A86249] font-bold mb-4 block">
+            <span className="text-[10px] tracking-widest uppercase text-[#9C4122] font-bold mb-4 block">
               Curated For You
             </span>
             <h2 className="font-display text-4xl lg:text-5xl text-[#241916] font-medium leading-tight mb-6">
@@ -86,7 +86,7 @@ export const BundleSection: React.FC = () => {
                   className="object-cover"
                 />
               )}
-              <div className="absolute top-6 left-6 md:top-8 md:left-8 bg-gradient-to-tr from-[#C87355] to-[#E2A08C] text-white text-[10px] font-bold px-4 py-2 uppercase tracking-widest z-10 rounded-full shadow-sm">
+              <div className="absolute top-6 left-6 md:top-8 md:left-8 bg-[#9C4122] text-white text-[10px] font-bold px-4 py-2 uppercase tracking-widest z-10 rounded-full shadow-sm">
                 Save {bundle.discountPercent}%
               </div>
             </div>
@@ -101,7 +101,7 @@ export const BundleSection: React.FC = () => {
                 className="max-w-md w-full"
               >
                 <Link href={`/bundles/${bundle.slug}`}>
-                  <h2 className="font-display text-4xl md:text-5xl text-[#1A1A1A] mb-6 leading-[1.1] hover:text-[#A86249] transition-colors">
+                  <h2 className="font-display text-4xl md:text-5xl text-[#1A1A1A] mb-6 leading-[1.1] hover:text-[#9C4122] transition-colors">
                     {bundle.name}
                   </h2>
                 </Link>
@@ -115,7 +115,7 @@ export const BundleSection: React.FC = () => {
                   <ul className="space-y-2">
                     {bundle.products?.map(p => (
                       <li key={p.id} className="text-[#1A1A1A]/70 text-sm flex items-center">
-                        <span className="w-1 h-1 rounded-full bg-[#A86249] mr-3"></span>
+                        <span className="w-1 h-1 rounded-full bg-[#9C4122] mr-3"></span>
                         {p.name}
                       </li>
                     ))}
@@ -125,20 +125,20 @@ export const BundleSection: React.FC = () => {
                 {/* Price & CTA */}
                 <div className="flex flex-col gap-6">
                   <div className="flex items-end gap-3">
-                    <span className="text-2xl font-medium text-[#A86249]">{formatPrice(bundle.currentPrice || 0)}</span>
+                    <span className="text-2xl font-medium text-[#9C4122]">{formatPrice(bundle.currentPrice || 0)}</span>
                     <span className="text-base text-[#1A1A1A]/40 line-through pb-0.5">{formatPrice(bundle.originalTotalPrice || 0)}</span>
                   </div>
 
                   <div className="flex flex-col sm:flex-row gap-3">
                     <button 
                       onClick={() => handleAddBundle(bundle)}
-                      className="w-full sm:w-auto flex-1 px-8 py-4 bg-gradient-to-r from-[#C87355] to-[#E2A08C] hover:from-[#A86249] hover:to-[#C87355] text-white text-[11px] font-bold tracking-widest uppercase transition-colors rounded-full"
+                      className="w-full sm:w-auto flex-1 px-8 py-4 bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#7A321A] hover:to-[#9C4122] text-white text-[11px] font-bold tracking-widest uppercase transition-colors rounded-full"
                     >
                       Add to Cart
                     </button>
                     <Link 
                       href={`/bundles/${bundle.slug}`}
-                      className="w-full sm:w-auto flex-1 px-8 py-4 bg-transparent border border-[#A86249] text-[#A86249] hover:bg-[#A86249] hover:text-white flex items-center justify-center text-[11px] font-bold tracking-widest uppercase transition-colors rounded-full text-center"
+                      className="w-full sm:w-auto flex-1 px-8 py-4 bg-transparent border border-[#9C4122] text-[#9C4122] hover:bg-[#9C4122] hover:text-white flex items-center justify-center text-[11px] font-bold tracking-widest uppercase transition-colors rounded-full text-center"
                     >
                       View Details
                     </Link>
@@ -168,7 +168,7 @@ export const BundleSection: React.FC = () => {
             </div>
             <Link 
               href="/bundles/build"
-              className="flex-shrink-0 px-8 py-4 bg-gradient-to-r from-[#C87355] to-[#E2A08C] hover:from-[#A86249] hover:to-[#C87355] text-white text-[11px] font-bold tracking-widest uppercase transition-colors rounded-full"
+              className="flex-shrink-0 px-8 py-4 bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#7A321A] hover:to-[#9C4122] text-white text-[11px] font-bold tracking-widest uppercase transition-colors rounded-full"
             >
               Create Your Routine
             </Link>
@@ -178,4 +178,5 @@ export const BundleSection: React.FC = () => {
     </section>
   );
 };
+
 

@@ -82,7 +82,7 @@ export const CartDrawer: React.FC = () => {
           <div className="flex-1 overflow-y-auto p-5 space-y-4">
             {cart.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center p-6 text-[#1A1A1A]/40">
-                <div className="w-20 h-20 rounded-full bg-[#F5EDE4] flex items-center justify-center text-[#C48B80]/60 mb-4 animate-bounce">
+                <div className="w-20 h-20 rounded-full bg-[#F5EDE4] flex items-center justify-center text-[#9C4122]/60 mb-4 animate-bounce">
                   <ShoppingBag className="w-10 h-10" />
                 </div>
                 <h3 className="font-display font-bold text-lg text-[#1A1A1A]/80 mb-1">Your Basket is Empty</h3>
@@ -91,7 +91,7 @@ export const CartDrawer: React.FC = () => {
                 </p>
                 <button
                   onClick={() => setIsCartOpen(false)}
-                  className="px-6 py-3 rounded-full bg-gradient-to-r from-[#1A1A1A] to-[#333333] hover:from-[#C87355] hover:to-[#E2A08C] text-white tracking-widest font-display font-bold text-sm shadow-md transition-all"
+                  className="px-6 py-3 rounded-full bg-gradient-to-r from-[#1A1A1A] to-[#333333] hover:from-[#9C4122] hover:to-[#B34E28] text-white tracking-widest font-display font-bold text-sm shadow-md transition-all"
                 >
                   Start Shopping
                 </button>
@@ -143,13 +143,13 @@ export const CartDrawer: React.FC = () => {
                         <Link
                           href={item.product.productType === 'bundle' ? '#' : `/product/${item.product.slug}`}
                           onClick={() => setIsCartOpen(false)}
-                          className="font-display font-bold text-xs sm:text-sm text-[#1A1A1A]/90 hover:text-[#C48B80] line-clamp-1"
+                          className="font-display font-bold text-xs sm:text-sm text-[#1A1A1A]/90 hover:text-[#9C4122] line-clamp-1"
                         >
                           {item.product.name}
                         </Link>
                         <button
                           onClick={() => removeFromCart(item.product.id, item.selectedVariant, item.variationId)}
-                          className="text-[#1A1A1A]/40 hover:text-[#C48B80] transition-colors p-1"
+                          className="text-[#1A1A1A]/40 hover:text-[#9C4122] transition-colors p-1"
                           title="Remove"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -159,7 +159,7 @@ export const CartDrawer: React.FC = () => {
                       {item.product.productType === 'bundle' && item.product.bundleData?.products && (
                         <div className="mt-1 mb-1">
                           <details className="text-xs text-[#1A1A1A]/60">
-                            <summary className="cursor-pointer font-medium hover:text-[#C87355] transition-colors">Includes: {item.product.bundleData.products.length} items</summary>
+                            <summary className="cursor-pointer font-medium hover:text-[#9C4122] transition-colors">Includes: {item.product.bundleData.products.length} items</summary>
                             <ul className="mt-1.5 pl-3 list-disc space-y-0.5 border-l-2 border-[#EDE5DC] ml-1">
                               {item.product.bundleData.products.map((bp: any, idx: number) => (
                                 <li key={idx} className="pl-1">{bp.name} (x{bp.bundle_quantity || 1})</li>
@@ -169,7 +169,7 @@ export const CartDrawer: React.FC = () => {
                         </div>
                       )}
 
-                      {item.product.category && item.product.category !== "Uncategorized" && (<span className="text-[10px] text-[#C48B80] font-semibold uppercase block tracking-wider mt-0.5">{item.product.category}</span>)}
+                      {item.product.category && item.product.category !== "Uncategorized" && (<span className="text-[10px] text-[#9C4122] font-semibold uppercase block tracking-wider mt-0.5">{item.product.category}</span>)}
                       
                       {variation && (
                         <div className="mt-1 flex flex-wrap gap-1">
@@ -188,7 +188,7 @@ export const CartDrawer: React.FC = () => {
                       {!!(item.appliedOfferLabel || item.freeUnits) && (
                         <div className="mt-1 flex flex-col gap-1">
                           {item.appliedOfferLabel && (
-                            <span className="inline-flex w-fit items-center rounded bg-[#F5EDE4] px-1.5 py-0.5 text-[10px] font-bold text-[#C48B80]">
+                            <span className="inline-flex w-fit items-center rounded bg-[#F5EDE4] px-1.5 py-0.5 text-[10px] font-bold text-[#9C4122]">
                               <Tag className="mr-1 h-3 w-3" />
                               {item.appliedOfferLabel}
                             </span>
@@ -272,7 +272,7 @@ export const CartDrawer: React.FC = () => {
               )}
 
               {couponMsg && (
-                <p className={`text-[11px] ${couponMsg.success ? 'text-emerald-600' : 'text-[#C48B80]'}`}>
+                <p className={`text-[11px] ${couponMsg.success ? 'text-emerald-600' : 'text-[#9C4122]'}`}>
                   {couponMsg.message}
                 </p>
               )}
@@ -299,7 +299,7 @@ export const CartDrawer: React.FC = () => {
 
               <div className="flex justify-between items-baseline pt-2 border-t border-[#EDE5DC] text-[#1A1A1A] font-display font-extrabold text-base sm:text-lg">
                 <span>Total</span>
-                <span className="text-[#C48B80]">{formatPrice(finalTotal, settings.currency)}</span>
+                <span className="text-[#9C4122]">{formatPrice(finalTotal, settings.currency)}</span>
               </div>
             </div>
 
@@ -326,7 +326,7 @@ export const CartDrawer: React.FC = () => {
                   setIsCartOpen(false);
                   router.push('/checkout');
                 }}
-                className="w-full py-3.5 rounded-full bg-gradient-to-r from-[#1A1A1A] to-[#333333] hover:from-[#C87355] hover:to-[#E2A08C] text-white font-display font-bold tracking-widest text-sm shadow-md flex items-center justify-center gap-2 transition-all"
+                className="w-full py-3.5 rounded-full bg-gradient-to-r from-[#1A1A1A] to-[#333333] hover:from-[#9C4122] hover:to-[#B34E28] text-white font-display font-bold tracking-widest text-sm shadow-md flex items-center justify-center gap-2 transition-all"
               >
                 <span>Proceed to Checkout</span>
                 <ArrowRight className="w-4 h-4" />
@@ -343,6 +343,7 @@ export const CartDrawer: React.FC = () => {
     </div>
   );
 };
+
 
 
 

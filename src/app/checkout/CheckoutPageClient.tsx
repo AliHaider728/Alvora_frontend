@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React, { useEffect, useState } from 'react';
 import Link from "next/link";
 
@@ -394,7 +394,7 @@ export const CheckoutPageClient: React.FC = () => {
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#EDE5DC] pb-3">
                 <div>
                   <span className="text-xs text-[#1A1A1A]/40 uppercase font-bold block">Order ID</span>
-                  <span className="font-display font-black text-base text-[#C48B80]">{completedOrder.id}</span>
+                  <span className="font-display font-black text-base text-[#9C4122]">{completedOrder.id}</span>
                 </div>
                 <div>
                   <span className="text-xs text-[#1A1A1A]/40 uppercase font-bold block">Tracking Code</span>
@@ -424,7 +424,7 @@ export const CheckoutPageClient: React.FC = () => {
 
               <div className="pt-3 border-t border-[#EDE5DC] flex justify-between font-display font-black text-[#1A1A1A] text-lg">
                 <span>Total Payable on Delivery:</span>
-                <span className="text-[#C48B80]">{formatPrice(completedOrder.total, settings.currency)}</span>
+                <span className="text-[#9C4122]">{formatPrice(completedOrder.total, settings.currency)}</span>
               </div>
             </div>
 
@@ -452,7 +452,7 @@ export const CheckoutPageClient: React.FC = () => {
                 <form onSubmit={handleShippingSubmit} className="bg-white rounded-3xl p-4 sm:p-8 border border-[#EDE5DC] shadow-sm space-y-6">
                   <div className="flex flex-col items-start gap-3 border-b border-[#EDE5DC] pb-4 sm:flex-row sm:items-center sm:justify-between">
                     <h2 className="font-display font-black text-xl text-[#1A1A1A] flex items-center gap-2">
-                      <Truck className="w-5 h-5 text-[#C48B80]" />
+                      <Truck className="w-5 h-5 text-[#9C4122]" />
                       <span>Delivery Address & Contact</span>
                     </h2>
                     <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full flex items-center gap-1">
@@ -564,7 +564,7 @@ export const CheckoutPageClient: React.FC = () => {
                     disabled={isPlacingOrder}
                     className="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-display font-black text-lg shadow-xl flex items-center justify-center gap-2 transition-all hover:scale-[1.01]"
                   >
-                    <span>{isPlacingOrder ? 'Placing Order…' : `Confirm Order & Pay ${formatPrice(finalTotal, settings.currency)} on Delivery`}</span>
+                    <span>{isPlacingOrder ? 'Placing Orderâ€¦' : `Confirm Order & Pay ${formatPrice(finalTotal, settings.currency)} on Delivery`}</span>
                     {isPlacingOrder ? <span className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" /> : <Check className="w-6 h-6" />}
                   </button>
                 </form>
@@ -635,7 +635,7 @@ export const CheckoutPageClient: React.FC = () => {
                         {!!(item.appliedOfferLabel || item.freeUnits) && (
                           <div className="mt-1 flex flex-col gap-1">
                             {item.appliedOfferLabel && (
-                              <span className="inline-flex w-fit items-center rounded bg-[#F5EDE4] px-1.5 py-0.5 text-[9px] font-bold text-[#C48B80]">
+                              <span className="inline-flex w-fit items-center rounded bg-[#F5EDE4] px-1.5 py-0.5 text-[9px] font-bold text-[#9C4122]">
                                 <Tag className="mr-1 h-3 w-3" />
                                 {item.appliedOfferLabel}
                               </span>
@@ -707,7 +707,7 @@ export const CheckoutPageClient: React.FC = () => {
 
                   <div className="flex justify-between items-baseline pt-3 border-t border-[#EDE5DC] text-[#1A1A1A] font-display font-black text-xl">
                     <span>Total Payable</span>
-                    <span className="text-[#C48B80]">{formatPrice(finalTotal, settings.currency)}</span>
+                    <span className="text-[#9C4122]">{formatPrice(finalTotal, settings.currency)}</span>
                   </div>
                 </div>
               </div>
@@ -718,3 +718,4 @@ export const CheckoutPageClient: React.FC = () => {
     </div>
   );
 };
+

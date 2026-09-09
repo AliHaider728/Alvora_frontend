@@ -138,7 +138,7 @@ export const Header: React.FC = () => {
       >
         {/* SHIPPING BAR */}
         {!isHome && (
-          <div className="flex min-h-8 items-center justify-center bg-gradient-to-r from-[#C87355] via-[#E2A08C] to-[#C87355] px-4 text-center text-[11px] font-medium uppercase tracking-[0.14em] text-white sm:min-h-8.5 sm:text-xs">
+          <div className="flex min-h-8 items-center justify-center bg-gradient-to-r from-[#9C4122] via-[#B34E28] to-[#9C4122] px-4 text-center text-[11px] font-medium uppercase tracking-[0.14em] text-white sm:min-h-8.5 sm:text-xs">
             FREE SHIPPING ON ORDERS OVER {settings?.freeShippingThreshold ? formatPrice(settings.freeShippingThreshold, settings.currency) : 'RS. 5,000'}
             <span className="mx-2 opacity-60">Ã¢â‚¬Â¢</span>
             30-DAY RETURNS
@@ -156,7 +156,7 @@ export const Header: React.FC = () => {
                   <Link
                     key={`${link.href}-${link.label}`}
                     href={link.href}
-                    className="relative flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-[0.15em] text-[#2A211E] transition-colors duration-200 hover:text-[#A86249]"
+                    className="relative flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-[0.15em] text-[#2A211E] transition-colors duration-200 hover:text-[#9C4122]"
                   >
                     {link.label}
                     {link.hasDropdown && <ChevronDown className="h-3 w-3 opacity-60" strokeWidth={2} />}
@@ -186,7 +186,7 @@ export const Header: React.FC = () => {
                 type="button"
                 onClick={() => setSearchOpen((value) => !value)}
                 aria-label="Search"
-                className="rounded-full p-2 text-[#241916] transition-colors hover:bg-[#F2E7DF] hover:text-[#A86249]"
+                className="rounded-full p-2 text-[#241916] transition-colors hover:bg-[#F2E7DF] hover:text-[#9C4122]"
               >
                 <Search className="h-4.75 w-4.75" strokeWidth={1.35} />
               </button>
@@ -196,7 +196,7 @@ export const Header: React.FC = () => {
                 <Link
                   href="/account"
                   aria-label="My account"
-                  className="hidden rounded-full p-2 text-[#241916] transition-colors hover:bg-[#F2E7DF] hover:text-[#A86249] sm:flex"
+                  className="hidden rounded-full p-2 text-[#241916] transition-colors hover:bg-[#F2E7DF] hover:text-[#9C4122] sm:flex"
                 >
                   <User className="h-4.75 w-4.75" strokeWidth={1.35} />
                 </Link>
@@ -205,7 +205,7 @@ export const Header: React.FC = () => {
                   type="button"
                   onClick={() => openAuthModal("login")}
                   aria-label="Sign in"
-                  className="hidden rounded-full p-2 text-[#241916] transition-colors hover:bg-[#F2E7DF] hover:text-[#A86249] sm:flex"
+                  className="hidden rounded-full p-2 text-[#241916] transition-colors hover:bg-[#F2E7DF] hover:text-[#9C4122] sm:flex"
                 >
                   <User className="h-4.75 w-4.75" strokeWidth={1.35} />
                 </button>
@@ -215,11 +215,11 @@ export const Header: React.FC = () => {
               <Link
                 href="/wishlist"
                 aria-label="Wishlist"
-                className="relative hidden rounded-full p-2 text-[#241916] transition-colors hover:bg-[#F2E7DF] hover:text-[#A86249] sm:flex"
+                className="relative hidden rounded-full p-2 text-[#241916] transition-colors hover:bg-[#F2E7DF] hover:text-[#9C4122] sm:flex"
               >
                 <Heart className="h-4.75 w-4.75" strokeWidth={1.35} />
                 {mounted && wishlist.length > 0 && (
-                  <span className="absolute right-0 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-gradient-to-tr from-[#C87355] to-[#E2A08C] px-1 text-[9px] font-bold text-white">
+                  <span className="absolute right-0 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#9C4122] px-1 text-[9px] font-bold text-white">
                     {wishlist.length}
                   </span>
                 )}
@@ -230,11 +230,11 @@ export const Header: React.FC = () => {
                 type="button"
                 onClick={() => setIsCartOpen(true)}
                 aria-label={`Shopping bag, ${mounted ? cartTotalItems : 0} items`}
-                className="relative rounded-full p-2 text-[#241916] transition-colors hover:bg-[#F2E7DF] hover:text-[#A86249]"
+                className="relative rounded-full p-2 text-[#241916] transition-colors hover:bg-[#F2E7DF] hover:text-[#9C4122]"
               >
                 <ShoppingBag className="h-4.75 w-4.75" strokeWidth={1.35} />
                 {mounted && cartTotalItems > 0 && (
-                  <span className="absolute right-0 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-gradient-to-tr from-[#C87355] to-[#E2A08C] px-1 text-[9px] font-bold text-white">
+                  <span className="absolute right-0 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#9C4122] px-1 text-[9px] font-bold text-white">
                     {cartTotalItems}
                   </span>
                 )}
@@ -350,7 +350,7 @@ export const Header: React.FC = () => {
           >
             Wishlist
             {mounted && wishlist.length > 0 && (
-              <span className="rounded-full bg-gradient-to-tr from-[#C87355] to-[#E2A08C] px-2 py-0.5 text-[10px] font-bold text-white">{wishlist.length}</span>
+              <span className="rounded-full bg-[#9C4122] px-2 py-0.5 text-[10px] font-bold text-white">{wishlist.length}</span>
             )}
           </Link>
 
@@ -383,7 +383,7 @@ export const Header: React.FC = () => {
               setMobileOpen(false);
               setIsCartOpen(true);
             }}
-            className="flex h-12 w-full items-center justify-center gap-2 bg-gradient-to-r from-[#C87355] to-[#E2A08C] hover:from-[#A86249] hover:to-[#C87355] text-xs font-semibold uppercase tracking-[0.14em] text-white transition-all"
+            className="flex h-12 w-full items-center justify-center gap-2 bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#7A321A] hover:to-[#9C4122] text-xs font-semibold uppercase tracking-[0.14em] text-white transition-all"
           >
             <ShoppingBag className="h-4 w-4" strokeWidth={1.4} />
             View Bag
@@ -398,6 +398,7 @@ export const Header: React.FC = () => {
     </>
   );
 };
+
 
 
 
