@@ -45,13 +45,18 @@ export const AdminLoginPageClient: React.FC = () => {
     <div className="min-h-screen bg-[#FAF6F2] font-body flex flex-col md:flex-row">
       {/* Left Panel - Image & Marketing Text */}
       <div className="hidden md:flex md:w-1/2 relative p-12 lg:p-20 overflow-hidden">
-        <Image
+                <Image
           src="/images/admin/login-bg.png" 
           alt="Alvora Skincare Admin"
           fill
           className="object-cover object-[15%_100%] lg:object-[20%_100%]"
           priority
         />
+        
+        {/* Readability Overlays */}
+        <div className="absolute inset-0 z-[1] bg-gradient-to-r from-[#FAF6F2]/95 via-[#FAF6F2]/50 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 z-[1] bg-gradient-to-t from-[#FAF6F2]/80 via-transparent to-transparent pointer-events-none" />
+
         
         <div className="relative z-10 w-full max-w-lg flex flex-col h-full justify-between pt-2 lg:pt-4">
           <div>
