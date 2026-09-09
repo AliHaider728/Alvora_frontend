@@ -1,7 +1,8 @@
-"use client";
+﻿"use client";
 import React from 'react';
 import Link from "next/link";
 import { Heart, Trash2, ShoppingBag } from 'lucide-react';
+import { SkeletonCard } from '../../components/common/SkeletonCard';
 import { useStore } from '../../context/StoreContext';
 import { ProductCard } from '../../components/common/ProductCard';
 import { Breadcrumbs } from '../../components/common/Breadcrumbs';
@@ -9,7 +10,7 @@ import { SeoHead } from '../../components/common/SeoHead';
 import { isProductVisibleOnStorefront } from '../../utils/products';
 
 export default function WishlistPage() {
-  const { wishlist, products, toggleWishlist } = useStore();
+  const { wishlist, products, productsLoading, toggleWishlist } = useStore();
 
   const wishlistedProducts = products.filter(
     p => wishlist.includes(p.id) && isProductVisibleOnStorefront(p)
@@ -34,7 +35,7 @@ export default function WishlistPage() {
           </div>
         </div>
 
-        {wishlistedProducts.length === 0 ? (
+        {productsLoading ? (<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">{[...Array(3)].map((_, i) => <SkeletonCard key={i} />)}</div>) : wishlistedProducts.length === 0 ? (
           <div className="bg-white rounded-3xl p-12 text-center border border-slate-100 space-y-4">
             <div className="w-16 h-16 rounded-full bg-rose-50 text-rose-400 flex items-center justify-center mx-auto">
               <Heart className="w-8 h-8" />

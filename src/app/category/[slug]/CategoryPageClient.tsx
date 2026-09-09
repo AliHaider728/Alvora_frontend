@@ -39,10 +39,10 @@ export const CategoryPageClient: React.FC = () => {
       router.push(pathname + query, { scroll: false });
     }
   };
-  const { products, categories } = useStore();
+  const { products, categories, productsLoading } = useStore();
 
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  
 
   useScrollLock(mobileFilterOpen);
 
@@ -389,7 +389,7 @@ export const CategoryPageClient: React.FC = () => {
             </div>
 
             {/* Product Grid */}
-            {loading ? (
+            {productsLoading ? (
               <div className="grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
                 {[...Array(6)].map((_, i) => (
                   <SkeletonCard key={i} />

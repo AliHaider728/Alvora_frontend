@@ -1,8 +1,9 @@
-"use client";
+﻿"use client";
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Search, SlidersHorizontal } from 'lucide-react';
+import { SkeletonCard } from '../../components/common/SkeletonCard';
 import { useStore } from '../../context/StoreContext';
 import { ProductCard } from '../../components/common/ProductCard';
 import { Breadcrumbs } from '../../components/common/Breadcrumbs';
@@ -13,7 +14,7 @@ import { trackTikTokSearch } from '../../lib/tiktokPixel';
 function SearchResultsContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get('q') || '';
-  const { products } = useStore();
+  const { products, productsLoading } = useStore();
 
   const [sortBy, setSortBy] = useState<'featured' | 'price-low' | 'price-high'>('featured');
 
@@ -73,7 +74,7 @@ function SearchResultsContent() {
           </div>
         )}
 
-        {sortedResults.length === 0 ? (
+        {productsLoading ? (<div className="grid grid-cols-1 items-start gap-5 sm:grid-cols-2 lg:gap-6">{[...Array(6)].map((_, i) => <SkeletonCard key={i} />)}</div>) : sortedResults.length === 0 ? (
           <div className="bg-white rounded-3xl p-12 text-center border border-slate-100 space-y-4">
             <div className="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto">
               <Search className="w-8 h-8" />

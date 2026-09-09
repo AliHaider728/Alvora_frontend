@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { revalidateProductPage } from "../app/actions/revalidate";
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import {
@@ -173,6 +173,8 @@ export interface StoreContextType {
   // Data
   products: Product[];
   productsLoading: boolean;
+  bundles: any[];
+  bundlesLoading: boolean;
   categories: Category[];
   orders: Order[];
   customers: Customer[];
@@ -238,7 +240,8 @@ export interface StoreContextType {
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
 
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [bundles, setBundles] = useState<Bundle[]>([]);
+  const [bundles, setBundles] = useState<any[]>([]);
+  const [bundlesLoading, setBundlesLoading] = useState(true);
   const { showToast } = useToast();
 
   // LocalStorage state initialization
@@ -283,7 +286,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   useEffect(() => {
     if (USE_MOCK_DATA) {
-      console.warn('⚠️ [Alvora] RUNNING IN MOCK DATA MODE. Real backend API is bypassed. Set NEXT_PUBLIC_ALVORA_USE_MOCK_DATA=false to connect to backend.');
+      console.warn('âš ï¸ [Alvora] RUNNING IN MOCK DATA MODE. Real backend API is bypassed. Set NEXT_PUBLIC_ALVORA_USE_MOCK_DATA=false to connect to backend.');
     }
   }, []);
 
@@ -333,7 +336,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         console.error('Failed to fetch bundles:', err);
       }
     };
-    fetchBundles();
+    setBundlesLoading(true);
+    fetchBundles().finally(() => setBundlesLoading(false));
   }, []);
 
   const refreshProducts = async () => {
@@ -348,7 +352,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return normalized;
   };
 
-  // ─── Settings: fetched independently, never mixed with auth-gated data ───
+  // â”€â”€â”€ Settings: fetched independently, never mixed with auth-gated data â”€â”€â”€
   // This MUST run on mount and NEVER be re-triggered by pb-auth-changed.
   // It is the sole authority for settings state in production.
   useEffect(() => {
@@ -362,15 +366,15 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         if (result) {
           setSettings(normalizeStoreSettings(result));
         }
-        // If API fails, keep the current canonical value • do NOT fall back to mock
+        // If API fails, keep the current canonical value â€¢ do NOT fall back to mock
       } catch {
         // Settings API temporarily unavailable; keep current state (already normalized)
       }
     };
     void fetchSettings();
-  }, []); // runs ONCE on mount only • no auth dependency
+  }, []); // runs ONCE on mount only â€¢ no auth dependency
 
-  // ─── Auth-gated admin data: fetched on mount + on auth change ───
+  // â”€â”€â”€ Auth-gated admin data: fetched on mount + on auth change â”€â”€â”€
   // Does NOT touch settings. Each domain updates only its own slice.
   useEffect(() => {
     const fetchAdminData = async () => {
@@ -401,7 +405,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       }
     };
 
-    // ─── Public data (products + categories) • always fetch ───
+    // â”€â”€â”€ Public data (products + categories) â€¢ always fetch â”€â”€â”€
     const fetchPublicData = async () => {
       if (USE_MOCK_DATA) {
         setProducts(MOCK_PRODUCTS.map(normalizeProduct));

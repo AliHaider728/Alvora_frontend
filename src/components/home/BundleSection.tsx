@@ -8,7 +8,7 @@ import { formatPrice } from '../../utils/formatters';
 import { Bundle } from '../../types';
 
 export const BundleSection: React.FC = () => {
-  const { bundles, addToCart, setIsCartOpen } = useStore();
+  const { bundles, bundlesLoading, addToCart, setIsCartOpen } = useStore();
   const shouldReduceMotion = useReducedMotion();
   const variants = shouldReduceMotion ? {} : {
     hidden: { opacity: 0, y: 30 },
@@ -19,7 +19,7 @@ export const BundleSection: React.FC = () => {
   useEffect(() => setMounted(true), []);
 
   if (!mounted) return null;
-    if (!bundles || bundles.length === 0) return null;
+    if (!bundlesLoading && (!bundles || bundles.length === 0)) return null;
 
   const handleAddBundle = (bundle: Bundle) => {
     const bundleProduct: any = {
@@ -68,7 +68,21 @@ export const BundleSection: React.FC = () => {
       </div>
 
       {/* Alternating Split Layout for Bundles */}
-      {bundles.map((bundle, index) => {
+            {/* Alternating Split Layout for Bundles */}
+      {bundlesLoading ? (
+        <div className="flex flex-col md:flex-row w-full min-h-[500px] animate-pulse">
+          <div className="w-full md:w-1/2 bg-[#E7D9D0] aspect-square md:aspect-auto" />
+          <div className="w-full md:w-1/2 bg-white flex flex-col justify-center p-8 md:p-16 lg:p-24 space-y-6">
+            <div className="h-4 bg-[#E7D9D0] rounded w-24" />
+            <div className="h-10 bg-[#E7D9D0] rounded w-3/4" />
+            <div className="space-y-3">
+              <div className="h-4 bg-[#E7D9D0] rounded w-full" />
+              <div className="h-4 bg-[#E7D9D0] rounded w-5/6" />
+            </div>
+            <div className="h-8 bg-[#E7D9D0] rounded w-32" />
+          </div>
+        </div>
+      ) : bundles.map((bundle, index) => {
         const isReverse = index % 2 === 1;
         const bgClass = isReverse ? 'bg-[#FAF6F2]' : 'bg-white';
         const imageBgClass = isReverse ? 'bg-[#1A1A1A]' : 'bg-[#F1C9BD]';

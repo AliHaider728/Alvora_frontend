@@ -3,13 +3,14 @@
 import React, { useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { AlvoraProductCard } from '../../components/common/AlvoraProductCard';
+import { SkeletonCard } from '../../components/common/SkeletonCard';
 import { useStore } from '../../context/StoreContext';
 import { TextScatter } from '../../components/ui/text-scatter';
 
 
 
 export default function BestSellersClient() {
-  const { products } = useStore();
+  const { products, productsLoading } = useStore();
 
   const bestSellers = useMemo(() => {
     return products.filter(p => p.isVisible);
@@ -40,7 +41,7 @@ export default function BestSellersClient() {
           <span className="text-sm font-medium text-gray-500">{bestSellers.length} Products</span>
         </div>
 
-        {bestSellers.length > 0 ? (
+        {productsLoading ? (<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">{[...Array(6)].map((_, i) => <SkeletonCard key={i} />)}</div>) : bestSellers.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
             {bestSellers.map(product => (
               <AlvoraProductCard key={product.id} product={product} />
