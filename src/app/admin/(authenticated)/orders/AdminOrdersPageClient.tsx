@@ -283,7 +283,7 @@ export const AdminOrdersPageClient: React.FC = () => {
                               
                               {/* Legacy simple variant string */}
                               {!it.selectedAttributes && it.selectedVariant && (
-                                <span className="text-[#1A1A1A]/40">â€¢ {it.selectedVariant}</span>
+                                <span className="text-[#1A1A1A]/40">� {it.selectedVariant}</span>
                               )}
                               
                               {/* New attribute-based variations */}

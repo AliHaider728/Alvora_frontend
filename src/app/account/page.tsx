@@ -73,7 +73,7 @@ export default function AccountPage() {
             )}
             <div>
               <h1 className="font-heading font-black text-2xl text-slate-900">{customerProfile.name}</h1>
-              <span className="text-xs text-slate-500 font-medium">{customerProfile.email} {customerProfile.phone ? `• ${customerProfile.phone}` : ''}</span>
+              <span className="text-xs text-slate-500 font-medium">{customerProfile.email} {customerProfile.phone ? `� ${customerProfile.phone}` : ''}</span>
             </div>
           </div>
 

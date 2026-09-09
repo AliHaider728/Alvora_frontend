@@ -35,7 +35,7 @@ export default function TikTokPixel() {
 
   return (
     <>
-      {/* TikTok Pixel — base loader */}
+      {/* TikTok Pixel � base loader */}
       <Script id="tiktok-pixel" strategy="afterInteractive">
         {`
           !function (w, d, t) {

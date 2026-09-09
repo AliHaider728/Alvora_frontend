@@ -8,7 +8,7 @@ export const MOCK_SETTINGS: StoreSettings = {
   phone: '0310-7172222',
   address: 'Mumtaz Market, Gujranwala',
   currency: 'Rs.',
-  metaTitle: 'Alvora Skincare — Pure Ingredients. Visible Results.',
+  metaTitle: 'Alvora Skincare � Pure Ingredients. Visible Results.',
   metaDescription: 'Thoughtfully formulated skincare that nourishes, protects and brings out your most radiant skin.',
   freeShippingThreshold: 5000,
   standardShippingFee: 0,

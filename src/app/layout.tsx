@@ -58,7 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${playfairDisplay.variable} ${lato.variable}`} data-scroll-behavior="smooth">
       <head>
-        {/* Meta Pixel stub — loads fbq global before any pixel fires */}
+        {/* Meta Pixel stub � loads fbq global before any pixel fires */}
         <Script
           id="meta-pixel-stub"
           strategy="beforeInteractive"

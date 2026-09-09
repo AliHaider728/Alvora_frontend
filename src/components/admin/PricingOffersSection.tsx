@@ -446,7 +446,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
               {/* Live preview */}
               <div className="col-span-2 sm:col-span-1 flex items-end">
                 <div className="w-full rounded-xl border border-indigo-200 bg-indigo-50 px-3 py-2.5 text-sm font-bold text-indigo-800">
-                  ðŸ·ï¸ {flatAutoLabel}
+                  ðŸ�ï¸ {flatAutoLabel}
                 </div>
               </div>
             </div>
