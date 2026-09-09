@@ -33,7 +33,12 @@ export const AudioReviews: React.FC = () => {
     } else {
       if (audioRef.current) {
         audioRef.current.src = url;
-        audioRef.current.play();
+        const playPromise = audioRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise.catch((error) => {
+            console.log("Audio playback interrupted or blocked:", error);
+          });
+        }
         setPlayingId(id);
       }
     }

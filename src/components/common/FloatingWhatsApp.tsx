@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname, useParams } from 'next/navigation';
@@ -38,7 +38,7 @@ export const FloatingWhatsApp: React.FC = () => {
         }
       `}</style>
       <a
-        href={`https://wa.me/923107172222?text=${encodeURIComponent("Hi Alvora Skincare! 👋 I'm interested in your skincare products and would like some more information. Can you please help me?")}`}
+        href={`https://wa.me/923107172222?text=${encodeURIComponent("Hi Alvora Skincare! ðŸ‘‹ I'm interested in your skincare products and would like some more information. Can you please help me?")}`}
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 rounded-full bg-[#25D366] text-white shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 animate-custom-bounce mb-16 xl:mb-0"
