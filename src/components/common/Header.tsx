@@ -12,7 +12,7 @@ import { isProductVisibleOnStorefront } from "../../utils/products";
 import { getSafeImageSrc } from "../../utils/images";
 import { useAuth } from "../../context/AuthContext";
 
-const NAV_LINKS = [
+const NAV_LINKS: { label: string; href: string; hasDropdown?: boolean }[] = [
   { label: "SHOP", href: "/category/all" },
   { label: "BEST SELLERS", href: "/best-sellers" },
   { label: "SKINCARE", href: "/category/all" },
@@ -137,7 +137,7 @@ export const Header: React.FC = () => {
         } ${isScrolled ? "shadow-[0_4px_24px_rgba(36,25,22,0.06)]" : ""} ${isVisible ? "translate-y-0" : "-translate-y-full"}`}
       >
         {/* SHIPPING BAR */}
-        {!isHome && (
+        {!searchOpen && (
           <div className="flex min-h-8 items-center justify-center bg-gradient-to-r from-[#D4784F] via-[#9C4122] to-[#D4784F] px-4 text-center text-[11px] font-medium uppercase tracking-[0.14em] text-white sm:min-h-8.5 sm:text-xs">
             FREE SHIPPING ON ORDERS OVER {settings?.freeShippingThreshold ? formatPrice(settings.freeShippingThreshold, settings.currency) : 'RS. 5,000'}
             <span className="mx-2 opacity-60">•</span>
