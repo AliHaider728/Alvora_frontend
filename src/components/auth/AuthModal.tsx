@@ -179,7 +179,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultMo
                     required
                     value={password}
                     onChange={e => setPassword(e.target.value)}
-                    placeholder="��������"
+                    placeholder="••••••••"
                     className="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-colors pr-10"
                   />
                   <button
@@ -203,7 +203,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultMo
                     required
                     value={confirmPassword}
                     onChange={e => setConfirmPassword(e.target.value)}
-                    placeholder="��������"
+                    placeholder="••••••••"
                     className="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-colors pr-10"
                   />
                   <button

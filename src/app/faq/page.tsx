@@ -34,7 +34,7 @@ export default function FaqPage() {
     },
     {
       q: 'How long does delivery take?',
-      a: 'Orders are usually delivered within 2�5 business days. Delivery to remote areas may take a little longer.',
+      a: 'Orders are usually delivered within 2•5 business days. Delivery to remote areas may take a little longer.',
       icon: Clock,
       color: 'text-amber-500 bg-amber-50'
     },

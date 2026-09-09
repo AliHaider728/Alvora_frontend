@@ -99,7 +99,7 @@ export const FinalCTA: React.FC = () => {
                 <path id="curve-cta" d="M 50, 50 m -35, 0 a 35,35 0 1,1 70,0 a 35,35 0 1,1 -70,0" fill="transparent" />
                 <text fontSize="10" letterSpacing="1.5" className="uppercase font-semibold fill-current">
                   <textPath href="#curve-cta" startOffset="0">
-                    � CLEAN INGREDIENTS � CONSCIOUS BEAUTY
+                    • CLEAN INGREDIENTS • CONSCIOUS BEAUTY
                   </textPath>
                 </text>
               </svg>

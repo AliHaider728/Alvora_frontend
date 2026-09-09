@@ -362,13 +362,13 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         if (result) {
           setSettings(normalizeStoreSettings(result));
         }
-        // If API fails, keep the current canonical value � do NOT fall back to mock
+        // If API fails, keep the current canonical value • do NOT fall back to mock
       } catch {
         // Settings API temporarily unavailable; keep current state (already normalized)
       }
     };
     void fetchSettings();
-  }, []); // runs ONCE on mount only � no auth dependency
+  }, []); // runs ONCE on mount only • no auth dependency
 
   // ─── Auth-gated admin data: fetched on mount + on auth change ───
   // Does NOT touch settings. Each domain updates only its own slice.
@@ -401,7 +401,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       }
     };
 
-    // ─── Public data (products + categories) � always fetch ───
+    // ─── Public data (products + categories) • always fetch ───
     const fetchPublicData = async () => {
       if (USE_MOCK_DATA) {
         setProducts(MOCK_PRODUCTS.map(normalizeProduct));

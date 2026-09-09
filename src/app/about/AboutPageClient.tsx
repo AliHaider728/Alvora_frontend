@@ -79,7 +79,7 @@ export const AboutPageClient: React.FC = () => {
                 It all started with a simple idea: skincare shouldn't be a compromise between efficacy and safety. We noticed the market was flooded with harsh chemical treatments or natural products that simply didn't work. Alvora Skincare was born out of a desire to bridge that gap.
               </p>
               <p>
-                We spent years researching and partnering with top dermatologists to develop formulas that treat real skin concerns � from hyperpigmentation to barrier repair � using clean, scientifically-backed ingredients. We believe in transparency, sustainability, and giving you the radiant skin you deserve.
+                We spent years researching and partnering with top dermatologists to develop formulas that treat real skin concerns • from hyperpigmentation to barrier repair • using clean, scientifically-backed ingredients. We believe in transparency, sustainability, and giving you the radiant skin you deserve.
               </p>
             </div>
             
@@ -199,7 +199,7 @@ export const AboutPageClient: React.FC = () => {
               </div>
               <h3 className="font-display text-lg text-[#241916]">A Formula for Every Skin Type</h3>
               <p className="text-xs text-[#1A1A1A]/70 leading-relaxed">
-                Explore hydrating serums, clarifying toners, barrier creams, and more � curated for every skin concern.
+                Explore hydrating serums, clarifying toners, barrier creams, and more • curated for every skin concern.
               </p>
             </div>
           </div>
@@ -211,9 +211,9 @@ export const AboutPageClient: React.FC = () => {
             <Quote className="w-6 h-6" />
           </div>
           <p className="max-w-3xl mx-auto font-display text-xl sm:text-2xl text-[#241916] leading-relaxed">
-            "At Alvora Skincare, we're passionate about empowering you to feel confident in your own skin through clean, effective, and beautifully crafted formulas � because your skin deserves the best."
+            "At Alvora Skincare, we're passionate about empowering you to feel confident in your own skin through clean, effective, and beautifully crafted formulas • because your skin deserves the best."
           </p>
-          <p className="mt-8 text-[10px] font-bold text-[#A86249] uppercase tracking-widest">� The Alvora Skincare Team</p>
+          <p className="mt-8 text-[10px] font-bold text-[#A86249] uppercase tracking-widest">• The Alvora Skincare Team</p>
         </div>
         
       </div>

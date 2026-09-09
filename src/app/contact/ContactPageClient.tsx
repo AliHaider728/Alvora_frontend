@@ -37,7 +37,7 @@ const YouTubeIcon = ({ className }: { className?: string }) => (
 
 // ─────────────────────────────────────────────────────────
 // Hardcoded real store contact info.
-// These are the confirmed real values � kept in sync with
+// These are the confirmed real values • kept in sync with
 // Footer.tsx. Do NOT fall back to settings.phone / .email /
 // .address, which was the source of the data-flicker bug
 // (settings context loads async and could momentarily show
@@ -174,7 +174,7 @@ export const ContactPageClient: React.FC = () => {
               </div>
             </div>
 
-            {/* Follow Us Card � ONE row, exactly 4 icons */}
+            {/* Follow Us Card • ONE row, exactly 4 icons */}
             <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
               <h2 className="font-heading font-black text-lg text-slate-900 mb-5">Follow Us</h2>
               <div className="flex items-center gap-4 flex-wrap">

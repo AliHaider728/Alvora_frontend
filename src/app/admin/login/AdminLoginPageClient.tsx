@@ -109,7 +109,7 @@ export const AdminLoginPageClient: React.FC = () => {
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 required
-                placeholder="��������"
+                placeholder="••••••••"
                 className="w-full px-4 py-3 text-sm rounded-xl border border-[#E7D9D0] bg-white text-[#1A1A1A] placeholder:text-[#1A1A1A]/30 focus:outline-none focus:border-[#9C4122] focus:ring-1 focus:ring-[#9C4122] transition-colors"
               />
             </div>

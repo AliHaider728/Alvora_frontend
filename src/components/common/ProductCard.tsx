@@ -77,7 +77,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
       const maxPrice = Math.max(...prices);
       displayPrice = minPrice;
       if (minPrice < maxPrice) {
-        displayPriceStr = `${formatPrice(minPrice, settings.currency)} � ${formatPrice(maxPrice, settings.currency)}`;
+        displayPriceStr = `${formatPrice(minPrice, settings.currency)} • ${formatPrice(maxPrice, settings.currency)}`;
         pricePrefix = '';
       } else {
         displayPriceStr = formatPrice(minPrice, settings.currency);
@@ -211,7 +211,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
           <Heart className={`h-4 w-4 transition-all duration-200 ${isWishlisted ? 'scale-110 fill-white' : ''}`} strokeWidth={2.2} />
         </button>
 
-        {/* Quick view � desktop hover */}
+        {/* Quick view • desktop hover */}
         {onQuickView && (
           <button
             onClick={(e) => {
@@ -233,7 +233,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
         <div className="flex items-start justify-between gap-2">
           <div className="flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-1 text-[10px] font-bold uppercase tracking-[0.1em]">
             <span className="truncate text-sky-600">{formatProductCategories(product)}</span>
-            <span aria-hidden="true" className="text-slate-300">�</span>
+            <span aria-hidden="true" className="text-slate-300">•</span>
             <span className="whitespace-nowrap text-indigo-500">{formatProductAgeGroups(product)}</span>
           </div>
           {product.brand && (

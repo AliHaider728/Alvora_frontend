@@ -289,15 +289,15 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
                   <p className="text-[#1A1A1A]/70 text-sm mb-3">{review.content}</p>
                   <div className="flex flex-wrap items-center gap-3 text-xs font-semibold text-[#1A1A1A]/50">
                     <span className="text-[#1A1A1A]/80">{review.reviewerName}</span>
-                    <span className="text-slate-300">�</span>
+                    <span className="text-slate-300">•</span>
                     <span>{new Date(review.createdAt || '').toLocaleDateString()}</span>
-                    <span className="text-slate-300">�</span>
+                    <span className="text-slate-300">•</span>
                     <span className="uppercase tracking-wider text-[10px] bg-slate-200 px-1.5 py-0.5 rounded text-[#1A1A1A]/70">
                       {review.source === 'admin' ? 'Admin' : 'Customer'}
                     </span>
                     {review.verifiedPurchase && (
                       <>
-                        <span className="text-slate-300">�</span>
+                        <span className="text-slate-300">•</span>
                         <span className="flex items-center gap-1 text-emerald-600">
                           <ShieldCheck className="w-3.5 h-3.5" /> Verified
                         </span>

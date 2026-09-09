@@ -24,7 +24,7 @@ export const MOCK_PRODUCTS: Product[] = [
     status: 'published' as const,
     description:
       'A lightweight, fast-absorbing serum infused with Niacinamide and Hyaluronic Acid to brighten, hydrate and even skin tone for a natural healthy glow.',
-    shortDescription: 'Brighten � Hydrate � Glow',
+    shortDescription: 'Brighten • Hydrate • Glow',
     isFeatured: true,
     isBestseller: true,
     isSpotlight: true,
@@ -50,7 +50,7 @@ export const MOCK_PRODUCTS: Product[] = [
     status: 'published' as const,
     description:
       'A soft, soap-free cleanser that removes impurities while preserving your natural moisture barrier.',
-    shortDescription: 'Cleanse � Refresh � Balance',
+    shortDescription: 'Cleanse • Refresh • Balance',
     isBestseller: true,
   },
   {
@@ -74,7 +74,7 @@ export const MOCK_PRODUCTS: Product[] = [
     status: 'published' as const,
     description:
       'A lightweight gel-cream that delivers intense hydration and soothes irritated skin throughout the day.',
-    shortDescription: 'Hydrate � Soothe � Protect',
+    shortDescription: 'Hydrate • Soothe • Protect',
     isBestseller: true,
   },
   {
@@ -98,7 +98,7 @@ export const MOCK_PRODUCTS: Product[] = [
     status: 'published' as const,
     description:
       'A watery essence that preps skin for maximum absorption of subsequent skincare steps.',
-    shortDescription: 'Prep � Hydrate � Revive',
+    shortDescription: 'Prep • Hydrate • Revive',
     isBestseller: true,
   },
   {
@@ -122,7 +122,7 @@ export const MOCK_PRODUCTS: Product[] = [
     status: 'published' as const,
     description:
       'Ceramide-rich formula that repairs and strengthens the skin barrier against environmental stressors.',
-    shortDescription: 'Restore � Protect � Soothe',
+    shortDescription: 'Restore • Protect • Soothe',
     isFeatured: true,
   },
   {
@@ -146,7 +146,7 @@ export const MOCK_PRODUCTS: Product[] = [
     status: 'published' as const,
     description:
       'Stabilized Vitamin C serum that visibly brightens and protects against free radical damage.',
-    shortDescription: 'Glow � Even � Protect',
+    shortDescription: 'Glow • Even • Protect',
     isNewArrival: true,
   },
   {
@@ -170,7 +170,7 @@ export const MOCK_PRODUCTS: Product[] = [
     status: 'published' as const,
     description:
       'Antioxidant-rich green tea toner that calms redness and balances oil production.',
-    shortDescription: 'Calm � Balance � Refresh',
+    shortDescription: 'Calm • Balance • Refresh',
     isNewArrival: true,
   },
   {
@@ -194,7 +194,7 @@ export const MOCK_PRODUCTS: Product[] = [
     status: 'published' as const,
     description:
       'Lightweight broad-spectrum SPF 50 sunscreen with no white cast. Wear it every day.',
-    shortDescription: 'Protect � Hydrate � Shield',
+    shortDescription: 'Protect • Hydrate • Shield',
     isFeatured: true,
   },
 ];

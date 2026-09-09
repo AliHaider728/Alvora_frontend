@@ -13,7 +13,7 @@ export const TrustBadges: React.FC = () => {
     {
       icon: Truck,
       title: 'Express Delivery',
-      desc: '2�3 Days',
+      desc: '2•3 Days',
       bgColor: 'bg-amber-400 text-white',
     },
     {

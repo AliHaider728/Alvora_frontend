@@ -330,9 +330,9 @@ export const AdminReviewsPageClient: React.FC = () => {
                             <div className="text-xs text-[#1A1A1A]/50 mb-1.5 line-clamp-2 pr-4">{review.content}</div>
                             <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">
                               <span className="text-[#1A1A1A]/80">{review.reviewerName}</span>
-                              <span className="text-slate-300">�</span>
+                              <span className="text-slate-300">•</span>
                               <span className="text-[#1A1A1A]/50">{(review as any).productName || 'Product'}</span>
-                              <span className="text-slate-300">�</span>
+                              <span className="text-slate-300">•</span>
                               <span className="text-[#1A1A1A]/40">{new Date(review.createdAt || '').toLocaleDateString()}</span>
                               {review.verifiedPurchase && (
                                 <span className="flex items-center gap-1 text-[10px] uppercase tracking-wider font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-md">

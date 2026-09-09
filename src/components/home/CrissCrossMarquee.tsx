@@ -14,7 +14,7 @@ const WORDS_2 = [
 // Helper to repeat words with bullet points
 const createLine = (words: string[]) => {
   const repeated = [...words, ...words, ...words, ...words];
-  return repeated.join(" � ") + " � ";
+  return repeated.join(" • ") + " • ";
 };
 
 const line1 = createLine(WORDS_1);
