@@ -198,10 +198,10 @@ export const Footer: React.FC = () => {
               />
               <button
                 type="submit"
-                className="
+                className="btn-interactive
                   flex items-center justify-center gap-2
                   w-full py-2.5 px-4
-                  bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#1A1A1A] hover:to-[#1A1A1A]
+                  bg-gradient-to-br from-[#D4784F] to-[#9C4122] hover:from-[#1A1A1A] hover:to-[#1A1A1A]
                   text-white text-sm font-semibold tracking-wide
                   transition-colors duration-200
                 "
@@ -244,4 +244,7 @@ export const Footer: React.FC = () => {
     </footer>
   );
 };
+
+
+
 

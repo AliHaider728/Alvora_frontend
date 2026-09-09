@@ -132,7 +132,7 @@ export const BundleSection: React.FC = () => {
                   <div className="flex flex-col sm:flex-row gap-3">
                     <button 
                       onClick={() => handleAddBundle(bundle)}
-                      className="w-full sm:w-auto flex-1 px-8 py-4 bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#7A321A] hover:to-[#9C4122] text-white text-[11px] font-bold tracking-widest uppercase transition-colors rounded-full"
+                      className="btn-interactive w-full sm:w-auto flex-1 px-8 py-4 bg-gradient-to-br from-[#D4784F] to-[#9C4122] hover:from-[#9C4122] hover:to-[#7A321A] text-white text-[11px] font-bold tracking-widest uppercase transition-colors rounded-full"
                     >
                       Add to Cart
                     </button>
@@ -168,7 +168,7 @@ export const BundleSection: React.FC = () => {
             </div>
             <Link 
               href="/bundles/build"
-              className="flex-shrink-0 px-8 py-4 bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#7A321A] hover:to-[#9C4122] text-white text-[11px] font-bold tracking-widest uppercase transition-colors rounded-full"
+              className="btn-interactive flex-shrink-0 px-8 py-4 bg-gradient-to-br from-[#D4784F] to-[#9C4122] hover:from-[#9C4122] hover:to-[#7A321A] text-white text-[11px] font-bold tracking-widest uppercase transition-colors rounded-full"
             >
               Create Your Routine
             </Link>
@@ -178,5 +178,7 @@ export const BundleSection: React.FC = () => {
     </section>
   );
 };
+
+
 
 

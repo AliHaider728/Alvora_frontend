@@ -99,14 +99,14 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
           {needsSelection ? (
               <Link
                 href={`/product/${product.slug}`}
-                className="flex-1 bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#7A321A] hover:to-[#9C4122] text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase py-3 px-2 rounded-xl transition-colors flex items-center justify-center shadow-sm text-center"
+                className="btn-interactive flex-1 bg-gradient-to-br from-[#D4784F] to-[#9C4122] hover:from-[#9C4122] hover:to-[#7A321A] text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase py-3 px-2 rounded-xl transition-colors flex items-center justify-center shadow-sm text-center"
               >
                 SELECT OPTIONS
               </Link>
             ) : product.inStock ? (
               <Link
                 href={`/product/${product.slug}`}
-                className="flex-1 bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#7A321A] hover:to-[#9C4122] text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase py-3 px-2 rounded-xl transition-colors flex items-center justify-center shadow-sm text-center"
+                className="btn-interactive flex-1 bg-gradient-to-br from-[#D4784F] to-[#9C4122] hover:from-[#9C4122] hover:to-[#7A321A] text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase py-3 px-2 rounded-xl transition-colors flex items-center justify-center shadow-sm text-center"
               >
                 VIEW DETAIL
               </Link>
@@ -130,6 +130,8 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
     </div>
   );
 };
+
+
 
 
 

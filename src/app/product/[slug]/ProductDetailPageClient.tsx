@@ -404,7 +404,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">
         <h2 className="font-display font-black text-2xl text-[#1A1A1A]/90 mb-2">Product Not Found</h2>
         <p className="text-sm text-[#1A1A1A]/50 mb-6">The product you are looking for might have been discontinued or moved.</p>
-        <Link href="/category/all" className="px-6 py-3 rounded-2xl bg-gradient-to-r from-[#9C4122] to-[#B34E28] text-white font-display font-bold text-sm">
+        <Link href="/category/all" className="btn-interactive px-6 py-3 rounded-2xl bg-gradient-to-br from-[#D4784F] to-[#9C4122] text-white font-display font-bold text-sm">
           Explore All Products
         </Link>
       </div>
@@ -654,7 +654,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
               />
               <span className="pointer-events-none absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-slate-950/70 px-3 py-1.5 text-[10px] font-bold text-white opacity-0 backdrop-blur transition-opacity group-hover/gallery:opacity-100"><ZoomIn className="h-3.5 w-3.5" /> Click to enlarge</span>
               {(product.discountPercent ?? 0) > 0 && (
-                <span className="absolute top-4 left-4 z-10 bg-gradient-to-r from-[#9C4122] to-[#B34E28] text-white font-display font-extrabold text-xs px-3 py-1.5 rounded-full shadow-md">
+                <span className="absolute top-4 left-4 z-10 bg-gradient-to-br from-[#D4784F] to-[#9C4122] text-white font-display font-extrabold text-xs px-3 py-1.5 rounded-full shadow-md">
                   -{product.discountPercent}% OFF
                 </span>
               )}
@@ -993,7 +993,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                                 !isOptionInStock
                                   ? 'bg-[#F5EDE4] text-[#1A1A1A]/40 cursor-not-allowed opacity-60 line-through'
                                   : isSelected
-                                  ? 'bg-gradient-to-r from-[#9C4122] to-[#B34E28] text-white ring-2 ring-rose-200 shadow-sm'
+                                  ? 'bg-gradient-to-br from-[#D4784F] to-[#9C4122] text-white ring-2 ring-rose-200 shadow-sm'
                                   : 'bg-[#F5EDE4] text-[#1A1A1A]/80 hover:bg-[#EDE5DC]'
                               }`}
                             >
@@ -1426,7 +1426,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-[#9C4122] to-[#B34E28] text-white font-display font-bold text-xs hover:bg-black shadow-md"
+                  className="btn-interactive flex-1 py-2.5 rounded-xl bg-gradient-to-br from-[#D4784F] to-[#9C4122] text-white font-display font-bold text-xs hover:bg-black shadow-md"
                 >
                   Submit Review
                 </button>
@@ -1480,6 +1480,8 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
     </div>
   );
 };
+
+
 
 
 

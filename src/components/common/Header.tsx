@@ -138,7 +138,7 @@ export const Header: React.FC = () => {
       >
         {/* SHIPPING BAR */}
         {!isHome && (
-          <div className="flex min-h-8 items-center justify-center bg-gradient-to-r from-[#9C4122] via-[#B34E28] to-[#9C4122] px-4 text-center text-[11px] font-medium uppercase tracking-[0.14em] text-white sm:min-h-8.5 sm:text-xs">
+          <div className="flex min-h-8 items-center justify-center bg-gradient-to-r from-[#D4784F] via-[#9C4122] to-[#D4784F] px-4 text-center text-[11px] font-medium uppercase tracking-[0.14em] text-white sm:min-h-8.5 sm:text-xs">
             FREE SHIPPING ON ORDERS OVER {settings?.freeShippingThreshold ? formatPrice(settings.freeShippingThreshold, settings.currency) : 'RS. 5,000'}
             <span className="mx-2 opacity-60">Ã¢â‚¬Â¢</span>
             30-DAY RETURNS
@@ -383,7 +383,7 @@ export const Header: React.FC = () => {
               setMobileOpen(false);
               setIsCartOpen(true);
             }}
-            className="flex h-12 w-full items-center justify-center gap-2 bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#7A321A] hover:to-[#9C4122] text-xs font-semibold uppercase tracking-[0.14em] text-white transition-all"
+            className="btn-interactive flex h-12 w-full items-center justify-center gap-2 bg-gradient-to-br from-[#D4784F] to-[#9C4122] hover:from-[#9C4122] hover:to-[#7A321A] text-xs font-semibold uppercase tracking-[0.14em] text-white transition-all"
           >
             <ShoppingBag className="h-4 w-4" strokeWidth={1.4} />
             View Bag
@@ -398,6 +398,9 @@ export const Header: React.FC = () => {
     </>
   );
 };
+
+
+
 
 
 

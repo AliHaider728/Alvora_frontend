@@ -91,7 +91,7 @@ export const CartDrawer: React.FC = () => {
                 </p>
                 <button
                   onClick={() => setIsCartOpen(false)}
-                  className="px-6 py-3 rounded-full bg-gradient-to-r from-[#1A1A1A] to-[#333333] hover:from-[#9C4122] hover:to-[#B34E28] text-white tracking-widest font-display font-bold text-sm shadow-md transition-all"
+                  className="btn-interactive px-6 py-3 rounded-full bg-gradient-to-r from-[#1A1A1A] to-[#333333] hover:from-[#D4784F] hover:to-[#9C4122] text-white tracking-widest font-display font-bold text-sm shadow-md transition-all"
                 >
                   Start Shopping
                 </button>
@@ -326,7 +326,7 @@ export const CartDrawer: React.FC = () => {
                   setIsCartOpen(false);
                   router.push('/checkout');
                 }}
-                className="w-full py-3.5 rounded-full bg-gradient-to-r from-[#1A1A1A] to-[#333333] hover:from-[#9C4122] hover:to-[#B34E28] text-white font-display font-bold tracking-widest text-sm shadow-md flex items-center justify-center gap-2 transition-all"
+                className="btn-interactive w-full py-3.5 rounded-full bg-gradient-to-r from-[#1A1A1A] to-[#333333] hover:from-[#D4784F] hover:to-[#9C4122] text-white font-display font-bold tracking-widest text-sm shadow-md flex items-center justify-center gap-2 transition-all"
               >
                 <span>Proceed to Checkout</span>
                 <ArrowRight className="w-4 h-4" />
@@ -343,6 +343,8 @@ export const CartDrawer: React.FC = () => {
     </div>
   );
 };
+
+
 
 
 

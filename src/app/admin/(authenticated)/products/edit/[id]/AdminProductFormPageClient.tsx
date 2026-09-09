@@ -742,8 +742,8 @@ export const AdminProductFormPageClient: React.FC = () => {
     
     if (productType === 'simple') {
       if (!Number.isFinite(regularPrice) || regularPrice < 0) nextErrors.regularPrice = 'Enter a non-negative regular price.';
-      if (salePrice !== undefined && (!Number.isFinite(salePrice) || salePrice < 0 || false)) {
-        nextErrors.salePrice = 'Sale price must be non-negative and lower than regular price.';
+      if (salePrice !== undefined && (!Number.isFinite(salePrice) || salePrice < 0 )) {
+        nextErrors.salePrice = 'Sale price must be non-negative.';
       }
       if (trackInventory && (!Number.isInteger(stockQuantity) || Number(stockQuantity) < 0)) nextErrors.stockQuantity = 'Stock must be a non-negative whole number.';
       if (trackInventory && lowStockThreshold !== undefined && (!Number.isInteger(lowStockThreshold) || lowStockThreshold < 0)) {
@@ -789,7 +789,7 @@ export const AdminProductFormPageClient: React.FC = () => {
             nextErrors.variations = `Regular price is required for ${v.id}.`;
             break;
           }
-          if (v.salePrice !== undefined && v.salePrice !== null && (v.salePrice < 0 || false)) {
+          if (v.salePrice !== undefined && v.salePrice !== null && (v.salePrice < 0 )) {
             nextErrors.variations = `Sale price cannot exceed regular price for ${v.id}.`;
             break;
           }
@@ -1292,6 +1292,7 @@ export const AdminProductFormPageClient: React.FC = () => {
     </>
   );
 };
+
 
 
 

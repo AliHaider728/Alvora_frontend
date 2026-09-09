@@ -117,7 +117,7 @@ export const AdminLoginPageClient: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-4 rounded-xl bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#7A321A] hover:to-[#9C4122] text-white font-bold text-xs uppercase tracking-widest shadow-md flex items-center justify-center gap-2 transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-50 disabled:hover:transform-none disabled:hover:shadow-md"
+              className="btn-interactive w-full py-4 rounded-xl bg-gradient-to-br from-[#D4784F] to-[#9C4122] hover:from-[#9C4122] hover:to-[#7A321A] text-white font-bold text-xs uppercase tracking-widest shadow-md flex items-center justify-center gap-2 transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-50 disabled:hover:transform-none disabled:hover:shadow-md"
             >
               {loading ? (
                 <Loader2 className="w-5 h-5 animate-spin text-white/70" />
@@ -143,4 +143,7 @@ export const AdminLoginPageClient: React.FC = () => {
     </div>
   );
 };
+
+
+
 
