@@ -372,7 +372,7 @@ export const AdminProductFormPageClient: React.FC = () => {
       ? editingProduct.categoryIds
       : editingProduct.categoryId ? [editingProduct.categoryId] : []);
     setRegularPrice(editingProduct.originalPrice ?? editingProduct.price);
-    setSalePrice(editingProduct.originalPrice ? editingProduct.price : undefined);
+    setSalePrice(editingProduct.originalPrice && editingProduct.originalPrice > editingProduct.price ? editingProduct.price : undefined);
     setSku(editingProduct.sku || '');
     const productInventory = normalizeInventory(editingProduct);
     setTrackInventory(productInventory.trackInventory);
@@ -501,7 +501,7 @@ export const AdminProductFormPageClient: React.FC = () => {
             setCategorySlug(data.categorySlug || '');
             setCategoryIds(data.categoryIds || (data.categoryId ? [data.categoryId] : []));
             setRegularPrice(data.regularPrice || 0);
-            setSalePrice(data.salePrice);
+            setSalePrice(data.salePrice && data.salePrice < (data.regularPrice || 0) ? data.salePrice : undefined);
             setSku(data.sku || '');
             setTrackInventory(data.trackInventory || false);
             setStockQuantity(data.stockQuantity);
@@ -742,7 +742,7 @@ export const AdminProductFormPageClient: React.FC = () => {
     
     if (productType === 'simple') {
       if (!Number.isFinite(regularPrice) || regularPrice < 0) nextErrors.regularPrice = 'Enter a non-negative regular price.';
-      if (salePrice !== undefined && (!Number.isFinite(salePrice) || salePrice < 0 || salePrice >= regularPrice)) {
+      if (salePrice !== undefined && (!Number.isFinite(salePrice) || salePrice < 0 || false)) {
         nextErrors.salePrice = 'Sale price must be non-negative and lower than regular price.';
       }
       if (trackInventory && (!Number.isInteger(stockQuantity) || Number(stockQuantity) < 0)) nextErrors.stockQuantity = 'Stock must be a non-negative whole number.';
@@ -789,7 +789,7 @@ export const AdminProductFormPageClient: React.FC = () => {
             nextErrors.variations = `Regular price is required for ${v.id}.`;
             break;
           }
-          if (v.salePrice !== undefined && v.salePrice !== null && (v.salePrice < 0 || v.salePrice >= v.regularPrice)) {
+          if (v.salePrice !== undefined && v.salePrice !== null && (v.salePrice < 0 || false)) {
             nextErrors.variations = `Sale price cannot exceed regular price for ${v.id}.`;
             break;
           }
@@ -834,7 +834,7 @@ export const AdminProductFormPageClient: React.FC = () => {
       showToast(firstError, 'error');
       
       setTimeout(() => {
-        const errorElement = document.querySelector('.border-[#C48B80], .text-[#C48B80]');
+        const errorElement = document.querySelector('.border-\\[\\#C48B80\\], .text-\\[\\#C48B80\\]');
         if (errorElement) {
           errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
           const input = errorElement.querySelector('input, select, textarea') as HTMLElement;
@@ -942,7 +942,7 @@ export const AdminProductFormPageClient: React.FC = () => {
       setProductDetailBlocks(current => current.filter(block => !block.image?.newlyUploaded));
       showToast(apiError, 'error');
       setTimeout(() => {
-        const errorElement = document.querySelector('.border-[#C48B80], .text-[#C48B80]');
+        const errorElement = document.querySelector('.border-\\[\\#C48B80\\], .text-\\[\\#C48B80\\]');
         if (errorElement) {
           errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
           const input = errorElement.querySelector('input, select, textarea') as HTMLElement;
@@ -1074,6 +1074,7 @@ export const AdminProductFormPageClient: React.FC = () => {
                   <span className="mb-1.5 block text-xs font-bold text-[#1A1A1A]/80">Sale Price (Rs.)</span>
                   <input type="number" min="0" step="1" value={salePrice ?? ''} onChange={event => { setSalePrice(event.target.value === '' ? undefined : Number(event.target.value)); markDirty(); clearError('salePrice'); }} className={inputClass('salePrice')} placeholder="Leave empty if not on sale" />
                   <FieldError message={errors.salePrice} />
+                  {salePrice !== undefined && salePrice >= regularPrice && <span className="text-[10px] text-amber-600 font-medium block mt-1">Sale price is equal to or higher than regular price, so it will not display as a discount.</span>}
                 </label>
                 <label>
                   <span className="mb-1.5 block text-xs font-bold text-[#1A1A1A]/80">SKU</span>
@@ -1291,4 +1292,5 @@ export const AdminProductFormPageClient: React.FC = () => {
     </>
   );
 };
+
 

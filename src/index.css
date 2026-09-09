@@ -1,25 +1,25 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 @import "../node_modules/tw-animate-css/dist/tw-animate.css";
 @import "shadcn/tailwind.css";
 
-/* ─────────────────────────────────────────────
-   ALVORA SKINCARE — DESIGN SYSTEM
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+   ALVORA SKINCARE â€” DESIGN SYSTEM
    Phase 1: Color, Typography, Global Tokens
-   ───────────────────────────────────────────── */
+   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
-/* Google Fonts loaded in layout.tsx via next/font — no @import needed here */
+/* Google Fonts loaded in layout.tsx via next/font â€” no @import needed here */
 
 @custom-variant dark (&:is(.dark *));
 
-/* ── Alvora Semantic CSS Custom Properties ── */
+/* â”€â”€ Alvora Semantic CSS Custom Properties â”€â”€ */
 :root {
   /* Brand Palette (from design-system reference) */
-  --alvora-ivory:        #FAF6F2;     /* #FAF6F2 — warm page background */
-  --alvora-cream:        #F5EDE4;     /* #F5EDE4 — section alt background */
-  --alvora-peach:        #F1C9BD;     /* soft peach — #F1C9BD */
+  --alvora-ivory:        #FAF6F2;     /* #FAF6F2 â€” warm page background */
+  --alvora-cream:        #F5EDE4;     /* #F5EDE4 â€” section alt background */
+  --alvora-peach:        #F1C9BD;     /* soft peach â€” #F1C9BD */
   --alvora-terracotta:   #C48B80;     /* primary CTA / accent */
-  --alvora-mocha:        #4D3D2D;     /* #4D3D2D — deep warm brown */
-  --alvora-taupe:        #A1A7AA;     /* #A1A7AA — muted text */
+  --alvora-mocha:        #4D3D2D;     /* #4D3D2D â€” deep warm brown */
+  --alvora-taupe:        #A1A7AA;     /* #A1A7AA â€” muted text */
   --alvora-charcoal:     #1A1A1A;     /* near-black headings / body */
   --alvora-white:        #FFFFFF;
 
@@ -49,7 +49,7 @@
   --font-display: 'Playfair Display', Georgia, serif;
   --font-body:    'Lato', system-ui, sans-serif;
 
-  /* shadcn/ui token bridge → Alvora palette */
+  /* shadcn/ui token bridge â†’ Alvora palette */
   --background:           #FAF6F2;
   --foreground:           #1A1A1A;
   --card:                 #FFFFFF;
@@ -70,7 +70,7 @@
   --ring:                 #C48B80;
   --radius:               0.625rem;
 
-  /* Sidebar (admin) — keep neutral */
+  /* Sidebar (admin) â€” keep neutral */
   --sidebar:                      #FFFFFF;
   --sidebar-foreground:           #1A1A1A;
   --sidebar-primary:              #C48B80;
@@ -132,7 +132,7 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* ── Base Reset & Global Styles ── */
+/* â”€â”€ Base Reset & Global Styles â”€â”€ */
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -187,7 +187,7 @@
   }
 }
 
-/* ── Utility Classes ── */
+/* â”€â”€ Utility Classes â”€â”€ */
 .font-display {
   font-family: var(--font-display);
 }
@@ -198,7 +198,7 @@
   font-family: var(--font-display);
 }
 
-/* ── Alvora Button Primitives ── */
+/* â”€â”€ Alvora Button Primitives â”€â”€ */
 .btn-primary {
   display: inline-flex;
   align-items: center;
@@ -218,13 +218,8 @@
   transition: background-color 220ms ease, color 220ms ease, transform 120ms ease;
   white-space: nowrap;
 }
-.btn-primary:hover {
-  background-color: var(--alvora-mocha);
-  border-color: var(--alvora-mocha);
-}
-.btn-primary:active {
-  transform: scale(0.98);
-}
+
+
 
 .btn-secondary {
   display: inline-flex;
@@ -245,10 +240,7 @@
   transition: background-color 220ms ease, color 220ms ease, border-color 220ms ease;
   white-space: nowrap;
 }
-.btn-secondary:hover {
-  background-color: var(--alvora-charcoal);
-  color: #fff;
-}
+
 
 .btn-ghost {
   display: inline-flex;
@@ -272,7 +264,7 @@
   color: var(--alvora-mocha);
 }
 
-/* ── Alvora Section Layout Helpers ── */
+/* â”€â”€ Alvora Section Layout Helpers â”€â”€ */
 .alvora-section {
   padding-top: var(--space-2xl);
   padding-bottom: var(--space-2xl);
@@ -326,7 +318,7 @@
   max-width: 52ch;
 }
 
-/* ── Product Card Base ── */
+/* â”€â”€ Product Card Base â”€â”€ */
 .alvora-card {
   background-color: var(--alvora-white);
   border: 1px solid var(--border);
@@ -337,7 +329,7 @@
   transform: translateY(-2px);
 }
 
-/* ── Badges ── */
+/* â”€â”€ Badges â”€â”€ */
 .badge {
   display: inline-block;
   padding: 0.2rem 0.625rem;
@@ -362,7 +354,7 @@
   border: 1px solid var(--alvora-terracotta);
 }
 
-/* ── Form Inputs ── */
+/* â”€â”€ Form Inputs â”€â”€ */
 .alvora-input {
   width: 100%;
   padding: 0.875rem 1rem;
@@ -383,14 +375,14 @@
   box-shadow: 0 0 0 3px rgb(196 139 128 / 0.12);
 }
 
-/* ── Star Rating ── */
+/* â”€â”€ Star Rating â”€â”€ */
 .star-rating {
   display: inline-flex;
   gap: 0.125rem;
   color: var(--alvora-terracotta);
 }
 
-/* ── Trust Badges row ── */
+/* â”€â”€ Trust Badges row â”€â”€ */
 .trust-badges {
   display: flex;
   flex-wrap: wrap;
@@ -407,7 +399,7 @@
   font-weight: 500;
 }
 
-/* ── Cart count pop animation ── */
+/* â”€â”€ Cart count pop animation â”€â”€ */
 @keyframes cart-count-pop {
   0%   { opacity: 0.65; transform: scale(0.78); }
   55%  { opacity: 1;    transform: scale(1.12); }
@@ -417,7 +409,7 @@
   animation: cart-count-pop 280ms ease-out;
 }
 
-/* ── Announcement bar marquee ── */
+/* â”€â”€ Announcement bar marquee â”€â”€ */
 @keyframes alvora-marquee {
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
@@ -426,7 +418,7 @@
   animation: alvora-marquee 26s linear infinite;
 }
 
-/* ── Smooth reveal on scroll (CSS only) ── */
+/* â”€â”€ Smooth reveal on scroll (CSS only) â”€â”€ */
 @keyframes fadeSlideUp {
   from { opacity: 0; transform: translateY(18px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -435,7 +427,7 @@
   animation: fadeSlideUp 0.55s ease forwards;
 }
 
-/* ── Admin shell overrides (keep existing) ── */
+/* â”€â”€ Admin shell overrides (keep existing) â”€â”€ */
 .admin-shell select {
   background-color: #ffffff;
   color: #1e293b;
@@ -450,13 +442,13 @@
   color: #64748b;
 }
 
-/* ── Custom scrollbar ── */
+/* â”€â”€ Custom scrollbar â”€â”€ */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: var(--alvora-cream); }
 ::-webkit-scrollbar-thumb { background: var(--alvora-peach); border-radius: 999px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--alvora-terracotta); }
 
-/* ── Reduced motion ── */
+/* â”€â”€ Reduced motion â”€â”€ */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -465,4 +457,42 @@
   .alvora-marquee-track {
     animation: none;
   }
+}
+
+  /* Advanced Button Hover States (Site-wide + Admin) */
+  .btn-primary, .btn-secondary, .btn-interactive {
+    transition: all 0.2s ease-in-out;
+  }
+  .btn-primary:not(:disabled):hover,
+  .btn-interactive:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(156, 65, 34, 0.2);
+    filter: brightness(1.05);
+  }
+  .btn-secondary:not(:disabled):hover {
+    background-color: var(--alvora-charcoal);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  }
+  .btn-primary:not(:disabled):active,
+  .btn-secondary:not(:disabled):active,
+  .btn-interactive:not(:disabled):active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+
+/* Admin Panel Global Button Hover Effects */
+.admin-shell button[class*="bg-"]:not([class*="bg-transparent"]):not(:disabled) {
+  transition: all 0.2s ease-in-out;
+}
+.admin-shell button[class*="bg-"]:not([class*="bg-transparent"]):not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  filter: brightness(1.05);
+}
+.admin-shell button[class*="bg-"]:not([class*="bg-transparent"]):not(:disabled):active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  filter: brightness(1);
 }

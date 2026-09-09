@@ -75,7 +75,7 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
   }
 
   return (
-    <div className="admin-shell min-h-screen bg-[#FAF6F2] font-sans text-[#1A1A1A] flex">
+    <div className="admin-shell min-h-screen bg-[#FAF6F2] font-body text-[#1A1A1A] flex">
       {/* Mobile Sidebar Overlay */}
       {mobileMenuOpen && (
         <div 
@@ -193,6 +193,7 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
     </div>
   );
 };
+
 
 
 
