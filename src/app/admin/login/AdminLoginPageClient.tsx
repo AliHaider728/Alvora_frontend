@@ -42,9 +42,9 @@ export const AdminLoginPageClient: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white font-body flex flex-col md:flex-row">
+    <div className="min-h-screen bg-[#FAF6F2] font-body flex flex-col md:flex-row">
       {/* Left Panel - Image & Marketing Text */}
-      <div className="hidden md:flex md:w-[50%] relative p-12 lg:p-20 overflow-hidden">
+      <div className="hidden md:flex md:w-1/2 relative p-12 lg:p-20 overflow-hidden">
         <Image
           src="/images/admin/login-bg.png" 
           alt="Alvora Skincare Admin"
@@ -55,6 +55,7 @@ export const AdminLoginPageClient: React.FC = () => {
         
         <div className="relative z-10 w-full max-w-lg flex flex-col h-full justify-between pt-6">
           <div>
+            {/* Eyebrow */}
             <div className="flex items-center gap-3 mb-8">
               <div className="h-[1px] w-8 bg-[#A86249]" />
               <span className="text-[10px] font-bold text-[#A86249] uppercase tracking-[0.15em]">
@@ -62,15 +63,18 @@ export const AdminLoginPageClient: React.FC = () => {
               </span>
             </div>
 
+            {/* Main Headline */}
             <h1 className="font-display text-[3.5rem] lg:text-[4.5rem] leading-[1.05] mb-6 text-[#1A1A1A]">
               Pure Ingredients.<br/>
               <span className="text-[#A86249]">Visible Results.</span>
             </h1>
 
+            {/* Paragraph */}
             <p className="text-[#4A403A] text-[15px] font-medium leading-relaxed max-w-[340px] mb-12">
               Manage your Alvora storefront, orders, and products through our secure admin dashboard.
             </p>
 
+            {/* Features Row */}
             <div className="flex items-start gap-6 lg:gap-10">
               <div className="flex flex-col items-center text-center gap-2">
                 <Sparkles className="w-5 h-5 text-[#A86249] mb-1" strokeWidth={1.5} />
@@ -89,6 +93,7 @@ export const AdminLoginPageClient: React.FC = () => {
             </div>
           </div>
 
+          {/* Bottom Script text */}
           <div className="mt-auto pt-16 pb-4">
             <span className="font-display italic text-[28px] lg:text-[32px] text-[#A85A3B]">
               Care for your natural beauty
@@ -97,11 +102,30 @@ export const AdminLoginPageClient: React.FC = () => {
         </div>
       </div>
 
-      {/* Right Panel - Login Form */}
-      <div className="flex-1 flex flex-col justify-center p-8 sm:p-12 lg:p-24 bg-white relative">
-        <div className="w-full max-w-[420px] mx-auto z-10 relative">
+      {/* Right Panel - Login Form Container */}
+      <div className="flex-1 md:w-1/2 flex flex-col justify-center p-6 sm:p-8 lg:p-16 relative overflow-hidden bg-[#FAF6F2]">
+        
+        {/* Decorative Elements - Z-index 0 */}
+        {/* Top Right Leaf Decoration (Fallback SVG if image missing) */}
+        <div className="absolute top-0 right-0 -mr-12 -mt-12 text-[#8C7B74] opacity-10 pointer-events-none z-0 transform rotate-45">
+          <Leaf className="w-64 h-64" strokeWidth={0.5} />
+        </div>
+        
+        {/* Bottom Right Soft Terracotta Shape */}
+        <div className="absolute bottom-0 right-0 w-80 h-80 bg-[#A86249] opacity-10 rounded-tl-[120px] pointer-events-none z-0 translate-x-12 translate-y-12" />
+
+        {/* Floating White Form Card - Z-index 10 */}
+        <div className="w-full max-w-[460px] mx-auto z-10 relative bg-white p-8 sm:p-12 rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(168,98,73,0.15)]">
           
-          <div className="mb-12">
+          {/* Mobile Header (Hidden on Desktop) */}
+          <div className="md:hidden mb-10 flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-[#A85A3B] text-white font-display font-medium text-xl flex items-center justify-center">
+              A
+            </div>
+            <span className="font-display text-xl text-[#1A1A1A]">Alvora</span>
+          </div>
+
+          <div className="mb-10">
             <h2 className="font-display text-4xl lg:text-[42px] text-[#1A1A1A] mb-3">Admin Login</h2>
             <p className="text-[13px] lg:text-[14px] text-[#8C7B74] font-medium">
               Welcome back. Please enter your details.
@@ -115,7 +139,7 @@ export const AdminLoginPageClient: React.FC = () => {
             </div>
           )}
 
-          <form onSubmit={handleLogin} className="space-y-7">
+          <form onSubmit={handleLogin} className="space-y-6">
             <div className="space-y-2">
               <label className="text-[10px] font-bold text-[#1A1A1A] uppercase tracking-[0.15em] block">
                 Email
@@ -176,6 +200,7 @@ export const AdminLoginPageClient: React.FC = () => {
             </button>
           </form>
 
+          {/* Divider */}
           <div className="relative flex items-center py-8">
             <div className="flex-grow border-t border-[#E7D9D0]"></div>
             <span className="flex-shrink-0 mx-4 text-[9px] uppercase tracking-widest font-bold text-[#A1A7AA]">
@@ -184,6 +209,7 @@ export const AdminLoginPageClient: React.FC = () => {
             <div className="flex-grow border-t border-[#E7D9D0]"></div>
           </div>
 
+          {/* Footer Link */}
           <div>
             <button
               onClick={() => router.push('/')}
