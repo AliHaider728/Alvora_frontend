@@ -13,7 +13,7 @@ export const HeroSection: React.FC = () => {
         We add padding-top to ensure the content starts safely below the header,
         but the background itself starts from the very top of the page.
       */}
-      <div className="mx-auto flex min-h-screen max-w-375 flex-col justify-center px-5 pt-36 lg:pt-40 sm:px-8 lg:px-12">
+      <div className="mx-auto flex min-h-screen max-w-375 flex-col justify-center px-5 pt-24 sm:px-8 lg:px-12">
         <div className="max-w-xl pb-16">
           {/* Eyebrow */}
           <motion.div 
