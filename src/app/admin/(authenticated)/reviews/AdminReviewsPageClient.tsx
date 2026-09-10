@@ -176,18 +176,13 @@ export const AdminReviewsPageClient: React.FC = () => {
 
       {/* 4 Metric Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        
         {/* Total Reviews Card */}
         <div className="bg-white p-6 rounded-2xl border border-[#E7D9D0] shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-32 h-32 bg-[#F5EDE4] rounded-bl-full -mr-10 -mt-10 opacity-50 transition-transform group-hover:scale-110" />
           <div className="flex items-start justify-between relative z-10">
             <div>
-              <span className="text-[11px] font-bold text-[#1A1A1A]/50 uppercase tracking-wider block">
-                Total Reviews
-              </span>
-              <span className="font-sans font-black text-3xl text-[#1A1A1A] mt-2 block tracking-tight">
-                {total}
-              </span>
+              <span className="text-[11px] font-bold text-[#1A1A1A]/50 uppercase tracking-wider block">Total Reviews</span>
+              <span className="font-sans font-black text-3xl text-[#1A1A1A] mt-2 block tracking-tight">{total}</span>
             </div>
             <div className="p-3 rounded-xl bg-[#F5EDE4] text-[#9C4122] shadow-inner">
               <MessageSquare className="w-5 h-5" />
@@ -200,12 +195,8 @@ export const AdminReviewsPageClient: React.FC = () => {
           <div className="absolute top-0 right-0 w-32 h-32 bg-amber-50 rounded-bl-full -mr-10 -mt-10 opacity-50 transition-transform group-hover:scale-110" />
           <div className="flex items-start justify-between relative z-10">
             <div>
-              <span className="text-[11px] font-bold text-[#1A1A1A]/50 uppercase tracking-wider block">
-                Pending Approval
-              </span>
-              <span className="font-sans font-black text-3xl text-amber-600 mt-2 block tracking-tight">
-                {counts.pending || 0}
-              </span>
+              <span className="text-[11px] font-bold text-[#1A1A1A]/50 uppercase tracking-wider block">Pending Approval</span>
+              <span className="font-sans font-black text-3xl text-amber-600 mt-2 block tracking-tight">{counts.pending || 0}</span>
             </div>
             <div className="p-3 rounded-xl bg-amber-100 text-amber-700 shadow-inner">
               <Clock className="w-5 h-5" />
@@ -218,12 +209,8 @@ export const AdminReviewsPageClient: React.FC = () => {
           <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-50 rounded-bl-full -mr-10 -mt-10 opacity-50 transition-transform group-hover:scale-110" />
           <div className="flex items-start justify-between relative z-10">
             <div>
-              <span className="text-[11px] font-bold text-[#1A1A1A]/50 uppercase tracking-wider block">
-                Approved
-              </span>
-              <span className="font-sans font-black text-3xl text-emerald-600 mt-2 block tracking-tight">
-                {counts.approved || 0}
-              </span>
+              <span className="text-[11px] font-bold text-[#1A1A1A]/50 uppercase tracking-wider block">Approved</span>
+              <span className="font-sans font-black text-3xl text-emerald-600 mt-2 block tracking-tight">{counts.approved || 0}</span>
             </div>
             <div className="p-3 rounded-xl bg-emerald-100 text-emerald-700 shadow-inner">
               <CheckCircle className="w-5 h-5" />
@@ -236,12 +223,8 @@ export const AdminReviewsPageClient: React.FC = () => {
           <div className="absolute top-0 right-0 w-32 h-32 bg-rose-50 rounded-bl-full -mr-10 -mt-10 opacity-50 transition-transform group-hover:scale-110" />
           <div className="flex items-start justify-between relative z-10">
             <div>
-              <span className="text-[11px] font-bold text-[#1A1A1A]/50 uppercase tracking-wider block">
-                Rejected
-              </span>
-              <span className="font-sans font-black text-3xl text-rose-600 mt-2 block tracking-tight">
-                {counts.rejected || 0}
-              </span>
+              <span className="text-[11px] font-bold text-[#1A1A1A]/50 uppercase tracking-wider block">Rejected</span>
+              <span className="font-sans font-black text-3xl text-rose-600 mt-2 block tracking-tight">{counts.rejected || 0}</span>
             </div>
             <div className="p-3 rounded-xl bg-rose-100 text-rose-700 shadow-inner">
               <XCircle className="w-5 h-5" />
@@ -250,7 +233,7 @@ export const AdminReviewsPageClient: React.FC = () => {
         </div>
       </div>
 
-      {/* Slim Inline Filters (No bulky outer container) */}
+      {/* Slim Inline Filters */}
       <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
         <div className="flex-1 w-full relative">
           <Search className="w-4 h-4 text-[#1A1A1A]/40 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -263,21 +246,13 @@ export const AdminReviewsPageClient: React.FC = () => {
           />
         </div>
         <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
-          <select
-            value={statusFilter}
-            onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
-            className="px-4 py-2.5 bg-white border border-[#E7D9D0] shadow-sm rounded-xl text-sm font-semibold text-[#1A1A1A]/80 outline-none focus:border-[#9C4122] transition-colors cursor-pointer"
-          >
+          <select value={statusFilter} onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }} className="px-4 py-2.5 bg-white border border-[#E7D9D0] shadow-sm rounded-xl text-sm font-semibold text-[#1A1A1A]/80 outline-none focus:border-[#9C4122] transition-colors cursor-pointer">
             <option value="">All Statuses</option>
             <option value="pending">Pending</option>
             <option value="approved">Approved</option>
             <option value="rejected">Rejected</option>
           </select>
-          <select
-            value={ratingFilter}
-            onChange={(e) => { setRatingFilter(e.target.value); setPage(1); }}
-            className="px-4 py-2.5 bg-white border border-[#E7D9D0] shadow-sm rounded-xl text-sm font-semibold text-[#1A1A1A]/80 outline-none focus:border-[#9C4122] transition-colors cursor-pointer"
-          >
+          <select value={ratingFilter} onChange={(e) => { setRatingFilter(e.target.value); setPage(1); }} className="px-4 py-2.5 bg-white border border-[#E7D9D0] shadow-sm rounded-xl text-sm font-semibold text-[#1A1A1A]/80 outline-none focus:border-[#9C4122] transition-colors cursor-pointer">
             <option value="">All Ratings</option>
             <option value="5">5 Stars</option>
             <option value="4">4 Stars</option>
@@ -285,11 +260,7 @@ export const AdminReviewsPageClient: React.FC = () => {
             <option value="2">2 Stars</option>
             <option value="1">1 Star</option>
           </select>
-          <select
-            value={sourceFilter}
-            onChange={(e) => { setSourceFilter(e.target.value); setPage(1); }}
-            className="px-4 py-2.5 bg-white border border-[#E7D9D0] shadow-sm rounded-xl text-sm font-semibold text-[#1A1A1A]/80 outline-none focus:border-[#9C4122] transition-colors cursor-pointer"
-          >
+          <select value={sourceFilter} onChange={(e) => { setSourceFilter(e.target.value); setPage(1); }} className="px-4 py-2.5 bg-white border border-[#E7D9D0] shadow-sm rounded-xl text-sm font-semibold text-[#1A1A1A]/80 outline-none focus:border-[#9C4122] transition-colors cursor-pointer">
             <option value="">All Sources</option>
             <option value="organic">Organic</option>
             <option value="admin">Admin Added</option>
@@ -315,101 +286,100 @@ export const AdminReviewsPageClient: React.FC = () => {
             <p className="text-sm text-[#1A1A1A]/50">Try adjusting your filters or search query.</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse min-w-[900px]">
-              <thead>
-                <tr className="bg-[#FAF6F2] border-b border-[#E7D9D0]">
-                  <th className="py-4 px-6 text-[11px] font-bold uppercase tracking-wider text-[#1A1A1A]/50">Review & Product</th>
-                  <th className="py-4 px-6 text-[11px] font-bold uppercase tracking-wider text-[#1A1A1A]/50 w-32">Rating</th>
-                  <th className="py-4 px-6 text-[11px] font-bold uppercase tracking-wider text-[#1A1A1A]/50 w-32">Status</th>
-                  <th className="py-4 px-6 text-[11px] font-bold uppercase tracking-wider text-[#1A1A1A]/50 text-right w-32">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#E7D9D0]/50">
-                {reviews.map(review => (
-                  <tr key={review.id} className="hover:bg-[#FAF6F2]/50 transition-colors group">
-                    <td className="py-4 px-6">
-                      <div className="flex gap-4">
-                        <div className="w-12 h-12 bg-[#FAF6F2] rounded-xl overflow-hidden flex-shrink-0 border border-[#E7D9D0]">
-                          {(review as any).productThumbnail ? (
-                            <img src={getSafeImageSrc((review as any).productThumbnail)} alt="Product" className="w-full h-full object-cover" />
-                          ) : (
-                            <ShoppingBag className="w-5 h-5 text-[#1A1A1A]/20 m-auto mt-3.5" />
-                          )}
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <div className="text-sm font-bold text-[#1A1A1A] line-clamp-1 mb-1">
-                            {review.title ? `"${review.title}"` : review.content}
-                          </div>
-                          <div className="text-xs text-[#1A1A1A]/60 mb-2 line-clamp-2 pr-4">{review.content}</div>
-                          <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold">
-                            <span className="text-[#1A1A1A]/80">{review.reviewerName}</span>
-                            <span className="text-[#1A1A1A]/20">•</span>
-                            <span className="text-[#1A1A1A]/50">{(review as any).productName || 'Product'}</span>
-                            <span className="text-[#1A1A1A]/20">•</span>
-                            <span className="text-[#1A1A1A]/40">{new Date(review.createdAt || '').toLocaleDateString()}</span>
-                            {review.verifiedPurchase && (
-                              <span className="flex items-center gap-1 text-[9px] uppercase tracking-wider font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-md border border-emerald-200 ml-1">
-                                <ShieldCheck className="w-2.5 h-2.5" /> Verified
-                              </span>
+          <>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse min-w-[900px]">
+                <thead>
+                  <tr className="bg-[#FAF6F2] border-b border-[#E7D9D0]">
+                    <th className="py-4 px-6 text-[11px] font-bold uppercase tracking-wider text-[#1A1A1A]/50">Review & Product</th>
+                    <th className="py-4 px-6 text-[11px] font-bold uppercase tracking-wider text-[#1A1A1A]/50 w-32">Rating</th>
+                    <th className="py-4 px-6 text-[11px] font-bold uppercase tracking-wider text-[#1A1A1A]/50 w-32">Status</th>
+                    <th className="py-4 px-6 text-[11px] font-bold uppercase tracking-wider text-[#1A1A1A]/50 text-right w-32">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#E7D9D0]/50">
+                  {reviews.map(review => (
+                    <tr key={review.id} className="hover:bg-[#FAF6F2]/50 transition-colors group">
+                      <td className="py-4 px-6">
+                        <div className="flex gap-4">
+                          <div className="w-12 h-12 bg-[#FAF6F2] rounded-xl overflow-hidden flex-shrink-0 border border-[#E7D9D0]">
+                            {(review as any).productThumbnail ? (
+                              <img src={getSafeImageSrc((review as any).productThumbnail)} alt="Product" className="w-full h-full object-cover" />
+                            ) : (
+                              <ShoppingBag className="w-5 h-5 text-[#1A1A1A]/20 m-auto mt-3.5" />
                             )}
                           </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="text-sm font-bold text-[#1A1A1A] line-clamp-1 mb-1">
+                              {review.title ? `"${review.title}"` : review.content}
+                            </div>
+                            <div className="text-xs text-[#1A1A1A]/60 mb-2 line-clamp-2 pr-4">{review.content}</div>
+                            <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold">
+                              <span className="text-[#1A1A1A]/80">{review.reviewerName}</span>
+                              <span className="text-[#1A1A1A]/20">•</span>
+                              <span className="text-[#1A1A1A]/50">{(review as any).productName || 'Product'}</span>
+                              <span className="text-[#1A1A1A]/20">•</span>
+                              <span className="text-[#1A1A1A]/40">{new Date(review.createdAt || '').toLocaleDateString()}</span>
+                              {review.verifiedPurchase && (
+                                <span className="flex items-center gap-1 text-[9px] uppercase tracking-wider font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-md border border-emerald-200 ml-1">
+                                  <ShieldCheck className="w-2.5 h-2.5" /> Verified
+                                </span>
+                              )}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </td>
-                    <td className="py-4 px-6 align-top pt-5">
-                      {renderStars(review.rating)}
-                    </td>
-                    <td className="py-4 px-6 align-top pt-5">
-                      <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-bold uppercase tracking-wide border ${
-                        review.status === 'approved' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
-                        review.status === 'rejected' ? 'bg-rose-50 text-rose-700 border-rose-200' :
-                        'bg-amber-50 text-amber-700 border-amber-200'
-                      }`}>
-                        {review.status === 'approved' && <CheckCircle className="w-3 h-3" />}
-                        {review.status === 'rejected' && <XCircle className="w-3 h-3" />}
-                        {review.status === 'pending' && <Clock className="w-3 h-3" />}
-                        {review.status}
-                      </span>
-                    </td>
-                    <td className="py-4 px-6 align-top pt-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        {review.status === 'pending' && (
-                          <>
-                            <button 
-                              onClick={() => handleApprove(review.id!)}
-                              className="p-2 text-emerald-600 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-colors border border-emerald-100"
-                              title="Approve"
-                            >
-                              <CheckCircle className="w-4 h-4" />
-                            </button>
-                            <button 
-                              onClick={() => handleReject(review.id!)}
-                              className="p-2 text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-lg transition-colors border border-rose-100"
-                              title="Reject"
-                            >
-                              <XCircle className="w-4 h-4" />
-                            </button>
-                          </>
-                        )}
-                        <button 
-                          onClick={() => handleDelete(review.id!)}
-                          className="p-2 text-[#1A1A1A]/40 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
-                          title="Delete"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
-      
-      {/* (The existing pagination and Add Modal remain exactly the same as they were at the bottom, appending them next) */}            {/* Pagination */}
+                      </td>
+                      <td className="py-4 px-6 align-top pt-5">
+                        {renderStars(review.rating)}
+                      </td>
+                      <td className="py-4 px-6 align-top pt-5">
+                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-bold uppercase tracking-wide border ${
+                          review.status === 'approved' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
+                          review.status === 'rejected' ? 'bg-rose-50 text-rose-700 border-rose-200' :
+                          'bg-amber-50 text-amber-700 border-amber-200'
+                        }`}>
+                          {review.status === 'approved' && <CheckCircle className="w-3 h-3" />}
+                          {review.status === 'rejected' && <XCircle className="w-3 h-3" />}
+                          {review.status === 'pending' && <Clock className="w-3 h-3" />}
+                          {review.status}
+                        </span>
+                      </td>
+                      <td className="py-4 px-6 align-top pt-4 text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          {review.status === 'pending' && (
+                            <>
+                              <button 
+                                onClick={() => handleApprove(review.id!)}
+                                className="p-2 text-emerald-600 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-colors border border-emerald-100"
+                                title="Approve"
+                              >
+                                <CheckCircle className="w-4 h-4" />
+                              </button>
+                              <button 
+                                onClick={() => handleReject(review.id!)}
+                                className="p-2 text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-lg transition-colors border border-rose-100"
+                                title="Reject"
+                              >
+                                <XCircle className="w-4 h-4" />
+                              </button>
+                            </>
+                          )}
+                          <button 
+                            onClick={() => handleDelete(review.id!)}
+                            className="p-2 text-[#1A1A1A]/40 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
+                            title="Delete"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            
+            {/* Pagination */}
             {!loading && total > limit && (
               <div className="px-6 py-4 border-t border-[#E7D9D0] bg-[#FAF6F2]/50 flex items-center justify-between">
                 <span className="text-sm font-semibold text-[#1A1A1A]/50">
@@ -433,89 +403,90 @@ export const AdminReviewsPageClient: React.FC = () => {
                 </div>
               </div>
             )}
-          </div>
-        </div>
+          </>
+        )}
+      </div>
 
-        {/* Add Review Modal */}
-        {isAddModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1A1A1A]/60 backdrop-blur-sm">
-            <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden">
-              <div className="px-6 py-4 border-b border-[#E7D9D0] flex items-center justify-between">
-                <h2 className="font-sans font-black text-lg text-[#1A1A1A]">Add Customer Review</h2>
-                <button onClick={() => setIsAddModalOpen(false)} className="text-[#1A1A1A]/40 hover:text-[#1A1A1A]/70">
-                  <XCircle className="h-6 w-6" />
-                </button>
-              </div>
-              
-              <div className="p-6 overflow-y-auto font-sans">
-                <form id="addReviewForm" onSubmit={handleAddReview} className="space-y-4">
+      {/* Add Review Modal */}
+      {isAddModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1A1A1A]/60 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden">
+            <div className="px-6 py-4 border-b border-[#E7D9D0] flex items-center justify-between">
+              <h2 className="font-sans font-black text-lg text-[#1A1A1A]">Add Customer Review</h2>
+              <button onClick={() => setIsAddModalOpen(false)} className="text-[#1A1A1A]/40 hover:text-[#1A1A1A]/70">
+                <XCircle className="h-6 w-6" />
+              </button>
+            </div>
+            
+            <div className="p-6 overflow-y-auto font-sans">
+              <form id="addReviewForm" onSubmit={handleAddReview} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-bold text-[#1A1A1A]/80 mb-1">Product ID or Slug <span className="text-rose-500">*</span></label>
+                  <input type="text" required value={newReview.productId} onChange={e => setNewReview({...newReview, productId: e.target.value})} className="w-full px-3 py-2 text-sm rounded-xl bg-white border border-[#E7D9D0] focus:outline-none focus:ring-2 focus:ring-[#9C4122] transition-shadow" placeholder="e.g. magnetic-building-blocks or 60d5ecb..." />
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-[#1A1A1A]/80 mb-1">Product ID or Slug <span className="text-rose-500">*</span></label>
-                    <input type="text" required value={newReview.productId} onChange={e => setNewReview({...newReview, productId: e.target.value})} className="w-full px-3 py-2 text-sm rounded-xl bg-white border border-[#E7D9D0] focus:outline-none focus:ring-2 focus:ring-[#9C4122] transition-shadow" placeholder="e.g. magnetic-building-blocks or 60d5ecb..." />
+                    <label className="block text-xs font-bold text-[#1A1A1A]/80 mb-1">Customer Name <span className="text-rose-500">*</span></label>
+                    <input type="text" required value={newReview.reviewerName} onChange={e => setNewReview({...newReview, reviewerName: e.target.value})} className="w-full px-3 py-2 text-sm rounded-xl bg-white border border-[#E7D9D0] focus:outline-none focus:ring-2 focus:ring-[#9C4122] transition-shadow" placeholder="e.g. Sarah M." />
                   </div>
-                  
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-bold text-[#1A1A1A]/80 mb-1">Customer Name <span className="text-rose-500">*</span></label>
-                      <input type="text" required value={newReview.reviewerName} onChange={e => setNewReview({...newReview, reviewerName: e.target.value})} className="w-full px-3 py-2 text-sm rounded-xl bg-white border border-[#E7D9D0] focus:outline-none focus:ring-2 focus:ring-[#9C4122] transition-shadow" placeholder="e.g. Sarah M." />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-[#1A1A1A]/80 mb-1">Rating</label>
-                      <select value={newReview.rating} onChange={e => setNewReview({...newReview, rating: Number(e.target.value)})} className="w-full px-3 py-2 text-sm rounded-xl bg-white border border-[#E7D9D0] focus:outline-none focus:ring-2 focus:ring-[#9C4122] transition-shadow">
-                        <option value="5">5 Stars</option>
-                        <option value="4">4 Stars</option>
-                        <option value="3">3 Stars</option>
-                        <option value="2">2 Stars</option>
-                        <option value="1">1 Star</option>
-                      </select>
-                    </div>
-                  </div>
-  
                   <div>
-                    <label className="block text-xs font-bold text-[#1A1A1A]/80 mb-1">Review Title</label>
-                    <input type="text" value={newReview.title} onChange={e => setNewReview({...newReview, title: e.target.value})} className="w-full px-3 py-2 text-sm rounded-xl bg-white border border-[#E7D9D0] focus:outline-none focus:ring-2 focus:ring-[#9C4122] transition-shadow" placeholder="e.g. My kids love this!" />
+                    <label className="block text-xs font-bold text-[#1A1A1A]/80 mb-1">Rating</label>
+                    <select value={newReview.rating} onChange={e => setNewReview({...newReview, rating: Number(e.target.value)})} className="w-full px-3 py-2 text-sm rounded-xl bg-white border border-[#E7D9D0] focus:outline-none focus:ring-2 focus:ring-[#9C4122] transition-shadow">
+                      <option value="5">5 Stars</option>
+                      <option value="4">4 Stars</option>
+                      <option value="3">3 Stars</option>
+                      <option value="2">2 Stars</option>
+                      <option value="1">1 Star</option>
+                    </select>
                   </div>
-  
-                  <div>
-                    <label className="block text-xs font-bold text-[#1A1A1A]/80 mb-1">Review Content <span className="text-rose-500">*</span></label>
-                    <textarea required rows={4} value={newReview.content} onChange={e => setNewReview({...newReview, content: e.target.value})} className="w-full px-3 py-2 text-sm rounded-xl bg-white border border-[#E7D9D0] focus:outline-none focus:ring-2 focus:ring-[#9C4122] transition-shadow" placeholder="Write the review text here..."></textarea>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-[#1A1A1A]/80 mb-1">Review Title</label>
+                  <input type="text" value={newReview.title} onChange={e => setNewReview({...newReview, title: e.target.value})} className="w-full px-3 py-2 text-sm rounded-xl bg-white border border-[#E7D9D0] focus:outline-none focus:ring-2 focus:ring-[#9C4122] transition-shadow" placeholder="e.g. My kids love this!" />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-[#1A1A1A]/80 mb-1">Review Content <span className="text-rose-500">*</span></label>
+                  <textarea required rows={4} value={newReview.content} onChange={e => setNewReview({...newReview, content: e.target.value})} className="w-full px-3 py-2 text-sm rounded-xl bg-white border border-[#E7D9D0] focus:outline-none focus:ring-2 focus:ring-[#9C4122] transition-shadow" placeholder="Write the review text here..."></textarea>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <input type="checkbox" id="verifiedPurchase" checked={newReview.verifiedPurchase} onChange={e => setNewReview({...newReview, verifiedPurchase: e.target.checked})} className="rounded text-[#9C4122] focus:ring-[#9C4122]" />
+                  <label htmlFor="verifiedPurchase" className="text-sm font-bold text-[#1A1A1A]/80">Verified Purchase</label>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-[#1A1A1A]/80 mb-1">Review Image (Optional)</label>
+                  <div className="flex items-center gap-4">
+                    {reviewImagePreview ? (
+                      <div className="relative h-20 w-20 rounded-xl overflow-hidden border border-[#E7D9D0]">
+                        <img src={getSafeImageSrc(reviewImagePreview)} alt="Preview" className="w-full h-full object-cover" />
+                        <button type="button" onClick={() => { setReviewImageFile(null); setReviewImagePreview(''); }} className="absolute top-1 right-1 bg-white/80 rounded-full p-0.5 text-rose-500 hover:bg-white"><XCircle className="w-4 h-4" /></button>
+                      </div>
+                    ) : (
+                      <label className="flex h-20 w-20 cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-[#E7D9D0] bg-[#FAF6F2] text-[#1A1A1A]/40 hover:border-[#9C4122] hover:text-[#9C4122] transition-colors">
+                        <ImagePlus className="h-6 w-6" />
+                        <span className="text-[10px] font-bold">Upload</span>
+                        <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handleImageChange} />
+                      </label>
+                    )}
                   </div>
-                  
-                  <div className="flex items-center gap-2">
-                    <input type="checkbox" id="verifiedPurchase" checked={newReview.verifiedPurchase} onChange={e => setNewReview({...newReview, verifiedPurchase: e.target.checked})} className="rounded text-[#9C4122] focus:ring-[#9C4122]" />
-                    <label htmlFor="verifiedPurchase" className="text-sm font-bold text-[#1A1A1A]/80">Verified Purchase</label>
-                  </div>
-  
-                  <div>
-                    <label className="block text-xs font-bold text-[#1A1A1A]/80 mb-1">Review Image (Optional)</label>
-                    <div className="flex items-center gap-4">
-                      {reviewImagePreview ? (
-                        <div className="relative h-20 w-20 rounded-xl overflow-hidden border border-[#E7D9D0]">
-                          <img src={getSafeImageSrc(reviewImagePreview)} alt="Preview" className="w-full h-full object-cover" />
-                          <button type="button" onClick={() => { setReviewImageFile(null); setReviewImagePreview(''); }} className="absolute top-1 right-1 bg-white/80 rounded-full p-0.5 text-rose-500 hover:bg-white"><XCircle className="w-4 h-4" /></button>
-                        </div>
-                      ) : (
-                        <label className="flex h-20 w-20 cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-[#E7D9D0] bg-[#FAF6F2] text-[#1A1A1A]/40 hover:border-[#9C4122] hover:text-[#9C4122] transition-colors">
-                          <ImagePlus className="h-6 w-6" />
-                          <span className="text-[10px] font-bold">Upload</span>
-                          <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handleImageChange} />
-                        </label>
-                      )}
-                    </div>
-                  </div>
-  
-                </form>
-              </div>
-              
-              <div className="px-6 py-4 bg-[#FAF6F2] border-t border-[#E7D9D0] flex justify-end gap-3">
-                <button type="button" onClick={() => setIsAddModalOpen(false)} className="px-4 py-2 rounded-xl text-sm font-bold text-[#1A1A1A]/70 hover:bg-[#E7D9D0] transition">Cancel</button>
-                <button type="submit" form="addReviewForm" disabled={isSubmitting} className="flex items-center gap-2 px-6 py-2 rounded-xl bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:to-[#7A321A] text-white border-transparent shadow-sm text-sm font-bold transition disabled:opacity-70">
-                  {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />} Save Review
-                </button>
-              </div>
+                </div>
+
+              </form>
+            </div>
+            
+            <div className="px-6 py-4 bg-[#FAF6F2] border-t border-[#E7D9D0] flex justify-end gap-3">
+              <button type="button" onClick={() => setIsAddModalOpen(false)} className="px-4 py-2 rounded-xl text-sm font-bold text-[#1A1A1A]/70 hover:bg-[#E7D9D0] transition">Cancel</button>
+              <button type="submit" form="addReviewForm" disabled={isSubmitting} className="flex items-center gap-2 px-6 py-2 rounded-xl bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:to-[#7A321A] text-white border-transparent shadow-sm text-sm font-bold transition disabled:opacity-70">
+                {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />} Save Review
+              </button>
             </div>
           </div>
-        )}
+        </div>
+      )}
     </div>
   );
 };
