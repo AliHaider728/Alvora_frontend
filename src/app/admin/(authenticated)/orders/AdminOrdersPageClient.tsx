@@ -190,13 +190,13 @@ export const AdminOrdersPageClient: React.FC = () => {
       </div>
 
       {selectedOrderIds.size > 0 && (
-        <div className="bg-sky-50 border border-sky-100 rounded-2xl p-3 flex flex-wrap items-center justify-between gap-4">
-          <div className="text-xs font-bold text-sky-900 flex items-center gap-2">
+        <div className="bg-[#C48B80] border border-[#C48B80] rounded-2xl p-3 flex flex-wrap items-center justify-between gap-4">
+          <div className="text-xs font-bold text-[#C48B80] flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4" />
             {selectedOrderIds.size} Order{selectedOrderIds.size > 1 ? 's' : ''} Selected
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[10px] font-bold text-sky-700 uppercase tracking-wider mr-2 hidden sm:inline">Bulk Status:</span>
+            <span className="text-[10px] font-bold text-[#C48B80] uppercase tracking-wider mr-2 hidden sm:inline">Bulk Status:</span>
             {['Processing', 'Shipped', 'Delivered', 'Cancelled'].map(status => (
               <button
                 key={status}
@@ -204,15 +204,15 @@ export const AdminOrdersPageClient: React.FC = () => {
                 onClick={() => void handleBulkStatusChange(status as Order['status'])}
                 className={`px-3 py-1.5 text-[11px] font-bold rounded-xl transition-colors border ${
                   status === 'Processing' ? 'bg-amber-100 text-amber-800 border-amber-200 hover:bg-amber-200' :
-                  status === 'Shipped' ? 'bg-sky-100 text-sky-800 border-sky-200 hover:bg-sky-200' :
+                  status === 'Shipped' ? 'bg-[#C48B80] text-[#C48B80] border-[#C48B80] hover:bg-[#C48B80]' :
                   status === 'Delivered' ? 'bg-emerald-100 text-emerald-800 border-emerald-200 hover:bg-emerald-200' :
-                  'bg-rose-100 text-rose-800 border-[#E7D9D0] hover:bg-rose-200'
+                  'bg-rose-100 text-[#C48B80] border-[#E7D9D0] hover:bg-rose-200'
                 } disabled:opacity-50`}
               >
                 {status}
               </button>
             ))}
-            <div className="w-px h-6 bg-sky-200 mx-2 hidden sm:block" />
+            <div className="w-px h-6 bg-[#C48B80] mx-2 hidden sm:block" />
             <button
               disabled={isBulkUpdating}
               onClick={() => void handleBulkDelete()}
@@ -235,7 +235,7 @@ export const AdminOrdersPageClient: React.FC = () => {
                     type="checkbox"
                     checked={filteredOrders.length > 0 && selectedOrderIds.size === filteredOrders.length}
                     onChange={toggleSelectAll}
-                    className="rounded border-[#E7D9D0] text-sky-600 focus:ring-sky-500 cursor-pointer"
+                    className="rounded border-[#E7D9D0] text-[#C48B80] focus:ring-[#C48B80] cursor-pointer"
                   />
                 </th>
                 <th className="p-4">Order ID</th>
@@ -256,7 +256,7 @@ export const AdminOrdersPageClient: React.FC = () => {
                       type="checkbox"
                       checked={selectedOrderIds.has(order.id)}
                       onChange={() => toggleSelectOrder(order.id)}
-                      className="rounded border-[#E7D9D0] text-sky-600 focus:ring-sky-500 cursor-pointer"
+                      className="rounded border-[#E7D9D0] text-[#C48B80] focus:ring-[#C48B80] cursor-pointer"
                     />
                   </td>
                   <td className="p-4 font-heading font-bold text-[#1A1A1A]">{order.id}</td>
@@ -308,8 +308,8 @@ export const AdminOrdersPageClient: React.FC = () => {
                       onChange={e => { void handleStatusChange(order, e.target.value as Order['status']); }}
                       className={`px-2.5 py-1 rounded-full text-[11px] font-bold border border-transparent cursor-pointer ${
                         order.status === 'Delivered' ? 'bg-emerald-100 text-emerald-800' :
-                        order.status === 'Shipped' ? 'bg-sky-100 text-sky-800' :
-                        order.status === 'Cancelled' ? 'bg-rose-100 text-rose-800' :
+                        order.status === 'Shipped' ? 'bg-[#C48B80] text-[#C48B80]' :
+                        order.status === 'Cancelled' ? 'bg-rose-100 text-[#C48B80]' :
                         order.status === 'Processing' ? 'bg-amber-100 text-amber-800' : 'bg-[#FAF6F2] text-[#1A1A1A]/80'
                       }`}
                     >
@@ -368,19 +368,19 @@ export const AdminOrdersPageClient: React.FC = () => {
               </div>
 
               {/* Courier Tracking */}
-              <div className="p-3 rounded-2xl bg-sky-50 border border-sky-100 space-y-2">
-                <span className="font-bold text-sky-900 block">Courier Tracking Code</span>
+              <div className="p-3 rounded-2xl bg-[#C48B80] border border-[#C48B80] space-y-2">
+                <span className="font-bold text-[#C48B80] block">Courier Tracking Code</span>
                 <div className="flex gap-2">
                   <input
                     type="text"
                     placeholder="Enter TCS / Leopard tracking code..."
                     value={trackingInput}
                     onChange={e => setTrackingInput(e.target.value)}
-                    className="flex-1 px-3 py-1.5 text-xs rounded-xl border border-sky-200 bg-white"
+                    className="flex-1 px-3 py-1.5 text-xs rounded-xl border border-[#C48B80] bg-white"
                   />
                   <button
                     onClick={() => { void handleSaveTracking(selectedOrder.id); }}
-                    className="px-3 py-1.5 rounded-xl bg-sky-600 text-white font-bold text-xs flex items-center gap-1"
+                    className="px-3 py-1.5 rounded-xl bg-[#C48B80] text-white font-bold text-xs flex items-center gap-1"
                   >
                     <Send className="w-3 h-3" /> Save
                   </button>

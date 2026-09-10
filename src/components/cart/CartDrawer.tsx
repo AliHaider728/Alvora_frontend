@@ -259,7 +259,7 @@ export const CartDrawer: React.FC = () => {
                       placeholder="Promo code (e.g. PLAYFUL10)"
                       value={couponCodeInput}
                       onChange={e => setCouponCodeInput(e.target.value)}
-                      className="w-full pl-9 pr-3 py-2 text-base sm:text-xs rounded-xl border border-[#EDE5DC] bg-white font-sans focus:outline-none focus:ring-2 focus:ring-rose-400 uppercase"
+                      className="w-full pl-9 pr-3 py-2 text-base sm:text-xs rounded-xl border border-[#EDE5DC] bg-white font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80] uppercase"
                     />
                   </div>
                   <button

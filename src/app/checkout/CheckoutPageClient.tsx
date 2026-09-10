@@ -312,7 +312,7 @@ export const CheckoutPageClient: React.FC = () => {
   if (cart.length === 0 && currentStep !== 2) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">
-        <div className="w-16 h-16 rounded-full bg-[#F5EDE4] text-rose-400 flex items-center justify-center mb-4">
+        <div className="w-16 h-16 rounded-full bg-[#F5EDE4] text-[#C48B80] flex items-center justify-center mb-4">
           <ShoppingBag className="w-8 h-8" />
         </div>
         <h2 className="font-display font-black text-2xl text-[#1A1A1A]/90 mb-2">Your Basket is Empty</h2>
@@ -470,7 +470,7 @@ export const CheckoutPageClient: React.FC = () => {
                         placeholder="e.g. Ali Raza"
                         value={fullName}
                         onChange={e => setFullName(e.target.value)}
-                        className="w-full px-4 py-2.5 text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-rose-400"
+                        className="w-full px-4 py-2.5 text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
                       />
                     </div>
 
@@ -485,7 +485,7 @@ export const CheckoutPageClient: React.FC = () => {
                         placeholder="e.g. 03276655557"
                         value={phone}
                         onChange={e => setPhone(e.target.value.replace(/[^0-9]/g, '').slice(0, 11))}
-                        className="w-full px-4 py-2.5 text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-rose-400"
+                        className="w-full px-4 py-2.5 text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
                       />
                     </div>
 
@@ -497,7 +497,7 @@ export const CheckoutPageClient: React.FC = () => {
                         placeholder="House #, Street name, Sector / Area"
                         value={street}
                         onChange={e => setStreet(e.target.value)}
-                        className="w-full px-4 py-2.5 text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-rose-400"
+                        className="w-full px-4 py-2.5 text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
                       />
                     </div>
 
@@ -509,7 +509,7 @@ export const CheckoutPageClient: React.FC = () => {
                         placeholder="e.g. Gujranwala, Karachi, Islamabad"
                         value={city}
                         onChange={e => setCity(e.target.value)}
-                        className="w-full px-4 py-2.5 text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-rose-400"
+                        className="w-full px-4 py-2.5 text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
                       />
                     </div>
 
@@ -520,7 +520,7 @@ export const CheckoutPageClient: React.FC = () => {
                           type="text"
                           value={state}
                           onChange={e => setState(e.target.value)}
-                          className="w-full px-3 py-2.5 text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-rose-400"
+                          className="w-full px-3 py-2.5 text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
                         />
                       </div>
                       <div>
@@ -531,7 +531,7 @@ export const CheckoutPageClient: React.FC = () => {
                           pattern="[0-9]*"
                           value={postalCode}
                           onChange={e => setPostalCode(e.target.value.replace(/[^0-9]/g, ''))}
-                          className="w-full px-3 py-2.5 text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-rose-400"
+                          className="w-full px-3 py-2.5 text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
                         />
                       </div>
                     </div>
@@ -543,7 +543,7 @@ export const CheckoutPageClient: React.FC = () => {
                         placeholder="Near landmark, call before arrival, etc."
                         value={orderNotes}
                         onChange={e => setOrderNotes(e.target.value)}
-                        className="w-full px-4 py-2 text-base sm:text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-rose-400"
+                        className="w-full px-4 py-2 text-base sm:text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
                       />
                     </div>
 
@@ -554,7 +554,7 @@ export const CheckoutPageClient: React.FC = () => {
                         placeholder="e.g. ali@example.com"
                         value={email}
                         onChange={e => setEmail(e.target.value)}
-                        className="w-full px-4 py-2.5 text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-rose-400"
+                        className="w-full px-4 py-2.5 text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
                       />
                     </div>
                   </div>

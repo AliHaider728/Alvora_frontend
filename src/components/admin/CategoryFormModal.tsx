@@ -123,7 +123,7 @@ export const CategoryFormModal: React.FC<Props> = ({ category, categories, onClo
     onClose();
   };
 
-  const input = 'mt-1.5 w-full rounded-xl border border-[#E7D9D0] px-3 py-2.5 text-sm outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100';
+  const input = 'mt-1.5 w-full rounded-xl border border-[#E7D9D0] px-3 py-2.5 text-sm outline-none focus:border-[#C48B80] focus:ring-2 focus:ring-rose-100';
   return <div className="fixed inset-0 z-[105] flex items-center justify-center overflow-y-auto bg-slate-950/60 p-3 sm:p-5" onMouseDown={event => { if (event.target === event.currentTarget) void safeClose(); }}>
     <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="category-form-title" className={`my-auto max-h-[calc(100vh-1.5rem)] w-full overflow-y-auto rounded-3xl bg-white shadow-2xl ${compact ? 'max-w-2xl' : 'max-w-4xl'}`}>
       <div className="sticky top-0 z-10 flex items-center justify-between border-b border-[#E7D9D0] bg-white px-5 py-4">

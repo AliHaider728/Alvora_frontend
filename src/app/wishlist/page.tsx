@@ -45,7 +45,7 @@ export default function WishlistPage() {
               Tap the heart icon on any product to save it to your wishlist!
             </p>
             <Link href="/category/all"
-              className="inline-block px-6 py-2.5 rounded-2xl bg-rose-500 text-white font-heading font-bold text-xs"
+              className="inline-block px-6 py-2.5 rounded-2xl bg-[#C48B80] text-white font-heading font-bold text-xs"
             >
               Discover Products
             </Link>

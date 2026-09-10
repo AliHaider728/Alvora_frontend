@@ -110,7 +110,7 @@ export const ProductDetailContentBuilder: React.FC<Props> = ({
         <p className="mt-1 text-xs text-[#1A1A1A]/50">Build responsive content below the main product information. The server sanitizes every block before publishing.</p>
       </div>
       <div className="mb-5 flex flex-wrap items-center gap-2">
-        <select value={selectedBlockType} onChange={e => setSelectedBlockType(e.target.value as ProductDetailBlockType)} className="rounded-xl border border-[#E7D9D0] bg-white px-3 py-2 text-sm text-[#1A1A1A] outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100">
+        <select value={selectedBlockType} onChange={e => setSelectedBlockType(e.target.value as ProductDetailBlockType)} className="rounded-xl border border-[#E7D9D0] bg-white px-3 py-2 text-sm text-[#1A1A1A] outline-none transition focus:border-[#C48B80] focus:ring-2 focus:ring-[#C48B80]">
           <option value="heading">Heading</option>
           <option value="richText">Rich Text</option>
           <option value="image">Image</option>
@@ -128,7 +128,7 @@ export const ProductDetailContentBuilder: React.FC<Props> = ({
           <option value="ctaBanner">CTA Banner</option>
           {isSuperAdmin && <option value="html">Custom HTML</option>}
         </select>
-        <button type="button" onClick={() => add(selectedBlockType)} className="inline-flex items-center gap-2 rounded-xl border border-indigo-200 bg-indigo-50 px-3 py-2 text-xs font-bold text-indigo-700 hover:bg-indigo-100">
+        <button type="button" onClick={() => add(selectedBlockType)} className="inline-flex items-center gap-2 rounded-xl border border-[#C48B80] bg-[#C48B80] px-3 py-2 text-xs font-bold text-[#C48B80] hover:bg-[#C48B80]">
           <Plus className="h-4 w-4" /> Add Block
         </button>
       </div>
@@ -140,7 +140,7 @@ export const ProductDetailContentBuilder: React.FC<Props> = ({
           return (
             <article key={block.id} className="overflow-hidden rounded-2xl border border-[#E7D9D0] bg-[#FAF6F2]">
               <div className="flex flex-wrap items-center gap-2 border-b border-[#E7D9D0] bg-white p-3">
-                <span className="rounded-lg bg-indigo-50 px-2.5 py-1 text-[10px] font-black uppercase text-indigo-600">{block.type}</span>
+                <span className="rounded-lg bg-[#C48B80] px-2.5 py-1 text-[10px] font-black uppercase text-[#C48B80]">{block.type}</span>
                 <label className="mr-auto flex items-center gap-2 text-xs font-bold text-[#1A1A1A]/70"><input type="checkbox" disabled={codeLocked} checked={block.enabled} onChange={event => update(block.id, { enabled: event.target.checked })} /> Enabled</label>
                 <IconButton label="Move up" disabled={codeLocked || index === 0} onClick={() => move(index, -1)} icon={ArrowUp} />
                 <IconButton label="Move down" disabled={codeLocked || index === sorted.length - 1} onClick={() => move(index, 1)} icon={ArrowDown} />
@@ -159,7 +159,7 @@ export const ProductDetailContentBuilder: React.FC<Props> = ({
                 </>}
                 {['image', 'imageText', 'fullWidthImage', 'gallery', 'ctaBanner'].includes(block.type) && <>
                   {block.image?.secureUrl && <img src={getSafeImageSrc(block.image.secureUrl)} alt={block.image.alt || 'Product detail preview'} className="max-h-72 w-full rounded-xl bg-white object-contain" />}
-                  <label className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-indigo-300 bg-white px-4 py-3 text-xs font-bold text-indigo-600 mt-3">
+                  <label className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-[#C48B80] bg-white px-4 py-3 text-xs font-bold text-[#C48B80] mt-3">
                     {uploadingBlock === block.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImagePlus className="h-4 w-4" />}{block.image ? 'Replace image' : 'Upload primary media'}
                     <input type="file" className="hidden" accept="image/jpeg,image/png,image/webp" disabled={uploadingBlock === block.id} onChange={event => { void upload(block, event.target.files?.[0]); event.target.value = ''; }} />
                   </label>

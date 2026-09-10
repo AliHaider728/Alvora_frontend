@@ -133,7 +133,7 @@ export const AdminCouponsPageClient: React.FC = () => {
               </button>
               <button
                 onClick={() => openEditModal(coup)}
-                className="p-1.5 text-sky-500 hover:bg-sky-50 rounded-lg text-xs flex items-center gap-1 font-bold"
+                className="p-1.5 text-[#C48B80] hover:bg-[#C48B80] rounded-lg text-xs flex items-center gap-1 font-bold"
               >
                 <Edit className="w-3.5 h-3.5" />
                 <span>Edit</span>

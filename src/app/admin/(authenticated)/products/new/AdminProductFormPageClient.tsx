@@ -65,8 +65,8 @@ type OrderedImage = {
 type FieldErrors = Record<string, string>;
 
 const fieldClassName =
-  'w-full rounded-xl border border-[#E7D9D0] bg-white px-3 py-2.5 text-sm text-[#1A1A1A] outline-none transition focus:border-rose-400 focus:ring-2 focus:ring-rose-100';
-const errorFieldClassName = 'border-rose-400 focus:border-[#C48B80] focus:ring-rose-100';
+  'w-full rounded-xl border border-[#E7D9D0] bg-white px-3 py-2.5 text-sm text-[#1A1A1A] outline-none transition focus:border-[#C48B80] focus:ring-2 focus:ring-rose-100';
+const errorFieldClassName = 'border-[#C48B80] focus:border-[#C48B80] focus:ring-rose-100';
 
 const slugify = (value: string) =>
   value
@@ -153,7 +153,7 @@ const FormCard: React.FC<{
 }> = ({ title, description, icon: Icon, children }) => (
   <section className="rounded-3xl border border-[#E7D9D0]/80 bg-white p-5 shadow-sm sm:p-6">
     <div className="mb-5 flex items-start gap-3">
-      <div className="mt-0.5 rounded-xl bg-indigo-50 p-2 text-indigo-600">
+      <div className="mt-0.5 rounded-xl bg-[#C48B80] p-2 text-[#C48B80]">
         <Icon className="h-4 w-4" />
       </div>
       <div>
@@ -1032,14 +1032,14 @@ export const AdminProductFormPageClient: React.FC = () => {
               <fieldset className="sm:col-span-2">
                 <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
                   <legend className="text-xs font-bold text-[#1A1A1A]/80">Categories</legend>
-                  {superAdmin && <button type="button" onClick={() => setCategoryModalOpen(true)} className="inline-flex items-center gap-1 text-[11px] font-bold text-indigo-600 hover:text-indigo-700"><Plus className="h-3.5 w-3.5" /> Add category</button>}
+                  {superAdmin && <button type="button" onClick={() => setCategoryModalOpen(true)} className="inline-flex items-center gap-1 text-[11px] font-bold text-[#C48B80] hover:text-[#C48B80]"><Plus className="h-3.5 w-3.5" /> Add category</button>}
                 </div>
                 {categoryIds.length > 0 && (
                   <div className="mb-2 flex flex-wrap gap-2" aria-label="Selected categories">
                     {categoryIds.map((selectedId, index) => {
                       const selected = categories.find(item => item.id === selectedId);
                       if (!selected) return null;
-                      return <button key={selected.id} type="button" onClick={() => applyCategorySelection(categoryIds.filter(idValue => idValue !== selected.id))} className="inline-flex min-h-9 items-center gap-1.5 rounded-full bg-indigo-50 px-3 text-xs font-bold text-indigo-700 ring-1 ring-indigo-200" aria-label={`Remove ${selected.name}`}>{selected.name}{index === 0 && <span className="text-[9px] font-black uppercase tracking-wide text-indigo-400">Primary</span>}<span aria-hidden="true">&times;</span></button>;
+                      return <button key={selected.id} type="button" onClick={() => applyCategorySelection(categoryIds.filter(idValue => idValue !== selected.id))} className="inline-flex min-h-9 items-center gap-1.5 rounded-full bg-[#C48B80] px-3 text-xs font-bold text-[#C48B80] ring-1 ring-[#C48B80]" aria-label={`Remove ${selected.name}`}>{selected.name}{index === 0 && <span className="text-[9px] font-black uppercase tracking-wide text-[#C48B80]">Primary</span>}<span aria-hidden="true">&times;</span></button>;
                     })}
                   </div>
                 )}
@@ -1047,12 +1047,12 @@ export const AdminProductFormPageClient: React.FC = () => {
                   <label className="relative block">
                     <span className="sr-only">Search categories</span>
                     <Search className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-[#1A1A1A]/40" />
-                    <input value={categorySearch} onChange={event => setCategorySearch(event.target.value)} className="w-full rounded-xl border border-[#E7D9D0] bg-white py-2 pl-9 pr-3 text-xs outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100" placeholder="Search categories…" />
+                    <input value={categorySearch} onChange={event => setCategorySearch(event.target.value)} className="w-full rounded-xl border border-[#E7D9D0] bg-white py-2 pl-9 pr-3 text-xs outline-none focus:border-[#C48B80] focus:ring-2 focus:ring-[#C48B80]" placeholder="Search categories…" />
                   </label>
                   <div className="mt-2 grid max-h-44 gap-2 overflow-y-auto pr-1 sm:grid-cols-2" role="group" aria-label="Product categories">
                     {categories.filter(item => item.isActive !== false && item.name.toLowerCase().includes(categorySearch.trim().toLowerCase())).map(item => {
                       const checked = categoryIds.includes(item.id);
-                      return <label key={item.id || item.slug} className={`flex min-h-10 cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-xs font-bold transition ${checked ? 'border-indigo-300 bg-white text-indigo-700 shadow-sm' : 'border-transparent text-[#1A1A1A]/70 hover:border-[#E7D9D0] hover:bg-white'}`}><input type="checkbox" checked={checked} onChange={event => applyCategorySelection(event.target.checked ? [...categoryIds, item.id] : categoryIds.filter(idValue => idValue !== item.id))} />{item.name}</label>;
+                      return <label key={item.id || item.slug} className={`flex min-h-10 cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-xs font-bold transition ${checked ? 'border-[#C48B80] bg-white text-[#C48B80] shadow-sm' : 'border-transparent text-[#1A1A1A]/70 hover:border-[#E7D9D0] hover:bg-white'}`}><input type="checkbox" checked={checked} onChange={event => applyCategorySelection(event.target.checked ? [...categoryIds, item.id] : categoryIds.filter(idValue => idValue !== item.id))} />{item.name}</label>;
                     })}
                   </div>
                 </div>
@@ -1093,7 +1093,7 @@ export const AdminProductFormPageClient: React.FC = () => {
                   </label>
                   <label>
                     <span className="mb-1.5 block text-xs font-bold text-[#1A1A1A]/80">Computed Availability</span>
-                    <span className={`flex h-[42px] items-center rounded-xl border px-3 text-sm font-bold ${(stockQuantity || 0) > 0 ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : 'border-[#E7D9D0] bg-[#FAF6F2] text-rose-700'}`}>{(stockQuantity || 0) > 0 ? 'In Stock' : 'Out of Stock'}</span>
+                    <span className={`flex h-[42px] items-center rounded-xl border px-3 text-sm font-bold ${(stockQuantity || 0) > 0 ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : 'border-[#E7D9D0] bg-[#FAF6F2] text-[#C48B80]'}`}>{(stockQuantity || 0) > 0 ? 'In Stock' : 'Out of Stock'}</span>
                   </label>
                   <label>
                     <span className="mb-1.5 block text-xs font-bold text-[#1A1A1A]/80">Low Stock Alert</span>
@@ -1149,7 +1149,7 @@ export const AdminProductFormPageClient: React.FC = () => {
                         markDirty();
                         clearError('defaultAttributes');
                       }}
-                      className={`w-full rounded-lg border bg-white px-3 py-2 text-sm text-[#1A1A1A] outline-none focus:ring-1 ${errors.defaultAttributes ? 'border-[#C48B80] focus:border-[#C48B80] focus:ring-[#C48B80]' : 'border-[#E7D9D0] focus:border-rose-400 focus:ring-rose-400'}`}
+                      className={`w-full rounded-lg border bg-white px-3 py-2 text-sm text-[#1A1A1A] outline-none focus:ring-1 ${errors.defaultAttributes ? 'border-[#C48B80] focus:border-[#C48B80] focus:ring-[#C48B80]' : 'border-[#E7D9D0] focus:border-[#C48B80] focus:ring-[#C48B80]'}`}
                     >
                       <option value="" disabled>Select a default variation...</option>
                       {enabledVariations.map((v, i) => (
@@ -1235,7 +1235,7 @@ export const AdminProductFormPageClient: React.FC = () => {
               ))}
               <div className="flex items-center justify-between gap-4 border-t border-[#E7D9D0] pt-4 mt-4">
                 <div><span className="block text-xs font-bold text-[#1A1A1A]/80">Sold Count (Social Proof)</span><span className="text-[10px] text-[#1A1A1A]/40">Override the generated X+ Sold number</span></div>
-                <input type="number" min="0" placeholder="e.g. 150" value={soldCount} onChange={e => { setSoldCount(e.target.value === '' ? '' : parseInt(e.target.value, 10)); markDirty(); }} className="w-24 px-3 py-2 text-xs rounded-xl border border-[#E7D9D0] focus:outline-none focus:border-rose-300 focus:ring-1 focus:ring-rose-300 transition" />
+                <input type="number" min="0" placeholder="e.g. 150" value={soldCount} onChange={e => { setSoldCount(e.target.value === '' ? '' : parseInt(e.target.value, 10)); markDirty(); }} className="w-24 px-3 py-2 text-xs rounded-xl border border-[#E7D9D0] focus:outline-none focus:border-[#C48B80] focus:ring-1 focus:ring-[#C48B80] transition" />
               </div>
             </div>
           </FormCard>
@@ -1247,14 +1247,14 @@ export const AdminProductFormPageClient: React.FC = () => {
                 {images[0] ? (
                   <div className="relative overflow-hidden rounded-2xl border border-[#E7D9D0] bg-[#FAF6F2]"><img src={getSafeImageSrc(images[0].url)} alt="Main product preview" className="aspect-[4/3] w-full object-cover" /><div className="absolute inset-x-0 bottom-0 flex gap-2 bg-[#1A1A1A]/70 p-2 backdrop-blur"><label className="flex flex-1 cursor-pointer items-center justify-center gap-1 rounded-lg bg-white px-2 py-2 text-[10px] font-bold text-[#1A1A1A]/80"><ImagePlus className="h-3.5 w-3.5" /> Replace<input type="file" className="hidden" accept="image/jpeg,image/png,image/webp" disabled={uploadingTarget !== null} onChange={event => { void uploadImages(Array.from(event.target.files || []), 'main'); event.target.value = ''; }} /></label><button type="button" onClick={() => { void removeImage(images[0].id); }} className="rounded-lg bg-white px-2.5 text-[#C48B80]" aria-label="Remove main image"><Trash2 className="h-4 w-4" /></button></div></div>
                 ) : (
-                  <label className={`flex aspect-[4/3] cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed bg-[#FAF6F2] text-center transition hover:border-indigo-300 hover:bg-indigo-50/40 ${errors.images ? 'border-rose-400' : 'border-[#E7D9D0]'}`}><input type="file" className="hidden" accept="image/jpeg,image/png,image/webp" disabled={uploadingTarget !== null} onChange={event => { void uploadImages(Array.from(event.target.files || []), 'main'); event.target.value = ''; }} />{uploadingTarget === 'main' ? <Loader2 className="h-7 w-7 animate-spin text-[#C48B80]" /> : <ImageIcon className="h-7 w-7 text-indigo-500" />}<span className="mt-2 text-xs font-bold text-[#1A1A1A]/70">Upload main image</span><span className="mt-1 text-[10px] text-[#1A1A1A]/40">JPG, PNG, WebP • Max 5MB</span></label>
+                  <label className={`flex aspect-[4/3] cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed bg-[#FAF6F2] text-center transition hover:border-[#C48B80] hover:bg-[#C48B80]/40 ${errors.images ? 'border-[#C48B80]' : 'border-[#E7D9D0]'}`}><input type="file" className="hidden" accept="image/jpeg,image/png,image/webp" disabled={uploadingTarget !== null} onChange={event => { void uploadImages(Array.from(event.target.files || []), 'main'); event.target.value = ''; }} />{uploadingTarget === 'main' ? <Loader2 className="h-7 w-7 animate-spin text-[#C48B80]" /> : <ImageIcon className="h-7 w-7 text-[#C48B80]" />}<span className="mt-2 text-xs font-bold text-[#1A1A1A]/70">Upload main image</span><span className="mt-1 text-[10px] text-[#1A1A1A]/40">JPG, PNG, WebP • Max 5MB</span></label>
                 )}
                 <FieldError message={errors.images} />
               </div>
               <div>
                 <div className="mb-2 flex items-center justify-between"><span className="text-xs font-bold text-[#1A1A1A]/80">Gallery Images</span><span className="text-[10px] text-[#1A1A1A]/40">{galleryImages.length}/8</span></div>
-                {galleryImages.length > 0 && <div className="mb-3 grid grid-cols-2 gap-2">{galleryImages.map((image, galleryIndex) => { const imageIndex = galleryIndex + 1; return <div key={image.id} className="overflow-hidden rounded-xl border border-[#E7D9D0] bg-[#FAF6F2]"><img src={getSafeImageSrc(image.url)} alt={`Gallery preview ${imageIndex}`} className="aspect-square w-full object-cover" /><div className="flex items-center justify-between gap-1 p-1.5"><button type="button" title="Make main image" onClick={() => makeMainImage(imageIndex)} className="rounded-md px-1.5 py-1 text-[9px] font-bold text-indigo-600 hover:bg-indigo-50">Main</button><button type="button" disabled={galleryIndex === 0} onClick={() => moveGalleryImage(imageIndex, -1)} className="rounded-md p-1 text-[#1A1A1A]/50 disabled:opacity-30" aria-label="Move image left"><ArrowLeft className="h-3 w-3" /></button><button type="button" disabled={galleryIndex === galleryImages.length - 1} onClick={() => moveGalleryImage(imageIndex, 1)} className="rounded-md p-1 text-[#1A1A1A]/50 disabled:opacity-30" aria-label="Move image right"><ArrowRight className="h-3 w-3" /></button><button type="button" onClick={() => { void removeImage(image.id); }} className="rounded-md p-1 text-[#C48B80]" aria-label="Remove gallery image"><Trash2 className="h-3 w-3" /></button></div></div>; })}</div>}
-                <label className={`flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-[#E7D9D0] px-3 py-3 text-xs font-bold text-[#1A1A1A]/70 hover:border-indigo-300 hover:bg-indigo-50/40 ${galleryImages.length >= 8 ? 'pointer-events-none opacity-50' : ''}`}>{uploadingTarget === 'gallery' ? <Loader2 className="h-4 w-4 animate-spin text-[#C48B80]" /> : <ImagePlus className="h-4 w-4 text-indigo-500" />} Add Gallery Images<input type="file" multiple className="hidden" accept="image/jpeg,image/png,image/webp" disabled={uploadingTarget !== null || galleryImages.length >= 8} onChange={event => { void uploadImages(Array.from(event.target.files || []), 'gallery'); event.target.value = ''; }} /></label>
+                {galleryImages.length > 0 && <div className="mb-3 grid grid-cols-2 gap-2">{galleryImages.map((image, galleryIndex) => { const imageIndex = galleryIndex + 1; return <div key={image.id} className="overflow-hidden rounded-xl border border-[#E7D9D0] bg-[#FAF6F2]"><img src={getSafeImageSrc(image.url)} alt={`Gallery preview ${imageIndex}`} className="aspect-square w-full object-cover" /><div className="flex items-center justify-between gap-1 p-1.5"><button type="button" title="Make main image" onClick={() => makeMainImage(imageIndex)} className="rounded-md px-1.5 py-1 text-[9px] font-bold text-[#C48B80] hover:bg-[#C48B80]">Main</button><button type="button" disabled={galleryIndex === 0} onClick={() => moveGalleryImage(imageIndex, -1)} className="rounded-md p-1 text-[#1A1A1A]/50 disabled:opacity-30" aria-label="Move image left"><ArrowLeft className="h-3 w-3" /></button><button type="button" disabled={galleryIndex === galleryImages.length - 1} onClick={() => moveGalleryImage(imageIndex, 1)} className="rounded-md p-1 text-[#1A1A1A]/50 disabled:opacity-30" aria-label="Move image right"><ArrowRight className="h-3 w-3" /></button><button type="button" onClick={() => { void removeImage(image.id); }} className="rounded-md p-1 text-[#C48B80]" aria-label="Remove gallery image"><Trash2 className="h-3 w-3" /></button></div></div>; })}</div>}
+                <label className={`flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-[#E7D9D0] px-3 py-3 text-xs font-bold text-[#1A1A1A]/70 hover:border-[#C48B80] hover:bg-[#C48B80]/40 ${galleryImages.length >= 8 ? 'pointer-events-none opacity-50' : ''}`}>{uploadingTarget === 'gallery' ? <Loader2 className="h-4 w-4 animate-spin text-[#C48B80]" /> : <ImagePlus className="h-4 w-4 text-[#C48B80]" />} Add Gallery Images<input type="file" multiple className="hidden" accept="image/jpeg,image/png,image/webp" disabled={uploadingTarget !== null || galleryImages.length >= 8} onChange={event => { void uploadImages(Array.from(event.target.files || []), 'gallery'); event.target.value = ''; }} /></label>
               </div>
             </div>
           </FormCard>
@@ -1264,7 +1264,7 @@ export const AdminProductFormPageClient: React.FC = () => {
               <fieldset>
                 <legend className="mb-2 block text-xs font-bold text-[#1A1A1A]/80">Age Recommendations <span className="text-[#C48B80]">*</span></legend>
                 <div className="grid grid-cols-2 gap-2">
-                  {AGE_GROUPS.map(group => <label key={group.id} className={`flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2.5 text-xs font-bold transition ${ageGroups.includes(group.id) ? 'border-indigo-300 bg-indigo-50 text-indigo-700' : 'border-[#E7D9D0] bg-white text-[#1A1A1A]/70'}`}><input type="checkbox" checked={ageGroups.includes(group.id)} onChange={event => { setAgeGroups(current => event.target.checked ? [...current, group.id] : current.filter(value => value !== group.id)); markDirty(); clearError('ageGroups'); }} />{group.label}</label>)}
+                  {AGE_GROUPS.map(group => <label key={group.id} className={`flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2.5 text-xs font-bold transition ${ageGroups.includes(group.id) ? 'border-[#C48B80] bg-[#C48B80] text-[#C48B80]' : 'border-[#E7D9D0] bg-white text-[#1A1A1A]/70'}`}><input type="checkbox" checked={ageGroups.includes(group.id)} onChange={event => { setAgeGroups(current => event.target.checked ? [...current, group.id] : current.filter(value => value !== group.id)); markDirty(); clearError('ageGroups'); }} />{group.label}</label>)}
                 </div>
                 <FieldError message={errors.ageGroups} />
               </fieldset>

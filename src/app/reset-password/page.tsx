@@ -74,7 +74,7 @@ function ResetPasswordForm() {
           </p>
           <button
             onClick={() => router.push('/login')}
-            className="w-full rounded-2xl bg-rose-500 py-3.5 text-sm font-bold text-white transition-all hover:bg-rose-600 active:scale-95"
+            className="w-full rounded-2xl bg-[#C48B80] py-3.5 text-sm font-bold text-white transition-all hover:bg-[#C48B80] active:scale-95"
           >
             Go to Login
           </button>
@@ -114,7 +114,7 @@ function ResetPasswordForm() {
                   onChange={(e) => setTokenInput(e.target.value)}
                   required
                   maxLength={6}
-                  className="w-full rounded-2xl border-2 border-slate-100 bg-slate-50 py-3.5 px-4 text-sm font-medium text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-rose-500 focus:bg-white focus:shadow-lg focus:shadow-rose-100 text-center tracking-[0.5em] font-mono text-xl"
+                  className="w-full rounded-2xl border-2 border-slate-100 bg-slate-50 py-3.5 px-4 text-sm font-medium text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-[#C48B80] focus:bg-white focus:shadow-lg focus:shadow-rose-100 text-center tracking-[0.5em] font-mono text-xl"
                   placeholder="------"
                 />
               </div>
@@ -130,7 +130,7 @@ function ResetPasswordForm() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full rounded-2xl border-2 border-slate-100 bg-slate-50 py-3.5 pl-11 pr-4 text-sm font-medium text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-rose-500 focus:bg-white focus:shadow-lg focus:shadow-rose-100"
+                  className="w-full rounded-2xl border-2 border-slate-100 bg-slate-50 py-3.5 pl-11 pr-4 text-sm font-medium text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-[#C48B80] focus:bg-white focus:shadow-lg focus:shadow-rose-100"
                   placeholder="At least 8 characters"
                 />
               </div>
@@ -147,7 +147,7 @@ function ResetPasswordForm() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
-                  className="w-full rounded-2xl border-2 border-slate-100 bg-slate-50 py-3.5 pl-11 pr-4 text-sm font-medium text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-rose-500 focus:bg-white focus:shadow-lg focus:shadow-rose-100"
+                  className="w-full rounded-2xl border-2 border-slate-100 bg-slate-50 py-3.5 pl-11 pr-4 text-sm font-medium text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-[#C48B80] focus:bg-white focus:shadow-lg focus:shadow-rose-100"
                   placeholder="Confirm new password"
                 />
               </div>

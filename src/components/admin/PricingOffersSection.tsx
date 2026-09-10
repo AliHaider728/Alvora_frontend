@@ -5,10 +5,10 @@ import { PricingOffers, QuantityBreakTier } from '../../../types';
 
 // Re-use the same fieldClassName constant pattern from AdminProductFormPageClient
 const fieldCls =
-  'w-full rounded-xl border border-[#E7D9D0] bg-white px-3 py-2.5 text-sm text-[#1A1A1A] outline-none transition focus:border-rose-400 focus:ring-2 focus:ring-rose-100';
+  'w-full rounded-xl border border-[#E7D9D0] bg-white px-3 py-2.5 text-sm text-[#1A1A1A] outline-none transition focus:border-[#C48B80] focus:ring-2 focus:ring-rose-100';
 
 const smallFieldCls =
-  'w-full rounded-xl border border-[#E7D9D0] bg-white px-2.5 py-2 text-sm text-[#1A1A1A] outline-none transition focus:border-rose-400 focus:ring-2 focus:ring-rose-100';
+  'w-full rounded-xl border border-[#E7D9D0] bg-white px-2.5 py-2 text-sm text-[#1A1A1A] outline-none transition focus:border-[#C48B80] focus:ring-2 focus:ring-rose-100';
 
 // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Toggle — matches the style used elsewhere in the admin panel
@@ -259,7 +259,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
             <button
               type="button"
               onClick={addTier}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-dashed border-[#E7D9D0] bg-white px-4 py-2 text-xs font-bold text-[#1A1A1A]/70 hover:border-rose-400 hover:text-[#A86249] transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-dashed border-[#E7D9D0] bg-white px-4 py-2 text-xs font-bold text-[#1A1A1A]/70 hover:border-[#C48B80] hover:text-[#A86249] transition-colors"
             >
               <Plus className="h-3.5 w-3.5" />
               Add Tier
@@ -368,7 +368,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
       {/* â”€â”€ Section C: Flat Discount â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <div className="space-y-4">
         <div className="flex items-center gap-2 border-b border-[#E7D9D0] pb-3">
-          <BadgePercent className="h-4 w-4 text-indigo-500" />
+          <BadgePercent className="h-4 w-4 text-[#C48B80]" />
           <h3 className="font-heading text-sm font-black text-[#1A1A1A] uppercase tracking-wider">
             Flat Discount
           </h3>
@@ -445,7 +445,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
 
               {/* Live preview */}
               <div className="col-span-2 sm:col-span-1 flex items-end">
-                <div className="w-full rounded-xl border border-indigo-200 bg-indigo-50 px-3 py-2.5 text-sm font-bold text-indigo-800">
+                <div className="w-full rounded-xl border border-[#C48B80] bg-[#C48B80] px-3 py-2.5 text-sm font-bold text-[#C48B80]">
                   ðŸ•ï¸ {flatAutoLabel}
                 </div>
               </div>

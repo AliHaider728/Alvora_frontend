@@ -52,7 +52,7 @@ function SearchResultsContent() {
 
         <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-sm mb-8">
           <h1 className="font-heading font-black text-2xl sm:text-3xl text-slate-900 flex items-center gap-3">
-            <Search className="w-6 h-6 text-rose-500" />
+            <Search className="w-6 h-6 text-[#C48B80]" />
             <span>Search Results for "{query}"</span>
           </h1>
           <p className="text-xs text-slate-500 mt-1 font-medium">
@@ -84,7 +84,7 @@ function SearchResultsContent() {
               Try searching for terms like "blocks", "robot", "plush", or "puzzle".
             </p>
             <Link href="/category/all"
-              className="inline-block px-6 py-2.5 rounded-2xl bg-rose-500 text-white font-heading font-bold text-xs"
+              className="inline-block px-6 py-2.5 rounded-2xl bg-[#C48B80] text-white font-heading font-bold text-xs"
             >
               Browse All Products
             </Link>

@@ -184,7 +184,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
                 </span>
               )}
               {product.isNewArrival && (
-                <span className="rounded-full bg-sky-500 px-3 py-1 text-[11px] font-bold tracking-wide text-white shadow-sm">
+                <span className="rounded-full bg-[#C48B80] px-3 py-1 text-[11px] font-bold tracking-wide text-white shadow-sm">
                   NEW
                 </span>
               )}
@@ -205,7 +205,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
           className={`absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full shadow-sm ring-1 ring-black/5 backdrop-blur transition-all duration-200 active:scale-90 ${
             isWishlisted
               ? 'scale-105 bg-rose-500 text-white'
-              : 'bg-white/90 text-slate-500 hover:scale-110 hover:text-rose-500'
+              : 'bg-white/90 text-slate-500 hover:scale-110 hover:text-[#C48B80]'
           }`}
         >
           <Heart className={`h-4 w-4 transition-all duration-200 ${isWishlisted ? 'scale-110 fill-white' : ''}`} strokeWidth={2.2} />
@@ -219,7 +219,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
               e.stopPropagation();
               onQuickView(product);
             }}
-            className="absolute bottom-3 right-3 z-10 hidden h-9 w-9 items-center justify-center rounded-full bg-white text-slate-700 opacity-0 shadow-md ring-1 ring-black/5 transition-all duration-200 hover:bg-rose-500 hover:text-white group-hover:opacity-100 sm:flex"
+            className="absolute bottom-3 right-3 z-10 hidden h-9 w-9 items-center justify-center rounded-full bg-white text-slate-700 opacity-0 shadow-md ring-1 ring-black/5 transition-all duration-200 hover:bg-[#C48B80] hover:text-white group-hover:opacity-100 sm:flex"
             title="Quick View"
           >
             <Eye className="h-4 w-4" strokeWidth={2.2} />
@@ -232,9 +232,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
       <div className={`flex flex-1 flex-col ${compact ? 'p-4' : 'p-5 sm:p-6'}`}>
         <div className="flex items-start justify-between gap-2">
           <div className="flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-1 text-[10px] font-bold uppercase tracking-[0.1em]">
-            <span className="truncate text-sky-600">{formatProductCategories(product)}</span>
+            <span className="truncate text-[#C48B80]">{formatProductCategories(product)}</span>
             <span aria-hidden="true" className="text-slate-300">•</span>
-            <span className="whitespace-nowrap text-indigo-500">{formatProductAgeGroups(product)}</span>
+            <span className="whitespace-nowrap text-[#C48B80]">{formatProductAgeGroups(product)}</span>
           </div>
           {product.brand && (
             <span className="shrink-0 text-xs font-medium text-slate-400">{product.brand}</span>
@@ -243,13 +243,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
 
         <Link
           href={`/product/${product.slug}`}
-          className={`mt-2 line-clamp-2 font-bold leading-snug text-slate-900 transition-colors hover:text-rose-500 ${compact ? 'text-base sm:text-lg' : 'text-lg sm:text-xl'}`}
+          className={`mt-2 line-clamp-2 font-bold leading-snug text-slate-900 transition-colors hover:text-[#C48B80] ${compact ? 'text-base sm:text-lg' : 'text-lg sm:text-xl'}`}
         >
           {product.name}
         </Link>
 
         <div className="mt-2.5 flex items-baseline gap-2">
-          <span className={`font-black leading-none tracking-tight text-rose-500 ${compact ? 'text-xl sm:text-2xl' : 'text-2xl sm:text-3xl'}`}>
+          <span className={`font-black leading-none tracking-tight text-[#C48B80] ${compact ? 'text-xl sm:text-2xl' : 'text-2xl sm:text-3xl'}`}>
             {pricePrefix}{displayPriceStr}
           </span>
           {displayOriginalPrice && displayOriginalPrice > displayPrice && !pricePrefix && (
@@ -301,7 +301,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
                 ? 'bg-emerald-500 text-white shadow-emerald-200'
                 : !isAvailable
                 ? 'cursor-not-allowed bg-slate-100 text-slate-400'
-                : 'bg-rose-500 text-white hover:bg-rose-600 hover:shadow-lg hover:shadow-rose-200'
+                : 'bg-[#C48B80] text-white hover:bg-[#9C4122] hover:shadow-lg hover:shadow-none'
             }`}
           >
             {cartActionState === 'added' ? (

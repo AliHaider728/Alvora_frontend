@@ -78,7 +78,7 @@ export const AdminBundlesPageClient = () => {
                 </div>
               </div>
               <div className="mt-4 flex justify-end gap-2 border-t border-[#E7D9D0] pt-3">
-                <button type="button" onClick={() => setEditing(bundle)} className="rounded-xl p-2 text-sky-600 hover:bg-sky-50">
+                <button type="button" onClick={() => setEditing(bundle)} className="rounded-xl p-2 text-[#C48B80] hover:bg-[#FAF6F2]">
                   <Edit2 className="h-4 w-4" />
                 </button>
                 <button type="button" onClick={() => deleteBundle(bundle.id)} className="rounded-xl p-2 text-[#A86249] hover:bg-[#FAF6F2]">

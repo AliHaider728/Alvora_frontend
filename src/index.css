@@ -496,3 +496,7 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   filter: brightness(1);
 }
+
+input[type='checkbox'], input[type='radio'] {
+  accent-color: var(--alvora-terracotta);
+}

@@ -441,17 +441,17 @@ export const AdminReviewsPageClient: React.FC = () => {
               <form id="addReviewForm" onSubmit={handleAddReview} className="space-y-4">
                 <div>
                   <label className="block text-xs font-bold text-[#1A1A1A]/80 mb-1">Product ID or Slug <span className="text-[#C48B80]">*</span></label>
-                  <input type="text" required value={newReview.productId} onChange={e => setNewReview({...newReview, productId: e.target.value})} className="w-full px-3 py-2 text-sm rounded-xl border border-[#E7D9D0] focus:outline-none focus:ring-2 focus:ring-rose-400" placeholder="e.g. magnetic-building-blocks or 60d5ecb..." />
+                  <input type="text" required value={newReview.productId} onChange={e => setNewReview({...newReview, productId: e.target.value})} className="w-full px-3 py-2 text-sm rounded-xl border border-[#E7D9D0] focus:outline-none focus:ring-2 focus:ring-[#C48B80]" placeholder="e.g. magnetic-building-blocks or 60d5ecb..." />
                 </div>
                 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold text-[#1A1A1A]/80 mb-1">Customer Name <span className="text-[#C48B80]">*</span></label>
-                    <input type="text" required value={newReview.reviewerName} onChange={e => setNewReview({...newReview, reviewerName: e.target.value})} className="w-full px-3 py-2 text-sm rounded-xl border border-[#E7D9D0] focus:outline-none focus:ring-2 focus:ring-rose-400" placeholder="e.g. Sarah M." />
+                    <input type="text" required value={newReview.reviewerName} onChange={e => setNewReview({...newReview, reviewerName: e.target.value})} className="w-full px-3 py-2 text-sm rounded-xl border border-[#E7D9D0] focus:outline-none focus:ring-2 focus:ring-[#C48B80]" placeholder="e.g. Sarah M." />
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-[#1A1A1A]/80 mb-1">Rating</label>
-                    <select value={newReview.rating} onChange={e => setNewReview({...newReview, rating: Number(e.target.value)})} className="w-full px-3 py-2 text-sm rounded-xl border border-[#E7D9D0] focus:outline-none focus:ring-2 focus:ring-rose-400">
+                    <select value={newReview.rating} onChange={e => setNewReview({...newReview, rating: Number(e.target.value)})} className="w-full px-3 py-2 text-sm rounded-xl border border-[#E7D9D0] focus:outline-none focus:ring-2 focus:ring-[#C48B80]">
                       <option value="5">5 Stars</option>
                       <option value="4">4 Stars</option>
                       <option value="3">3 Stars</option>
@@ -463,12 +463,12 @@ export const AdminReviewsPageClient: React.FC = () => {
 
                 <div>
                   <label className="block text-xs font-bold text-[#1A1A1A]/80 mb-1">Review Title</label>
-                  <input type="text" value={newReview.title} onChange={e => setNewReview({...newReview, title: e.target.value})} className="w-full px-3 py-2 text-sm rounded-xl border border-[#E7D9D0] focus:outline-none focus:ring-2 focus:ring-rose-400" placeholder="e.g. My kids love this!" />
+                  <input type="text" value={newReview.title} onChange={e => setNewReview({...newReview, title: e.target.value})} className="w-full px-3 py-2 text-sm rounded-xl border border-[#E7D9D0] focus:outline-none focus:ring-2 focus:ring-[#C48B80]" placeholder="e.g. My kids love this!" />
                 </div>
 
                 <div>
                   <label className="block text-xs font-bold text-[#1A1A1A]/80 mb-1">Review Content <span className="text-[#C48B80]">*</span></label>
-                  <textarea required rows={4} value={newReview.content} onChange={e => setNewReview({...newReview, content: e.target.value})} className="w-full px-3 py-2 text-sm rounded-xl border border-[#E7D9D0] focus:outline-none focus:ring-2 focus:ring-rose-400" placeholder="Write the review text here..."></textarea>
+                  <textarea required rows={4} value={newReview.content} onChange={e => setNewReview({...newReview, content: e.target.value})} className="w-full px-3 py-2 text-sm rounded-xl border border-[#E7D9D0] focus:outline-none focus:ring-2 focus:ring-[#C48B80]" placeholder="Write the review text here..."></textarea>
                 </div>
                 
                 <div className="flex items-center gap-2">
@@ -485,7 +485,7 @@ export const AdminReviewsPageClient: React.FC = () => {
                         <button type="button" onClick={() => { setReviewImageFile(null); setReviewImagePreview(''); }} className="absolute top-1 right-1 bg-white/80 rounded-full p-0.5 text-[#C48B80] hover:bg-white"><XCircle className="w-4 h-4" /></button>
                       </div>
                     ) : (
-                      <label className="flex h-20 w-20 cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-[#E7D9D0] bg-[#FAF6F2] text-[#1A1A1A]/40 hover:border-rose-300 hover:bg-[#FAF6F2] hover:text-[#C48B80]">
+                      <label className="flex h-20 w-20 cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-[#E7D9D0] bg-[#FAF6F2] text-[#1A1A1A]/40 hover:border-[#C48B80] hover:bg-[#FAF6F2] hover:text-[#C48B80]">
                         <ImagePlus className="h-6 w-6" />
                         <span className="text-[10px] font-bold">Upload</span>
                         <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handleImageChange} />

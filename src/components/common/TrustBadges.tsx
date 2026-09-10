@@ -8,25 +8,25 @@ export const TrustBadges: React.FC = () => {
       icon: ShieldCheck,
       title: '100% Safe &',
       desc: 'Child-Friendly',
-      bgColor: 'bg-blue-500 text-white',
+      bgColor: 'bg-[#C48B80] text-white',
     },
     {
       icon: Truck,
       title: 'Express Delivery',
       desc: '2•3 Days',
-      bgColor: 'bg-amber-400 text-white',
+      bgColor: 'bg-[#C48B80] text-white',
     },
     {
       icon: RefreshCw,
       title: 'Easy Returns',
       desc: 'Hassle-Free',
-      bgColor: 'bg-rose-400 text-white',
+      bgColor: 'bg-[#C48B80] text-white',
     },
     {
       icon: Gift,
       title: 'Perfect for',
       desc: 'Gifting',
-      bgColor: 'bg-purple-500 text-white',
+      bgColor: 'bg-[#C48B80] text-white',
     },
   ];
 

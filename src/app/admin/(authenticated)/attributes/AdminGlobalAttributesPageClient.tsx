@@ -69,7 +69,7 @@ function SortableTermItem({ term, onEdit, onDelete, displayType, inUseCount }: {
       <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
         <button
           onClick={() => onEdit(term)}
-          className="p-1.5 text-[#1A1A1A]/40 hover:text-blue-600 rounded-lg hover:bg-blue-50"
+          className="p-1.5 text-[#1A1A1A]/40 hover:text-[#C48B80] rounded-lg hover:bg-[#C48B80]"
           title="Edit"
         >
           <Edit2 className="w-4 h-4" />
@@ -269,7 +269,7 @@ export function AdminGlobalAttributesPageClient() {
         </div>
         <button
           onClick={() => setEditingAttr({ id: '', name: '', slug: '', displayType: 'buttons', terms: [] })}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+          className="flex items-center gap-2 px-4 py-2 bg-[#C48B80] text-white rounded-lg hover:bg-[#C48B80] transition-colors font-medium"
         >
           <Plus className="w-4 h-4" />
           Add Attribute
@@ -290,7 +290,7 @@ export function AdminGlobalAttributesPageClient() {
                 onClick={() => openAttribute(attr)}
                 className={`w-full text-left p-4 rounded-xl border transition-all ${
                   editingAttr?.id === attr.id
-                    ? 'bg-blue-50 border-blue-200 shadow-sm ring-1 ring-blue-500'
+                    ? 'bg-[#C48B80] border-[#C48B80] shadow-sm ring-1 ring-[#C48B80]'
                     : 'bg-white border-[#E7D9D0] hover:border-[#E7D9D0] hover:shadow-sm'
                 }`}
               >
@@ -334,7 +334,7 @@ export function AdminGlobalAttributesPageClient() {
                     required
                     value={editingAttr.name}
                     onChange={e => setEditingAttr({ ...editingAttr, name: e.target.value, slug: e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-') })}
-                    className="w-full px-3 py-2 border border-[#E7D9D0] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-[#E7D9D0] rounded-lg focus:ring-2 focus:ring-[#C48B80] focus:border-transparent"
                     placeholder="e.g. Size"
                   />
                 </div>
@@ -345,7 +345,7 @@ export function AdminGlobalAttributesPageClient() {
                     required
                     value={editingAttr.slug}
                     onChange={e => setEditingAttr({ ...editingAttr, slug: e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-') })}
-                    className="w-full px-3 py-2 border border-[#E7D9D0] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-[#E7D9D0] rounded-lg focus:ring-2 focus:ring-[#C48B80] focus:border-transparent"
                   />
                 </div>
                 <div className="col-span-2">
@@ -353,7 +353,7 @@ export function AdminGlobalAttributesPageClient() {
                   <select
                     value={editingAttr.displayType}
                     onChange={e => setEditingAttr({ ...editingAttr, displayType: e.target.value as any })}
-                    className="w-full px-3 py-2 border border-[#E7D9D0] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-[#E7D9D0] rounded-lg focus:ring-2 focus:ring-[#C48B80] focus:border-transparent"
                   >
                     <option value="buttons">Text Buttons</option>
                     <option value="dropdown">Dropdown</option>
@@ -384,7 +384,7 @@ export function AdminGlobalAttributesPageClient() {
                   </button>
                   <button
                     type="submit"
-                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                    className="flex items-center gap-2 px-4 py-2 bg-[#C48B80] text-white rounded-lg hover:bg-[#C48B80] transition-colors font-medium"
                   >
                     <Save className="w-4 h-4" />
                     Save Settings
@@ -466,7 +466,7 @@ export function AdminGlobalAttributesPageClient() {
                       value: e.target.value,
                       slug: e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-') 
                     })}
-                    className="w-full px-3 py-2 border border-[#E7D9D0] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-[#E7D9D0] rounded-lg focus:ring-2 focus:ring-[#C48B80] focus:border-transparent"
                     placeholder="e.g. Extra Large"
                   />
                 </div>
@@ -478,7 +478,7 @@ export function AdminGlobalAttributesPageClient() {
                     required
                     value={editingTerm.slug || ''}
                     onChange={e => setEditingTerm({ ...editingTerm, slug: e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-') })}
-                    className="w-full px-3 py-2 border border-[#E7D9D0] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
+                    className="w-full px-3 py-2 border border-[#E7D9D0] rounded-lg focus:ring-2 focus:ring-[#C48B80] focus:border-transparent font-mono text-sm"
                   />
                 </div>
 
@@ -496,7 +496,7 @@ export function AdminGlobalAttributesPageClient() {
                         type="text"
                         value={editingTerm.colorValue || ''}
                         onChange={e => setEditingTerm({ ...editingTerm, colorValue: e.target.value })}
-                        className="flex-1 px-3 py-2 border border-[#E7D9D0] rounded-lg focus:ring-2 focus:ring-blue-500 font-mono text-sm uppercase"
+                        className="flex-1 px-3 py-2 border border-[#E7D9D0] rounded-lg focus:ring-2 focus:ring-[#C48B80] font-mono text-sm uppercase"
                         placeholder="#HEXCODE"
                       />
                     </div>
@@ -512,7 +512,7 @@ export function AdminGlobalAttributesPageClient() {
                            type="url"
                            value={editingTerm.imageUrl || ''}
                            onChange={e => setEditingTerm({ ...editingTerm, imageUrl: e.target.value })}
-                           className="flex-1 px-3 py-2 border border-[#E7D9D0] rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+                           className="flex-1 px-3 py-2 border border-[#E7D9D0] rounded-lg focus:ring-2 focus:ring-[#C48B80] text-sm"
                            placeholder="https://..."
                          />
                          <label className="flex items-center gap-2 px-3 py-2 bg-[#FAF6F2] text-[#1A1A1A]/80 rounded-lg hover:bg-slate-200 transition-colors font-medium text-sm cursor-pointer shrink-0">
@@ -542,7 +542,7 @@ export function AdminGlobalAttributesPageClient() {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                  className="px-4 py-2 bg-[#C48B80] text-white rounded-lg hover:bg-[#C48B80] transition-colors font-medium"
                 >
                   Save Term
                 </button>

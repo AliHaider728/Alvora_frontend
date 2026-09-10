@@ -708,8 +708,8 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
               </h1>
 
               <div className="mb-3 grid gap-1.5 rounded-2xl border border-[#EDE5DC] bg-[#FAF6F2]/70 px-3 py-2.5 text-xs sm:grid-cols-2" aria-label="Product categories and recommended age groups">
-                <div><span className="font-black text-[#1A1A1A]/80">Categories: </span><span className="font-semibold text-sky-700">{getProductCategoryNames(product).join(', ') || 'Uncategorized'}</span></div>
-                <div><span className="font-black text-[#1A1A1A]/80">Age: </span><span className="font-semibold text-indigo-700">{formatProductAgeGroups(product).replace(/^Ages\s*/i, '')}</span></div>
+                <div><span className="font-black text-[#1A1A1A]/80">Categories: </span><span className="font-semibold text-[#C48B80]">{getProductCategoryNames(product).join(', ') || 'Uncategorized'}</span></div>
+                <div><span className="font-black text-[#1A1A1A]/80">Age: </span><span className="font-semibold text-[#C48B80]">{formatProductAgeGroups(product).replace(/^Ages\s*/i, '')}</span></div>
               </div>
 
               {/* Price & Stock */}
@@ -757,7 +757,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                   <span className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold ${
                     ((isVariable ? (product.attributes?.length || 0) > 0 : variantGroups.length > 0) && !allVariantsSelected)
                       ? 'bg-amber-100 text-amber-800'
-                      : effectiveAvailable ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
+                      : effectiveAvailable ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-[#C48B80]'
                   }`}>
                     <span className={`w-2 h-2 rounded-full ${
                       ((isVariable ? (product.attributes?.length || 0) > 0 : variantGroups.length > 0) && !allVariantsSelected)
@@ -774,19 +774,19 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
               </div>
 
               {/* Delivery Charge Info Badge */}
-              <div className="mb-3 flex items-center gap-2.5 rounded-2xl border border-sky-100 bg-sky-50 p-3 text-xs font-semibold text-sky-900">
-                <Truck className="w-4 h-4 text-sky-600 shrink-0" />
+              <div className="mb-3 flex items-center gap-2.5 rounded-2xl border border-[#C48B80] bg-[#C48B80] p-3 text-xs font-semibold text-[#C48B80]">
+                <Truck className="w-4 h-4 text-[#C48B80] shrink-0" />
                 <span>
                   Delivery Fee:{' '}
                   {productDeliveryType === 'none' ? (
-                    <strong className="text-rose-600">Delivery unavailable</strong>
+                    <strong className="text-[#C48B80]">Delivery unavailable</strong>
                   ) : deliveryFee === 0 ? (
                     <strong className="text-emerald-600">FREE Delivery</strong>
                   ) : (
                     <strong>{formatPrice(deliveryFee, settings.currency)}</strong>
                   )}
                   {productDeliveryType === 'store_threshold' && settings.freeShippingThreshold > 0 && deliveryFee > 0 && (
-                    <span className="block sm:inline text-sky-700 font-normal ml-1">
+                    <span className="block sm:inline text-[#C48B80] font-normal ml-1">
                       (Free delivery on total orders above {formatPrice(settings.freeShippingThreshold, settings.currency)})
                     </span>
                   )}
@@ -807,7 +807,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                       <button 
                         ref={sizeGuideTriggerRef}
                         onClick={() => setSizeGuideModalOpen(true)} 
-                        className="text-xs font-bold text-blue-600 hover:underline flex items-center gap-1"
+                        className="text-xs font-bold text-[#C48B80] hover:underline flex items-center gap-1"
                       >
                         <Info className="w-3.5 h-3.5" /> Size Guide
                       </button>
@@ -844,7 +844,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                           <select
                             value={selectedAttributes[attr.slug] || ''}
                             onChange={(e) => handleAttributeSelect(attr.slug, e.target.value)}
-                            className="w-full sm:w-64 rounded-xl border border-[#EDE5DC] bg-[#FAF6F2] px-3 py-2 text-sm text-[#1A1A1A]/90 outline-none focus:border-rose-400 focus:ring-2 focus:ring-[#F5EDE4]"
+                            className="w-full sm:w-64 rounded-xl border border-[#EDE5DC] bg-[#FAF6F2] px-3 py-2 text-sm text-[#1A1A1A]/90 outline-none focus:border-[#C48B80] focus:ring-2 focus:ring-[#F5EDE4]"
                           >
                             <option value="" disabled>Choose {attr.name}</option>
                             {terms.map(t => <option key={t.id} value={t.value}>{t.label}</option>)}
@@ -859,7 +859,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                                   value={t.value}
                                   checked={selectedAttributes[attr.slug] === t.value}
                                   onChange={() => handleAttributeSelect(attr.slug, t.value)}
-                                  className="text-[#9C4122] focus:ring-rose-500"
+                                  className="text-[#9C4122] focus:ring-[#C48B80]"
                                 />
                                 <span className="text-sm font-medium text-[#1A1A1A]/80">{t.label}</span>
                               </label>
@@ -1109,7 +1109,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
             {/* Micro Guarantees */}
             <div className="grid grid-cols-3 gap-1.5 border-t border-[#EDE5DC] pt-3 text-center text-[10px] text-[#1A1A1A]/50 sm:gap-3 sm:text-xs">
               <div className="rounded-2xl bg-[#FAF6F2] p-2 sm:p-2.5">
-                <Truck className="w-4 h-4 mx-auto text-sky-500 mb-1" />
+                <Truck className="w-4 h-4 mx-auto text-[#C48B80] mb-1" />
                 <span>Cash on Delivery</span>
               </div>
               <div className="rounded-2xl bg-[#FAF6F2] p-2 sm:p-2.5">
@@ -1190,7 +1190,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                 <>
                   {product.description && (
                     <div
-                      className="max-w-none space-y-4 leading-7 whitespace-pre-wrap [&_a]:text-sky-600 [&_a]:underline [&_blockquote]:border-l-4 [&_blockquote]:border-[#EDE5DC] [&_blockquote]:pl-4 [&_h1]:mt-7 [&_h1]:text-2xl [&_h1]:font-black [&_h2]:mt-6 [&_h2]:text-xl [&_h2]:font-black [&_h3]:mt-5 [&_h3]:text-lg [&_h3]:font-bold [&_img]:h-auto [&_img]:max-w-full [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:my-3 [&_table]:block [&_table]:max-w-full [&_table]:overflow-x-auto [&_table]:border-collapse [&_td]:border [&_td]:border-[#EDE5DC] [&_td]:p-2 [&_th]:border [&_th]:border-[#EDE5DC] [&_th]:bg-[#FAF6F2] [&_th]:p-2 [&_ul]:list-disc [&_ul]:pl-6"
+                      className="max-w-none space-y-4 leading-7 whitespace-pre-wrap [&_a]:text-[#C48B80] [&_a]:underline [&_blockquote]:border-l-4 [&_blockquote]:border-[#EDE5DC] [&_blockquote]:pl-4 [&_h1]:mt-7 [&_h1]:text-2xl [&_h1]:font-black [&_h2]:mt-6 [&_h2]:text-xl [&_h2]:font-black [&_h3]:mt-5 [&_h3]:text-lg [&_h3]:font-bold [&_img]:h-auto [&_img]:max-w-full [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:my-3 [&_table]:block [&_table]:max-w-full [&_table]:overflow-x-auto [&_table]:border-collapse [&_td]:border [&_td]:border-[#EDE5DC] [&_td]:p-2 [&_th]:border [&_th]:border-[#EDE5DC] [&_th]:bg-[#FAF6F2] [&_th]:p-2 [&_ul]:list-disc [&_ul]:pl-6"
                       dangerouslySetInnerHTML={{ __html: product.description }}
                     />
                   )}
@@ -1269,7 +1269,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                             <div className="flex items-center gap-2">
                               <span className="font-bold text-sm text-[#1A1A1A]/90">{review.reviewerName}</span>
                               {review.verifiedPurchase && (
-                                <span className="flex items-center text-[10px] text-blue-600 font-semibold">
+                                <span className="flex items-center text-[10px] text-[#C48B80] font-semibold">
                                   <BadgeCheck className="w-3.5 h-3.5 mr-0.5" /> Verified Purchase
                                 </span>
                               )}
@@ -1461,7 +1461,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
               </h3>
               <button 
                 onClick={() => setSizeGuideModalOpen(false)} 
-                className="text-[#1A1A1A]/40 hover:text-[#1A1A1A]/60 focus:outline-none focus:ring-2 focus:ring-rose-500 rounded-lg p-1"
+                className="text-[#1A1A1A]/40 hover:text-[#1A1A1A]/60 focus:outline-none focus:ring-2 focus:ring-[#C48B80] rounded-lg p-1"
                 aria-label="Close Size Guide"
               >
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

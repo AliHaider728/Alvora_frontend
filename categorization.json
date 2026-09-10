@@ -1,0 +1,906 @@
+{
+  "primary": [
+    {
+      "file": "src\\app\\account\\page.tsx",
+      "line": 22,
+      "text": "<Loader2 className=\"w-8 h-8 text-rose-500 animate-spin\" />"
+    },
+    {
+      "file": "src\\app\\account\\page.tsx",
+      "line": 33,
+      "text": "<User className=\"w-8 h-8 text-rose-500\" />"
+    },
+    {
+      "file": "src\\app\\account\\page.tsx",
+      "line": 70,
+      "text": "<div className=\"w-16 h-16 rounded-full ring-4 ring-rose-100 flex items-center justify-center bg-rose-500 text-white font-heading font-black text-2xl\">"
+    },
+    {
+      "file": "src\\app\\account\\page.tsx",
+      "line": 95,
+      "text": "activeTab === 'orders' ? 'bg-rose-500 text-white' : 'text-slate-700 hover:bg-slate-100'"
+    },
+    {
+      "file": "src\\app\\account\\page.tsx",
+      "line": 104,
+      "text": "activeTab === 'profile' ? 'bg-rose-500 text-white' : 'text-slate-700 hover:bg-slate-100'"
+    },
+    {
+      "file": "src\\app\\account\\page.tsx",
+      "line": 131,
+      "text": "order.status === 'Cancelled' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800'"
+    },
+    {
+      "file": "src\\app\\account\\page.tsx",
+      "line": 153,
+      "text": "<span className=\"font-heading font-extrabold text-base text-rose-600\">Total: {formatPrice(order.total, settings.currency)}</span>"
+    },
+    {
+      "file": "src\\app\\account\\page.tsx",
+      "line": 196,
+      "text": "className=\"w-full px-4 py-2.5 text-base sm:text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400\""
+    },
+    {
+      "file": "src\\app\\account\\page.tsx",
+      "line": 205,
+      "text": "className=\"w-full px-4 py-2.5 text-base sm:text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400\""
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\AdminDashboardPageClient.tsx",
+      "line": 126,
+      "text": "<div className=\"p-3.5 rounded-2xl bg-[#FAF6F2] text-rose-700\">"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\attributes\\AdminGlobalAttributesPageClient.tsx",
+      "line": 72,
+      "text": "className=\"p-1.5 text-[#1A1A1A]/40 hover:text-blue-600 rounded-lg hover:bg-blue-50\""
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\attributes\\AdminGlobalAttributesPageClient.tsx",
+      "line": 272,
+      "text": "className=\"flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium\""
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\attributes\\AdminGlobalAttributesPageClient.tsx",
+      "line": 293,
+      "text": "? 'bg-blue-50 border-blue-200 shadow-sm ring-1 ring-blue-500'"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\attributes\\AdminGlobalAttributesPageClient.tsx",
+      "line": 337,
+      "text": "className=\"w-full px-3 py-2 border border-[#E7D9D0] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent\""
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\attributes\\AdminGlobalAttributesPageClient.tsx",
+      "line": 348,
+      "text": "className=\"w-full px-3 py-2 border border-[#E7D9D0] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent\""
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\attributes\\AdminGlobalAttributesPageClient.tsx",
+      "line": 356,
+      "text": "className=\"w-full px-3 py-2 border border-[#E7D9D0] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent\""
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\attributes\\AdminGlobalAttributesPageClient.tsx",
+      "line": 387,
+      "text": "className=\"flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium\""
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\attributes\\AdminGlobalAttributesPageClient.tsx",
+      "line": 469,
+      "text": "className=\"w-full px-3 py-2 border border-[#E7D9D0] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent\""
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\attributes\\AdminGlobalAttributesPageClient.tsx",
+      "line": 481,
+      "text": "className=\"w-full px-3 py-2 border border-[#E7D9D0] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm\""
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\attributes\\AdminGlobalAttributesPageClient.tsx",
+      "line": 499,
+      "text": "className=\"flex-1 px-3 py-2 border border-[#E7D9D0] rounded-lg focus:ring-2 focus:ring-blue-500 font-mono text-sm uppercase\""
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\attributes\\AdminGlobalAttributesPageClient.tsx",
+      "line": 515,
+      "text": "className=\"flex-1 px-3 py-2 border border-[#E7D9D0] rounded-lg focus:ring-2 focus:ring-blue-500 text-sm\""
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\attributes\\AdminGlobalAttributesPageClient.tsx",
+      "line": 545,
+      "text": "className=\"px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium\""
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\contact-messages\\AdminContactMessagesClient.tsx",
+      "line": 82,
+      "text": "msg.status === 'New' ? 'bg-rose-100 text-rose-700' :"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\orders\\AdminOrdersPageClient.tsx",
+      "line": 209,
+      "text": "'bg-rose-100 text-rose-800 border-[#E7D9D0] hover:bg-rose-200'"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\orders\\AdminOrdersPageClient.tsx",
+      "line": 312,
+      "text": "order.status === 'Cancelled' ? 'bg-rose-100 text-rose-800' :"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\products\\AdminProductsPageClient.tsx",
+      "line": 260,
+      "text": "prod.inStock ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\products\\edit\\[id]\\AdminProductFormPageClient.tsx",
+      "line": 156,
+      "text": "<div className=\"mt-0.5 rounded-xl bg-indigo-50 p-2 text-indigo-600\">"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\products\\edit\\[id]\\AdminProductFormPageClient.tsx",
+      "line": 1035,
+      "text": "{superAdmin && <button type=\"button\" onClick={() => setCategoryModalOpen(true)} className=\"inline-flex items-center gap-1 text-[11px] font-bold text-indigo-600 hover:text-indigo-700\"><Plus className=\"h-3.5 w-3.5\" /> Add category</button>}"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\products\\edit\\[id]\\AdminProductFormPageClient.tsx",
+      "line": 1050,
+      "text": "<input value={categorySearch} onChange={event => setCategorySearch(event.target.value)} className=\"w-full rounded-xl border border-[#E7D9D0] bg-white py-2 pl-9 pr-3 text-xs outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100\" placeholder=\"Search categories…\" />"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\products\\edit\\[id]\\AdminProductFormPageClient.tsx",
+      "line": 1055,
+      "text": "return <label key={item.id || item.slug} className={`flex min-h-10 cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-xs font-bold transition ${checked ? 'border-indigo-300 bg-white text-indigo-700 shadow-sm' : 'border-transparent text-[#1A1A1A]/70 hover:border-[#E7D9D0] hover:bg-white'}`}><input type=\"checkbox\" checked={checked} onChange={event => applyCategorySelection(event.target.checked ? [...categoryIds, item.id] : categoryIds.filter(idValue => idValue !== item.id))} />{item.name}</label>;"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\products\\edit\\[id]\\AdminProductFormPageClient.tsx",
+      "line": 1096,
+      "text": "<span className={`flex h-[42px] items-center rounded-xl border px-3 text-sm font-bold ${(stockQuantity || 0) > 0 ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : 'border-[#E7D9D0] bg-[#FAF6F2] text-rose-700'}`}>{(stockQuantity || 0) > 0 ? 'In Stock' : 'Out of Stock'}</span>"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\products\\edit\\[id]\\AdminProductFormPageClient.tsx",
+      "line": 1238,
+      "text": "<input type=\"number\" min=\"0\" placeholder=\"e.g. 150\" value={soldCount} onChange={e => { setSoldCount(e.target.value === '' ? '' : parseInt(e.target.value, 10)); markDirty(); }} className=\"w-24 px-3 py-2 text-xs rounded-xl border border-[#E7D9D0] focus:outline-none focus:border-rose-300 focus:ring-1 focus:ring-rose-300 transition\" />"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\products\\new\\AdminProductFormPageClient.tsx",
+      "line": 156,
+      "text": "<div className=\"mt-0.5 rounded-xl bg-indigo-50 p-2 text-indigo-600\">"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\products\\new\\AdminProductFormPageClient.tsx",
+      "line": 1035,
+      "text": "{superAdmin && <button type=\"button\" onClick={() => setCategoryModalOpen(true)} className=\"inline-flex items-center gap-1 text-[11px] font-bold text-indigo-600 hover:text-indigo-700\"><Plus className=\"h-3.5 w-3.5\" /> Add category</button>}"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\products\\new\\AdminProductFormPageClient.tsx",
+      "line": 1050,
+      "text": "<input value={categorySearch} onChange={event => setCategorySearch(event.target.value)} className=\"w-full rounded-xl border border-[#E7D9D0] bg-white py-2 pl-9 pr-3 text-xs outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100\" placeholder=\"Search categories…\" />"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\products\\new\\AdminProductFormPageClient.tsx",
+      "line": 1055,
+      "text": "return <label key={item.id || item.slug} className={`flex min-h-10 cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-xs font-bold transition ${checked ? 'border-indigo-300 bg-white text-indigo-700 shadow-sm' : 'border-transparent text-[#1A1A1A]/70 hover:border-[#E7D9D0] hover:bg-white'}`}><input type=\"checkbox\" checked={checked} onChange={event => applyCategorySelection(event.target.checked ? [...categoryIds, item.id] : categoryIds.filter(idValue => idValue !== item.id))} />{item.name}</label>;"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\products\\new\\AdminProductFormPageClient.tsx",
+      "line": 1096,
+      "text": "<span className={`flex h-[42px] items-center rounded-xl border px-3 text-sm font-bold ${(stockQuantity || 0) > 0 ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : 'border-[#E7D9D0] bg-[#FAF6F2] text-rose-700'}`}>{(stockQuantity || 0) > 0 ? 'In Stock' : 'Out of Stock'}</span>"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\products\\new\\AdminProductFormPageClient.tsx",
+      "line": 1238,
+      "text": "<input type=\"number\" min=\"0\" placeholder=\"e.g. 150\" value={soldCount} onChange={e => { setSoldCount(e.target.value === '' ? '' : parseInt(e.target.value, 10)); markDirty(); }} className=\"w-24 px-3 py-2 text-xs rounded-xl border border-[#E7D9D0] focus:outline-none focus:border-rose-300 focus:ring-1 focus:ring-rose-300 transition\" />"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\reviews\\AdminReviewsPageClient.tsx",
+      "line": 444,
+      "text": "<input type=\"text\" required value={newReview.productId} onChange={e => setNewReview({...newReview, productId: e.target.value})} className=\"w-full px-3 py-2 text-sm rounded-xl border border-[#E7D9D0] focus:outline-none focus:ring-2 focus:ring-rose-400\" placeholder=\"e.g. magnetic-building-blocks or 60d5ecb...\" />"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\reviews\\AdminReviewsPageClient.tsx",
+      "line": 450,
+      "text": "<input type=\"text\" required value={newReview.reviewerName} onChange={e => setNewReview({...newReview, reviewerName: e.target.value})} className=\"w-full px-3 py-2 text-sm rounded-xl border border-[#E7D9D0] focus:outline-none focus:ring-2 focus:ring-rose-400\" placeholder=\"e.g. Sarah M.\" />"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\reviews\\AdminReviewsPageClient.tsx",
+      "line": 454,
+      "text": "<select value={newReview.rating} onChange={e => setNewReview({...newReview, rating: Number(e.target.value)})} className=\"w-full px-3 py-2 text-sm rounded-xl border border-[#E7D9D0] focus:outline-none focus:ring-2 focus:ring-rose-400\">"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\reviews\\AdminReviewsPageClient.tsx",
+      "line": 466,
+      "text": "<input type=\"text\" value={newReview.title} onChange={e => setNewReview({...newReview, title: e.target.value})} className=\"w-full px-3 py-2 text-sm rounded-xl border border-[#E7D9D0] focus:outline-none focus:ring-2 focus:ring-rose-400\" placeholder=\"e.g. My kids love this!\" />"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\reviews\\AdminReviewsPageClient.tsx",
+      "line": 471,
+      "text": "<textarea required rows={4} value={newReview.content} onChange={e => setNewReview({...newReview, content: e.target.value})} className=\"w-full px-3 py-2 text-sm rounded-xl border border-[#E7D9D0] focus:outline-none focus:ring-2 focus:ring-rose-400\" placeholder=\"Write the review text here...\"></textarea>"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\reviews\\AdminReviewsPageClient.tsx",
+      "line": 488,
+      "text": "<label className=\"flex h-20 w-20 cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-[#E7D9D0] bg-[#FAF6F2] text-[#1A1A1A]/40 hover:border-rose-300 hover:bg-[#FAF6F2] hover:text-[#C48B80]\">"
+    },
+    {
+      "file": "src\\app\\category\\[slug]\\CategoryPageClient.tsx",
+      "line": 380,
+      "text": "className=\"px-3.5 py-2 text-xs font-display font-medium text-2xl uppercase tracking-widest rounded-sm border border-[#EDE5DC] bg-[#FAF6F2] text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-rose-400 cursor-pointer\""
+    },
+    {
+      "file": "src\\app\\checkout\\CheckoutPageClient.tsx",
+      "line": 315,
+      "text": "<div className=\"w-16 h-16 rounded-full bg-[#F5EDE4] text-rose-400 flex items-center justify-center mb-4\">"
+    },
+    {
+      "file": "src\\app\\checkout\\CheckoutPageClient.tsx",
+      "line": 473,
+      "text": "className=\"w-full px-4 py-2.5 text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-rose-400\""
+    },
+    {
+      "file": "src\\app\\checkout\\CheckoutPageClient.tsx",
+      "line": 488,
+      "text": "className=\"w-full px-4 py-2.5 text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-rose-400\""
+    },
+    {
+      "file": "src\\app\\checkout\\CheckoutPageClient.tsx",
+      "line": 500,
+      "text": "className=\"w-full px-4 py-2.5 text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-rose-400\""
+    },
+    {
+      "file": "src\\app\\checkout\\CheckoutPageClient.tsx",
+      "line": 512,
+      "text": "className=\"w-full px-4 py-2.5 text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-rose-400\""
+    },
+    {
+      "file": "src\\app\\checkout\\CheckoutPageClient.tsx",
+      "line": 523,
+      "text": "className=\"w-full px-3 py-2.5 text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-rose-400\""
+    },
+    {
+      "file": "src\\app\\checkout\\CheckoutPageClient.tsx",
+      "line": 534,
+      "text": "className=\"w-full px-3 py-2.5 text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-rose-400\""
+    },
+    {
+      "file": "src\\app\\checkout\\CheckoutPageClient.tsx",
+      "line": 546,
+      "text": "className=\"w-full px-4 py-2 text-base sm:text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-rose-400\""
+    },
+    {
+      "file": "src\\app\\checkout\\CheckoutPageClient.tsx",
+      "line": 557,
+      "text": "className=\"w-full px-4 py-2.5 text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-rose-400\""
+    },
+    {
+      "file": "src\\app\\contact\\ContactPageClient.tsx",
+      "line": 94,
+      "text": "hoverClass: 'hover:text-blue-600'"
+    },
+    {
+      "file": "src\\app\\contact\\ContactPageClient.tsx",
+      "line": 101,
+      "text": "hoverClass: 'hover:text-pink-600'"
+    },
+    {
+      "file": "src\\app\\contact\\ContactPageClient.tsx",
+      "line": 140,
+      "text": "<div className=\"p-3 rounded-2xl bg-rose-50 text-rose-500\">"
+    },
+    {
+      "file": "src\\app\\contact\\ContactPageClient.tsx",
+      "line": 156,
+      "text": "<a href={phoneLink} className=\"hover:text-rose-500 transition-colors\">"
+    },
+    {
+      "file": "src\\app\\contact\\ContactPageClient.tsx",
+      "line": 169,
+      "text": "<a href={emailLink} className=\"hover:text-rose-500 transition-colors\">"
+    },
+    {
+      "file": "src\\app\\contact\\ContactPageClient.tsx",
+      "line": 260,
+      "text": "className=\"w-full py-3.5 rounded-2xl bg-rose-500 text-white font-heading font-extrabold text-xs hover:bg-rose-600 shadow-md flex items-center justify-center gap-2 disabled:opacity-50\""
+    },
+    {
+      "file": "src\\app\\faq\\page.tsx",
+      "line": 45,
+      "text": "color: 'text-rose-500 bg-rose-50'"
+    },
+    {
+      "file": "src\\app\\faq\\page.tsx",
+      "line": 115,
+      "text": "<h3 className={`font-heading font-bold text-sm sm:text-base transition-colors ${isOpen ? 'text-rose-500' : 'text-slate-900 group-hover:text-rose-500'}`}>"
+    },
+    {
+      "file": "src\\app\\faq\\page.tsx",
+      "line": 121,
+      "text": "className={`w-5 h-5 transition-transform duration-300 ease-out ${isOpen ? 'rotate-180 text-rose-500' : 'text-slate-400'}`}"
+    },
+    {
+      "file": "src\\app\\product\\[slug]\\ProductDetailPageClient.tsx",
+      "line": 712,
+      "text": "<div><span className=\"font-black text-[#1A1A1A]/80\">Age: </span><span className=\"font-semibold text-indigo-700\">{formatProductAgeGroups(product).replace(/^Ages\\s*/i, '')}</span></div>"
+    },
+    {
+      "file": "src\\app\\product\\[slug]\\ProductDetailPageClient.tsx",
+      "line": 760,
+      "text": ": effectiveAvailable ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'"
+    },
+    {
+      "file": "src\\app\\product\\[slug]\\ProductDetailPageClient.tsx",
+      "line": 782,
+      "text": "<strong className=\"text-rose-600\">Delivery unavailable</strong>"
+    },
+    {
+      "file": "src\\app\\product\\[slug]\\ProductDetailPageClient.tsx",
+      "line": 810,
+      "text": "className=\"text-xs font-bold text-blue-600 hover:underline flex items-center gap-1\""
+    },
+    {
+      "file": "src\\app\\product\\[slug]\\ProductDetailPageClient.tsx",
+      "line": 847,
+      "text": "className=\"w-full sm:w-64 rounded-xl border border-[#EDE5DC] bg-[#FAF6F2] px-3 py-2 text-sm text-[#1A1A1A]/90 outline-none focus:border-rose-400 focus:ring-2 focus:ring-[#F5EDE4]\""
+    },
+    {
+      "file": "src\\app\\product\\[slug]\\ProductDetailPageClient.tsx",
+      "line": 862,
+      "text": "className=\"text-[#9C4122] focus:ring-rose-500\""
+    },
+    {
+      "file": "src\\app\\product\\[slug]\\ProductDetailPageClient.tsx",
+      "line": 1272,
+      "text": "<span className=\"flex items-center text-[10px] text-blue-600 font-semibold\">"
+    },
+    {
+      "file": "src\\app\\product\\[slug]\\ProductDetailPageClient.tsx",
+      "line": 1464,
+      "text": "className=\"text-[#1A1A1A]/40 hover:text-[#1A1A1A]/60 focus:outline-none focus:ring-2 focus:ring-rose-500 rounded-lg p-1\""
+    },
+    {
+      "file": "src\\app\\reset-password\\page.tsx",
+      "line": 77,
+      "text": "className=\"w-full rounded-2xl bg-rose-500 py-3.5 text-sm font-bold text-white transition-all hover:bg-rose-600 active:scale-95\""
+    },
+    {
+      "file": "src\\app\\reset-password\\page.tsx",
+      "line": 117,
+      "text": "className=\"w-full rounded-2xl border-2 border-slate-100 bg-slate-50 py-3.5 px-4 text-sm font-medium text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-rose-500 focus:bg-white focus:shadow-lg focus:shadow-rose-100 text-center tracking-[0.5em] font-mono text-xl\""
+    },
+    {
+      "file": "src\\app\\reset-password\\page.tsx",
+      "line": 133,
+      "text": "className=\"w-full rounded-2xl border-2 border-slate-100 bg-slate-50 py-3.5 pl-11 pr-4 text-sm font-medium text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-rose-500 focus:bg-white focus:shadow-lg focus:shadow-rose-100\""
+    },
+    {
+      "file": "src\\app\\reset-password\\page.tsx",
+      "line": 150,
+      "text": "className=\"w-full rounded-2xl border-2 border-slate-100 bg-slate-50 py-3.5 pl-11 pr-4 text-sm font-medium text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-rose-500 focus:bg-white focus:shadow-lg focus:shadow-rose-100\""
+    },
+    {
+      "file": "src\\app\\search\\page.tsx",
+      "line": 55,
+      "text": "<Search className=\"w-6 h-6 text-rose-500\" />"
+    },
+    {
+      "file": "src\\app\\search\\page.tsx",
+      "line": 87,
+      "text": "className=\"inline-block px-6 py-2.5 rounded-2xl bg-rose-500 text-white font-heading font-bold text-xs\""
+    },
+    {
+      "file": "src\\app\\wishlist\\page.tsx",
+      "line": 48,
+      "text": "className=\"inline-block px-6 py-2.5 rounded-2xl bg-rose-500 text-white font-heading font-bold text-xs\""
+    },
+    {
+      "file": "src\\components\\admin\\AdminProductReviewsSection.tsx",
+      "line": 145,
+      "text": "<MessageSquare className=\"h-5 w-5 text-indigo-500\" />"
+    },
+    {
+      "file": "src\\components\\admin\\AdminProductReviewsSection.tsx",
+      "line": 159,
+      "text": "<MessageSquare className=\"h-5 w-5 text-indigo-500\" />"
+    },
+    {
+      "file": "src\\components\\admin\\AdminProductReviewsSection.tsx",
+      "line": 167,
+      "text": "className=\"flex items-center gap-1 text-xs font-bold text-indigo-600 hover:text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition-colors\""
+    },
+    {
+      "file": "src\\components\\admin\\AdminProductReviewsSection.tsx",
+      "line": 178,
+      "text": "<Plus className=\"w-4 h-4 text-indigo-500\" /> New Manual Review"
+    },
+    {
+      "file": "src\\components\\admin\\AdminProductReviewsSection.tsx",
+      "line": 189,
+      "text": "className=\"w-full px-3 py-2 bg-white border border-[#E7D9D0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500\""
+    },
+    {
+      "file": "src\\components\\admin\\AdminProductReviewsSection.tsx",
+      "line": 198,
+      "text": "className=\"w-full px-3 py-2 bg-white border border-[#E7D9D0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500\""
+    },
+    {
+      "file": "src\\components\\admin\\AdminProductReviewsSection.tsx",
+      "line": 207,
+      "text": "className=\"w-full px-3 py-2 bg-white border border-[#E7D9D0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500\""
+    },
+    {
+      "file": "src\\components\\admin\\AdminProductReviewsSection.tsx",
+      "line": 222,
+      "text": "className=\"w-4 h-4 text-indigo-600 rounded border-[#E7D9D0] focus:ring-indigo-500\""
+    },
+    {
+      "file": "src\\components\\admin\\AdminProductReviewsSection.tsx",
+      "line": 236,
+      "text": "className=\"w-full px-3 py-2 bg-white border border-[#E7D9D0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500\""
+    },
+    {
+      "file": "src\\components\\admin\\AdminProductReviewsSection.tsx",
+      "line": 247,
+      "text": "className=\"w-full px-3 py-2 bg-white border border-[#E7D9D0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500\""
+    },
+    {
+      "file": "src\\components\\admin\\AdminProductReviewsSection.tsx",
+      "line": 262,
+      "text": "className=\"px-4 py-2 text-sm font-bold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 flex items-center gap-2\""
+    },
+    {
+      "file": "src\\components\\admin\\AdminProductReviewsSection.tsx",
+      "line": 283,
+      "text": "review.status === 'rejected' ? 'bg-rose-100 text-rose-700' : 'bg-amber-100 text-[#A86249]'}"
+    },
+    {
+      "file": "src\\components\\admin\\AttributesManager.tsx",
+      "line": 145,
+      "text": "<a href=\"/admin/attributes\" target=\"_blank\" rel=\"noreferrer\" className=\"text-sm font-medium text-blue-600 hover:underline flex items-center gap-1\">"
+    },
+    {
+      "file": "src\\components\\admin\\AttributesManager.tsx",
+      "line": 159,
+      "text": "<span className={`text-xs font-bold px-2 py-0.5 rounded uppercase ${attr.source === 'global' ? 'bg-blue-100 text-blue-700' : 'bg-slate-200 text-[#1A1A1A]/80'}`}>"
+    },
+    {
+      "file": "src\\components\\admin\\AttributesManager.tsx",
+      "line": 194,
+      "text": "className=\"w-full rounded-lg border border-[#E7D9D0] px-3 py-2 text-sm focus:border-rose-400 outline-none focus:ring-1 focus:ring-rose-400 disabled:bg-[#FAF6F2] disabled:text-[#1A1A1A]/50\""
+    },
+    {
+      "file": "src\\components\\admin\\AttributesManager.tsx",
+      "line": 207,
+      "text": "<span key={t.id} className=\"inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FAF6F2] text-rose-700 text-sm border border-[#E7D9D0]\">"
+    },
+    {
+      "file": "src\\components\\admin\\AttributesManager.tsx",
+      "line": 237,
+      "text": "className=\"w-full rounded-lg border border-[#E7D9D0] px-3 py-2 text-sm focus:border-rose-400 outline-none focus:ring-1 focus:ring-rose-400\""
+    },
+    {
+      "file": "src\\components\\admin\\AttributesManager.tsx",
+      "line": 250,
+      "text": "? 'bg-blue-50 border-blue-200 text-blue-700 font-medium ring-1 ring-blue-500'"
+    },
+    {
+      "file": "src\\components\\admin\\AttributesManager.tsx",
+      "line": 316,
+      "text": "className=\"rounded-lg border border-[#E7D9D0] px-3 py-2 text-sm font-medium text-[#1A1A1A]/80 focus:border-rose-400 outline-none focus:ring-1 focus:ring-rose-400 disabled:bg-[#FAF6F2] disabled:text-[#1A1A1A]/40\""
+    },
+    {
+      "file": "src\\components\\admin\\CategoryFormModal.tsx",
+      "line": 126,
+      "text": "const input = 'mt-1.5 w-full rounded-xl border border-[#E7D9D0] px-3 py-2.5 text-sm outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100';"
+    },
+    {
+      "file": "src\\components\\admin\\PricingOffersSection.tsx",
+      "line": 8,
+      "text": "'w-full rounded-xl border border-[#E7D9D0] bg-white px-3 py-2.5 text-sm text-[#1A1A1A] outline-none transition focus:border-rose-400 focus:ring-2 focus:ring-rose-100';"
+    },
+    {
+      "file": "src\\components\\admin\\PricingOffersSection.tsx",
+      "line": 11,
+      "text": "'w-full rounded-xl border border-[#E7D9D0] bg-white px-2.5 py-2 text-sm text-[#1A1A1A] outline-none transition focus:border-rose-400 focus:ring-2 focus:ring-rose-100';"
+    },
+    {
+      "file": "src\\components\\admin\\PricingOffersSection.tsx",
+      "line": 262,
+      "text": "className=\"inline-flex items-center gap-1.5 rounded-xl border border-dashed border-[#E7D9D0] bg-white px-4 py-2 text-xs font-bold text-[#1A1A1A]/70 hover:border-rose-400 hover:text-[#A86249] transition-colors\""
+    },
+    {
+      "file": "src\\components\\admin\\PricingOffersSection.tsx",
+      "line": 371,
+      "text": "<BadgePercent className=\"h-4 w-4 text-indigo-500\" />"
+    },
+    {
+      "file": "src\\components\\admin\\PricingOffersSection.tsx",
+      "line": 448,
+      "text": "<div className=\"w-full rounded-xl border border-indigo-200 bg-indigo-50 px-3 py-2.5 text-sm font-bold text-indigo-800\">"
+    },
+    {
+      "file": "src\\components\\admin\\ProductDetailContentBuilder.tsx",
+      "line": 113,
+      "text": "<select value={selectedBlockType} onChange={e => setSelectedBlockType(e.target.value as ProductDetailBlockType)} className=\"rounded-xl border border-[#E7D9D0] bg-white px-3 py-2 text-sm text-[#1A1A1A] outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100\">"
+    },
+    {
+      "file": "src\\components\\admin\\ProductDetailContentBuilder.tsx",
+      "line": 131,
+      "text": "<button type=\"button\" onClick={() => add(selectedBlockType)} className=\"inline-flex items-center gap-2 rounded-xl border border-indigo-200 bg-indigo-50 px-3 py-2 text-xs font-bold text-indigo-700 hover:bg-indigo-100\">"
+    },
+    {
+      "file": "src\\components\\admin\\ProductDetailContentBuilder.tsx",
+      "line": 143,
+      "text": "<span className=\"rounded-lg bg-indigo-50 px-2.5 py-1 text-[10px] font-black uppercase text-indigo-600\">{block.type}</span>"
+    },
+    {
+      "file": "src\\components\\admin\\ProductDetailContentBuilder.tsx",
+      "line": 162,
+      "text": "<label className=\"flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-indigo-300 bg-white px-4 py-3 text-xs font-bold text-indigo-600 mt-3\">"
+    },
+    {
+      "file": "src\\components\\admin\\VariationImageModal.tsx",
+      "line": 102,
+      "text": "className=\"w-full rounded-lg border border-[#E7D9D0] px-3 py-2 text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none\""
+    },
+    {
+      "file": "src\\components\\admin\\VariationImageModal.tsx",
+      "line": 111,
+      "text": "<label className=\"flex items-center justify-center gap-2 w-full p-4 border-2 border-dashed border-indigo-200 rounded-xl bg-indigo-50 text-indigo-600 hover:bg-indigo-100 hover:border-indigo-300 cursor-pointer transition-colors font-medium text-sm\">"
+    },
+    {
+      "file": "src\\components\\admin\\VariationImageModal.tsx",
+      "line": 135,
+      "text": "className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${selectedImage?.url === img.url ? 'border-indigo-500 ring-2 ring-indigo-500/20' : 'border-transparent hover:border-[#E7D9D0]'}`}"
+    },
+    {
+      "file": "src\\components\\admin\\VariationImageModal.tsx",
+      "line": 153,
+      "text": "<button type=\"button\" onClick={handleSave} className=\"px-5 py-2 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow transition-colors\">"
+    },
+    {
+      "file": "src\\components\\admin\\VariationsGenerator.tsx",
+      "line": 168,
+      "text": "className=\"w-full rounded-lg border border-[#E7D9D0] px-3 py-1.5 text-sm focus:border-rose-400 outline-none focus:ring-1 focus:ring-rose-400\""
+    },
+    {
+      "file": "src\\components\\admin\\VariationsGenerator.tsx",
+      "line": 179,
+      "text": "className=\"w-full rounded-lg border border-[#E7D9D0] px-3 py-1.5 text-sm focus:border-rose-400 outline-none focus:ring-1 focus:ring-rose-400\""
+    },
+    {
+      "file": "src\\components\\admin\\VariationsGenerator.tsx",
+      "line": 189,
+      "text": "className=\"w-full rounded-lg border border-[#E7D9D0] px-3 py-1.5 text-sm focus:border-rose-400 outline-none focus:ring-1 focus:ring-rose-400\""
+    },
+    {
+      "file": "src\\components\\admin\\VariationsGenerator.tsx",
+      "line": 210,
+      "text": "className=\"w-full rounded-lg border border-[#E7D9D0] px-3 py-1.5 text-sm focus:border-rose-400 outline-none focus:ring-1 focus:ring-rose-400\""
+    },
+    {
+      "file": "src\\components\\admin\\VariationsGenerator.tsx",
+      "line": 220,
+      "text": "className={`p-1.5 rounded-lg border transition-colors ${variation.image?.url ? 'border-indigo-200 bg-indigo-50 hover:bg-indigo-100' : 'border-[#E7D9D0] bg-white hover:bg-[#FAF6F2]'} text-[#1A1A1A]/50`}"
+    },
+    {
+      "file": "src\\components\\auth\\AuthModal.tsx",
+      "line": 146,
+      "text": "className=\"w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-colors\""
+    },
+    {
+      "file": "src\\components\\auth\\AuthModal.tsx",
+      "line": 158,
+      "text": "className=\"w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-colors\""
+    },
+    {
+      "file": "src\\components\\auth\\AuthModal.tsx",
+      "line": 170,
+      "text": "className=\"text-xs font-bold text-rose-500 hover:text-rose-600 transition-colors\""
+    },
+    {
+      "file": "src\\components\\auth\\AuthModal.tsx",
+      "line": 183,
+      "text": "className=\"w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-colors pr-10\""
+    },
+    {
+      "file": "src\\components\\auth\\AuthModal.tsx",
+      "line": 207,
+      "text": "className=\"w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-colors pr-10\""
+    },
+    {
+      "file": "src\\components\\auth\\AuthModal.tsx",
+      "line": 249,
+      "text": "className=\"text-rose-500 hover:text-rose-600 font-bold transition-colors\""
+    },
+    {
+      "file": "src\\components\\cart\\CartDrawer.tsx",
+      "line": 262,
+      "text": "className=\"w-full pl-9 pr-3 py-2 text-base sm:text-xs rounded-xl border border-[#EDE5DC] bg-white font-sans focus:outline-none focus:ring-2 focus:ring-rose-400 uppercase\""
+    },
+    {
+      "file": "src\\components\\common\\Breadcrumbs.tsx",
+      "line": 23,
+      "text": "className=\"inline-flex items-center gap-1 hover:text-rose-500 transition-colors p-1 rounded-md hover:bg-rose-50\""
+    },
+    {
+      "file": "src\\components\\common\\Breadcrumbs.tsx",
+      "line": 42,
+      "text": "className=\"hover:text-rose-500 transition-colors p-1 rounded-md hover:bg-rose-50 line-clamp-1\""
+    },
+    {
+      "file": "src\\components\\common\\MobileBottomNav.tsx",
+      "line": 72,
+      "text": "className=\"flex flex-col items-center justify-center py-1 text-slate-600 hover:text-rose-500 transition-colors relative\""
+    },
+    {
+      "file": "src\\components\\common\\MobileBottomNav.tsx",
+      "line": 75,
+      "text": "<Icon className=\"w-5 h-5 text-slate-700 hover:text-rose-500\" />"
+    },
+    {
+      "file": "src\\components\\common\\MobileBottomNav.tsx",
+      "line": 77,
+      "text": "<span key={`cart-badge-${item.badge}`} className=\"cart-count-pop absolute -right-2 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-black text-white shadow-xs\">"
+    },
+    {
+      "file": "src\\components\\common\\MobileBottomNav.tsx",
+      "line": 99,
+      "text": "<a key={(item as any).id} href={(item as any).externalUrl} target={(item as any).openInNewTab ? '_blank' : undefined} rel={(item as any).openInNewTab ? 'noopener noreferrer' : undefined} className=\"flex flex-col items-center justify-center py-1 text-slate-500 transition hover:text-rose-600\">"
+    },
+    {
+      "file": "src\\components\\common\\MobileBottomNav.tsx",
+      "line": 108,
+      "text": "className={`flex flex-col items-center justify-center py-1 transition-all relative ${isActive ? 'text-rose-600 font-bold' : 'text-slate-500 hover:text-slate-800 font-semibold'}`}"
+    },
+    {
+      "file": "src\\components\\common\\MobileBottomNav.tsx",
+      "line": 111,
+      "text": "<Icon className={`w-5 h-5 ${isActive ? 'text-rose-600 stroke-[2.5px]' : 'text-slate-600'}`} />"
+    },
+    {
+      "file": "src\\components\\common\\MobileBottomNav.tsx",
+      "line": 113,
+      "text": "<span key={`nav-badge-${item.key}-${item.badge}`} className=\"cart-count-pop absolute -right-2 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-black text-white shadow-xs\">"
+    },
+    {
+      "file": "src\\components\\common\\MobileBottomNav.tsx",
+      "line": 118,
+      "text": "<span className={`text-[10px] font-heading mt-1 ${isActive ? 'text-rose-600 font-bold' : 'text-slate-600'}`}>"
+    },
+    {
+      "file": "src\\components\\common\\MobileBottomNav.tsx",
+      "line": 122,
+      "text": "<span className=\"absolute top-0 w-8 h-0.5 bg-rose-500 rounded-full\" />"
+    },
+    {
+      "file": "src\\components\\common\\ProductCard.tsx",
+      "line": 177,
+      "text": "<span className=\"rounded-full bg-rose-500 px-3 py-1 text-[11px] font-extrabold tracking-wide text-white shadow-sm\">"
+    },
+    {
+      "file": "src\\components\\common\\ProductCard.tsx",
+      "line": 222,
+      "text": "className=\"absolute bottom-3 right-3 z-10 hidden h-9 w-9 items-center justify-center rounded-full bg-white text-slate-700 opacity-0 shadow-md ring-1 ring-black/5 transition-all duration-200 hover:bg-rose-500 hover:text-white group-hover:opacity-100 sm:flex\""
+    },
+    {
+      "file": "src\\components\\common\\ProductCard.tsx",
+      "line": 237,
+      "text": "<span className=\"whitespace-nowrap text-indigo-500\">{formatProductAgeGroups(product)}</span>"
+    },
+    {
+      "file": "src\\components\\common\\ProductCard.tsx",
+      "line": 246,
+      "text": "className={`mt-2 line-clamp-2 font-bold leading-snug text-slate-900 transition-colors hover:text-rose-500 ${compact ? 'text-base sm:text-lg' : 'text-lg sm:text-xl'}`}"
+    },
+    {
+      "file": "src\\components\\common\\ProductCard.tsx",
+      "line": 252,
+      "text": "<span className={`font-black leading-none tracking-tight text-rose-500 ${compact ? 'text-xl sm:text-2xl' : 'text-2xl sm:text-3xl'}`}>"
+    },
+    {
+      "file": "src\\components\\common\\ProductCard.tsx",
+      "line": 304,
+      "text": ": 'bg-rose-500 text-white hover:bg-rose-600 hover:shadow-lg hover:shadow-rose-200'"
+    },
+    {
+      "file": "src\\components\\common\\TrustBadges.tsx",
+      "line": 11,
+      "text": "bgColor: 'bg-blue-500 text-white',"
+    },
+    {
+      "file": "src\\components\\common\\TrustBadges.tsx",
+      "line": 23,
+      "text": "bgColor: 'bg-rose-400 text-white',"
+    },
+    {
+      "file": "src\\components\\product\\FlatDiscountBanner.tsx",
+      "line": 23,
+      "text": "<div className={`mt-5 w-full overflow-hidden rounded-2xl border ${isApplied ? 'border-indigo-200 bg-indigo-50' : 'border-slate-200 bg-slate-50'}`}>"
+    },
+    {
+      "file": "src\\components\\product\\FlatDiscountBanner.tsx",
+      "line": 25,
+      "text": "<div className={`flex shrink-0 items-center justify-center rounded-xl p-2 ${isApplied ? 'bg-indigo-100 text-indigo-600' : 'bg-slate-100 text-slate-500'}`}>"
+    },
+    {
+      "file": "src\\components\\product\\FlatDiscountBanner.tsx",
+      "line": 29,
+      "text": "<span className={`truncate text-sm font-black ${isApplied ? 'text-indigo-900' : 'text-slate-700'}`}>"
+    },
+    {
+      "file": "src\\components\\product\\FlatDiscountBanner.tsx",
+      "line": 32,
+      "text": "<span className={`truncate text-xs font-bold ${isApplied ? 'text-indigo-700' : 'text-slate-500'}`}>"
+    },
+    {
+      "file": "src\\components\\product\\FlatDiscountBanner.tsx",
+      "line": 40,
+      "text": "<div className=\"bg-indigo-600 px-4 py-2 text-center text-[10px] font-black uppercase tracking-wider text-white\">"
+    },
+    {
+      "file": "src\\components\\product\\QuantityBreaksSelector.tsx",
+      "line": 50,
+      "text": "? 'border-rose-500 bg-rose-50/50 shadow-sm'"
+    },
+    {
+      "file": "src\\components\\product\\QuantityBreaksSelector.tsx",
+      "line": 57,
+      "text": "isActive ? 'border-rose-500' : 'border-slate-300'"
+    },
+    {
+      "file": "src\\components\\product\\QuantityBreaksSelector.tsx",
+      "line": 59,
+      "text": "{isActive && <div className=\"h-2.5 w-2.5 rounded-full bg-rose-500\" />}"
+    },
+    {
+      "file": "src\\components\\product\\QuantityBreaksSelector.tsx",
+      "line": 67,
+      "text": "isActive ? 'bg-rose-500 text-white' : 'bg-slate-800 text-white'"
+    },
+    {
+      "file": "src\\components\\product\\QuantityBreaksSelector.tsx",
+      "line": 81,
+      "text": "<span className={`text-base font-bold leading-tight ${isActive ? 'text-rose-950' : 'text-slate-700'}`}>"
+    },
+    {
+      "file": "src\\components\\product\\QuantityBreaksSelector.tsx",
+      "line": 85,
+      "text": "<span className={`text-xl font-black ${isActive ? 'text-rose-600' : 'text-slate-900'}`}>"
+    },
+    {
+      "file": "src\\components\\product\\QuantityBreaksSelector.tsx",
+      "line": 91,
+      "text": "<span className=\"mt-1.5 block text-xs font-bold text-rose-500\">"
+    },
+    {
+      "file": "src\\context\\DialogContext.tsx",
+      "line": 71,
+      "text": "{request.kind === 'prompt' && <label className=\"mt-4 block text-xs font-bold text-slate-700\">{request.inputLabel || 'Value'}<input autoFocus value={input} onChange={event => setInput(event.target.value)} placeholder={request.placeholder} className=\"mt-1.5 w-full rounded-xl border border-slate-200 px-3 py-2.5 text-sm outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100\" /></label>}"
+    },
+    {
+      "file": "src\\context\\DialogContext.tsx",
+      "line": 74,
+      "text": "<button type=\"button\" onClick={() => close(request.kind === 'prompt' ? input.trim() || null : true)} className={`rounded-xl px-5 py-2.5 text-xs font-bold text-white ${request.destructive ? 'bg-rose-600 hover:bg-rose-700' : 'bg-slate-900 hover:bg-slate-800'}`}>{request.confirmLabel || 'Confirm'}</button>"
+    },
+    {
+      "file": "src\\data\\mockData.ts",
+      "line": 24,
+      "text": "{ id: '0-2', name: 'Sensitive Skin', label: 'Sensitive', range: '0-2', color: 'bg-rose-50 text-rose-700 border-rose-200', icon: 'Shield' },"
+    }
+  ],
+  "semantic": [
+    {
+      "file": "src\\app\\admin\\(authenticated)\\categories\\AdminCategoriesPageClient.tsx",
+      "line": 96,
+      "text": "<div className=\"mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end\"><button type=\"button\" disabled={deleting} onClick={() => setDeleteState(null)} className=\"rounded-xl bg-[#FAF6F2] px-4 py-2.5 text-xs font-bold text-[#1A1A1A]/80\">Cancel</button><button type=\"button\" disabled={deleting} onClick={() => void confirmDelete()} className=\"flex items-center justify-center gap-2 rounded-xl bg-rose-600 px-5 py-2.5 text-xs font-bold text-white disabled:opacity-50\">{deleting && <Loader2 className=\"h-4 w-4 animate-spin\" />}{productResolution === 'reassign' ? 'Reassign and Delete' : 'Move to Uncategorized and Delete'}</button></div>"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\products\\edit\\[id]\\AdminProductFormPageClient.tsx",
+      "line": 68,
+      "text": "'w-full rounded-xl border border-[#E7D9D0] bg-white px-3 py-2.5 text-sm text-[#1A1A1A] outline-none transition focus:border-rose-400 focus:ring-2 focus:ring-rose-100';"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\products\\edit\\[id]\\AdminProductFormPageClient.tsx",
+      "line": 1042,
+      "text": "return <button key={selected.id} type=\"button\" onClick={() => applyCategorySelection(categoryIds.filter(idValue => idValue !== selected.id))} className=\"inline-flex min-h-9 items-center gap-1.5 rounded-full bg-indigo-50 px-3 text-xs font-bold text-indigo-700 ring-1 ring-indigo-200\" aria-label={`Remove ${selected.name}`}>{selected.name}{index === 0 && <span className=\"text-[9px] font-black uppercase tracking-wide text-indigo-400\">Primary</span>}<span aria-hidden=\"true\">&times;</span></button>;"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\products\\edit\\[id]\\AdminProductFormPageClient.tsx",
+      "line": 1152,
+      "text": "className={`w-full rounded-lg border bg-white px-3 py-2 text-sm text-[#1A1A1A] outline-none focus:ring-1 ${errors.defaultAttributes ? 'border-[#C48B80] focus:border-[#C48B80] focus:ring-[#C48B80]' : 'border-[#E7D9D0] focus:border-rose-400 focus:ring-rose-400'}`}"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\products\\edit\\[id]\\AdminProductFormPageClient.tsx",
+      "line": 1250,
+      "text": "<label className={`flex aspect-[4/3] cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed bg-[#FAF6F2] text-center transition hover:border-indigo-300 hover:bg-indigo-50/40 ${errors.images ? 'border-rose-400' : 'border-[#E7D9D0]'}`}><input type=\"file\" className=\"hidden\" accept=\"image/jpeg,image/png,image/webp\" disabled={uploadingTarget !== null} onChange={event => { void uploadImages(Array.from(event.target.files || []), 'main'); event.target.value = ''; }} />{uploadingTarget === 'main' ? <Loader2 className=\"h-7 w-7 animate-spin text-[#C48B80]\" /> : <ImageIcon className=\"h-7 w-7 text-indigo-500\" />}<span className=\"mt-2 text-xs font-bold text-[#1A1A1A]/70\">Upload main image</span><span className=\"mt-1 text-[10px] text-[#1A1A1A]/40\">JPG, PNG, WebP • Max 5MB</span></label>"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\products\\edit\\[id]\\AdminProductFormPageClient.tsx",
+      "line": 1256,
+      "text": "{galleryImages.length > 0 && <div className=\"mb-3 grid grid-cols-2 gap-2\">{galleryImages.map((image, galleryIndex) => { const imageIndex = galleryIndex + 1; return <div key={image.id} className=\"overflow-hidden rounded-xl border border-[#E7D9D0] bg-[#FAF6F2]\"><img src={getSafeImageSrc(image.url)} alt={`Gallery preview ${imageIndex}`} className=\"aspect-square w-full object-cover\" /><div className=\"flex items-center justify-between gap-1 p-1.5\"><button type=\"button\" title=\"Make main image\" onClick={() => makeMainImage(imageIndex)} className=\"rounded-md px-1.5 py-1 text-[9px] font-bold text-indigo-600 hover:bg-indigo-50\">Main</button><button type=\"button\" disabled={galleryIndex === 0} onClick={() => moveGalleryImage(imageIndex, -1)} className=\"rounded-md p-1 text-[#1A1A1A]/50 disabled:opacity-30\" aria-label=\"Move image left\"><ArrowLeft className=\"h-3 w-3\" /></button><button type=\"button\" disabled={galleryIndex === galleryImages.length - 1} onClick={() => moveGalleryImage(imageIndex, 1)} className=\"rounded-md p-1 text-[#1A1A1A]/50 disabled:opacity-30\" aria-label=\"Move image right\"><ArrowRight className=\"h-3 w-3\" /></button><button type=\"button\" onClick={() => { void removeImage(image.id); }} className=\"rounded-md p-1 text-[#C48B80]\" aria-label=\"Remove gallery image\"><Trash2 className=\"h-3 w-3\" /></button></div></div>; })}</div>}"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\products\\edit\\[id]\\AdminProductFormPageClient.tsx",
+      "line": 1267,
+      "text": "{AGE_GROUPS.map(group => <label key={group.id} className={`flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2.5 text-xs font-bold transition ${ageGroups.includes(group.id) ? 'border-indigo-300 bg-indigo-50 text-indigo-700' : 'border-[#E7D9D0] bg-white text-[#1A1A1A]/70'}`}><input type=\"checkbox\" checked={ageGroups.includes(group.id)} onChange={event => { setAgeGroups(current => event.target.checked ? [...current, group.id] : current.filter(value => value !== group.id)); markDirty(); clearError('ageGroups'); }} />{group.label}</label>)}"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\products\\new\\AdminProductFormPageClient.tsx",
+      "line": 68,
+      "text": "'w-full rounded-xl border border-[#E7D9D0] bg-white px-3 py-2.5 text-sm text-[#1A1A1A] outline-none transition focus:border-rose-400 focus:ring-2 focus:ring-rose-100';"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\products\\new\\AdminProductFormPageClient.tsx",
+      "line": 1042,
+      "text": "return <button key={selected.id} type=\"button\" onClick={() => applyCategorySelection(categoryIds.filter(idValue => idValue !== selected.id))} className=\"inline-flex min-h-9 items-center gap-1.5 rounded-full bg-indigo-50 px-3 text-xs font-bold text-indigo-700 ring-1 ring-indigo-200\" aria-label={`Remove ${selected.name}`}>{selected.name}{index === 0 && <span className=\"text-[9px] font-black uppercase tracking-wide text-indigo-400\">Primary</span>}<span aria-hidden=\"true\">&times;</span></button>;"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\products\\new\\AdminProductFormPageClient.tsx",
+      "line": 1152,
+      "text": "className={`w-full rounded-lg border bg-white px-3 py-2 text-sm text-[#1A1A1A] outline-none focus:ring-1 ${errors.defaultAttributes ? 'border-[#C48B80] focus:border-[#C48B80] focus:ring-[#C48B80]' : 'border-[#E7D9D0] focus:border-rose-400 focus:ring-rose-400'}`}"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\products\\new\\AdminProductFormPageClient.tsx",
+      "line": 1250,
+      "text": "<label className={`flex aspect-[4/3] cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed bg-[#FAF6F2] text-center transition hover:border-indigo-300 hover:bg-indigo-50/40 ${errors.images ? 'border-rose-400' : 'border-[#E7D9D0]'}`}><input type=\"file\" className=\"hidden\" accept=\"image/jpeg,image/png,image/webp\" disabled={uploadingTarget !== null} onChange={event => { void uploadImages(Array.from(event.target.files || []), 'main'); event.target.value = ''; }} />{uploadingTarget === 'main' ? <Loader2 className=\"h-7 w-7 animate-spin text-[#C48B80]\" /> : <ImageIcon className=\"h-7 w-7 text-indigo-500\" />}<span className=\"mt-2 text-xs font-bold text-[#1A1A1A]/70\">Upload main image</span><span className=\"mt-1 text-[10px] text-[#1A1A1A]/40\">JPG, PNG, WebP • Max 5MB</span></label>"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\products\\new\\AdminProductFormPageClient.tsx",
+      "line": 1256,
+      "text": "{galleryImages.length > 0 && <div className=\"mb-3 grid grid-cols-2 gap-2\">{galleryImages.map((image, galleryIndex) => { const imageIndex = galleryIndex + 1; return <div key={image.id} className=\"overflow-hidden rounded-xl border border-[#E7D9D0] bg-[#FAF6F2]\"><img src={getSafeImageSrc(image.url)} alt={`Gallery preview ${imageIndex}`} className=\"aspect-square w-full object-cover\" /><div className=\"flex items-center justify-between gap-1 p-1.5\"><button type=\"button\" title=\"Make main image\" onClick={() => makeMainImage(imageIndex)} className=\"rounded-md px-1.5 py-1 text-[9px] font-bold text-indigo-600 hover:bg-indigo-50\">Main</button><button type=\"button\" disabled={galleryIndex === 0} onClick={() => moveGalleryImage(imageIndex, -1)} className=\"rounded-md p-1 text-[#1A1A1A]/50 disabled:opacity-30\" aria-label=\"Move image left\"><ArrowLeft className=\"h-3 w-3\" /></button><button type=\"button\" disabled={galleryIndex === galleryImages.length - 1} onClick={() => moveGalleryImage(imageIndex, 1)} className=\"rounded-md p-1 text-[#1A1A1A]/50 disabled:opacity-30\" aria-label=\"Move image right\"><ArrowRight className=\"h-3 w-3\" /></button><button type=\"button\" onClick={() => { void removeImage(image.id); }} className=\"rounded-md p-1 text-[#C48B80]\" aria-label=\"Remove gallery image\"><Trash2 className=\"h-3 w-3\" /></button></div></div>; })}</div>}"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\products\\new\\AdminProductFormPageClient.tsx",
+      "line": 1267,
+      "text": "{AGE_GROUPS.map(group => <label key={group.id} className={`flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2.5 text-xs font-bold transition ${ageGroups.includes(group.id) ? 'border-indigo-300 bg-indigo-50 text-indigo-700' : 'border-[#E7D9D0] bg-white text-[#1A1A1A]/70'}`}><input type=\"checkbox\" checked={ageGroups.includes(group.id)} onChange={event => { setAgeGroups(current => event.target.checked ? [...current, group.id] : current.filter(value => value !== group.id)); markDirty(); clearError('ageGroups'); }} />{group.label}</label>)}"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\store-appearance\\AdminStoreAppearancePageClient.tsx",
+      "line": 131,
+      "text": "<div className=\"flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between\"><div><h1 className=\"font-heading text-2xl font-black text-[#1A1A1A]\">Store Appearance</h1><p className=\"text-xs font-medium text-[#1A1A1A]/50\">Build database-driven navigation and organize homepage content.</p></div><div className=\"flex flex-wrap gap-2\">{tab === 'navigation' && <button type=\"button\" onClick={addParent} className=\"flex items-center gap-2 rounded-xl border border-[#E7D9D0] bg-[#FAF6F2] px-4 py-2.5 text-xs font-bold text-rose-700\"><Plus className=\"h-4 w-4\" /> Add Navigation Item</button>}<button type=\"button\" onClick={() => void reset()} disabled={saving} className=\"flex items-center gap-2 rounded-xl border bg-white px-4 py-2.5 text-xs font-bold text-[#1A1A1A]/80\"><RotateCcw className=\"h-4 w-4\" /> Reset defaults</button><button type=\"button\" onClick={() => void save()} disabled={saving || !dirty} className=\"flex items-center gap-2 rounded-xl bg-[#C48B80] px-5 py-2.5 text-xs font-bold text-white disabled:opacity-50\"><Save className=\"h-4 w-4\" />{saving ? 'Saving…' : 'Save appearance'}</button></div></div>"
+    },
+    {
+      "file": "src\\app\\admin\\(authenticated)\\store-appearance\\AdminStoreAppearancePageClient.tsx",
+      "line": 134,
+      "text": "{tab === 'navigation' ? <div className=\"space-y-4\">{parents.map(parent => <div key={parent.id} className=\"rounded-3xl border border-[#E7D9D0] bg-white p-4 shadow-xs sm:p-5\"><NavigationEditor item={parent} categories={categories} siblings={parents} patchItem={patchItem} move={move} changeMenuType={changeMenuType} duplicate={duplicate} remove={remove} addChild={addChild} />{parent.menuType === 'dropdown' && <div className=\"mt-4 space-y-3 border-l-2 border-rose-100 pl-3 sm:pl-6\">{navigation.filter(child => child.parentId === parent.id).sort((a, b) => a.displayOrder - b.displayOrder).map(child => <div key={child.id} className=\"rounded-2xl border border-[#E7D9D0] bg-[#FAF6F2] p-4\"><NavigationEditor item={child} categories={categories} siblings={navigation.filter(row => row.parentId === parent.id)} patchItem={patchItem} move={move} duplicate={duplicate} remove={remove} /></div>)}<button type=\"button\" onClick={() => addChild(parent)} className=\"flex items-center gap-2 rounded-xl border border-dashed border-rose-300 px-4 py-2.5 text-xs font-bold text-[#A86249]\"><Plus className=\"h-4 w-4\" /> Add Child Link</button></div>}</div>)}</div> : <div className=\"space-y-3\">{sections.map((section, index) => <div key={section.key} className=\"rounded-2xl border border-[#E7D9D0] bg-white p-5 shadow-xs\"><div className=\"mb-4 flex flex-wrap items-center gap-3\"><div className=\"flex gap-1\"><button type=\"button\" disabled={index === 0} onClick={() => { const next = [...sections]; [next[index - 1], next[index]] = [next[index], next[index - 1]]; markSections(next); }} className=\"rounded-lg border p-2 disabled:opacity-30\"><ArrowUp className=\"h-3.5 w-3.5\" /></button><button type=\"button\" disabled={index === sections.length - 1} onClick={() => { const next = [...sections]; [next[index + 1], next[index]] = [next[index], next[index + 1]]; markSections(next); }} className=\"rounded-lg border p-2 disabled:opacity-30\"><ArrowDown className=\"h-3.5 w-3.5\" /></button></div><h2 className=\"mr-auto font-heading text-sm font-black\">{section.name}</h2><label className=\"flex items-center gap-2 text-xs font-bold\"><input type=\"checkbox\" checked={section.enabled} onChange={e => markSections(sections.map(row => row.key === section.key ? { ...row, enabled: e.target.checked } : row))} /> Enabled</label></div><div className=\"grid gap-4 lg:grid-cols-2\"><AppearanceField label=\"Heading\" value={section.heading || ''} maxLength={120} onChange={value => markSections(sections.map(row => row.key === section.key ? { ...row, heading: value } : row))} /><AppearanceField label=\"Subheading\" value={section.subheading || ''} maxLength={320} onChange={value => markSections(sections.map(row => row.key === section.key ? { ...row, subheading: value } : row))} />{section.ctaLabel !== undefined && <AppearanceField label=\"Button label\" value={section.ctaLabel} maxLength={60} onChange={value => markSections(sections.map(row => row.key === section.key ? { ...row, ctaLabel: value } : row))} />}{section.ctaLink !== undefined && <AppearanceField label=\"Button link\" value={section.ctaLink} maxLength={200} onChange={value => markSections(sections.map(row => row.key === section.key ? { ...row, ctaLink: value } : row))} />}</div></div>)}</div>}"
+    },
+    {
+      "file": "src\\app\\admin\\login\\AdminLoginPageClient.tsx",
+      "line": 141,
+      "text": "<div className=\"p-4 bg-rose-50 border border-rose-100 rounded-xl flex items-start gap-3 text-sm text-rose-700 font-medium mb-6\">"
+    },
+    {
+      "file": "src\\app\\wishlist\\page.tsx",
+      "line": 29,
+      "text": "<Heart className=\"w-7 h-7 text-rose-500 fill-rose-500\" />"
+    },
+    {
+      "file": "src\\app\\wishlist\\page.tsx",
+      "line": 40,
+      "text": "<div className=\"w-16 h-16 rounded-full bg-rose-50 text-rose-400 flex items-center justify-center mx-auto\">"
+    },
+    {
+      "file": "src\\components\\admin\\AttributesManager.tsx",
+      "line": 216,
+      "text": "<button type=\"button\" onClick={() => removeCustomTerm(attr.id, t.id)} className=\"text-[#C48B80] hover:text-rose-700 p-0.5 rounded-full hover:bg-rose-100 transition-colors\">"
+    },
+    {
+      "file": "src\\components\\auth\\AuthModal.tsx",
+      "line": 130,
+      "text": "<div className=\"mb-4 p-3 rounded-xl bg-rose-50 text-rose-600 text-sm font-medium flex items-center gap-2\">"
+    },
+    {
+      "file": "src\\components\\common\\ProductCard.tsx",
+      "line": 207,
+      "text": "? 'scale-105 bg-rose-500 text-white'"
+    },
+    {
+      "file": "src\\components\\common\\ProductCard.tsx",
+      "line": 208,
+      "text": ": 'bg-white/90 text-slate-500 hover:scale-110 hover:text-rose-500'"
+    },
+    {
+      "file": "src\\context\\ToastContext.tsx",
+      "line": 92,
+      "text": "const style = item.type === 'success' ? 'border-emerald-200 bg-white text-emerald-900' : error ? 'border-rose-200 bg-white text-rose-900' : item.type === 'warning' ? 'border-amber-200 bg-white text-amber-900' : 'border-sky-200 bg-white text-slate-800';"
+    }
+  ]
+}

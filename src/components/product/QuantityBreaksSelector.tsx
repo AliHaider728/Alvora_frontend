@@ -47,16 +47,16 @@ export const QuantityBreaksSelector: React.FC<QuantityBreaksSelectorProps> = ({
               onClick={() => onTierSelect(tier, isActive)}
               className={`relative flex flex-col items-start rounded-2xl border-2 p-4 text-left transition-all ${
                 isActive
-                  ? 'border-rose-500 bg-rose-50/50 shadow-sm'
+                  ? 'border-[#C48B80] bg-rose-50/50 shadow-sm'
                   : 'border-slate-100 bg-white hover:border-rose-200 hover:bg-rose-50/30'
               }`}
             >
               {/* Radio Indicator */}
               <div className="absolute right-4 top-4">
                 <div className={`flex h-5 w-5 items-center justify-center rounded-full border-2 transition-colors ${
-                  isActive ? 'border-rose-500' : 'border-slate-300'
+                  isActive ? 'border-[#C48B80]' : 'border-slate-300'
                 }`}>
-                  {isActive && <div className="h-2.5 w-2.5 rounded-full bg-rose-500" />}
+                  {isActive && <div className="h-2.5 w-2.5 rounded-full bg-[#C48B80]" />}
                 </div>
               </div>
 
@@ -64,7 +64,7 @@ export const QuantityBreaksSelector: React.FC<QuantityBreaksSelectorProps> = ({
               <div className="mb-2 flex w-full flex-wrap gap-2 pr-8">
                 {tier.badge && (
                   <span className={`inline-flex items-center rounded-lg px-2 py-1 text-[10px] font-black uppercase tracking-wider ${
-                    isActive ? 'bg-rose-500 text-white' : 'bg-slate-800 text-white'
+                    isActive ? 'bg-[#C48B80] text-white' : 'bg-slate-800 text-white'
                   }`}>
                     {tier.badge}
                   </span>
@@ -78,17 +78,17 @@ export const QuantityBreaksSelector: React.FC<QuantityBreaksSelectorProps> = ({
 
               {/* Label & Price */}
               <div className="mt-1 flex w-full flex-col">
-                <span className={`text-base font-bold leading-tight ${isActive ? 'text-rose-950' : 'text-slate-700'}`}>
+                <span className={`text-base font-bold leading-tight ${isActive ? 'text-[#C48B80]' : 'text-slate-700'}`}>
                   {tier.label || (savePct > 0 ? `Buy ${tier.minQty}, Save Rs. ${(tier1Price - tier.pricePerUnit) * tier.minQty}` : `Buy ${tier.minQty}`)}
                 </span>
                 <div className="mt-1.5 flex items-baseline gap-1.5">
-                  <span className={`text-xl font-black ${isActive ? 'text-rose-600' : 'text-slate-900'}`}>
+                  <span className={`text-xl font-black ${isActive ? 'text-[#C48B80]' : 'text-slate-900'}`}>
                     Rs. {tier.pricePerUnit.toLocaleString()}
                   </span>
                   <span className="text-xs font-bold text-slate-500">/ each</span>
                 </div>
                 {isActive && (
-                  <span className="mt-1.5 block text-xs font-bold text-rose-500">
+                  <span className="mt-1.5 block text-xs font-bold text-[#C48B80]">
                     Total: Rs. {(tier.pricePerUnit * tier.minQty).toLocaleString()}
                   </span>
                 )}

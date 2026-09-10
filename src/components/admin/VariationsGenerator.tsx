@@ -165,7 +165,7 @@ export const VariationsGenerator: React.FC<VariationsGeneratorProps> = ({ attrib
                   min="0"
                   value={variation.regularPrice !== undefined && variation.regularPrice !== ('' as unknown as number) ? variation.regularPrice : ''}
                   onChange={(e) => updateVariation(variation.id, 'regularPrice', e.target.value === '' ? ('' as unknown as number) : parseFloat(e.target.value))}
-                  className="w-full rounded-lg border border-[#E7D9D0] px-3 py-1.5 text-sm focus:border-rose-400 outline-none focus:ring-1 focus:ring-rose-400"
+                  className="w-full rounded-lg border border-[#E7D9D0] px-3 py-1.5 text-sm focus:border-[#C48B80] outline-none focus:ring-1 focus:ring-[#C48B80]"
                   placeholder="Required"
                 />
               </div>
@@ -176,7 +176,7 @@ export const VariationsGenerator: React.FC<VariationsGeneratorProps> = ({ attrib
                   min="0"
                   value={variation.salePrice || ''}
                   onChange={(e) => updateVariation(variation.id, 'salePrice', e.target.value ? parseFloat(e.target.value) : undefined)}
-                  className="w-full rounded-lg border border-[#E7D9D0] px-3 py-1.5 text-sm focus:border-rose-400 outline-none focus:ring-1 focus:ring-rose-400"
+                  className="w-full rounded-lg border border-[#E7D9D0] px-3 py-1.5 text-sm focus:border-[#C48B80] outline-none focus:ring-1 focus:ring-[#C48B80]"
                   placeholder="Optional"
                 />
               </div>
@@ -186,7 +186,7 @@ export const VariationsGenerator: React.FC<VariationsGeneratorProps> = ({ attrib
                   type="text"
                   value={variation.sku || ''}
                   onChange={(e) => updateVariation(variation.id, 'sku', e.target.value)}
-                  className="w-full rounded-lg border border-[#E7D9D0] px-3 py-1.5 text-sm focus:border-rose-400 outline-none focus:ring-1 focus:ring-rose-400"
+                  className="w-full rounded-lg border border-[#E7D9D0] px-3 py-1.5 text-sm focus:border-[#C48B80] outline-none focus:ring-1 focus:ring-[#C48B80]"
                   placeholder="SKU"
                 />
               </div>
@@ -207,7 +207,7 @@ export const VariationsGenerator: React.FC<VariationsGeneratorProps> = ({ attrib
                     min="0"
                     value={variation.stockQuantity || ''}
                     onChange={(e) => updateVariation(variation.id, 'stockQuantity', parseInt(e.target.value, 10))}
-                    className="w-full rounded-lg border border-[#E7D9D0] px-3 py-1.5 text-sm focus:border-rose-400 outline-none focus:ring-1 focus:ring-rose-400"
+                    className="w-full rounded-lg border border-[#E7D9D0] px-3 py-1.5 text-sm focus:border-[#C48B80] outline-none focus:ring-1 focus:ring-[#C48B80]"
                     placeholder="Qty"
                   />
                 )}
@@ -217,7 +217,7 @@ export const VariationsGenerator: React.FC<VariationsGeneratorProps> = ({ attrib
                 <button
                   type="button"
                   onClick={() => setEditingImageFor(variation.id)}
-                  className={`p-1.5 rounded-lg border transition-colors ${variation.image?.url ? 'border-indigo-200 bg-indigo-50 hover:bg-indigo-100' : 'border-[#E7D9D0] bg-white hover:bg-[#FAF6F2]'} text-[#1A1A1A]/50`}
+                  className={`p-1.5 rounded-lg border transition-colors ${variation.image?.url ? 'border-[#C48B80] bg-[#C48B80] hover:bg-[#C48B80]' : 'border-[#E7D9D0] bg-white hover:bg-[#FAF6F2]'} text-[#1A1A1A]/50`}
                   title="Variation Image"
                 >
                   {variation.image?.url ? (

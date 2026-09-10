@@ -142,7 +142,7 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
     return (
       <div className="rounded-2xl border border-[#E7D9D0] bg-white shadow-sm overflow-hidden mb-6">
         <div className="flex items-center gap-2 border-b border-[#E7D9D0] bg-[#FAF6F2]/50 px-5 py-4">
-          <MessageSquare className="h-5 w-5 text-indigo-500" />
+          <MessageSquare className="h-5 w-5 text-[#C48B80]" />
           <h2 className="font-heading text-sm font-black text-[#1A1A1A]">Product Reviews</h2>
         </div>
         <div className="p-8 text-center text-[#1A1A1A]/50 text-sm font-semibold">
@@ -156,7 +156,7 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
     <div className="rounded-2xl border border-[#E7D9D0] bg-white shadow-sm overflow-hidden mb-6">
       <div className="flex items-center justify-between border-b border-[#E7D9D0] bg-[#FAF6F2]/50 px-5 py-4">
         <div className="flex items-center gap-2">
-          <MessageSquare className="h-5 w-5 text-indigo-500" />
+          <MessageSquare className="h-5 w-5 text-[#C48B80]" />
           <h2 className="font-heading text-sm font-black text-[#1A1A1A]">Product Reviews</h2>
           <span className="bg-slate-200 text-[#1A1A1A]/70 text-xs font-bold px-2 py-0.5 rounded-full">{reviews.length}</span>
         </div>
@@ -164,7 +164,7 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
           <button
             type="button"
             onClick={() => setShowAddForm(true)}
-            className="flex items-center gap-1 text-xs font-bold text-indigo-600 hover:text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition-colors"
+            className="flex items-center gap-1 text-xs font-bold text-[#C48B80] hover:text-[#C48B80] bg-[#C48B80] hover:bg-[#C48B80] px-3 py-1.5 rounded-lg transition-colors"
           >
             <Plus className="w-4 h-4" /> Add Review
           </button>
@@ -175,7 +175,7 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
         {showAddForm && (
           <form onSubmit={handleAddReview} className="mb-6 bg-[#FAF6F2] border border-[#E7D9D0] rounded-xl p-5">
             <h3 className="text-sm font-bold text-[#1A1A1A] mb-4 flex items-center gap-2">
-              <Plus className="w-4 h-4 text-indigo-500" /> New Manual Review
+              <Plus className="w-4 h-4 text-[#C48B80]" /> New Manual Review
             </h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -186,7 +186,7 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
                   required
                   value={reviewerName}
                   onChange={e => setReviewerName(e.target.value)}
-                  className="w-full px-3 py-2 bg-white border border-[#E7D9D0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 bg-white border border-[#E7D9D0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
                 />
               </label>
               <label>
@@ -195,7 +195,7 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
                   type="text"
                   value={avatarUrl}
                   onChange={(e) => setAvatarUrl(e.target.value)}
-                  className="w-full px-3 py-2 bg-white border border-[#E7D9D0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 bg-white border border-[#E7D9D0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
                 />
               </label>
               <label>
@@ -204,7 +204,7 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
                   type="email"
                   value={reviewerEmail}
                   onChange={e => setReviewerEmail(e.target.value)}
-                  className="w-full px-3 py-2 bg-white border border-[#E7D9D0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 bg-white border border-[#E7D9D0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
                 />
               </label>
             </div>
@@ -219,7 +219,7 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
                   type="checkbox"
                   checked={verifiedPurchase}
                   onChange={e => setVerifiedPurchase(e.target.checked)}
-                  className="w-4 h-4 text-indigo-600 rounded border-[#E7D9D0] focus:ring-indigo-500"
+                  className="w-4 h-4 text-[#C48B80] rounded border-[#E7D9D0] focus:ring-[#C48B80]"
                 />
                 <span className="text-sm font-bold text-[#1A1A1A]/80 flex items-center gap-1">
                   <ShieldCheck className="w-4 h-4 text-emerald-500" /> Verified Purchase
@@ -233,7 +233,7 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
                 type="text"
                 value={title}
                 onChange={e => setTitle(e.target.value)}
-                className="w-full px-3 py-2 bg-white border border-[#E7D9D0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 bg-white border border-[#E7D9D0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
               />
             </label>
 
@@ -244,7 +244,7 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
                 rows={3}
                 value={content}
                 onChange={e => setContent(e.target.value)}
-                className="w-full px-3 py-2 bg-white border border-[#E7D9D0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 bg-white border border-[#E7D9D0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
               />
             </label>
 
@@ -259,7 +259,7 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
               <button
                 type="submit"
                 disabled={submitting}
-                className="px-4 py-2 text-sm font-bold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 flex items-center gap-2"
+                className="px-4 py-2 text-sm font-bold text-white bg-[#C48B80] rounded-lg hover:bg-[#C48B80] transition-colors disabled:opacity-50 flex items-center gap-2"
               >
                 {submitting ? 'Adding...' : 'Add Review'}
               </button>

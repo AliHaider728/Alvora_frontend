@@ -79,7 +79,7 @@ export const AdminContactMessagesClient: React.FC = () => {
                 <tr key={msg._id} className={msg.status === 'New' ? 'bg-[#FAF6F2]/30' : 'hover:bg-[#FAF6F2]/50'}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold ${
-                      msg.status === 'New' ? 'bg-rose-100 text-rose-700' :
+                      msg.status === 'New' ? 'bg-rose-100 text-[#C48B80]' :
                       msg.status === 'Read' ? 'bg-amber-100 text-[#A86249]' :
                       'bg-emerald-100 text-emerald-700'
                     }`}>

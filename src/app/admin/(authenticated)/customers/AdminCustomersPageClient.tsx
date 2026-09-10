@@ -51,7 +51,7 @@ export const AdminCustomersPageClient: React.FC = () => {
                     </span>
                   </td>
                   <td className="p-4 text-[#1A1A1A]/50">{cust.joinedDate}</td>
-                  <td className="p-4 font-bold text-sky-600">{cust.ordersCount} order(s)</td>
+                  <td className="p-4 font-bold text-[#C48B80]">{cust.ordersCount} order(s)</td>
                   <td className="p-4 pr-6 text-right font-heading font-black text-[#1A1A1A]">{formatPrice(cust.totalSpent)}</td>
                 </tr>
               ))}

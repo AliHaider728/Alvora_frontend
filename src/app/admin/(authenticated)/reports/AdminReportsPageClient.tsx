@@ -39,7 +39,7 @@ export const AdminReportsPageClient: React.FC = () => {
                   <div className="w-full h-2.5 rounded-full bg-[#FAF6F2] overflow-hidden">
                     <div
                       className={`h-full rounded-full ${
-                        idx % 3 === 0 ? 'bg-[#C48B80]' : idx % 3 === 1 ? 'bg-amber-400' : 'bg-sky-500'
+                        idx % 3 === 0 ? 'bg-[#C48B80]' : idx % 3 === 1 ? 'bg-amber-400' : 'bg-[#C48B80]'
                       }`}
                       style={{ width: `${percent}%` }}
                     />

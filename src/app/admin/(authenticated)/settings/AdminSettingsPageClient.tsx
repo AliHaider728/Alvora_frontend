@@ -164,7 +164,7 @@ export const AdminSettingsPageClient: React.FC = () => {
         {/* Default SEO Settings */}
         <div className="bg-white p-6 rounded-3xl border border-[#E7D9D0]/80 shadow-xs space-y-4">
           <h3 className="font-heading font-black text-base text-[#1A1A1A] flex items-center gap-2">
-            <Sliders className="w-5 h-5 text-sky-500" />
+            <Sliders className="w-5 h-5 text-[#C48B80]" />
             <span>Global SEO Default Meta</span>
           </h3>
 

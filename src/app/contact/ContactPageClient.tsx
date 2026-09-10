@@ -91,14 +91,14 @@ export const ContactPageClient: React.FC = () => {
       label: 'Facebook',
       href: settings.socialLinks?.facebook || 'https://facebook.com/alvora.pk',
       icon: <FacebookIcon className="w-5 h-5" />,
-      hoverClass: 'hover:text-blue-600'
+      hoverClass: 'hover:text-[#C48B80]'
     },
     {
       key: 'instagram',
       label: 'Instagram',
       href: settings.socialLinks?.instagram || 'https://www.instagram.com/alvora.pk',
       icon: <InstagramIcon className="w-5 h-5" />,
-      hoverClass: 'hover:text-pink-600'
+      hoverClass: 'hover:text-[#C48B80]'
     },
     {
       key: 'youtube',
@@ -137,7 +137,7 @@ export const ContactPageClient: React.FC = () => {
               <div className="space-y-4 pt-4 border-t border-slate-100 text-xs text-slate-700">
                 {/* Address */}
                 <div className="flex items-center gap-3">
-                  <div className="p-3 rounded-2xl bg-rose-50 text-rose-500">
+                  <div className="p-3 rounded-2xl bg-rose-50 text-[#C48B80]">
                     <MapPin className="w-5 h-5" />
                   </div>
                   <div>
@@ -148,12 +148,12 @@ export const ContactPageClient: React.FC = () => {
 
                 {/* Phone */}
                 <div className="flex items-center gap-3">
-                  <div className="p-3 rounded-2xl bg-sky-50 text-sky-500">
+                  <div className="p-3 rounded-2xl bg-[#C48B80] text-[#C48B80]">
                     <Phone className="w-5 h-5" />
                   </div>
                   <div>
                     <span className="font-bold block text-slate-900">Phone Support</span>
-                    <a href={phoneLink} className="hover:text-rose-500 transition-colors">
+                    <a href={phoneLink} className="hover:text-[#C48B80] transition-colors">
                       {phoneDisplay}
                     </a>
                   </div>
@@ -166,7 +166,7 @@ export const ContactPageClient: React.FC = () => {
                   </div>
                   <div>
                     <span className="font-bold block text-slate-900">Email Customer Service</span>
-                    <a href={emailLink} className="hover:text-rose-500 transition-colors">
+                    <a href={emailLink} className="hover:text-[#C48B80] transition-colors">
                       {emailDisplay}
                     </a>
                   </div>
@@ -257,7 +257,7 @@ export const ContactPageClient: React.FC = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-3.5 rounded-2xl bg-rose-500 text-white font-heading font-extrabold text-xs hover:bg-rose-600 shadow-md flex items-center justify-center gap-2 disabled:opacity-50"
+                    className="w-full py-3.5 rounded-2xl bg-[#C48B80] text-white font-heading font-extrabold text-xs hover:bg-[#C48B80] shadow-md flex items-center justify-center gap-2 disabled:opacity-50"
                   >
                     <span>{isSubmitting ? 'Sending...' : 'Send Message'}</span>
                     <Send className="w-4 h-4" />

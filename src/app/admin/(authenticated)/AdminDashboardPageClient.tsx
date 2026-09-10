@@ -102,11 +102,11 @@ export const AdminDashboardPageClient: React.FC = () => {
             <span className="font-heading font-black text-2xl text-[#1A1A1A] mt-1 block">
               {orders.length}
             </span>
-            <span className="text-[11px] font-bold text-sky-600 flex items-center gap-0.5 mt-1">
+            <span className="text-[11px] font-bold text-[#C48B80] flex items-center gap-0.5 mt-1">
               <ArrowUpRight className="w-3.5 h-3.5" /> 100% fulfilled
             </span>
           </div>
-          <div className="p-3.5 rounded-2xl bg-sky-50 text-sky-700">
+          <div className="p-3.5 rounded-2xl bg-[#C48B80] text-[#C48B80]">
             <ShoppingBag className="w-6 h-6" />
           </div>
         </div>
@@ -123,7 +123,7 @@ export const AdminDashboardPageClient: React.FC = () => {
               In 6 categories
             </span>
           </div>
-          <div className="p-3.5 rounded-2xl bg-[#FAF6F2] text-rose-700">
+          <div className="p-3.5 rounded-2xl bg-[#FAF6F2] text-[#C48B80]">
             <Package className="w-6 h-6" />
           </div>
         </div>
@@ -208,7 +208,7 @@ export const AdminDashboardPageClient: React.FC = () => {
                   <td className="p-4">
                     <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
                       order.status === 'Delivered' ? 'bg-emerald-100 text-emerald-800' :
-                      order.status === 'Shipped' ? 'bg-sky-100 text-sky-800' : 'bg-amber-100 text-amber-800'
+                      order.status === 'Shipped' ? 'bg-[#C48B80] text-[#C48B80]' : 'bg-amber-100 text-amber-800'
                     }`}>
                       {order.status}
                     </span>

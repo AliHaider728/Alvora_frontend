@@ -30,7 +30,7 @@ export default function FaqPage() {
       q: 'What are the delivery charges?',
       a: 'Delivery charges are calculated at checkout based on your location. We occasionally offer free shipping promotions, so keep an eye on our latest offers.',
       icon: Truck,
-      color: 'text-sky-500 bg-sky-50'
+      color: 'text-[#C48B80] bg-[#C48B80]'
     },
     {
       q: 'How long does delivery take?',
@@ -42,13 +42,13 @@ export default function FaqPage() {
       q: 'What happens after I place my order?',
       a: 'Once your order is placed, you\u2019ll receive an order confirmation. Our team will process and pack your order before handing it over to our courier partner for delivery.',
       icon: PackageCheck,
-      color: 'text-rose-500 bg-rose-50'
+      color: 'text-[#C48B80] bg-rose-50'
     },
     {
       q: 'Can I track my order?',
       a: 'Yes! Once your order has been shipped, we\u2019ll provide you with a tracking number so you can monitor your delivery status.',
       icon: MapPinned,
-      color: 'text-violet-500 bg-violet-50'
+      color: 'text-[#C48B80] bg-[#C48B80]'
     },
     {
       q: 'What if I receive a damaged or incorrect product?',
@@ -60,7 +60,7 @@ export default function FaqPage() {
       q: 'Can I return or exchange a product?',
       a: 'Yes. Products can be returned or exchanged according to our Return & Refund Policy. Please ensure the item is unused and in its original packaging.',
       icon: RefreshCw,
-      color: 'text-teal-500 bg-teal-50'
+      color: 'text-[#C48B80] bg-[#C48B80]'
     },
     {
       q: 'Are your products safe for sensitive skin?',
@@ -72,7 +72,7 @@ export default function FaqPage() {
       q: 'How can I contact Alvora Skincare?',
       a: 'You can reach us through WhatsApp, email, or our Contact Us page. Our support team is always happy to assist you with your questions.',
       icon: MessageCircleQuestion,
-      color: 'text-fuchsia-500 bg-fuchsia-50'
+      color: 'text-[#C48B80] bg-[#C48B80]'
     }
   ];
 
@@ -84,7 +84,7 @@ export default function FaqPage() {
         <Breadcrumbs items={[{ label: 'FAQs' }]} />
 
         <div className="bg-white p-6 sm:p-10 rounded-3xl border border-slate-100 shadow-sm mb-8 text-center space-y-3 max-w-7xl mx-auto">
-          <div className="w-14 h-14 rounded-2xl bg-sky-100 text-sky-500 flex items-center justify-center mx-auto">
+          <div className="w-14 h-14 rounded-2xl bg-[#C48B80] text-[#C48B80] flex items-center justify-center mx-auto">
             <HelpCircle className="w-7 h-7" />
           </div>
           <h1 className="font-heading font-black text-3xl text-slate-900">Frequently Asked Questions</h1>
@@ -112,13 +112,13 @@ export default function FaqPage() {
                     <faq.icon className="w-5 h-5" />
                   </div>
                   <div className="flex-1">
-                    <h3 className={`font-heading font-bold text-sm sm:text-base transition-colors ${isOpen ? 'text-rose-500' : 'text-slate-900 group-hover:text-rose-500'}`}>
+                    <h3 className={`font-heading font-bold text-sm sm:text-base transition-colors ${isOpen ? 'text-[#C48B80]' : 'text-slate-900 group-hover:text-[#C48B80]'}`}>
                       {faq.q}
                     </h3>
                   </div>
                   <div className="shrink-0 pt-1">
                     <ChevronDown
-                      className={`w-5 h-5 transition-transform duration-300 ease-out ${isOpen ? 'rotate-180 text-rose-500' : 'text-slate-400'}`}
+                      className={`w-5 h-5 transition-transform duration-300 ease-out ${isOpen ? 'rotate-180 text-[#C48B80]' : 'text-slate-400'}`}
                     />
                   </div>
                 </button>

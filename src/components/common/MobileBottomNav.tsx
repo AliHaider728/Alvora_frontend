@@ -69,12 +69,12 @@ export const MobileBottomNav: React.FC = () => {
                 key={item.label}
                 type="button"
                 onClick={item.onClick}
-                className="flex flex-col items-center justify-center py-1 text-slate-600 hover:text-rose-500 transition-colors relative"
+                className="flex flex-col items-center justify-center py-1 text-slate-600 hover:text-[#C48B80] transition-colors relative"
               >
                 <div className="relative">
-                  <Icon className="w-5 h-5 text-slate-700 hover:text-rose-500" />
+                  <Icon className="w-5 h-5 text-slate-700 hover:text-[#C48B80]" />
                   {mounted && typeof item.badge === 'number' && item.badge > 0 && (
-                    <span key={`cart-badge-${item.badge}`} className="cart-count-pop absolute -right-2 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-black text-white shadow-xs">
+                    <span key={`cart-badge-${item.badge}`} className="cart-count-pop absolute -right-2 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#C48B80] text-[10px] font-black text-white shadow-xs">
                       {item.badge > 99 ? '99+' : item.badge}
                     </span>
                   )}
@@ -96,7 +96,7 @@ export const MobileBottomNav: React.FC = () => {
           }
 
           if ((item as any).type === 'external_url') return (
-            <a key={(item as any).id} href={(item as any).externalUrl} target={(item as any).openInNewTab ? '_blank' : undefined} rel={(item as any).openInNewTab ? 'noopener noreferrer' : undefined} className="flex flex-col items-center justify-center py-1 text-slate-500 transition hover:text-rose-600">
+            <a key={(item as any).id} href={(item as any).externalUrl} target={(item as any).openInNewTab ? '_blank' : undefined} rel={(item as any).openInNewTab ? 'noopener noreferrer' : undefined} className="flex flex-col items-center justify-center py-1 text-slate-500 transition hover:text-[#C48B80]">
               <Icon className="h-5 w-5" /><span className="mt-1 max-w-full truncate px-1 text-[10px] font-bold">{item.label}</span>
             </a>
           );
@@ -105,21 +105,21 @@ export const MobileBottomNav: React.FC = () => {
             <Link
               key={item.key}
               href={item.path || '/'}
-              className={`flex flex-col items-center justify-center py-1 transition-all relative ${isActive ? 'text-rose-600 font-bold' : 'text-slate-500 hover:text-slate-800 font-semibold'}`}
+              className={`flex flex-col items-center justify-center py-1 transition-all relative ${isActive ? 'text-[#C48B80] font-bold' : 'text-slate-500 hover:text-slate-800 font-semibold'}`}
             >
               <div className="relative">
-                <Icon className={`w-5 h-5 ${isActive ? 'text-rose-600 stroke-[2.5px]' : 'text-slate-600'}`} />
+                <Icon className={`w-5 h-5 ${isActive ? 'text-[#C48B80] stroke-[2.5px]' : 'text-slate-600'}`} />
                 {mounted && typeof item.badge === 'number' && item.badge > 0 && (
-                  <span key={`nav-badge-${item.key}-${item.badge}`} className="cart-count-pop absolute -right-2 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-black text-white shadow-xs">
+                  <span key={`nav-badge-${item.key}-${item.badge}`} className="cart-count-pop absolute -right-2 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#C48B80] text-[10px] font-black text-white shadow-xs">
                     {item.badge > 99 ? '99+' : item.badge}
                   </span>
                 )}
               </div>
-              <span className={`text-[10px] font-heading mt-1 ${isActive ? 'text-rose-600 font-bold' : 'text-slate-600'}`}>
+              <span className={`text-[10px] font-heading mt-1 ${isActive ? 'text-[#C48B80] font-bold' : 'text-slate-600'}`}>
                 {item.label}
               </span>
               {isActive && (
-                <span className="absolute top-0 w-8 h-0.5 bg-rose-500 rounded-full" />
+                <span className="absolute top-0 w-8 h-0.5 bg-[#C48B80] rounded-full" />
               )}
             </Link>
           );

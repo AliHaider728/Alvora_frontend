@@ -377,7 +377,7 @@ export const CategoryPageClient: React.FC = () => {
                 <select
                   value={sortBy}
                   onChange={e => setSortBy(e.target.value as any)}
-                  className="px-3.5 py-2 text-xs font-display font-medium text-2xl uppercase tracking-widest rounded-sm border border-[#EDE5DC] bg-[#FAF6F2] text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-rose-400 cursor-pointer"
+                  className="px-3.5 py-2 text-xs font-display font-medium text-2xl uppercase tracking-widest rounded-sm border border-[#EDE5DC] bg-[#FAF6F2] text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-[#C48B80] cursor-pointer"
                 >
                   <option value="featured">Featured / Best Match</option>
                   <option value="price-low">Price: Low to High</option>

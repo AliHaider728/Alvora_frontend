@@ -252,12 +252,12 @@ export const AdminProductsPageClient: React.FC = () => {
                       </div>
                     </div>
                   </td>
-                  <td className="p-4 font-semibold text-sky-600">{prod.category || 'Uncategorized'}{(prod.categoryNames?.length || 0) > 1 && <span className="ml-1 text-[10px] text-[#1A1A1A]/40">+{prod.categoryNames!.length - 1}</span>}</td>
+                  <td className="p-4 font-semibold text-[#C48B80]">{prod.category || 'Uncategorized'}{(prod.categoryNames?.length || 0) > 1 && <span className="ml-1 text-[10px] text-[#1A1A1A]/40">+{prod.categoryNames!.length - 1}</span>}</td>
                   <td className="p-4 font-bold">{formatProductAgeGroups(prod)}</td>
                   <td className="p-4 font-bold text-[#1A1A1A]">{formatPrice(prod.price, settings.currency)}</td>
                   <td className="p-4">
                     <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
-                      prod.inStock ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
+                      prod.inStock ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-[#C48B80]'
                     }`}>
                       {prod.trackInventory ? `${prod.stockQuantity ?? 0} in stock` : prod.inStock ? 'In stock (not tracked)' : 'Out of stock'}
                     </span>
@@ -281,7 +281,7 @@ export const AdminProductsPageClient: React.FC = () => {
                       className="p-1.5 rounded-lg text-[#1A1A1A]/70 hover:bg-[#FAF6F2]"
                       title="Edit"
                     >
-                      <Edit2 className="w-4 h-4 text-sky-600" />
+                      <Edit2 className="w-4 h-4 text-[#C48B80]" />
                     </button>
                     <button
                       onClick={() => { void handleDelete(prod.id, prod.name); }}

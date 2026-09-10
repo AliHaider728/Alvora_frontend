@@ -89,7 +89,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       {toasts.map(item => {
         const error = item.type === 'error';
         const Icon = item.type === 'success' ? CheckCircle2 : error ? AlertCircle : item.type === 'warning' ? TriangleAlert : item.type === 'loading' ? Loader2 : Info;
-        const style = item.type === 'success' ? 'border-emerald-200 bg-white text-emerald-900' : error ? 'border-rose-200 bg-white text-rose-900' : item.type === 'warning' ? 'border-amber-200 bg-white text-amber-900' : 'border-sky-200 bg-white text-slate-800';
+        const style = item.type === 'success' ? 'border-emerald-200 bg-white text-emerald-900' : error ? 'border-rose-200 bg-white text-rose-900' : item.type === 'warning' ? 'border-amber-200 bg-white text-amber-900' : 'border-[#E7D9D0] bg-white text-slate-800';
         return <div
           key={item.id}
           role={error ? 'alert' : 'status'}

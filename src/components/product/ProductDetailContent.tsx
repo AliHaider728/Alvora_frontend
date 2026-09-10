@@ -215,7 +215,7 @@ export const ProductDetailContent: React.FC<{ product: Product }> = ({ product }
               </h2>
             )}
             <div
-              className="space-y-3 text-sm leading-7 text-slate-700 [&_a]:text-sky-600 [&_a]:underline [&_blockquote]:border-l-4 [&_blockquote]:border-slate-200 [&_blockquote]:pl-4 [&_img]:h-auto [&_img]:max-w-full [&_ol]:list-decimal [&_ol]:pl-6 [&_table]:min-w-full [&_td]:border [&_td]:p-2 [&_th]:border [&_th]:p-2 [&_ul]:list-disc [&_ul]:pl-6"
+              className="space-y-3 text-sm leading-7 text-slate-700 [&_a]:text-[#C48B80] [&_a]:underline [&_blockquote]:border-l-4 [&_blockquote]:border-slate-200 [&_blockquote]:pl-4 [&_img]:h-auto [&_img]:max-w-full [&_ol]:list-decimal [&_ol]:pl-6 [&_table]:min-w-full [&_td]:border [&_td]:p-2 [&_th]:border [&_th]:p-2 [&_ul]:list-disc [&_ul]:pl-6"
               dangerouslySetInnerHTML={{ __html: normalizeLegacyTemplateHtml(block.content || '') }}
             />
           </article>

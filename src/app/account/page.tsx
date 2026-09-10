@@ -19,7 +19,7 @@ export default function AccountPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-rose-500 animate-spin" />
+        <Loader2 className="w-8 h-8 text-[#C48B80] animate-spin" />
       </div>
     );
   }
@@ -30,7 +30,7 @@ export default function AccountPage() {
         <SeoHead title="My Account" />
         <div className="bg-white p-10 rounded-3xl border border-slate-100 shadow-xl max-w-md w-full text-center space-y-6">
           <div className="mx-auto w-16 h-16 bg-rose-100 rounded-full flex items-center justify-center mb-2">
-            <User className="w-8 h-8 text-rose-500" />
+            <User className="w-8 h-8 text-[#C48B80]" />
           </div>
           <h2 className="font-heading font-black text-2xl text-slate-900">Please Log In</h2>
           <p className="text-sm text-slate-500 font-medium">
@@ -67,7 +67,7 @@ export default function AccountPage() {
                 className="w-16 h-16 rounded-full object-cover ring-4 ring-rose-100"
               />
             ) : (
-              <div className="w-16 h-16 rounded-full ring-4 ring-rose-100 flex items-center justify-center bg-rose-500 text-white font-heading font-black text-2xl">
+              <div className="w-16 h-16 rounded-full ring-4 ring-rose-100 flex items-center justify-center bg-[#C48B80] text-white font-heading font-black text-2xl">
                 {customerProfile.name?.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() || 'U'}
               </div>
             )}
@@ -92,7 +92,7 @@ export default function AccountPage() {
             <button
               onClick={() => setActiveTab('orders')}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-heading font-bold text-xs transition-colors ${
-                activeTab === 'orders' ? 'bg-rose-500 text-white' : 'text-slate-700 hover:bg-slate-100'
+                activeTab === 'orders' ? 'bg-[#C48B80] text-white' : 'text-slate-700 hover:bg-slate-100'
               }`}
             >
               <Package className="w-4 h-4" />
@@ -101,7 +101,7 @@ export default function AccountPage() {
             <button
               onClick={() => setActiveTab('profile')}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-heading font-bold text-xs transition-colors ${
-                activeTab === 'profile' ? 'bg-rose-500 text-white' : 'text-slate-700 hover:bg-slate-100'
+                activeTab === 'profile' ? 'bg-[#C48B80] text-white' : 'text-slate-700 hover:bg-slate-100'
               }`}
             >
               <User className="w-4 h-4" />
@@ -127,8 +127,8 @@ export default function AccountPage() {
                           <div className="flex items-center gap-2">
                             <span className={`px-3 py-1 rounded-full font-bold text-xs ${
                               order.status === 'Delivered' ? 'bg-emerald-100 text-emerald-800' :
-                              order.status === 'Shipped' ? 'bg-sky-100 text-sky-800' :
-                              order.status === 'Cancelled' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800'
+                              order.status === 'Shipped' ? 'bg-[#C48B80] text-[#C48B80]' :
+                              order.status === 'Cancelled' ? 'bg-rose-100 text-[#C48B80]' : 'bg-amber-100 text-amber-800'
                             }`}>
                               {order.status}
                             </span>
@@ -150,7 +150,7 @@ export default function AccountPage() {
 
                         <div className="pt-3 border-t border-slate-100 flex justify-between items-center text-xs">
                           <span className="text-slate-500 font-medium">Tracking Code: {order.trackingNumber || 'Pending'}</span>
-                          <span className="font-heading font-extrabold text-base text-rose-600">Total: {formatPrice(order.total, settings.currency)}</span>
+                          <span className="font-heading font-extrabold text-base text-[#C48B80]">Total: {formatPrice(order.total, settings.currency)}</span>
                         </div>
                       </div>
                     );
@@ -193,7 +193,7 @@ export default function AccountPage() {
                         name="newPassword"
                         type="password"
                         required
-                        className="w-full px-4 py-2.5 text-base sm:text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400"
+                        className="w-full px-4 py-2.5 text-base sm:text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-[#C48B80] focus:ring-1 focus:ring-[#C48B80]"
                       />
                     </div>
                     <div>
@@ -202,7 +202,7 @@ export default function AccountPage() {
                         name="confirmPassword"
                         type="password"
                         required
-                        className="w-full px-4 py-2.5 text-base sm:text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400"
+                        className="w-full px-4 py-2.5 text-base sm:text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-[#C48B80] focus:ring-1 focus:ring-[#C48B80]"
                       />
                     </div>
                     <button

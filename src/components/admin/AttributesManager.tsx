@@ -142,7 +142,7 @@ export const AttributesManager: React.FC<AttributesManagerProps> = ({ attributes
     <div className="space-y-4">
       <div className="flex items-center justify-between mb-2">
         <h3 className="font-heading font-bold text-[#1A1A1A]">Product Attributes</h3>
-        <a href="/admin/attributes" target="_blank" rel="noreferrer" className="text-sm font-medium text-blue-600 hover:underline flex items-center gap-1">
+        <a href="/admin/attributes" target="_blank" rel="noreferrer" className="text-sm font-medium text-[#C48B80] hover:underline flex items-center gap-1">
           <Settings className="w-3.5 h-3.5" /> Manage Global Attributes
         </a>
       </div>
@@ -156,7 +156,7 @@ export const AttributesManager: React.FC<AttributesManagerProps> = ({ attributes
             
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className={`text-xs font-bold px-2 py-0.5 rounded uppercase ${attr.source === 'global' ? 'bg-blue-100 text-blue-700' : 'bg-slate-200 text-[#1A1A1A]/80'}`}>
+                <span className={`text-xs font-bold px-2 py-0.5 rounded uppercase ${attr.source === 'global' ? 'bg-[#C48B80] text-[#C48B80]' : 'bg-slate-200 text-[#1A1A1A]/80'}`}>
                   {attr.source}
                 </span>
                 <span className="text-sm font-medium text-[#1A1A1A]/50 capitalize flex items-center gap-1">
@@ -191,7 +191,7 @@ export const AttributesManager: React.FC<AttributesManagerProps> = ({ attributes
                   disabled={attr.source === 'global'}
                   onChange={(e) => handleAttributeChange(attr.id, 'name', e.target.value)}
                   placeholder="e.g. Size, Color"
-                  className="w-full rounded-lg border border-[#E7D9D0] px-3 py-2 text-sm focus:border-rose-400 outline-none focus:ring-1 focus:ring-rose-400 disabled:bg-[#FAF6F2] disabled:text-[#1A1A1A]/50"
+                  className="w-full rounded-lg border border-[#E7D9D0] px-3 py-2 text-sm focus:border-[#C48B80] outline-none focus:ring-1 focus:ring-[#C48B80] disabled:bg-[#FAF6F2] disabled:text-[#1A1A1A]/50"
                 />
               </div>
               
@@ -204,7 +204,7 @@ export const AttributesManager: React.FC<AttributesManagerProps> = ({ attributes
                   <div className="space-y-2">
                     <div className="flex flex-wrap gap-2">
                       {attr.terms.map(t => (
-                        <span key={t.id} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FAF6F2] text-rose-700 text-sm border border-[#E7D9D0]">
+                        <span key={t.id} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FAF6F2] text-[#C48B80] text-sm border border-[#E7D9D0]">
                           {(attr.displayTypeOverride || attr.displayType) === 'color_swatches' && (
                             <span
                               className="h-3.5 w-3.5 rounded-full border border-black/10"
@@ -213,7 +213,7 @@ export const AttributesManager: React.FC<AttributesManagerProps> = ({ attributes
                             />
                           )}
                           {t.label}
-                          <button type="button" onClick={() => removeCustomTerm(attr.id, t.id)} className="text-[#C48B80] hover:text-rose-700 p-0.5 rounded-full hover:bg-rose-100 transition-colors">
+                          <button type="button" onClick={() => removeCustomTerm(attr.id, t.id)} className="text-[#C48B80] hover:text-[#C48B80] p-0.5 rounded-full hover:bg-rose-100 transition-colors">
                             <span className="sr-only">Remove</span>
                             <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                           </button>
@@ -234,7 +234,7 @@ export const AttributesManager: React.FC<AttributesManagerProps> = ({ attributes
                         e.target.value = '';
                       }}
                       placeholder="Type value and press Enter..."
-                      className="w-full rounded-lg border border-[#E7D9D0] px-3 py-2 text-sm focus:border-rose-400 outline-none focus:ring-1 focus:ring-rose-400"
+                      className="w-full rounded-lg border border-[#E7D9D0] px-3 py-2 text-sm focus:border-[#C48B80] outline-none focus:ring-1 focus:ring-[#C48B80]"
                     />
                   </div>
                 ) : (
@@ -247,7 +247,7 @@ export const AttributesManager: React.FC<AttributesManagerProps> = ({ attributes
                           onClick={() => toggleGlobalTermSelection(attr.id, term.id)}
                           className={`px-3 py-1 text-sm rounded-full border transition-colors ${
                             isSelected 
-                              ? 'bg-blue-50 border-blue-200 text-blue-700 font-medium ring-1 ring-blue-500' 
+                              ? 'bg-[#C48B80] border-[#C48B80] text-[#C48B80] font-medium ring-1 ring-[#C48B80]' 
                               : 'bg-white border-[#E7D9D0] text-[#1A1A1A]/70 hover:border-[#E7D9D0]'
                           }`}
                         >
@@ -313,7 +313,7 @@ export const AttributesManager: React.FC<AttributesManagerProps> = ({ attributes
           }}
           defaultValue=""
           disabled={loading || globalAttributes.length === 0}
-          className="rounded-lg border border-[#E7D9D0] px-3 py-2 text-sm font-medium text-[#1A1A1A]/80 focus:border-rose-400 outline-none focus:ring-1 focus:ring-rose-400 disabled:bg-[#FAF6F2] disabled:text-[#1A1A1A]/40"
+          className="rounded-lg border border-[#E7D9D0] px-3 py-2 text-sm font-medium text-[#1A1A1A]/80 focus:border-[#C48B80] outline-none focus:ring-1 focus:ring-[#C48B80] disabled:bg-[#FAF6F2] disabled:text-[#1A1A1A]/40"
         >
           <option value="" disabled>+ Add Global Attribute</option>
           {globalAttributes.map(g => (
