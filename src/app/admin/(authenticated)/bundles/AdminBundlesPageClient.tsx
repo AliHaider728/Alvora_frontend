@@ -176,7 +176,23 @@ const BundleModal = ({ bundle, products, onClose, onRefresh }: { bundle: any, pr
               {products.map(p => (
                 <label key={p.id} className="flex items-center gap-3 p-2 hover:bg-[#FAF6F2] rounded-lg cursor-pointer">
                   <input type="checkbox" checked={formData.products.some((fp: any) => fp.product_id === p.id)} onChange={() => toggleProduct(p.id)} className="rounded" />
-                  <span className="text-sm font-semibold">{p.name}</span>
+                  
+                    <span className="text-sm font-semibold text-[#1A1A1A]">{p.name}</span>
+                    {p.pricingOffers?.flatDiscount?.enabled && (
+                      <span className="ml-auto inline-flex items-center rounded-full bg-[#FAF6F2] px-2 py-0.5 text-[10px] font-bold text-[#1A1A1A] border border-[#E7D9D0]">
+                        {p.pricingOffers.flatDiscount.discountType === 'percentage' ? `${p.pricingOffers.flatDiscount.discountValue}% Off` : `-${p.pricingOffers.flatDiscount.discountValue}`}
+                      </span>
+                    )}
+                    {p.pricingOffers?.bogo?.enabled && !p.pricingOffers?.flatDiscount?.enabled && (
+                      <span className="ml-auto inline-flex items-center rounded-full bg-[#FAF6F2] px-2 py-0.5 text-[10px] font-bold text-[#1A1A1A] border border-[#E7D9D0]">
+                        Buy {p.pricingOffers.bogo.buyQuantity} Get {p.pricingOffers.bogo.getQuantity}
+                      </span>
+                    )}
+                    {p.pricingOffers?.quantityBreaks?.enabled && !p.pricingOffers?.flatDiscount?.enabled && !p.pricingOffers?.bogo?.enabled && (
+                      <span className="ml-auto inline-flex items-center rounded-full bg-[#F5EDE4] px-2 py-0.5 text-[10px] font-bold text-[#4D3D2D] border border-[#E7D9D0]">
+                        Quantity Breaks
+                      </span>
+                    )}
                 </label>
               ))}
             </div>
