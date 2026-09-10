@@ -96,10 +96,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body
         style={{
-          fontFamily: 'var(--font-lato, Lato, system-ui, sans-serif)',
           background: 'var(--alvora-ivory)',
         }}
-        className="antialiased text-[#1A1A1A] selection:bg-[#F1C9BD] selection:text-[#1A1A1A]"
+        className="font-sans antialiased text-[#1A1A1A] selection:bg-[#F1C9BD] selection:text-[#1A1A1A]"
       >
         <MetaPixel />
         <TikTokPixel />

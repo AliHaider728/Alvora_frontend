@@ -47,7 +47,7 @@
 
   /* Typography */
   --font-display: var(--font-playfair, 'Playfair Display'), Georgia, serif;
-  --font-body: var(--font-lato, 'Lato'), system-ui, sans-serif;
+  --font-body: var(--font-lato), 'Lato', system-ui, sans-serif;
 
   /* shadcn/ui token bridge â†• Alvora palette */
   --background:           #FAF6F2;
