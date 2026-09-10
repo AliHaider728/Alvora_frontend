@@ -127,7 +127,7 @@ export const CategoryFormModal: React.FC<Props> = ({ category, categories, onClo
   return <div className="fixed inset-0 z-[105] flex items-center justify-center overflow-y-auto bg-slate-950/60 p-3 sm:p-5" onMouseDown={event => { if (event.target === event.currentTarget) void safeClose(); }}>
     <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="category-form-title" className={`my-auto max-h-[calc(100vh-1.5rem)] w-full overflow-y-auto rounded-3xl bg-white shadow-2xl ${compact ? 'max-w-2xl' : 'max-w-4xl'}`}>
       <div className="sticky top-0 z-10 flex items-center justify-between border-b border-[#E7D9D0] bg-white px-5 py-4">
-        <div><h2 id="category-form-title" className="font-heading text-lg font-black text-[#1A1A1A]">{category ? 'Edit Category' : 'Add New Category'}</h2><p className="text-xs text-[#1A1A1A]/50">Saved to the live category database.</p></div>
+        <div><h2 id="category-form-title" className="font-sans text-lg font-black text-[#1A1A1A]">{category ? 'Edit Category' : 'Add New Category'}</h2><p className="text-xs text-[#1A1A1A]/50">Saved to the live category database.</p></div>
         <button type="button" onClick={() => void safeClose()} disabled={saving || uploading} aria-label="Close category form" className="rounded-xl p-2 text-[#1A1A1A]/40 hover:bg-[#FAF6F2]"><X className="h-5 w-5" /></button>
       </div>
       <form onSubmit={submit} className="grid gap-5 p-5 md:grid-cols-2">
@@ -152,7 +152,7 @@ export const CategoryFormModal: React.FC<Props> = ({ category, categories, onClo
         {!compact && <><label className="text-xs font-bold text-[#1A1A1A]/80">SEO Title<input value={seoTitle} maxLength={120} onChange={e => setSeoTitle(e.target.value)} className={input} /></label><label className="text-xs font-bold text-[#1A1A1A]/80">Meta Description<textarea rows={2} value={metaDescription} maxLength={320} onChange={e => setMetaDescription(e.target.value)} className={input} /></label></>}
         <div className="flex flex-col-reverse gap-2 border-t border-[#E7D9D0] pt-4 md:col-span-2 sm:flex-row sm:justify-end">
           <button type="button" onClick={() => void safeClose()} disabled={saving || uploading} className="rounded-xl bg-[#FAF6F2] px-5 py-2.5 text-xs font-bold text-[#1A1A1A]/80">Cancel</button>
-          <button type="submit" disabled={saving || uploading} className="flex items-center justify-center gap-2 rounded-xl bg-[#C48B80] px-5 py-2.5 text-xs font-bold text-white disabled:opacity-50">{saving && <Loader2 className="h-4 w-4 animate-spin" />}{saving ? 'Saving…' : 'Save Category'}</button>
+          <button type="submit" disabled={saving || uploading} className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm px-5 py-2.5 text-xs font-bold disabled:opacity-50">{saving && <Loader2 className="h-4 w-4 animate-spin" />}{saving ? 'Saving…' : 'Save Category'}</button>
         </div>
       </form>
     </div>

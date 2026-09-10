@@ -61,7 +61,7 @@ export const VariationImageModal: React.FC<VariationImageModalProps> = ({
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#1A1A1A]/50 backdrop-blur-sm">
       <div className="w-full max-w-2xl bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
         <div className="flex items-center justify-between p-4 border-b border-[#E7D9D0] bg-[#FAF6F2]">
-          <h2 className="font-heading font-black text-lg text-[#1A1A1A]">Variation Image</h2>
+          <h2 className="font-sans font-black text-lg text-[#1A1A1A]">Variation Image</h2>
           <button type="button" onClick={onClose} className="p-2 text-[#1A1A1A]/40 hover:bg-slate-200 rounded-full transition-colors">
             <X className="w-5 h-5" />
           </button>
@@ -108,7 +108,7 @@ export const VariationImageModal: React.FC<VariationImageModalProps> = ({
           <div className="grid grid-cols-2 gap-6 pt-6 border-t border-[#E7D9D0]">
             <div>
               <h3 className="text-sm font-bold text-[#1A1A1A]/80 mb-3">Upload New</h3>
-              <label className="flex items-center justify-center gap-2 w-full p-4 border-2 border-dashed border-[#C48B80] rounded-xl bg-[#C48B80] text-[#C48B80] hover:bg-[#C48B80] hover:border-[#C48B80] cursor-pointer transition-colors font-medium text-sm">
+              <label className="flex items-center justify-center gap-2 w-full p-4 border-2 border-dashed border-[#C48B80] rounded-xl bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm text-[#C48B80] hover:bg-gradient-to-r hover:border-[#C48B80] cursor-pointer transition-colors font-medium text-sm">
                 {isUploading ? (
                   <><Loader2 className="w-5 h-5 animate-spin" /> Uploading...</>
                 ) : (
@@ -150,7 +150,7 @@ export const VariationImageModal: React.FC<VariationImageModalProps> = ({
           <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-bold text-[#1A1A1A]/70 hover:bg-slate-200 rounded-lg transition-colors">
             Cancel
           </button>
-          <button type="button" onClick={handleSave} className="px-5 py-2 text-sm font-bold text-white bg-[#C48B80] hover:bg-[#C48B80] rounded-lg shadow transition-colors">
+          <button type="button" onClick={handleSave} className="px-5 py-2 text-sm font-bold text-white bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] border-transparent shadow-sm hover:bg-gradient-to-r rounded-lg shadow transition-colors">
             Confirm Image
           </button>
         </div>

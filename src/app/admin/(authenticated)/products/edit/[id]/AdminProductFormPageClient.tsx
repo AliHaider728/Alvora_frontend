@@ -153,11 +153,11 @@ const FormCard: React.FC<{
 }> = ({ title, description, icon: Icon, children }) => (
   <section className="rounded-3xl border border-[#E7D9D0]/80 bg-white p-5 shadow-sm sm:p-6">
     <div className="mb-5 flex items-start gap-3">
-      <div className="mt-0.5 rounded-xl bg-[#C48B80] p-2 text-[#C48B80]">
+      <div className="mt-0.5 rounded-xl bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm p-2 text-[#C48B80]">
         <Icon className="h-4 w-4" />
       </div>
       <div>
-        <h2 className="font-heading text-base font-black text-[#1A1A1A]">{title}</h2>
+        <h2 className="font-sans text-base font-black text-[#1A1A1A]">{title}</h2>
         {description && <p className="mt-0.5 text-xs font-medium text-[#1A1A1A]/50">{description}</p>}
       </div>
     </div>
@@ -235,7 +235,8 @@ export const AdminProductFormPageClient: React.FC = () => {
 
   const DEFAULT_PRICING_OFFERS: PricingOffers = {
     quantityBreaks: { enabled: false, tiers: [] },
-    bogo: { enabled: false, buyQty: 2, getQty: 1, label: '' }
+    bogo: { enabled: false, buyQty: 2, getQty: 1, label: '' },
+    flatDiscount: { enabled: false, minQty: 1, discountType: 'percentage', discountValue: 0, label: '' }
   };
   const [pricingOffers, setPricingOffers] = useState<PricingOffers>(DEFAULT_PRICING_OFFERS);
 
@@ -455,7 +456,8 @@ export const AdminProductFormPageClient: React.FC = () => {
     if (editingProduct.pricingOffers) {
       setPricingOffers({
         quantityBreaks: editingProduct.pricingOffers.quantityBreaks || { enabled: false, tiers: [] },
-        bogo: editingProduct.pricingOffers.bogo || { enabled: false, buyQty: 2, getQty: 1, label: '' }
+        bogo: editingProduct.pricingOffers.bogo || { enabled: false, buyQty: 2, getQty: 1, label: '' },
+        flatDiscount: editingProduct.pricingOffers.flatDiscount || { enabled: false, discountType: 'percentage', discountValue: 0, label: '' }
       });
     } else {
       setPricingOffers(DEFAULT_PRICING_OFFERS);
@@ -971,7 +973,7 @@ export const AdminProductFormPageClient: React.FC = () => {
       <div className="flex min-h-[50vh] items-center justify-center rounded-3xl border border-[#E7D9D0] bg-white p-6 text-center">
         <div>
           <Box className="mx-auto h-9 w-9 text-slate-300" />
-          <h1 className="mt-3 font-heading text-lg font-black text-[#1A1A1A]">Product not found</h1>
+          <h1 className="mt-3 font-sans text-lg font-black text-[#1A1A1A]">Product not found</h1>
           <button onClick={() => router.push('/admin/products')} className="mt-5 rounded-xl bg-[#1A1A1A] px-4 py-2.5 text-xs font-bold text-white">Back to Products</button>
         </div>
       </div>
@@ -1004,7 +1006,7 @@ export const AdminProductFormPageClient: React.FC = () => {
         <button type="button" onClick={cancelEditing} className="mb-2 inline-flex items-center gap-1 text-xs font-bold text-[#1A1A1A]/50 hover:text-[#A86249]">
           <ChevronLeft className="h-4 w-4" /> Back to Products
         </button>
-        <h1 className="font-heading text-2xl font-black text-[#1A1A1A] sm:text-3xl">{isEditing ? 'Edit Product' : 'Add New Product'}</h1>
+        <h1 className="font-sans text-2xl font-black text-[#1A1A1A] sm:text-3xl">{isEditing ? 'Edit Product' : 'Add New Product'}</h1>
         <p className="mt-1 text-xs font-medium text-[#1A1A1A]/50">{isEditing ? 'Update this product and publish changes to the Alvora Skincare storefront.' : 'Create and publish a new product on the Alvora Skincare storefront.'}</p>
       </div>
 
@@ -1039,7 +1041,7 @@ export const AdminProductFormPageClient: React.FC = () => {
                     {categoryIds.map((selectedId, index) => {
                       const selected = categories.find(item => item.id === selectedId);
                       if (!selected) return null;
-                      return <button key={selected.id} type="button" onClick={() => applyCategorySelection(categoryIds.filter(idValue => idValue !== selected.id))} className="inline-flex min-h-9 items-center gap-1.5 rounded-full bg-[#C48B80] px-3 text-xs font-bold text-[#C48B80] ring-1 ring-[#C48B80]" aria-label={`Remove ${selected.name}`}>{selected.name}{index === 0 && <span className="text-[9px] font-black uppercase tracking-wide text-[#C48B80]">Primary</span>}<span aria-hidden="true">&times;</span></button>;
+                      return <button key={selected.id} type="button" onClick={() => applyCategorySelection(categoryIds.filter(idValue => idValue !== selected.id))} className="inline-flex min-h-9 items-center gap-1.5 rounded-full bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm px-3 text-xs font-bold text-[#C48B80] ring-1 ring-[#C48B80]" aria-label={`Remove ${selected.name}`}>{selected.name}{index === 0 && <span className="text-[9px] font-black uppercase tracking-wide text-[#C48B80]">Primary</span>}<span aria-hidden="true">&times;</span></button>;
                     })}
                   </div>
                 )}
@@ -1083,7 +1085,7 @@ export const AdminProductFormPageClient: React.FC = () => {
                 </label>
                 <div className="flex items-center justify-between gap-4 rounded-xl border border-[#E7D9D0] px-3 py-2.5">
                   <div><span className="block text-xs font-bold text-[#1A1A1A]/80">Track Inventory</span><span className="text-[10px] text-[#1A1A1A]/40">Reduce exact quantity after orders</span></div>
-                  <button type="button" role="switch" aria-checked={trackInventory} onClick={() => { setTrackInventory(value => !value); markDirty(); clearError('stockQuantity'); }} className={`relative h-6 w-11 rounded-full transition ${trackInventory ? 'bg-[#C48B80]' : 'bg-slate-200'}`}><span className={`absolute top-1 h-4 w-4 rounded-full bg-white shadow transition ${trackInventory ? 'left-6' : 'left-1'}`} /></button>
+                  <button type="button" role="switch" aria-checked={trackInventory} onClick={() => { setTrackInventory(value => !value); markDirty(); clearError('stockQuantity'); }} className={`relative h-6 w-11 rounded-full transition ${trackInventory ? 'bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm' : 'bg-slate-200'}`}><span className={`absolute top-1 h-4 w-4 rounded-full bg-white shadow transition ${trackInventory ? 'left-6' : 'left-1'}`} /></button>
                 </div>
                 {trackInventory ? <>
                   <label>
@@ -1221,7 +1223,7 @@ export const AdminProductFormPageClient: React.FC = () => {
               <label><span className="mb-1.5 block text-xs font-bold text-[#1A1A1A]/80">Visibility</span><select value={isVisible ? 'visible' : 'hidden'} onChange={event => { setIsVisible(event.target.value === 'visible'); markDirty(); }} className={fieldClassName}><option value="visible">Visible to Customers</option><option value="hidden">Hidden</option></select></label>
               <div className="flex items-center justify-between gap-4 border-t border-[#E7D9D0] pt-4">
                 <div><span className="block text-xs font-bold text-[#1A1A1A]/80">Featured Product</span><span className="text-[10px] text-[#1A1A1A]/40">Show in the homepage featured section</span></div>
-                <button type="button" role="switch" aria-checked={isFeatured} onClick={() => { setIsFeatured(value => !value); markDirty(); }} className={`relative h-6 w-11 rounded-full transition ${isFeatured ? 'bg-[#C48B80]' : 'bg-slate-200'}`}><span className={`absolute top-1 h-4 w-4 rounded-full bg-white shadow transition ${isFeatured ? 'left-6' : 'left-1'}`} /></button>
+                <button type="button" role="switch" aria-checked={isFeatured} onClick={() => { setIsFeatured(value => !value); markDirty(); }} className={`relative h-6 w-11 rounded-full transition ${isFeatured ? 'bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm' : 'bg-slate-200'}`}><span className={`absolute top-1 h-4 w-4 rounded-full bg-white shadow transition ${isFeatured ? 'left-6' : 'left-1'}`} /></button>
               </div>
               {[
                 { label: 'Bestseller', help: 'Include in Featured Products & Bestsellers', value: isBestseller, setValue: setIsBestseller },
@@ -1230,7 +1232,7 @@ export const AdminProductFormPageClient: React.FC = () => {
               ].map(option => (
                 <div key={option.label} className="flex items-center justify-between gap-4 border-t border-[#E7D9D0] pt-4">
                   <div><span className="block text-xs font-bold text-[#1A1A1A]/80">{option.label}</span><span className="text-[10px] text-[#1A1A1A]/40">{option.help}</span></div>
-                  <button type="button" role="switch" aria-label={option.label} aria-checked={option.value} onClick={() => { option.setValue(value => !value); markDirty(); }} className={`relative h-6 w-11 shrink-0 rounded-full transition ${option.value ? 'bg-[#C48B80]' : 'bg-slate-200'}`}><span className={`absolute top-1 h-4 w-4 rounded-full bg-white shadow transition ${option.value ? 'left-6' : 'left-1'}`} /></button>
+                  <button type="button" role="switch" aria-label={option.label} aria-checked={option.value} onClick={() => { option.setValue(value => !value); markDirty(); }} className={`relative h-6 w-11 shrink-0 rounded-full transition ${option.value ? 'bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm' : 'bg-slate-200'}`}><span className={`absolute top-1 h-4 w-4 rounded-full bg-white shadow transition ${option.value ? 'left-6' : 'left-1'}`} /></button>
                 </div>
               ))}
               <div className="flex items-center justify-between gap-4 border-t border-[#E7D9D0] pt-4 mt-4">
@@ -1247,14 +1249,14 @@ export const AdminProductFormPageClient: React.FC = () => {
                 {images[0] ? (
                   <div className="relative overflow-hidden rounded-2xl border border-[#E7D9D0] bg-[#FAF6F2]"><img src={getSafeImageSrc(images[0].url)} alt="Main product preview" className="aspect-[4/3] w-full object-cover" /><div className="absolute inset-x-0 bottom-0 flex gap-2 bg-[#1A1A1A]/70 p-2 backdrop-blur"><label className="flex flex-1 cursor-pointer items-center justify-center gap-1 rounded-lg bg-white px-2 py-2 text-[10px] font-bold text-[#1A1A1A]/80"><ImagePlus className="h-3.5 w-3.5" /> Replace<input type="file" className="hidden" accept="image/jpeg,image/png,image/webp" disabled={uploadingTarget !== null} onChange={event => { void uploadImages(Array.from(event.target.files || []), 'main'); event.target.value = ''; }} /></label><button type="button" onClick={() => { void removeImage(images[0].id); }} className="rounded-lg bg-white px-2.5 text-[#C48B80]" aria-label="Remove main image"><Trash2 className="h-4 w-4" /></button></div></div>
                 ) : (
-                  <label className={`flex aspect-[4/3] cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed bg-[#FAF6F2] text-center transition hover:border-[#C48B80] hover:bg-[#C48B80]/40 ${errors.images ? 'border-[#C48B80]' : 'border-[#E7D9D0]'}`}><input type="file" className="hidden" accept="image/jpeg,image/png,image/webp" disabled={uploadingTarget !== null} onChange={event => { void uploadImages(Array.from(event.target.files || []), 'main'); event.target.value = ''; }} />{uploadingTarget === 'main' ? <Loader2 className="h-7 w-7 animate-spin text-[#C48B80]" /> : <ImageIcon className="h-7 w-7 text-[#C48B80]" />}<span className="mt-2 text-xs font-bold text-[#1A1A1A]/70">Upload main image</span><span className="mt-1 text-[10px] text-[#1A1A1A]/40">JPG, PNG, WebP • Max 5MB</span></label>
+                  <label className={`flex aspect-[4/3] cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed bg-[#FAF6F2] text-center transition hover:border-[#C48B80] hover:bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm/40 ${errors.images ? 'border-[#C48B80]' : 'border-[#E7D9D0]'}`}><input type="file" className="hidden" accept="image/jpeg,image/png,image/webp" disabled={uploadingTarget !== null} onChange={event => { void uploadImages(Array.from(event.target.files || []), 'main'); event.target.value = ''; }} />{uploadingTarget === 'main' ? <Loader2 className="h-7 w-7 animate-spin text-[#C48B80]" /> : <ImageIcon className="h-7 w-7 text-[#C48B80]" />}<span className="mt-2 text-xs font-bold text-[#1A1A1A]/70">Upload main image</span><span className="mt-1 text-[10px] text-[#1A1A1A]/40">JPG, PNG, WebP • Max 5MB</span></label>
                 )}
                 <FieldError message={errors.images} />
               </div>
               <div>
                 <div className="mb-2 flex items-center justify-between"><span className="text-xs font-bold text-[#1A1A1A]/80">Gallery Images</span><span className="text-[10px] text-[#1A1A1A]/40">{galleryImages.length}/8</span></div>
-                {galleryImages.length > 0 && <div className="mb-3 grid grid-cols-2 gap-2">{galleryImages.map((image, galleryIndex) => { const imageIndex = galleryIndex + 1; return <div key={image.id} className="overflow-hidden rounded-xl border border-[#E7D9D0] bg-[#FAF6F2]"><img src={getSafeImageSrc(image.url)} alt={`Gallery preview ${imageIndex}`} className="aspect-square w-full object-cover" /><div className="flex items-center justify-between gap-1 p-1.5"><button type="button" title="Make main image" onClick={() => makeMainImage(imageIndex)} className="rounded-md px-1.5 py-1 text-[9px] font-bold text-[#C48B80] hover:bg-[#C48B80]">Main</button><button type="button" disabled={galleryIndex === 0} onClick={() => moveGalleryImage(imageIndex, -1)} className="rounded-md p-1 text-[#1A1A1A]/50 disabled:opacity-30" aria-label="Move image left"><ArrowLeft className="h-3 w-3" /></button><button type="button" disabled={galleryIndex === galleryImages.length - 1} onClick={() => moveGalleryImage(imageIndex, 1)} className="rounded-md p-1 text-[#1A1A1A]/50 disabled:opacity-30" aria-label="Move image right"><ArrowRight className="h-3 w-3" /></button><button type="button" onClick={() => { void removeImage(image.id); }} className="rounded-md p-1 text-[#C48B80]" aria-label="Remove gallery image"><Trash2 className="h-3 w-3" /></button></div></div>; })}</div>}
-                <label className={`flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-[#E7D9D0] px-3 py-3 text-xs font-bold text-[#1A1A1A]/70 hover:border-[#C48B80] hover:bg-[#C48B80]/40 ${galleryImages.length >= 8 ? 'pointer-events-none opacity-50' : ''}`}>{uploadingTarget === 'gallery' ? <Loader2 className="h-4 w-4 animate-spin text-[#C48B80]" /> : <ImagePlus className="h-4 w-4 text-[#C48B80]" />} Add Gallery Images<input type="file" multiple className="hidden" accept="image/jpeg,image/png,image/webp" disabled={uploadingTarget !== null || galleryImages.length >= 8} onChange={event => { void uploadImages(Array.from(event.target.files || []), 'gallery'); event.target.value = ''; }} /></label>
+                {galleryImages.length > 0 && <div className="mb-3 grid grid-cols-2 gap-2">{galleryImages.map((image, galleryIndex) => { const imageIndex = galleryIndex + 1; return <div key={image.id} className="overflow-hidden rounded-xl border border-[#E7D9D0] bg-[#FAF6F2]"><img src={getSafeImageSrc(image.url)} alt={`Gallery preview ${imageIndex}`} className="aspect-square w-full object-cover" /><div className="flex items-center justify-between gap-1 p-1.5"><button type="button" title="Make main image" onClick={() => makeMainImage(imageIndex)} className="rounded-md px-1.5 py-1 text-[9px] font-bold text-[#C48B80] hover:bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm">Main</button><button type="button" disabled={galleryIndex === 0} onClick={() => moveGalleryImage(imageIndex, -1)} className="rounded-md p-1 text-[#1A1A1A]/50 disabled:opacity-30" aria-label="Move image left"><ArrowLeft className="h-3 w-3" /></button><button type="button" disabled={galleryIndex === galleryImages.length - 1} onClick={() => moveGalleryImage(imageIndex, 1)} className="rounded-md p-1 text-[#1A1A1A]/50 disabled:opacity-30" aria-label="Move image right"><ArrowRight className="h-3 w-3" /></button><button type="button" onClick={() => { void removeImage(image.id); }} className="rounded-md p-1 text-[#C48B80]" aria-label="Remove gallery image"><Trash2 className="h-3 w-3" /></button></div></div>; })}</div>}
+                <label className={`flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-[#E7D9D0] px-3 py-3 text-xs font-bold text-[#1A1A1A]/70 hover:border-[#C48B80] hover:bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm/40 ${galleryImages.length >= 8 ? 'pointer-events-none opacity-50' : ''}`}>{uploadingTarget === 'gallery' ? <Loader2 className="h-4 w-4 animate-spin text-[#C48B80]" /> : <ImagePlus className="h-4 w-4 text-[#C48B80]" />} Add Gallery Images<input type="file" multiple className="hidden" accept="image/jpeg,image/png,image/webp" disabled={uploadingTarget !== null || galleryImages.length >= 8} onChange={event => { void uploadImages(Array.from(event.target.files || []), 'gallery'); event.target.value = ''; }} /></label>
               </div>
             </div>
           </FormCard>
@@ -1264,7 +1266,7 @@ export const AdminProductFormPageClient: React.FC = () => {
               <fieldset>
                 <legend className="mb-2 block text-xs font-bold text-[#1A1A1A]/80">Age Recommendations <span className="text-[#C48B80]">*</span></legend>
                 <div className="grid grid-cols-2 gap-2">
-                  {AGE_GROUPS.map(group => <label key={group.id} className={`flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2.5 text-xs font-bold transition ${ageGroups.includes(group.id) ? 'border-[#C48B80] bg-[#C48B80] text-[#C48B80]' : 'border-[#E7D9D0] bg-white text-[#1A1A1A]/70'}`}><input type="checkbox" checked={ageGroups.includes(group.id)} onChange={event => { setAgeGroups(current => event.target.checked ? [...current, group.id] : current.filter(value => value !== group.id)); markDirty(); clearError('ageGroups'); }} />{group.label}</label>)}
+                  {AGE_GROUPS.map(group => <label key={group.id} className={`flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2.5 text-xs font-bold transition ${ageGroups.includes(group.id) ? 'border-[#C48B80] bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm text-[#C48B80]' : 'border-[#E7D9D0] bg-white text-[#1A1A1A]/70'}`}><input type="checkbox" checked={ageGroups.includes(group.id)} onChange={event => { setAgeGroups(current => event.target.checked ? [...current, group.id] : current.filter(value => value !== group.id)); markDirty(); clearError('ageGroups'); }} />{group.label}</label>)}
                 </div>
                 <FieldError message={errors.ageGroups} />
               </fieldset>
@@ -1284,7 +1286,7 @@ export const AdminProductFormPageClient: React.FC = () => {
 
         <div className="sticky bottom-4 z-20 flex flex-col-reverse gap-3 rounded-2xl border border-[#E7D9D0] bg-white/95 p-4 shadow-xl backdrop-blur sm:flex-row sm:justify-end xl:col-span-2">
           <button type="button" disabled={isSaving} onClick={() => { void cancelEditing(); }} className="rounded-xl bg-[#FAF6F2] px-5 py-3 text-xs font-bold text-[#1A1A1A]/80 disabled:opacity-50">Cancel</button>
-          <button type="submit" disabled={isSaving || uploadingTarget !== null} className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#C48B80] px-6 py-3 text-xs font-bold text-white shadow-md transition hover:bg-[#A86249] disabled:cursor-not-allowed disabled:opacity-60">{isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}{isSaving ? 'Saving…' : isEditing ? 'Update Product' : 'Save Product'}</button>
+          <button type="submit" disabled={isSaving || uploadingTarget !== null} className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm px-6 py-3 text-xs font-bold shadow-md transition disabled:cursor-not-allowed disabled:opacity-60">{isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}{isSaving ? 'Saving…' : isEditing ? 'Update Product' : 'Save Product'}</button>
         </div>
       </form>
     </div>

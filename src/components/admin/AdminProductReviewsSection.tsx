@@ -143,7 +143,7 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
       <div className="rounded-2xl border border-[#E7D9D0] bg-white shadow-sm overflow-hidden mb-6">
         <div className="flex items-center gap-2 border-b border-[#E7D9D0] bg-[#FAF6F2]/50 px-5 py-4">
           <MessageSquare className="h-5 w-5 text-[#C48B80]" />
-          <h2 className="font-heading text-sm font-black text-[#1A1A1A]">Product Reviews</h2>
+          <h2 className="font-sans text-sm font-black text-[#1A1A1A]">Product Reviews</h2>
         </div>
         <div className="p-8 text-center text-[#1A1A1A]/50 text-sm font-semibold">
           <p>Please save the product first before adding reviews.</p>
@@ -157,14 +157,14 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
       <div className="flex items-center justify-between border-b border-[#E7D9D0] bg-[#FAF6F2]/50 px-5 py-4">
         <div className="flex items-center gap-2">
           <MessageSquare className="h-5 w-5 text-[#C48B80]" />
-          <h2 className="font-heading text-sm font-black text-[#1A1A1A]">Product Reviews</h2>
+          <h2 className="font-sans text-sm font-black text-[#1A1A1A]">Product Reviews</h2>
           <span className="bg-slate-200 text-[#1A1A1A]/70 text-xs font-bold px-2 py-0.5 rounded-full">{reviews.length}</span>
         </div>
         {!showAddForm && (
           <button
             type="button"
             onClick={() => setShowAddForm(true)}
-            className="flex items-center gap-1 text-xs font-bold text-[#C48B80] hover:text-[#C48B80] bg-[#C48B80] hover:bg-[#C48B80] px-3 py-1.5 rounded-lg transition-colors"
+            className="flex items-center gap-1 text-xs font-bold text-[#C48B80] hover:text-[#C48B80] bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm hover:bg-gradient-to-r px-3 py-1.5 rounded-lg transition-colors"
           >
             <Plus className="w-4 h-4" /> Add Review
           </button>
@@ -259,7 +259,7 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
               <button
                 type="submit"
                 disabled={submitting}
-                className="px-4 py-2 text-sm font-bold text-white bg-[#C48B80] rounded-lg hover:bg-[#C48B80] transition-colors disabled:opacity-50 flex items-center gap-2"
+                className="px-4 py-2 text-sm font-bold text-white bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] border-transparent shadow-sm rounded-lg hover:bg-gradient-to-r transition-colors disabled:opacity-50 flex items-center gap-2"
               >
                 {submitting ? 'Adding...' : 'Add Review'}
               </button>

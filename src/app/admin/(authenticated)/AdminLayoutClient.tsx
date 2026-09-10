@@ -1,6 +1,7 @@
 ﻿"use client";
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 
 import {
@@ -26,13 +27,21 @@ import {
 import { getAuthToken, removeAuthToken, api, isSuperAdmin } from '../../../services/api';
 
 export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const location = usePathname();
   const router = useRouter();
   const pathname = usePathname();
-  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
-  const [mounted, setMounted] = React.useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [adminUser, setAdminUser] = useState<{name: string, email: string} | null>(null);
 
-  React.useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    setMounted(true);
+    const userStr = localStorage.getItem('alvora_admin_user');
+    if (userStr) {
+      try {
+        setAdminUser(JSON.parse(userStr));
+      } catch(e) {}
+    }
+  }, []);
 
   const token = getAuthToken();
 
@@ -66,13 +75,13 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
     router.push('/admin/login');
   };
 
-  if (!mounted) {
+  if (!mounted || !token) {
     return null;
   }
 
-  if (!token) {
-    return null;
-  }
+  const displayName = adminUser?.name || 'Alvora Skincare Manager';
+  const displayEmail = adminUser?.email || 'admin@alvora.pk';
+  const initials = displayName.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() || 'AS';
 
   return (
     <div className="admin-shell min-h-screen bg-[#FAF6F2] font-body text-[#1A1A1A] flex">
@@ -88,19 +97,9 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
       <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#F5EDE4] text-[#1A1A1A]/70 flex flex-col justify-between p-4 border-r border-[#E7D9D0] transition-transform duration-300 ease-in-out lg:translate-x-0 overflow-y-auto ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div>
           {/* Logo Header */}
-          <div className="flex items-center justify-between pb-6 pt-2 px-2 border-b border-[#E7D9D0] mb-4">
-            <Link href="/admin" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2">
-              <div className="p-2 rounded-xl bg-[#C48B80] text-white font-black">
-                PB
-              </div>
-              <div>
-                <span className="font-heading font-black text-[#1A1A1A] text-base block leading-tight">
-                  Alvora Skincare
-                </span>
-                <span className="text-[10px] text-[#1A1A1A]/50 uppercase font-bold tracking-wider">
-                  Admin Control
-                </span>
-              </div>
+          <div className="flex items-center justify-center pb-6 pt-2 px-2 border-b border-[#E7D9D0] mb-4">
+            <Link href="/admin" onClick={() => setMobileMenuOpen(false)} className="block relative w-[140px] h-[40px]">
+              <Image src="/images/logo.png" alt="Alvora Skincare" fill className="object-contain" priority />
             </Link>
           </div>
 
@@ -116,7 +115,7 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
                   onClick={() => setMobileMenuOpen(false)}
                   className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-colors ${
                     isActive
-                      ? 'bg-[#C48B80] text-white shadow-md'
+                      ? 'bg-gradient-to-r from-[#9C4122] to-[#B34E28] text-white shadow-md'
                       : 'text-[#1A1A1A]/70 hover:bg-white hover:text-[#1A1A1A]'
                   }`}
                 >
@@ -160,7 +159,7 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
             >
               <Menu className="w-5 h-5" />
             </button>
-            <span className="font-heading font-extrabold text-sm text-[#1A1A1A]">
+            <span className="font-sans font-extrabold text-sm text-[#1A1A1A]">
               {navItems.find(i => i.path === pathname)?.label || 'Admin Management'}
             </span>
           </div>
@@ -168,18 +167,18 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
           <div className="flex items-center gap-4">
             <button className="relative p-2 rounded-full hover:bg-[#FAF6F2] text-[#1A1A1A]/70">
               <Bell className="w-5 h-5" />
-              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#C48B80]" />
+              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-gradient-to-r from-[#9C4122] to-[#B34E28] text-white shadow-sm" />
             </button>
 
             <div className="flex items-center gap-3 pl-4 border-l border-[#E7D9D0]">
-              <div className="w-8 h-8 rounded-full bg-[#C48B80] text-white flex items-center justify-center font-bold text-xs">
-                PB
+              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#9C4122] to-[#B34E28] text-white shadow-sm flex items-center justify-center font-bold text-xs">
+                {initials}
               </div>
               <div className="hidden sm:block">
-                <span className="font-heading font-bold text-xs text-[#1A1A1A] block leading-tight">
-                  Alvora Skincare Manager
+                <span className="font-sans font-bold text-xs text-[#1A1A1A] block leading-tight">
+                  {displayName}
                 </span>
-                <span className="text-[10px] text-[#1A1A1A]/50 font-medium">admin@alvora.pk</span>
+                <span className="text-[10px] text-[#1A1A1A]/50 font-medium">{displayEmail}</span>
               </div>
             </div>
           </div>
@@ -193,7 +192,3 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
     </div>
   );
 };
-
-
-
-

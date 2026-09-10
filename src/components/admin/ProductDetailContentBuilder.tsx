@@ -106,7 +106,7 @@ export const ProductDetailContentBuilder: React.FC<Props> = ({
   return (
     <section className="rounded-3xl border border-[#E7D9D0] bg-white p-5 shadow-sm sm:p-6">
       <div className="mb-5">
-        <h2 className="font-heading text-base font-black text-[#1A1A1A]">Product Description & Page Content</h2>
+        <h2 className="font-sans text-base font-black text-[#1A1A1A]">Product Description & Page Content</h2>
         <p className="mt-1 text-xs text-[#1A1A1A]/50">Build responsive content below the main product information. The server sanitizes every block before publishing.</p>
       </div>
       <div className="mb-5 flex flex-wrap items-center gap-2">
@@ -128,7 +128,7 @@ export const ProductDetailContentBuilder: React.FC<Props> = ({
           <option value="ctaBanner">CTA Banner</option>
           {isSuperAdmin && <option value="html">Custom HTML</option>}
         </select>
-        <button type="button" onClick={() => add(selectedBlockType)} className="inline-flex items-center gap-2 rounded-xl border border-[#C48B80] bg-[#C48B80] px-3 py-2 text-xs font-bold text-[#C48B80] hover:bg-[#C48B80]">
+        <button type="button" onClick={() => add(selectedBlockType)} className="inline-flex items-center gap-2 rounded-xl border border-[#C48B80] bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm px-3 py-2 text-xs font-bold text-[#C48B80] hover:bg-gradient-to-r">
           <Plus className="h-4 w-4" /> Add Block
         </button>
       </div>
@@ -140,7 +140,7 @@ export const ProductDetailContentBuilder: React.FC<Props> = ({
           return (
             <article key={block.id} className="overflow-hidden rounded-2xl border border-[#E7D9D0] bg-[#FAF6F2]">
               <div className="flex flex-wrap items-center gap-2 border-b border-[#E7D9D0] bg-white p-3">
-                <span className="rounded-lg bg-[#C48B80] px-2.5 py-1 text-[10px] font-black uppercase text-[#C48B80]">{block.type}</span>
+                <span className="rounded-lg bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm px-2.5 py-1 text-[10px] font-black uppercase text-[#C48B80]">{block.type}</span>
                 <label className="mr-auto flex items-center gap-2 text-xs font-bold text-[#1A1A1A]/70"><input type="checkbox" disabled={codeLocked} checked={block.enabled} onChange={event => update(block.id, { enabled: event.target.checked })} /> Enabled</label>
                 <IconButton label="Move up" disabled={codeLocked || index === 0} onClick={() => move(index, -1)} icon={ArrowUp} />
                 <IconButton label="Move down" disabled={codeLocked || index === sorted.length - 1} onClick={() => move(index, 1)} icon={ArrowDown} />

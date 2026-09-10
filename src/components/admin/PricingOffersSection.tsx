@@ -29,7 +29,7 @@ const Toggle: React.FC<{
       />
       <div
         className={`h-5 w-9 rounded-full transition-colors duration-200 ${
-          checked ? 'bg-[#C48B80]' : 'bg-slate-200'
+          checked ? 'bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm' : 'bg-slate-200'
         }`}
       />
       <div
@@ -143,7 +143,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
       <div className="space-y-4">
         <div className="flex items-center gap-2 border-b border-[#E7D9D0] pb-3">
           <Tag className="h-4 w-4 text-[#C48B80]" />
-          <h3 className="font-heading text-sm font-black text-[#1A1A1A] uppercase tracking-wider">
+          <h3 className="font-sans text-sm font-black text-[#1A1A1A] uppercase tracking-wider">
             Quantity Breaks
           </h3>
         </div>
@@ -272,7 +272,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
       <div className="space-y-4">
         <div className="flex items-center gap-2 border-b border-[#E7D9D0] pb-3">
           <Gift className="h-4 w-4 text-emerald-500" />
-          <h3 className="font-heading text-sm font-black text-[#1A1A1A] uppercase tracking-wider">
+          <h3 className="font-sans text-sm font-black text-[#1A1A1A] uppercase tracking-wider">
             Buy X Get Y Free (BOGO)
           </h3>
         </div>
@@ -369,7 +369,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
       <div className="space-y-4">
         <div className="flex items-center gap-2 border-b border-[#E7D9D0] pb-3">
           <BadgePercent className="h-4 w-4 text-[#C48B80]" />
-          <h3 className="font-heading text-sm font-black text-[#1A1A1A] uppercase tracking-wider">
+          <h3 className="font-sans text-sm font-black text-[#1A1A1A] uppercase tracking-wider">
             Flat Discount
           </h3>
         </div>
@@ -445,7 +445,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
 
               {/* Live preview */}
               <div className="col-span-2 sm:col-span-1 flex items-end">
-                <div className="w-full rounded-xl border border-[#C48B80] bg-[#C48B80] px-3 py-2.5 text-sm font-bold text-[#C48B80]">
+                <div className="w-full rounded-xl border border-[#C48B80] bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm px-3 py-2.5 text-sm font-bold text-[#C48B80]">
                   ðŸ•ï¸ {flatAutoLabel}
                 </div>
               </div>

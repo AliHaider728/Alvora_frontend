@@ -69,7 +69,7 @@ function SortableTermItem({ term, onEdit, onDelete, displayType, inUseCount }: {
       <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
         <button
           onClick={() => onEdit(term)}
-          className="p-1.5 text-[#1A1A1A]/40 hover:text-[#C48B80] rounded-lg hover:bg-[#C48B80]"
+          className="p-1.5 text-[#1A1A1A]/40 hover:text-[#C48B80] rounded-lg hover:bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm"
           title="Edit"
         >
           <Edit2 className="w-4 h-4" />
@@ -269,7 +269,7 @@ export function AdminGlobalAttributesPageClient() {
         </div>
         <button
           onClick={() => setEditingAttr({ id: '', name: '', slug: '', displayType: 'buttons', terms: [] })}
-          className="flex items-center gap-2 px-4 py-2 bg-[#C48B80] text-white rounded-lg hover:bg-[#C48B80] transition-colors font-medium"
+          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm rounded-lg hover:bg-gradient-to-r transition-colors font-medium"
         >
           <Plus className="w-4 h-4" />
           Add Attribute
@@ -290,7 +290,7 @@ export function AdminGlobalAttributesPageClient() {
                 onClick={() => openAttribute(attr)}
                 className={`w-full text-left p-4 rounded-xl border transition-all ${
                   editingAttr?.id === attr.id
-                    ? 'bg-[#C48B80] border-[#C48B80] shadow-sm ring-1 ring-[#C48B80]'
+                    ? 'bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm border-[#C48B80] shadow-sm ring-1 ring-[#C48B80]'
                     : 'bg-white border-[#E7D9D0] hover:border-[#E7D9D0] hover:shadow-sm'
                 }`}
               >
@@ -384,7 +384,7 @@ export function AdminGlobalAttributesPageClient() {
                   </button>
                   <button
                     type="submit"
-                    className="flex items-center gap-2 px-4 py-2 bg-[#C48B80] text-white rounded-lg hover:bg-[#C48B80] transition-colors font-medium"
+                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm rounded-lg hover:bg-gradient-to-r transition-colors font-medium"
                   >
                     <Save className="w-4 h-4" />
                     Save Settings
@@ -542,7 +542,7 @@ export function AdminGlobalAttributesPageClient() {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-[#C48B80] text-white rounded-lg hover:bg-[#C48B80] transition-colors font-medium"
+                  className="px-4 py-2 bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm rounded-lg hover:bg-gradient-to-r transition-colors font-medium"
                 >
                   Save Term
                 </button>

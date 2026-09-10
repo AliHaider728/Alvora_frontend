@@ -14,14 +14,14 @@ export const AdminReportsPageClient: React.FC = () => {
       
 
       <div>
-        <h1 className="font-heading font-black text-2xl text-[#1A1A1A]">Sales Reports & Category Breakdown</h1>
+        <h1 className="font-sans font-black text-2xl text-[#1A1A1A]">Sales Reports & Category Breakdown</h1>
         <p className="text-xs text-[#1A1A1A]/50 font-medium">In-depth revenue trends, category distribution, and top product sales.</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Category Share Breakdown */}
         <div className="bg-white p-6 rounded-3xl border border-[#E7D9D0]/80 shadow-xs space-y-4">
-          <h3 className="font-heading font-black text-base text-[#1A1A1A] flex items-center gap-2">
+          <h3 className="font-sans font-black text-base text-[#1A1A1A] flex items-center gap-2">
             <PieChart className="w-5 h-5 text-[#C48B80]" />
             <span>Category Share & Catalog Mix</span>
           </h3>
@@ -52,7 +52,7 @@ export const AdminReportsPageClient: React.FC = () => {
 
         {/* Top Performing Products */}
         <div className="bg-white p-6 rounded-3xl border border-[#E7D9D0]/80 shadow-xs space-y-4">
-          <h3 className="font-heading font-black text-base text-[#1A1A1A] flex items-center gap-2">
+          <h3 className="font-sans font-black text-base text-[#1A1A1A] flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-emerald-500" />
             <span>Top Performing Products This Month</span>
           </h3>
@@ -61,10 +61,10 @@ export const AdminReportsPageClient: React.FC = () => {
             {products.slice(0, 4).map((p, i) => (
               <div key={p.id} className="pt-3 flex items-center justify-between text-xs">
                 <div className="flex items-center gap-3">
-                  <span className="font-heading font-bold text-[#1A1A1A]/40 w-4">#{i + 1}</span>
+                  <span className="font-sans font-bold text-[#1A1A1A]/40 w-4">#{i + 1}</span>
                   <img src={getSafeImageSrc(p.images[0])} alt="" className="w-9 h-9 object-cover rounded-lg bg-[#FAF6F2]" />
                   <div>
-                    <span className="font-heading font-bold text-[#1A1A1A] block">{p.name}</span>
+                    <span className="font-sans font-bold text-[#1A1A1A] block">{p.name}</span>
                     <span className="text-[10px] text-[#1A1A1A]/40">{p.category}</span>
                   </div>
                 </div>

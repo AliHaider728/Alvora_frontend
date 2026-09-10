@@ -152,7 +152,7 @@ export const AdminOrdersPageClient: React.FC = () => {
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-heading font-black text-2xl text-[#1A1A1A]">Orders Management</h1>
+          <h1 className="font-sans font-black text-2xl text-[#1A1A1A]">Orders Management</h1>
           <p className="text-xs text-[#1A1A1A]/50 font-medium">Fulfill customer orders, update delivery statuses, and issue tracking numbers.</p>
         </div>
       </div>
@@ -190,7 +190,7 @@ export const AdminOrdersPageClient: React.FC = () => {
       </div>
 
       {selectedOrderIds.size > 0 && (
-        <div className="bg-[#C48B80] border border-[#C48B80] rounded-2xl p-3 flex flex-wrap items-center justify-between gap-4">
+        <div className="bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm border border-[#C48B80] rounded-2xl p-3 flex flex-wrap items-center justify-between gap-4">
           <div className="text-xs font-bold text-[#C48B80] flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4" />
             {selectedOrderIds.size} Order{selectedOrderIds.size > 1 ? 's' : ''} Selected
@@ -204,7 +204,7 @@ export const AdminOrdersPageClient: React.FC = () => {
                 onClick={() => void handleBulkStatusChange(status as Order['status'])}
                 className={`px-3 py-1.5 text-[11px] font-bold rounded-xl transition-colors border ${
                   status === 'Processing' ? 'bg-amber-100 text-amber-800 border-amber-200 hover:bg-amber-200' :
-                  status === 'Shipped' ? 'bg-[#C48B80] text-[#C48B80] border-[#C48B80] hover:bg-[#C48B80]' :
+                  status === 'Shipped' ? 'bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm text-[#C48B80] border-[#C48B80] hover:bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm' :
                   status === 'Delivered' ? 'bg-emerald-100 text-emerald-800 border-emerald-200 hover:bg-emerald-200' :
                   'bg-rose-100 text-[#C48B80] border-[#E7D9D0] hover:bg-rose-200'
                 } disabled:opacity-50`}
@@ -212,7 +212,7 @@ export const AdminOrdersPageClient: React.FC = () => {
                 {status}
               </button>
             ))}
-            <div className="w-px h-6 bg-[#C48B80] mx-2 hidden sm:block" />
+            <div className="w-px h-6 bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm mx-2 hidden sm:block" />
             <button
               disabled={isBulkUpdating}
               onClick={() => void handleBulkDelete()}
@@ -259,7 +259,7 @@ export const AdminOrdersPageClient: React.FC = () => {
                       className="rounded border-[#E7D9D0] text-[#C48B80] focus:ring-[#C48B80] cursor-pointer"
                     />
                   </td>
-                  <td className="p-4 font-heading font-bold text-[#1A1A1A]">{order.id}</td>
+                  <td className="p-4 font-sans font-bold text-[#1A1A1A]">{order.id}</td>
                   <td className="p-4">
                     <span className="font-bold text-[#1A1A1A] block">{order.customerName}</span>
                     <span className="text-[10px] text-[#1A1A1A]/40">{order.email}</span>
@@ -308,7 +308,7 @@ export const AdminOrdersPageClient: React.FC = () => {
                       onChange={e => { void handleStatusChange(order, e.target.value as Order['status']); }}
                       className={`px-2.5 py-1 rounded-full text-[11px] font-bold border border-transparent cursor-pointer ${
                         order.status === 'Delivered' ? 'bg-emerald-100 text-emerald-800' :
-                        order.status === 'Shipped' ? 'bg-[#C48B80] text-[#C48B80]' :
+                        order.status === 'Shipped' ? 'bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm text-[#C48B80]' :
                         order.status === 'Cancelled' ? 'bg-rose-100 text-[#C48B80]' :
                         order.status === 'Processing' ? 'bg-amber-100 text-amber-800' : 'bg-[#FAF6F2] text-[#1A1A1A]/80'
                       }`}
@@ -353,7 +353,7 @@ export const AdminOrdersPageClient: React.FC = () => {
             <div className="flex items-center justify-between border-b border-[#E7D9D0] pb-3">
               <div>
                 <span className="text-[10px] font-bold uppercase text-[#1A1A1A]/40">Order Receipt</span>
-                <h3 className="font-heading font-black text-lg text-[#1A1A1A]">{selectedOrder.id}</h3>
+                <h3 className="font-sans font-black text-lg text-[#1A1A1A]">{selectedOrder.id}</h3>
               </div>
               <button onClick={() => setSelectedOrder(null)} className="p-1 text-[#1A1A1A]/40">
                 <X className="w-5 h-5" />
@@ -368,7 +368,7 @@ export const AdminOrdersPageClient: React.FC = () => {
               </div>
 
               {/* Courier Tracking */}
-              <div className="p-3 rounded-2xl bg-[#C48B80] border border-[#C48B80] space-y-2">
+              <div className="p-3 rounded-2xl bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm border border-[#C48B80] space-y-2">
                 <span className="font-bold text-[#C48B80] block">Courier Tracking Code</span>
                 <div className="flex gap-2">
                   <input
@@ -380,7 +380,7 @@ export const AdminOrdersPageClient: React.FC = () => {
                   />
                   <button
                     onClick={() => { void handleSaveTracking(selectedOrder.id); }}
-                    className="px-3 py-1.5 rounded-xl bg-[#C48B80] text-white font-bold text-xs flex items-center gap-1"
+                    className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm font-bold text-xs flex items-center gap-1"
                   >
                     <Send className="w-3 h-3" /> Save
                   </button>
@@ -414,7 +414,7 @@ export const AdminOrdersPageClient: React.FC = () => {
                 ))}
               </div>
 
-              <div className="pt-2 border-t border-[#E7D9D0] flex justify-between font-heading font-black text-[#1A1A1A] text-sm">
+              <div className="pt-2 border-t border-[#E7D9D0] flex justify-between font-sans font-black text-[#1A1A1A] text-sm">
                 <span>Total Amount (COD):</span>
                 <span className="text-[#A86249]">{formatPrice(selectedOrder.total, settings.currency)}</span>
               </div>

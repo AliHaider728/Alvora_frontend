@@ -168,7 +168,7 @@ export const AdminProductsPageClient: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-heading font-black text-2xl text-[#1A1A1A]">Products Catalog</h1>
+          <h1 className="font-sans font-black text-2xl text-[#1A1A1A]">Products Catalog</h1>
           <p className="text-xs text-[#1A1A1A]/50 font-medium">Manage products, PKR pricing, inventory stock, visibility, and delivery charge logic.</p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -186,7 +186,7 @@ export const AdminProductsPageClient: React.FC = () => {
             </label>
             <button
               onClick={() => router.push('/admin/products/new')}
-              className="px-5 py-2.5 rounded-2xl bg-[#C48B80] hover:bg-[#A86249] text-white font-heading font-bold text-xs flex items-center gap-2 shadow-md transition-all"
+              className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm font-sans font-bold text-xs flex items-center gap-2 shadow-md transition-all"
             >
               <Plus className="w-4 h-4" />
               <span>Add New Product</span>
@@ -247,7 +247,7 @@ export const AdminProductsPageClient: React.FC = () => {
                     <div className="flex items-center gap-3">
                       <img src={getSafeImageSrc(prod.images?.[0])} alt="" className="w-10 h-10 object-cover rounded-xl bg-[#FAF6F2]" />
                       <div>
-                        <span className="font-heading font-bold text-[#1A1A1A] block">{prod.name}</span>
+                        <span className="font-sans font-bold text-[#1A1A1A] block">{prod.name}</span>
                         <span className="text-[10px] text-[#1A1A1A]/40">{prod.brand}</span>
                       </div>
                     </div>

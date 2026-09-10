@@ -46,14 +46,14 @@ export const AdminSettingsPageClient: React.FC = () => {
       
 
       <div>
-        <h1 className="font-heading font-black text-2xl text-[#1A1A1A]">Store Settings & Delivery Rates</h1>
+        <h1 className="font-sans font-black text-2xl text-[#1A1A1A]">Store Settings & Delivery Rates</h1>
         <p className="text-xs text-[#1A1A1A]/50 font-medium">Configure store details, free shipping threshold in PKR, delivery charges, and SEO defaults.</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Store Profile */}
         <div className="bg-white p-6 rounded-3xl border border-[#E7D9D0]/80 shadow-xs space-y-4">
-          <h3 className="font-heading font-black text-base text-[#1A1A1A] flex items-center gap-2">
+          <h3 className="font-sans font-black text-base text-[#1A1A1A] flex items-center gap-2">
             <Globe className="w-5 h-5 text-[#C48B80]" />
             <span>General Store Profile</span>
           </h3>
@@ -118,7 +118,7 @@ export const AdminSettingsPageClient: React.FC = () => {
 
         {/* Shipping & Taxes */}
         <div className="bg-white p-6 rounded-3xl border border-[#E7D9D0]/80 shadow-xs space-y-4">
-          <h3 className="font-heading font-black text-base text-[#1A1A1A] flex items-center gap-2">
+          <h3 className="font-sans font-black text-base text-[#1A1A1A] flex items-center gap-2">
             <DollarSign className="w-5 h-5 text-emerald-500" />
             <span>Shipping & Tax Rates</span>
           </h3>
@@ -163,7 +163,7 @@ export const AdminSettingsPageClient: React.FC = () => {
 
         {/* Default SEO Settings */}
         <div className="bg-white p-6 rounded-3xl border border-[#E7D9D0]/80 shadow-xs space-y-4">
-          <h3 className="font-heading font-black text-base text-[#1A1A1A] flex items-center gap-2">
+          <h3 className="font-sans font-black text-base text-[#1A1A1A] flex items-center gap-2">
             <Sliders className="w-5 h-5 text-[#C48B80]" />
             <span>Global SEO Default Meta</span>
           </h3>
@@ -196,7 +196,7 @@ export const AdminSettingsPageClient: React.FC = () => {
         <button
           type="submit"
           disabled={saving}
-          className="px-8 py-3.5 rounded-2xl bg-[#1A1A1A] hover:bg-[#333333] text-white font-heading font-extrabold text-xs shadow-md flex items-center gap-2 disabled:opacity-50"
+          className="px-8 py-3.5 rounded-2xl bg-[#1A1A1A] hover:bg-[#333333] text-white font-sans font-extrabold text-xs shadow-md flex items-center gap-2 disabled:opacity-50"
         >
           <Save className="w-4 h-4 text-[#C48B80]" />
           <span>{saving ? 'Saving…' : 'Save Store Settings'}</span>

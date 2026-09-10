@@ -141,7 +141,7 @@ export const AttributesManager: React.FC<AttributesManagerProps> = ({ attributes
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between mb-2">
-        <h3 className="font-heading font-bold text-[#1A1A1A]">Product Attributes</h3>
+        <h3 className="font-sans font-bold text-[#1A1A1A]">Product Attributes</h3>
         <a href="/admin/attributes" target="_blank" rel="noreferrer" className="text-sm font-medium text-[#C48B80] hover:underline flex items-center gap-1">
           <Settings className="w-3.5 h-3.5" /> Manage Global Attributes
         </a>
@@ -156,7 +156,7 @@ export const AttributesManager: React.FC<AttributesManagerProps> = ({ attributes
             
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className={`text-xs font-bold px-2 py-0.5 rounded uppercase ${attr.source === 'global' ? 'bg-[#C48B80] text-[#C48B80]' : 'bg-slate-200 text-[#1A1A1A]/80'}`}>
+                <span className={`text-xs font-bold px-2 py-0.5 rounded uppercase ${attr.source === 'global' ? 'bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm text-[#C48B80]' : 'bg-slate-200 text-[#1A1A1A]/80'}`}>
                   {attr.source}
                 </span>
                 <span className="text-sm font-medium text-[#1A1A1A]/50 capitalize flex items-center gap-1">
@@ -184,7 +184,7 @@ export const AttributesManager: React.FC<AttributesManagerProps> = ({ attributes
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-heading font-bold text-[#1A1A1A]/80 mb-1">Attribute Name</label>
+                <label className="block text-xs font-sans font-bold text-[#1A1A1A]/80 mb-1">Attribute Name</label>
                 <input
                   type="text"
                   value={attr.name}
@@ -196,7 +196,7 @@ export const AttributesManager: React.FC<AttributesManagerProps> = ({ attributes
               </div>
               
               <div>
-                <label className="block text-xs font-heading font-bold text-[#1A1A1A]/80 mb-1">
+                <label className="block text-xs font-sans font-bold text-[#1A1A1A]/80 mb-1">
                   Values
                 </label>
                 
@@ -247,7 +247,7 @@ export const AttributesManager: React.FC<AttributesManagerProps> = ({ attributes
                           onClick={() => toggleGlobalTermSelection(attr.id, term.id)}
                           className={`px-3 py-1 text-sm rounded-full border transition-colors ${
                             isSelected 
-                              ? 'bg-[#C48B80] border-[#C48B80] text-[#C48B80] font-medium ring-1 ring-[#C48B80]' 
+                              ? 'bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm border-[#C48B80] text-[#C48B80] font-medium ring-1 ring-[#C48B80]' 
                               : 'bg-white border-[#E7D9D0] text-[#1A1A1A]/70 hover:border-[#E7D9D0]'
                           }`}
                         >
@@ -323,7 +323,7 @@ export const AttributesManager: React.FC<AttributesManagerProps> = ({ attributes
         <button
           type="button"
           onClick={handleAddCustomAttribute}
-          className="px-4 py-2 text-sm font-heading font-bold text-[#1A1A1A]/70 bg-[#FAF6F2] hover:bg-slate-200 rounded-lg transition-colors flex items-center gap-2"
+          className="px-4 py-2 text-sm font-sans font-bold text-[#1A1A1A]/70 bg-[#FAF6F2] hover:bg-slate-200 rounded-lg transition-colors flex items-center gap-2"
         >
           <Plus className="w-4 h-4" /> Add Custom
         </button>

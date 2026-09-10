@@ -186,13 +186,13 @@ export const AdminReviewsPageClient: React.FC = () => {
                 <MessageSquare className="w-6 h-6" />
               </div>
               <div>
-                <h1 className="text-2xl font-heading font-black text-[#1A1A1A] tracking-tight">Review Moderation</h1>
+                <h1 className="text-2xl font-sans font-black text-[#1A1A1A] tracking-tight">Review Moderation</h1>
                 <p className="text-sm font-medium text-[#1A1A1A]/50 mt-1">Manage customer feedback and ratings</p>
               </div>
             </div>
             <button 
               onClick={() => setIsAddModalOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-[#C48B80] hover:bg-[#A86249] text-white rounded-xl text-sm font-bold transition shadow-sm"
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm rounded-xl text-sm font-bold transition"
             >
               <Plus className="h-4 w-4" /> Add Review
             </button>
@@ -431,7 +431,7 @@ export const AdminReviewsPageClient: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1A1A1A]/60 backdrop-blur-sm">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden">
             <div className="px-6 py-4 border-b border-[#E7D9D0] flex items-center justify-between">
-              <h2 className="font-heading font-black text-lg text-[#1A1A1A]">Add Customer Review</h2>
+              <h2 className="font-sans font-black text-lg text-[#1A1A1A]">Add Customer Review</h2>
               <button onClick={() => setIsAddModalOpen(false)} className="text-[#1A1A1A]/40 hover:text-[#1A1A1A]/70">
                 <XCircle className="h-6 w-6" />
               </button>
@@ -499,7 +499,7 @@ export const AdminReviewsPageClient: React.FC = () => {
             
             <div className="px-6 py-4 bg-[#FAF6F2] border-t border-[#E7D9D0] flex justify-end gap-3">
               <button type="button" onClick={() => setIsAddModalOpen(false)} className="px-4 py-2 rounded-xl text-sm font-bold text-[#1A1A1A]/70 hover:bg-slate-200 transition">Cancel</button>
-              <button type="submit" form="addReviewForm" disabled={isSubmitting} className="flex items-center gap-2 px-6 py-2 rounded-xl bg-[#C48B80] hover:bg-[#A86249] text-white text-sm font-bold transition disabled:opacity-70">
+              <button type="submit" form="addReviewForm" disabled={isSubmitting} className="flex items-center gap-2 px-6 py-2 rounded-xl bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm text-sm font-bold transition disabled:opacity-70">
                 {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
                 Save Review
               </button>

@@ -497,6 +497,53 @@
   filter: brightness(1);
 }
 
-input[type='checkbox'], input[type='radio'] {
-  accent-color: var(--alvora-terracotta);
+
+
+
+/* 🛠️ Admin Panel Checkbox Override (Global Native Checkbox Styling) 🛠️ */
+input[type="checkbox"] {
+  appearance: none;
+  background-color: #fff;
+  margin: 0;
+  font: inherit;
+  color: currentColor;
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.25rem;
+  display: inline-grid;
+  place-content: center;
+  cursor: pointer;
+  transition: all 150ms ease-in-out;
+}
+
+input[type="checkbox"]::before {
+  content: "";
+  width: 0.65em;
+  height: 0.65em;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em white;
+  background-color: white;
+  transform-origin: center;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+input[type="checkbox"]:checked {
+  background: linear-gradient(to bottom right, #9C4122, #B34E28);
+  border-color: transparent;
+}
+
+input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+
+input[type="checkbox"]:focus-visible {
+  outline: 2px solid #9C4122;
+  outline-offset: max(2px, 0.15em);
+}
+
+/* 🛠️ Admin Panel Font Overrides (Force Professional Sans-Serif) 🛠️ */
+.admin-shell h1, .admin-shell h2, .admin-shell h3, .admin-shell h4, .admin-shell h5, .admin-shell h6 {
+  font-family: var(--font-body) !important;
 }

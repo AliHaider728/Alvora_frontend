@@ -94,7 +94,7 @@ export const VariationsGenerator: React.FC<VariationsGeneratorProps> = ({ attrib
     <div className="space-y-6">
       <div className="flex items-center justify-between bg-[#FAF6F2] p-4 border border-[#E7D9D0] rounded-xl">
         <div>
-          <h3 className="font-heading font-bold text-[#1A1A1A]">Generate Variations</h3>
+          <h3 className="font-sans font-bold text-[#1A1A1A]">Generate Variations</h3>
           <p className="text-sm text-[#1A1A1A]/50">
             {variationAttributes.length > 0 
               ? `Ready to generate from ${variationAttributes.length} attribute(s).`
@@ -105,7 +105,7 @@ export const VariationsGenerator: React.FC<VariationsGeneratorProps> = ({ attrib
           type="button"
           disabled={variationAttributes.length === 0}
           onClick={generateCombinations}
-          className="flex items-center gap-2 px-4 py-2 bg-[#333333] text-white font-heading font-bold rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-700 transition-colors text-sm"
+          className="flex items-center gap-2 px-4 py-2 bg-[#333333] text-white font-sans font-bold rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-700 transition-colors text-sm"
         >
           <Play className="w-4 h-4" /> Generate
         </button>
@@ -113,7 +113,7 @@ export const VariationsGenerator: React.FC<VariationsGeneratorProps> = ({ attrib
 
       {variations.length > 0 && (
         <div className="space-y-4">
-          <div className="grid grid-cols-12 gap-4 px-4 py-2 bg-[#FAF6F2] rounded-lg text-xs font-heading font-bold text-[#1A1A1A]/70 uppercase tracking-wider">
+          <div className="grid grid-cols-12 gap-4 px-4 py-2 bg-[#FAF6F2] rounded-lg text-xs font-sans font-bold text-[#1A1A1A]/70 uppercase tracking-wider">
             <div className="col-span-3">Attributes</div>
             <div className="col-span-2">Regular Price</div>
             <div className="col-span-2">Sale Price</div>
@@ -217,7 +217,7 @@ export const VariationsGenerator: React.FC<VariationsGeneratorProps> = ({ attrib
                 <button
                   type="button"
                   onClick={() => setEditingImageFor(variation.id)}
-                  className={`p-1.5 rounded-lg border transition-colors ${variation.image?.url ? 'border-[#C48B80] bg-[#C48B80] hover:bg-[#C48B80]' : 'border-[#E7D9D0] bg-white hover:bg-[#FAF6F2]'} text-[#1A1A1A]/50`}
+                  className={`p-1.5 rounded-lg border transition-colors ${variation.image?.url ? 'border-[#C48B80] bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm hover:bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm' : 'border-[#E7D9D0] bg-white hover:bg-[#FAF6F2]'} text-[#1A1A1A]/50`}
                   title="Variation Image"
                 >
                   {variation.image?.url ? (
