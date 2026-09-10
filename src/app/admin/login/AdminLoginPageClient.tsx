@@ -178,7 +178,7 @@ export const AdminLoginPageClient: React.FC = () => {
                   onChange={e => setPassword(e.target.value)}
                   required
                   placeholder="••••••••"
-                  className="w-full pl-11 pr-11 py-3.5 text-[13px] rounded-xl border border-[#E7D9D0] bg-white text-[#1A1A1A] placeholder:text-[#A1A7AA]/70 focus:outline-none focus:border-[#A86249] focus:ring-1 focus:ring-[#A86249] transition-colors tracking-widest font-sans"
+                  className="w-full pl-11 pr-11 py-3.5 text-[13px] rounded-xl border border-[#E7D9D0] bg-white text-[#1A1A1A] placeholder:text-[#A1A7AA]/70 focus:outline-none focus:border-[#A86249] focus:ring-1 focus:ring-[#A86249] transition-colors tracking-widest font-heading"
                 />
                 <button
                   type="button"

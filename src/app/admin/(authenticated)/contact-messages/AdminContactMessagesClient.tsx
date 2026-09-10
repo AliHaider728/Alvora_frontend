@@ -55,7 +55,7 @@ export const AdminContactMessagesClient: React.FC = () => {
           <MessageSquare className="w-6 h-6" />
         </div>
         <div>
-          <h1 className="font-sans font-black text-2xl text-[#1A1A1A]">Contact Messages</h1>
+          <h1 className="font-heading font-black text-2xl text-[#1A1A1A]">Contact Messages</h1>
           <p className="text-sm font-medium text-[#1A1A1A]/50">Manage customer inquiries and support requests</p>
         </div>
       </div>

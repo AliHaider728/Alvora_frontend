@@ -10,11 +10,11 @@ export const AdminCustomersPageClient: React.FC = () => {
   const { customers } = useStore();
 
   return (
-    <div className="space-y-6 font-sans">
+    <div className="space-y-6 font-heading">
       
 
       <div>
-        <h1 className="font-sans font-black text-2xl text-[#1A1A1A]">Registered Customers</h1>
+        <h1 className="font-heading font-black text-2xl text-[#1A1A1A]">Registered Customers</h1>
         <p className="text-xs text-[#1A1A1A]/50 font-medium">Customer contact information and total order metrics.</p>
       </div>
 
@@ -37,7 +37,7 @@ export const AdminCustomersPageClient: React.FC = () => {
                     <div className="flex items-center gap-3">
                       <img src={getSafeImageSrc(cust.avatar)} alt="" className="w-9 h-9 rounded-full object-cover" />
                       <div>
-                        <span className="font-sans font-bold text-[#1A1A1A] block">{cust.name}</span>
+                        <span className="font-heading font-bold text-[#1A1A1A] block">{cust.name}</span>
                         <span className="text-[10px] text-[#1A1A1A]/40">ID: {cust.id}</span>
                       </div>
                     </div>
@@ -52,7 +52,7 @@ export const AdminCustomersPageClient: React.FC = () => {
                   </td>
                   <td className="p-4 text-[#1A1A1A]/50">{cust.joinedDate}</td>
                   <td className="p-4 font-bold text-[#C48B80]">{cust.ordersCount} order(s)</td>
-                  <td className="p-4 pr-6 text-right font-sans font-black text-[#1A1A1A]">{formatPrice(cust.totalSpent)}</td>
+                  <td className="p-4 pr-6 text-right font-heading font-black text-[#1A1A1A]">{formatPrice(cust.totalSpent)}</td>
                 </tr>
               ))}
             </tbody>

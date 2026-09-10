@@ -44,10 +44,10 @@ export const AdminBundlesPageClient = () => {
   const filteredBundles = bundles.filter(b => b.name.toLowerCase().includes(search.toLowerCase()));
 
   return (
-    <div className="space-y-6 font-sans">
+    <div className="space-y-6 font-heading">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="font-sans text-2xl font-black text-[#1A1A1A]">Bundles</h1>
+          <h1 className="font-heading text-2xl font-black text-[#1A1A1A]">Bundles</h1>
           <p className="text-xs font-medium text-[#1A1A1A]/50">Manage curated product sets and discounts.</p>
         </div>
         <button type="button" onClick={() => setEditing({})} className="flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm px-5 py-2.5 text-xs font-bold shadow-md">
@@ -69,7 +69,7 @@ export const AdminBundlesPageClient = () => {
           {filteredBundles.map(bundle => (
             <article key={bundle.id} className="rounded-3xl border border-[#E7D9D0] bg-white p-5 shadow-xs flex flex-col justify-between">
               <div>
-                <h2 className="font-sans text-lg font-black text-[#1A1A1A]">{bundle.name}</h2>
+                <h2 className="font-heading text-lg font-black text-[#1A1A1A]">{bundle.name}</h2>
                 <p className="text-xs text-[#1A1A1A]/50">/{bundle.slug}</p>
                 <div className="mt-3 text-sm font-semibold text-[#C48B80]">{bundle.discountPercent}% OFF</div>
                 <div className="mt-2 text-xs text-[#1A1A1A]/70">{bundle.products?.length || 0} product(s)</div>
@@ -146,7 +146,7 @@ const BundleModal = ({ bundle, products, onClose, onRefresh }: { bundle: any, pr
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#1A1A1A]/60 p-4 overflow-y-auto">
       <div className="w-full max-w-2xl bg-white rounded-3xl p-6 shadow-xl my-auto">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-black font-sans">{isNew ? 'Create Bundle' : 'Edit Bundle'}</h2>
+          <h2 className="text-xl font-black font-heading">{isNew ? 'Create Bundle' : 'Edit Bundle'}</h2>
           <button onClick={onClose} className="p-2 text-[#1A1A1A]/40 hover:text-[#1A1A1A]/70"><X className="w-5 h-5" /></button>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">

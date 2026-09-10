@@ -86,17 +86,17 @@ export const AdminCouponsPageClient: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 font-sans">
+    <div className="space-y-6 font-heading">
       
 
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-sans font-black text-2xl text-[#1A1A1A]">Promo Coupons & Deals</h1>
+          <h1 className="font-heading font-black text-2xl text-[#1A1A1A]">Promo Coupons & Deals</h1>
           <p className="text-xs text-[#1A1A1A]/50 font-medium">Create promotional discount codes and percentage vouchers.</p>
         </div>
         <button
           onClick={openCreateModal}
-          className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm font-sans font-bold text-xs flex items-center gap-2 shadow-md"
+          className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm font-heading font-bold text-xs flex items-center gap-2 shadow-md"
         >
           <Plus className="w-4 h-4" />
           <span>Create New Coupon</span>
@@ -116,7 +116,7 @@ export const AdminCouponsPageClient: React.FC = () => {
             </div>
 
             <div className="space-y-1 text-xs">
-              <span className="font-sans font-black text-xl text-[#C48B80] block">
+              <span className="font-heading font-black text-xl text-[#C48B80] block">
                 {coup.discountType === 'percentage' ? `${coup.amount}% OFF` : `${formatPrice(coup.amount)} OFF`}
               </span>
               <p className="text-[#1A1A1A]/50 font-medium">Min spend: {formatPrice(coup.minSpend)}</p>
@@ -154,7 +154,7 @@ export const AdminCouponsPageClient: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1A1A1A]/60 backdrop-blur-xs">
           <div className="bg-white rounded-3xl max-w-md w-full p-6 relative shadow-2xl border border-[#E7D9D0] space-y-4">
             <div className="flex items-center justify-between border-b border-[#E7D9D0] pb-3">
-              <h3 className="font-sans font-black text-lg text-[#1A1A1A]">{editId ? 'Edit Promo Code' : 'Create Promo Code'}</h3>
+              <h3 className="font-heading font-black text-lg text-[#1A1A1A]">{editId ? 'Edit Promo Code' : 'Create Promo Code'}</h3>
               <button onClick={() => setIsModalOpen(false)} className="p-1 text-[#1A1A1A]/40">
                 <X className="w-5 h-5" />
               </button>

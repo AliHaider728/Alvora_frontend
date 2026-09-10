@@ -84,14 +84,13 @@ export const AdminReviewsPageClient: React.FC = () => {
   const fetchReviews = async () => {
     setLoading(true);
     try {
-      const res = await api.getAdminReviews({
-        page,
-        limit,
-        status: statusFilter,
-        source: sourceFilter,
-        rating: ratingFilter ? Number(ratingFilter) : undefined,
-        search: searchQuery
-      });
+      const params: any = { page, limit };
+      if (statusFilter) params.status = statusFilter;
+      if (sourceFilter) params.source = sourceFilter;
+      if (ratingFilter) params.rating = Number(ratingFilter);
+      if (searchQuery) params.search = searchQuery;
+
+      const res = await api.getAdminReviews(params);
       if (res && res.reviews) {
         setReviews(res.reviews);
         setTotal(res.total || 0);
@@ -158,12 +157,12 @@ export const AdminReviewsPageClient: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8 font-sans pb-10">
+    <div className="max-w-7xl mx-auto space-y-8 font-heading pb-10">
       
       {/* Clean Modern Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
-          <h1 className="font-sans text-2xl sm:text-3xl font-black text-[#1A1A1A] tracking-tight">Review Moderation</h1>
+          <h1 className="font-heading text-2xl sm:text-3xl font-black text-[#1A1A1A] tracking-tight">Review Moderation</h1>
           <p className="text-sm text-[#1A1A1A]/60 mt-2 max-w-2xl">Manage customer feedback, approve testimonials, and add manual reviews.</p>
         </div>
         <button 
@@ -182,7 +181,7 @@ export const AdminReviewsPageClient: React.FC = () => {
           <div className="flex items-start justify-between relative z-10">
             <div>
               <span className="text-[11px] font-bold text-[#1A1A1A]/50 uppercase tracking-wider block">Total Reviews</span>
-              <span className="font-sans font-black text-3xl text-[#1A1A1A] mt-2 block tracking-tight">{total}</span>
+              <span className="font-heading font-black text-3xl text-[#1A1A1A] mt-2 block tracking-tight">{total}</span>
             </div>
             <div className="p-3 rounded-xl bg-[#F5EDE4] text-[#9C4122] shadow-inner">
               <MessageSquare className="w-5 h-5" />
@@ -196,7 +195,7 @@ export const AdminReviewsPageClient: React.FC = () => {
           <div className="flex items-start justify-between relative z-10">
             <div>
               <span className="text-[11px] font-bold text-[#1A1A1A]/50 uppercase tracking-wider block">Pending Approval</span>
-              <span className="font-sans font-black text-3xl text-amber-600 mt-2 block tracking-tight">{counts.pending || 0}</span>
+              <span className="font-heading font-black text-3xl text-amber-600 mt-2 block tracking-tight">{counts.pending || 0}</span>
             </div>
             <div className="p-3 rounded-xl bg-amber-100 text-amber-700 shadow-inner">
               <Clock className="w-5 h-5" />
@@ -210,7 +209,7 @@ export const AdminReviewsPageClient: React.FC = () => {
           <div className="flex items-start justify-between relative z-10">
             <div>
               <span className="text-[11px] font-bold text-[#1A1A1A]/50 uppercase tracking-wider block">Approved</span>
-              <span className="font-sans font-black text-3xl text-emerald-600 mt-2 block tracking-tight">{counts.approved || 0}</span>
+              <span className="font-heading font-black text-3xl text-emerald-600 mt-2 block tracking-tight">{counts.approved || 0}</span>
             </div>
             <div className="p-3 rounded-xl bg-emerald-100 text-emerald-700 shadow-inner">
               <CheckCircle className="w-5 h-5" />
@@ -224,7 +223,7 @@ export const AdminReviewsPageClient: React.FC = () => {
           <div className="flex items-start justify-between relative z-10">
             <div>
               <span className="text-[11px] font-bold text-[#1A1A1A]/50 uppercase tracking-wider block">Rejected</span>
-              <span className="font-sans font-black text-3xl text-rose-600 mt-2 block tracking-tight">{counts.rejected || 0}</span>
+              <span className="font-heading font-black text-3xl text-rose-600 mt-2 block tracking-tight">{counts.rejected || 0}</span>
             </div>
             <div className="p-3 rounded-xl bg-rose-100 text-rose-700 shadow-inner">
               <XCircle className="w-5 h-5" />
@@ -412,13 +411,13 @@ export const AdminReviewsPageClient: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1A1A1A]/60 backdrop-blur-sm">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden">
             <div className="px-6 py-4 border-b border-[#E7D9D0] flex items-center justify-between">
-              <h2 className="font-sans font-black text-lg text-[#1A1A1A]">Add Customer Review</h2>
+              <h2 className="font-heading font-black text-lg text-[#1A1A1A]">Add Customer Review</h2>
               <button onClick={() => setIsAddModalOpen(false)} className="text-[#1A1A1A]/40 hover:text-[#1A1A1A]/70">
                 <XCircle className="h-6 w-6" />
               </button>
             </div>
             
-            <div className="p-6 overflow-y-auto font-sans">
+            <div className="p-6 overflow-y-auto font-heading">
               <form id="addReviewForm" onSubmit={handleAddReview} className="space-y-4">
                 <div>
                   <label className="block text-xs font-bold text-[#1A1A1A]/80 mb-1">Product ID or Slug <span className="text-rose-500">*</span></label>

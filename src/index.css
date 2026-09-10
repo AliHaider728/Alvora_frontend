@@ -1,4 +1,4 @@
-﻿@import "tailwindcss";
+@import "tailwindcss";
 @import "../node_modules/tw-animate-css/dist/tw-animate.css";
 @import "shadcn/tailwind.css";
 
@@ -46,8 +46,8 @@
   --shadow-card: 0 2px 12px 0 rgb(196 139 128 / 0.10);
 
   /* Typography */
-  --font-display: 'Playfair Display', Georgia, serif;
-  --font-body:    'Lato', system-ui, sans-serif;
+  --font-display: var(--font-playfair, 'Playfair Display'), Georgia, serif;
+  --font-body: var(--font-lato, 'Lato'), system-ui, sans-serif;
 
   /* shadcn/ui token bridge â†• Alvora palette */
   --background:           #FAF6F2;
@@ -541,9 +541,4 @@ input[type="checkbox"]:checked::before {
 input[type="checkbox"]:focus-visible {
   outline: 2px solid #9C4122;
   outline-offset: max(2px, 0.15em);
-}
-
-/* 🛠️ Admin Panel Font Overrides (Force Professional Sans-Serif) 🛠️ */
-.admin-shell h1, .admin-shell h2, .admin-shell h3, .admin-shell h4, .admin-shell h5, .admin-shell h6 {
-  font-family: var(--font-body) !important;
 }

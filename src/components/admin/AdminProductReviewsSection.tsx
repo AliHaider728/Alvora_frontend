@@ -143,7 +143,7 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
       <div className="rounded-2xl border border-[#E7D9D0] bg-white shadow-sm overflow-hidden mb-6">
         <div className="flex items-center gap-2 border-b border-[#E7D9D0] bg-[#FAF6F2]/50 px-5 py-4">
           <MessageSquare className="h-5 w-5 text-[#C48B80]" />
-          <h2 className="font-sans text-sm font-black text-[#1A1A1A]">Product Reviews</h2>
+          <h2 className="font-heading text-sm font-black text-[#1A1A1A]">Product Reviews</h2>
         </div>
         <div className="p-8 text-center text-[#1A1A1A]/50 text-sm font-semibold">
           <p>Please save the product first before adding reviews.</p>
@@ -157,7 +157,7 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
       <div className="flex items-center justify-between border-b border-[#E7D9D0] bg-[#FAF6F2]/50 px-5 py-4">
         <div className="flex items-center gap-2">
           <MessageSquare className="h-5 w-5 text-[#C48B80]" />
-          <h2 className="font-sans text-sm font-black text-[#1A1A1A]">Product Reviews</h2>
+          <h2 className="font-heading text-sm font-black text-[#1A1A1A]">Product Reviews</h2>
           <span className="bg-slate-200 text-[#1A1A1A]/70 text-xs font-bold px-2 py-0.5 rounded-full">{reviews.length}</span>
         </div>
         {!showAddForm && (

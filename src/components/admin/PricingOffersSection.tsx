@@ -143,7 +143,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
       <div className="space-y-4">
         <div className="flex items-center gap-2 border-b border-[#E7D9D0] pb-3">
           <Tag className="h-4 w-4 text-[#C48B80]" />
-          <h3 className="font-sans text-sm font-black text-[#1A1A1A] uppercase tracking-wider">
+          <h3 className="font-heading text-sm font-black text-[#1A1A1A] uppercase tracking-wider">
             Quantity Breaks
           </h3>
         </div>
@@ -272,7 +272,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
       <div className="space-y-4">
         <div className="flex items-center gap-2 border-b border-[#E7D9D0] pb-3">
           <Gift className="h-4 w-4 text-emerald-500" />
-          <h3 className="font-sans text-sm font-black text-[#1A1A1A] uppercase tracking-wider">
+          <h3 className="font-heading text-sm font-black text-[#1A1A1A] uppercase tracking-wider">
             Buy X Get Y Free (BOGO)
           </h3>
         </div>
@@ -369,7 +369,7 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
       <div className="space-y-4">
         <div className="flex items-center gap-2 border-b border-[#E7D9D0] pb-3">
           <BadgePercent className="h-4 w-4 text-[#C48B80]" />
-          <h3 className="font-sans text-sm font-black text-[#1A1A1A] uppercase tracking-wider">
+          <h3 className="font-heading text-sm font-black text-[#1A1A1A] uppercase tracking-wider">
             Flat Discount
           </h3>
         </div>

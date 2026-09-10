@@ -44,12 +44,12 @@ export const AdminDashboardPageClient: React.FC = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8 font-sans pb-10">
+    <div className="max-w-7xl mx-auto space-y-8 font-heading pb-10">
       
       {/* Clean Modern Header (Replacing the ugly dark hero box) */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
-          <h1 className="font-sans text-2xl sm:text-3xl font-black text-[#1A1A1A] tracking-tight">Dashboard Overview</h1>
+          <h1 className="font-heading text-2xl sm:text-3xl font-black text-[#1A1A1A] tracking-tight">Dashboard Overview</h1>
           <p className="text-sm text-[#1A1A1A]/60 mt-2 max-w-2xl">Real-time summary of sales revenue, inventory health, and recent customer orders.</p>
         </div>
         <Link 
@@ -84,7 +84,7 @@ export const AdminDashboardPageClient: React.FC = () => {
               <span className="text-[11px] font-bold text-[#1A1A1A]/50 uppercase tracking-wider block">
                 Total Revenue
               </span>
-              <span className="font-sans font-black text-3xl text-[#1A1A1A] mt-2 block tracking-tight">
+              <span className="font-heading font-black text-3xl text-[#1A1A1A] mt-2 block tracking-tight">
                 {formatPrice(totalRevenue)}
               </span>
             </div>
@@ -105,7 +105,7 @@ export const AdminDashboardPageClient: React.FC = () => {
               <span className="text-[11px] font-bold text-[#1A1A1A]/50 uppercase tracking-wider block">
                 Total Orders
               </span>
-              <span className="font-sans font-black text-3xl text-[#1A1A1A] mt-2 block tracking-tight">
+              <span className="font-heading font-black text-3xl text-[#1A1A1A] mt-2 block tracking-tight">
                 {orders.length}
               </span>
             </div>
@@ -127,7 +127,7 @@ export const AdminDashboardPageClient: React.FC = () => {
               <span className="text-[11px] font-bold text-[#1A1A1A]/50 uppercase tracking-wider block">
                 Active Products
               </span>
-              <span className="font-sans font-black text-3xl text-[#1A1A1A] mt-2 block tracking-tight">
+              <span className="font-heading font-black text-3xl text-[#1A1A1A] mt-2 block tracking-tight">
                 {products.length}
               </span>
             </div>
@@ -148,7 +148,7 @@ export const AdminDashboardPageClient: React.FC = () => {
               <span className="text-[11px] font-bold text-[#1A1A1A]/50 uppercase tracking-wider block">
                 Registered Customers
               </span>
-              <span className="font-sans font-black text-3xl text-[#1A1A1A] mt-2 block tracking-tight">
+              <span className="font-heading font-black text-3xl text-[#1A1A1A] mt-2 block tracking-tight">
                 {customers.length}
               </span>
             </div>
@@ -169,7 +169,7 @@ export const AdminDashboardPageClient: React.FC = () => {
         <div className="bg-white p-6 rounded-2xl border border-[#E7D9D0] shadow-sm flex flex-col xl:col-span-2 relative">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h3 className="font-sans font-black text-lg text-[#1A1A1A]">Weekly Revenue Breakdown</h3>
+              <h3 className="font-heading font-black text-lg text-[#1A1A1A]">Weekly Revenue Breakdown</h3>
               <p className="text-xs text-[#1A1A1A]/50 mt-1">Gross sales across the last 7 days</p>
             </div>
             <span className="px-3 py-1 bg-[#FAF6F2] rounded-md text-xs font-semibold text-[#1A1A1A]/60 border border-[#E7D9D0]">Last 7 Days</span>
@@ -211,7 +211,7 @@ export const AdminDashboardPageClient: React.FC = () => {
         {/* Quick Actions / Summary Sidebar */}
         <div className="bg-[#FAF6F2] p-6 rounded-2xl border border-[#E7D9D0] shadow-sm flex flex-col justify-between">
           <div>
-            <h3 className="font-sans font-black text-lg text-[#1A1A1A]">Store Status</h3>
+            <h3 className="font-heading font-black text-lg text-[#1A1A1A]">Store Status</h3>
             <p className="text-xs text-[#1A1A1A]/50 mt-1">Live metrics summary</p>
             
             <div className="mt-8 space-y-6">
@@ -240,7 +240,7 @@ export const AdminDashboardPageClient: React.FC = () => {
       <div className="bg-white rounded-2xl border border-[#E7D9D0] shadow-sm overflow-hidden">
         <div className="p-5 sm:p-6 border-b border-[#E7D9D0] flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gray-50/50">
           <div>
-            <h3 className="font-sans font-black text-lg text-[#1A1A1A]">Recent Customer Orders</h3>
+            <h3 className="font-heading font-black text-lg text-[#1A1A1A]">Recent Customer Orders</h3>
             <p className="text-xs text-[#1A1A1A]/50 mt-1">Latest transactions awaiting fulfillment</p>
           </div>
           <Link href="/admin/orders" className="text-xs font-bold text-[#9C4122] bg-[#F5EDE4] px-4 py-2 rounded-lg hover:bg-[#E7D9D0] transition-colors">
@@ -263,7 +263,7 @@ export const AdminDashboardPageClient: React.FC = () => {
             <tbody className="divide-y divide-[#E7D9D0]/50">
               {orders.slice(0, 5).map(order => (
                 <tr key={order._id || order.orderId} className="hover:bg-[#FAF6F2]/50 transition-colors group">
-                  <td className="p-4 pl-6 font-sans font-bold text-[#1A1A1A]">{order.orderId}</td>
+                  <td className="p-4 pl-6 font-heading font-bold text-[#1A1A1A]">{order.orderId}</td>
                   <td className="p-4 font-medium">{order.customerName || order.customer?.name}</td>
                   <td className="p-4 text-[#1A1A1A]/50 text-xs">{new Date(order.createdAt || order.date).toLocaleDateString()}</td>
                   <td className="p-4 font-bold text-[#1A1A1A]">{formatPrice(order.total)}</td>

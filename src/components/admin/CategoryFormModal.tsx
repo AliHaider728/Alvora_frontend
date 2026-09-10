@@ -127,7 +127,7 @@ export const CategoryFormModal: React.FC<Props> = ({ category, categories, onClo
   return <div className="fixed inset-0 z-[105] flex items-center justify-center overflow-y-auto bg-slate-950/60 p-3 sm:p-5" onMouseDown={event => { if (event.target === event.currentTarget) void safeClose(); }}>
     <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="category-form-title" className={`my-auto max-h-[calc(100vh-1.5rem)] w-full overflow-y-auto rounded-3xl bg-white shadow-2xl ${compact ? 'max-w-2xl' : 'max-w-4xl'}`}>
       <div className="sticky top-0 z-10 flex items-center justify-between border-b border-[#E7D9D0] bg-white px-5 py-4">
-        <div><h2 id="category-form-title" className="font-sans text-lg font-black text-[#1A1A1A]">{category ? 'Edit Category' : 'Add New Category'}</h2><p className="text-xs text-[#1A1A1A]/50">Saved to the live category database.</p></div>
+        <div><h2 id="category-form-title" className="font-heading text-lg font-black text-[#1A1A1A]">{category ? 'Edit Category' : 'Add New Category'}</h2><p className="text-xs text-[#1A1A1A]/50">Saved to the live category database.</p></div>
         <button type="button" onClick={() => void safeClose()} disabled={saving || uploading} aria-label="Close category form" className="rounded-xl p-2 text-[#1A1A1A]/40 hover:bg-[#FAF6F2]"><X className="h-5 w-5" /></button>
       </div>
       <form onSubmit={submit} className="grid gap-5 p-5 md:grid-cols-2">

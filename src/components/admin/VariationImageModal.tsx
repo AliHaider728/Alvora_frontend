@@ -61,7 +61,7 @@ export const VariationImageModal: React.FC<VariationImageModalProps> = ({
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#1A1A1A]/50 backdrop-blur-sm">
       <div className="w-full max-w-2xl bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
         <div className="flex items-center justify-between p-4 border-b border-[#E7D9D0] bg-[#FAF6F2]">
-          <h2 className="font-sans font-black text-lg text-[#1A1A1A]">Variation Image</h2>
+          <h2 className="font-heading font-black text-lg text-[#1A1A1A]">Variation Image</h2>
           <button type="button" onClick={onClose} className="p-2 text-[#1A1A1A]/40 hover:bg-slate-200 rounded-full transition-colors">
             <X className="w-5 h-5" />
           </button>

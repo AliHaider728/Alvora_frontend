@@ -157,7 +157,7 @@ const FormCard: React.FC<{
         <Icon className="h-4 w-4" />
       </div>
       <div>
-        <h2 className="font-sans text-base font-black text-[#1A1A1A]">{title}</h2>
+        <h2 className="font-heading text-base font-black text-[#1A1A1A]">{title}</h2>
         {description && <p className="mt-0.5 text-xs font-medium text-[#1A1A1A]/50">{description}</p>}
       </div>
     </div>
@@ -973,7 +973,7 @@ export const AdminProductFormPageClient: React.FC = () => {
       <div className="flex min-h-[50vh] items-center justify-center rounded-3xl border border-[#E7D9D0] bg-white p-6 text-center">
         <div>
           <Box className="mx-auto h-9 w-9 text-slate-300" />
-          <h1 className="mt-3 font-sans text-lg font-black text-[#1A1A1A]">Product not found</h1>
+          <h1 className="mt-3 font-heading text-lg font-black text-[#1A1A1A]">Product not found</h1>
           <button onClick={() => router.push('/admin/products')} className="mt-5 rounded-xl bg-[#1A1A1A] px-4 py-2.5 text-xs font-bold text-white">Back to Products</button>
         </div>
       </div>
@@ -1000,13 +1000,13 @@ export const AdminProductFormPageClient: React.FC = () => {
   const defaultVariationSelectValue = selectedDefaultVariation ? String(selectedDefaultVariation.id) : '';
 
   return (<>
-    <div className="mx-auto max-w-[1440px] space-y-6 pb-8 font-sans">
+    <div className="mx-auto max-w-[1440px] space-y-6 pb-8 font-heading">
       
       <div>
         <button type="button" onClick={cancelEditing} className="mb-2 inline-flex items-center gap-1 text-xs font-bold text-[#1A1A1A]/50 hover:text-[#A86249]">
           <ChevronLeft className="h-4 w-4" /> Back to Products
         </button>
-        <h1 className="font-sans text-2xl font-black text-[#1A1A1A] sm:text-3xl">{isEditing ? 'Edit Product' : 'Add New Product'}</h1>
+        <h1 className="font-heading text-2xl font-black text-[#1A1A1A] sm:text-3xl">{isEditing ? 'Edit Product' : 'Add New Product'}</h1>
         <p className="mt-1 text-xs font-medium text-[#1A1A1A]/50">{isEditing ? 'Update this product and publish changes to the Alvora Skincare storefront.' : 'Create and publish a new product on the Alvora Skincare storefront.'}</p>
       </div>
 

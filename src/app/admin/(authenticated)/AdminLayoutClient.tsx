@@ -159,7 +159,7 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
             >
               <Menu className="w-5 h-5" />
             </button>
-            <span className="font-sans font-extrabold text-sm text-[#1A1A1A]">
+            <span className="font-heading font-extrabold text-sm text-[#1A1A1A]">
               {navItems.find(i => i.path === pathname)?.label || 'Admin Management'}
             </span>
           </div>
@@ -175,7 +175,7 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
                 {initials}
               </div>
               <div className="hidden sm:block">
-                <span className="font-sans font-bold text-xs text-[#1A1A1A] block leading-tight">
+                <span className="font-heading font-bold text-xs text-[#1A1A1A] block leading-tight">
                   {displayName}
                 </span>
                 <span className="text-[10px] text-[#1A1A1A]/50 font-medium">{displayEmail}</span>

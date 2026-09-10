@@ -147,12 +147,12 @@ export const AdminOrdersPageClient: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 font-sans">
+    <div className="space-y-6 font-heading">
       
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-sans font-black text-2xl text-[#1A1A1A]">Orders Management</h1>
+          <h1 className="font-heading font-black text-2xl text-[#1A1A1A]">Orders Management</h1>
           <p className="text-xs text-[#1A1A1A]/50 font-medium">Fulfill customer orders, update delivery statuses, and issue tracking numbers.</p>
         </div>
       </div>
@@ -259,7 +259,7 @@ export const AdminOrdersPageClient: React.FC = () => {
                       className="rounded border-[#E7D9D0] text-[#C48B80] focus:ring-[#C48B80] cursor-pointer"
                     />
                   </td>
-                  <td className="p-4 font-sans font-bold text-[#1A1A1A]">{order.id}</td>
+                  <td className="p-4 font-heading font-bold text-[#1A1A1A]">{order.id}</td>
                   <td className="p-4">
                     <span className="font-bold text-[#1A1A1A] block">{order.customerName}</span>
                     <span className="text-[10px] text-[#1A1A1A]/40">{order.email}</span>
@@ -353,7 +353,7 @@ export const AdminOrdersPageClient: React.FC = () => {
             <div className="flex items-center justify-between border-b border-[#E7D9D0] pb-3">
               <div>
                 <span className="text-[10px] font-bold uppercase text-[#1A1A1A]/40">Order Receipt</span>
-                <h3 className="font-sans font-black text-lg text-[#1A1A1A]">{selectedOrder.id}</h3>
+                <h3 className="font-heading font-black text-lg text-[#1A1A1A]">{selectedOrder.id}</h3>
               </div>
               <button onClick={() => setSelectedOrder(null)} className="p-1 text-[#1A1A1A]/40">
                 <X className="w-5 h-5" />
@@ -414,7 +414,7 @@ export const AdminOrdersPageClient: React.FC = () => {
                 ))}
               </div>
 
-              <div className="pt-2 border-t border-[#E7D9D0] flex justify-between font-sans font-black text-[#1A1A1A] text-sm">
+              <div className="pt-2 border-t border-[#E7D9D0] flex justify-between font-heading font-black text-[#1A1A1A] text-sm">
                 <span>Total Amount (COD):</span>
                 <span className="text-[#A86249]">{formatPrice(selectedOrder.total, settings.currency)}</span>
               </div>
