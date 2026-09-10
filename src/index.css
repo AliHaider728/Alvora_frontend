@@ -46,8 +46,10 @@
   --shadow-card: 0 2px 12px 0 rgb(196 139 128 / 0.10);
 
   /* Typography */
-  --font-display: var(--font-playfair, 'Playfair Display'), Georgia, serif;
-  --font-body: 'Lato', system-ui, sans-serif;
+  --font-primary: var(--font-bodoni, 'Bodoni Moda'), Georgia, serif;
+  --font-display: var(--font-primary);
+
+  --font-body: var(--font-primary);
 
   /* shadcn/ui token bridge â†• Alvora palette */
   --background:           #FAF6F2;
@@ -83,9 +85,9 @@
 
 /* Tailwind v4 theme extension */
 @theme inline {
-  --font-display: var(--font-display);
-  --font-sans:    var(--font-body);
-  --font-heading: var(--font-display);
+  --font-display: var(--font-primary);
+  --font-sans: var(--font-primary);
+  --font-heading: var(--font-primary);
 
   --color-alvora-ivory:      #FAF6F2;
   --color-alvora-cream:      #F5EDE4;
