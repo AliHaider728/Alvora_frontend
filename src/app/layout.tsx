@@ -6,7 +6,7 @@ import { AuthModalWrapper } from './AuthModalWrapper';
 import { StorefrontLayoutWrapper } from '../components/common/StorefrontLayoutWrapper';
 import MetaPixel from '../components/analytics/MetaPixel';
 import TikTokPixel from '../components/analytics/TikTokPixel';
-import { Playfair_Display, Lato } from 'next/font/google';
+import { Playfair_Display } from 'next/font/google';
 import type { Metadata } from 'next';
 
 const playfairDisplay = Playfair_Display({
@@ -18,13 +18,6 @@ const playfairDisplay = Playfair_Display({
   preload: true,
 });
 
-const lato = Lato({
-  subsets: ['latin'],
-  weight: ['300', '400', '700', '900'],
-  variable: '--font-lato',
-  display: 'swap',
-  preload: true,
-});
 
 export const metadata: Metadata = {
   title: {
@@ -56,8 +49,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_ALVORA_GA_MEASUREMENT_ID;
 
   return (
-    <html lang="en" className={`${playfairDisplay.variable} ${lato.variable}`} data-scroll-behavior="smooth">
+    <html lang="en" className={playfairDisplay.variable} data-scroll-behavior="smooth">
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet" />
         {/* Meta Pixel stub • loads fbq global before any pixel fires */}
         <Script
           id="meta-pixel-stub"
