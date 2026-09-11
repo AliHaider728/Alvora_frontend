@@ -156,7 +156,7 @@ function ResetPasswordForm() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="group relative w-full overflow-hidden rounded-2xl bg-slate-900 py-3.5 text-sm font-bold text-white shadow-xl shadow-slate-900/20 transition-all hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-slate-900/30 disabled:opacity-70"
+              className="group relative w-full overflow-hidden rounded-xl bg-slate-900 py-3.5 text-sm font-bold text-white shadow-xl shadow-slate-900/20 transition-all hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-slate-900/30 disabled:opacity-70"
             >
               <div className="relative z-10 flex items-center justify-center gap-2">
                 <span>{isSubmitting ? 'Saving...' : 'Save Password'}</span>

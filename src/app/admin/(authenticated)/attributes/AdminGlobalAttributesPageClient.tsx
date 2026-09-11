@@ -280,7 +280,7 @@ export function AdminGlobalAttributesPageClient() {
         {/* Sidebar: List of Attributes */}
         <div className="lg:col-span-1 space-y-3">
           {attributes.length === 0 ? (
-            <div className="p-8 bg-white border border-dashed border-[#E7D9D0] rounded-xl text-center text-[#1A1A1A]/50">
+            <div className="p-8 bg-white border border-dashed border-[#E7D9D0] rounded-2xl text-center text-[#1A1A1A]/50">
               No global attributes yet.
             </div>
           ) : (
@@ -384,7 +384,7 @@ export function AdminGlobalAttributesPageClient() {
                   </button>
                   <button
                     type="submit"
-                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm rounded-lg hover:bg-gradient-to-r transition-colors font-medium"
+                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm rounded-xl hover:bg-gradient-to-r transition-colors font-medium"
                   >
                     <Save className="w-4 h-4" />
                     Save Settings
@@ -490,7 +490,7 @@ export function AdminGlobalAttributesPageClient() {
                         type="color"
                         value={editingTerm.colorValue || '#000000'}
                         onChange={e => setEditingTerm({ ...editingTerm, colorValue: e.target.value })}
-                        className="h-10 w-16 p-1 bg-white border border-[#E7D9D0] rounded-lg cursor-pointer"
+                        className="h-10 w-16 p-1 bg-white border border-[#E7D9D0] rounded-2xl cursor-pointer"
                       />
                       <input
                         type="text"
@@ -542,7 +542,7 @@ export function AdminGlobalAttributesPageClient() {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm rounded-lg hover:bg-gradient-to-r transition-colors font-medium"
+                  className="px-4 py-2 bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm rounded-xl hover:bg-gradient-to-r transition-colors font-medium"
                 >
                   Save Term
                 </button>

@@ -6,14 +6,14 @@ import { AuthModalWrapper } from './AuthModalWrapper';
 import { StorefrontLayoutWrapper } from '../components/common/StorefrontLayoutWrapper';
 import MetaPixel from '../components/analytics/MetaPixel';
 import TikTokPixel from '../components/analytics/TikTokPixel';
-import { Bodoni_Moda } from 'next/font/google';
+import { Poppins } from 'next/font/google';
 import type { Metadata } from 'next';
 
-const bodoniModa = Bodoni_Moda({
+const poppins = Poppins({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700', '800', '900'],
   style: ['normal', 'italic'],
-  variable: '--font-bodoni',
+  variable: '--font-poppins',
   display: 'swap',
   preload: true,
 });
@@ -49,7 +49,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_ALVORA_GA_MEASUREMENT_ID;
 
   return (
-    <html lang="en" className={bodoniModa.variable} data-scroll-behavior="smooth">
+    <html lang="en" className={poppins.variable} data-scroll-behavior="smooth">
       <head>
         {/* Meta Pixel stub • loads fbq global before any pixel fires */}
         <Script

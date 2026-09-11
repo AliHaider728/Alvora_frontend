@@ -222,7 +222,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultMo
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-3.5 rounded-2xl bg-linear-to-r from-rose-500 to-orange-400 hover:from-rose-600 hover:to-orange-500 text-white font-heading font-black text-sm shadow-md shadow-rose-200 disabled:opacity-50 flex items-center justify-center transition-all"
+                className="w-full py-3.5 rounded-xl bg-linear-to-r from-rose-500 to-orange-400 hover:from-rose-600 hover:to-orange-500 text-white font-heading font-black text-sm shadow-md shadow-rose-200 disabled:opacity-50 flex items-center justify-center transition-all"
               >
                 {isSubmitting ? (
                   <Loader2 className="w-5 h-5 animate-spin" />

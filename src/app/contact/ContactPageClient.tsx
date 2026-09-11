@@ -257,7 +257,7 @@ export const ContactPageClient: React.FC = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-3.5 rounded-2xl bg-[#C48B80] text-white font-heading font-extrabold text-xs hover:bg-[#C48B80] shadow-md flex items-center justify-center gap-2 disabled:opacity-50"
+                    className="w-full py-3.5 rounded-xl bg-[#C48B80] text-white font-heading font-extrabold text-xs hover:bg-[#C48B80] shadow-md flex items-center justify-center gap-2 disabled:opacity-50"
                   >
                     <span>{isSubmitting ? 'Sending...' : 'Send Message'}</span>
                     <Send className="w-4 h-4" />

@@ -147,10 +147,10 @@ export const VariationImageModal: React.FC<VariationImageModalProps> = ({
         </div>
 
         <div className="p-4 border-t border-[#E7D9D0] bg-[#FAF6F2] flex justify-end gap-3">
-          <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-bold text-[#1A1A1A]/70 hover:bg-slate-200 rounded-lg transition-colors">
+          <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-bold text-[#1A1A1A]/70 hover:bg-slate-200 rounded-xl transition-colors">
             Cancel
           </button>
-          <button type="button" onClick={handleSave} className="px-5 py-2 text-sm font-bold text-white bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] border-transparent shadow-sm hover:bg-gradient-to-r rounded-lg shadow transition-colors">
+          <button type="button" onClick={handleSave} className="px-5 py-2 text-sm font-bold text-white bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] border-transparent shadow-sm hover:bg-gradient-to-r rounded-xl shadow transition-colors">
             Confirm Image
           </button>
         </div>

@@ -241,17 +241,17 @@ export const AdminReviewsPageClient: React.FC = () => {
             placeholder="Search reviews by name, content, or product..."
             value={searchQuery}
             onChange={(e) => { setSearchQuery(e.target.value); setPage(1); }}
-            className="w-full max-w-md pl-10 pr-4 py-2.5 bg-white border border-[#E7D9D0] shadow-sm rounded-xl text-sm font-medium focus:ring-2 focus:ring-[#9C4122]/20 focus:border-[#9C4122] outline-none transition-all"
+            className="w-full max-w-md pl-10 pr-4 py-2.5 bg-white border border-[#E7D9D0] shadow-sm rounded-2xl text-sm font-medium focus:ring-2 focus:ring-[#9C4122]/20 focus:border-[#9C4122] outline-none transition-all"
           />
         </div>
         <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
-          <select value={statusFilter} onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }} className="px-4 py-2.5 bg-white border border-[#E7D9D0] shadow-sm rounded-xl text-sm font-semibold text-[#1A1A1A]/80 outline-none focus:border-[#9C4122] transition-colors cursor-pointer">
+          <select value={statusFilter} onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }} className="px-4 py-2.5 bg-white border border-[#E7D9D0] shadow-sm rounded-2xl text-sm font-semibold text-[#1A1A1A]/80 outline-none focus:border-[#9C4122] transition-colors cursor-pointer">
             <option value="">All Statuses</option>
             <option value="pending">Pending</option>
             <option value="approved">Approved</option>
             <option value="rejected">Rejected</option>
           </select>
-          <select value={ratingFilter} onChange={(e) => { setRatingFilter(e.target.value); setPage(1); }} className="px-4 py-2.5 bg-white border border-[#E7D9D0] shadow-sm rounded-xl text-sm font-semibold text-[#1A1A1A]/80 outline-none focus:border-[#9C4122] transition-colors cursor-pointer">
+          <select value={ratingFilter} onChange={(e) => { setRatingFilter(e.target.value); setPage(1); }} className="px-4 py-2.5 bg-white border border-[#E7D9D0] shadow-sm rounded-2xl text-sm font-semibold text-[#1A1A1A]/80 outline-none focus:border-[#9C4122] transition-colors cursor-pointer">
             <option value="">All Ratings</option>
             <option value="5">5 Stars</option>
             <option value="4">4 Stars</option>
@@ -259,7 +259,7 @@ export const AdminReviewsPageClient: React.FC = () => {
             <option value="2">2 Stars</option>
             <option value="1">1 Star</option>
           </select>
-          <select value={sourceFilter} onChange={(e) => { setSourceFilter(e.target.value); setPage(1); }} className="px-4 py-2.5 bg-white border border-[#E7D9D0] shadow-sm rounded-xl text-sm font-semibold text-[#1A1A1A]/80 outline-none focus:border-[#9C4122] transition-colors cursor-pointer">
+          <select value={sourceFilter} onChange={(e) => { setSourceFilter(e.target.value); setPage(1); }} className="px-4 py-2.5 bg-white border border-[#E7D9D0] shadow-sm rounded-2xl text-sm font-semibold text-[#1A1A1A]/80 outline-none focus:border-[#9C4122] transition-colors cursor-pointer">
             <option value="">All Sources</option>
             <option value="organic">Organic</option>
             <option value="admin">Admin Added</option>
@@ -388,14 +388,14 @@ export const AdminReviewsPageClient: React.FC = () => {
                   <button
                     disabled={page === 1}
                     onClick={() => setPage(p => p - 1)}
-                    className="px-3 py-1.5 text-sm font-bold text-[#1A1A1A]/70 bg-white border border-[#E7D9D0] rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#FAF6F2] transition-colors"
+                    className="px-3 py-1.5 text-sm font-bold text-[#1A1A1A]/70 bg-white border border-[#E7D9D0] rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#FAF6F2] transition-colors"
                   >
                     Previous
                   </button>
                   <button
                     disabled={page * limit >= total}
                     onClick={() => setPage(p => p + 1)}
-                    className="px-3 py-1.5 text-sm font-bold text-[#1A1A1A]/70 bg-white border border-[#E7D9D0] rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#FAF6F2] transition-colors"
+                    className="px-3 py-1.5 text-sm font-bold text-[#1A1A1A]/70 bg-white border border-[#E7D9D0] rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#FAF6F2] transition-colors"
                   >
                     Next
                   </button>

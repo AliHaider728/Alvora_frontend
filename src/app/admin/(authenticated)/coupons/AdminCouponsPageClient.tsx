@@ -96,7 +96,7 @@ export const AdminCouponsPageClient: React.FC = () => {
         </div>
         <button
           onClick={openCreateModal}
-          className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm font-heading font-bold text-xs flex items-center gap-2 shadow-md"
+          className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm font-heading font-bold text-xs flex items-center gap-2 shadow-md"
         >
           <Plus className="w-4 h-4" />
           <span>Create New Coupon</span>

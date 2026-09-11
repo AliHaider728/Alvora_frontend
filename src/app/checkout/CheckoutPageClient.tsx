@@ -562,7 +562,7 @@ export const CheckoutPageClient: React.FC = () => {
                   <button
                     type="submit"
                     disabled={isPlacingOrder}
-                    className="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-display font-black text-lg shadow-xl flex items-center justify-center gap-2 transition-all hover:scale-[1.01]"
+                    className="w-full py-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-display font-black text-lg shadow-xl flex items-center justify-center gap-2 transition-all hover:scale-[1.01]"
                   >
                     <span>{isPlacingOrder ? 'Placing Order…' : `Confirm Order & Pay ${formatPrice(finalTotal, settings.currency)} on Delivery`}</span>
                     {isPlacingOrder ? <span className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" /> : <Check className="w-6 h-6" />}
@@ -656,7 +656,7 @@ export const CheckoutPageClient: React.FC = () => {
                               type="button"
                               onClick={() => updateCartQuantity(item.product.id, item.quantity - 1, item.selectedVariant, item.variationId)}
                               aria-label={`Decrease quantity of ${item.product.name}`}
-                              className="rounded-l-xl p-1.5 text-[#1A1A1A]/70 transition-colors hover:bg-[#EDE5DC]"
+                              className="rounded-l-2xl p-1.5 text-[#1A1A1A]/70 transition-colors hover:bg-[#EDE5DC]"
                             >
                               <Minus className="h-3 w-3" />
                             </button>
@@ -665,7 +665,7 @@ export const CheckoutPageClient: React.FC = () => {
                               type="button"
                               onClick={() => updateCartQuantity(item.product.id, item.quantity + 1, item.selectedVariant, item.variationId)}
                               aria-label={`Increase quantity of ${item.product.name}`}
-                              className="rounded-r-xl p-1.5 text-[#1A1A1A]/70 transition-colors hover:bg-[#EDE5DC]"
+                              className="rounded-r-2xl p-1.5 text-[#1A1A1A]/70 transition-colors hover:bg-[#EDE5DC]"
                             >
                               <Plus className="h-3 w-3" />
                             </button>

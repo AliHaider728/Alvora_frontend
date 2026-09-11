@@ -201,7 +201,7 @@ export const ProductDetailContentBuilder: React.FC<Props> = ({
   );
 };
 
-const IconButton: React.FC<{ icon: React.ComponentType<{ className?: string }>; label: string; disabled?: boolean; danger?: boolean; onClick: () => void }> = ({ icon: Icon, label, disabled, danger, onClick }) => <button type="button" title={label} aria-label={label} disabled={disabled} onClick={onClick} className={`rounded-lg border p-2 disabled:opacity-30 ${danger ? 'border-[#E7D9D0] text-[#C48B80]' : 'border-[#E7D9D0] text-[#1A1A1A]/50'}`}><Icon className="h-3.5 w-3.5" /></button>;
+const IconButton: React.FC<{ icon: React.ComponentType<{ className?: string }>; label: string; disabled?: boolean; danger?: boolean; onClick: () => void }> = ({ icon: Icon, label, disabled, danger, onClick }) => <button type="button" title={label} aria-label={label} disabled={disabled} onClick={onClick} className={`rounded-xl border p-2 disabled:opacity-30 ${danger ? 'border-[#E7D9D0] text-[#C48B80]' : 'border-[#E7D9D0] text-[#1A1A1A]/50'}`}><Icon className="h-3.5 w-3.5" /></button>;
 
 const BlockRichEditor: React.FC<{ value: string; onChange: (value: string) => void }> = ({ value, onChange }) => {
   const ref = useRef<HTMLDivElement>(null);

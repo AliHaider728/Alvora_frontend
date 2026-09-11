@@ -323,7 +323,7 @@ export const AttributesManager: React.FC<AttributesManagerProps> = ({ attributes
         <button
           type="button"
           onClick={handleAddCustomAttribute}
-          className="px-4 py-2 text-sm font-heading font-bold text-[#1A1A1A]/70 bg-[#FAF6F2] hover:bg-slate-200 rounded-lg transition-colors flex items-center gap-2"
+          className="px-4 py-2 text-sm font-heading font-bold text-[#1A1A1A]/70 bg-[#FAF6F2] hover:bg-slate-200 rounded-xl transition-colors flex items-center gap-2"
         >
           <Plus className="w-4 h-4" /> Add Custom
         </button>

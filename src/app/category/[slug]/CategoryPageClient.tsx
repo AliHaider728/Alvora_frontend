@@ -406,7 +406,7 @@ export const CategoryPageClient: React.FC = () => {
                 </p>
                 <button
                   onClick={resetFilters}
-                  className="btn-interactive px-6 py-2.5 rounded-2xl bg-gradient-to-br from-[#D4784F] to-[#9C4122] text-white font-display font-medium text-2xl uppercase tracking-widest text-xs hover:bg-[#A86249] transition-colors"
+                  className="btn-interactive px-6 py-2.5 rounded-xl bg-gradient-to-br from-[#D4784F] to-[#9C4122] text-white font-display font-medium text-2xl uppercase tracking-widest text-xs hover:bg-[#A86249] transition-colors"
                 >
                   Clear All Filters
                 </button>
@@ -492,7 +492,7 @@ export const CategoryPageClient: React.FC = () => {
               <div className="grid grid-cols-2 gap-2 pt-4 border-t border-[#EDE5DC]">
                 <button
                   onClick={resetFilters}
-                  className="w-full py-3 rounded-2xl bg-[#F5EDE4] text-[#241916]/80 font-display font-medium text-2xl uppercase tracking-widest text-xs"
+                  className="w-full py-3 rounded-xl bg-[#F5EDE4] text-[#241916]/80 font-display font-medium text-2xl uppercase tracking-widest text-xs"
                 >
                   Reset
                 </button>

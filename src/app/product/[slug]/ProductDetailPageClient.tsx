@@ -404,7 +404,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">
         <h2 className="font-display font-black text-2xl text-[#1A1A1A]/90 mb-2">Product Not Found</h2>
         <p className="text-sm text-[#1A1A1A]/50 mb-6">The product you are looking for might have been discontinued or moved.</p>
-        <Link href="/category/all" className="btn-interactive px-6 py-3 rounded-2xl bg-gradient-to-br from-[#D4784F] to-[#9C4122] text-white font-display font-bold text-sm">
+        <Link href="/category/all" className="btn-interactive px-6 py-3 rounded-xl bg-gradient-to-br from-[#D4784F] to-[#9C4122] text-white font-display font-bold text-sm">
           Explore All Products
         </Link>
       </div>

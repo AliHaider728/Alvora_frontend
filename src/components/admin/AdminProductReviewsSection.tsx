@@ -186,7 +186,7 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
                   required
                   value={reviewerName}
                   onChange={e => setReviewerName(e.target.value)}
-                  className="w-full px-3 py-2 bg-white border border-[#E7D9D0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
+                  className="w-full px-3 py-2 bg-white border border-[#E7D9D0] rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
                 />
               </label>
               <label>
@@ -195,7 +195,7 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
                   type="text"
                   value={avatarUrl}
                   onChange={(e) => setAvatarUrl(e.target.value)}
-                  className="w-full px-3 py-2 bg-white border border-[#E7D9D0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
+                  className="w-full px-3 py-2 bg-white border border-[#E7D9D0] rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
                 />
               </label>
               <label>
@@ -204,7 +204,7 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
                   type="email"
                   value={reviewerEmail}
                   onChange={e => setReviewerEmail(e.target.value)}
-                  className="w-full px-3 py-2 bg-white border border-[#E7D9D0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
+                  className="w-full px-3 py-2 bg-white border border-[#E7D9D0] rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
                 />
               </label>
             </div>
@@ -233,7 +233,7 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
                 type="text"
                 value={title}
                 onChange={e => setTitle(e.target.value)}
-                className="w-full px-3 py-2 bg-white border border-[#E7D9D0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
+                className="w-full px-3 py-2 bg-white border border-[#E7D9D0] rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
               />
             </label>
 
@@ -244,7 +244,7 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
                 rows={3}
                 value={content}
                 onChange={e => setContent(e.target.value)}
-                className="w-full px-3 py-2 bg-white border border-[#E7D9D0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
+                className="w-full px-3 py-2 bg-white border border-[#E7D9D0] rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
               />
             </label>
 
@@ -252,14 +252,14 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
               <button
                 type="button"
                 onClick={() => setShowAddForm(false)}
-                className="px-4 py-2 text-sm font-bold text-[#1A1A1A]/70 bg-white border border-[#E7D9D0] rounded-lg hover:bg-[#FAF6F2] transition-colors"
+                className="px-4 py-2 text-sm font-bold text-[#1A1A1A]/70 bg-white border border-[#E7D9D0] rounded-2xl hover:bg-[#FAF6F2] transition-colors"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={submitting}
-                className="px-4 py-2 text-sm font-bold text-white bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] border-transparent shadow-sm rounded-lg hover:bg-gradient-to-r transition-colors disabled:opacity-50 flex items-center gap-2"
+                className="px-4 py-2 text-sm font-bold text-white bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] border-transparent shadow-sm rounded-xl hover:bg-gradient-to-r transition-colors disabled:opacity-50 flex items-center gap-2"
               >
                 {submitting ? 'Adding...' : 'Add Review'}
               </button>

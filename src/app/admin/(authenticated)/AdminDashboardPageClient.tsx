@@ -243,7 +243,7 @@ export const AdminDashboardPageClient: React.FC = () => {
             <h3 className="font-heading font-black text-lg text-[#1A1A1A]">Recent Customer Orders</h3>
             <p className="text-xs text-[#1A1A1A]/50 mt-1">Latest transactions awaiting fulfillment</p>
           </div>
-          <Link href="/admin/orders" className="text-xs font-bold text-[#9C4122] bg-[#F5EDE4] px-4 py-2 rounded-lg hover:bg-[#E7D9D0] transition-colors">
+          <Link href="/admin/orders" className="text-xs font-bold text-[#9C4122] bg-[#F5EDE4] px-4 py-2 rounded-xl hover:bg-[#E7D9D0] transition-colors">
             View All Orders
           </Link>
         </div>

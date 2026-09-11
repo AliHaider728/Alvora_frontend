@@ -117,7 +117,7 @@ export const BestSellers: React.FC<Props> = ({ products, sectionSettings }) => {
                     </span>
                     <Link 
                       href={`/product/${product.slug}`}
-                      className="group relative inline-flex items-center justify-center bg-[#1A1A1A] hover:bg-[#C87355] text-white text-[11px] sm:text-xs font-bold tracking-[0.15em] uppercase py-4 px-8 rounded-sm transition-all duration-300 overflow-hidden"
+                      className="group relative inline-flex items-center justify-center bg-[#1A1A1A] hover:bg-[#C87355] text-white text-[11px] sm:text-xs font-bold tracking-[0.15em] uppercase py-4 px-8 rounded-xl transition-all duration-300 overflow-hidden"
                     >
                       <span className="relative z-10">Discover</span>
                     </Link>

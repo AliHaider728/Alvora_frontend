@@ -208,14 +208,14 @@ export const CartDrawer: React.FC = () => {
                       <div className="flex items-center border border-[#EDE5DC] rounded-xl bg-white">
                         <button
                           onClick={() => updateCartQuantity(item.product.id, item.quantity - 1, item.selectedVariant, item.variationId)}
-                          className="p-1 sm:p-1.5 text-[#1A1A1A]/70 hover:bg-[#EDE5DC] rounded-l-xl transition-colors"
+                          className="p-1 sm:p-1.5 text-[#1A1A1A]/70 hover:bg-[#EDE5DC] rounded-l-2xl transition-colors"
                         >
                           <Minus className="w-3 h-3" />
                         </button>
                         <span className="px-2 text-xs font-bold text-[#1A1A1A]/90">{item.quantity}</span>
                         <button
                           onClick={() => updateCartQuantity(item.product.id, item.quantity + 1, item.selectedVariant, item.variationId)}
-                          className="p-1 sm:p-1.5 text-[#1A1A1A]/70 hover:bg-[#EDE5DC] rounded-r-xl transition-colors"
+                          className="p-1 sm:p-1.5 text-[#1A1A1A]/70 hover:bg-[#EDE5DC] rounded-r-2xl transition-colors"
                         >
                           <Plus className="w-3 h-3" />
                         </button>

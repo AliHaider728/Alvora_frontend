@@ -34,12 +34,12 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
         {/* Badges */}
         <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
           {product.isBestseller && (
-            <span className="bg-[#9C4122] text-white text-[9px] font-bold tracking-widest uppercase px-2 py-1 rounded-xl shadow-sm">
+            <span className="bg-[#9C4122] text-white text-[9px] font-bold tracking-widest uppercase px-2 py-1 rounded-2xl shadow-sm">
               BESTSELLER
             </span>
           )}
           {!product.isBestseller && product.isNewArrival && (
-            <span className="bg-[#D4A373] text-white text-[9px] font-bold tracking-widest uppercase px-2 py-1 rounded-xl shadow-sm">
+            <span className="bg-[#D4A373] text-white text-[9px] font-bold tracking-widest uppercase px-2 py-1 rounded-2xl shadow-sm">
               NEW
             </span>
           )}

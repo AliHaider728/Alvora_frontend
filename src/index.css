@@ -46,7 +46,7 @@
   --shadow-card: 0 2px 12px 0 rgb(196 139 128 / 0.10);
 
   /* Typography */
-  --font-primary: var(--font-bodoni, 'Bodoni Moda'), Georgia, serif;
+  --font-primary: var(--font-poppins, 'Poppins'), sans-serif;
   --font-display: var(--font-primary);
 
   --font-body: var(--font-primary);
@@ -215,7 +215,7 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   border: 2px solid var(--alvora-terracotta);
-  border-radius: 0;
+  border-radius: var(--radius-xl);
   cursor: pointer;
   transition: background-color 220ms ease, color 220ms ease, transform 120ms ease;
   white-space: nowrap;
@@ -237,7 +237,7 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   border: 2px solid var(--alvora-charcoal);
-  border-radius: 0;
+  border-radius: var(--radius-xl);
   cursor: pointer;
   transition: background-color 220ms ease, color 220ms ease, border-color 220ms ease;
   white-space: nowrap;
@@ -367,7 +367,7 @@
   color: var(--alvora-charcoal);
   outline: none;
   transition: border-color 200ms ease, box-shadow 200ms ease;
-  border-radius: 0;
+  border-radius: var(--radius-xl);
 }
 .alvora-input::placeholder {
   color: var(--alvora-taupe);

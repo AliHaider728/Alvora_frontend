@@ -296,7 +296,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
             onClick={handleAddToCart}
             disabled={!isAvailable || cartActionState !== 'idle'}
             aria-busy={cartActionState === 'adding'}
-            className={`relative flex h-11 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-2xl px-3 text-[13px] font-bold tracking-wide shadow-sm transition-all duration-300 active:scale-95 ${
+            className={`relative flex h-11 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-xl px-3 text-[13px] font-bold tracking-wide shadow-sm transition-all duration-300 active:scale-95 ${
               cartActionState === 'added'
                 ? 'bg-emerald-500 text-white shadow-emerald-200'
                 : !isAvailable

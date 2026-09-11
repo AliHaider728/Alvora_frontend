@@ -117,10 +117,10 @@ export const AdminLoginPageClient: React.FC = () => {
         </div>
         
         {/* Bottom Right Soft Terracotta Shape */}
-        <div className="absolute bottom-0 right-0 w-80 h-80 bg-[#A86249] opacity-10 rounded-tl-[120px] pointer-events-none z-0 translate-x-12 translate-y-12" />
+        <div className="absolute bottom-0 right-0 w-80 h-80 bg-[#A86249] opacity-10 rounded-tl-3xl pointer-events-none z-0 translate-x-12 translate-y-12" />
 
         {/* Floating White Form Card - Z-index 10 */}
-        <div className="w-full max-w-[460px] mx-auto z-10 relative bg-white p-8 sm:p-12 rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(168,98,73,0.15)]">
+        <div className="w-full max-w-[460px] mx-auto z-10 relative bg-white p-8 sm:p-12 rounded-3xl shadow-[0_20px_60px_-15px_rgba(168,98,73,0.15)]">
           
           {/* Mobile Header (Hidden on Desktop) */}
           <div className="md:hidden mb-10 flex items-center gap-3">

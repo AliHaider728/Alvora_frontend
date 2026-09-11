@@ -152,7 +152,7 @@ export default function AdminAudioReviewsPageClient() {
         <h1 className="text-2xl font-semibold text-gray-900">Audio Reviews</h1>
         <button
           onClick={handleOpenNew}
-          className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]/90 h-10 py-2 px-4"
+          className="inline-flex items-center justify-center rounded-xl text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]/90 h-10 py-2 px-4"
         >
           <Plus className="mr-2 h-4 w-4" />
           Add Audio Review
@@ -168,7 +168,7 @@ export default function AdminAudioReviewsPageClient() {
       )}
 
       {isFormOpen && (
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-medium">{editingId ? 'Edit Review' : 'New Audio Review'}</h2>
             <button onClick={() => setIsFormOpen(false)} className="text-gray-400 hover:text-gray-600">
@@ -214,7 +214,7 @@ export default function AdminAudioReviewsPageClient() {
             <div className="flex justify-end pt-4">
               <button
                 type="submit"
-                className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#1A1A1A] hover:bg-gray-800 focus:outline-none"
+                className="inline-flex items-center px-4 py-2 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-[#1A1A1A] hover:bg-gray-800 focus:outline-none"
               >
                 <Save className="w-4 h-4 mr-2" />
                 {editingId ? 'Save Changes' : 'Upload Review'}
@@ -229,7 +229,7 @@ export default function AdminAudioReviewsPageClient() {
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
         </div>
       ) : (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>

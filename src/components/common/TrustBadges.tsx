@@ -31,7 +31,7 @@ export const TrustBadges: React.FC = () => {
   ];
 
   return (
-    <div className="bg-white rounded-[2rem] shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] border border-slate-100 py-6 px-4 md:px-8">
+    <div className="bg-white rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] border border-slate-100 py-6 px-4 md:px-8">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 divide-x-0 md:divide-x divide-slate-100">
         {badges.map((b, idx) => {
           const Icon = b.icon;

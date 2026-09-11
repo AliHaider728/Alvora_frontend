@@ -193,7 +193,7 @@ export default function AccountPage() {
                         name="newPassword"
                         type="password"
                         required
-                        className="w-full px-4 py-2.5 text-base sm:text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-[#C48B80] focus:ring-1 focus:ring-[#C48B80]"
+                        className="w-full px-4 py-2.5 text-base sm:text-sm rounded-lg border border-slate-200 focus:outline-none focus:border-[#C48B80] focus:ring-1 focus:ring-[#C48B80]"
                       />
                     </div>
                     <div>
@@ -202,7 +202,7 @@ export default function AccountPage() {
                         name="confirmPassword"
                         type="password"
                         required
-                        className="w-full px-4 py-2.5 text-base sm:text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-[#C48B80] focus:ring-1 focus:ring-[#C48B80]"
+                        className="w-full px-4 py-2.5 text-base sm:text-sm rounded-lg border border-slate-200 focus:outline-none focus:border-[#C48B80] focus:ring-1 focus:ring-[#C48B80]"
                       />
                     </div>
                     <button

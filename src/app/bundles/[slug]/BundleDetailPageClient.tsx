@@ -114,7 +114,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
               ))}
             </div>
             <motion.div 
-              className="relative w-full aspect-square rounded-[2rem] overflow-hidden bg-white shadow-sm"
+              className="relative w-full aspect-square rounded-3xl overflow-hidden bg-white shadow-sm"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
@@ -339,7 +339,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
       {/* Write Review Modal */}
       {reviewModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-          <div className="bg-white rounded-[2rem] max-w-md w-full p-8 relative shadow-2xl">
+          <div className="bg-white rounded-3xl max-w-md w-full p-8 relative shadow-2xl">
             <h3 className="font-display text-2xl text-[#1A1A1A] mb-6">
               Write a Review
             </h3>

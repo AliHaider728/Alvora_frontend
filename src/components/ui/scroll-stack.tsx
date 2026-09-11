@@ -46,7 +46,7 @@ function ScrollCard({ i, progress, range, targetScale, children }: any) {
       <motion.div 
         ref={containerRef}
         style={{ scale, rotate, opacity }}
-        className="w-full max-w-[1200px] h-[85vh] sm:h-[80vh] md:h-[70vh] rounded-[2rem] shadow-2xl overflow-hidden bg-white relative origin-top"
+        className="w-full max-w-[1200px] h-[85vh] sm:h-[80vh] md:h-[70vh] rounded-3xl shadow-2xl overflow-hidden bg-white relative origin-top"
       >
         {children}
       </motion.div>

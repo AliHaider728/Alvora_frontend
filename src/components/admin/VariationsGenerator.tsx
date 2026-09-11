@@ -105,7 +105,7 @@ export const VariationsGenerator: React.FC<VariationsGeneratorProps> = ({ attrib
           type="button"
           disabled={variationAttributes.length === 0}
           onClick={generateCombinations}
-          className="flex items-center gap-2 px-4 py-2 bg-[#333333] text-white font-heading font-bold rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-700 transition-colors text-sm"
+          className="flex items-center gap-2 px-4 py-2 bg-[#333333] text-white font-heading font-bold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-700 transition-colors text-sm"
         >
           <Play className="w-4 h-4" /> Generate
         </button>
