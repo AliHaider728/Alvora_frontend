@@ -93,6 +93,7 @@ export const CheckoutPageClient: React.FC = () => {
   const [postalCode, setPostalCode] = useState('');
   const [country] = useState('Pakistan');
   const [orderNotes, setOrderNotes] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   // Order result state
   const [completedOrder, setCompletedOrder] = useState<Order | null>(null);
@@ -149,19 +150,37 @@ export const CheckoutPageClient: React.FC = () => {
 
   const handleShippingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFieldErrors({});
+
+    let errors: Record<string, string> = {};
+
+    if (!fullName.trim()) errors.fullName = "Full name is required";
+    if (!phone.trim()) errors.phone = "Phone number is required";
+    if (!street.trim()) errors.street = "Street address is required";
+    if (!city.trim()) errors.city = "City is required";
+
     if (deliveryUnavailable) {
       showToast('One or more products are not available for delivery.', 'error');
       return;
     }
-    if (phone.trim().length !== 11) {
-      showToast('Please enter a valid 11-digit phone number', 'error');
+
+    const cleanPhone = phone.replace(/[\s\-()]/g, '');
+    const phoneRegex = /^(?:\+92|0092|0)?3[0-9]{9}$/;
+
+    if (phone.trim() && !phoneRegex.test(cleanPhone)) {
+      errors.phone = "Please enter a valid Pakistani phone (e.g. 03001234567 or +923001234567)";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      showToast('Please correct the errors in the form before proceeding.', 'error');
       return;
     }
-    if (fullName.trim() && phone.trim() && street.trim() && city.trim()) {
-      await handlePaymentSubmit();
-    } else {
-      showToast('Please fill in all required shipping fields', 'error');
-    }
+
+    const standardizedPhone = '0' + cleanPhone.slice(-10);
+    setPhone(standardizedPhone);
+
+    await handlePaymentSubmit();
   };
 
   const handlePaymentSubmit = async () => {
@@ -469,9 +488,10 @@ export const CheckoutPageClient: React.FC = () => {
                         required
                         placeholder="e.g. Ali Raza"
                         value={fullName}
-                        onChange={e => setFullName(e.target.value)}
-                        className="w-full px-4 py-2.5 text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
-                      />
+                          onChange={e => { setFullName(e.target.value); setFieldErrors(p => ({...p, fullName: ''})); }}
+                          className={`w-full px-4 py-2.5 text-sm rounded-xl border ${fieldErrors.fullName ? 'border-red-500 focus:ring-red-500' : 'border-[#EDE5DC] focus:ring-[#C48B80]'} font-sans focus:outline-none focus:ring-2`}
+                        />
+                        {fieldErrors.fullName && <p className="text-red-500 text-xs mt-1 font-sans">{fieldErrors.fullName}</p>}
                     </div>
 
                     <div>
@@ -481,12 +501,12 @@ export const CheckoutPageClient: React.FC = () => {
                         required
                         inputMode="numeric"
                         pattern="[0-9]*"
-                        maxLength={11}
-                        placeholder="e.g. 03276655557"
-                        value={phone}
-                        onChange={e => setPhone(e.target.value.replace(/[^0-9]/g, '').slice(0, 11))}
-                        className="w-full px-4 py-2.5 text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
-                      />
+                        placeholder="e.g. +923001234567 or 03001234567"
+                          value={phone}
+                          onChange={e => { setPhone(e.target.value); setFieldErrors(p => ({...p, phone: ''})); }}
+                          className={`w-full px-4 py-2.5 text-sm rounded-xl border ${fieldErrors.phone ? 'border-red-500 focus:ring-red-500' : 'border-[#EDE5DC] focus:ring-[#C48B80]'} font-sans focus:outline-none focus:ring-2`}
+                        />
+                        {fieldErrors.phone && <p className="text-red-500 text-xs mt-1 font-sans">{fieldErrors.phone}</p>}
                     </div>
 
                     <div className="sm:col-span-2">
@@ -496,9 +516,10 @@ export const CheckoutPageClient: React.FC = () => {
                         required
                         placeholder="House #, Street name, Sector / Area"
                         value={street}
-                        onChange={e => setStreet(e.target.value)}
-                        className="w-full px-4 py-2.5 text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
+                        onChange={e => { setStreet(e.target.value); setFieldErrors(p => ({...p, street: ''})); }}
+                        className={`w-full px-4 py-2.5 text-sm rounded-xl border ${fieldErrors.street ? 'border-red-500 focus:ring-red-500' : 'border-[#EDE5DC] focus:ring-[#C48B80]'} font-sans focus:outline-none focus:ring-2`}
                       />
+                      {fieldErrors.street && <p className="text-red-500 text-xs mt-1 font-sans">{fieldErrors.street}</p>}
                     </div>
 
                     <div>
@@ -508,9 +529,10 @@ export const CheckoutPageClient: React.FC = () => {
                         required
                         placeholder="e.g. Gujranwala, Karachi, Islamabad"
                         value={city}
-                        onChange={e => setCity(e.target.value)}
-                        className="w-full px-4 py-2.5 text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
-                      />
+                          onChange={e => { setCity(e.target.value); setFieldErrors(p => ({...p, city: ''})); }}
+                          className={`w-full px-4 py-2.5 text-sm rounded-xl border ${fieldErrors.city ? 'border-red-500 focus:ring-red-500' : 'border-[#EDE5DC] focus:ring-[#C48B80]'} font-sans focus:outline-none focus:ring-2`}
+                        />
+                        {fieldErrors.city && <p className="text-red-500 text-xs mt-1 font-sans">{fieldErrors.city}</p>}
                     </div>
 
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-2">

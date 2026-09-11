@@ -13,11 +13,25 @@ export const AdminLoginPageClient: React.FC = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setFieldErrors({});
+
+    let errors: Record<string, string> = {};
+    if (!email.trim()) errors.email = "Email is required";
+    else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) errors.email = "Please enter a valid email address";
+    
+    if (!password) errors.password = "Password is required";
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -150,49 +164,25 @@ export const AdminLoginPageClient: React.FC = () => {
                 Email
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Mail className="w-4 h-4 text-[#A1A7AA]" strokeWidth={1.5} />
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Lock className="w-4 h-4 text-[#A1A7AA]" strokeWidth={1.5} />
+                  </div>
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={e => { setPassword(e.target.value); setFieldErrors(p => ({...p, password: ''})); }}
+                    placeholder="••••••••"
+                    className={`w-full pl-11 pr-11 py-3.5 text-[13px] rounded-lg border ${fieldErrors.password ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500 bg-rose-50/30' : 'border-[#E7D9D0] focus:border-[#A86249] focus:ring-[#A86249]'} bg-white text-[#1A1A1A] placeholder:text-[#A1A7AA]/70 focus:outline-none focus:ring-1 transition-colors`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-[#A1A7AA] hover:text-[#1A1A1A] transition-colors"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                  {fieldErrors.password && <p className="text-rose-500 text-[11px] mt-1.5 ml-1 font-medium">{fieldErrors.password}</p>}
                 </div>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  required
-                  placeholder="admin@alvora.pk"
-                  className="w-full pl-11 pr-4 py-3.5 text-[13px] rounded-xl border border-[#E7D9D0] bg-white text-[#1A1A1A] placeholder:text-[#A1A7AA]/70 focus:outline-none focus:border-[#A86249] focus:ring-1 focus:ring-[#A86249] transition-colors"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold text-[#1A1A1A] uppercase tracking-[0.15em] block">
-                Password
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Lock className="w-4 h-4 text-[#A1A7AA]" strokeWidth={1.5} />
-                </div>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  required
-                  placeholder="••••••••"
-                  className="w-full pl-11 pr-11 py-3.5 text-[13px] rounded-xl border border-[#E7D9D0] bg-white text-[#1A1A1A] placeholder:text-[#A1A7AA]/70 focus:outline-none focus:border-[#A86249] focus:ring-1 focus:ring-[#A86249] transition-colors tracking-widest font-heading"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-[#A1A7AA] hover:text-[#A86249] transition-colors"
-                  tabIndex={-1}
-                >
-                  {showPassword ? (
-                    <EyeOff className="w-4 h-4" strokeWidth={1.5} />
-                  ) : (
-                    <Eye className="w-4 h-4" strokeWidth={1.5} />
-                  )}
-                </button>
-              </div>
             </div>
 
             <button

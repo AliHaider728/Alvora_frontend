@@ -367,7 +367,7 @@
   color: var(--alvora-charcoal);
   outline: none;
   transition: border-color 200ms ease, box-shadow 200ms ease;
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-lg);
 }
 .alvora-input::placeholder {
   color: var(--alvora-taupe);
@@ -543,4 +543,15 @@ input[type="checkbox"]:checked::before {
 input[type="checkbox"]:focus-visible {
   outline: 2px solid #9C4122;
   outline-offset: max(2px, 0.15em);
+}
+
+/* Animation Utils from Prodcut-Animation */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1), transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-in {
+  opacity: 1;
+  transform: none;
 }

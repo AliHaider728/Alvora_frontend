@@ -65,7 +65,7 @@ export const FinalCTA: React.FC = () => {
                     placeholder="Enter your email to join us"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
-                    className="w-full bg-white/10 backdrop-blur-sm border border-white/30 text-white placeholder:text-white/70 rounded-full pl-6 pr-32 h-14 focus:outline-none focus:border-white focus:bg-white/20 transition-all text-sm"
+                    className="w-full bg-white/10 backdrop-blur-sm border border-white/30 text-white placeholder:text-white/70 rounded-lg pl-6 pr-32 h-14 focus:outline-none focus:border-white focus:bg-white/20 transition-all text-sm"
                   />
                   <button 
                     type="submit"

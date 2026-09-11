@@ -11,9 +11,12 @@ export const AdminDashboardPageClient: React.FC = () => {
   const [orders, setOrders] = useState<any[]>([]);
   const [customers, setCustomers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
+      setFetchError(null);
       try {
         const [pRes, oRes, cRes] = await Promise.all([
           api.getProducts(),
@@ -23,8 +26,9 @@ export const AdminDashboardPageClient: React.FC = () => {
         if (pRes) setProducts(Array.isArray(pRes) ? pRes : pRes.products || []);
         if (oRes) setOrders(oRes);
         if (cRes) setCustomers(cRes);
-      } catch (err) {
+      } catch (err: any) {
         console.error("Dashboard fetch error:", err);
+        setFetchError(err.message || 'Unable to load dashboard data. Please check your connection.');
       } finally {
         setLoading(false);
       }
@@ -39,6 +43,24 @@ export const AdminDashboardPageClient: React.FC = () => {
     return (
       <div className="flex h-64 items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#C48B80]"></div>
+      </div>
+    );
+  }
+
+  if (fetchError) {
+    return (
+      <div className="max-w-7xl mx-auto space-y-8 font-heading pb-10">
+        <div className="bg-rose-50 border border-rose-200 rounded-2xl p-8 text-center max-w-2xl mx-auto mt-12">
+          <AlertTriangle className="w-12 h-12 text-rose-500 mx-auto mb-4" />
+          <h2 className="text-xl font-bold text-rose-900 mb-2">Dashboard Data Unavailable</h2>
+          <p className="text-rose-700 mb-6">{fetchError}</p>
+          <button 
+            onClick={fetchData}
+            className="px-6 py-3 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl transition-colors shadow-sm"
+          >
+            Retry Connection
+          </button>
+        </div>
       </div>
     );
   }

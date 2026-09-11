@@ -34,7 +34,7 @@ export const HomePage: React.FC<Props> = ({ products, categories, settings }) =>
         description={settings.metaDescription || "Pure Ingredients. Visible Results."}
       />
 
-      <HeroSection />
+      <HeroSection featuredHref={featuredProduct ? `/product/${featuredProduct.slug}` : '/category/all'} />
       <CrissCrossMarquee />
       <section className="bg-[#FAF6F2]">
         <ScrollRevealText text="At ALVORA, we blend clinically proven ingredients with the best of nature to support your skin's health today and tomorrow. Sustainable choices. Responsible formulas. Beautiful results for you and the world we all share." />

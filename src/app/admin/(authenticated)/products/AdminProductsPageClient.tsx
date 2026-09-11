@@ -247,7 +247,7 @@ export const AdminProductsPageClient: React.FC = () => {
                     <div className="flex items-center gap-3">
                       <img src={getSafeImageSrc(prod.images?.[0])} alt="" className="w-10 h-10 object-cover rounded-xl bg-[#FAF6F2]" />
                       <div>
-                        <span className="font-heading font-bold text-[#1A1A1A] block">{prod.name}</span>
+                        <span className="font-heading font-bold text-[#1A1A1A] block truncate max-w-[120px] sm:max-w-[180px] md:max-w-[250px] lg:max-w-[300px]" title={prod.name}>{prod.name}</span>
                         <span className="text-[10px] text-[#1A1A1A]/40">{prod.brand}</span>
                       </div>
                     </div>
