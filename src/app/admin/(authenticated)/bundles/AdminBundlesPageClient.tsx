@@ -1,10 +1,12 @@
-﻿"use client";
+"use client";
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { api } from '../../../../services/api';
 import { Plus, Edit2, Trash2, Search, Loader2, Package, Check, X } from 'lucide-react';
 import { Product } from '../../../../types';
 
 export const AdminBundlesPageClient = () => {
+  const router = useRouter();
   const [bundles, setBundles] = useState<any[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -50,7 +52,7 @@ export const AdminBundlesPageClient = () => {
           <h1 className="font-heading text-2xl font-black text-[#1A1A1A]">Bundles</h1>
           <p className="text-xs font-medium text-[#1A1A1A]/50">Manage curated product sets and discounts.</p>
         </div>
-        <button type="button" onClick={() => setEditing({})} className="flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm px-5 py-2.5 text-xs font-bold shadow-md">
+        <button type="button" onClick={() => router.push('/admin/bundles/new')} className="flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm px-5 py-2.5 text-xs font-bold shadow-md">
           <Plus className="h-4 w-4" /> Add Bundle
         </button>
       </div>
