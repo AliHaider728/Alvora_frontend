@@ -65,21 +65,21 @@ export const AdminLoginPageClient: React.FC = () => {
           className="object-cover object-[15%_100%] lg:object-[20%_100%]"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/50 to-transparent" />
         <div className="relative z-10 h-full flex flex-col justify-center">
           <div className="flex items-center gap-4 mb-8">
             <div className="h-[1px] w-8 bg-[#C87355]"></div>
             <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#C87355]">Skincare For A Brighter You</span>
           </div>
-          <h1 className="text-5xl lg:text-6xl text-white font-display mb-4 leading-[1.1]">
+          <h1 className="text-5xl lg:text-6xl text-gray-900 font-display mb-4 leading-[1.1]">
             Pure Ingredients.<br />
             <span className="text-[#C87355]">Visible Results.</span>
           </h1>
-          <p className="text-white/80 text-sm max-w-sm leading-relaxed mb-12">
+          <p className="text-gray-800 text-sm max-w-sm leading-relaxed mb-12">
             Manage your Alvora storefront, orders, and products through our secure admin dashboard.
           </p>
           <div className="mt-auto">
-            <p className="text-white/60 text-xs italic">Care for your natural beauty</p>
+            <p className="text-gray-600 font-medium text-xs italic">Care for your natural beauty</p>
           </div>
         </div>
       </div>
