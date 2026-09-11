@@ -33,7 +33,7 @@ export const HeroSection: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-            className="mb-8 font-display text-5xl leading-[1.1] text-[#241916] md:text-6xl lg:text-[5.5rem]"
+            className="mb-8 font-display text-4xl leading-[1.2] text-[#241916] md:text-5xl lg:text-6xl tracking-tight"
           >
             Healthy Skin.<br />
             <span className="italic text-[#A86249]">Naturally You.</span>
