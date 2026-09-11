@@ -134,7 +134,7 @@ export const AdminLoginPageClient: React.FC = () => {
                     type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={e => { setPassword(e.target.value); setFieldErrors(p => ({...p, password: ''})); }}
-                    placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                    placeholder="********"
                     className={`w-full pl-11 pr-11 py-3.5 text-[13px] rounded-lg border ${fieldErrors.password ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500 bg-rose-50/30' : 'border-[#E7D9D0] focus:border-[#A86249] focus:ring-[#A86249]'} bg-white text-[#1A1A1A] placeholder:text-[#A1A7AA]/70 focus:outline-none focus:ring-1 transition-colors`}
                   />
                   <button
