@@ -5,7 +5,7 @@ import { api } from '../../../../../services/api';
 import { Product } from '../../../../../types';
 import { 
   ArrowLeft, Search, Plus, Minus, Trash2, Image as ImageIcon, 
-  Box, Tag, Eye, Info, Check, AlertCircle, Save 
+  Box, Tag, Eye, Info, Check, AlertCircle, Save, Layers, Loader2 
 } from 'lucide-react';
 import Image from 'next/image';
 
@@ -19,6 +19,8 @@ export default function AdminCreateBundleClient() {
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   // Form State
   const [name, setName] = useState('');
@@ -44,6 +46,8 @@ export default function AdminCreateBundleClient() {
 
   // Images & Marketing
   const [useCollage, setUseCollage] = useState(true);
+  const [customImageUrl, setCustomImageUrl] = useState('');
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [badgeText, setBadgeText] = useState('Best Value');
   const [routineSteps, setRoutineSteps] = useState('');
 
@@ -108,7 +112,8 @@ export default function AdminCreateBundleClient() {
 
   // Handlers
   const addProduct = (p: Product) => {
-    setSelectedProducts([...selectedProducts, { product: p, qty: 1 }]);
+    const defaultVariant = p.variants && p.variants.length > 0 ? p.variants[0].id : undefined;
+    setSelectedProducts([...selectedProducts, { product: p, qty: 1, variant: defaultVariant }]);
     setSearchTerm('');
   };
 
@@ -122,31 +127,139 @@ export default function AdminCreateBundleClient() {
     }));
   };
 
+  const updateVariant = (id: string, variantId: string) => {
+    setSelectedProducts(prev => prev.map(sp => sp.product.id === id ? { ...sp, variant: variantId } : sp));
+  };
+
   const removeProduct = (id: string) => {
     setSelectedProducts(prev => prev.filter(sp => sp.product.id !== id));
   };
 
   const formatPrice = (p: number) => new Intl.NumberFormat('en-PK', { style: 'currency', currency: 'PKR', minimumFractionDigits: 0 }).format(p);
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    setUploadingImage(true);
+    try {
+      const file = e.target.files[0];
+      const result = await api.uploadImage(file);
+      if (result && result.url) {
+        setCustomImageUrl(result.url);
+        setUseCollage(false);
+      }
+    } catch (err) {
+      console.error("Failed to upload image", err);
+      alert("Failed to upload image");
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  const handleSubmit = async (targetStatus: string) => {
+    setSaveError(null);
+    if (!name.trim()) {
+      setSaveError("Bundle Name is required.");
+      window.scrollTo(0,0);
+      return;
+    }
+    if (selectedProducts.length < 2) {
+      setSaveError("A bundle must contain at least 2 products.");
+      window.scrollTo(0,0);
+      return;
+    }
+    
+    // Out of stock warning
+    const hasOutOfStock = selectedProducts.some(sp => (sp.product.stock || 0) < sp.qty);
+    if (hasOutOfStock) {
+      const confirm = window.confirm("One or more included products do not have enough stock. Are you sure you want to create this bundle?");
+      if (!confirm) return;
+    }
+
+    // Price logic warning
+    if (finalPrice > currentSaleTotal) {
+      const confirm = window.confirm("The final bundle price is higher than buying the items individually on sale. Proceed anyway?");
+      if (!confirm) return;
+    }
+
+    setSaving(true);
+    try {
+      const payload = {
+        name,
+        slug,
+        description: detailDesc,
+        shortDescription: shortDesc,
+        discountPercent: discountType === 'percentage' ? discountValue : 0, // Fallback for old backends
+        isActive: targetStatus === 'Active',
+        status: targetStatus,
+        category,
+        tags,
+        discountType,
+        discountValue,
+        customPrice,
+        bundlePrice: finalPrice,
+        autoCalcStock,
+        manualStock: bundleStock,
+        badgeText,
+        routineSteps,
+        showShop,
+        featureHome,
+        useCollage,
+        customImage: customImageUrl,
+        products: selectedProducts.map(sp => ({
+          product_id: sp.product.id,
+          quantity: sp.qty,
+          variant_id: sp.variant
+        }))
+      };
+
+      await api.createBundle(payload);
+      router.push('/admin/bundles');
+    } catch (e: any) {
+      console.error(e);
+      setSaveError(e.message || "An error occurred while saving the bundle.");
+      window.scrollTo(0,0);
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-[#F8F9FA] pb-24">
+    <div className="min-h-screen bg-[#F8F9FA] pb-24 font-body">
       {/* Top Navbar */}
       <div className="sticky top-0 z-40 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-4">
           <button onClick={() => router.back()} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
             <ArrowLeft className="w-5 h-5 text-gray-600" />
           </button>
-          <h1 className="text-xl font-semibold text-gray-900">Create Product Bundle</h1>
+          <h1 className="text-xl font-semibold text-gray-900 font-heading">Create Product Bundle</h1>
         </div>
         <div className="flex items-center gap-3">
-          <button className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
+          <button onClick={() => router.back()} className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
             Cancel
           </button>
-          <button className="px-4 py-2 text-sm font-medium text-[#A85A3B] bg-[#A85A3B]/10 hover:bg-[#A85A3B]/20 rounded-lg transition-colors">
-            Save Draft
+          <button 
+            disabled={saving}
+            onClick={() => {
+               document.getElementById('preview-card')?.scrollIntoView({ behavior: 'smooth' });
+            }} 
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 rounded-lg transition-colors flex items-center gap-2"
+          >
+            <Eye className="w-4 h-4" />
+            Preview Bundle
           </button>
-          <button className="px-5 py-2 text-sm font-medium text-white bg-[#1A1A1A] hover:bg-black rounded-lg shadow-md transition-colors flex items-center gap-2">
-            <Save className="w-4 h-4" />
+          <button 
+            disabled={saving}
+            onClick={() => handleSubmit('Draft')}
+            className="px-4 py-2 text-sm font-medium text-[#A85A3B] bg-[#A85A3B]/10 hover:bg-[#A85A3B]/20 rounded-lg transition-colors"
+          >
+            {saving ? 'Saving...' : 'Save Draft'}
+          </button>
+          <button 
+            disabled={saving}
+            onClick={() => handleSubmit('Active')}
+            className="px-5 py-2 text-sm font-medium text-white bg-[#1A1A1A] hover:bg-black rounded-lg shadow-md transition-colors flex items-center gap-2"
+          >
+            {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             Create Bundle
           </button>
         </div>
@@ -157,6 +270,16 @@ export default function AdminCreateBundleClient() {
         {/* LEFT COLUMN - Forms */}
         <div className="flex-1 space-y-6">
           
+          {saveError && (
+            <div className="bg-red-50 border border-red-200 p-4 rounded-xl flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+              <div>
+                <h3 className="text-sm font-bold text-red-800">Cannot save bundle</h3>
+                <p className="text-xs text-red-700 mt-1">{saveError}</p>
+              </div>
+            </div>
+          )}
+
           {/* SECTION 1 - Basic Info */}
           <section className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
             <h2 className="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
@@ -197,14 +320,6 @@ export default function AdminCreateBundleClient() {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Status</label>
-                <select value={status} onChange={e => setStatus(e.target.value)} className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none">
-                  <option>Active</option>
-                  <option>Draft</option>
-                  <option>Inactive</option>
-                </select>
-              </div>
-              <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Category</label>
                 <select value={category} onChange={e => setCategory(e.target.value)} className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none">
                   <option>Bundles</option>
@@ -212,7 +327,7 @@ export default function AdminCreateBundleClient() {
                   <option>Gifts</option>
                 </select>
               </div>
-              <div className="space-y-2 md:col-span-2">
+              <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Bundle Tags (comma separated)</label>
                 <input 
                   type="text" value={tags} onChange={e => setTags(e.target.value)}
@@ -247,7 +362,7 @@ export default function AdminCreateBundleClient() {
                       </div>
                       <div className="flex-1">
                         <p className="text-sm font-medium text-gray-900">{p.name}</p>
-                        <p className="text-xs text-gray-500">{formatPrice(p.price)}</p>
+                        <p className="text-xs text-gray-500">{formatPrice(p.price || 0)}</p>
                       </div>
                       <Plus className="w-5 h-5 text-gray-400" />
                     </div>
@@ -263,6 +378,7 @@ export default function AdminCreateBundleClient() {
                   <thead className="bg-gray-50 text-gray-600 font-medium">
                     <tr>
                       <th className="p-4">Product</th>
+                      <th className="p-4">Variant</th>
                       <th className="p-4">Stock</th>
                       <th className="p-4">Original Price</th>
                       <th className="p-4">Qty</th>
@@ -279,18 +395,33 @@ export default function AdminCreateBundleClient() {
                               {sp.product.images?.[0] && <Image src={sp.product.images[0]} alt="" fill className="object-cover" />}
                             </div>
                             <div>
-                              <p className="font-medium text-gray-900">{sp.product.name}</p>
+                              <p className="font-medium text-gray-900 line-clamp-1">{sp.product.name}</p>
                               {sp.product.discountPrice && (
-                                <p className="text-xs text-green-600">Sale: {formatPrice(sp.product.discountPrice)}</p>
+                                <p className="text-xs text-green-600 font-medium">Sale: {formatPrice(sp.product.discountPrice)}</p>
                               )}
                             </div>
+                          </td>
+                          <td className="p-4">
+                            {sp.product.variants && sp.product.variants.length > 0 ? (
+                              <select 
+                                value={sp.variant || ''} 
+                                onChange={e => updateVariant(sp.product.id, e.target.value)}
+                                className="p-1.5 text-xs bg-white border border-gray-200 rounded-lg outline-none w-24"
+                              >
+                                {sp.product.variants.map((v: any) => (
+                                  <option key={v.id || v.name} value={v.id || v.name}>{v.name}</option>
+                                ))}
+                              </select>
+                            ) : (
+                              <span className="text-gray-400 text-xs italic">-</span>
+                            )}
                           </td>
                           <td className="p-4">
                             <span className={`px-2 py-1 rounded-md text-xs font-medium ${outOfStock ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-700'}`}>
                               {sp.product.stock || 0}
                             </span>
                           </td>
-                          <td className="p-4 text-gray-600">{formatPrice(sp.product.price)}</td>
+                          <td className="p-4 text-gray-600">{formatPrice(sp.product.price || 0)}</td>
                           <td className="p-4">
                             <div className="flex items-center gap-2 border border-gray-200 rounded-lg w-fit p-1 bg-white">
                               <button onClick={() => updateQty(sp.product.id, -1)} className="p-1 hover:bg-gray-100 rounded">
@@ -320,23 +451,28 @@ export default function AdminCreateBundleClient() {
             )}
             
             {selectedProducts.length < 2 && selectedProducts.length > 0 && (
-              <p className="text-amber-600 text-xs mt-3 flex items-center gap-1">
+              <p className="text-amber-600 text-xs mt-3 flex items-center gap-1 font-medium">
                 <AlertCircle className="w-3 h-3" /> Minimum 2 products required for a bundle.
+              </p>
+            )}
+            {selectedProducts.some(sp => (sp.product.stock || 0) < sp.qty) && (
+              <p className="text-red-600 text-xs mt-2 flex items-center gap-1 font-medium">
+                <AlertCircle className="w-3 h-3" /> Warning: One or more selected items do not have enough stock.
               </p>
             )}
           </section>
 
-            {finalPrice > currentSaleTotal && (
-            <div className="p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3 mb-6">
+          {finalPrice > currentSaleTotal && (
+            <div className="p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3 mb-6 shadow-sm">
               <AlertCircle className="w-5 h-5 text-red-500 shrink-0" />
               <div>
                 <p className="text-sm font-semibold text-red-800">Warning: Bundle Price is Higher Than Individual Items</p>
-                <p className="text-xs text-red-700 mt-1">Customers will pay more for this bundle than buying the items individually on sale.</p>
+                <p className="text-xs text-red-700 mt-1">Customers will pay {formatPrice(finalPrice - currentSaleTotal)} more for this bundle than buying the items individually on sale.</p>
               </div>
             </div>
           )}
 
-        {/* SECTION 3 - Pricing & Inventory Settings */}
+          {/* SECTION 3 - Pricing & Inventory Settings */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <section className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
               <h2 className="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
@@ -386,7 +522,7 @@ export default function AdminCreateBundleClient() {
               </h2>
               <div className="space-y-4">
                 <div className="flex items-center gap-3 p-4 border border-gray-200 rounded-xl bg-gray-50">
-                  <input type="checkbox" checked={autoCalcStock} onChange={e => setAutoCalcStock(e.target.checked)} className="w-4 h-4 text-[#A85A3B]" />
+                  <input type="checkbox" checked={autoCalcStock} onChange={e => setAutoCalcStock(e.target.checked)} className="w-4 h-4 text-[#A85A3B] rounded" />
                   <div>
                     <p className="text-sm font-medium text-gray-900">Auto-Calculate Stock</p>
                     <p className="text-xs text-gray-500">Calculated based on lowest component quantity.</p>
@@ -474,8 +610,20 @@ export default function AdminCreateBundleClient() {
                     <span className="text-sm font-semibold text-gray-900">Auto-generate Image Collage</span>
                   </label>
                   {!useCollage && (
-                    <div className="mt-3 p-4 border-2 border-dashed border-gray-200 rounded-xl text-center bg-gray-50">
-                      <button className="text-sm font-medium text-[#A85A3B] hover:underline">Click to upload custom image</button>
+                    <div className="mt-3">
+                      <label className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-[#A85A3B] hover:bg-gray-50 transition-colors bg-white">
+                        {uploadingImage ? (
+                           <Loader2 className="w-6 h-6 animate-spin text-[#A85A3B]" />
+                        ) : customImageUrl ? (
+                           <Image src={customImageUrl} alt="Custom Bundle" width={100} height={100} className="rounded object-cover" />
+                        ) : (
+                           <>
+                             <ImageIcon className="w-6 h-6 text-gray-400 mb-2" />
+                             <span className="text-sm font-medium text-gray-600">Click to upload custom image</span>
+                           </>
+                        )}
+                        <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={uploadingImage} />
+                      </label>
                     </div>
                   )}
                 </div>
@@ -519,7 +667,7 @@ export default function AdminCreateBundleClient() {
             </div>
 
             {/* LIVE PREVIEW CARD */}
-            <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+            <div id="preview-card" className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm scroll-mt-24">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-widest">Live Preview</h3>
                 {badgeText && <span className="bg-[#FAF6F2] text-[#A85A3B] px-2 py-1 text-[10px] font-bold uppercase tracking-widest rounded">{badgeText}</span>}
@@ -534,6 +682,8 @@ export default function AdminCreateBundleClient() {
                       </div>
                     ))}
                   </div>
+                ) : !useCollage && customImageUrl ? (
+                  <Image src={customImageUrl} alt="Bundle Preview" fill className="object-cover" />
                 ) : (
                   <ImageIcon className="w-10 h-10 text-gray-300" />
                 )}
@@ -547,7 +697,7 @@ export default function AdminCreateBundleClient() {
                 {totalSavings > 0 && <span className="text-sm text-gray-400 line-through">{formatPrice(originalTotal)}</span>}
               </div>
 
-              <button className="w-full py-3 bg-[#1A1A1A] text-white text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-black transition-colors">
+              <button className="w-full py-3 bg-[#1A1A1A] text-white text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-black transition-colors pointer-events-none">
                 Add Bundle to Cart
               </button>
             </div>
