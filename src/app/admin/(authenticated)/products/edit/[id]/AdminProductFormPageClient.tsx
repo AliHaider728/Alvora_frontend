@@ -759,7 +759,7 @@ export const AdminProductFormPageClient: React.FC = () => {
       )) nextErrors.sku = 'This SKU is already in use.';
     }
 
-    if (weight !== undefined && (!Number.isFinite(weight) || weight < 0)) nextErrors.weight = 'Weight must be zero or greater.';
+    if (weight !== undefined && weight !== '' && (!Number.isFinite(Number(weight)) || Number(weight) < 0)) nextErrors.weight = 'Weight must be zero or greater.';
     if (deliveryType === 'fixed' && (customDeliveryFee === undefined || customDeliveryFee < 0)) {
       nextErrors.customDeliveryFee = 'Enter a non-negative custom shipping fee.';
     }
