@@ -1,53 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import Link from "next/link";
 import { ShoppingCart, Eye } from "lucide-react";
 import { useScrollProgress, mapRange, clamp01 } from "../../hooks/use-scroll-progress";
 import { useStore } from "../../context/StoreContext";
-
-const STEPS = [
-  {
-    n: "1",
-    title: "Cleanse",
-    sub: "Gentle Glow Face Wash",
-    body: "A soft, soap-free cleanser that removes impurities while preserving your natural moisture barrier. Leaves skin feeling clean and hydrated.",
-    img: "/images/animation/prod-1.png",
-    slug: "gentle-glow-face-wash",
-  },
-  {
-    n: "2",
-    title: "Prep",
-    sub: "Nourishing Essence",
-    body: "A watery essence that preps skin for maximum absorption of subsequent skincare steps.",
-    img: "/images/animation/prod-2.png",
-    slug: "nourishing-essence",
-  },
-  {
-    n: "3",
-    title: "Treat",
-    sub: "Radiance Serum",
-    body: "A lightweight, fast-absorbing serum infused with Niacinamide and Hyaluronic Acid to brighten, hydrate and even skin tone for a natural healthy glow.",
-    img: "/images/animation/prod-3.png",
-    slug: "radiance-serum",
-  },
-  {
-    n: "4",
-    title: "Hydrate",
-    sub: "Hydra Comfort Gel Cream",
-    body: "A lightweight gel-cream that delivers intense hydration and soothes irritated skin throughout the day.",
-    img: "/images/animation/prod-1.png",
-    slug: "hydra-comfort-gel-cream",
-  },
-  {
-    n: "5",
-    title: "Protect",
-    sub: "Daily Defense SPF 50",
-    body: "Lightweight broad-spectrum SPF 50 sunscreen with no white cast. Wear it every day to lock in your ritual.",
-    img: "/images/animation/prod-2.png",
-    slug: "daily-defense-spf-50",
-  },
-];
 
 function interpolateStops(value: number, stops: number[]) {
   if (stops.length < 2) return stops[0] ?? 0;
@@ -68,12 +25,34 @@ export function RitualAnimation() {
   const [ref, p] = useScrollProgress<HTMLDivElement>();
   const { products, addToCart, setIsCartOpen } = useStore();
 
+  const STEPS = useMemo(() => {
+    // Get visible products, prioritizing bestsellers
+    let topProducts = products.filter(p => p.isBestseller && p.isVisible !== false);
+    if (topProducts.length < 5) {
+      const others = products.filter(p => !p.isBestseller && p.isVisible !== false);
+      topProducts = [...topProducts, ...others];
+    }
+    // Take exactly up to 5 products
+    return topProducts.slice(0, 5).map((prod, index) => ({
+      n: (index + 1).toString(),
+      title: prod.category || "Care",
+      sub: prod.name,
+      body: prod.description || prod.shortDescription || "Elevate your skincare routine.",
+      img: prod.images?.[0] || "/images/animation/prod-1.png",
+      slug: prod.slug,
+      product: prod,
+    }));
+  }, [products]);
+
   const centers = [0, 0.16, 0.33, 0.5, 0.66];
   const bubbleX = interpolateStops(p, [-18, 18, -18, 18, -18, 0, 0]);
   const bubbleY = interpolateStops(p, [8, -3, -7, 5, -5, 0, 0]);
   const bubbleScale = interpolateStops(p, [0.78, 0.88, 0.9, 0.94, 0.9, 1.28, 1.28]);
   const finalOpacity = mapRange(p, 0.75, 0.85, 0, 1);
   const itemOpacity = 1 - mapRange(p, 0.72, 0.82, 0, 1);
+
+  // If no steps generated yet (loading state)
+  if (STEPS.length === 0) return null;
 
   return (
     <>
@@ -86,7 +65,7 @@ export function RitualAnimation() {
 
               return (
                 <article
-                  key={s.title}
+                  key={s.slug}
                   className={`absolute top-1/2 w-[44%] max-w-md -translate-y-1/2 px-6 md:px-10 ${
                     onRight ? "right-0 md:right-[7%]" : "left-0 md:left-[7%]"
                   }`}
@@ -103,7 +82,7 @@ export function RitualAnimation() {
                       <div>
                         <h3 className="text-lg uppercase md:text-4xl text-[#1A1A1A]">{s.title}</h3>
                         <p className="text-[#C87355] text-xs font-bold tracking-widest uppercase mt-2">{s.sub}</p>
-                        <p className="text-[#1A1A1A]/70 mt-4 hidden text-sm leading-relaxed md:block">{s.body}</p>
+                        <p className="text-[#1A1A1A]/70 mt-4 hidden text-sm leading-relaxed md:block line-clamp-3">{s.body}</p>
                       </div>
                     </div>
                   </div>
@@ -130,7 +109,6 @@ export function RitualAnimation() {
 
             {STEPS.map((s, i) => {
               const op = stageOpacity(p, centers[i] ?? 0, 0.12) * itemOpacity;
-              const matchedProduct = products.find(prod => prod.slug === s.slug);
               const pointerEvents = op > 0.4 ? 'auto' : 'none';
               const onRight = i % 2 === 0;
               // If text is on the right, put bubbles on the right side of the main image
@@ -138,7 +116,7 @@ export function RitualAnimation() {
 
               return (
                 <div
-                  key={s.title}
+                  key={s.slug}
                   className="absolute inset-0 flex items-center justify-center"
                   style={{ opacity: op, pointerEvents }}
                 >
@@ -148,26 +126,26 @@ export function RitualAnimation() {
                     width={768}
                     height={1024}
                     loading="lazy"
-                    className="h-[50%] w-auto object-contain pointer-events-none"
+                    className="h-[45%] w-auto object-contain pointer-events-none rounded-xl"
                   />
                   
                   {/* Small Action Bubbles */}
                   <div className={`absolute top-[38%] flex flex-col gap-3 md:gap-4 ${sideClass}`}>
                     <button 
-                      onClick={() => {
-                        if (matchedProduct) {
-                          addToCart(matchedProduct);
-                          setIsCartOpen(true);
-                        }
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        addToCart(s.product);
+                        setIsCartOpen(true);
                       }}
-                      className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/70 backdrop-blur-md border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.12)] flex items-center justify-center hover:bg-white hover:scale-110 transition-all text-[#C87355]"
+                      className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/80 backdrop-blur-md border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.12)] flex items-center justify-center hover:bg-white hover:scale-110 transition-all text-[#C87355] z-50 cursor-pointer"
                       title="Add to Cart"
                     >
                       <ShoppingCart className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2} />
                     </button>
                     <Link 
                       href={`/product/${s.slug}`}
-                      className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/70 backdrop-blur-md border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.12)] flex items-center justify-center hover:bg-white hover:scale-110 transition-all text-[#1A1A1A]"
+                      className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/80 backdrop-blur-md border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.12)] flex items-center justify-center hover:bg-white hover:scale-110 transition-all text-[#1A1A1A] z-50 cursor-pointer"
                       title="View Details"
                     >
                       <Eye className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2} />
