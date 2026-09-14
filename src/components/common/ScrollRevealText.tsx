@@ -51,7 +51,7 @@ export const ScrollRevealText: React.FC<Props> = ({ text, className = "" }) => {
 
       {/* ─── DESKTOP VIEW (Pinned Scroll Highlight) ─── */}
       <div ref={containerRef} className="hidden md:block relative w-full h-[150vh]">
-        <div className="sticky top-0 h-[80vh] flex flex-col items-center justify-center px-12 lg:px-24 overflow-hidden pt-12">
+        <div className="sticky top-0 h-screen flex flex-col items-center justify-center px-12 lg:px-24 overflow-hidden">
           
           <span className="text-xs tracking-[0.3em] uppercase text-[#C87355] font-bold mb-8 block">
             Our Philosophy

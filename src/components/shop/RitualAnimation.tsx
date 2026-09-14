@@ -3,7 +3,8 @@
 import React, { useMemo } from "react";
 import Link from "next/link";
 import { ShoppingCart, Eye } from "lucide-react";
-import { useScrollProgress, mapRange, clamp01 } from "../../hooks/use-scroll-progress";
+import { useScroll, useSpring, useMotionValueEvent } from "framer-motion";
+import { mapRange, clamp01 } from "../../hooks/use-scroll-progress";
 import { useStore } from "../../context/StoreContext";
 
 function interpolateStops(value: number, stops: number[]) {
@@ -11,8 +12,8 @@ function interpolateStops(value: number, stops: number[]) {
   const scaled = clamp01(value) * (stops.length - 1);
   const index = Math.min(Math.floor(scaled), stops.length - 2);
   const local = scaled - index;
-  const from = stops[index] ?? 0;
-  const to = stops[index + 1] ?? from;
+  const from = stops[index];
+  const to = stops[index + 1];
   return from + (to - from) * local;
 }
 
@@ -22,7 +23,15 @@ function stageOpacity(progress: number, center: number, width = 0.12) {
 }
 
 export function RitualAnimation() {
-  const [ref, p] = useScrollProgress<HTMLDivElement>();
+  const ref = React.useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+  const [p, setP] = React.useState(0);
+
+  useMotionValueEvent(smoothProgress, "change", (latest) => {
+    setP(latest);
+  });
+
   const { products, addToCart, setIsCartOpen } = useStore();
 
   const STEPS = useMemo(() => {
@@ -130,7 +139,7 @@ export function RitualAnimation() {
                   />
                   
                   {/* Small Action Bubbles */}
-                  <div className={`absolute top-[38%] flex flex-col gap-3 md:gap-4 ${sideClass}`}>
+                  <div className={`absolute top-[38%] flex flex-col gap-3 md:gap-4 ${sideClass} pointer-events-auto`}>
                     <button 
                       onClick={(e) => {
                         e.preventDefault();
