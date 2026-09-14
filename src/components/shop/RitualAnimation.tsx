@@ -83,7 +83,6 @@ export function RitualAnimation() {
             {STEPS.map((s, i) => {
               const opacity = stageOpacity(p, centers[i] ?? 0, 0.12);
               const onRight = i % 2 === 0;
-              const matchedProduct = products.find(prod => prod.slug === s.slug);
 
               return (
                 <article
@@ -107,29 +106,6 @@ export function RitualAnimation() {
                         <p className="text-[#1A1A1A]/70 mt-4 hidden text-sm leading-relaxed md:block">{s.body}</p>
                       </div>
                     </div>
-                    
-                    {/* Buttons - Hidden via opacity from parent, pointer-events-auto allows clicks */}
-                    <div className="pointer-events-auto flex items-center gap-3 mt-6 ml-[4.5rem]">
-                      <button 
-                        onClick={() => {
-                          if (matchedProduct) {
-                            addToCart(matchedProduct);
-                            setIsCartOpen(true);
-                          }
-                        }}
-                        className="bg-[#1A1A1A] hover:bg-black text-white px-5 py-2.5 rounded-full text-xs uppercase tracking-widest font-bold transition-all flex items-center gap-2 shadow-lg"
-                      >
-                        <ShoppingCart className="w-4 h-4" />
-                        Add to Cart
-                      </button>
-                      <Link 
-                        href={`/product/${s.slug}`}
-                        className="bg-white hover:bg-gray-50 text-[#1A1A1A] border border-[#1A1A1A]/10 px-5 py-2.5 rounded-full text-xs uppercase tracking-widest font-bold transition-all flex items-center gap-2 shadow-sm"
-                      >
-                        <Eye className="w-4 h-4" />
-                        View Details
-                      </Link>
-                    </div>
                   </div>
                 </article>
               );
@@ -149,23 +125,59 @@ export function RitualAnimation() {
               width={1024}
               height={1024}
               loading="lazy"
-              className="absolute inset-0 h-full w-full opacity-80"
+              className="absolute inset-0 h-full w-full opacity-80 pointer-events-none"
             />
 
-            {STEPS.map((s, i) => (
-              <img
-                key={s.title}
-                src={s.img}
-                alt={s.sub}
-                width={768}
-                height={1024}
-                loading="lazy"
-                className="absolute top-1/2 left-1/2 h-[50%] w-auto -translate-x-1/2 -translate-y-1/2 object-contain"
-                style={{ opacity: stageOpacity(p, centers[i] ?? 0, 0.12) * itemOpacity }}
-              />
-            ))}
+            {STEPS.map((s, i) => {
+              const op = stageOpacity(p, centers[i] ?? 0, 0.12) * itemOpacity;
+              const matchedProduct = products.find(prod => prod.slug === s.slug);
+              const pointerEvents = op > 0.4 ? 'auto' : 'none';
+              const onRight = i % 2 === 0;
+              // If text is on the right, put bubbles on the right side of the main image
+              const sideClass = onRight ? 'right-[8%] md:right-[12%]' : 'left-[8%] md:left-[12%]';
 
-            <div className="relative flex w-[64%] flex-col items-center" style={{ opacity: finalOpacity }}>
+              return (
+                <div
+                  key={s.title}
+                  className="absolute inset-0 flex items-center justify-center"
+                  style={{ opacity: op, pointerEvents }}
+                >
+                  <img
+                    src={s.img}
+                    alt={s.sub}
+                    width={768}
+                    height={1024}
+                    loading="lazy"
+                    className="h-[50%] w-auto object-contain pointer-events-none"
+                  />
+                  
+                  {/* Small Action Bubbles */}
+                  <div className={`absolute top-[38%] flex flex-col gap-3 md:gap-4 ${sideClass}`}>
+                    <button 
+                      onClick={() => {
+                        if (matchedProduct) {
+                          addToCart(matchedProduct);
+                          setIsCartOpen(true);
+                        }
+                      }}
+                      className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/70 backdrop-blur-md border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.12)] flex items-center justify-center hover:bg-white hover:scale-110 transition-all text-[#C87355]"
+                      title="Add to Cart"
+                    >
+                      <ShoppingCart className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2} />
+                    </button>
+                    <Link 
+                      href={`/product/${s.slug}`}
+                      className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/70 backdrop-blur-md border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.12)] flex items-center justify-center hover:bg-white hover:scale-110 transition-all text-[#1A1A1A]"
+                      title="View Details"
+                    >
+                      <Eye className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2} />
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
+
+            <div className="relative flex w-[64%] flex-col items-center pointer-events-none" style={{ opacity: finalOpacity }}>
               <img src="/images/animation/products.png" alt="Skincare set" width={1200} height={1008} loading="lazy" className="w-full" />
             </div>
           </div>
