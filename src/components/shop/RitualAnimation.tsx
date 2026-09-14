@@ -55,7 +55,13 @@ export function RitualAnimation() {
   const y2 = useTransform(op2, [0, 1], ["calc(-50% + 38px)", "calc(-50% + 0px)"]);
   const y3 = useTransform(op3, [0, 1], ["calc(-50% + 38px)", "calc(-50% + 0px)"]);
   const y4 = useTransform(op4, [0, 1], ["calc(-50% + 38px)", "calc(-50% + 0px)"]);
-  const ys = [y0, y1, y2, y3, y4];
+  
+  const trans0 = useMotionTemplate`translate3d(0, ${y0}, 0)`;
+  const trans1 = useMotionTemplate`translate3d(0, ${y1}, 0)`;
+  const trans2 = useMotionTemplate`translate3d(0, ${y2}, 0)`;
+  const trans3 = useMotionTemplate`translate3d(0, ${y3}, 0)`;
+  const trans4 = useMotionTemplate`translate3d(0, ${y4}, 0)`;
+  const transforms = [trans0, trans1, trans2, trans3, trans4];
 
   // Image Opacities (Combined step opacity * overall items opacity)
   const imgOp0 = useTransform(() => op0.get() * itemOpacity.get());
@@ -73,8 +79,15 @@ export function RitualAnimation() {
   const pe4 = useTransform(() => imgOp4.get() > 0.4 ? "auto" : "none");
   const pes = [pe0, pe1, pe2, pe3, pe4];
 
-  // If no steps generated yet (loading state)
-  if (STEPS.length === 0) return null;
+  // If no steps generated yet (loading state), attach ref to avoid hydration errors
+  if (STEPS.length === 0) {
+    return (
+      <>
+        <section className="md:hidden bg-[#FAF6F2] py-20 px-6 min-h-[500px]" />
+        <section id="ritual" ref={ref as any} className="hidden md:block relative h-[100vh] bg-[#FAF6F2]" />
+      </>
+    );
+  }
 
   return (
     <>
@@ -147,7 +160,7 @@ export function RitualAnimation() {
                   }`}
                   style={{
                     opacity: ops[i],
-                    transform: useMotionTemplate`translate3d(0, ${ys[i]}, 0)`,
+                    transform: transforms[i],
                   }}
                 >
                   <div className="flex flex-col gap-4">

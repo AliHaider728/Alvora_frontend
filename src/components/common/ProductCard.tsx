@@ -145,24 +145,36 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
   };
 
   return (
-    <article className="group relative flex h-full w-full flex-col overflow-hidden rounded-[28px] border border-slate-200/70 bg-white shadow-[0_2px_10px_rgba(15,23,42,0.05)] transition-all duration-300 ease-out hover:-translate-y-1 hover:border-rose-200 hover:shadow-[0_20px_45px_rgba(244,63,94,0.14)]">
+    <article className="group relative flex h-full w-full flex-col overflow-hidden rounded-2xl border border-slate-200/70 bg-white shadow-[0_2px_10px_rgba(15,23,42,0.05)] transition-all duration-300 ease-out hover:-translate-y-1 hover:border-rose-200 hover:shadow-[0_20px_45px_rgba(244,63,94,0.14)]">
 
       {/* ---------- IMAGE ---------- */}
       <div className="relative aspect-[1/1] w-full shrink-0 overflow-hidden bg-white">
         <Link
           href={`/product/${product.slug}`}
-          className={`flex h-full w-full items-center justify-center ${compact ? 'p-2.5' : 'p-3 sm:p-4'}`}
+          className={`flex h-full w-full items-center justify-center relative ${compact ? 'p-2.5' : 'p-3 sm:p-4'}`}
           aria-label={`View ${product.name}`}
         >
-          <img
-            src={getSafeImageSrc(cardImageUrl, { width: 600 })}
-            alt={product.name}
-            width={600}
-            height={600}
-            loading={priority ? "eager" : "lazy"}
-            fetchPriority={priority ? "high" : "auto"}
-            className="h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.06]"
-          />
+          <div className="relative w-full h-full rounded-2xl overflow-hidden">
+            <img
+              src={getSafeImageSrc(cardImageUrl, { width: 600 })}
+              alt={product.name}
+              width={600}
+              height={600}
+              loading={priority ? "eager" : "lazy"}
+              fetchPriority={priority ? "high" : "auto"}
+              className={`absolute inset-0 h-full w-full object-cover object-center transition-all duration-700 ease-out group-hover:scale-[1.06] ${product.images && product.images.length > 1 ? 'group-hover:opacity-0' : ''}`}
+            />
+            {product.images && product.images.length > 1 && (
+              <img
+                src={getSafeImageSrc(product.images[1], { width: 600 })}
+                alt={`${product.name} alternate view`}
+                width={600}
+                height={600}
+                loading="lazy"
+                className="absolute inset-0 h-full w-full object-cover object-center opacity-0 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-[1.06]"
+              />
+            )}
+          </div>
         </Link>
 
         {/* Top-left badges */}

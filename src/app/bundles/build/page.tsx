@@ -65,7 +65,7 @@ export default function BuildBundlePage() {
 
   return (
     <>
-      <div className="bg-[#FAF6F2] min-h-screen py-24">
+      <div className="bg-[#FAF6F2] flex-1 py-24">
         <div className="alvora-container">
           
           <div className="mb-12 text-center">

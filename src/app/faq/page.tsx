@@ -77,7 +77,7 @@ export default function FaqPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans py-8">
+    <div className="flex-1 bg-slate-50 font-sans py-8">
       <SeoHead title="Frequently Asked Questions (FAQ)" />
 
       <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-16">

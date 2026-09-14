@@ -6,7 +6,7 @@ import { RefreshCw, CheckCircle, Clock, AlertTriangle } from 'lucide-react';
 
 export default function ReturnPolicyPage() {
   return (
-    <div className="min-h-screen bg-slate-50 font-sans py-8">
+    <div className="flex-1 bg-slate-50 font-sans py-8">
       <SeoHead title="Return Policy - Alvora Skincare" />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

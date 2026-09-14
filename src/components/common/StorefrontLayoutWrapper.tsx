@@ -19,7 +19,7 @@ export const StorefrontLayoutWrapper: React.FC<{ children: React.ReactNode }> = 
     <div className="flex flex-col min-h-screen bg-[#FAF6F2] text-[#1A1A1A] pb-20 xl:pb-0">
       <Header />
       <CartDrawer />
-      <main className="flex-1">
+      <main className="flex-1 flex flex-col">
         {children}
       </main>
       <Footer />

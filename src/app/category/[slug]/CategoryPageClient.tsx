@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import React, { useState, useMemo } from 'react';
 import Link from "next/link";
 import Image from "next/image";
@@ -183,7 +183,7 @@ export const CategoryPageClient: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF6F2] font-sans py-6">
+    <div className="min-h-screen bg-[#FAF6F2] font-sans pt-6 pb-32">
       
 
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
@@ -358,7 +358,7 @@ export const CategoryPageClient: React.FC = () => {
           {/* Main Content Area */}
           <main className="lg:col-span-3 space-y-6">
             {/* Controls Bar: Mobile Filter Button + Results Count + Sort Dropdown */}
-            <div className="bg-white p-4 rounded-sm border border-[#EDE5DC] shadow-sm flex flex-wrap items-center justify-between gap-4">
+            <div className="bg-white p-4 rounded-2xl border border-[#EDE5DC] shadow-sm flex flex-wrap items-center justify-between gap-4">
               <button
                 onClick={() => setMobileFilterOpen(true)}
                 className="btn-interactive lg:hidden flex items-center gap-2 px-4 py-2 rounded-2xl bg-gradient-to-br from-[#D4784F] to-[#9C4122] text-white font-display font-medium text-2xl uppercase tracking-widest text-xs"
@@ -377,7 +377,7 @@ export const CategoryPageClient: React.FC = () => {
                 <select
                   value={sortBy}
                   onChange={e => setSortBy(e.target.value as any)}
-                  className="px-3.5 py-2 text-xs font-display font-medium text-2xl uppercase tracking-widest rounded-sm border border-[#EDE5DC] bg-[#FAF6F2] text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-[#C48B80] cursor-pointer"
+                  className="px-3.5 py-2 text-xs font-display font-medium text-2xl uppercase tracking-widest rounded-2xl border border-[#EDE5DC] bg-[#FAF6F2] text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-[#C48B80] cursor-pointer"
                 >
                   <option value="featured">Featured / Best Match</option>
                   <option value="price-low">Price: Low to High</option>
@@ -396,7 +396,7 @@ export const CategoryPageClient: React.FC = () => {
                 ))}
               </div>
             ) : sortedProducts.length === 0 ? (
-              <div className="bg-white rounded-sm p-12 text-center border border-[#EDE5DC] space-y-4">
+              <div className="bg-white rounded-2xl p-12 text-center border border-[#EDE5DC] space-y-4">
                 <div className="w-16 h-16 rounded-full bg-[#FAF6F2] text-[#9C4122] flex items-center justify-center mx-auto">
                   <Filter className="w-8 h-8" />
                 </div>

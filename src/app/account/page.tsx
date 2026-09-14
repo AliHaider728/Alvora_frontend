@@ -18,7 +18,7 @@ export default function AccountPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div className="flex-1 bg-slate-50 flex items-center justify-center">
         <Loader2 className="w-8 h-8 text-[#C48B80] animate-spin" />
       </div>
     );
@@ -26,7 +26,7 @@ export default function AccountPage() {
 
   if (!isLoggedIn || !customerProfile) {
     return (
-      <div className="min-h-screen bg-slate-50 font-sans py-12 flex items-center justify-center">
+      <div className="flex-1 bg-slate-50 font-sans py-12 flex items-center justify-center">
         <SeoHead title="My Account" />
         <div className="bg-white p-10 rounded-3xl border border-slate-100 shadow-xl max-w-md w-full text-center space-y-6">
           <div className="mx-auto w-16 h-16 bg-rose-100 rounded-full flex items-center justify-center mb-2">
@@ -51,7 +51,7 @@ export default function AccountPage() {
   const customerOrders = orders.filter(o => o.email?.toLowerCase() === customerProfile.email?.toLowerCase());
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans py-6">
+    <div className="flex-1 bg-slate-50 font-sans py-6">
       <SeoHead title="My Account & Order History" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
