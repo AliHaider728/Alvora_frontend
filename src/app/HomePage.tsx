@@ -5,8 +5,6 @@ import { HeroSection } from '../components/home/HeroSection';
 import { CrissCrossMarquee } from '../components/home/CrissCrossMarquee';
 import { BundleSection } from '../components/home/BundleSection';
 import { ScrollRevealText } from '../components/common/ScrollRevealText';
-
-import { BestSellers } from '../components/home/BestSellers';
 import { IngredientSection } from '../components/home/IngredientSection';
 import { FeaturedProduct } from '../components/home/FeaturedProduct';
 
@@ -40,7 +38,6 @@ export const HomePage: React.FC<Props> = ({ products, categories, settings }) =>
         <ScrollRevealText text="At ALVORA, we blend clinically proven ingredients with the best of nature to support your skin's health today and tomorrow. Sustainable choices. Responsible formulas. Beautiful results for you and the world we all share." />
       </section>
       <BundleSection />
-      <BestSellers products={visibleProducts} sectionSettings={sectionByKey.featuredProducts} />
       <IngredientSection />
       {featuredProduct && <FeaturedProduct product={featuredProduct} />}
       
