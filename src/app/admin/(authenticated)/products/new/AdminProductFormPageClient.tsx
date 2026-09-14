@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import React, { useEffect, useRef, useState } from 'react';
 import {
   ArrowLeft,
@@ -1189,8 +1189,8 @@ export const AdminProductFormPageClient: React.FC = () => {
           <FormCard title="Delivery & Shipping" icon={Truck}>
             <div className="grid gap-5 sm:grid-cols-2">
               <label>
-                <span className="mb-1.5 block text-xs font-bold text-[#1A1A1A]/80">Weight (kg)</span>
-                <input type="number" min="0" step="0.01" value={weight ?? ''} onChange={event => { setWeight(event.target.value === '' ? undefined : Number(event.target.value)); markDirty(); clearError('weight'); }} className={inputClass('weight')} placeholder="e.g. 1.20" />
+                <span className="mb-1.5 block text-xs font-bold text-[#1A1A1A]/80">Weight / Volume (ml/g)</span>
+                <input type="number" min="0" step="0.01" value={weight ?? ''} onChange={event => { setWeight(event.target.value === '' ? undefined : Number(event.target.value)); markDirty(); clearError('weight'); }} className={inputClass('weight')} placeholder="e.g. 100" />
                 <FieldError message={errors.weight} />
               </label>
               <label>

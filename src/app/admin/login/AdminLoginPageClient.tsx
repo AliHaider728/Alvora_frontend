@@ -14,6 +14,14 @@ export const AdminLoginPageClient: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [showPassword, setShowPassword] = useState(false);
+  const passwordInputRef = React.useRef<HTMLInputElement>(null);
+
+  const handleEmailKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      passwordInputRef.current?.focus();
+    }
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,7 +30,7 @@ export const AdminLoginPageClient: React.FC = () => {
 
     let errors: Record<string, string> = {};
     if (!email.trim()) errors.email = "Email is required";
-    else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,}$/i.test(email)) errors.email = "Please enter a valid email address";
+    else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) errors.email = "Please enter a valid email address";
     
     if (!password) errors.password = "Password is required";
 
@@ -114,6 +122,7 @@ export const AdminLoginPageClient: React.FC = () => {
                     type="email"
                     value={email}
                     onChange={e => { setEmail(e.target.value); setFieldErrors(p => ({...p, email: ''})); }}
+                    onKeyDown={handleEmailKeyDown}
                     placeholder="admin@alvora.pk"
                     className={`w-full pl-11 pr-4 py-3.5 text-[13px] rounded-lg border ${fieldErrors.email ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500 bg-rose-50/30' : 'border-[#E7D9D0] focus:border-[#A86249] focus:ring-[#A86249]'} bg-white text-[#1A1A1A] placeholder:text-[#A1A7AA]/70 focus:outline-none focus:ring-1 transition-colors`}
                   />
@@ -131,6 +140,7 @@ export const AdminLoginPageClient: React.FC = () => {
                     <Lock className="w-4 h-4 text-[#A1A7AA]" strokeWidth={1.5} />
                   </div>
                   <input
+                    ref={passwordInputRef}
                     type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={e => { setPassword(e.target.value); setFieldErrors(p => ({...p, password: ''})); }}

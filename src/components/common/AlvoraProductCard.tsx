@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Heart, Eye, ArrowLeftRight, ShoppingCart } from 'lucide-react';
@@ -22,17 +22,19 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
   return (
     <div className="group relative bg-white rounded-2xl flex flex-col h-full border border-[#EDE5DC] hover:shadow-md transition-shadow duration-300">
       {/* Image Container */}
-      <Link href={`/product/${product.slug}`} className="relative aspect-square bg-[#F5EDE4] overflow-hidden block rounded-t-2xl">
-        <Image
-          src={getSafeImageSrc(product.images[0])}
-          alt={product.name}
-          fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className="object-cover transition-transform duration-700 group-hover:scale-105"
-        />
+      <div className="relative aspect-square bg-[#F5EDE4] overflow-hidden block rounded-t-2xl">
+        <Link href={`/product/${product.slug}`} className="absolute inset-0 z-0">
+          <Image
+            src={getSafeImageSrc(product.images[0])}
+            alt={product.name}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        </Link>
         
         {/* Badges */}
-        <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
+        <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10 pointer-events-none">
           {product.isBestseller && (
             <span className="bg-[#9C4122] text-white text-[9px] font-bold tracking-widest uppercase px-2 py-1 rounded-2xl shadow-sm">
               BESTSELLER
@@ -63,7 +65,7 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
             <ArrowLeftRight className="w-4 h-4" />
           </button>
         </div>
-      </Link>
+      </div>
 
       {/* Content Container */}
       <div className="p-4 flex flex-col flex-grow text-left">

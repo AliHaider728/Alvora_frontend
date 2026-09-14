@@ -1,4 +1,4 @@
-﻿// Alvora Skincare Unified Backend API Client
+// Alvora Skincare Unified Backend API Client
 
 import { MOCK_PRODUCTS } from '../data/mock/products';
 import { MOCK_CATEGORIES } from '../data/mock/categories';
@@ -109,7 +109,7 @@ export const api = {
   // Products
   getProducts: (params?: { category?: string; ageGroup?: string; search?: string; isVisible?: boolean }) => {
     const query = new URLSearchParams(params as any).toString();
-    return fetchJson<any[]>(`/products?${query}`);
+    return fetchJson<any[]>(`/products?${query}&_t=${Date.now()}`);
   },
 
   getProduct: async (idOrSlug: string) => {
