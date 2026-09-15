@@ -35,7 +35,67 @@ export function RitualAnimation() {
   // Framer Motion transforms to replace state-based interpolation
   const bubbleX = useTransform(smoothProgress, [0, 1/6, 2/6, 3/6, 4/6, 5/6, 1], [-18, 18, -18, 18, -18, 0, 0]);
   const bubbleY = useTransform(smoothProgress, [0, 1/6, 2/6, 3/6, 4/6, 5/6, 1], [8, -3, -7, 5, -5, 0, 0]);
-  const bubbleScale = useTransform(smoothProgress, [0, 1/6, 2/6, 3/6, 4/6, 5/6, 1], [0.78, 0.88, 0.9, 0.94, 0.9, 1.28, 1.28]);
+  
+  const transInputs = [
+    0.0, 0.04, 0.08, 0.12, 
+    0.16, 0.20, 0.24, 0.28, 
+    0.33, 0.37, 0.41, 0.45, 
+    0.50, 0.54, 0.58, 0.62, 
+    0.66, 1.0
+  ];
+  const mainOp = [
+    0.8, 0.8, 0.0, 0.8,
+    0.8, 0.8, 0.0, 0.8,
+    0.8, 0.8, 0.0, 0.8,
+    0.8, 0.8, 0.0, 0.8,
+    0.8, 0.8
+  ];
+  const mainSc = [
+    0.78, 0.82, 1.2, 0.4,
+    0.88, 0.92, 1.2, 0.4,
+    0.9,  0.94, 1.2, 0.4,
+    0.94, 0.98, 1.2, 0.4,
+    0.9,  0.9
+  ];
+  const smallOp = [
+    0, 0, 0.6, 0,
+    0, 0, 0.6, 0,
+    0, 0, 0.6, 0,
+    0, 0, 0.6, 0,
+    0, 0
+  ];
+
+  // Small Bubble 1 (Top Left)
+  const sb1X = [0, 0, -12, 0, 0, 0, -15, 0, 0, 0, -10, 0, 0, 0, -14, 0, 0, 0];
+  const sb1Y = [0, 0, -15, 0, 0, 0, -10, 0, 0, 0, -18, 0, 0, 0, -12, 0, 0, 0];
+  // Small Bubble 2 (Top Right)
+  const sb2X = [0, 0, 15, 0, 0, 0, 12, 0, 0, 0, 18, 0, 0, 0, 10, 0, 0, 0];
+  const sb2Y = [0, 0, -10, 0, 0, 0, -16, 0, 0, 0, -8, 0, 0, 0, -15, 0, 0, 0];
+  // Small Bubble 3 (Bottom Left)
+  const sb3X = [0, 0, -10, 0, 0, 0, -8, 0, 0, 0, -12, 0, 0, 0, -16, 0, 0, 0];
+  const sb3Y = [0, 0, 12, 0, 0, 0, 15, 0, 0, 0, 10, 0, 0, 0, 14, 0, 0, 0];
+  // Small Bubble 4 (Bottom Right)
+  const sb4X = [0, 0, 14, 0, 0, 0, 16, 0, 0, 0, 10, 0, 0, 0, 12, 0, 0, 0];
+  const sb4Y = [0, 0, 15, 0, 0, 0, 12, 0, 0, 0, 18, 0, 0, 0, 10, 0, 0, 0];
+
+  const bubbleScale = useTransform(smoothProgress, transInputs, mainSc);
+  const bubbleOpacity = useTransform(smoothProgress, transInputs, mainOp);
+  const smallBubbleOpacity = useTransform(smoothProgress, transInputs, smallOp);
+  
+  const b1X = useTransform(smoothProgress, transInputs, sb1X);
+  const b1Y = useTransform(smoothProgress, transInputs, sb1Y);
+  const b2X = useTransform(smoothProgress, transInputs, sb2X);
+  const b2Y = useTransform(smoothProgress, transInputs, sb2Y);
+  const b3X = useTransform(smoothProgress, transInputs, sb3X);
+  const b3Y = useTransform(smoothProgress, transInputs, sb3Y);
+  const b4X = useTransform(smoothProgress, transInputs, sb4X);
+  const b4Y = useTransform(smoothProgress, transInputs, sb4Y);
+
+  const t1 = useMotionTemplate`translate3d(${b1X}vw, ${b1Y}vh, 0) scale(0.35)`;
+  const t2 = useMotionTemplate`translate3d(${b2X}vw, ${b2Y}vh, 0) scale(0.25)`;
+  const t3 = useMotionTemplate`translate3d(${b3X}vw, ${b3Y}vh, 0) scale(0.4)`;
+  const t4 = useMotionTemplate`translate3d(${b4X}vw, ${b4Y}vh, 0) scale(0.3)`;
+
   const finalOpacity = useTransform(smoothProgress, [0.75, 0.85], [0, 1]);
   const itemOpacity = useTransform(smoothProgress, [0.72, 0.82], [1, 0]);
   
@@ -156,7 +216,7 @@ export function RitualAnimation() {
                 <motion.article
                   key={s.slug}
                   className={`absolute top-1/2 w-[44%] max-w-md -translate-y-1/2 px-10 ${
-                    onRight ? "right-[7%]" : "left-[7%]"
+                    onRight ? "right-[15%]" : "left-[15%]"
                   }`}
                   style={{
                     opacity: ops[i],
@@ -184,14 +244,22 @@ export function RitualAnimation() {
             className="relative flex aspect-square items-center justify-center will-change-transform w-[46vw] max-w-[560px]"
             style={{ transform: bubbleTransform }}
           >
-            <img
+            {/* Small Bubbles for Splitting Effect */}
+            <motion.img src="/images/animation/bubble.png" alt="Bubble Splinter" style={{ transform: t1, opacity: smallBubbleOpacity, filter: 'grayscale(1) brightness(1.3) contrast(1.2)' }} className="absolute inset-0 h-full w-full pointer-events-none" />
+            <motion.img src="/images/animation/bubble.png" alt="Bubble Splinter" style={{ transform: t2, opacity: smallBubbleOpacity, filter: 'grayscale(1) brightness(1.3) contrast(1.2)' }} className="absolute inset-0 h-full w-full pointer-events-none" />
+            <motion.img src="/images/animation/bubble.png" alt="Bubble Splinter" style={{ transform: t3, opacity: smallBubbleOpacity, filter: 'grayscale(1) brightness(1.3) contrast(1.2)' }} className="absolute inset-0 h-full w-full pointer-events-none" />
+            <motion.img src="/images/animation/bubble.png" alt="Bubble Splinter" style={{ transform: t4, opacity: smallBubbleOpacity, filter: 'grayscale(1) brightness(1.3) contrast(1.2)' }} className="absolute inset-0 h-full w-full pointer-events-none" />
+
+            {/* Main Bubble */}
+            <motion.img
               src="/images/animation/bubble.png"
               alt="Bubble"
               aria-hidden
               width={1024}
               height={1024}
               loading="lazy"
-              className="absolute inset-0 h-full w-full opacity-80 pointer-events-none"
+              className="absolute inset-0 h-full w-full pointer-events-none"
+              style={{ opacity: bubbleOpacity, filter: 'grayscale(1) brightness(1.3) contrast(1.2)' }}
             />
 
             {STEPS.map((s, i) => {
