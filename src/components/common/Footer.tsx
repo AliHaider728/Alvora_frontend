@@ -57,10 +57,10 @@ export const Footer: React.FC = () => {
 
       {/* â”€â”€ Main Footer Grid â”€â”€ */}
       <div className="alvora-container py-14 md:py-16">
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr_1.5fr] lg:gap-8">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-5 lg:gap-8">
 
           {/* Col 1 — Brand */}
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-5 lg:col-span-1 lg:pr-4">
             <Logo size="md" />
             <p className="text-[15px] lg:text-base text-[#4D3D2D]/80 leading-relaxed max-w-xs">
               Thoughtfully formulated skincare that nourishes, protects and brings out your most radiant skin. Pure ingredients. Visible results. Naturally.
@@ -119,7 +119,7 @@ export const Footer: React.FC = () => {
           </div>
 
           {/* Col 2 — Shop */}
-          <div>
+          <div className="lg:pl-4">
             <h4 className="text-[13px] lg:text-[14px] font-bold tracking-wider uppercase text-[#1A1A1A] mb-6">
               SHOP
             </h4>
@@ -138,7 +138,7 @@ export const Footer: React.FC = () => {
           </div>
 
           {/* Col 3 — About */}
-          <div>
+          <div className="lg:pl-4">
             <h4 className="text-[13px] lg:text-[14px] font-bold tracking-wider uppercase text-[#1A1A1A] mb-6">
               ABOUT
             </h4>
@@ -157,7 +157,7 @@ export const Footer: React.FC = () => {
           </div>
 
           {/* Col 4 — Help */}
-          <div>
+          <div className="lg:pl-4">
             <h4 className="text-[13px] lg:text-[14px] font-bold tracking-wider uppercase text-[#1A1A1A] mb-6">
               HELP
             </h4>
@@ -176,14 +176,14 @@ export const Footer: React.FC = () => {
           </div>
 
           {/* Col 5 — Newsletter */}
-          <div>
+          <div className="lg:pl-4 lg:col-span-1">
             <h4 className="text-[13px] lg:text-[14px] font-bold tracking-wider uppercase text-[#1A1A1A] mb-6">
               STAY IN THE GLOW
             </h4>
             <p className="text-[15px] lg:text-base text-[#1A1A1A]/80 leading-relaxed mb-5">
               Signup for exclusive offers,<br/>skincare tips, and more.
             </p>
-            <form onSubmit={handleSubscribe} className="flex flex-col gap-2">
+            <form onSubmit={handleSubscribe} className="flex flex-col gap-3">
               <label htmlFor="footer-email" className="sr-only">
                 Your email address
               </label>
@@ -194,15 +194,15 @@ export const Footer: React.FC = () => {
                 placeholder="Enter your email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="alvora-input text-base sm:text-sm py-2.5"
+                className="alvora-input rounded-full text-base sm:text-sm py-3"
               />
               <button
                 type="submit"
-                className="btn-interactive
+                className="btn-interactive rounded-full
                   flex items-center justify-center gap-2
-                  w-full py-2.5 px-4
+                  w-full py-3 px-4
                   bg-gradient-to-br from-[#D4784F] to-[#9C4122] hover:from-[#1A1A1A] hover:to-[#1A1A1A]
-                  text-white text-sm font-semibold tracking-wide
+                  text-white text-sm font-bold tracking-wide uppercase
                   transition-colors duration-200
                 "
               >

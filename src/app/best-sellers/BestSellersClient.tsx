@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { RitualAnimation } from '../../components/shop/RitualAnimation';
+import { ScrollRevealText } from '../../components/common/ScrollRevealText';
 
 export default function BestSellersClient() {
   return (
@@ -82,6 +83,11 @@ export default function BestSellersClient() {
 
       {/* Product Animation Section */}
       <RitualAnimation />
+      
+      {/* Best Sellers Text Section */}
+      <section className="bg-[#FAF6F2]">
+        <ScrollRevealText text="Curated by our community, driven by science. Our best sellers are the foundation of healthy, radiant skin. Explore the formulas that deliver visible results time and time again." />
+      </section>
     </div>
   );
 }
