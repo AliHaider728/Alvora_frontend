@@ -55,8 +55,8 @@ export const Footer: React.FC = () => {
   return (
     <footer className="bg-[#F5EDE4] border-t border-[#EDE5DC]" role="contentinfo">
 
-      {/* â”€â”€ Main Footer Grid â”€â”€ */}
-      <div className="alvora-container py-14 md:py-16">
+      {/* ── Main Footer Grid ── */}
+      <div className="mx-auto w-full max-w-375 px-5 sm:px-8 lg:px-12 py-14 md:py-16">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-5 lg:gap-8">
 
           {/* Col 1 — Brand */}
@@ -225,9 +225,9 @@ export const Footer: React.FC = () => {
         </div>
       </div>
 
-      {/* â”€â”€ Bottom Bar â”€â”€ */}
+      {/* ── Bottom Bar ── */}
       <div className="border-t border-[#EDE5DC] pb-24 xl:pb-0">
-        <div className="alvora-container py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="mx-auto w-full max-w-375 px-5 sm:px-8 lg:px-12 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-[#A1A7AA] text-center sm:text-left">
             &copy; {new Date().getFullYear()} Alvora Skincare. All Rights Reserved.
           </p>

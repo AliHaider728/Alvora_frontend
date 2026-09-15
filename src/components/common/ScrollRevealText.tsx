@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform, MotionValue } from 'framer-motion';
 
 interface Props {
   text: string;
+  title?: string;
   className?: string;
 }
 
@@ -16,7 +17,7 @@ const Word = ({ children, progress, range }: { children: string, progress: Motio
   );
 };
 
-const DesktopHighlight = ({ text, words }: { text: string; words: string[] }) => {
+const DesktopHighlight = ({ text, words, title }: { text: string; words: string[], title: string }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -27,7 +28,7 @@ const DesktopHighlight = ({ text, words }: { text: string; words: string[] }) =>
     <div ref={containerRef} className="hidden md:block relative w-full h-[150vh]">
       <div className="sticky top-0 h-screen flex flex-col items-center justify-center px-12 lg:px-24 overflow-hidden">
         <span className="text-xs tracking-[0.3em] uppercase text-[#C87355] font-bold mb-8 block">
-          Our Philosophy
+          {title}
         </span>
         <p className="text-center font-display text-3xl md:text-4xl lg:text-[42px] xl:text-[48px] leading-[1.5] font-medium max-w-[1000px] mx-auto whitespace-pre-wrap">
           {words.map((word, i) => {
@@ -45,7 +46,7 @@ const DesktopHighlight = ({ text, words }: { text: string; words: string[] }) =>
   );
 };
 
-export const ScrollRevealText: React.FC<Props> = ({ text, className = "" }) => {
+export const ScrollRevealText: React.FC<Props> = ({ text, title = "Our Philosophy", className = "" }) => {
   const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
@@ -64,7 +65,7 @@ export const ScrollRevealText: React.FC<Props> = ({ text, className = "" }) => {
       {/* MOBILE VIEW (Always rendered for SSR safety, but visually simple) */}
       <div className="md:hidden py-16 px-6 flex flex-col items-center justify-center">
         <span className="text-xs tracking-[0.3em] uppercase text-[#C87355] font-bold mb-6 block text-center">
-          Our Philosophy
+          {title}
         </span>
         <motion.p 
           initial={{ opacity: 0, y: 20 }}
@@ -78,7 +79,7 @@ export const ScrollRevealText: React.FC<Props> = ({ text, className = "" }) => {
       </div>
 
       {/* DESKTOP VIEW (Only mounted on client if desktop, avoiding heavy mobile observers) */}
-      {isDesktop && <DesktopHighlight text={text} words={words} />}
+      {isDesktop && <DesktopHighlight text={text} words={words} title={title} />}
     </div>
   );
 };

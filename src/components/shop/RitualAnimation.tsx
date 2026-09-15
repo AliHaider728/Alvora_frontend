@@ -240,24 +240,8 @@ export function RitualAnimation() {
             })}
           </div>
 
-          <style dangerouslySetInnerHTML={{ __html: `
-            @keyframes wobbleWaterImg {
-              0%, 100% { transform: scale(1) skew(0deg, 0deg) rotate(0deg); }
-              25% { transform: scale(1.02) skew(1deg, 0.5deg) rotate(0.5deg); }
-              50% { transform: scale(0.98) skew(-0.5deg, -1deg) rotate(-0.5deg); }
-              75% { transform: scale(1.01) skew(0.5deg, -0.5deg) rotate(0.2deg); }
-            }
-            .hover-wobble-target {
-              transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-            }
-            .group:hover .hover-wobble-target {
-              animation: wobbleWaterImg 4s infinite ease-in-out;
-              filter: grayscale(1) brightness(1.05) drop-shadow(0 20px 40px rgba(0,0,0,0.15)) !important;
-            }
-          `}} />
-
           <motion.div
-            className="relative flex aspect-square items-center justify-center will-change-transform w-[46vw] max-w-[560px] group cursor-pointer"
+            className="relative flex aspect-square items-center justify-center will-change-transform w-[46vw] max-w-[560px]"
             style={{ transform: bubbleTransform }}
           >
             {/* Small Bubbles for Splitting Effect */}
@@ -283,7 +267,7 @@ export function RitualAnimation() {
               width={1024}
               height={1024}
               loading="lazy"
-              className="absolute inset-0 h-full w-full pointer-events-none object-contain hover-wobble-target"
+              className="absolute inset-0 h-full w-full pointer-events-none object-contain"
               style={{ opacity: bubbleOpacity, filter: 'grayscale(1)' }}
             />
 
