@@ -246,31 +246,28 @@ export function RitualAnimation() {
           >
             {/* Small Bubbles for Splitting Effect */}
             {[t1, t2, t3, t4].map((t, index) => (
-              <motion.div 
+              <motion.img 
                 key={`small-bubble-${index}`}
-                className="absolute inset-0 h-full w-full pointer-events-none rounded-full"
+                src="/images/animation/bubble.png" 
+                alt="Bubble Splinter" 
+                className="absolute inset-0 h-full w-full pointer-events-none object-contain"
                 style={{ 
                   transform: t, 
-                  opacity: smallBubbleOpacity,
-                  background: 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.1) 25%, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.1) 80%, rgba(255, 255, 255, 0.4) 100%)',
-                  boxShadow: 'inset 0 0 20px rgba(255, 255, 255, 0.5), inset 10px 0 40px rgba(255, 255, 255, 0.4), inset -10px 0 20px rgba(255, 255, 255, 0.2), 0 10px 20px rgba(0,0,0,0.05)',
-                  border: '1px solid rgba(255, 255, 255, 0.6)',
-                  backdropFilter: 'blur(3px)'
+                  opacity: smallBubbleOpacity 
                 }} 
               />
             ))}
 
             {/* Main Bubble */}
-            <motion.div
+            <motion.img
+              src="/images/animation/bubble.png"
+              alt="Bubble"
               aria-hidden
-              className="absolute inset-0 h-full w-full pointer-events-none rounded-full"
-              style={{ 
-                opacity: bubbleOpacity,
-                background: 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.1) 25%, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.1) 80%, rgba(255, 255, 255, 0.4) 100%)',
-                boxShadow: 'inset 0 0 20px rgba(255, 255, 255, 0.5), inset 10px 0 40px rgba(255, 255, 255, 0.4), inset -10px 0 20px rgba(255, 255, 255, 0.2), 0 10px 20px rgba(0,0,0,0.05)',
-                border: '1px solid rgba(255, 255, 255, 0.6)',
-                backdropFilter: 'blur(3px)'
-              }}
+              width={1024}
+              height={1024}
+              loading="lazy"
+              className="absolute inset-0 h-full w-full pointer-events-none object-contain"
+              style={{ opacity: bubbleOpacity }}
             />
 
             {STEPS.map((s, i) => {
