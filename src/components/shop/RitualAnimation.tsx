@@ -253,7 +253,8 @@ export function RitualAnimation() {
                 className="absolute inset-0 h-full w-full pointer-events-none object-contain"
                 style={{ 
                   transform: t, 
-                  opacity: smallBubbleOpacity 
+                  opacity: smallBubbleOpacity,
+                  filter: 'grayscale(1)'
                 }} 
               />
             ))}
@@ -267,12 +268,12 @@ export function RitualAnimation() {
               height={1024}
               loading="lazy"
               className="absolute inset-0 h-full w-full pointer-events-none object-contain"
-              style={{ opacity: bubbleOpacity }}
+              style={{ opacity: bubbleOpacity, filter: 'grayscale(1)' }}
             />
 
             {STEPS.map((s, i) => {
               const onRight = i % 2 === 0;
-              const sideClass = onRight ? 'right-[12%]' : 'left-[12%]';
+              const sideClass = onRight ? 'right-[24%]' : 'left-[24%]';
 
               return (
                 <motion.div
