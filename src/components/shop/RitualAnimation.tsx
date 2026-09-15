@@ -242,54 +242,24 @@ export function RitualAnimation() {
 
           <style dangerouslySetInnerHTML={{ __html: `
             @keyframes wobbleWaterImg {
-              0%, 100% { transform: scale(1) skew(0deg, 0deg); }
-              25% { transform: scale(1.02) skew(1.5deg, 1.5deg); }
-              50% { transform: scale(0.98) skew(-1.5deg, -1.5deg); }
-              75% { transform: scale(1.01) skew(0.5deg, -0.5deg); }
+              0%, 100% { transform: scale(1) skew(0deg, 0deg) rotate(0deg); }
+              25% { transform: scale(1.02) skew(1deg, 0.5deg) rotate(0.5deg); }
+              50% { transform: scale(0.98) skew(-0.5deg, -1deg) rotate(-0.5deg); }
+              75% { transform: scale(1.01) skew(0.5deg, -0.5deg) rotate(0.2deg); }
+            }
+            .hover-wobble-target {
+              transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
             }
             .group:hover .hover-wobble-target {
-              animation: wobbleWaterImg 3s infinite ease-in-out;
+              animation: wobbleWaterImg 4s infinite ease-in-out;
+              filter: grayscale(1) brightness(1.05) drop-shadow(0 20px 40px rgba(0,0,0,0.15)) !important;
             }
-            @keyframes popOutSprout {
-              0% { transform: translate(-50%, -50%) scale(0.3); opacity: 0; }
-              20% { opacity: 0.8; }
-              100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.5); opacity: 0; }
-            }
-            .sprout-bubble {
-              position: absolute;
-              top: 50%; left: 50%;
-              width: 20px; height: 20px;
-              background-image: url('/images/animation/bubble.png');
-              background-size: cover;
-              opacity: 0;
-              pointer-events: none;
-              filter: grayscale(1);
-            }
-            .group:hover .sprout-bubble {
-              animation: popOutSprout 1.5s ease-out infinite;
-            }
-            .group:hover .sb-1 { animation-delay: 0s; width: 40px; height: 40px; }
-            .group:hover .sb-2 { animation-delay: 0.3s; width: 30px; height: 30px; }
-            .group:hover .sb-3 { animation-delay: 0.7s; width: 50px; height: 50px; }
-            .group:hover .sb-4 { animation-delay: 0.2s; width: 25px; height: 25px; }
-            .group:hover .sb-5 { animation-delay: 0.6s; width: 45px; height: 45px; }
-            .group:hover .sb-6 { animation-delay: 0.4s; width: 35px; height: 35px; }
           `}} />
 
           <motion.div
             className="relative flex aspect-square items-center justify-center will-change-transform w-[46vw] max-w-[560px] group cursor-pointer"
             style={{ transform: bubbleTransform }}
           >
-            {/* Hover Sprouting Bubbles */}
-            <div className="absolute inset-0 pointer-events-none z-10">
-              <div className="sprout-bubble sb-1" style={{ '--tx': '150px', '--ty': '-120px' } as React.CSSProperties} />
-              <div className="sprout-bubble sb-2" style={{ '--tx': '-140px', '--ty': '-90px' } as React.CSSProperties} />
-              <div className="sprout-bubble sb-3" style={{ '--tx': '120px', '--ty': '140px' } as React.CSSProperties} />
-              <div className="sprout-bubble sb-4" style={{ '--tx': '-110px', '--ty': '130px' } as React.CSSProperties} />
-              <div className="sprout-bubble sb-5" style={{ '--tx': '20px', '--ty': '-160px' } as React.CSSProperties} />
-              <div className="sprout-bubble sb-6" style={{ '--tx': '-160px', '--ty': '20px' } as React.CSSProperties} />
-            </div>
-
             {/* Small Bubbles for Splitting Effect */}
             {[t1, t2, t3, t4].map((t, index) => (
               <motion.img 
