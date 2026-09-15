@@ -245,21 +245,32 @@ export function RitualAnimation() {
             style={{ transform: bubbleTransform }}
           >
             {/* Small Bubbles for Splitting Effect */}
-            <motion.img src="/images/animation/bubble.png" alt="Bubble Splinter" style={{ transform: t1, opacity: smallBubbleOpacity, filter: 'grayscale(1) brightness(1.3) contrast(1.2)' }} className="absolute inset-0 h-full w-full pointer-events-none" />
-            <motion.img src="/images/animation/bubble.png" alt="Bubble Splinter" style={{ transform: t2, opacity: smallBubbleOpacity, filter: 'grayscale(1) brightness(1.3) contrast(1.2)' }} className="absolute inset-0 h-full w-full pointer-events-none" />
-            <motion.img src="/images/animation/bubble.png" alt="Bubble Splinter" style={{ transform: t3, opacity: smallBubbleOpacity, filter: 'grayscale(1) brightness(1.3) contrast(1.2)' }} className="absolute inset-0 h-full w-full pointer-events-none" />
-            <motion.img src="/images/animation/bubble.png" alt="Bubble Splinter" style={{ transform: t4, opacity: smallBubbleOpacity, filter: 'grayscale(1) brightness(1.3) contrast(1.2)' }} className="absolute inset-0 h-full w-full pointer-events-none" />
+            {[t1, t2, t3, t4].map((t, index) => (
+              <motion.div 
+                key={`small-bubble-${index}`}
+                className="absolute inset-0 h-full w-full pointer-events-none rounded-full"
+                style={{ 
+                  transform: t, 
+                  opacity: smallBubbleOpacity,
+                  background: 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.1) 25%, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.1) 80%, rgba(255, 255, 255, 0.4) 100%)',
+                  boxShadow: 'inset 0 0 20px rgba(255, 255, 255, 0.5), inset 10px 0 40px rgba(255, 255, 255, 0.4), inset -10px 0 20px rgba(255, 255, 255, 0.2), 0 10px 20px rgba(0,0,0,0.05)',
+                  border: '1px solid rgba(255, 255, 255, 0.6)',
+                  backdropFilter: 'blur(3px)'
+                }} 
+              />
+            ))}
 
             {/* Main Bubble */}
-            <motion.img
-              src="/images/animation/bubble.png"
-              alt="Bubble"
+            <motion.div
               aria-hidden
-              width={1024}
-              height={1024}
-              loading="lazy"
-              className="absolute inset-0 h-full w-full pointer-events-none"
-              style={{ opacity: bubbleOpacity, filter: 'grayscale(1) brightness(1.3) contrast(1.2)' }}
+              className="absolute inset-0 h-full w-full pointer-events-none rounded-full"
+              style={{ 
+                opacity: bubbleOpacity,
+                background: 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.1) 25%, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.1) 80%, rgba(255, 255, 255, 0.4) 100%)',
+                boxShadow: 'inset 0 0 20px rgba(255, 255, 255, 0.5), inset 10px 0 40px rgba(255, 255, 255, 0.4), inset -10px 0 20px rgba(255, 255, 255, 0.2), 0 10px 20px rgba(0,0,0,0.05)',
+                border: '1px solid rgba(255, 255, 255, 0.6)',
+                backdropFilter: 'blur(3px)'
+              }}
             />
 
             {STEPS.map((s, i) => {
