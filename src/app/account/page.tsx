@@ -26,7 +26,7 @@ export default function AccountPage() {
 
   if (!isLoggedIn || !customerProfile) {
     return (
-      <div className="flex-1 bg-slate-50 font-sans py-12 flex items-center justify-center">
+      <div className="flex-1 bg-slate-50 font-sans py-12 px-4 flex items-center justify-center">
         <SeoHead title="My Account" />
         <div className="bg-white p-10 rounded-3xl border border-slate-100 shadow-xl max-w-md w-full text-center space-y-6">
           <div className="mx-auto w-16 h-16 bg-rose-100 rounded-full flex items-center justify-center mb-2">
@@ -58,7 +58,7 @@ export default function AccountPage() {
         <Breadcrumbs items={[{ label: 'My Account' }]} />
 
         {/* Profile Header */}
-        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-sm mb-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="bg-white p-5 sm:p-8 rounded-3xl border border-slate-100 shadow-sm mb-8 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-4">
             {customerProfile.avatar ? (
               <img
@@ -71,9 +71,9 @@ export default function AccountPage() {
                 {customerProfile.name?.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() || 'U'}
               </div>
             )}
-            <div>
-              <h1 className="font-heading font-black text-2xl text-slate-900">{customerProfile.name}</h1>
-              <span className="text-xs text-slate-500 font-medium">{customerProfile.email} {customerProfile.phone ? `• ${customerProfile.phone}` : ''}</span>
+            <div className="min-w-0">
+              <h1 className="font-heading font-black text-2xl text-slate-900 truncate">{customerProfile.name}</h1>
+              <span className="text-xs text-slate-500 font-medium truncate block">{customerProfile.email} {customerProfile.phone ? `• ${customerProfile.phone}` : ''}</span>
             </div>
           </div>
 
@@ -127,7 +127,7 @@ export default function AccountPage() {
                           <div className="flex items-center gap-2">
                             <span className={`px-3 py-1 rounded-full font-bold text-xs ${
                               order.status === 'Delivered' ? 'bg-emerald-100 text-emerald-800' :
-                              order.status === 'Shipped' ? 'bg-[#C48B80] text-[#C48B80]' :
+                              order.status === 'Shipped' ? 'bg-rose-50 text-[#C48B80]' :
                               order.status === 'Cancelled' ? 'bg-rose-100 text-[#C48B80]' : 'bg-amber-100 text-amber-800'
                             }`}>
                               {order.status}
@@ -148,7 +148,7 @@ export default function AccountPage() {
                           ))}
                         </div>
 
-                        <div className="pt-3 border-t border-slate-100 flex justify-between items-center text-xs">
+                        <div className="pt-3 border-t border-slate-100 flex flex-wrap gap-2 justify-between items-center text-xs">
                           <span className="text-slate-500 font-medium">Tracking Code: {order.trackingNumber || 'Pending'}</span>
                           <span className="font-heading font-extrabold text-base text-[#C48B80]">Total: {formatPrice(order.total, settings.currency)}</span>
                         </div>
@@ -162,7 +162,7 @@ export default function AccountPage() {
             {activeTab === 'profile' && (
               <div className="space-y-4">
                 <h2 className="font-heading font-black text-xl text-slate-900 mb-4">Security Settings</h2>
-                <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-sm max-w-xl">
+                <div className="bg-white p-5 sm:p-8 rounded-3xl border border-slate-100 shadow-sm max-w-xl">
                   <h3 className="font-heading font-bold text-sm text-slate-900 mb-4">Change Password</h3>
                   <form 
                     onSubmit={async (e) => {

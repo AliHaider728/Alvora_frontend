@@ -121,20 +121,20 @@ export function RitualAnimation() {
                 <p className="text-xl font-display text-[#C87355] mt-1 mb-3">{s.sub}</p>
                 <p className="text-[#1A1A1A]/70 text-sm leading-relaxed mb-6">{s.body}</p>
                 
-                <div className="flex items-center justify-center gap-4">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full">
                   <button 
                     onClick={(e) => {
                       e.preventDefault();
                       addToCart(s.product);
                       setIsCartOpen(true);
                     }}
-                    className="flex items-center gap-2 bg-gradient-to-br from-[#D4784F] to-[#9C4122] text-white px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:from-[#9C4122] hover:to-[#7A321A] transition-colors"
+                    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gradient-to-br from-[#D4784F] to-[#9C4122] text-white px-6 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest hover:from-[#9C4122] hover:to-[#7A321A] transition-colors"
                   >
                     <ShoppingCart className="w-4 h-4" /> Add to Cart
                   </button>
                   <Link 
                     href={`/product/${s.slug}`}
-                    className="flex items-center gap-2 bg-white border border-[#C87355] text-[#C87355] px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-[#C87355] hover:text-white transition-colors"
+                    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-white border border-[#C87355] text-[#C87355] px-6 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-[#C87355] hover:text-white transition-colors"
                   >
                     <Eye className="w-4 h-4" /> View
                   </Link>

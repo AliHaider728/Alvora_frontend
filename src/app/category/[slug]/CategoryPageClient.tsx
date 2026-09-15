@@ -190,7 +190,7 @@ export const CategoryPageClient: React.FC = () => {
         <Breadcrumbs items={breadcrumbItems} />
 
         {/* Page Header */}
-        <div className="relative w-full h-[250px] md:h-[300px] lg:h-[350px] mb-8 bg-[#E9E1D9] overflow-hidden rounded-xl flex items-center">
+        <div className="relative w-full min-h-[250px] md:min-h-[300px] lg:min-h-[350px] py-10 mb-8 bg-[#E9E1D9] overflow-hidden rounded-xl flex items-center">
           {/* Background Image positioned on the right */}
           <div className="absolute right-0 top-0 bottom-0 w-full md:w-[80%]">
             <Image 
@@ -209,7 +209,7 @@ export const CategoryPageClient: React.FC = () => {
             <span className="text-xs tracking-widest uppercase text-[#B95C41] font-bold mb-3 block">
               COLLECTION
             </span>
-            <h1 className="font-display text-4xl lg:text-5xl text-[#1A1A1A] font-medium leading-tight mb-4">
+            <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl text-[#1A1A1A] font-medium leading-tight mb-4">
               {currentCategoryObj ? currentCategoryObj.name : 'All Products'}
             </h1>
             <p className="text-[#1A1A1A]/80 text-[15px] font-medium leading-relaxed max-w-md">
@@ -240,7 +240,7 @@ export const CategoryPageClient: React.FC = () => {
 
             {/* Category Filter */}
             <div className="space-y-2">
-              <h3 className="font-display font-medium text-2xl uppercase tracking-widest text-xs uppercase tracking-wider text-[#1A1A1A]/60">
+              <h3 className="font-display font-medium uppercase tracking-widest text-xs uppercase tracking-wider text-[#1A1A1A]/60">
                 Category
               </h3>
               <div className="space-y-1">
@@ -275,7 +275,7 @@ export const CategoryPageClient: React.FC = () => {
 
             {/* Age Group Filter */}
             <div className="space-y-2 pt-4 border-t border-[#EDE5DC]">
-              <h3 className="font-display font-medium text-2xl uppercase tracking-widest text-xs uppercase tracking-wider text-[#1A1A1A]/60">
+              <h3 className="font-display font-medium uppercase tracking-widest text-xs uppercase tracking-wider text-[#1A1A1A]/60">
                 Age Recommendation
               </h3>
               <div className="grid grid-cols-2 gap-2">
@@ -335,7 +335,7 @@ export const CategoryPageClient: React.FC = () => {
 
             {/* Minimum Rating Filter */}
             <div className="space-y-2 pt-4 border-t border-[#EDE5DC]">
-              <h3 className="font-display font-medium text-2xl uppercase tracking-widest text-xs uppercase tracking-wider text-[#1A1A1A]/60">
+              <h3 className="font-display font-medium uppercase tracking-widest text-xs uppercase tracking-wider text-[#1A1A1A]/60">
                 Minimum Rating
               </h3>
               <div className="space-y-1">
@@ -361,7 +361,7 @@ export const CategoryPageClient: React.FC = () => {
             <div className="bg-white p-4 rounded-2xl border border-[#EDE5DC] shadow-sm flex flex-wrap items-center justify-between gap-4">
               <button
                 onClick={() => setMobileFilterOpen(true)}
-                className="btn-interactive lg:hidden flex items-center gap-2 px-4 py-2 rounded-2xl bg-gradient-to-br from-[#D4784F] to-[#9C4122] text-white font-display font-medium text-2xl uppercase tracking-widest text-xs"
+                className="btn-interactive lg:hidden flex items-center gap-2 px-4 py-2 rounded-2xl bg-gradient-to-br from-[#D4784F] to-[#9C4122] text-white font-display font-medium uppercase tracking-widest text-xs"
               >
                 <SlidersHorizontal className="w-4 h-4" />
                 <span>Filter & Refine</span>
@@ -377,7 +377,7 @@ export const CategoryPageClient: React.FC = () => {
                 <select
                   value={sortBy}
                   onChange={e => setSortBy(e.target.value as any)}
-                  className="px-3.5 py-2 text-xs font-display font-medium text-2xl uppercase tracking-widest rounded-2xl border border-[#EDE5DC] bg-[#FAF6F2] text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-[#C48B80] cursor-pointer"
+                  className="px-3.5 py-2 text-xs font-display font-medium uppercase tracking-widest rounded-2xl border border-[#EDE5DC] bg-[#FAF6F2] text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-[#C48B80] cursor-pointer"
                 >
                   <option value="featured">Featured / Best Match</option>
                   <option value="price-low">Price: Low to High</option>
@@ -400,13 +400,13 @@ export const CategoryPageClient: React.FC = () => {
                 <div className="w-16 h-16 rounded-full bg-[#FAF6F2] text-[#9C4122] flex items-center justify-center mx-auto">
                   <Filter className="w-8 h-8" />
                 </div>
-                <h3 className="font-display font-medium text-2xl uppercase tracking-widest text-lg text-[#1A1A1A]">No Products Found</h3>
+                <h3 className="font-display font-medium uppercase tracking-widest text-lg text-[#1A1A1A]">No Products Found</h3>
                 <p className="text-xs text-[#1A1A1A]/60 max-w-sm mx-auto">
                   We couldn't find any products matching your current filter choices. Try broadening your price range or clearing filters!
                 </p>
                 <button
                   onClick={resetFilters}
-                  className="btn-interactive px-6 py-2.5 rounded-xl bg-gradient-to-br from-[#D4784F] to-[#9C4122] text-white font-display font-medium text-2xl uppercase tracking-widest text-xs hover:bg-[#A86249] transition-colors"
+                  className="btn-interactive px-6 py-2.5 rounded-xl bg-gradient-to-br from-[#D4784F] to-[#9C4122] text-white font-display font-medium uppercase tracking-widest text-xs hover:bg-[#A86249] transition-colors"
                 >
                   Clear All Filters
                 </button>
@@ -430,9 +430,9 @@ export const CategoryPageClient: React.FC = () => {
             onClick={() => setMobileFilterOpen(false)}
           />
           <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
-            <div className="w-screen max-w-xs bg-white shadow-2xl p-6 overflow-y-auto space-y-6">
+            <div className="w-screen max-w-xs bg-white shadow-2xl p-6 pb-12 overflow-y-auto space-y-6">
               <div className="flex items-center justify-between pb-4 border-b border-[#EDE5DC]">
-                <h3 className="font-display font-medium text-2xl uppercase tracking-widest text-base text-[#1A1A1A]">Filter Products</h3>
+                <h3 className="font-display font-medium uppercase tracking-widest text-base text-[#1A1A1A]">Filter Products</h3>
                 <button
                   onClick={() => setMobileFilterOpen(false)}
                   className="p-1 rounded-full text-slate-400 hover:text-[#1A1A1A]"
@@ -443,7 +443,7 @@ export const CategoryPageClient: React.FC = () => {
 
               {/* Mobile Categories */}
               <div className="space-y-2">
-                <h4 className="font-display font-medium text-2xl uppercase tracking-widest text-xs uppercase text-[#1A1A1A]/60">Category</h4>
+                <h4 className="font-display font-medium uppercase tracking-widest text-xs uppercase text-[#1A1A1A]/60">Category</h4>
                 <div className="space-y-1">
                   <button
                     onClick={selectAllCategories}
@@ -467,7 +467,7 @@ export const CategoryPageClient: React.FC = () => {
 
               {/* Mobile Age Groups */}
               <div className="space-y-2 pt-4 border-t border-[#EDE5DC]">
-                <h4 className="font-display font-medium text-2xl uppercase tracking-widest text-xs uppercase text-[#1A1A1A]/60">Age Group</h4>
+                <h4 className="font-display font-medium uppercase tracking-widest text-xs uppercase text-[#1A1A1A]/60">Age Group</h4>
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     onClick={selectAllAges}
@@ -489,16 +489,64 @@ export const CategoryPageClient: React.FC = () => {
                 </div>
               </div>
 
+              {/* Mobile Price Filter */}
+              <div className="space-y-2 pt-4 border-t border-[#EDE5DC]">
+                  <div className="flex justify-between items-center mb-4">
+                    <h4 className="font-display font-medium uppercase tracking-widest text-xs uppercase text-[#1A1A1A]/60">
+                      Max Price
+                    </h4>
+                    <span className="font-display font-extrabold text-xs text-[#1A1A1A]">
+                      {formatPrice(priceRange)}
+                    </span>
+                  </div>
+                  <input
+                    type="range"
+                    min="500"
+                    max="15000"
+                    step="500"
+                    value={priceRange}
+                    onChange={e => setPriceRange(Number(e.target.value))}
+                    className="w-full accent-[#C48B80] cursor-pointer"
+                  />
+                  <div className="flex justify-between text-[10px] text-slate-400 font-bold">
+                    <span>{formatPrice(500)}</span>
+                    <span>{formatPrice(15000)}</span>
+                  </div>
+              </div>
+
+              {/* Mobile Minimum Rating Filter */}
+              <div className="space-y-2 pt-4 border-t border-[#EDE5DC]">
+                <h4 className="font-display font-medium uppercase tracking-widest text-xs uppercase text-[#1A1A1A]/60">
+                  Minimum Rating
+                </h4>
+                <div className="space-y-1">
+                  {[0, 4, 4.5, 4.8].map(r => (
+                    <button
+                      key={r}
+                      onClick={() => setMinRating(r)}
+                      aria-pressed={minRating === r}
+                      className={`w-full text-left px-3 py-2 rounded-full text-xs font-semibold ${
+                        minRating === r
+                          ? 'bg-gradient-to-br from-[#D4784F] to-[#9C4122] text-white font-bold'
+                          : 'text-[#241916]/80'
+                      }`}
+                    >
+                      {r === 0 ? 'Any Rating' : `${r} Stars & Up`}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <div className="grid grid-cols-2 gap-2 pt-4 border-t border-[#EDE5DC]">
                 <button
                   onClick={resetFilters}
-                  className="w-full py-3 rounded-xl bg-[#F5EDE4] text-[#241916]/80 font-display font-medium text-2xl uppercase tracking-widest text-xs"
+                  className="w-full py-3 rounded-xl bg-[#F5EDE4] text-[#241916]/80 font-display font-medium uppercase tracking-widest text-xs"
                 >
                   Reset
                 </button>
                 <button
                   onClick={() => setMobileFilterOpen(false)}
-                  className="w-full py-3 rounded-2xl bg-slate-900 text-white font-display font-medium text-2xl uppercase tracking-widest text-xs"
+                  className="w-full py-3 rounded-2xl bg-slate-900 text-white font-display font-medium uppercase tracking-widest text-xs"
                 >
                   Apply & Close
                 </button>

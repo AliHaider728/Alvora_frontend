@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import React, { useEffect, useState, useMemo } from 'react';
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -774,7 +774,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
               </div>
 
               {/* Delivery Charge Info Badge */}
-              <div className="mb-3 flex items-center gap-2.5 rounded-2xl border border-[#C48B80] bg-[#C48B80] p-3 text-xs font-semibold text-[#C48B80]">
+              <div className="mb-3 flex items-center gap-2.5 rounded-2xl border border-[#C48B80] bg-rose-50 p-3 text-xs font-semibold text-[#C48B80]">
                 <Truck className="w-4 h-4 text-[#C48B80] shrink-0" />
                 <span>
                   Delivery Fee:{' '}
@@ -1373,7 +1373,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                   placeholder="e.g. Jessica M."
                   value={newUserName}
                   onChange={e => setNewUserName(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
+                  className="w-full px-3 py-2 text-base sm:text-xs rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
                 />
               </div>
 
@@ -1400,7 +1400,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                   placeholder="e.g. Glowing Skin!"
                   value={newTitle}
                   onChange={e => setNewTitle(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
+                  className="w-full px-3 py-2 text-base sm:text-xs rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
                 />
               </div>
 
@@ -1412,7 +1412,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                   placeholder="Share details about the texture, results, how you use it, etc."
                   value={newComment}
                   onChange={e => setNewComment(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
+                  className="w-full px-3 py-2 text-base sm:text-xs rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
                 />
               </div>
 

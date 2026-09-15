@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -139,7 +139,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
               <motion.span variants={staggerVariants} className="text-xs tracking-[0.25em] uppercase text-[#9C4122] font-bold block mb-2">
                 Curated Bundle
               </motion.span>
-              <motion.h1 variants={staggerVariants} className="font-display text-4xl lg:text-5xl text-[#1A1A1A] font-medium leading-tight mb-4">
+              <motion.h1 variants={staggerVariants} className="font-display text-3xl sm:text-4xl lg:text-5xl text-[#1A1A1A] font-medium leading-tight mb-4">
                 {bundle.name}
               </motion.h1>
               <motion.div variants={staggerVariants} className="mb-6">

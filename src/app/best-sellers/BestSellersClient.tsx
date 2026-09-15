@@ -12,7 +12,7 @@ export default function BestSellersClient() {
           <span className="text-xs md:text-sm tracking-[0.25em] uppercase text-[#C87355] font-bold mb-4 block">
             The Alvora Collection
           </span>
-          <h1 className="font-display text-5xl md:text-7xl lg:text-8xl text-[#1A1A1A] font-medium leading-tight mb-6 tracking-wide">
+          <h1 className="font-display text-4xl sm:text-5xl md:text-7xl lg:text-8xl text-[#1A1A1A] font-medium leading-tight mb-6 tracking-wide">
             Best Sellers
           </h1>
           <div className="text-[#1A1A1A]/70 text-base md:text-lg font-medium leading-relaxed max-w-2xl mx-auto">

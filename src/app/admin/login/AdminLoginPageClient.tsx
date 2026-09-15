@@ -79,7 +79,7 @@ export const AdminLoginPageClient: React.FC = () => {
             <div className="h-[1px] w-8 bg-[#C87355]"></div>
             <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#C87355]">Skincare For A Brighter You</span>
           </div>
-          <h1 className="text-5xl lg:text-6xl text-gray-900 font-display mb-4 leading-[1.1]">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl text-gray-900 font-display mb-4 leading-[1.1]">
             Pure Ingredients.<br />
             <span className="text-[#C87355]">Visible Results.</span>
           </h1>

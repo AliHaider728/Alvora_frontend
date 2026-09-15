@@ -15,7 +15,7 @@ export const MobileBottomNav: React.FC = () => {
     setMounted(true);
   }, []);
 
-  if (isCartOpen) return null;
+  if (isCartOpen || pathname === '/checkout') return null;
 
   const navItems = [
     {

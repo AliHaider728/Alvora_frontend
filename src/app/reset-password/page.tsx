@@ -38,7 +38,7 @@ function ResetPasswordForm() {
 
     setIsSubmitting(true);
     try {
-      const response = await fetch(`${API_BASE_URL || 'http://localhost:6000/api'}/auth/reset-password`, {
+      const response = await fetch(`${API_BASE_URL}/auth/reset-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: tokenInput, newPassword: password })
@@ -62,7 +62,7 @@ function ResetPasswordForm() {
   if (success) {
     return (
       <div className="flex min-h-[80vh] items-center justify-center p-4">
-        <div className="w-full max-w-md rounded-3xl bg-white p-8 text-center shadow-xl shadow-slate-200/50">
+        <div className="w-full max-w-md rounded-3xl bg-white p-5 sm:p-8 text-center shadow-xl shadow-slate-200/50">
           <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-500">
             <CheckCircle className="h-8 w-8" />
           </div>
@@ -90,7 +90,7 @@ function ResetPasswordForm() {
           <StoreLogo className="h-10 w-auto" />
         </div>
         
-        <div className="rounded-3xl bg-white p-8 shadow-xl shadow-slate-200/50">
+        <div className="rounded-3xl bg-white p-5 sm:p-8 shadow-xl shadow-slate-200/50">
           <div className="mb-8 text-center">
             <h1 className="font-heading text-2xl font-black text-slate-900">
               {isActivation ? 'Activate Account' : 'Set New Password'}
@@ -114,7 +114,7 @@ function ResetPasswordForm() {
                   onChange={(e) => setTokenInput(e.target.value)}
                   required
                   maxLength={6}
-                  className="w-full rounded-2xl border-2 border-slate-100 bg-slate-50 py-3.5 px-4 text-sm font-medium text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-[#C48B80] focus:bg-white focus:shadow-lg focus:shadow-rose-100 text-center tracking-[0.5em] font-mono text-xl"
+                  className="w-full rounded-2xl border-2 border-slate-100 bg-slate-50 py-3.5 px-4 font-medium text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-[#C48B80] focus:bg-white focus:shadow-lg focus:shadow-rose-100 text-center tracking-[0.5em] font-mono text-lg sm:text-xl"
                   placeholder="------"
                 />
               </div>
@@ -130,7 +130,7 @@ function ResetPasswordForm() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full rounded-2xl border-2 border-slate-100 bg-slate-50 py-3.5 pl-11 pr-4 text-sm font-medium text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-[#C48B80] focus:bg-white focus:shadow-lg focus:shadow-rose-100"
+                  className="w-full rounded-2xl border-2 border-slate-100 bg-slate-50 py-3.5 pl-11 pr-4 text-base sm:text-sm font-medium text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-[#C48B80] focus:bg-white focus:shadow-lg focus:shadow-rose-100"
                   placeholder="At least 8 characters"
                 />
               </div>
@@ -147,7 +147,7 @@ function ResetPasswordForm() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
-                  className="w-full rounded-2xl border-2 border-slate-100 bg-slate-50 py-3.5 pl-11 pr-4 text-sm font-medium text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-[#C48B80] focus:bg-white focus:shadow-lg focus:shadow-rose-100"
+                  className="w-full rounded-2xl border-2 border-slate-100 bg-slate-50 py-3.5 pl-11 pr-4 text-base sm:text-sm font-medium text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-[#C48B80] focus:bg-white focus:shadow-lg focus:shadow-rose-100"
                   placeholder="Confirm new password"
                 />
               </div>

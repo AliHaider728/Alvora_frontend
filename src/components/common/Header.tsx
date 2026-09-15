@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
@@ -255,7 +255,7 @@ export const Header: React.FC = () => {
                   value={searchQuery}
                   onChange={(event) => setSearchQuery(event.target.value)}
                   placeholder="Search skincare products..."
-                  className="h-12 w-full border border-[#E2D2C9] bg-white pl-11 pr-12 text-sm text-[#241916] outline-none transition-colors placeholder:text-[#AA958B] focus:border-[#C87355]"
+                  className="h-12 w-full border border-[#E2D2C9] bg-white pl-11 pr-12 text-base sm:text-sm text-[#241916] outline-none transition-colors placeholder:text-[#AA958B] focus:border-[#C87355]"
                 />
                 <button
                   type="button"

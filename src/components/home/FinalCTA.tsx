@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -58,18 +58,18 @@ export const FinalCTA: React.FC = () => {
 
               {/* Newsletter Form */}
               <div className="w-full max-w-md">
-                <form onSubmit={handleSubscribe} className="relative w-full flex items-center group">
+                <form onSubmit={handleSubscribe} className="w-full flex flex-col sm:block relative gap-3 group">
                   <input 
                     type="email" 
                     required
                     placeholder="Enter your email to join us"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
-                    className="w-full bg-white/10 backdrop-blur-sm border border-white/30 text-white placeholder:text-white/70 rounded-lg pl-6 pr-32 h-14 focus:outline-none focus:border-white focus:bg-white/20 transition-all text-sm"
+                    className="w-full bg-white/10 backdrop-blur-sm border border-white/30 text-white placeholder:text-white/70 rounded-xl px-5 sm:pl-6 sm:pr-36 h-14 focus:outline-none focus:border-white focus:bg-white/20 transition-all text-base sm:text-sm"
                   />
                   <button 
                     type="submit"
-                    className="absolute right-1.5 top-1.5 bottom-1.5 bg-white text-[#C87355] hover:bg-[#1A1A1A] hover:text-white transition-colors duration-300 px-6 rounded-full text-xs font-bold tracking-widest uppercase shadow-sm"
+                    className="w-full sm:w-auto h-14 sm:h-auto sm:absolute sm:right-1.5 sm:top-1.5 sm:bottom-1.5 bg-white text-[#C87355] hover:bg-[#1A1A1A] hover:text-white transition-colors duration-300 px-6 rounded-xl sm:rounded-lg text-xs font-bold tracking-widest uppercase shadow-sm"
                   >
                     {subscribed ? "JOINED!" : "JOIN US"}
                   </button>

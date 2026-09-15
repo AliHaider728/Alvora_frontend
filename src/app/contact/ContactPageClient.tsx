@@ -128,7 +128,7 @@ export const ContactPageClient: React.FC = () => {
           <div className="lg:col-span-5 space-y-6">
 
             {/* Contact Information Card */}
-            <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm space-y-4">
+            <div className="bg-white p-5 sm:p-8 rounded-3xl border border-slate-100 shadow-sm space-y-4">
               <h1 className="font-heading font-black text-2xl text-slate-900">Get in Touch with Alvora Skincare</h1>
               <p className="text-xs text-slate-500 leading-relaxed font-medium">
                 Have questions about our skincare, orders, delivery, or anything else? Send us a message and our team will get back to you as soon as possible.
@@ -148,7 +148,7 @@ export const ContactPageClient: React.FC = () => {
 
                 {/* Phone */}
                 <div className="flex items-center gap-3">
-                  <div className="p-3 rounded-2xl bg-[#C48B80] text-[#C48B80]">
+                  <div className="p-3 rounded-2xl bg-rose-50 text-[#C48B80]">
                     <Phone className="w-5 h-5" />
                   </div>
                   <div>
@@ -175,7 +175,7 @@ export const ContactPageClient: React.FC = () => {
             </div>
 
             {/* Follow Us Card • ONE row, exactly 4 icons */}
-            <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
+            <div className="bg-white p-5 sm:p-8 rounded-3xl border border-slate-100 shadow-sm">
               <h2 className="font-heading font-black text-lg text-slate-900 mb-5">Follow Us</h2>
               <div className="flex items-center gap-4 flex-wrap">
                 {socialLinks.map(({ key, label, href, icon, hoverClass }) => (
@@ -197,7 +197,7 @@ export const ContactPageClient: React.FC = () => {
 
           {/* Right column: contact form */}
           <div className="lg:col-span-7">
-            <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6">
+            <div className="bg-white p-5 sm:p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6">
               <h2 className="font-heading font-black text-xl text-slate-900">Send Us a Direct Message</h2>
 
               {submitted ? (
@@ -216,7 +216,7 @@ export const ContactPageClient: React.FC = () => {
                         required
                         value={name}
                         onChange={e => setName(e.target.value)}
-                        className="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200"
+                        className="w-full px-4 py-2.5 text-base sm:text-xs rounded-xl border border-slate-200"
                       />
                     </div>
                     <div>
@@ -226,7 +226,7 @@ export const ContactPageClient: React.FC = () => {
                         required
                         value={email}
                         onChange={e => setEmail(e.target.value)}
-                        className="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200"
+                        className="w-full px-4 py-2.5 text-base sm:text-xs rounded-xl border border-slate-200"
                       />
                     </div>
                   </div>
@@ -239,7 +239,7 @@ export const ContactPageClient: React.FC = () => {
                       placeholder="e.g. Order Tracking or Product Question"
                       value={subject}
                       onChange={e => setSubject(e.target.value)}
-                      className="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200"
+                      className="w-full px-4 py-2.5 text-base sm:text-xs rounded-xl border border-slate-200"
                     />
                   </div>
 
@@ -250,7 +250,7 @@ export const ContactPageClient: React.FC = () => {
                       rows={5}
                       value={message}
                       onChange={e => setMessage(e.target.value)}
-                      className="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200"
+                      className="w-full px-4 py-2.5 text-base sm:text-xs rounded-xl border border-slate-200"
                     />
                   </div>
 

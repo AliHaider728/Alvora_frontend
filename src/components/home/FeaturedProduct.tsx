@@ -82,7 +82,7 @@ export const FeaturedProduct: React.FC<Props> = ({ product }) => {
             </p>
 
             {/* Benefits Grid */}
-            <div className="grid grid-cols-2 gap-y-6 gap-x-4 mb-10 text-sm text-[#1A1A1A]/80">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-4 mb-10 text-sm text-[#1A1A1A]/80">
               <div className="flex items-center gap-3">
                 <Sun className="w-4 h-4 text-[#1A1A1A]" />
                 <span>Brightens & Evens Tone</span>

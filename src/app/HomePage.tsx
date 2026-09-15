@@ -26,7 +26,7 @@ export const HomePage: React.FC<Props> = ({ products, categories, settings }) =>
   const sectionByKey = Object.fromEntries(settings.homepageSections.map(s => [s.key, s]));
 
   return (
-    <div className="min-h-screen bg-[#FAF6F2] font-sans flex flex-col">
+    <div className="min-h-[100dvh] bg-[#FAF6F2] font-sans flex flex-col overflow-x-hidden w-full">
       <SeoHead
         title={settings.metaTitle || "Alvora Skincare"}
         description={settings.metaDescription || "Pure Ingredients. Visible Results."}

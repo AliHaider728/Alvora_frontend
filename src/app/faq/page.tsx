@@ -30,7 +30,7 @@ export default function FaqPage() {
       q: 'What are the delivery charges?',
       a: 'Delivery charges are calculated at checkout based on your location. We occasionally offer free shipping promotions, so keep an eye on our latest offers.',
       icon: Truck,
-      color: 'text-[#C48B80] bg-[#C48B80]'
+      color: 'text-[#C48B80] bg-rose-50'
     },
     {
       q: 'How long does delivery take?',
@@ -48,7 +48,7 @@ export default function FaqPage() {
       q: 'Can I track my order?',
       a: 'Yes! Once your order has been shipped, we\u2019ll provide you with a tracking number so you can monitor your delivery status.',
       icon: MapPinned,
-      color: 'text-[#C48B80] bg-[#C48B80]'
+      color: 'text-[#C48B80] bg-rose-50'
     },
     {
       q: 'What if I receive a damaged or incorrect product?',
@@ -60,7 +60,7 @@ export default function FaqPage() {
       q: 'Can I return or exchange a product?',
       a: 'Yes. Products can be returned or exchanged according to our Return & Refund Policy. Please ensure the item is unused and in its original packaging.',
       icon: RefreshCw,
-      color: 'text-[#C48B80] bg-[#C48B80]'
+      color: 'text-[#C48B80] bg-rose-50'
     },
     {
       q: 'Are your products safe for sensitive skin?',
@@ -72,7 +72,7 @@ export default function FaqPage() {
       q: 'How can I contact Alvora Skincare?',
       a: 'You can reach us through WhatsApp, email, or our Contact Us page. Our support team is always happy to assist you with your questions.',
       icon: MessageCircleQuestion,
-      color: 'text-[#C48B80] bg-[#C48B80]'
+      color: 'text-[#C48B80] bg-rose-50'
     }
   ];
 
@@ -84,7 +84,7 @@ export default function FaqPage() {
         <Breadcrumbs items={[{ label: 'FAQs' }]} />
 
         <div className="bg-white p-6 sm:p-10 rounded-3xl border border-slate-100 shadow-sm mb-8 text-center space-y-3 max-w-7xl mx-auto">
-          <div className="w-14 h-14 rounded-2xl bg-[#C48B80] text-[#C48B80] flex items-center justify-center mx-auto">
+          <div className="w-14 h-14 rounded-2xl bg-rose-50 text-[#C48B80] flex items-center justify-center mx-auto">
             <HelpCircle className="w-7 h-7" />
           </div>
           <h1 className="font-heading font-black text-3xl text-slate-900">Frequently Asked Questions</h1>
@@ -130,7 +130,7 @@ export default function FaqPage() {
                   }`}
                 >
                   <div className="overflow-hidden">
-                    <div className="px-6 pb-6 text-xs text-slate-600 leading-relaxed border-t border-slate-50 pt-3">
+                    <div className="px-6 pb-6 text-sm sm:text-base text-slate-600 leading-relaxed border-t border-slate-50 pt-3">
                       {faq.a}
                     </div>
                   </div>

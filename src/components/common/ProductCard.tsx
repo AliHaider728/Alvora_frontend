@@ -162,7 +162,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
               height={600}
               loading={priority ? "eager" : "lazy"}
               fetchPriority={priority ? "high" : "auto"}
-              className={`absolute inset-0 h-full w-full object-cover object-center transition-all duration-700 ease-out group-hover:scale-[1.06] ${product.images && product.images.length > 1 ? 'group-hover:opacity-0' : ''}`}
+              className={`absolute inset-0 h-full w-full object-cover object-center transition-all duration-700 ease-out lg:group-hover:scale-[1.06] ${product.images && product.images.length > 1 ? 'lg:group-hover:opacity-0' : ''}`}
             />
             {product.images && product.images.length > 1 && (
               <img
@@ -171,7 +171,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
                 width={600}
                 height={600}
                 loading="lazy"
-                className="absolute inset-0 h-full w-full object-cover object-center opacity-0 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-[1.06]"
+                className="absolute inset-0 h-full w-full object-cover object-center opacity-0 transition-all duration-700 ease-out lg:group-hover:opacity-100 lg:group-hover:scale-[1.06]"
               />
             )}
           </div>
@@ -260,7 +260,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
           {product.name}
         </Link>
 
-        <div className="mt-2.5 flex items-baseline gap-2">
+        <div className="mt-2.5 flex flex-wrap items-baseline gap-2">
           <span className={`font-black leading-none tracking-tight text-[#C48B80] ${compact ? 'text-xl sm:text-2xl' : 'text-2xl sm:text-3xl'}`}>
             {pricePrefix}{displayPriceStr}
           </span>
@@ -288,16 +288,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
         {/* ---------- ACTIONS ---------- */}
         <div className={`flex items-center gap-2 border-t border-slate-100 ${compact ? 'mt-3 pt-3' : 'mt-4 pt-4'}`}>
           <a
-            href={`https://wa.me/923107172222?text=${encodeURIComponent(`Hello, I am interested in this product:\nProduct: ${product.name}\nPrice: ${formatPrice(displayPrice, settings.currency)}\nLink: /product/${product.slug}`)}`}
+            href={`https://wa.me/923107172222?text=${encodeURIComponent(`Hello, I am interested in this product:\nProduct: ${product.name}\nPrice: ${formatPrice(displayPrice, settings.currency)}\nLink: https://alvoraskincare.com/product/${product.slug}`)}`}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              const fullUrl = `${window.location.origin}/product/${product.slug}`;
-              const whatsappUrl = `https://wa.me/923107172222?text=${encodeURIComponent(`Hello, I am interested in this product:\nProduct: ${product.name}\nPrice: ${formatPrice(displayPrice, settings.currency)}\nLink: ${fullUrl}`)}`;
-              window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
-            }}
             className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#25D366]/10 text-[#25D366] transition-colors duration-200 hover:bg-[#25D366] hover:text-white"
             title="Order via WhatsApp"
           >

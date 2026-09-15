@@ -14,7 +14,7 @@ export const AboutPageClient: React.FC = () => {
             <span className="text-[10px] tracking-widest uppercase text-[#A86249] font-bold mb-4 block">
               Our Mission
             </span>
-            <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl text-[#241916] font-medium leading-tight mb-6">
+            <h1 className="font-display text-3xl sm:text-5xl lg:text-6xl text-[#241916] font-medium leading-tight mb-6">
               Skincare Rooted in Care, Backed by Science
             </h1>
             <p className="text-[#241916]/70 leading-relaxed text-base sm:text-lg max-w-2xl mx-auto">
@@ -116,7 +116,7 @@ export const AboutPageClient: React.FC = () => {
 
         {/* STATS BAR */}
         <div className="bg-[#1A1A1A] p-8 sm:p-12 mb-20">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
             <div className="text-center space-y-3">
               <div className="w-12 h-12 rounded-full bg-[#2A2A2A] text-[#F1C9BD] flex items-center justify-center mx-auto">
                 <Users className="w-5 h-5" />

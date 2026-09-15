@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React from "react";
 import Link from "next/link";
@@ -7,13 +7,13 @@ import { motion } from "framer-motion";
 
 export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref }) => {
   return (
-    <section className="relative min-h-screen w-full bg-[url('/images/hero/hero-bg.png')] bg-cover bg-center bg-fixed bg-no-repeat overflow-hidden">
+    <section className="relative min-h-[100dvh] w-full bg-[url('/images/hero/hero-bg.png')] bg-cover bg-center bg-scroll sm:bg-fixed bg-no-repeat overflow-hidden">
       {/* 
         The Header is fixed and overlays this section. 
         We add padding-top to ensure the content starts safely below the header,
         but the background itself starts from the very top of the page.
       */}
-      <div className="mx-auto flex min-h-screen max-w-375 flex-col justify-center px-5 pt-24 sm:px-8 lg:px-12">
+      <div className="mx-auto flex min-h-[100dvh] max-w-7xl flex-col justify-center px-5 pt-24 sm:px-8 lg:px-12">
         <div className="max-w-xl pb-16">
           {/* Eyebrow */}
           <motion.div 
@@ -35,7 +35,7 @@ export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref 
             transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
             className="mb-8 font-display text-4xl leading-[1.2] text-[#241916] md:text-5xl lg:text-6xl tracking-tight"
           >
-            Healthy Skin.<br />
+            Healthy Skin.<br className="hidden sm:inline" />
             <span className="italic text-[#A86249]">Naturally You.</span>
           </motion.h1>
 
@@ -46,8 +46,8 @@ export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref 
             transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
             className="mb-10 max-w-sm text-sm leading-relaxed text-[#5C4F4A] md:text-base"
           >
-            Thoughtfully crafted skincare with nature's<br />
-            finest ingredients — for a calmer, clearer,<br />
+            Thoughtfully crafted skincare with nature's<br className="hidden sm:inline" />
+            finest ingredients — for a calmer, clearer,<br className="hidden sm:inline" />
             more radiant you.
           </motion.p>
 
@@ -82,7 +82,7 @@ export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.8 }}
-          className="absolute bottom-8 right-5 flex flex-col items-center gap-4 sm:right-8 lg:right-12"
+          className="hidden sm:flex absolute bottom-8 right-5 flex-col items-center gap-4 sm:right-8 lg:right-12"
         >
           <button 
             onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import React from 'react';
 import Link from "next/link";
 import { Heart, Trash2, ShoppingBag } from 'lucide-react';
@@ -26,7 +26,7 @@ export default function WishlistPage() {
         <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-sm mb-8 flex items-center justify-between">
           <div>
             <h1 className="font-heading font-black text-2xl sm:text-3xl text-slate-900 flex items-center gap-2">
-              <Heart className="w-7 h-7 text-rose-500 fill-rose-500" />
+              <Heart className="w-7 h-7 text-rose-500 fill-rose-500 shrink-0" />
               <span>Saved Favorite Products</span>
             </h1>
             <p className="text-xs text-slate-500 mt-1 font-medium">

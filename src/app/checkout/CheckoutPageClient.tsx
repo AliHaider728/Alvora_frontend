@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import React, { useEffect, useState } from 'react';
 import Link from "next/link";
 
@@ -489,7 +489,7 @@ export const CheckoutPageClient: React.FC = () => {
                         placeholder="e.g. Ali Raza"
                         value={fullName}
                           onChange={e => { setFullName(e.target.value); setFieldErrors(p => ({...p, fullName: ''})); }}
-                          className={`w-full px-4 py-2.5 text-sm rounded-xl border ${fieldErrors.fullName ? 'border-red-500 focus:ring-red-500' : 'border-[#EDE5DC] focus:ring-[#C48B80]'} font-sans focus:outline-none focus:ring-2`}
+                          className={`w-full px-4 py-2.5 text-base sm:text-sm rounded-xl border ${fieldErrors.fullName ? 'border-red-500 focus:ring-red-500' : 'border-[#EDE5DC] focus:ring-[#C48B80]'} font-sans focus:outline-none focus:ring-2`}
                         />
                         {fieldErrors.fullName && <p className="text-red-500 text-xs mt-1 font-sans">{fieldErrors.fullName}</p>}
                     </div>
@@ -504,7 +504,7 @@ export const CheckoutPageClient: React.FC = () => {
                         placeholder="e.g. +923001234567 or 03001234567"
                           value={phone}
                           onChange={e => { setPhone(e.target.value); setFieldErrors(p => ({...p, phone: ''})); }}
-                          className={`w-full px-4 py-2.5 text-sm rounded-xl border ${fieldErrors.phone ? 'border-red-500 focus:ring-red-500' : 'border-[#EDE5DC] focus:ring-[#C48B80]'} font-sans focus:outline-none focus:ring-2`}
+                          className={`w-full px-4 py-2.5 text-base sm:text-sm rounded-xl border ${fieldErrors.phone ? 'border-red-500 focus:ring-red-500' : 'border-[#EDE5DC] focus:ring-[#C48B80]'} font-sans focus:outline-none focus:ring-2`}
                         />
                         {fieldErrors.phone && <p className="text-red-500 text-xs mt-1 font-sans">{fieldErrors.phone}</p>}
                     </div>
@@ -517,7 +517,7 @@ export const CheckoutPageClient: React.FC = () => {
                         placeholder="House #, Street name, Sector / Area"
                         value={street}
                         onChange={e => { setStreet(e.target.value); setFieldErrors(p => ({...p, street: ''})); }}
-                        className={`w-full px-4 py-2.5 text-sm rounded-xl border ${fieldErrors.street ? 'border-red-500 focus:ring-red-500' : 'border-[#EDE5DC] focus:ring-[#C48B80]'} font-sans focus:outline-none focus:ring-2`}
+                        className={`w-full px-4 py-2.5 text-base sm:text-sm rounded-xl border ${fieldErrors.street ? 'border-red-500 focus:ring-red-500' : 'border-[#EDE5DC] focus:ring-[#C48B80]'} font-sans focus:outline-none focus:ring-2`}
                       />
                       {fieldErrors.street && <p className="text-red-500 text-xs mt-1 font-sans">{fieldErrors.street}</p>}
                     </div>
@@ -530,7 +530,7 @@ export const CheckoutPageClient: React.FC = () => {
                         placeholder="e.g. Gujranwala, Karachi, Islamabad"
                         value={city}
                           onChange={e => { setCity(e.target.value); setFieldErrors(p => ({...p, city: ''})); }}
-                          className={`w-full px-4 py-2.5 text-sm rounded-xl border ${fieldErrors.city ? 'border-red-500 focus:ring-red-500' : 'border-[#EDE5DC] focus:ring-[#C48B80]'} font-sans focus:outline-none focus:ring-2`}
+                          className={`w-full px-4 py-2.5 text-base sm:text-sm rounded-xl border ${fieldErrors.city ? 'border-red-500 focus:ring-red-500' : 'border-[#EDE5DC] focus:ring-[#C48B80]'} font-sans focus:outline-none focus:ring-2`}
                         />
                         {fieldErrors.city && <p className="text-red-500 text-xs mt-1 font-sans">{fieldErrors.city}</p>}
                     </div>
@@ -542,7 +542,7 @@ export const CheckoutPageClient: React.FC = () => {
                           type="text"
                           value={state}
                           onChange={e => setState(e.target.value)}
-                          className="w-full px-3 py-2.5 text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
+                          className="w-full px-3 py-2.5 text-base sm:text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
                         />
                       </div>
                       <div>
@@ -553,7 +553,7 @@ export const CheckoutPageClient: React.FC = () => {
                           pattern="[0-9]*"
                           value={postalCode}
                           onChange={e => setPostalCode(e.target.value.replace(/[^0-9]/g, ''))}
-                          className="w-full px-3 py-2.5 text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
+                          className="w-full px-3 py-2.5 text-base sm:text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
                         />
                       </div>
                     </div>
@@ -576,7 +576,7 @@ export const CheckoutPageClient: React.FC = () => {
                         placeholder="e.g. ali@example.com"
                         value={email}
                         onChange={e => setEmail(e.target.value)}
-                        className="w-full px-4 py-2.5 text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
+                        className="w-full px-4 py-2.5 text-base sm:text-sm rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
                       />
                     </div>
                   </div>

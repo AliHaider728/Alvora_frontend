@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Send, CheckCircle2, Instagram, Facebook, Youtube } from 'lucide-react';
@@ -194,7 +194,7 @@ export const Footer: React.FC = () => {
                 placeholder="Enter your email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="alvora-input text-sm py-2.5"
+                className="alvora-input text-base sm:text-sm py-2.5"
               />
               <button
                 type="submit"
@@ -226,7 +226,7 @@ export const Footer: React.FC = () => {
       </div>
 
       {/* â”€â”€ Bottom Bar â”€â”€ */}
-      <div className="border-t border-[#EDE5DC]">
+      <div className="border-t border-[#EDE5DC] pb-24 xl:pb-0">
         <div className="alvora-container py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-[#A1A7AA] text-center sm:text-left">
             &copy; {new Date().getFullYear()} Alvora Skincare. All Rights Reserved.
