@@ -76,7 +76,7 @@ export const normalizeStoreSettings = (settings: Partial<StoreSettings>): StoreS
   storeName: settings.storeName || 'Alvora Skincare',
   tagline: settings.tagline || 'Where Imagination Comes to Life',
   email: settings.email || 'Sales@alvora.pk',
-  phone: settings.phone || '0310-7172222',
+  phone: settings.phone || '+92 324 6036146',
   address: settings.address || 'Mumtaz Market, Gujranwala',
   currency: settings.currency || 'Rs.',
   logoUrl: settings.logoUrl,

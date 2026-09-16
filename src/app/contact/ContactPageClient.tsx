@@ -45,7 +45,7 @@ const YouTubeIcon = ({ className }: { className?: string }) => (
 // If these ever need to change, update them directly here
 // (and in Footer.tsx to keep both in sync).
 // ─────────────────────────────────────────────────────────
-const STORE_PHONE = '0310-7172222';
+const STORE_PHONE = '+92 324 6036146';
 const STORE_EMAIL = 'Sales@alvora.pk';
 const STORE_ADDRESS = 'Mumtaz Market, Gujranwala';
 

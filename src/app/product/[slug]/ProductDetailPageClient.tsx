@@ -1074,7 +1074,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
 
                     return (
                       <a
-                        href={`https://wa.me/923107172222?text=${encodeURIComponent(waMessage)}`}
+                        href={`https://wa.me/923246036146?text=${encodeURIComponent(waMessage)}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex h-12 w-14 shrink-0 items-center justify-center rounded-2xl bg-[#25D366]/10 text-[#25D366] shadow-sm transition-colors hover:bg-[#25D366] hover:text-white sm:w-16"

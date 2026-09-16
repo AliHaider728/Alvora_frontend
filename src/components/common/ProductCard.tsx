@@ -288,7 +288,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
         {/* ---------- ACTIONS ---------- */}
         <div className={`flex items-center gap-2 border-t border-slate-100 ${compact ? 'mt-3 pt-3' : 'mt-4 pt-4'}`}>
           <a
-            href={`https://wa.me/923107172222?text=${encodeURIComponent(`Hello, I am interested in this product:\nProduct: ${product.name}\nPrice: ${formatPrice(displayPrice, settings.currency)}\nLink: https://alvoraskincare.com/product/${product.slug}`)}`}
+            href={`https://wa.me/923246036146?text=${encodeURIComponent(`Hello, I am interested in this product:\nProduct: ${product.name}\nPrice: ${formatPrice(displayPrice, settings.currency)}\nLink: https://alvoraskincare.com/product/${product.slug}`)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#25D366]/10 text-[#25D366] transition-colors duration-200 hover:bg-[#25D366] hover:text-white"

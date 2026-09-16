@@ -5,7 +5,7 @@ export const MOCK_SETTINGS: StoreSettings = {
   storeName: 'Alvora Skincare',
   tagline: 'Pure Ingredients. Visible Results.',
   email: 'sales@alvora.pk',
-  phone: '0310-7172222',
+  phone: '+92 324 6036146',
   address: 'Mumtaz Market, Gujranwala',
   currency: 'Rs.',
   metaTitle: 'Alvora Skincare • Pure Ingredients. Visible Results.',
