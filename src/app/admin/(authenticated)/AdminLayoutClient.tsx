@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import React, { useEffect, useState } from 'react';
 import Link from "next/link";
 import Image from "next/image";
@@ -22,7 +22,8 @@ import {
   Menu,
   X as CloseIcon,
   Mic,
-  Gift
+  Gift,
+  Star
 } from 'lucide-react';
 import { getAuthToken, removeAuthToken, api, isSuperAdmin } from '../../../services/api';
 
@@ -54,6 +55,7 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
   const navItems = [
     { label: 'Dashboard', path: '/admin', icon: LayoutDashboard },
     { label: 'Products', path: '/admin/products', icon: Package },
+    { label: 'Best Sellers', path: '/admin/best-sellers', icon: Star },
     { label: 'Categories', path: '/admin/categories', icon: Layers },
     { label: 'Attributes', path: '/admin/attributes', icon: Settings },
     { label: 'Orders', path: '/admin/orders', icon: ShoppingBag },

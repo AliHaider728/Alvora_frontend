@@ -45,7 +45,7 @@ export default function AdminCreateBundleClient() {
   const [manualStock, setManualStock] = useState(0);
 
   // Images & Marketing
-  const [useCollage, setUseCollage] = useState(true);
+  const [useCollage, setUseCollage] = useState(false);
   const [customImageUrl, setCustomImageUrl] = useState('');
   const [uploadingImage, setUploadingImage] = useState(false);
   const [badgeText, setBadgeText] = useState('Best Value');
@@ -605,22 +605,31 @@ export default function AdminCreateBundleClient() {
                 </div>
 
                 <div className="pt-4 border-t border-gray-100">
-                  <label className="flex items-center gap-3">
-                    <input type="checkbox" checked={useCollage} onChange={e => setUseCollage(e.target.checked)} className="w-4 h-4 rounded text-[#A85A3B] focus:ring-[#A85A3B]" />
-                    <span className="text-sm font-semibold text-gray-900">Auto-generate Image Collage</span>
-                  </label>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-sm font-semibold text-gray-900">Bundle Thumbnail Image</span>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input type="checkbox" checked={useCollage} onChange={e => setUseCollage(e.target.checked)} className="w-4 h-4 rounded text-[#A85A3B] focus:ring-[#A85A3B]" />
+                      <span className="text-xs font-semibold text-gray-700">Auto-generate Collage Instead</span>
+                    </label>
+                  </div>
                   {!useCollage && (
-                    <div className="mt-3">
-                      <label className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-[#A85A3B] hover:bg-gray-50 transition-colors bg-white">
+                    <div className="mt-2">
+                      <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-[#A85A3B] hover:bg-gray-50 transition-colors bg-white">
                         {uploadingImage ? (
-                           <Loader2 className="w-6 h-6 animate-spin text-[#A85A3B]" />
+                           <Loader2 className="w-8 h-8 animate-spin text-[#A85A3B]" />
                         ) : customImageUrl ? (
-                           <Image src={customImageUrl} alt="Custom Bundle" width={100} height={100} className="rounded object-cover" />
+                           <div className="flex flex-col items-center">
+                             <div className="relative w-full max-w-[200px] aspect-square rounded-lg overflow-hidden border border-gray-200 mb-3 shadow-sm">
+                               <Image src={customImageUrl} alt="Bundle Thumbnail Preview" fill className="object-cover" />
+                             </div>
+                             <span className="text-xs font-semibold text-[#A85A3B]">Click to replace image</span>
+                           </div>
                         ) : (
-                           <>
-                             <ImageIcon className="w-6 h-6 text-gray-400 mb-2" />
-                             <span className="text-sm font-medium text-gray-600">Click to upload custom image</span>
-                           </>
+                           <div className="flex flex-col items-center py-4">
+                             <ImageIcon className="w-8 h-8 text-gray-400 mb-3" />
+                             <span className="text-sm font-medium text-gray-900">Click to upload bundle image</span>
+                             <span className="text-xs text-gray-500 mt-1">Recommended size: 1080x1080px (JPG, PNG, WebP)</span>
+                           </div>
                         )}
                         <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={uploadingImage} />
                       </label>

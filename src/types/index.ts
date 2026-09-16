@@ -184,6 +184,7 @@ export interface Product {
   isFeatured?: boolean;
   isNewArrival?: boolean;
   isBestseller?: boolean;
+  bestSellerDisplayImage?: string;
   isSpotlight?: boolean;
   isVisible?: boolean; // Show/Hide toggle on storefront
   status?: 'draft' | 'published';
