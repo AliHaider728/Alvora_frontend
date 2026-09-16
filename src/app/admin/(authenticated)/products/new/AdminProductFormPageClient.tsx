@@ -1287,10 +1287,10 @@ export const AdminProductFormPageClient: React.FC = () => {
 
         <div className="sticky bottom-4 z-20 flex flex-col-reverse gap-3 rounded-2xl border border-[#E7D9D0] bg-white/95 p-4 shadow-xl backdrop-blur sm:flex-row sm:justify-end xl:col-span-2">
           <button type="button" disabled={isSaving} onClick={() => { void cancelEditing(); }} className="rounded-xl bg-[#FAF6F2] px-5 py-3 text-xs font-bold text-[#1A1A1A]/80 disabled:opacity-50">Cancel</button>
-          <AnimatedButton type="submit" disabled={isSaving || uploadingTarget !== null} variant="primary">
-            {isSaving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
-            {isSaving ? 'Saving…' : isEditing ? 'Update Product' : 'Save Product'}
-          </AnimatedButton>
+          <button type="submit" disabled={isSaving || uploadingTarget !== null} className="flex items-center gap-2 rounded-xl bg-[#9C4122] text-white px-5 py-2.5 text-xs font-bold hover:bg-[#7A321A] transition-colors disabled:opacity-50">
+            <Save className="w-4 h-4" />
+            <span>{isSaving ? 'Saving…' : isEditing ? 'Update Product' : 'Save Product'}</span>
+          </button>
         </div>
       </form>
     </div>

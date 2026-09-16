@@ -201,7 +201,7 @@ export const CategoryPageClient: React.FC = () => {
               priority 
             />
             {/* Gradient mask to blend the image smoothly into the left solid color */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#E9E1D9] via-[#E9E1D9]/80 to-transparent sm:via-[#E9E1D9]/40"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-[#E9E1D9] via-[#E9E1D9]/40 to-transparent sm:via-[#E9E1D9]/10"></div>
           </div>
 
           {/* Text Content */}

@@ -185,13 +185,7 @@ export const AdminProductsPageClient: React.FC = () => {
               <span>Import CSV</span>
               <input type="file" accept=".csv" className="hidden" onChange={handleImportCSV} />
             </label>
-            <AnimatedButton
-              onClick={() => router.push('/admin/products/new')}
-              variant="primary"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              <span>Add New Product</span>
-            </AnimatedButton>
+            <button onClick={() => router.push('/admin/products/new')} className="flex items-center gap-2 rounded-xl bg-[#9C4122] text-white px-5 py-2.5 text-xs font-bold hover:bg-[#7A321A] transition-colors"><Plus className="w-4 h-4" /><span>Add New Product</span></button>
           </div>
       </div>
 
@@ -305,4 +299,5 @@ export const AdminProductsPageClient: React.FC = () => {
     </div>
   );
 };
+
 
