@@ -1,4 +1,5 @@
 "use client";
+import { AnimatedButton } from "../../../components/common/AnimatedButton";
 import React, { useEffect, useState, useMemo } from 'react';
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -1087,20 +1088,22 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
 
                   
                   {/* Add to Cart CTA Button with bounce micro-interaction */}
-                  <button
-  type="button"
-  onClick={handleAddToCart}
-  disabled={cartActionLocked.current || (isVariable ? (product.attributes?.length || 0) > 0 && !allVariantsSelected : variantGroups.length > 0 && !allVariantsSelected) || !effectiveAvailable}
-  className="w-full bg-[#1A1A1A] text-white rounded-full py-4 text-xs font-bold tracking-widest hover:bg-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
->
-  {cartActionState === 'adding' ? (
-    <><Loader2 className="h-4 w-4 animate-spin" /> ADDING...</>
-  ) : cartActionState === 'added' ? (
-    <><Check className="h-4 w-4" /> ADDED</>
-  ) : (
-    <>ADD TO CART</>
-  )}
-</button>
+                  <AnimatedButton
+                    type="button"
+                    onClick={handleAddToCart}
+                    disabled={cartActionLocked.current || (isVariable ? (product.attributes?.length || 0) > 0 && !allVariantsSelected : variantGroups.length > 0 && !allVariantsSelected) || !effectiveAvailable}
+                    size="full"
+                    variant="primary"
+                    className="disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {cartActionState === 'adding' ? (
+                      <><Loader2 className="h-4 w-4 animate-spin mr-2" /> ADDING...</>
+                    ) : cartActionState === 'added' ? (
+                      <><Check className="h-4 w-4 mr-2" /> ADDED</>
+                    ) : (
+                      <>ADD TO CART</>
+                    )}
+                  </AnimatedButton>
 
                 </div>
 

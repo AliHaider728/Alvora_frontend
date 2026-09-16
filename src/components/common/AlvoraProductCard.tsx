@@ -6,6 +6,7 @@ import { Product } from '../../types';
 import { useStore } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/formatters';
 import { getSafeImageSrc } from '../../utils/images';
+import { AnimatedButton } from './AnimatedButton';
 
 export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: Product, layout?: 'standard' | 'compact' }) => {
   const { addToCart, settings, toggleWishlist, isInWishlist } = useStore();
@@ -99,19 +100,23 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
 
         <div className="flex gap-2 mt-auto">
           {needsSelection ? (
-              <Link
+              <AnimatedButton
                 href={`/product/${product.slug}`}
-                className="btn-interactive flex-1 bg-gradient-to-br from-[#D4784F] to-[#9C4122] hover:from-[#9C4122] hover:to-[#7A321A] text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase py-3 px-2 rounded-xl transition-colors flex items-center justify-center shadow-sm text-center"
+                size="full"
+                variant="primary"
+                className="flex-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2.5 sm:py-3"
               >
-                SELECT OPTIONS
-              </Link>
+                OPTIONS
+              </AnimatedButton>
             ) : product.inStock ? (
-              <Link
+              <AnimatedButton
                 href={`/product/${product.slug}`}
-                className="btn-interactive flex-1 bg-gradient-to-br from-[#D4784F] to-[#9C4122] hover:from-[#9C4122] hover:to-[#7A321A] text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase py-3 px-2 rounded-xl transition-colors flex items-center justify-center shadow-sm text-center"
+                size="full"
+                variant="primary"
+                className="flex-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2.5 sm:py-3"
               >
                 VIEW DETAIL
-              </Link>
+              </AnimatedButton>
             ) : (
               <button
                 disabled

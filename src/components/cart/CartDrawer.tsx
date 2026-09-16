@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname, useParams } from 'next/navigation';
@@ -305,7 +305,7 @@ export const CartDrawer: React.FC = () => {
 
             {/* CTAs */}
             <div className="pt-2 flex flex-col gap-2">
-              <button
+              <AnimatedButton
                 onClick={() => {
                   trackInitiateCheckout({
                     items: cart.map((item) => ({
@@ -326,11 +326,12 @@ export const CartDrawer: React.FC = () => {
                   setIsCartOpen(false);
                   router.push('/checkout');
                 }}
-                className="btn-interactive w-full py-3.5 rounded-full bg-gradient-to-r from-[#1A1A1A] to-[#333333] hover:from-[#D4784F] hover:to-[#9C4122] text-white font-display font-bold tracking-widest text-sm shadow-md flex items-center justify-center gap-2 transition-all"
+                variant="primary"
+                size="full"
               >
                 <span>Proceed to Checkout</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </AnimatedButton>
 
               <div className="flex items-center justify-center gap-1.5 text-[11px] text-[#1A1A1A]/40 font-sans pt-1">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />

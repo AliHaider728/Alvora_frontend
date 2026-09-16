@@ -1,4 +1,5 @@
-﻿"use client";
+"use client";
+import { AnimatedButton } from "../../../../components/common/AnimatedButton";
 import React, { useState } from 'react';
 import { Plus, Search, Edit2, Trash2, Eye, EyeOff, UploadCloud, DownloadCloud, GripVertical } from 'lucide-react';
 import { useRouter } from "next/navigation";
@@ -184,13 +185,13 @@ export const AdminProductsPageClient: React.FC = () => {
               <span>Import CSV</span>
               <input type="file" accept=".csv" className="hidden" onChange={handleImportCSV} />
             </label>
-            <button
+            <AnimatedButton
               onClick={() => router.push('/admin/products/new')}
-              className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm font-heading font-bold text-xs flex items-center gap-2 shadow-md transition-all"
+              variant="primary"
             >
-              <Plus className="w-4 h-4" />
+              <Plus className="w-4 h-4 mr-2" />
               <span>Add New Product</span>
-            </button>
+            </AnimatedButton>
           </div>
       </div>
 

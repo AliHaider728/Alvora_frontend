@@ -1,11 +1,12 @@
-﻿"use client";
+"use client";
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useStore } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/formatters';
-import { Bundle } from '../../types';
+import { Product, Bundle } from '../../types';
+import { AnimatedButton } from '../common/AnimatedButton';
 
 export const BundleSection: React.FC = () => {
   const { bundles, bundlesLoading, addToCart, setIsCartOpen } = useStore();
@@ -144,18 +145,20 @@ export const BundleSection: React.FC = () => {
                   </div>
 
                   <div className="flex flex-col sm:flex-row gap-3">
-                    <button 
+                    <AnimatedButton 
                       onClick={() => handleAddBundle(bundle)}
-                      className="btn-interactive w-full sm:w-auto flex-1 px-8 py-4 bg-gradient-to-br from-[#D4784F] to-[#9C4122] hover:from-[#9C4122] hover:to-[#7A321A] text-white text-[11px] font-bold tracking-widest uppercase transition-colors rounded-full"
+                      variant="primary"
+                      className="w-full sm:w-auto flex-1 text-[11px]"
                     >
                       Add to Cart
-                    </button>
-                    <Link 
+                    </AnimatedButton>
+                    <AnimatedButton 
                       href={`/bundles/${bundle.slug}`}
-                      className="w-full sm:w-auto flex-1 px-8 py-4 bg-transparent border border-[#9C4122] text-[#9C4122] hover:bg-[#9C4122] hover:text-white flex items-center justify-center text-[11px] font-bold tracking-widest uppercase transition-colors rounded-full text-center"
+                      variant="outline"
+                      className="w-full sm:w-auto flex-1 text-[11px]"
                     >
                       View Details
-                    </Link>
+                    </AnimatedButton>
                   </div>
                 </div>
               </motion.div>
@@ -180,12 +183,14 @@ export const BundleSection: React.FC = () => {
                 Mix and match any 3 products to create your perfect routine and automatically save 15%.
               </p>
             </div>
-            <Link 
+            <AnimatedButton 
               href="/bundles/build"
-              className="btn-interactive flex-shrink-0 px-8 py-4 bg-gradient-to-br from-[#D4784F] to-[#9C4122] hover:from-[#9C4122] hover:to-[#7A321A] text-white text-[11px] font-bold tracking-widest uppercase transition-colors rounded-full"
+              variant="primary"
+              className="flex-shrink-0 text-[11px]"
+              size="lg"
             >
               Create Your Routine
-            </Link>
+            </AnimatedButton>
           </motion.div>
         </div>
       </div>

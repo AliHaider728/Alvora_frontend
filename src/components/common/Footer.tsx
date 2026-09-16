@@ -2,11 +2,12 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Send, CheckCircle2, Instagram, Facebook, Youtube } from 'lucide-react';
+import { AnimatedButton } from './AnimatedButton';
 import { Logo } from './Logo';
 import { useStore } from '../../context/StoreContext';
 import { useAuth } from '../../context/AuthContext';
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+/* ────────────────────────────────────────────
    ALVORA — Footer
    Design reference: warm ivory/cream, logo top-left,
    multi-column links, newsletter, social icons, clean bottom bar.
@@ -194,21 +195,16 @@ export const Footer: React.FC = () => {
                 placeholder="Enter your email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="alvora-input rounded-2xl text-base sm:text-sm py-3"
+                className="alvora-input rounded-xl text-base sm:text-sm py-3"
               />
-              <button
+              <AnimatedButton
                 type="submit"
-                className="btn-interactive rounded-2xl
-                  flex items-center justify-center gap-2
-                  w-full py-3 px-4
-                  bg-gradient-to-br from-[#D4784F] to-[#9C4122] hover:from-[#1A1A1A] hover:to-[#1A1A1A]
-                  text-white text-sm font-bold tracking-wide uppercase
-                  transition-colors duration-200
-                "
+                variant="terracotta"
+                size="full"
               >
                 Subscribe
-                <Send className="w-3.5 h-3.5" />
-              </button>
+                <Send className="w-3.5 h-3.5 ml-2" />
+              </AnimatedButton>
             </form>
 
             {subscribed && (

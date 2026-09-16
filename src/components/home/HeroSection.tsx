@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { ArrowRight, ArrowDown } from "lucide-react";
 import { motion } from "framer-motion";
+import { AnimatedButton } from "../common/AnimatedButton";
 
 export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref }) => {
   return (
@@ -58,13 +59,9 @@ export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref 
             transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
             className="flex flex-col flex-wrap items-start gap-6 sm:flex-row sm:items-center sm:gap-10"
           >
-            <Link 
-              href={featuredHref || "/category/all"}
-              className="group flex items-center justify-center gap-3 bg-[#A86249] px-8 py-4 text-xs font-bold uppercase tracking-[0.15em] text-white transition-colors hover:bg-[#8E4D39] rounded-xl"
-            >
+            <AnimatedButton href={featuredHref || "/category/all"} size="lg" variant="primary">
               SHOP FEATURED
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
+            </AnimatedButton>
 
             <Link 
               href="/category/all"

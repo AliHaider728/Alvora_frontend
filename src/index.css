@@ -555,3 +555,62 @@ input[type="checkbox"]:focus-visible {
   opacity: 1;
   transform: none;
 }
+
+/* Animated Button Decorators */
+.anim-wind-bg {
+  background-size: 200% 200%;
+}
+.group:hover .anim-wind-bg {
+  animation: btn-wind 2s ease-in-out infinite;
+}
+@keyframes btn-wind {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.anim-slay-1 {
+  transform-origin: 0 0;
+  transform: rotate(10deg);
+  transition: all 0.5s ease-in-out;
+}
+.group:hover .anim-slay-1 {
+  animation: slay-1 3s cubic-bezier(0.52, 0, 0.58, 1) infinite;
+  transform: rotate(10deg);
+}
+@keyframes slay-1 {
+  0% { transform: rotate(10deg); }
+  50% { transform: rotate(-5deg); }
+  100% { transform: rotate(10deg); }
+}
+
+.anim-slay-2 {
+  transform-origin: 50% 0;
+  transform: rotate(10deg);
+  transition: all 1s ease-in-out;
+}
+.group:hover .anim-slay-2 {
+  animation: slay-2 3s cubic-bezier(0.52, 0, 0.58, 1) 1s infinite;
+  transform: rotate(0);
+}
+@keyframes slay-2 {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(15deg); }
+  100% { transform: rotate(0); }
+}
+
+.anim-slay-3 {
+  transform-origin: 50% 0;
+  transform: rotate(-5deg);
+  transition: all 1s ease-in-out;
+}
+.group:hover .anim-slay-3 {
+  animation: slay-3 2s cubic-bezier(0.52, 0, 0.58, 1) 1s infinite;
+  transform: rotate(0);
+}
+@keyframes slay-3 {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(-5deg); }
+  100% { transform: rotate(0); }
+}
+

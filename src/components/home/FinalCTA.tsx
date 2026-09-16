@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
 import { CheckCircle } from 'lucide-react';
+import { AnimatedButton } from '../common/AnimatedButton';
 
 export const FinalCTA: React.FC = () => {
   const shouldReduceMotion = useReducedMotion();
@@ -67,12 +68,13 @@ export const FinalCTA: React.FC = () => {
                     onChange={e => setEmail(e.target.value)}
                     className="w-full bg-white/10 backdrop-blur-sm border border-white/30 text-white placeholder:text-white/70 rounded-xl px-5 sm:pl-6 sm:pr-36 h-14 focus:outline-none focus:border-white focus:bg-white/20 transition-all text-base sm:text-sm"
                   />
-                  <button 
+                  <AnimatedButton 
                     type="submit"
-                    className="w-full sm:w-auto h-14 sm:h-auto sm:absolute sm:right-1.5 sm:top-1.5 sm:bottom-1.5 bg-white text-[#C87355] hover:bg-[#1A1A1A] hover:text-white transition-colors duration-300 px-6 rounded-xl sm:rounded-lg text-xs font-bold tracking-widest uppercase shadow-sm"
+                    variant="white"
+                    className="w-full sm:w-auto h-14 sm:h-auto sm:absolute sm:right-1.5 sm:top-1.5 sm:bottom-1.5 px-6 rounded-xl sm:rounded-lg text-xs"
                   >
                     {subscribed ? "JOINED!" : "JOIN US"}
-                  </button>
+                  </AnimatedButton>
                 </form>
                 {subscribed && (
                   <motion.p 

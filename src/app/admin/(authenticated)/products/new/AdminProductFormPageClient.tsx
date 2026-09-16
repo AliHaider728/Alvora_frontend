@@ -1,4 +1,5 @@
 "use client";
+import { AnimatedButton } from "../../../../../components/common/AnimatedButton";
 import React, { useEffect, useRef, useState } from 'react';
 import {
   ArrowLeft,
@@ -1286,7 +1287,10 @@ export const AdminProductFormPageClient: React.FC = () => {
 
         <div className="sticky bottom-4 z-20 flex flex-col-reverse gap-3 rounded-2xl border border-[#E7D9D0] bg-white/95 p-4 shadow-xl backdrop-blur sm:flex-row sm:justify-end xl:col-span-2">
           <button type="button" disabled={isSaving} onClick={() => { void cancelEditing(); }} className="rounded-xl bg-[#FAF6F2] px-5 py-3 text-xs font-bold text-[#1A1A1A]/80 disabled:opacity-50">Cancel</button>
-          <button type="submit" disabled={isSaving || uploadingTarget !== null} className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm px-6 py-3 text-xs font-bold shadow-md transition disabled:cursor-not-allowed disabled:opacity-60">{isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}{isSaving ? 'Saving…' : isEditing ? 'Update Product' : 'Save Product'}</button>
+          <AnimatedButton type="submit" disabled={isSaving || uploadingTarget !== null} variant="primary">
+            {isSaving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
+            {isSaving ? 'Saving…' : isEditing ? 'Update Product' : 'Save Product'}
+          </AnimatedButton>
         </div>
       </form>
     </div>

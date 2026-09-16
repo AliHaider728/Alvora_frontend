@@ -1,4 +1,5 @@
 "use client";
+import { AnimatedButton } from "../../components/common/AnimatedButton";
 import React, { useEffect, useState } from 'react';
 import Link from "next/link";
 
@@ -581,14 +582,16 @@ export const CheckoutPageClient: React.FC = () => {
                     </div>
                   </div>
 
-                  <button
+                  <AnimatedButton
                     type="submit"
                     disabled={isPlacingOrder}
-                    className="w-full py-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-display font-black text-lg shadow-xl flex items-center justify-center gap-2 transition-all hover:scale-[1.01]"
+                    variant="primary"
+                    size="full"
+                    className="py-4 text-lg"
                   >
                     <span>{isPlacingOrder ? 'Placing Order…' : `Confirm Order & Pay ${formatPrice(finalTotal, settings.currency)} on Delivery`}</span>
-                    {isPlacingOrder ? <span className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" /> : <Check className="w-6 h-6" />}
-                  </button>
+                    {isPlacingOrder ? <span className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent ml-2" /> : <Check className="w-6 h-6 ml-2" />}
+                  </AnimatedButton>
                 </form>
               )}
 
