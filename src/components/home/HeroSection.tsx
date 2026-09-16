@@ -8,7 +8,7 @@ import { AnimatedButton } from "../common/AnimatedButton";
 
 export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref }) => {
   return (
-    <section className="relative min-h-[100dvh] w-full bg-[url('/images/hero/hero-banner.png')] bg-cover bg-center bg-scroll sm:bg-fixed bg-no-repeat overflow-hidden">
+    <section className="relative min-h-[100dvh] w-full bg-[url('/images/hero/hero-banner.jpg')] bg-cover bg-center bg-scroll sm:bg-fixed bg-no-repeat overflow-hidden">
       {/* 
         The Header is fixed and overlays this section. 
         We add padding-top to ensure the content starts safely below the header,
