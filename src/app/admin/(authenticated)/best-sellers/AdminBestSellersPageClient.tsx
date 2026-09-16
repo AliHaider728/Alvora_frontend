@@ -41,12 +41,19 @@ export const AdminBestSellersPageClient: React.FC = () => {
       const result = await api.uploadImage(file);
       
       if (result && result.url) {
+        // Find current product to get existing tags
+        const product = products.find(p => p.id === productId);
+        if (!product) throw new Error("Product not found");
+
+        const otherTags = (product.tags || []).filter(t => !t.startsWith('bestseller_image:'));
+        const newTags = [...otherTags, `bestseller_image:${result.url}`];
+
         // Update product via API
-        await api.updateProduct(productId, { bestSellerDisplayImage: result.url });
+        await api.updateProduct(productId, { tags: newTags });
         
         // Update local state
         setProducts(prev => prev.map(p => 
-          p.id === productId ? { ...p, bestSellerDisplayImage: result.url } : p
+          p.id === productId ? { ...p, tags: newTags } : p
         ));
         
         showToast('Best seller image updated successfully', 'success');
@@ -65,9 +72,14 @@ export const AdminBestSellersPageClient: React.FC = () => {
     
     setUploadingId(productId);
     try {
-      await api.updateProduct(productId, { bestSellerDisplayImage: null });
+      const product = products.find(p => p.id === productId);
+      if (!product) throw new Error("Product not found");
+
+      const newTags = (product.tags || []).filter(t => !t.startsWith('bestseller_image:'));
+
+      await api.updateProduct(productId, { tags: newTags });
       setProducts(prev => prev.map(p => 
-        p.id === productId ? { ...p, bestSellerDisplayImage: undefined } : p
+        p.id === productId ? { ...p, tags: newTags } : p
       ));
       showToast('Override image removed', 'success');
     } catch (err) {
@@ -101,8 +113,9 @@ export const AdminBestSellersPageClient: React.FC = () => {
       ) : (
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {products.map(product => {
-            const hasOverride = !!product.bestSellerDisplayImage;
-            const displayUrl = product.bestSellerDisplayImage || (product.images && product.images[0]) || '';
+            const overrideImage = product.tags?.find(t => t.startsWith('bestseller_image:'))?.split('bestseller_image:')[1];
+            const hasOverride = !!overrideImage;
+            const displayUrl = overrideImage || (product.images && product.images[0]) || '';
             const isUploading = uploadingId === product.id;
 
             return (

@@ -26,7 +26,7 @@ export function RitualAnimation() {
       title: prod.category || "Care",
       sub: prod.name,
       body: prod.description || prod.shortDescription || "Elevate your skincare routine.",
-      img: prod.bestSellerDisplayImage || prod.images?.[0] || "/images/animation/prod-1.png",
+      img: prod.tags?.find((t: string) => t.startsWith('bestseller_image:'))?.split('bestseller_image:')[1] || prod.images?.[0] || "/images/animation/prod-1.png",
       slug: prod.slug,
       product: prod,
     }));
