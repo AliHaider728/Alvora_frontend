@@ -163,7 +163,7 @@ export function RitualAnimation() {
           
           {STEPS.map((s, i) => (
             <div key={s.slug} className="flex flex-col items-center text-center gap-6 relative">
-              <div className="relative w-full aspect-square max-w-[280px] bg-white rounded-3xl p-8 shadow-sm border border-[#E7D9D0]">
+              <div className="relative w-full aspect-square max-w-[280px] bg-white rounded-3xl p-4 shadow-sm border border-[#E7D9D0]">
                 <img
                   src={s.img}
                   alt={s.sub}
@@ -287,7 +287,7 @@ export function RitualAnimation() {
                     width={768}
                     height={1024}
                     loading="lazy"
-                    className="h-[45%] w-auto object-contain pointer-events-none rounded-xl"
+                    className="h-[65%] w-auto object-contain pointer-events-none rounded-xl"
                   />
                   
                   {/* Small Action Bubbles */}
