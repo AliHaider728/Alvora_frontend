@@ -273,7 +273,7 @@ export function RitualAnimation() {
 
             {STEPS.map((s, i) => {
               const onRight = i % 2 === 0;
-              const sideClass = onRight ? 'right-[30%]' : 'left-[30%]';
+              const sideClass = onRight ? 'right-[18%]' : 'left-[18%]';
 
               return (
                 <motion.div
@@ -287,11 +287,11 @@ export function RitualAnimation() {
                     width={768}
                     height={1024}
                     loading="lazy"
-                    className="h-[85%] w-auto object-contain pointer-events-none"
+                    className="h-[80%] w-[80%] object-contain pointer-events-none -translate-y-8 scale-110"
                   />
                   
                   {/* Small Action Bubbles */}
-                  <div className={`absolute top-[40%] flex flex-col gap-4 ${sideClass} pointer-events-auto z-10`}>
+                  <div className={`absolute top-1/2 -translate-y-1/2 flex flex-col gap-4 ${sideClass} pointer-events-auto z-10`}>
                     <button 
                       onClick={(e) => {
                         e.preventDefault();
