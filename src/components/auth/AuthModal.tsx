@@ -127,7 +127,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultMo
           </div>
 
           {error && (
-            <div className="mb-4 p-3 rounded-xl bg-rose-50 text-rose-600 text-sm font-medium flex items-center gap-2">
+            <div className="mb-4 p-3 rounded-xl bg-red-50 text-red-600 text-sm font-medium flex items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{error}</span>
             </div>
@@ -143,7 +143,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultMo
                   value={name}
                   onChange={e => setName(e.target.value)}
                   placeholder="John Doe"
-                  className="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-colors"
+                  className="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-[#E7D9D0] focus:ring-1 focus:ring-[#E7D9D0] transition-colors"
                 />
               </div>
             )}
@@ -155,7 +155,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultMo
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 placeholder="name@example.com"
-                className="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-colors"
+                className="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-[#E7D9D0] focus:ring-1 focus:ring-[#E7D9D0] transition-colors"
               />
             </div>
             
@@ -167,7 +167,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultMo
                     <button 
                       type="button" 
                       onClick={() => setMode('forgot-password')}
-                      className="text-xs font-bold text-rose-500 hover:text-rose-600 transition-colors"
+                      className="text-xs font-bold text-[#C87355] hover:text-[#9C4122] transition-colors"
                     >
                       Forgot Password?
                     </button>
@@ -180,7 +180,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultMo
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-colors pr-10"
+                    className="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-[#E7D9D0] focus:ring-1 focus:ring-[#E7D9D0] transition-colors pr-10"
                   />
                   <button
                     type="button"
@@ -204,7 +204,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultMo
                     value={confirmPassword}
                     onChange={e => setConfirmPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-colors pr-10"
+                    className="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-[#E7D9D0] focus:ring-1 focus:ring-[#E7D9D0] transition-colors pr-10"
                   />
                   <button
                     type="button"
@@ -222,7 +222,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultMo
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-3.5 rounded-xl bg-linear-to-r from-rose-500 to-orange-400 hover:from-rose-600 hover:to-orange-500 text-white font-heading font-black text-sm shadow-md shadow-rose-200 disabled:opacity-50 flex items-center justify-center transition-all"
+                className="w-full py-3.5 rounded-xl bg-[#1A1A1A] hover:bg-black text-white font-heading font-black text-sm shadow-md shadow-sm disabled:opacity-50 flex items-center justify-center transition-all"
               >
                 {isSubmitting ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -246,7 +246,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultMo
                 {mode === 'login' ? "Don't have an account? " : "Already have an account? "}
                 <button 
                   onClick={() => setMode(mode === 'login' ? 'signup' : 'login')}
-                  className="text-rose-500 hover:text-rose-600 font-bold transition-colors"
+                  className="text-[#C87355] hover:text-[#9C4122] font-bold transition-colors"
                 >
                   {mode === 'login' ? 'Sign up' : 'Log in'}
                 </button>

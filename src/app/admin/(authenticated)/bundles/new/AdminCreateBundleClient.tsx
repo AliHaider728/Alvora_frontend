@@ -104,7 +104,7 @@ export default function AdminCreateBundleClient() {
 
   const calculatedStock = useMemo(() => {
     if (selectedProducts.length === 0) return 0;
-    const stocks = selectedProducts.map(sp => Math.floor((sp.product.stock || 0) / sp.qty));
+    const stocks = selectedProducts.map(sp => Math.floor((sp.product.stockQuantity || 0) / sp.qty));
     return Math.min(...stocks);
   }, [selectedProducts]);
 
@@ -169,7 +169,7 @@ export default function AdminCreateBundleClient() {
     }
     
     // Out of stock warning
-    const hasOutOfStock = selectedProducts.some(sp => (sp.product.stock || 0) < sp.qty);
+    const hasOutOfStock = selectedProducts.some(sp => (sp.product.stockQuantity || 0) < sp.qty);
     if (hasOutOfStock) {
       const confirm = window.confirm("One or more included products do not have enough stock. Are you sure you want to create this bundle?");
       if (!confirm) return;
@@ -189,7 +189,7 @@ export default function AdminCreateBundleClient() {
         description: detailDesc,
         shortDescription: shortDesc,
         discountPercent: discountType === 'percentage' ? discountValue : 0, // Fallback for old backends
-        isActive: targetStatus === 'Active',
+        isActive: targetStatus === 'published' || targetStatus === 'Active',
         status: targetStatus,
         category,
         tags,
@@ -249,14 +249,14 @@ export default function AdminCreateBundleClient() {
           </button>
           <button 
             disabled={saving}
-            onClick={() => handleSubmit('Draft')}
+            onClick={() => handleSubmit('draft')}
             className="px-4 py-2 text-sm font-medium text-[#A85A3B] bg-[#A85A3B]/10 hover:bg-[#A85A3B]/20 rounded-lg transition-colors"
           >
             {saving ? 'Saving...' : 'Save Draft'}
           </button>
           <button 
             disabled={saving}
-            onClick={() => handleSubmit('Active')}
+            onClick={() => handleSubmit('published')}
             className="px-5 py-2 text-sm font-medium text-white bg-[#1A1A1A] hover:bg-black rounded-lg shadow-md transition-colors flex items-center gap-2"
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
@@ -387,7 +387,7 @@ export default function AdminCreateBundleClient() {
                   </thead>
                   <tbody className="divide-y divide-gray-100">
                     {selectedProducts.map((sp) => {
-                      const outOfStock = (sp.product.stock || 0) < sp.qty;
+                      const outOfStock = (sp.product.stockQuantity || 0) < sp.qty;
                       return (
                         <tr key={sp.product.id} className={outOfStock ? "bg-red-50/50" : ""}>
                           <td className="p-4 flex items-center gap-3">
@@ -418,7 +418,7 @@ export default function AdminCreateBundleClient() {
                           </td>
                           <td className="p-4">
                             <span className={`px-2 py-1 rounded-md text-xs font-medium ${outOfStock ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-700'}`}>
-                              {sp.product.stock || 0}
+                              {sp.product.stockQuantity || 0}
                             </span>
                           </td>
                           <td className="p-4 text-gray-600">{formatPrice(sp.product.price || 0)}</td>
@@ -455,7 +455,7 @@ export default function AdminCreateBundleClient() {
                 <AlertCircle className="w-3 h-3" /> Minimum 2 products required for a bundle.
               </p>
             )}
-            {selectedProducts.some(sp => (sp.product.stock || 0) < sp.qty) && (
+            {selectedProducts.some(sp => (sp.product.stockQuantity || 0) < sp.qty) && (
               <p className="text-red-600 text-xs mt-2 flex items-center gap-1 font-medium">
                 <AlertCircle className="w-3 h-3" /> Warning: One or more selected items do not have enough stock.
               </p>

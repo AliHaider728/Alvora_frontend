@@ -247,7 +247,7 @@ export const AdminProductsPageClient: React.FC = () => {
                       </div>
                     </div>
                   </td>
-                  <td className="p-4 font-semibold text-[#C48B80]">{prod.category || 'Uncategorized'}{(prod.categoryNames?.length || 0) > 1 && <span className="ml-1 text-[10px] text-[#1A1A1A]/40">+{prod.categoryNames!.length - 1}</span>}</td>
+                    <td className="p-4 font-semibold text-[#C48B80]">{prod.categoryNames?.[0] || prod.category || 'Uncategorized'}{(prod.categoryNames?.length || 0) > 1 && <span className="ml-1 text-[10px] text-[#1A1A1A]/40">+{prod.categoryNames!.length - 1}</span>}</td>
                   <td className="p-4 font-bold">{formatProductAgeGroups(prod)}</td>
                   <td className="p-4 font-bold text-[#1A1A1A]">{formatPrice(prod.price, settings.currency)}</td>
                   <td className="p-4">

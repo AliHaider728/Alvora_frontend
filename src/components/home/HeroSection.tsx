@@ -8,13 +8,16 @@ import { AnimatedButton } from "../common/AnimatedButton";
 
 export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref }) => {
   return (
-    <section className="relative min-h-[100dvh] w-full bg-[url('/images/hero/hero-banner-hd.jpg')] bg-cover bg-center bg-scroll sm:bg-fixed bg-no-repeat overflow-hidden">
+    <section className="relative min-h-[100dvh] w-full bg-[url('/images/hero/hero-banner-hd.jpg')] bg-cover bg-[40%_center] sm:bg-center bg-scroll sm:bg-fixed bg-no-repeat overflow-hidden">
+      {/* Mobile-only overlay to improve text contrast against dark parts of the image */}
+      <div className="absolute inset-0 bg-white/60 sm:bg-transparent pointer-events-none transition-colors duration-300" />
+      
       {/* 
         The Header is fixed and overlays this section. 
         We add padding-top to ensure the content starts safely below the header,
         but the background itself starts from the very top of the page.
       */}
-      <div className="mx-auto flex min-h-[100dvh] max-w-7xl flex-col justify-center px-5 pt-24 sm:px-8 lg:px-12">
+      <div className="relative z-10 mx-auto flex min-h-[100dvh] max-w-7xl flex-col justify-center px-5 pt-24 sm:px-8 lg:px-12">
         <div className="max-w-xl pb-16">
           {/* Eyebrow */}
           <motion.div 
