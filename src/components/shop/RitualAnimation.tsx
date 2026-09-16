@@ -273,7 +273,7 @@ export function RitualAnimation() {
 
             {STEPS.map((s, i) => {
               const onRight = i % 2 === 0;
-              const sideClass = onRight ? 'right-[18%]' : 'left-[18%]';
+              const sideClass = onRight ? 'right-[28%]' : 'left-[28%]';
 
               return (
                 <motion.div
