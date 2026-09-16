@@ -1289,7 +1289,7 @@ export const AdminProductFormPageClient: React.FC = () => {
           <button type="button" disabled={isSaving} onClick={() => { void cancelEditing(); }} className="rounded-xl bg-[#FAF6F2] px-5 py-3 text-xs font-bold text-[#1A1A1A]/80 disabled:opacity-50">Cancel</button>
           <button type="submit" disabled={isSaving || uploadingTarget !== null} className="flex items-center gap-2 rounded-xl bg-[#9C4122] text-white px-5 py-2.5 text-xs font-bold hover:bg-[#7A321A] transition-colors disabled:opacity-50">
             <Save className="w-4 h-4" />
-            <span>{isSaving ? (initialProduct ? 'Saving Changes...' : 'Creating Product...') : (initialProduct ? 'Save Changes' : 'Create Product')}</span>
+            <span>{isSaving ? 'Saving…' : isEditing ? 'Update Product' : 'Save Product'}</span>
           </button>
         </div>
       </form>
