@@ -5,30 +5,16 @@ import Link from "next/link";
 import { ArrowRight, ArrowDown } from "lucide-react";
 import { motion } from "framer-motion";
 import { AnimatedButton } from "../common/AnimatedButton";
-import Image from "next/image";
 
 export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref }) => {
   return (
-    <section className="relative min-h-[100dvh] w-full overflow-hidden">
-      {/* Background Image Container with parallax on desktop */}
-      <div className="absolute inset-0 z-0 sm:fixed sm:inset-0 sm:h-[100dvh] sm:w-full">
-        <Image 
-          src="/images/hero/hero-banner.jpg"
-          alt="Alvora Hero Background"
-          fill
-          priority
-          quality={100}
-          sizes="100vw"
-          className="object-cover object-center"
-        />
-      </div>
-
+    <section className="relative min-h-[100dvh] w-full bg-[url('/images/hero/hero-banner.jpg')] bg-cover bg-center bg-scroll sm:bg-fixed bg-no-repeat overflow-hidden">
       {/* 
         The Header is fixed and overlays this section. 
         We add padding-top to ensure the content starts safely below the header,
         but the background itself starts from the very top of the page.
       */}
-      <div className="relative z-10 mx-auto flex min-h-[100dvh] max-w-7xl flex-col justify-center px-5 pt-24 sm:px-8 lg:px-12">
+      <div className="mx-auto flex min-h-[100dvh] max-w-7xl flex-col justify-center px-5 pt-24 sm:px-8 lg:px-12">
         <div className="max-w-xl pb-16">
           {/* Eyebrow */}
           <motion.div 
