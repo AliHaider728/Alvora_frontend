@@ -21,16 +21,16 @@ const DesktopHighlight = ({ text, words, title }: { text: string; words: string[
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start", "end end"] 
+    offset: ["start 80%", "end 40%"] 
   });
 
   return (
-    <div ref={containerRef} className="hidden md:block relative w-full h-[150vh]">
-      <div className="sticky top-0 h-screen flex flex-col items-center justify-center px-12 lg:px-24 overflow-hidden">
-        <span className="text-xs tracking-[0.3em] uppercase text-[#C87355] font-bold mb-8 block">
+    <div ref={containerRef} className="hidden md:block relative w-full py-32 px-12 lg:px-24">
+      <div className="flex flex-col items-center justify-center max-w-[1000px] mx-auto">
+        <span className="text-xs tracking-[0.3em] uppercase text-[#C87355] font-bold mb-8 block text-center">
           {title}
         </span>
-        <p className="text-center font-display text-3xl md:text-4xl lg:text-[42px] xl:text-[48px] leading-[1.5] font-medium max-w-[1000px] mx-auto whitespace-pre-wrap">
+        <p className="text-center font-display text-3xl md:text-4xl lg:text-[42px] xl:text-[48px] leading-[1.5] font-medium whitespace-pre-wrap">
           {words.map((word, i) => {
             const start = 0.1 + (i / words.length) * 0.8;
             const end = start + (1 / words.length) * 0.8;
