@@ -194,11 +194,11 @@ export const Footer: React.FC = () => {
                 placeholder="Enter your email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="alvora-input rounded-full text-base sm:text-sm py-3"
+                className="alvora-input rounded-2xl text-base sm:text-sm py-3"
               />
               <button
                 type="submit"
-                className="btn-interactive rounded-full
+                className="btn-interactive rounded-2xl
                   flex items-center justify-center gap-2
                   w-full py-3 px-4
                   bg-gradient-to-br from-[#D4784F] to-[#9C4122] hover:from-[#1A1A1A] hover:to-[#1A1A1A]
