@@ -194,7 +194,7 @@ export const CategoryPageClient: React.FC = () => {
           {/* Background Image positioned on the right */}
           <div className="absolute right-0 top-0 bottom-0 w-full md:w-[80%]">
             <Image 
-              src="/images/shop-banner.png" 
+              src="/images/shop-banner-new.jpg" 
               alt="Skincare Collection" 
               fill 
               className="object-cover object-right" 
