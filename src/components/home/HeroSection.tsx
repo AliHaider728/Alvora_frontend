@@ -9,8 +9,8 @@ import { AnimatedButton } from "../common/AnimatedButton";
 export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref }) => {
   return (
     <section className="relative min-h-[100dvh] w-full bg-[url('/images/hero/hero-banner-hd.jpg')] bg-cover bg-[40%_center] sm:bg-center bg-scroll sm:bg-fixed bg-no-repeat overflow-hidden">
-      {/* Mobile-only overlay to improve text contrast against dark parts of the image */}
-      <div className="absolute inset-0 bg-white/60 sm:bg-transparent pointer-events-none transition-colors duration-300" />
+      {/* Overlay to improve text contrast against dark parts of the image (Mobile: solid fade, Desktop: gradient from left) */}
+      <div className="absolute inset-0 bg-[#FAF6F2]/70 sm:bg-transparent sm:bg-gradient-to-r sm:from-[#FAF6F2]/90 sm:via-[#FAF6F2]/30 sm:to-transparent pointer-events-none transition-colors duration-300" />
       
       {/* 
         The Header is fixed and overlays this section. 
@@ -27,7 +27,7 @@ export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref 
             className="mb-6 flex items-center gap-4"
           >
             <div className="h-px w-12 bg-[#8C7B74]" />
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#8C7B74]">
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#3A2E2A]">
               PURE • NATURAL • EFFECTIVE
             </span>
           </motion.div>
@@ -48,7 +48,7 @@ export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref 
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
-            className="mb-10 max-w-sm text-sm leading-relaxed text-[#5C4F4A] md:text-base"
+            className="mb-10 max-w-sm text-sm leading-relaxed text-[#3A2E2A] md:text-base"
           >
             Thoughtfully crafted skincare with nature's<br className="hidden sm:inline" />
             finest ingredients — for a calmer, clearer,<br className="hidden sm:inline" />
@@ -68,7 +68,7 @@ export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref 
 
             <Link 
               href="/category/all"
-              className="relative text-xs font-bold uppercase tracking-[0.15em] text-[#5C4F4A] transition-colors hover:text-[#A86249] after:absolute after:-bottom-2 after:left-0 after:h-px after:w-full after:bg-[#241916] after:transition-colors hover:after:bg-[#A86249]"
+              className="relative text-xs font-bold uppercase tracking-[0.15em] text-[#3A2E2A] transition-colors hover:text-[#A86249] after:absolute after:-bottom-2 after:left-0 after:h-px after:w-full after:bg-[#241916] after:transition-colors hover:after:bg-[#A86249]"
             >
               DISCOVER THE COLLECTION
             </Link>
@@ -91,7 +91,7 @@ export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref 
           >
             <ArrowDown className="h-4 w-4" />
           </button>
-          <span className="text-center text-[8px] font-bold uppercase tracking-[0.2em] text-[#8C7B74] [writing-mode:vertical-lr] rotate-180 sm:[writing-mode:horizontal-tb] sm:rotate-0">
+          <span className="text-center text-[8px] font-bold uppercase tracking-[0.2em] text-[#3A2E2A] [writing-mode:vertical-lr] rotate-180 sm:[writing-mode:horizontal-tb] sm:rotate-0">
             SCROLL<br className="hidden sm:block" /> DOWN
           </span>
         </motion.div>
@@ -105,7 +105,7 @@ export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref 
         >
           <div className="flex items-center gap-6 [writing-mode:vertical-rl] rotate-180">
             <div className="h-16 w-px bg-[#8C7B74]" />
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#8C7B74]">
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#3A2E2A]">
               SKINCARE COLLECTION
             </span>
           </div>
