@@ -630,29 +630,30 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
         <Breadcrumbs items={breadcrumbItems} />
 
-        {/* Top Detail Section: Gallery + Product Info */}
-        <div className="mb-5 grid grid-cols-1 items-start gap-5 rounded-3xl border border-[#EDE5DC] bg-white p-4 shadow-sm sm:p-5 lg:grid-cols-12 lg:gap-8">
-          {/* Left Column: Image Gallery */}
-          <div className="self-start space-y-2.5 lg:col-span-6">
-            {/* Main Preview Image with Hover Zoom Effect */}
-            <button
-              ref={lightboxTriggerRef}
-              type="button"
-              onPointerMove={handleZoomPointerMove}
-              onPointerLeave={() => { setIsZooming(false); setZoomOrigin('50% 50%'); }}
-              onClick={openLightbox}
-              className="group/gallery relative flex aspect-[4/5] rounded-2xl w-full cursor-zoom-in items-center justify-center overflow-hidden bg-[#FAF6F2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C48B80] focus-visible:ring-offset-2"
-              aria-label={`Enlarge ${product.name} image`}
-            >
-              <Image
-                src={getSafeImageSrc(activeImageUrl)}
-                alt={product.name}
-                style={{ transformOrigin: zoomOrigin }}
-                className={`object-cover object-center transition-transform duration-200 ease-out motion-reduce:transition-none ${isZooming ? 'scale-[1.75]' : 'scale-100'}`}
-                fill
-                priority
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
+          {/* Top Detail Section: Gallery + Product Info */}
+          <div className="mb-10 grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-12">
+            {/* Left Column: Image Gallery */}
+            <div className="self-start space-y-4 lg:col-span-6 lg:sticky lg:top-28">
+              {/* Main Preview Image with Hover Zoom Effect */}
+              <button
+                ref={lightboxTriggerRef}
+                type="button"
+                onPointerMove={handleZoomPointerMove}
+                onPointerLeave={() => { setIsZooming(false); setZoomOrigin('50% 50%'); }}
+                onClick={openLightbox}
+                className="group/gallery relative flex rounded-3xl w-full cursor-zoom-in items-center justify-center overflow-hidden bg-white border border-[#EDE5DC] shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C48B80] focus-visible:ring-offset-2"
+                aria-label={`Enlarge ${product.name} image`}
+              >
+                <Image
+                  src={getSafeImageSrc(activeImageUrl)}
+                  alt={product.name}
+                  width={1000}
+                  height={1000}
+                  style={{ width: '100%', height: 'auto', transformOrigin: zoomOrigin }}
+                  className={`object-cover object-center transition-transform duration-200 ease-out motion-reduce:transition-none ${isZooming ? 'scale-[1.75]' : 'scale-100'}`}
+                  priority
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
               <span className="pointer-events-none absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-slate-950/70 px-3 py-1.5 text-[10px] font-bold text-white opacity-0 backdrop-blur transition-opacity group-hover/gallery:opacity-100"><ZoomIn className="h-3.5 w-3.5" /> Click to enlarge</span>
               {(product.discountPercent ?? 0) > 0 && (
                 <span className="absolute top-4 left-4 z-10 bg-gradient-to-br from-[#D4784F] to-[#9C4122] text-white font-display font-extrabold text-xs px-3 py-1.5 rounded-full shadow-md">
@@ -686,7 +687,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
           </div>
 
           {/* Right Column: Product Information & Buy Panel */}
-          <div className="self-start lg:col-span-6">
+          <div className="self-start lg:col-span-6 bg-white p-5 sm:p-8 rounded-3xl border border-[#EDE5DC] shadow-sm">
             <div>
               {/* Category & Brand Header */}
               <div className="flex items-center justify-between mb-2">
