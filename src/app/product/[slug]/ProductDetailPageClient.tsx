@@ -631,7 +631,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
         <Breadcrumbs items={breadcrumbItems} />
 
         {/* Top Detail Section: Gallery + Product Info */}
-        <div className="mb-5 grid grid-cols-1 items-start gap-5 rounded-3xl border border-[#EDE5DC] bg-white p-4 shadow-sm sm:p-6 lg:grid-cols-12 lg:gap-8">
+        <div className="mb-5 grid grid-cols-1 items-start gap-5 rounded-3xl border border-[#EDE5DC] bg-white p-4 shadow-sm sm:p-5 lg:grid-cols-12 lg:gap-8">
           {/* Left Column: Image Gallery */}
           <div className="self-start space-y-2.5 lg:col-span-6">
             {/* Main Preview Image with Hover Zoom Effect */}
@@ -641,14 +641,14 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
               onPointerMove={handleZoomPointerMove}
               onPointerLeave={() => { setIsZooming(false); setZoomOrigin('50% 50%'); }}
               onClick={openLightbox}
-              className="group/gallery relative flex aspect-square w-full cursor-zoom-in items-center justify-center overflow-hidden bg-[#F1C9BD] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C48B80] focus-visible:ring-offset-2"
+              className="group/gallery relative flex aspect-[4/5] rounded-2xl w-full cursor-zoom-in items-center justify-center overflow-hidden bg-[#FAF6F2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C48B80] focus-visible:ring-offset-2"
               aria-label={`Enlarge ${product.name} image`}
             >
               <Image
                 src={getSafeImageSrc(activeImageUrl)}
                 alt={product.name}
                 style={{ transformOrigin: zoomOrigin }}
-                className={`object-contain object-center transition-transform duration-200 ease-out motion-reduce:transition-none ${isZooming ? 'scale-[1.75]' : 'scale-100'}`}
+                className={`object-cover object-center transition-transform duration-200 ease-out motion-reduce:transition-none ${isZooming ? 'scale-[1.75]' : 'scale-100'}`}
                 fill
                 priority
                 sizes="(max-width: 768px) 100vw, 50vw"
@@ -675,10 +675,10 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                     aria-label={`Show ${product.name} image ${idx + 1}`}
                     aria-current={!overrideImage && activeImageIndex === idx ? 'true' : undefined}
                     className={`relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 p-0.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C48B80] focus-visible:ring-offset-2 sm:h-20 sm:w-20 ${
-                      (!overrideImage && activeImageIndex === idx) ? 'border-[#9C4122] bg-[#F1C9BD] shadow-sm' : 'border-[#EDE5DC] bg-white opacity-75 hover:opacity-100'
+                      (!overrideImage && activeImageIndex === idx) ? 'border-[#9C4122] bg-[#FAF6F2] shadow-sm' : 'border-[#EDE5DC] bg-[#FAF6F2] opacity-75 hover:opacity-100'
                     }`}
                   >
-                    <Image src={getSafeImageSrc(img)} alt={`${product.name} thumbnail ${idx + 1}`} fill sizes="80px" className="object-contain" />
+                    <Image src={getSafeImageSrc(img)} alt={`${product.name} thumbnail ${idx + 1}`} fill sizes="80px" className="object-cover" />
                   </button>
                 ))}
               </div>
@@ -1128,7 +1128,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
         </div>
 
         {/* Product Information Tabs */}
-        <div className="mb-8 rounded-3xl border border-[#EDE5DC] bg-white p-4 shadow-sm sm:p-6">
+        <div className="mb-2 rounded-3xl border border-[#EDE5DC] bg-white p-4 shadow-sm sm:p-5">
           {availableTabs.length > 1 && (
             <div className="mb-5 flex gap-4 overflow-x-auto whitespace-nowrap border-b border-[#EDE5DC] scrollbar-hide sm:gap-8" role="tablist" aria-label="Product information">
               {availableTabs.includes('desc') && (
@@ -1237,7 +1237,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
 
           {/* Tab 4: Reviews Section */}
           {activeTab === 'reviews' && (
-            <div id="product-panel-reviews" role="tabpanel" className="space-y-6">
+            <div id="product-panel-reviews" role="tabpanel" className="space-y-4">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-[#FAF6F2]">
                 <div>
                   <h4 className="font-display font-bold text-base text-[#1A1A1A]">
@@ -1257,7 +1257,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
               {/* Reviews List */}
               <div className="space-y-4">
                 {approvedReviews.length === 0 ? (
-                  <p className="text-sm text-[#1A1A1A]/50 text-center py-6">
+                  <p className="text-sm text-[#1A1A1A]/50 text-center py-4">
                     Be the first to review this product!
                   </p>
                 ) : (
@@ -1328,7 +1328,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
       {/* Related Products */}
       {(relatedLoading || apiRelatedProducts.length > 0) && (
         <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
-          <div className="mt-10 border-t border-[#EDE5DC] pt-10 sm:mt-16 sm:pt-12">
+          <div className="mt-2 border-t border-[#EDE5DC] pt-8 sm:mt-4 sm:pt-10">
             <h2 className="font-display font-black text-2xl text-[#1A1A1A] mb-8 text-center sm:text-left">You May Also Like</h2>
             {relatedLoading ? (
               <div className="grid grid-cols-1 items-stretch justify-items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">

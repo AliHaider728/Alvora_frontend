@@ -86,12 +86,12 @@ export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref 
         >
           <button 
             onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
-            className="flex h-12 w-12 items-center justify-center rounded-full border border-[#8C7B74] text-[#241916] transition-colors hover:bg-[#241916] hover:text-[#FAF6F2]"
+            className="flex h-12 w-12 items-center justify-center rounded-full border border-white/60 text-white transition-colors hover:bg-white hover:text-[#241916] backdrop-blur-sm bg-white/10 shadow-sm"
             aria-label="Scroll down"
           >
             <ArrowDown className="h-4 w-4" />
           </button>
-          <span className="text-center text-[8px] font-bold uppercase tracking-[0.2em] text-[#3A2E2A] [writing-mode:vertical-lr] rotate-180 sm:[writing-mode:horizontal-tb] sm:rotate-0">
+          <span className="text-center text-[8px] font-bold uppercase tracking-[0.2em] text-white drop-shadow-md [writing-mode:vertical-lr] rotate-180 sm:[writing-mode:horizontal-tb] sm:rotate-0">
             SCROLL<br className="hidden sm:block" /> DOWN
           </span>
         </motion.div>
