@@ -14,20 +14,10 @@ import { useAuth } from '../../context/AuthContext';
    â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 const SHOP_LINKS = [
-  { label: 'All Products',   href: '/category/all' },
-  { label: 'Best Sellers',   href: '/category/all?sort=bestseller' },
+  { label: 'Best Sellers',   href: '/best-sellers' },
   { label: 'Serums',         href: '/category/serums' },
   { label: 'Moisturizers',   href: '/category/moisturizers' },
   { label: 'Cleansers',      href: '/category/cleansers' },
-  { label: 'Shop All',       href: '/category/all' },
-];
-
-const ABOUT_LINKS = [
-  { label: 'Our Story',      href: '/about' },
-  { label: 'Our Ingredients',href: '/about#ingredients' },
-  { label: 'Sustainability', href: '/about#sustainability' },
-  { label: 'Careers',        href: '/careers' },
-  { label: 'Press',          href: '/press' },
 ];
 
 const HELP_LINKS = [
@@ -35,7 +25,6 @@ const HELP_LINKS = [
   { label: 'Shipping & Returns',  href: '/shipping' },
   { label: 'Track Order',         href: '/account' },
   { label: 'Contact Us',          href: '/contact' },
-  { label: '30-Day Guarantee',    href: '/return-policy' },
 ];
 
 export const Footer: React.FC = () => {
@@ -56,9 +45,9 @@ export const Footer: React.FC = () => {
   return (
     <footer className="bg-[#F5EDE4] border-t border-[#EDE5DC]" role="contentinfo">
 
-      {/* ── Main Footer Grid ── */}
-      <div className="mx-auto w-full max-w-375 px-5 sm:px-8 lg:px-12 py-14 md:py-16">
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-5 lg:gap-8">
+      {/* ✧✧ Main Footer Grid ✧✧ */}
+      <div className="mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-12 py-14 md:py-16">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
 
           {/* Col 1 — Brand */}
           <div className="flex flex-col gap-5 lg:col-span-1 lg:pr-4">
@@ -138,24 +127,7 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Col 3 — About */}
-          <div className="lg:pl-4">
-            <h4 className="text-[13px] lg:text-[14px] font-bold tracking-wider uppercase text-[#1A1A1A] mb-6">
-              ABOUT
-            </h4>
-            <ul className="flex flex-col gap-4 lg:gap-5">
-              {ABOUT_LINKS.map(l => (
-                <li key={l.href + l.label}>
-                  <Link
-                    href={l.href}
-                    className="text-[15px] lg:text-base font-medium text-[#1A1A1A]/80 hover:text-[#C48B80] transition-colors"
-                  >
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+
 
           {/* Col 4 — Help */}
           <div className="lg:pl-4">

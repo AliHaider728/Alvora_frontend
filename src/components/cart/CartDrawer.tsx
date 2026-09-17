@@ -10,6 +10,7 @@ import { getVariationDisplayLabel } from '../../utils/products';
 import { useScrollLock } from '../../hooks/useScrollLock';
 import { trackInitiateCheckout } from "../../lib/metaPixel";
 import { trackTikTokInitiateCheckout } from "../../lib/tiktokPixel";
+import { AnimatedButton } from '../common/AnimatedButton';
 
 export const CartDrawer: React.FC = () => {
   const {

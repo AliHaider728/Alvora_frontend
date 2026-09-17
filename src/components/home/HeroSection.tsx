@@ -8,7 +8,7 @@ import { AnimatedButton } from "../common/AnimatedButton";
 
 export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref }) => {
   return (
-    <section className="relative min-h-[100dvh] w-full bg-[url('/images/hero/hero-banner-hd.jpg')] bg-cover bg-[40%_center] sm:bg-center bg-scroll sm:bg-fixed bg-no-repeat overflow-hidden">
+    <section className="relative min-h-[100dvh] w-full bg-[url('/images/Alvora_hero_background.avif')] bg-cover bg-[40%_center] sm:bg-center bg-scroll sm:bg-fixed bg-no-repeat overflow-hidden">
       {/* Overlay to improve text contrast against dark parts of the image (Mobile: solid fade, Desktop: gradient from left) */}
       <div className="absolute inset-0 bg-[#FAF6F2]/70 sm:bg-transparent sm:bg-gradient-to-r sm:from-[#FAF6F2]/90 sm:via-[#FAF6F2]/30 sm:to-transparent pointer-events-none transition-colors duration-300" />
       
@@ -60,18 +60,16 @@ export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref 
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
-            className="flex flex-col flex-wrap items-start gap-6 sm:flex-row sm:items-center sm:gap-10"
+            className="flex flex-col flex-wrap items-start gap-4 sm:flex-row sm:items-center sm:gap-6 mt-4"
           >
-            <AnimatedButton href={featuredHref || "/category/all"} size="lg" variant="primary">
-              SHOP FEATURED
-            </AnimatedButton>
-
-            <Link 
-              href="/category/all"
-              className="relative text-xs font-bold uppercase tracking-[0.15em] text-[#3A2E2A] transition-colors hover:text-[#A86249] after:absolute after:-bottom-2 after:left-0 after:h-px after:w-full after:bg-[#241916] after:transition-colors hover:after:bg-[#A86249]"
+            <AnimatedButton 
+              href="/category/all" 
+              size="sm" 
+              variant="primary"
+              className="!py-[12px] !px-[32px] !text-[14px]"
             >
               DISCOVER THE COLLECTION
-            </Link>
+            </AnimatedButton>
           </motion.div>
         </div>
 

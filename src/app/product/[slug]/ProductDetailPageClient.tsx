@@ -33,6 +33,8 @@ import Image from "next/image";
 import dynamic from 'next/dynamic';
 import { formatPrice } from '../../../utils/formatters';
 import { useScrollLock } from '../../../hooks/useScrollLock';
+import { AlvoraProductCard } from '../../../components/common/AlvoraProductCard';
+import { ReviewModal } from '../../../components/common/ReviewModal';
 import { api, getLastApiError } from '../../../services/api';
 import {
   getEffectiveAvailableQuantity,
@@ -1360,85 +1362,12 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
         </div>
       )}
 
-      {/* Write Review Modal */}
-      {reviewModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 relative shadow-2xl border border-[#EDE5DC]">
-            <h3 className="font-display font-extrabold text-lg text-[#1A1A1A] mb-4">
-              Write a Review for {product.name}
-            </h3>
-
-            <form onSubmit={handleReviewSubmit} className="space-y-4">
-              <div>
-                <label className="text-xs font-bold text-[#1A1A1A]/80 block mb-1">Your Name</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Jessica M."
-                  value={newUserName}
-                  onChange={e => setNewUserName(e.target.value)}
-                  className="w-full px-3 py-2 text-base sm:text-xs rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
-                />
-              </div>
-
-              <div>
-                <label className="text-xs font-bold text-[#1A1A1A]/80 block mb-1">Rating</label>
-                <div className="flex gap-2 text-amber-400">
-                  {[1, 2, 3, 4, 5].map(star => (
-                    <button
-                      key={star}
-                      type="button"
-                      onClick={() => setNewRating(star)}
-                      className="p-1 hover:scale-110 transition-transform"
-                    >
-                      <Star className={`w-6 h-6 ${star <= newRating ? 'fill-amber-400' : 'text-[#EDE5DC]'}`} />
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <label className="text-xs font-bold text-[#1A1A1A]/80 block mb-1">Review Headline</label>
-                <input
-                  type="text"
-                  placeholder="e.g. Glowing Skin!"
-                  value={newTitle}
-                  onChange={e => setNewTitle(e.target.value)}
-                  className="w-full px-3 py-2 text-base sm:text-xs rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
-                />
-              </div>
-
-              <div>
-                <label className="text-xs font-bold text-[#1A1A1A]/80 block mb-1">Comments</label>
-                <textarea
-                  required
-                  rows={4}
-                  placeholder="Share details about the texture, results, how you use it, etc."
-                  value={newComment}
-                  onChange={e => setNewComment(e.target.value)}
-                  className="w-full px-3 py-2 text-base sm:text-xs rounded-xl border border-[#EDE5DC] font-sans focus:outline-none focus:ring-2 focus:ring-[#C48B80]"
-                />
-              </div>
-
-              <div className="flex gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setReviewModalOpen(false)}
-                  className="flex-1 py-2.5 rounded-xl bg-[#F5EDE4] text-[#1A1A1A]/80 font-display font-bold text-xs"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="btn-interactive flex-1 py-2.5 rounded-xl bg-gradient-to-br from-[#D4784F] to-[#9C4122] text-white font-display font-bold text-xs hover:bg-black shadow-md"
-                >
-                  Submit Review
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      <ReviewModal 
+        productId={product.id}
+        productName={product.name}
+        isOpen={reviewModalOpen}
+        onClose={() => setReviewModalOpen(false)}
+      />
 
       {/* Size Guide Modal */}
       {sizeGuideModalOpen && product.sizeGuide && (

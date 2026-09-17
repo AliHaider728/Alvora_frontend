@@ -6,6 +6,8 @@ import { SeoHead } from '../../components/common/SeoHead';
 import { useStore } from '../../context/StoreContext';
 import { api } from '../../services/api';
 import { useToast } from '../../context/ToastContext';
+import { HomeFAQ } from '../../components/home/HomeFAQ';
+import { FinalCTA } from '../../components/home/FinalCTA';
 
 // TikTok SVG (not in lucide-react)
 const TikTokIcon = ({ className }: { className?: string }) => (
@@ -117,56 +119,58 @@ export const ContactPageClient: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans py-8">
+    <div className="min-h-screen bg-[#FAF6F2] font-sans pb-24">
       <SeoHead title="Contact Us" />
 
-      <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12">
         <Breadcrumbs items={[{ label: 'Contact Us' }]} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 mt-8">
           {/* Left column: contact info + follow us */}
-          <div className="lg:col-span-5 space-y-6">
+          <div className="lg:col-span-5 space-y-8">
 
             {/* Contact Information Card */}
-            <div className="bg-white p-5 sm:p-8 rounded-3xl border border-slate-100 shadow-sm space-y-4">
-              <h1 className="font-heading font-black text-2xl text-slate-900">Get in Touch with Alvora Skincare</h1>
-              <p className="text-xs text-slate-500 leading-relaxed font-medium">
+            <div className="bg-white p-8 sm:p-10 rounded-3xl shadow-sm space-y-6 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#F1C9BD]/20 to-[#C48B80]/20 rounded-bl-full -mr-10 -mt-10" />
+              
+              <h1 className="font-display text-4xl text-[#1A1A1A]">Get in Touch</h1>
+              <p className="text-[#1A1A1A]/70 text-base leading-relaxed">
                 Have questions about our skincare, orders, delivery, or anything else? Send us a message and our team will get back to you as soon as possible.
               </p>
 
-              <div className="space-y-4 pt-4 border-t border-slate-100 text-xs text-slate-700">
+              <div className="space-y-6 pt-6 border-t border-gray-100">
                 {/* Address */}
-                <div className="flex items-center gap-3">
-                  <div className="p-3 rounded-2xl bg-rose-50 text-[#C48B80]">
-                    <MapPin className="w-5 h-5" />
+                <div className="flex gap-4">
+                  <div className="p-3 rounded-2xl bg-[#F5EDE4] text-[#C48B80] h-fit">
+                    <MapPin className="w-6 h-6" />
                   </div>
                   <div>
-                    <span className="font-bold block text-slate-900">Store Address</span>
-                    <span>{addressDisplay}</span>
+                    <span className="text-xs font-bold uppercase tracking-widest text-[#1A1A1A]/50 block mb-1">Store Address</span>
+                    <span className="text-[#1A1A1A] font-medium text-lg leading-snug">{addressDisplay}</span>
                   </div>
                 </div>
 
                 {/* Phone */}
-                <div className="flex items-center gap-3">
-                  <div className="p-3 rounded-2xl bg-rose-50 text-[#C48B80]">
-                    <Phone className="w-5 h-5" />
+                <div className="flex gap-4">
+                  <div className="p-3 rounded-2xl bg-[#F5EDE4] text-[#C48B80] h-fit">
+                    <Phone className="w-6 h-6" />
                   </div>
                   <div>
-                    <span className="font-bold block text-slate-900">Phone Support</span>
-                    <a href={phoneLink} className="hover:text-[#C48B80] transition-colors">
+                    <span className="text-xs font-bold uppercase tracking-widest text-[#1A1A1A]/50 block mb-1">Phone Support</span>
+                    <a href={phoneLink} className="text-[#1A1A1A] font-medium text-lg hover:text-[#C48B80] transition-colors">
                       {phoneDisplay}
                     </a>
                   </div>
                 </div>
 
                 {/* Email */}
-                <div className="flex items-center gap-3">
-                  <div className="p-3 rounded-2xl bg-amber-50 text-amber-500">
-                    <Mail className="w-5 h-5" />
+                <div className="flex gap-4">
+                  <div className="p-3 rounded-2xl bg-[#F5EDE4] text-[#C48B80] h-fit">
+                    <Mail className="w-6 h-6" />
                   </div>
                   <div>
-                    <span className="font-bold block text-slate-900">Email Customer Service</span>
-                    <a href={emailLink} className="hover:text-[#C48B80] transition-colors">
+                    <span className="text-xs font-bold uppercase tracking-widest text-[#1A1A1A]/50 block mb-1">Email Customer Service</span>
+                    <a href={emailLink} className="text-[#1A1A1A] font-medium text-lg hover:text-[#C48B80] transition-colors">
                       {emailDisplay}
                     </a>
                   </div>
@@ -174,9 +178,9 @@ export const ContactPageClient: React.FC = () => {
               </div>
             </div>
 
-            {/* Follow Us Card • ONE row, exactly 4 icons */}
-            <div className="bg-white p-5 sm:p-8 rounded-3xl border border-slate-100 shadow-sm">
-              <h2 className="font-heading font-black text-lg text-slate-900 mb-5">Follow Us</h2>
+            {/* Follow Us Card */}
+            <div className="bg-white p-8 sm:p-10 rounded-3xl shadow-sm">
+              <h2 className="font-display text-2xl text-[#1A1A1A] mb-6">Follow Us</h2>
               <div className="flex items-center gap-4 flex-wrap">
                 {socialLinks.map(({ key, label, href, icon, hoverClass }) => (
                   <a
@@ -185,7 +189,7 @@ export const ContactPageClient: React.FC = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Follow Alvora Skincare on ${label}`}
-                    className={`p-3 bg-slate-50 rounded-xl border border-slate-100 shadow-sm hover:shadow-md text-slate-500 ${hoverClass} transition-all`}
+                    className={`p-4 bg-[#FAF6F2] rounded-2xl text-gray-500 hover:bg-white hover:shadow-md ${hoverClass} transition-all duration-300`}
                   >
                     {icon}
                   </a>
@@ -197,77 +201,86 @@ export const ContactPageClient: React.FC = () => {
 
           {/* Right column: contact form */}
           <div className="lg:col-span-7">
-            <div className="bg-white p-5 sm:p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6">
-              <h2 className="font-heading font-black text-xl text-slate-900">Send Us a Direct Message</h2>
+            <div className="bg-white p-8 sm:p-10 rounded-3xl shadow-sm space-y-8">
+              <h2 className="font-display text-3xl text-[#1A1A1A]">Send a Message</h2>
 
               {submitted ? (
-                <div className="p-6 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-center space-y-2">
-                  <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto animate-bounce" />
-                  <h3 className="font-heading font-bold text-base">Message Sent Successfully!</h3>
-                  <p className="text-xs">Thank you for reaching out to Alvora Skincare. We'll reply shortly!</p>
+                <div className="py-12 flex flex-col items-center justify-center space-y-4 text-center">
+                  <div className="w-20 h-20 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-500 mb-2">
+                    <CheckCircle2 className="w-10 h-10" />
+                  </div>
+                  <h3 className="font-display text-2xl text-[#1A1A1A]">Message Sent!</h3>
+                  <p className="text-[#1A1A1A]/70 text-base max-w-sm">Thank you for reaching out to Alvora Skincare. We'll reply to your email shortly.</p>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                      <label className="text-xs font-bold text-slate-700 block mb-1">Your Name</label>
+                      <label className="text-xs font-bold uppercase tracking-widest text-[#1A1A1A]/80 block mb-2">Your Name</label>
                       <input
                         type="text"
                         required
                         value={name}
                         onChange={e => setName(e.target.value)}
-                        className="w-full px-4 py-2.5 text-base sm:text-xs rounded-xl border border-slate-200"
+                        className="w-full px-4 py-3 rounded-xl bg-[#FAF6F2] border-none focus:ring-2 focus:ring-[#C48B80] outline-none transition-all"
                       />
                     </div>
                     <div>
-                      <label className="text-xs font-bold text-slate-700 block mb-1">Email Address</label>
+                      <label className="text-xs font-bold uppercase tracking-widest text-[#1A1A1A]/80 block mb-2">Email Address</label>
                       <input
                         type="email"
                         required
                         value={email}
                         onChange={e => setEmail(e.target.value)}
-                        className="w-full px-4 py-2.5 text-base sm:text-xs rounded-xl border border-slate-200"
+                        className="w-full px-4 py-3 rounded-xl bg-[#FAF6F2] border-none focus:ring-2 focus:ring-[#C48B80] outline-none transition-all"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="text-xs font-bold text-slate-700 block mb-1">Subject</label>
+                    <label className="text-xs font-bold uppercase tracking-widest text-[#1A1A1A]/80 block mb-2">Subject</label>
                     <input
                       type="text"
                       required
                       placeholder="e.g. Order Tracking or Product Question"
                       value={subject}
                       onChange={e => setSubject(e.target.value)}
-                      className="w-full px-4 py-2.5 text-base sm:text-xs rounded-xl border border-slate-200"
+                      className="w-full px-4 py-3 rounded-xl bg-[#FAF6F2] border-none focus:ring-2 focus:ring-[#C48B80] outline-none transition-all"
                     />
                   </div>
 
                   <div>
-                    <label className="text-xs font-bold text-slate-700 block mb-1">Message</label>
+                    <label className="text-xs font-bold uppercase tracking-widest text-[#1A1A1A]/80 block mb-2">Message</label>
                     <textarea
                       required
-                      rows={5}
+                      rows={6}
                       value={message}
                       onChange={e => setMessage(e.target.value)}
-                      className="w-full px-4 py-2.5 text-base sm:text-xs rounded-xl border border-slate-200"
+                      className="w-full px-4 py-3 rounded-xl bg-[#FAF6F2] border-none focus:ring-2 focus:ring-[#C48B80] outline-none resize-none transition-all"
                     />
                   </div>
 
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full py-3.5 rounded-xl bg-[#C48B80] text-white font-heading font-extrabold text-xs hover:bg-[#C48B80] shadow-md flex items-center justify-center gap-2 disabled:opacity-50"
-                  >
-                    <span>{isSubmitting ? 'Sending...' : 'Send Message'}</span>
-                    <Send className="w-4 h-4" />
-                  </button>
+                  <div className="pt-4">
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="btn-interactive w-full py-4 rounded-full bg-gradient-to-br from-[#D4784F] to-[#9C4122] text-white font-bold text-xs uppercase tracking-widest hover:bg-black transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                    >
+                      <span>{isSubmitting ? 'Sending...' : 'Send Message'}</span>
+                      <Send className="w-4 h-4" />
+                    </button>
+                  </div>
                 </form>
               )}
             </div>
           </div>
         </div>
       </div>
+
+      <div className="mt-12 bg-white">
+        <HomeFAQ />
+      </div>
+      <FinalCTA />
     </div>
   );
 };

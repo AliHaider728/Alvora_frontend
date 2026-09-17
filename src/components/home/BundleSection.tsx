@@ -88,22 +88,36 @@ export const BundleSection: React.FC = () => {
         const bgClass = isReverse ? 'bg-[#FAF6F2]' : 'bg-white';
         const imageBgClass = isReverse ? 'bg-[#1A1A1A]' : 'bg-[#F1C9BD]';
 
+        const displayImage = bundle.image || bundle.customImage || (bundle.products && bundle.products.length > 0 && bundle.products[0].images ? bundle.products[0].images[0] : null);
+        const discountValue = Number(bundle.discountPercent) || 0;
+
         return (
           <div key={bundle.id} className={`flex flex-col ${isReverse ? 'md:flex-row-reverse' : 'md:flex-row'} w-full min-h-[500px]`}>
             {/* Image Side */}
             <div className={`w-full md:w-1/2 ${imageBgClass} relative aspect-square md:aspect-auto overflow-hidden`}>
-              {bundle.image && (
+              {displayImage ? (
                 <Image 
-                  src={bundle.image} 
+                  src={displayImage} 
                   alt={bundle.name} 
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-cover"
                 />
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-center space-y-3 opacity-60">
+                    <div className="w-20 h-20 mx-auto rounded-full bg-white/20 flex items-center justify-center">
+                      <span className="font-display text-3xl text-white/80">✦</span>
+                    </div>
+                    <p className="text-white/70 text-xs font-bold uppercase tracking-widest">{bundle.name}</p>
+                  </div>
+                </div>
               )}
-              <div className="absolute top-6 left-6 md:top-8 md:left-8 bg-[#9C4122] text-white text-[10px] font-bold px-4 py-2 uppercase tracking-widest z-10 rounded-full shadow-sm">
-                Save {bundle.discountPercent}%
-              </div>
+              {discountValue > 0 && (
+                <div className="absolute top-6 left-6 md:top-8 md:left-8 bg-[#9C4122] text-white text-[10px] font-bold px-4 py-2 uppercase tracking-widest z-10 rounded-full shadow-sm">
+                  Save {discountValue}%
+                </div>
+              )}
             </div>
             
             {/* Content Side */}
@@ -145,19 +159,21 @@ export const BundleSection: React.FC = () => {
                   </div>
 
                   <div className="flex flex-col sm:flex-row gap-3">
-                    <AnimatedButton 
+                    <AnimatedButton
                       onClick={() => handleAddBundle(bundle)}
                       variant="primary"
-                      className="w-full sm:w-auto flex-1 text-[11px]"
+                      size="sm"
+                      className="flex-1 text-[11px]"
                     >
-                      Add to Cart
+                      ADD TO CART
                     </AnimatedButton>
-                    <AnimatedButton 
+                    <AnimatedButton
                       href={`/bundles/${bundle.slug}`}
                       variant="outline"
-                      className="w-full sm:w-auto flex-1 text-[11px]"
+                      size="sm"
+                      className="flex-1 text-[11px]"
                     >
-                      View Details
+                      VIEW DETAILS
                     </AnimatedButton>
                   </div>
                 </div>
@@ -168,18 +184,18 @@ export const BundleSection: React.FC = () => {
       })}
 
       {/* Build Your Own Bundle CTA */}
-      <div className="bg-[#EFCDBE]/20 py-20 border-t border-[#EFCDBE]">
+      <div className="bg-[#EFCDBE]/20 py-12 border-t border-[#EFCDBE]">
         <div className="alvora-container">
           <motion.div 
-            className="bg-white rounded-lg p-10 md:p-16 flex flex-col md:flex-row items-center justify-between gap-8 border border-[#EFCDBE] shadow-sm"
+            className="bg-white rounded-lg p-6 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6 border border-[#EFCDBE] shadow-sm"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
             <div className="max-w-xl text-center md:text-left">
-              <h3 className="font-display text-3xl text-[#241916] mb-3">Build Your Own Bundle</h3>
-              <p className="text-[#241916]/80 text-base">
+              <h3 className="font-display text-2xl text-[#241916] mb-2">Build Your Own Bundle</h3>
+              <p className="text-[#241916]/80 text-sm">
                 Mix and match any 3 products to create your perfect routine and automatically save 15%.
               </p>
             </div>
@@ -187,7 +203,7 @@ export const BundleSection: React.FC = () => {
               href="/bundles/build"
               variant="primary"
               className="flex-shrink-0 text-[11px]"
-              size="lg"
+              size="sm"
             >
               Create Your Routine
             </AnimatedButton>

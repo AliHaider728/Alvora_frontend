@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { api } from '../../../../../services/api';
-import { Product } from '../../../../../types';
+import { api } from '../../../../../../services/api';
+import { Product } from '../../../../../../types';
 import { 
   ArrowLeft, Search, Plus, Minus, Trash2, Image as ImageIcon, 
   Box, Tag, Eye, Info, Check, AlertCircle, Save, Layers, Loader2, Upload 
@@ -15,7 +15,7 @@ interface SelectedProduct {
   variant?: string;
 }
 
-export default function AdminCreateBundleClient() {
+export default function AdminEditBundleClient({ bundleId }: { bundleId: string }) {
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -53,15 +53,54 @@ export default function AdminCreateBundleClient() {
   // Visibility
   const [showShop, setShowShop] = useState(true);
   const [featureHome, setFeatureHome] = useState(false);
+  const [isBestseller, setIsBestseller] = useState(false);
 
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    fetchData();
+  }, [bundleId]);
 
-  const fetchProducts = async () => {
+  const fetchData = async () => {
+    setLoading(true);
     try {
-      const res = await api.getProducts();
-      setProducts(Array.isArray(res) ? res : res.products || []);
+      const [productsRes, bundlesRes] = await Promise.all([
+        api.getProducts(),
+        api.getBundles()
+      ]);
+      const fetchedProducts = Array.isArray(productsRes) ? productsRes : productsRes.products || [];
+      setProducts(fetchedProducts);
+
+      const allBundles = bundlesRes.bundles || [];
+      const bundle = allBundles.find((b: any) => b.id === bundleId);
+      if (bundle) {
+        setName(bundle.name || '');
+        setSlug(bundle.slug || '');
+        setShortDesc(bundle.shortDescription || '');
+        setDetailDesc(bundle.description || '');
+        setCategory(bundle.category || 'Bundles');
+        setTags(bundle.tags || '');
+        setDiscountType(bundle.discountType || 'percentage');
+        setDiscountValue(bundle.discountValue || 0);
+        setCustomPrice(bundle.customPrice || 0);
+        setAutoCalcStock(bundle.autoCalcStock !== false);
+        setManualStock(bundle.manualStock || 0);
+        setCustomImageUrl(bundle.customImage || bundle.image || '');
+        setBadgeText(bundle.badgeText || '');
+        setRoutineSteps(bundle.routineSteps || '');
+        setShowShop(bundle.showShop !== false);
+        setFeatureHome(bundle.featureHome === true);
+        setIsBestseller(bundle.isBestseller === true);
+        
+        if (bundle.products) {
+          const sps: SelectedProduct[] = [];
+          for (const bp of bundle.products) {
+            const prod = fetchedProducts.find((p: any) => p.id === (bp.product_id || bp.id));
+            if (prod) {
+              sps.push({ product: prod, qty: bp.quantity || bp.bundle_quantity || 1, variant: bp.variant_id || bp.variant });
+            }
+          }
+          setSelectedProducts(sps);
+        }
+      }
     } catch (e) {
       console.error(e);
     } finally {
@@ -201,6 +240,7 @@ export default function AdminCreateBundleClient() {
         routineSteps,
         showShop,
         featureHome,
+        isBestseller,
         customImage: customImageUrl,
         products: selectedProducts.map(sp => ({
           product_id: sp.product.id,
@@ -209,7 +249,7 @@ export default function AdminCreateBundleClient() {
         }))
       };
 
-      await api.createBundle(payload);
+      await api.updateBundle(bundleId, payload);
       router.push('/admin/bundles');
     } catch (e: any) {
       console.error(e);
@@ -228,7 +268,7 @@ export default function AdminCreateBundleClient() {
           <button onClick={() => router.back()} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
             <ArrowLeft className="w-5 h-5 text-gray-600" />
           </button>
-          <h1 className="text-xl font-semibold text-gray-900 font-heading">Create Product Bundle</h1>
+          <h1 className="text-xl font-semibold text-gray-900 font-heading">Edit Bundle</h1>
         </div>
         <div className="flex items-center gap-3">
           <button onClick={() => router.back()} className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
@@ -257,7 +297,7 @@ export default function AdminCreateBundleClient() {
             className="px-5 py-2 text-sm font-medium text-white bg-[#1A1A1A] hover:bg-black rounded-lg shadow-md transition-colors flex items-center gap-2"
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-            Create Bundle
+            Save Changes
           </button>
         </div>
       </div>
@@ -583,6 +623,10 @@ export default function AdminCreateBundleClient() {
                   <span className="text-sm text-gray-700">Feature on Homepage</span>
                 </label>
                 <label className="flex items-center gap-3">
+                  <input type="checkbox" checked={isBestseller} onChange={e => setIsBestseller(e.target.checked)} className="w-4 h-4 rounded text-[#A85A3B] focus:ring-[#A85A3B]" />
+                  <span className="text-sm text-gray-700">Bestseller Status</span>
+                </label>
+                <label className="flex items-center gap-3">
                   <input type="checkbox" defaultChecked className="w-4 h-4 rounded text-[#A85A3B] focus:ring-[#A85A3B]" />
                   <span className="text-sm text-gray-700">Allow Coupon Codes</span>
                 </label>
@@ -601,7 +645,6 @@ export default function AdminCreateBundleClient() {
                    </div>
                 </div>
 
-                {/* Image Upload Area */}
                 <div className="md:col-span-2 pt-4 border-t border-gray-100">
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-sm font-semibold text-gray-900">Bundle Thumbnail Image</span>

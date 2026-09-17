@@ -15,8 +15,8 @@ import { useAuth } from "../../context/AuthContext";
 const NAV_LINKS: { label: string; href: string; hasDropdown?: boolean }[] = [
   { label: "SHOP", href: "/category/all" },
   { label: "BEST SELLERS", href: "/best-sellers" },
-  { label: "SKINCARE", href: "/category/all" },
   { label: "ABOUT", href: "/about" },
+  { label: "CONTACT", href: "/contact" },
 ];
 
 export const Header: React.FC = () => {

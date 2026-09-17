@@ -124,12 +124,6 @@ export const FeaturedProduct: React.FC<Props> = ({ product }) => {
                   ADD TO CART
                 </button>
               </div>
-              <button 
-                className="w-full border border-[#1A1A1A] hover:bg-slate-50 text-[#1A1A1A] text-[10px] font-bold tracking-widest uppercase py-3.5 rounded-full transition-colors flex items-center justify-center gap-2"
-              >
-                BUY WITH <span className="text-[#5A31F4] normal-case tracking-normal font-sans text-base leading-none font-bold">shop</span><span className="font-sans normal-case tracking-normal text-sm font-bold bg-[#5A31F4] text-white px-1.5 rounded">Pay</span>
-              </button>
-            </div>
             
           </div>
         </div>

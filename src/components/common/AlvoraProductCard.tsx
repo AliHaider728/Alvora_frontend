@@ -57,14 +57,22 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
           <Heart className="w-6 h-6" strokeWidth={1.5} fill={isInWishlist(product.id) ? 'currentColor' : 'none'} />
         </button>
 
-        {/* Bottom Right Actions - Quick View & Compare */}
+        {/* Bottom Right Actions - Add to Cart & View Details */}
         <div className="absolute bottom-3 right-3 flex items-center gap-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-2 group-hover:translate-y-0">
-          <button className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-gray-700 hover:text-[#9C4122] shadow-sm" title="Quick View" onClick={(e) => e.preventDefault()}>
+          <button 
+            className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-gray-700 hover:text-[#9C4122] shadow-sm transition-colors" 
+            title="Add to Cart" 
+            onClick={handleAddToCart}
+          >
+            <ShoppingCart className="w-4 h-4" />
+          </button>
+          <Link 
+            href={`/product/${product.slug}`}
+            className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-gray-700 hover:text-[#9C4122] shadow-sm transition-colors" 
+            title="View Details"
+          >
             <Eye className="w-4 h-4" />
-          </button>
-          <button className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-gray-700 hover:text-[#9C4122] shadow-sm" title="Compare" onClick={(e) => e.preventDefault()}>
-            <ArrowLeftRight className="w-4 h-4" />
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -75,16 +83,24 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
             {product.name}
           </h3>
           
-          <div className="flex items-center gap-1.5 mb-2">
-            <div className="flex text-[#9C4122]">
-              {[...Array(5)].map((_, i) => (
-                <svg key={i} className="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-              ))}
+          {/* Star Rating */}
+          {(product.reviewCount ?? 0) > 0 && (
+            <div className="flex items-center gap-1.5 mb-2 mt-auto">
+              <div className="flex items-center text-[#D4784F]">
+                {[...Array(5)].map((_, i) => {
+                  const isFilled = i < Math.floor(product.rating || 5);
+                  return (
+                    <svg key={i} className={`w-2.5 h-2.5 sm:w-3 sm:h-3 ${isFilled ? 'fill-current' : 'fill-gray-300'}`} viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  );
+                })}
+              </div>
+              <span className="text-[10px] sm:text-[11px] text-[#A1A7AA] font-medium tracking-wide">
+                {(product.rating || 5).toFixed(1)} ({product.reviewCount})
+              </span>
             </div>
-            <span className="text-[10px] sm:text-[11px] text-[#A1A7AA] font-medium tracking-wide">4.8 (120)</span>
-          </div>
+          )}
 
           <div className="flex items-baseline gap-2 mb-4">
             <span className="text-[#9C4122] font-bold text-[15px] sm:text-base">

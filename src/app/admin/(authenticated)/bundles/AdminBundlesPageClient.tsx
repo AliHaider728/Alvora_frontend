@@ -2,15 +2,15 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '../../../../services/api';
-import { Plus, Edit2, Trash2, Search, Loader2, Package, Check, X } from 'lucide-react';
+import { Plus, Edit2, Trash2, Search, Loader2, Package, Tag, Layers, ImageIcon } from 'lucide-react';
 import { Product } from '../../../../types';
+import Image from 'next/image';
 
 export const AdminBundlesPageClient = () => {
   const router = useRouter();
   const [bundles, setBundles] = useState<any[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [editing, setEditing] = useState<any>(null);
   const [search, setSearch] = useState('');
   
   useEffect(() => {
@@ -46,168 +46,123 @@ export const AdminBundlesPageClient = () => {
   const filteredBundles = bundles.filter(b => b.name.toLowerCase().includes(search.toLowerCase()));
 
   return (
-    <div className="space-y-6 font-heading">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <div className="max-w-7xl mx-auto space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
         <div>
-          <h1 className="font-heading text-2xl font-black text-[#1A1A1A]">Bundles</h1>
-          <p className="text-xs font-medium text-[#1A1A1A]/50">Manage curated product sets and discounts.</p>
+          <h1 className="text-2xl font-bold text-gray-900 font-display">Bundles</h1>
+          <p className="text-sm text-gray-500 mt-1">Manage curated product sets and discounts.</p>
         </div>
-        <button type="button" onClick={() => router.push('/admin/bundles/new')} className="flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm px-5 py-2.5 text-xs font-bold shadow-md">
+        <button 
+          type="button" 
+          onClick={() => router.push('/admin/bundles/new')} 
+          className="px-6 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-[#D4784F] to-[#A85A3B] rounded-lg shadow-sm hover:opacity-90 transition-opacity flex items-center gap-2 uppercase tracking-widest"
+        >
           <Plus className="h-4 w-4" /> Add Bundle
         </button>
       </div>
 
-      <div className="flex flex-col gap-3 rounded-2xl border border-[#E7D9D0] bg-white p-4">
-        <label className="relative min-w-0 flex-1">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#1A1A1A]/40" />
-          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search bundles..." className="w-full rounded-xl border border-[#E7D9D0] py-2.5 pl-9 pr-3 text-sm" />
+      {/* Search */}
+      <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+        <label className="relative flex items-center w-full">
+          <Search className="absolute left-4 w-5 h-5 text-gray-400" />
+          <input 
+            value={search} 
+            onChange={e => setSearch(e.target.value)} 
+            placeholder="Search bundles by name..." 
+            className="w-full pl-12 pr-4 py-3 rounded-xl bg-gray-50 border-none focus:ring-2 focus:ring-[#A85A3B] outline-none transition-all text-sm" 
+          />
         </label>
       </div>
 
       {loading ? (
-        <div className="flex justify-center p-12"><Loader2 className="w-8 h-8 animate-spin text-[#1A1A1A]/40" /></div>
+        <div className="flex flex-col items-center justify-center p-20 space-y-4">
+          <Loader2 className="w-10 h-10 animate-spin text-[#A85A3B]" />
+          <p className="text-sm font-semibold text-gray-500">Loading Bundles...</p>
+        </div>
       ) : filteredBundles.length ? (
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {filteredBundles.map(bundle => (
-            <article key={bundle.id} className="rounded-3xl border border-[#E7D9D0] bg-white p-5 shadow-xs flex flex-col justify-between">
-              <div>
-                <h2 className="font-heading text-lg font-black text-[#1A1A1A]">{bundle.name}</h2>
-                <p className="text-xs text-[#1A1A1A]/50">/{bundle.slug}</p>
-                <div className="mt-3 text-sm font-semibold text-[#C48B80]">{bundle.discountPercent}% OFF</div>
-                <div className="mt-2 text-xs text-[#1A1A1A]/70">{bundle.products?.length || 0} product(s)</div>
-                <div className={`mt-2 text-[10px] inline-block px-2 py-1 rounded-full font-bold ${bundle.isActive ? 'bg-emerald-100 text-emerald-700' : 'bg-[#FAF6F2] text-[#1A1A1A]/50'}`}>
-                  {bundle.isActive ? 'Active' : 'Inactive'}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {filteredBundles.map(bundle => {
+            const isActive = bundle.status === 'published';
+            const bundleImage = bundle.customImage || bundle.image || (bundle.products?.[0]?.images?.[0]);
+
+            return (
+              <div key={bundle.id} className="group flex flex-col bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+                {/* Image Section */}
+                <div className="relative aspect-[4/3] bg-gray-50 border-b border-gray-100 flex items-center justify-center overflow-hidden">
+                  {bundleImage ? (
+                    <Image src={bundleImage} alt={bundle.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                  ) : (
+                    <ImageIcon className="w-10 h-10 text-gray-300" />
+                  )}
+                  
+                  {/* Status Badges */}
+                  <div className="absolute top-3 left-3 flex flex-col gap-2 z-10">
+                    <span className={`px-2.5 py-1 text-[10px] font-bold tracking-widest uppercase rounded-lg shadow-sm ${isActive ? 'bg-emerald-500 text-white' : 'bg-gray-200 text-gray-700'}`}>
+                      {isActive ? 'Active' : 'Draft'}
+                    </span>
+                    {bundle.isBestseller && (
+                      <span className="px-2.5 py-1 text-[10px] font-bold tracking-widest uppercase rounded-lg shadow-sm bg-[#9C4122] text-white">
+                        Bestseller
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Content Section */}
+                <div className="p-5 flex-1 flex flex-col">
+                  <h3 className="font-display font-semibold text-lg text-gray-900 leading-tight mb-1 truncate">{bundle.name}</h3>
+                  <p className="text-xs text-gray-400 mb-4 truncate">/{bundle.slug}</p>
+
+                  <div className="flex items-center gap-4 text-sm text-gray-600 mb-4 bg-gray-50/50 p-3 rounded-xl border border-gray-100">
+                    <div className="flex items-center gap-1.5 flex-1">
+                      <Layers className="w-4 h-4 text-[#A85A3B]" />
+                      <span className="font-medium text-xs">{bundle.products?.length || 0} Products</span>
+                    </div>
+                    <div className="w-px h-6 bg-gray-200"></div>
+                    <div className="flex items-center gap-1.5 flex-1 justify-end">
+                      <Tag className="w-4 h-4 text-emerald-600" />
+                      <span className="font-bold text-xs text-emerald-700">{bundle.discountPercent}% OFF</span>
+                    </div>
+                  </div>
+
+                  <div className="mt-auto flex items-center justify-between pt-4 border-t border-gray-100">
+                    <button 
+                      type="button" 
+                      onClick={() => router.push('/admin/bundles/edit/' + bundle.id)} 
+                      className="flex-1 flex items-center justify-center gap-2 py-2 text-sm font-semibold text-gray-600 hover:text-[#A85A3B] hover:bg-orange-50 rounded-lg transition-colors"
+                    >
+                      <Edit2 className="w-4 h-4" /> Edit
+                    </button>
+                    <div className="w-px h-6 bg-gray-100 mx-2"></div>
+                    <button 
+                      type="button" 
+                      onClick={() => deleteBundle(bundle.id)} 
+                      className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      title="Delete Bundle"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
-              <div className="mt-4 flex justify-end gap-2 border-t border-[#E7D9D0] pt-3">
-                <button type="button" onClick={() => setEditing(bundle)} className="rounded-xl p-2 text-[#C48B80] hover:bg-[#FAF6F2]">
-                  <Edit2 className="h-4 w-4" />
-                </button>
-                <button type="button" onClick={() => deleteBundle(bundle.id)} className="rounded-xl p-2 text-[#A86249] hover:bg-[#FAF6F2]">
-                  <Trash2 className="h-4 w-4" />
-                </button>
-              </div>
-            </article>
-          ))}
+            );
+          })}
         </div>
       ) : (
-        <div className="rounded-3xl border border-dashed border-[#E7D9D0] bg-white p-10 text-center text-sm font-semibold text-[#1A1A1A]/50">
-          No bundles found.
+        <div className="bg-white rounded-2xl border-2 border-dashed border-gray-200 p-12 text-center flex flex-col items-center">
+          <Package className="w-12 h-12 text-gray-300 mb-4" />
+          <h3 className="text-lg font-bold text-gray-900 mb-1">No bundles found</h3>
+          <p className="text-sm text-gray-500 mb-6">You haven't created any bundles yet, or none match your search.</p>
+          <button 
+            type="button" 
+            onClick={() => router.push('/admin/bundles/new')} 
+            className="px-6 py-2.5 text-sm font-bold text-[#A85A3B] bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors uppercase tracking-widest"
+          >
+            Create Your First Bundle
+          </button>
         </div>
       )}
-
-      {editing && (
-        <BundleModal bundle={editing} products={products} onClose={() => setEditing(null)} onRefresh={fetchData} />
-      )}
-    </div>
-  );
-};
-
-const BundleModal = ({ bundle, products, onClose, onRefresh }: { bundle: any, products: Product[], onClose: () => void, onRefresh: () => void }) => {
-  const isNew = !bundle.id;
-  const [formData, setFormData] = useState({
-    name: bundle.name || '',
-    slug: bundle.slug || '',
-    description: bundle.description || '',
-    discountPercent: bundle.discountPercent || 0,
-    isActive: bundle.isActive !== false,
-    displayOrder: bundle.displayOrder || 0,
-    products: bundle.products ? bundle.products.map((p: any) => ({ product_id: p.id, quantity: p.bundle_quantity || 1 })) : []
-  });
-  const [saving, setSaving] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSaving(true);
-    try {
-      if (isNew) {
-        await api.createBundle(formData);
-      } else {
-        await api.updateBundle(bundle.id, formData);
-      }
-      onRefresh();
-      onClose();
-    } catch (e: any) {
-      alert(e.message || 'Failed to save bundle');
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const toggleProduct = (id: string) => {
-    setFormData(prev => {
-      const exists = prev.products.find((p: any) => p.product_id === id);
-      if (exists) {
-        return { ...prev, products: prev.products.filter((p: any) => p.product_id !== id) };
-      }
-      return { ...prev, products: [...prev.products, { product_id: id, quantity: 1 }] };
-    });
-  };
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#1A1A1A]/60 p-4 overflow-y-auto">
-      <div className="w-full max-w-2xl bg-white rounded-3xl p-6 shadow-xl my-auto">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-black font-heading">{isNew ? 'Create Bundle' : 'Edit Bundle'}</h2>
-          <button onClick={onClose} className="p-2 text-[#1A1A1A]/40 hover:text-[#1A1A1A]/70"><X className="w-5 h-5" /></button>
-        </div>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <label className="block text-xs font-bold">
-              Name
-              <input required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="mt-1 w-full rounded-xl border p-2 text-sm" />
-            </label>
-            <label className="block text-xs font-bold">
-              Slug
-              <input required value={formData.slug} onChange={e => setFormData({...formData, slug: e.target.value})} className="mt-1 w-full rounded-xl border p-2 text-sm" />
-            </label>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <label className="block text-xs font-bold">
-              Discount Percent (%)
-              <input type="number" required value={formData.discountPercent} onChange={e => setFormData({...formData, discountPercent: Number(e.target.value)})} className="mt-1 w-full rounded-xl border p-2 text-sm" />
-            </label>
-            <label className="flex items-center gap-2 text-xs font-bold mt-6">
-              <input type="checkbox" checked={formData.isActive} onChange={e => setFormData({...formData, isActive: e.target.checked})} className="rounded text-[#C48B80]" />
-              Active
-            </label>
-          </div>
-          <div>
-            <label className="block text-xs font-bold mb-2">Select Products</label>
-            <div className="max-h-60 overflow-y-auto border rounded-xl p-2 space-y-2">
-              {products.map(p => (
-                <label key={p.id} className="flex items-center gap-3 p-2 hover:bg-[#FAF6F2] rounded-lg cursor-pointer">
-                  <input type="checkbox" checked={formData.products.some((fp: any) => fp.product_id === p.id)} onChange={() => toggleProduct(p.id)} className="rounded" />
-                  
-                    <span className="text-sm font-semibold text-[#1A1A1A]">{p.name}</span>
-                    {p.pricingOffers?.flatDiscount?.enabled && (
-                      <span className="ml-auto inline-flex items-center rounded-full bg-[#FAF6F2] px-2 py-0.5 text-[10px] font-bold text-[#1A1A1A] border border-[#E7D9D0]">
-                        {p.pricingOffers.flatDiscount.discountType === 'percentage' ? `${p.pricingOffers.flatDiscount.discountValue}% Off` : `-${p.pricingOffers.flatDiscount.discountValue}`}
-                      </span>
-                    )}
-                    {p.pricingOffers?.bogo?.enabled && !p.pricingOffers?.flatDiscount?.enabled && (
-                      <span className="ml-auto inline-flex items-center rounded-full bg-[#FAF6F2] px-2 py-0.5 text-[10px] font-bold text-[#1A1A1A] border border-[#E7D9D0]">
-                        Buy {p.pricingOffers.bogo.buyQuantity} Get {p.pricingOffers.bogo.getQuantity}
-                      </span>
-                    )}
-                    {p.pricingOffers?.quantityBreaks?.enabled && !p.pricingOffers?.flatDiscount?.enabled && !p.pricingOffers?.bogo?.enabled && (
-                      <span className="ml-auto inline-flex items-center rounded-full bg-[#F5EDE4] px-2 py-0.5 text-[10px] font-bold text-[#4D3D2D] border border-[#E7D9D0]">
-                        Quantity Breaks
-                      </span>
-                    )}
-                </label>
-              ))}
-            </div>
-          </div>
-          <div className="flex justify-end gap-3 pt-4 border-t">
-            <button type="button" onClick={onClose} className="px-5 py-2.5 rounded-xl font-bold text-[#1A1A1A]/70 bg-[#FAF6F2] text-sm">Cancel</button>
-            <button type="submit" disabled={saving} className="px-5 py-2.5 rounded-xl font-bold text-white bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] border-transparent shadow-sm text-sm flex items-center gap-2">
-              {saving && <Loader2 className="w-4 h-4 animate-spin" />}
-              Save Bundle
-            </button>
-          </div>
-        </form>
-      </div>
     </div>
   );
 };

@@ -23,7 +23,9 @@ import {
   X as CloseIcon,
   Mic,
   Gift,
-  Star
+  Star,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { getAuthToken, removeAuthToken, api, isSuperAdmin } from '../../../services/api';
 
@@ -31,6 +33,7 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
   const router = useRouter();
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [adminUser, setAdminUser] = useState<{name: string, email: string} | null>(null);
 
@@ -42,6 +45,10 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
         setAdminUser(JSON.parse(userStr));
       } catch(e) {}
     }
+    const savedCollapsed = localStorage.getItem('alvora_admin_sidebar_collapsed');
+    if (savedCollapsed === 'true') {
+      setCollapsed(true);
+    }
   }, []);
 
   const token = getAuthToken();
@@ -51,6 +58,12 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
       router.replace('/admin/login');
     }
   }, [token, router]);
+
+  const toggleCollapse = () => {
+    const newVal = !collapsed;
+    setCollapsed(newVal);
+    localStorage.setItem('alvora_admin_sidebar_collapsed', String(newVal));
+  };
 
   const navItems = [
     { label: 'Dashboard', path: '/admin', icon: LayoutDashboard },
@@ -85,6 +98,9 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
   const displayEmail = adminUser?.email || 'admin@alvora.pk';
   const initials = displayName.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() || 'AS';
 
+  const sidebarWidth = collapsed ? 'w-64 lg:w-[72px]' : 'w-64';
+  const mainMargin = collapsed ? 'lg:ml-[72px]' : 'lg:ml-64';
+
   return (
     <div className="admin-shell min-h-screen bg-[#FAF6F2] font-body text-[#1A1A1A] flex">
       {/* Mobile Sidebar Overlay */}
@@ -96,17 +112,31 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
       )}
       
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#F5EDE4] text-[#1A1A1A]/70 flex flex-col justify-between p-4 border-r border-[#E7D9D0] transition-transform duration-300 ease-in-out lg:translate-x-0 overflow-y-auto ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <aside className={`fixed inset-y-0 left-0 z-50 ${sidebarWidth} bg-[#F5EDE4] text-[#1A1A1A]/70 flex flex-col justify-between p-4 border-r border-[#E7D9D0] transition-all duration-300 ease-in-out lg:translate-x-0 overflow-visible lg:overflow-y-auto ${mobileMenuOpen ? 'translate-x-0 overflow-y-auto' : '-translate-x-full'}`}>
         <div>
           {/* Logo Header */}
-          <div className="flex items-center justify-center pb-6 pt-2 px-2 border-b border-[#E7D9D0] mb-4">
-            <Link href="/admin" onClick={() => setMobileMenuOpen(false)} className="block relative w-[140px] h-[40px]">
+          <div className="flex items-center justify-center pb-6 pt-2 px-2 border-b border-[#E7D9D0] mb-4 relative">
+            <Link href="/admin" onClick={() => setMobileMenuOpen(false)} className={`block relative w-[140px] h-[40px] ${collapsed ? 'lg:hidden' : ''}`}>
               <Image src="/images/logo.png" alt="Alvora Skincare" fill className="object-contain" priority />
             </Link>
+            
+            {collapsed && (
+              <Link href="/admin" onClick={() => setMobileMenuOpen(false)} className="hidden lg:flex items-center justify-center font-heading font-bold text-2xl text-[#9C4122] h-[40px]">
+                A
+              </Link>
+            )}
+
+            {/* Toggle Button */}
+            <button 
+              onClick={toggleCollapse} 
+              className="hidden lg:flex absolute -right-7 top-2 bg-white border border-[#E7D9D0] text-[#1A1A1A]/70 rounded-full p-1 hover:bg-[#FAF6F2] transition-colors z-[60] shadow-sm"
+            >
+              {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+            </button>
           </div>
 
           {/* Navigation Items */}
-          <nav className="space-y-1">
+          <nav className="space-y-1 relative">
             {navItems.map(item => {
               const Icon = item.icon;
               const isActive = pathname === item.path || (item.path !== '/admin' && pathname.startsWith(item.path));
@@ -115,14 +145,19 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
                   key={item.path}
                   href={item.path}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-colors ${
+                  className={`group relative flex items-center gap-3 ${collapsed ? 'lg:justify-center' : ''} px-3.5 py-2.5 rounded-xl text-xs font-bold transition-colors ${
                     isActive
                       ? 'bg-gradient-to-r from-[#9C4122] to-[#B34E28] text-white shadow-md'
                       : 'text-[#1A1A1A]/70 hover:bg-white hover:text-[#1A1A1A]'
                   }`}
                 >
-                  <Icon className="w-4 h-4" />
-                  <span>{item.label}</span>
+                  <Icon className="w-4 h-4 shrink-0" />
+                  <span className={`${collapsed ? 'lg:hidden' : ''}`}>{item.label}</span>
+                  
+                  {/* Tooltip */}
+                  <div className={`hidden ${collapsed ? 'lg:group-hover:block' : 'hidden'} absolute left-full top-1/2 -translate-y-1/2 ml-3 px-2.5 py-1.5 bg-[#1A1A1A] text-white text-xs font-medium rounded-md shadow-md whitespace-nowrap z-[70] pointer-events-none before:content-[''] before:absolute before:right-full before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-transparent before:border-r-[#1A1A1A]`}>
+                    {item.label}
+                  </div>
                 </Link>
               );
             })}
@@ -130,30 +165,38 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
         </div>
 
         {/* Sidebar Footer */}
-        <div className="pt-4 border-t border-[#E7D9D0] space-y-2">
+        <div className="pt-4 border-t border-[#E7D9D0] space-y-2 relative">
           <Link
             href="/"
             target="_blank"
-            className="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-white text-[#1A1A1A] text-xs font-bold hover:bg-[#FAF6F2] border border-[#E7D9D0] transition-colors"
+            className={`group relative flex items-center gap-3 ${collapsed ? 'lg:justify-center' : 'justify-between'} px-3.5 py-2.5 rounded-xl bg-white text-[#1A1A1A] text-xs font-bold hover:bg-[#FAF6F2] border border-[#E7D9D0] transition-colors`}
           >
-            <span>View Live Storefront</span>
-            <ExternalLink className="w-3.5 h-3.5 text-[#C48B80]" />
+            <span className={`${collapsed ? 'lg:hidden' : ''}`}>View Live Storefront</span>
+            <ExternalLink className="w-3.5 h-3.5 text-[#C48B80] shrink-0" />
+            
+            <div className={`hidden ${collapsed ? 'lg:group-hover:block' : 'hidden'} absolute left-full top-1/2 -translate-y-1/2 ml-3 px-2.5 py-1.5 bg-[#1A1A1A] text-white text-xs font-medium rounded-md shadow-md whitespace-nowrap z-[70] pointer-events-none before:content-[''] before:absolute before:right-full before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-transparent before:border-r-[#1A1A1A]`}>
+              View Storefront
+            </div>
           </Link>
 
           <button
             onClick={handleSignOut}
-            className="w-full flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold text-red-500 hover:bg-red-50 transition-colors"
+            className={`group relative w-full flex items-center gap-2 ${collapsed ? 'lg:justify-center' : ''} px-3.5 py-2 rounded-xl text-xs font-semibold text-red-500 hover:bg-red-50 transition-colors`}
           >
-            <LogOut className="w-4 h-4" />
-            <span>Sign Out Manager</span>
+            <LogOut className="w-4 h-4 shrink-0" />
+            <span className={`${collapsed ? 'lg:hidden' : ''}`}>Sign Out Manager</span>
+            
+            <div className={`hidden ${collapsed ? 'lg:group-hover:block' : 'hidden'} absolute left-full top-1/2 -translate-y-1/2 ml-3 px-2.5 py-1.5 bg-[#1A1A1A] text-white text-xs font-medium rounded-md shadow-md whitespace-nowrap z-[70] pointer-events-none before:content-[''] before:absolute before:right-full before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-transparent before:border-r-[#1A1A1A]`}>
+              Sign Out
+            </div>
           </button>
         </div>
       </aside>
 
       {/* Main Container */}
-      <div className="flex-1 flex flex-col min-w-0 lg:ml-64">
+      <div className={`flex-1 flex flex-col min-w-0 transition-all duration-300 ease-in-out ${mainMargin}`}>
         {/* Top Header Bar */}
-        <header className="h-16 bg-white border-b border-[#E7D9D0] px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 shadow-xs">
+        <header className="h-16 bg-white border-b border-[#E7D9D0] px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 shadow-xs transition-all duration-300">
           <div className="flex items-center gap-4">
             <button 
               className="lg:hidden p-2 -ml-2 rounded-xl text-[#1A1A1A]/70 hover:bg-[#FAF6F2]"

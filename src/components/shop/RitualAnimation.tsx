@@ -2,6 +2,7 @@
 
 import React, { useMemo } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ShoppingCart, Eye } from "lucide-react";
 import { useScroll, useSpring, motion, useTransform, useMotionTemplate } from "framer-motion";
 import { useStore } from "../../context/StoreContext";
@@ -11,7 +12,35 @@ export function RitualAnimation() {
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
-  const { products, addToCart, setIsCartOpen } = useStore();
+  const { products, bundles, addToCart, setIsCartOpen } = useStore();
+
+  const finalBundle = useMemo(() => {
+    return bundles.find(b => b.isBestseller && (b.isActive || b.status === 'published')) 
+        || bundles.find(b => b.status === 'published' || b.isActive)
+        || null;
+  }, [bundles]);
+
+  const mapBundleToProduct = (b: any): any => ({
+    id: b.id,
+    productType: 'bundle',
+    bundleData: b,
+    name: b.name,
+    slug: b.slug,
+    price: b.currentPrice || 0,
+    originalPrice: b.originalTotalPrice || 0,
+    images: b.customImage ? [b.customImage] : (b.image ? [b.image] : []),
+    inStock: true,
+    category: 'Bundles',
+    categorySlug: 'bundles',
+    sku: "BUNDLE-" + b.id,
+    rating: 5,
+    reviewCount: 0,
+    tags: [],
+    features: [],
+    description: b.description || '',
+    ageGroups: [],
+    brand: 'Alvora'
+  });
 
   const STEPS = useMemo(() => {
     // Get visible products, prioritizing bestsellers
@@ -26,7 +55,7 @@ export function RitualAnimation() {
       title: prod.category || "Care",
       sub: prod.name,
       body: prod.description || prod.shortDescription || "Elevate your skincare routine.",
-      img: prod.tags?.find((t: string) => t.startsWith('bestseller_image:'))?.split('bestseller_image:')[1] || prod.images?.[0] || "/images/animation/prod-1.png",
+      img: prod.tags?.find((t: string) => t.startsWith('bestseller_image:'))?.split('bestseller_image:')[1] || prod.images?.[0] || "/images/hero/alvora-hero.png",
       slug: prod.slug,
       product: prod,
     }));
@@ -317,7 +346,48 @@ export function RitualAnimation() {
             })}
 
             <motion.div className="relative flex w-[64%] flex-col items-center pointer-events-none" style={{ opacity: finalOpacity }}>
-              <img src="/images/animation/products.png" alt="Skincare set" width={1200} height={1008} loading="lazy" className="w-full" />
+              {finalBundle ? (
+                <>
+                  <div className="relative w-full aspect-square bg-white rounded-3xl p-4 shadow-sm border border-[#E7D9D0]">
+                    <Image 
+                      src={finalBundle.customImage || finalBundle.image || (finalBundle.products?.[0]?.images?.[0]) || '/images/hero/alvora-hero.png'} 
+                      alt={finalBundle.name} 
+                      fill 
+                      className="object-cover rounded-2xl" 
+                    />
+                  </div>
+                  {/* Action Buttons for Bundle */}
+                  <div className={`absolute top-1/2 -translate-y-1/2 flex flex-col gap-4 right-[-30%] pointer-events-auto z-10`}>
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const prod = mapBundleToProduct(finalBundle);
+                        addToCart(prod, 1);
+                        setIsCartOpen(true);
+                      }}
+                      className="w-14 h-14 rounded-full bg-white/80 backdrop-blur-md border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.12)] flex items-center justify-center hover:bg-white hover:scale-110 transition-all text-[#C87355] z-50 cursor-pointer"
+                      title="Add Bundle to Cart"
+                    >
+                      <ShoppingCart className="w-5 h-5" strokeWidth={2} />
+                    </button>
+                    <Link 
+                      href={`/bundles/${finalBundle.slug}`}
+                      className="w-14 h-14 rounded-full bg-white/80 backdrop-blur-md border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.12)] flex items-center justify-center hover:bg-white hover:scale-110 transition-all text-[#1A1A1A] z-50 cursor-pointer"
+                      title="View Bundle Details"
+                    >
+                      <Eye className="w-5 h-5" strokeWidth={2} />
+                    </Link>
+                  </div>
+                </>
+              ) : (
+                <div className="grid grid-cols-2 gap-4 w-full">
+                  {STEPS.slice(0, 4).map((s) => (
+                    <div key={s.slug} className="relative aspect-square">
+                      <Image src={s.img} alt={s.sub} fill className="object-contain" />
+                    </div>
+                  ))}
+                </div>
+              )}
             </motion.div>
           </motion.div>
         </div>

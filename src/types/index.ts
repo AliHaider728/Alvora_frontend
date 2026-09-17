@@ -447,9 +447,12 @@ export interface Bundle {
   name: string;
   slug: string;
   description: string;
+  shortDescription?: string;
   image?: string;
+  customImage?: string;
   discountPercent: number;
   isActive: boolean;
+  isBestseller?: boolean;
   displayOrder: number;
   originalTotalPrice?: number;
   currentPrice?: number;

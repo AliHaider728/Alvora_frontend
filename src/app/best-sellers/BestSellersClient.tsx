@@ -1,10 +1,40 @@
 "use client";
 
 import React from 'react';
+import { useStore } from '../../context/StoreContext';
 import { RitualAnimation } from '../../components/shop/RitualAnimation';
 import { ScrollRevealText } from '../../components/common/ScrollRevealText';
+import { AlvoraProductCard } from '../../components/common/AlvoraProductCard';
+import { Bundle, Product } from '../../types';
 
 export default function BestSellersClient() {
+  const { bundles } = useStore();
+  
+  // Filter best seller bundles
+  const bestSellerBundles = bundles.filter(b => b.isBestseller && (b.isActive || b.status === 'published'));
+  
+  // Mapper
+  const mapBundleToProduct = (b: Bundle): Product => ({
+    id: b.id,
+    productType: 'bundle',
+    bundleData: b,
+    name: b.name,
+    slug: b.slug,
+    price: b.currentPrice || 0,
+    originalPrice: b.originalTotalPrice || 0,
+    images: b.customImage ? [b.customImage] : (b.image ? [b.image] : []),
+    inStock: true,
+    category: 'Bundles',
+    categorySlug: 'bundles',
+    sku: "BUNDLE-" + b.id,
+    rating: 5,
+    reviewCount: 0,
+    tags: b.customImage ? [`bestseller_image:${b.customImage}`] : [],
+    features: [],
+    description: b.description || '',
+    ageGroups: [],
+    brand: 'Alvora'
+  });
   return (
     <div className="min-h-screen bg-[#FAF6F2]">
       {/* 3D Hero Section */}
@@ -104,6 +134,7 @@ export default function BestSellersClient() {
           text="Curated by our community, driven by science. Our best sellers are the foundation of healthy, radiant skin. Explore the formulas that deliver visible results time and time again." 
         />
       </section>
+
     </div>
   );
 }

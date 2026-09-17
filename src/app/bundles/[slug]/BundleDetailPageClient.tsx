@@ -8,9 +8,10 @@ import { useStore } from '../../../context/StoreContext';
 import { formatPrice } from '../../../utils/formatters';
 import { ReviewSummary } from '../../../components/common/ReviewSummary';
 import { AlvoraProductCard } from '../../../components/common/AlvoraProductCard';
+import { ReviewModal } from '../../../components/common/ReviewModal';
 
 export function BundleDetailPageClient({ initialBundle, initialReviews, relatedBundles }: any) {
-  const { addToCart, setIsCartOpen, submitCustomerReview } = useStore();
+  const { addToCart, setIsCartOpen } = useStore();
   const [bundle] = useState(initialBundle);
   const [reviews, setReviews] = useState(initialReviews || []);
   const [addingToCart, setAddingToCart] = useState(false);
@@ -22,10 +23,6 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
   
   // Review Modal
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
-  const [newRating, setNewRating] = useState(5);
-  const [newTitle, setNewTitle] = useState('');
-  const [newComment, setNewComment] = useState('');
-  const [newUserName, setNewUserName] = useState('');
 
   // Bundle to Product mapper for cart
   const mapBundleToProduct = (b: any) => ({
@@ -61,28 +58,6 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
     }, 600);
   };
 
-  const handleReviewSubmit = async (e: any) => {
-    e.preventDefault();
-    if (!newUserName || !newComment) return;
-    try {
-      await submitCustomerReview({
-        productId: bundle.id,
-        reviewerName: newUserName,
-        rating: newRating,
-        content: newComment,
-        verifiedPurchase: false,
-        title: newTitle
-      });
-      alert('Review submitted for approval.');
-      setReviewModalOpen(false);
-      setNewTitle('');
-      setNewComment('');
-      setNewUserName('');
-    } catch (err) {
-      alert('Review submission failed.');
-    }
-  };
-
   const staggerVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 }
@@ -97,7 +72,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
     <div className="min-h-screen bg-[#FAF6F2] font-sans pb-24">
       
       {/* Hero Section */}
-      <section className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <section className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           
           {/* Gallery */}
@@ -178,7 +153,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
       </section>
 
       {/* Value Breakdown & What's Included */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-[#E7D9D0]">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto border-t border-[#E7D9D0]">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
           
           <div className="lg:col-span-4">
@@ -235,7 +210,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
 
       {/* How to Layer */}
       {bundle.products && bundle.products.length > 0 && (
-        <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-[#E7D9D0]">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto border-t border-[#E7D9D0]">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <h2 className="font-display text-3xl md:text-4xl text-[#1A1A1A] mb-4">How To Layer</h2>
             <p className="text-[#1A1A1A]/70 text-lg">Your complete routine, step by step.</p>
@@ -269,7 +244,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
       )}
 
       {/* Reviews */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto border-t border-[#E7D9D0]">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto border-t border-[#E7D9D0]">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-6 rounded-3xl bg-white shadow-sm mb-8">
           <div>
             <h4 className="font-display font-bold text-2xl text-[#1A1A1A]">
@@ -293,31 +268,44 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
             </p>
           ) : (
             approvedReviews.map((review: any) => (
-              <div key={review.id} className="p-6 rounded-3xl bg-white shadow-sm space-y-3">
+              <div key={review.id} className="p-4 rounded-2xl border border-[#EDE5DC] bg-white space-y-2">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="relative w-12 h-12 rounded-full overflow-hidden shrink-0 bg-[#F5EDE4]">
-                      <Image src={review.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(review.reviewerName)}&background=random`} alt={review.reviewerName} fill className="object-cover" unoptimized />
+                  <div className="flex items-center gap-3">
+                    <div className="relative w-10 h-10 rounded-full overflow-hidden shrink-0 bg-[#F5EDE4]">
+                      <Image src={review.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(review.reviewerName)}&background=random`} alt={review.reviewerName} fill sizes="40px" className="object-cover" unoptimized />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-sm text-[#1A1A1A]">{review.reviewerName}</span>
+                        <span className="font-bold text-sm text-[#1A1A1A]/90">{review.reviewerName}</span>
                         {review.verifiedPurchase && (
-                          <span className="flex items-center text-[10px] text-emerald-600 font-bold uppercase tracking-wide">
-                            <BadgeCheck className="w-3.5 h-3.5 mr-0.5" /> Verified
+                          <span className="flex items-center text-[10px] text-[#C48B80] font-semibold">
+                            <BadgeCheck className="w-3.5 h-3.5 mr-0.5" /> Verified Purchase
                           </span>
                         )}
                       </div>
-                      <div className="flex gap-0.5 mt-1">
-                        {[...Array(5)].map((_, i) => (
-                          <Star key={i} className={`w-3.5 h-3.5 ${i < review.rating ? 'fill-amber-400 text-amber-400' : 'text-[#EDE5DC]'}`} />
-                        ))}
-                      </div>
                     </div>
                   </div>
+
+                  <div className="flex text-amber-400">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`w-3.5 h-3.5 ${i < review.rating ? 'fill-amber-400' : 'text-[#EDE5DC]'}`}
+                      />
+                    ))}
+                  </div>
                 </div>
-                <h5 className="font-display font-bold text-[#1A1A1A]">{review.title}</h5>
-                <p className="text-sm text-[#1A1A1A]/70 leading-relaxed">{review.content}</p>
+
+                <h5 className="font-display font-bold text-xs text-[#1A1A1A]">{review.title}</h5>
+                <p className="text-xs text-[#1A1A1A]/60 leading-relaxed">{review.content}</p>
+                
+                {review.imageUrl && (
+                  <div className="mt-3">
+                    <div className="relative w-24 h-24">
+                      <Image src={review.imageUrl} alt="Customer review photo" fill sizes="96px" className="object-cover rounded-xl border border-[#EDE5DC] cursor-pointer hover:opacity-90 transition-opacity shadow-sm" onClick={() => window.open(review.imageUrl, `_blank`)} unoptimized />
+                    </div>
+                  </div>
+                )}
               </div>
             ))
           )}
@@ -326,7 +314,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
 
       {/* Related Bundles */}
       {relatedBundles.length > 0 && (
-        <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-[#E7D9D0]">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto border-t border-[#E7D9D0]">
           <h2 className="font-display text-3xl text-[#1A1A1A] mb-10 text-center">More Curated Sets</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {relatedBundles.map((b: any) => (
@@ -336,44 +324,12 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
         </section>
       )}
 
-      {/* Write Review Modal */}
-      {reviewModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl max-w-md w-full p-8 relative shadow-2xl">
-            <h3 className="font-display text-2xl text-[#1A1A1A] mb-6">
-              Write a Review
-            </h3>
-            <form onSubmit={handleReviewSubmit} className="space-y-5">
-              <div>
-                <label className="text-xs font-bold uppercase tracking-widest text-[#1A1A1A]/80 block mb-2">Your Name</label>
-                <input type="text" required value={newUserName} onChange={e => setNewUserName(e.target.value)} className="w-full px-4 py-3 rounded-xl bg-[#FAF6F2] border-none focus:ring-2 focus:ring-[#C48B80] outline-none" />
-              </div>
-              <div>
-                <label className="text-xs font-bold uppercase tracking-widest text-[#1A1A1A]/80 block mb-2">Headline</label>
-                <input type="text" required value={newTitle} onChange={e => setNewTitle(e.target.value)} className="w-full px-4 py-3 rounded-xl bg-[#FAF6F2] border-none focus:ring-2 focus:ring-[#C48B80] outline-none" />
-              </div>
-              <div>
-                <label className="text-xs font-bold uppercase tracking-widest text-[#1A1A1A]/80 block mb-2">Rating</label>
-                <div className="flex gap-2">
-                  {[1,2,3,4,5].map(star => (
-                    <button type="button" key={star} onClick={() => setNewRating(star)}>
-                      <Star className={`w-6 h-6 ${star <= newRating ? 'fill-amber-400 text-amber-400' : 'text-gray-300'}`} />
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <label className="text-xs font-bold uppercase tracking-widest text-[#1A1A1A]/80 block mb-2">Review</label>
-                <textarea required rows={4} value={newComment} onChange={e => setNewComment(e.target.value)} className="w-full px-4 py-3 rounded-xl bg-[#FAF6F2] border-none focus:ring-2 focus:ring-[#C48B80] outline-none resize-none"></textarea>
-              </div>
-              <div className="flex gap-4 pt-4">
-                <button type="button" onClick={() => setReviewModalOpen(false)} className="flex-1 py-4 rounded-full bg-[#FAF6F2] text-[#1A1A1A] font-bold text-xs uppercase tracking-widest hover:bg-gray-200 transition-colors">Cancel</button>
-                <button type="submit" className="btn-interactive flex-1 py-4 rounded-full bg-gradient-to-br from-[#D4784F] to-[#9C4122] text-white font-bold text-xs uppercase tracking-widest hover:bg-black transition-colors">Submit</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      <ReviewModal 
+        productId={bundle.id}
+        productName={bundle.name}
+        isOpen={reviewModalOpen}
+        onClose={() => setReviewModalOpen(false)}
+      />
     </div>
   );
 }
