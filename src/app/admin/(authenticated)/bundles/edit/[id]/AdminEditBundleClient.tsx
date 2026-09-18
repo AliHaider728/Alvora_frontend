@@ -64,7 +64,7 @@ export default function AdminEditBundleClient({ bundleId }: { bundleId: string }
     try {
       const [productsRes, bundlesRes] = await Promise.all([
         api.getProducts(),
-        api.getBundles()
+        api.getBundles({ fetchAll: true })
       ]);
       const fetchedProducts = Array.isArray(productsRes) ? productsRes : productsRes.products || [];
       setProducts(fetchedProducts);

@@ -313,37 +313,18 @@ export const api = {
       return null;
     }
   },
-  getBundles: async () => {
+  getBundles: async (options?: { fetchAll?: boolean }) => {
     if (USE_MOCK_DATA) {
       return { bundles: MOCK_BUNDLES };
     }
     try {
-      const res = await fetch(`${API_BASE_URL}/bundles`, {
+      const url = options?.fetchAll ? `${API_BASE_URL}/bundles?all=true` : `${API_BASE_URL}/bundles`;
+      const res = await fetch(url, {
         cache: "no-store",
         headers: { "Accept": "application/json" }
       });
       if (!res.ok) throw new Error("Failed to fetch bundles");
-      const result = await res.json();
-
-      if (result && result.bundles && typeof window !== 'undefined') {
-        try {
-          const overrides = JSON.parse(localStorage.getItem('alvora_bundle_overrides') || '{}');
-          
-          // Force fix the Clear Acne Care Duo bundle which got stuck as inactive on the backend
-          result.bundles.forEach((b: any) => {
-            if (b.slug === 'clear-acne-care-duo') {
-              if (!overrides[b.id]) overrides[b.id] = {};
-              overrides[b.id].isActive = true;
-              overrides[b.id].status = 'published';
-            }
-          });
-          localStorage.setItem('alvora_bundle_overrides', JSON.stringify(overrides));
-
-          result.bundles = result.bundles.map((b: any) => ({ ...b, ...overrides[b.id] }));
-        } catch (e) {}
-      }
-
-      return result;
+      return await res.json();
     } catch (error: any) {
       console.error("getBundles error:", error);
       lastApiError = error.message;
@@ -351,22 +332,7 @@ export const api = {
     }
   },
   createBundle: (data: any) => fetchJson<{ success: boolean, bundleId: string }>('/bundles', { method: 'POST', body: JSON.stringify(data) }),
-  updateBundle: async (id: string, data: any) => {
-    // Save UI-only fields to localStorage
-    if (typeof window !== 'undefined' && (data.customImage !== undefined || data.isBestseller !== undefined || data.shortDescription !== undefined || data.isActive !== undefined || data.status !== undefined)) {
-      try {
-        const overrides = JSON.parse(localStorage.getItem('alvora_bundle_overrides') || '{}');
-        overrides[id] = { ...overrides[id] };
-        if (data.customImage !== undefined) overrides[id].customImage = data.customImage;
-        if (data.isBestseller !== undefined) overrides[id].isBestseller = data.isBestseller;
-        if (data.shortDescription !== undefined) overrides[id].shortDescription = data.shortDescription;
-        if (data.isActive !== undefined) overrides[id].isActive = data.isActive;
-        if (data.status !== undefined) overrides[id].status = data.status;
-        localStorage.setItem('alvora_bundle_overrides', JSON.stringify(overrides));
-      } catch (e) {}
-    }
-    return fetchJson<{ success: boolean }>(`/bundles/${id}`, { method: 'PUT', body: JSON.stringify(data) });
-  },
+  updateBundle: (id: string, data: any) => fetchJson<{ success: boolean }>(`/bundles/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   deleteBundle: (id: string) => fetchJson<{ success: boolean }>(`/bundles/${id}`, { method: 'DELETE' })
 };
 

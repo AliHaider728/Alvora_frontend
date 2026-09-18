@@ -21,7 +21,7 @@ export const AdminBundlesPageClient = () => {
     setLoading(true);
     try {
       const [bundlesRes, productsRes] = await Promise.all([
-        api.getBundles(),
+        api.getBundles({ fetchAll: true }),
         api.getProducts()
       ]);
       setBundles(bundlesRes.bundles || []);

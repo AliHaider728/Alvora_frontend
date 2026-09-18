@@ -23,7 +23,7 @@ export const AdminBestSellersPageClient: React.FC = () => {
       setLoading(true);
       const [allProducts, bundlesRes] = await Promise.all([
         api.getProducts(),
-        api.getBundles().catch(() => ({ bundles: [] }))
+        api.getBundles({ fetchAll: true }).catch(() => ({ bundles: [] }))
       ]);
       const safeProducts = Array.isArray(allProducts) ? allProducts : [];
       const bestSellers = safeProducts.filter(p => p.isBestseller);
