@@ -120,7 +120,8 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
                 href={`/product/${product.slug}`}
                 size="full"
                 variant="primary"
-                className="flex-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2.5 sm:py-3"
+                hideLeaves={true}
+                className="flex-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2.5 sm:py-3 shrink-0"
               >
                 OPTIONS
               </AnimatedButton>
@@ -129,21 +130,22 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
                 href={`/product/${product.slug}`}
                 size="full"
                 variant="primary"
-                className="flex-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2.5 sm:py-3"
+                hideLeaves={true}
+                className="flex-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2.5 sm:py-3 shrink-0"
               >
-                VIEW DETAIL
+                DETAILS
               </AnimatedButton>
             ) : (
               <button
                 disabled
-                className="flex-1 bg-[#A1A7AA] cursor-not-allowed text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase py-3 px-2 rounded-xl transition-colors text-center shadow-sm"
+                className="flex-1 bg-[#A1A7AA] cursor-not-allowed text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase py-3 px-2 rounded-xl transition-colors text-center shadow-sm shrink-0"
               >
                 OUT OF STOCK
               </button>
             )}
           <button 
             onClick={needsSelection ? undefined : handleAddToCart}
-            className="w-10 sm:w-12 flex items-center justify-center border border-[#EDE5DC] hover:border-[#9C4122] bg-white text-gray-500 hover:text-[#9C4122] rounded-xl transition-colors shadow-sm"
+            className="w-10 sm:w-12 shrink-0 flex items-center justify-center border border-[#EDE5DC] hover:border-[#9C4122] bg-white text-gray-500 hover:text-[#9C4122] rounded-xl transition-colors shadow-sm"
             aria-label="Quick Add"
           >
             <ShoppingCart className="w-4 h-4" />

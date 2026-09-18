@@ -5,11 +5,12 @@ export interface AnimatedButtonProps extends React.ButtonHTMLAttributes<HTMLButt
   href?: string;
   variant?: 'primary' | 'terracotta' | 'outline' | 'secondary' | 'danger' | 'white';
   size?: 'sm' | 'md' | 'lg' | 'full';
+  hideLeaves?: boolean;
   children: React.ReactNode;
 }
 
 export const AnimatedButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, AnimatedButtonProps>(
-  ({ href, variant = 'primary', size = 'md', className = '', children, ...props }, ref) => {
+  ({ href, variant = 'primary', size = 'md', hideLeaves = false, className = '', children, ...props }, ref) => {
 
     let baseClass = "group relative inline-flex items-center justify-center font-bold tracking-wide uppercase transition-all duration-300 ";
 
@@ -77,7 +78,7 @@ export const AnimatedButton = React.forwardRef<HTMLButtonElement | HTMLAnchorEle
 
     const innerContent = (
       <>
-        {SVGs}
+        {!hideLeaves && SVGs}
         <span className="relative z-10 flex items-center justify-center gap-2">{children}</span>
       </>
     );
