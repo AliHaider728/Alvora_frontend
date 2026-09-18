@@ -23,7 +23,7 @@ export const FinalCTA: React.FC = () => {
     <section className="relative py-16 md:py-20 overflow-hidden border-y border-[#1A1A1A]">
       {/* Background Image */}
       <div 
-        className="absolute inset-0 z-0 bg-[url('/images/our-story-lifestyle.jpg')] bg-cover bg-center"
+        className="absolute inset-0 z-0 bg-[url('/images/cta-lifestyle.webp')] bg-cover bg-center"
       ></div>
       
       {/* Gradient Overlay for readability (Terracotta fading into the image) */}
@@ -48,12 +48,13 @@ export const FinalCTA: React.FC = () => {
             
             <div className="flex flex-col xl:flex-row items-center gap-6 xl:gap-8">
               {/* Primary CTA Button */}
-              <Link 
+              <AnimatedButton 
                 href="/category/all" 
-                className="w-full xl:w-auto inline-flex items-center justify-center bg-[#1A1A1A] hover:bg-white text-white hover:text-[#1A1A1A] transition-colors duration-300 px-10 h-14 text-xs font-bold tracking-widest uppercase rounded-full shadow-lg whitespace-nowrap"
+                variant="primary"
+                className="w-full xl:w-auto px-10 h-14 !rounded-full shadow-lg whitespace-nowrap"
               >
                 EXPLORE ALVORA
-              </Link>
+              </AnimatedButton>
               
               <span className="text-white/60 text-sm hidden xl:block uppercase tracking-widest font-bold">OR</span>
 
