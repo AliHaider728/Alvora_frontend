@@ -94,6 +94,9 @@ export default function AdminCreateBundleClient() {
     return customPrice;
   }, [discountType, discountValue, customPrice, currentSaleTotal]);
 
+  const totalSavings = currentOriginalTotal - finalPrice;
+  const savingsPercent = currentOriginalTotal > 0 ? ((totalSavings / currentOriginalTotal) * 100).toFixed(0) : 0;
+
   const maxPossibleStock = useMemo(() => {
     if (selectedProducts.length === 0) return 0;
     let maxBundles = Infinity;
@@ -669,7 +672,7 @@ export default function AdminCreateBundleClient() {
               <div className="space-y-3 mb-6 text-sm">
                 <div className="flex justify-between text-white/70">
                   <span>Combined Original Value</span>
-                  <span className="line-through">{formatPrice(originalTotal)}</span>
+                  <span className="line-through">{formatPrice(currentOriginalTotal)}</span>
                 </div>
                 <div className="flex justify-between text-white/70">
                   <span>Combined Sale Value</span>
@@ -711,7 +714,7 @@ export default function AdminCreateBundleClient() {
               
               <div className="flex items-center gap-2 mb-4">
                 <span className="font-semibold text-lg">{formatPrice(finalPrice)}</span>
-                {totalSavings > 0 && <span className="text-sm text-gray-400 line-through">{formatPrice(originalTotal)}</span>}
+                {totalSavings > 0 && <span className="text-sm text-gray-400 line-through">{formatPrice(currentOriginalTotal)}</span>}
               </div>
 
               <button className="w-full py-3 bg-[#1A1A1A] text-white text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-black transition-colors pointer-events-none">
