@@ -21,6 +21,7 @@ export default function AdminCreateBundleClient() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [slugError, setSlugError] = useState<string | null>(null);
 
   // Form State
   const [name, setName] = useState('');
@@ -35,24 +36,23 @@ export default function AdminCreateBundleClient() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>([]);
   
-  // Pricing
-  const [discountType, setDiscountType] = useState('percentage'); // percentage, fixed, custom
-  const [discountValue, setDiscountValue] = useState(10);
+  // Pricing & Stock Modes
+  const [discountType, setDiscountType] = useState<'percentage' | 'fixed_price'>('percentage');
+  const [discountValue, setDiscountValue] = useState(0);
   const [customPrice, setCustomPrice] = useState(0);
-
-  // Inventory
+  
   const [autoCalcStock, setAutoCalcStock] = useState(true);
-  const [manualStock, setManualStock] = useState(0);
-
-  // Images & Marketing
-  const [customImageUrl, setCustomImageUrl] = useState('');
-  const [uploadingImage, setUploadingImage] = useState(false);
-  const [badgeText, setBadgeText] = useState('Best Value');
-  const [routineSteps, setRoutineSteps] = useState('');
-
-  // Visibility
+  const [bundleStock, setBundleStock] = useState(10);
+  
+  // Display Options
+  const [badgeText, setBadgeText] = useState('');
+  const [routineSteps, setRoutineSteps] = useState(true);
   const [showShop, setShowShop] = useState(true);
   const [featureHome, setFeatureHome] = useState(false);
+
+  // Images
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [customImageUrl, setCustomImageUrl] = useState('');
 
   useEffect(() => {
     fetchProducts();
@@ -77,37 +77,33 @@ export default function AdminCreateBundleClient() {
     );
   }, [products, searchTerm, selectedProducts]);
 
-  const originalTotal = useMemo(() => {
-    return selectedProducts.reduce((sum, sp) => sum + ((sp.product.price || 0) * sp.qty), 0);
-  }, [selectedProducts]);
+  const currentSaleTotal = selectedProducts.reduce((sum, sp) => {
+    const spPrice = sp.product.price || 0;
+    return sum + (spPrice * sp.qty);
+  }, 0);
 
-  const currentSaleTotal = useMemo(() => {
-    return selectedProducts.reduce((sum, sp) => {
-      const price = sp.product.discountPrice || sp.product.price || 0;
-      return sum + (price * sp.qty);
-    }, 0);
-  }, [selectedProducts]);
+  const currentOriginalTotal = selectedProducts.reduce((sum, sp) => {
+    const origPrice = sp.product.originalPrice || sp.product.price || 0;
+    return sum + (origPrice * sp.qty);
+  }, 0);
 
   const finalPrice = useMemo(() => {
     if (discountType === 'percentage') {
       return currentSaleTotal * (1 - (discountValue / 100));
     }
-    if (discountType === 'fixed') {
-      return Math.max(0, currentSaleTotal - discountValue);
-    }
-    return Math.max(0, customPrice);
-  }, [currentSaleTotal, discountType, discountValue, customPrice]);
+    return customPrice;
+  }, [discountType, discountValue, customPrice, currentSaleTotal]);
 
-  const totalSavings = originalTotal - finalPrice;
-  const savingsPercent = originalTotal > 0 ? ((totalSavings / originalTotal) * 100).toFixed(0) : 0;
-
-  const calculatedStock = useMemo(() => {
+  const maxPossibleStock = useMemo(() => {
     if (selectedProducts.length === 0) return 0;
-    const stocks = selectedProducts.map(sp => Math.floor((sp.product.stockQuantity || 0) / sp.qty));
-    return Math.min(...stocks);
+    let maxBundles = Infinity;
+    selectedProducts.forEach(sp => {
+      const available = sp.product.stockQuantity || 0;
+      const possible = Math.floor(available / sp.qty);
+      if (possible < maxBundles) maxBundles = possible;
+    });
+    return maxBundles === Infinity ? 0 : maxBundles;
   }, [selectedProducts]);
-
-  const bundleStock = autoCalcStock ? calculatedStock : manualStock;
 
   // Handlers
   const addProduct = (p: Product) => {
@@ -155,11 +151,21 @@ export default function AdminCreateBundleClient() {
 
   const handleSubmit = async (targetStatus: string) => {
     setSaveError(null);
+    setSlugError(null);
+    
     if (!name.trim()) {
       setSaveError("Bundle Name is required.");
       window.scrollTo(0,0);
       return;
     }
+    
+    if (!slug.trim()) {
+      setSaveError("Bundle Slug is required.");
+      setSlugError("Please enter a unique URL slug");
+      window.scrollTo(0,0);
+      return;
+    }
+
     if (selectedProducts.length < 2) {
       setSaveError("A bundle must contain at least 2 products.");
       window.scrollTo(0,0);
@@ -209,7 +215,20 @@ export default function AdminCreateBundleClient() {
         }))
       };
 
-      await api.createBundle(payload);
+      const res = await api.createBundle(payload);
+      if (!res) {
+        const { getLastApiError } = await import('../../../../../services/api');
+        const err = getLastApiError();
+        
+        // Handle specific slug collision
+        if (err && err.toLowerCase().includes("slug already exists")) {
+          setSlugError("This slug is already in use — please choose another");
+          throw new Error("Please fix the validation errors below.");
+        }
+        
+        throw new Error(err || "An error occurred while saving the bundle.");
+      }
+      
       router.push('/admin/bundles');
     } catch (e: any) {
       console.error(e);
@@ -297,8 +316,9 @@ export default function AdminCreateBundleClient() {
                 <label className="text-sm font-medium text-gray-700">Bundle Slug</label>
                 <input 
                   type="text" value={slug} onChange={e => setSlug(e.target.value)}
-                  className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-[#A85A3B]/20 focus:border-[#A85A3B] transition-all outline-none"
+                  className={`w-full p-3 bg-gray-50 border ${slugError ? 'border-red-400 focus:ring-red-400/20 focus:border-red-400' : 'border-gray-200 focus:ring-[#A85A3B]/20 focus:border-[#A85A3B]'} rounded-xl focus:bg-white focus:ring-2 transition-all outline-none`}
                 />
+                {slugError && <p className="text-xs text-red-500 font-medium">{slugError}</p>}
               </div>
               <div className="space-y-2 md:col-span-2">
                 <label className="text-sm font-medium text-gray-700">Short Description</label>
