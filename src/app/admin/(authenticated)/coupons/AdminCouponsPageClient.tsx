@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import React, { useState } from 'react';
 import { Plus, Trash2, X, Edit, Power, PowerOff } from 'lucide-react';
 import { useStore } from '../../../../context/StoreContext';
@@ -133,7 +133,7 @@ export const AdminCouponsPageClient: React.FC = () => {
               </button>
               <button
                 onClick={() => openEditModal(coup)}
-                className="p-1.5 text-[#C48B80] hover:bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm rounded-lg text-xs flex items-center gap-1 font-bold"
+                className="p-1.5 text-[#A85A3B] hover:bg-[#FAF6F2] rounded-lg text-xs flex items-center gap-1 font-bold"
               >
                 <Edit className="w-3.5 h-3.5" />
                 <span>Edit</span>

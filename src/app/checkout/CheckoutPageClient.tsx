@@ -388,19 +388,19 @@ export const CheckoutPageClient: React.FC = () => {
 
         {/* STEP 2: ORDER CONFIRMATION */}
         {currentStep === 2 && completedOrder ? (
-          <div className="bg-white rounded-3xl p-8 sm:p-12 border border-[#EDE5DC] shadow-xl max-w-3xl mx-auto text-center space-y-6">
-            <div className="w-20 h-20 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto animate-bounce">
-              <PackageCheck className="w-10 h-10" />
+          <div className="bg-white rounded-2xl p-6 sm:p-8 border border-[#EDE5DC] shadow-lg max-w-2xl mx-auto text-center space-y-5">
+            <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto animate-bounce">
+              <PackageCheck className="w-8 h-8" />
             </div>
 
             <div>
-              <span className="text-xs font-display font-extrabold text-emerald-600 uppercase tracking-widest">
+              <span className="text-[10px] font-display font-extrabold text-emerald-600 uppercase tracking-widest">
                 Order Placed Successfully!
               </span>
-              <h1 className="font-display font-black text-3xl text-[#1A1A1A] mt-1">
+              <h1 className="font-display font-black text-2xl text-[#1A1A1A] mt-1">
                 Thank You for Shopping at Alvora Skincare!
               </h1>
-              <p className="text-sm text-[#1A1A1A]/70 mt-2">
+              <p className="text-xs text-[#1A1A1A]/70 mt-2">
                 {!completedOrder.email
                   ? <>Your order is safely recorded. Our team will contact you before dispatch.</>
                   : completedOrder.confirmationEmailAccepted !== false && completedOrder.confirmationEmailSentAt
@@ -410,7 +410,7 @@ export const CheckoutPageClient: React.FC = () => {
             </div>
 
             {/* Order Receipt Box */}
-            <div className="p-6 rounded-2xl bg-[#FAF6F2] border border-[#EDE5DC]/80 text-left space-y-4">
+            <div className="p-4 sm:p-5 rounded-xl bg-[#FAF6F2] border border-[#EDE5DC]/80 text-left space-y-3">
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#EDE5DC] pb-3">
                 <div>
                   <span className="text-xs text-[#1A1A1A]/40 uppercase font-bold block">Order ID</span>

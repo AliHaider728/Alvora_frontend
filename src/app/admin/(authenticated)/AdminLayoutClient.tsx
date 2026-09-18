@@ -112,7 +112,7 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
       )}
       
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 ${sidebarWidth} bg-[#F5EDE4] text-[#1A1A1A]/70 flex flex-col justify-between p-4 border-r border-[#E7D9D0] transition-all duration-300 ease-in-out lg:translate-x-0 overflow-visible lg:overflow-y-auto ${mobileMenuOpen ? 'translate-x-0 overflow-y-auto' : '-translate-x-full'}`}>
+      <aside className={`fixed inset-y-0 left-0 z-50 ${sidebarWidth} bg-[#F5EDE4] text-[#1A1A1A]/70 flex flex-col justify-between p-4 border-r border-[#E7D9D0] transition-all duration-300 ease-in-out lg:translate-x-0 overflow-visible ${mobileMenuOpen ? 'translate-x-0 overflow-y-auto' : '-translate-x-full'}`}>
         <div>
           {/* Logo Header */}
           <div className="flex items-center justify-center pb-6 pt-2 px-2 border-b border-[#E7D9D0] mb-4 relative">

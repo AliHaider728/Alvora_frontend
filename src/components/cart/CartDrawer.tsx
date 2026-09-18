@@ -330,6 +330,7 @@ export const CartDrawer: React.FC = () => {
                   setIsCartOpen(false);
                   router.push('/checkout');
                 }}
+                className="shadow-sm overflow-hidden py-[12px] text-[15px] max-h-[48px]"
                 variant="primary"
                 size="full"
               >
