@@ -173,7 +173,18 @@ export const api = {
   // Settings
   getSettings: async () => {
     if (USE_MOCK_DATA) return Promise.resolve(MOCK_SETTINGS);
-    return fetchJson<any>('/settings');
+    
+    const settings = await fetchJson<any>('/settings');
+    // HARDCODED OVERRIDE: Enforce correct social links until backend CMS is fully updated
+    if (settings) {
+      settings.socialLinks = {
+        ...settings.socialLinks,
+        instagram: 'https://www.instagram.com/alvora.pk/',
+        facebook: 'https://www.facebook.com/Alvora.pk',
+        tiktok: 'https://www.tiktok.com/@alvora_pk'
+      };
+    }
+    return settings;
   },
   getAdminAppearance: () => fetchJson<any>('/settings/appearance/admin'),
   updateSettings: (data: any) => fetchJson<any>('/settings', { method: 'PUT', body: JSON.stringify(data) }),

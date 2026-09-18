@@ -16,8 +16,8 @@ export const MOCK_SETTINGS: StoreSettings = {
   storefrontNavigation: DEFAULT_STOREFRONT_NAVIGATION.map(i => ({ ...i })),
   homepageSections: DEFAULT_HOMEPAGE_SECTIONS.map(i => ({ ...i })),
   socialLinks: {
-    instagram: 'https://instagram.com/alvoraskincare',
-    facebook: 'https://facebook.com/alvoraskincare',
-    tiktok: 'https://tiktok.com/@alvoraskincare',
+    instagram: 'https://www.instagram.com/alvora.pk/',
+    facebook: 'https://www.facebook.com/Alvora.pk',
+    tiktok: 'https://www.tiktok.com/@alvora_pk',
   },
 };

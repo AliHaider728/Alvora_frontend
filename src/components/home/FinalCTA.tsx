@@ -23,7 +23,7 @@ export const FinalCTA: React.FC = () => {
     <section className="relative py-16 md:py-20 overflow-hidden border-y border-[#1A1A1A]">
       {/* Background Image */}
       <div 
-        className="absolute inset-0 z-0 bg-[url('/images/cta-lifestyle.webp')] bg-cover bg-center"
+        className="absolute inset-0 z-0 bg-[url('/images/cta-shelf.jpg')] bg-cover bg-center"
       ></div>
       
       {/* Gradient Overlay for readability (Terracotta fading into the image) */}
