@@ -79,7 +79,7 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
       {/* Content Container */}
       <div className="p-4 flex flex-col flex-grow text-left">
         <Link href={`/product/${product.slug}`} className="flex flex-col flex-grow">
-          <h3 className="font-display font-medium text-[15px] sm:text-base text-[#1A1A1A] leading-tight mb-1 group-hover:text-[#9C4122] transition-colors">
+          <h3 className="font-display font-medium text-[13px] sm:text-[15px] text-[#1A1A1A] leading-tight mb-1 group-hover:text-[#9C4122] transition-colors">
             {product.name}
           </h3>
           
@@ -96,18 +96,18 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
                   );
                 })}
               </div>
-              <span className="text-[10px] sm:text-[11px] text-[#A1A7AA] font-medium tracking-wide">
+              <span className="text-[9px] sm:text-[10px] text-[#A1A7AA] font-medium tracking-wide">
                 {(product.rating || 5).toFixed(1)} ({product.reviewCount})
               </span>
             </div>
           )}
 
           <div className="flex items-baseline gap-2 mb-4">
-            <span className="text-[#9C4122] font-bold text-[15px] sm:text-base">
+            <span className="text-[#9C4122] font-bold text-[14px] sm:text-[15px]">
               {formatPrice(product.price, settings?.currency || 'Rs.')}
             </span>
             {product.originalPrice && product.originalPrice > product.price && (
-              <span className="text-[11px] sm:text-xs text-[#A1A7AA] line-through">
+              <span className="text-[10px] sm:text-[11px] text-[#A1A7AA] line-through">
                 {formatPrice(product.originalPrice, settings?.currency || 'Rs.')}
               </span>
             )}
@@ -116,33 +116,37 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
 
         <div className="flex gap-2 mt-auto">
           {needsSelection ? (
-              <AnimatedButton
-                href={`/product/${product.slug}`}
-                size="full"
-                variant="primary"
-                hideLeaves={true}
-                className="flex-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2.5 sm:py-3 shrink-0"
-              >
-                OPTIONS
-              </AnimatedButton>
-            ) : product.inStock ? (
-              <AnimatedButton
-                href={`/product/${product.slug}`}
-                size="full"
-                variant="primary"
-                hideLeaves={true}
-                className="flex-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2.5 sm:py-3 shrink-0"
-              >
-                DETAILS
-              </AnimatedButton>
-            ) : (
-              <button
-                disabled
-                className="flex-1 bg-[#A1A7AA] cursor-not-allowed text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase py-3 px-2 rounded-xl transition-colors text-center shadow-sm shrink-0"
-              >
-                OUT OF STOCK
-              </button>
-            )}
+            <AnimatedButton
+              href={`/product/${product.slug}`}
+              size="full"
+              variant="primary"
+              hideLeaves={true}
+              className="flex-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2.5 sm:py-3 shrink-0"
+              aria-label="Options"
+            >
+              <span className="hidden sm:inline">OPTIONS</span>
+              <Eye className="w-4 h-4 sm:hidden" />
+            </AnimatedButton>
+          ) : product.inStock ? (
+            <AnimatedButton
+              href={`/product/${product.slug}`}
+              size="full"
+              variant="primary"
+              hideLeaves={true}
+              className="flex-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2.5 sm:py-3 shrink-0"
+              aria-label="View Details"
+            >
+              <span className="hidden sm:inline">DETAILS</span>
+              <Eye className="w-4 h-4 sm:hidden" />
+            </AnimatedButton>
+          ) : (
+            <button
+              disabled
+              className="flex-1 bg-[#A1A7AA] cursor-not-allowed text-white text-[9px] sm:text-[10px] font-bold tracking-widest uppercase py-3 px-1 rounded-xl transition-colors text-center shadow-sm shrink-0"
+            >
+              OUT OF STOCK
+            </button>
+          )}
           <button 
             onClick={needsSelection ? undefined : handleAddToCart}
             className="w-10 sm:w-12 shrink-0 flex items-center justify-center border border-[#EDE5DC] hover:border-[#9C4122] bg-white text-gray-500 hover:text-[#9C4122] rounded-xl transition-colors shadow-sm"
@@ -154,10 +158,8 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
       </div>
     </div>
   );
+
+
+
+
 };
-
-
-
-
-
-
