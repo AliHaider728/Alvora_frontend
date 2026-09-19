@@ -124,7 +124,7 @@ export const FeaturedProduct: React.FC<Props> = ({ product }) => {
                   ADD TO CART
                 </button>
               </div>
-            
+            </div>
           </div>
         </div>
       </div>
