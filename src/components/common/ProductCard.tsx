@@ -306,7 +306,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
                 ? 'bg-emerald-500 text-white shadow-emerald-200'
                 : !isAvailable
                 ? 'cursor-not-allowed bg-slate-100 text-slate-400'
-                : 'bg-[#C48B80] text-white hover:bg-[#9C4122] hover:shadow-lg hover:shadow-none'
+                : 'bg-[#C48B80] text-white hover:bg-[#9C4122] hover:shadow-lg'
             }`}
           >
             {cartActionState === 'added' ? (

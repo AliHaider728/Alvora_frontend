@@ -12,19 +12,19 @@ export interface AnimatedButtonProps extends React.ButtonHTMLAttributes<HTMLButt
 export const AnimatedButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, AnimatedButtonProps>(
   ({ href, variant = 'primary', size = 'md', hideLeaves = false, className = '', children, ...props }, ref) => {
 
-    let baseClass = "group relative inline-flex items-center justify-center font-bold tracking-wide uppercase transition-all duration-300 ";
+    let baseClass = "group relative inline-flex items-center justify-center whitespace-nowrap font-bold tracking-wide uppercase transition-all duration-300 ";
 
     // Responsive Size classes
-    if (size === 'sm') baseClass += "py-[8px] px-[20px] text-[13px] ";
-    else if (size === 'md') baseClass += "py-[15px] px-[45px] text-[17px] ";
-    else if (size === 'lg') baseClass += "py-[15px] px-[45px] text-[15px] sm:py-[18px] sm:px-[55px] sm:text-[18px] ";
-    else if (size === 'full') baseClass += "w-full py-[15px] px-[45px] text-[17px] ";
+    if (size === 'sm') baseClass += "py-[8px] px-[36px] text-[13px] ";
+    else if (size === 'md') baseClass += "py-[15px] px-[48px] text-[17px] ";
+    else if (size === 'lg') baseClass += "py-[15px] px-[48px] text-[15px] sm:py-[18px] sm:px-[55px] sm:text-[18px] ";
+    else if (size === 'full') baseClass += "w-full py-[15px] px-[36px] text-[17px] ";
 
     // Variant classes
     let svgColor = "text-[#181818]";
 
     if (variant === 'primary') {
-      baseClass += "bg-[#fec195] text-[#181818] border border-[#fec195] rounded-[8px] drop-shadow-[2px_2px_3px_rgba(0,0,0,0.2)] anim-wind-bg ";
+      baseClass += "bg-[#fec195] text-[#181818] border border-[#fec195] rounded-[8px] drop-shadow-[2px_2px_3px_rgba(0,0,0,0.2)] ";
       svgColor = "text-[#181818]";
     } else if (variant === 'terracotta') {
       baseClass += "bg-gradient-to-r from-[#9C4122] via-[#B34E28] to-[#9C4122] text-white border border-transparent rounded-xl anim-wind-bg hover:shadow-lg overflow-hidden ";
