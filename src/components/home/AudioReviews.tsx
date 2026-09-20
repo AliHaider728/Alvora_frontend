@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect, useRef } from "react";
 import { Play, Pause, User } from "lucide-react";
@@ -9,6 +9,7 @@ export const AudioReviews: React.FC = () => {
   const [reviews, setReviews] = useState<AudioReview[]>([]);
   const [loading, setLoading] = useState(true);
   const [playingId, setPlayingId] = useState<string | null>(null);
+  const [playbackSpeed, setPlaybackSpeed] = useState<number>(1);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
@@ -33,6 +34,7 @@ export const AudioReviews: React.FC = () => {
     } else {
       if (audioRef.current) {
         audioRef.current.src = url;
+        audioRef.current.playbackRate = playbackSpeed;
         const playPromise = audioRef.current.play();
         if (playPromise !== undefined) {
           playPromise.catch((error) => {
@@ -41,6 +43,15 @@ export const AudioReviews: React.FC = () => {
         }
         setPlayingId(id);
       }
+    }
+  };
+
+  const cycleSpeed = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const nextSpeed = playbackSpeed === 1 ? 1.5 : playbackSpeed === 1.5 ? 2 : 1;
+    setPlaybackSpeed(nextSpeed);
+    if (audioRef.current) {
+      audioRef.current.playbackRate = nextSpeed;
     }
   };
 
@@ -59,15 +70,13 @@ export const AudioReviews: React.FC = () => {
 
   if (loading || reviews.length === 0) return null;
 
-  // Guarantee enough items to overflow the new smaller container height safely.
-  // 15 items ensures the array is ~1200px tall. The half-shift is 600px, which safely clears the 240px wrapper.
   const minItemsToFill = 15;
   const repeatCount = Math.ceil(minItemsToFill / Math.max(reviews.length, 1));
   const baseBlock = Array(repeatCount).fill(reviews).flat();
 
   const getColumnItems = (offset: number) => {
     const rotated = [...baseBlock.slice(offset), ...baseBlock.slice(0, offset)];
-    return [...rotated, ...rotated]; // Exactly duplicated once for seamless scroll
+    return [...rotated, ...rotated]; 
   };
   
   const col1 = getColumnItems(0);
@@ -102,8 +111,8 @@ export const AudioReviews: React.FC = () => {
           {formatDuration(r.duration)}
         </span>
       </div>
-      <button className="w-7 h-7 rounded-full bg-[#0ea5e9] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">
-        1x
+      <button onClick={cycleSpeed} className="w-7 h-7 rounded-full bg-[#0ea5e9] hover:bg-[#0284c7] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0 transition-colors">
+        {playbackSpeed}x
       </button>
     </div>
   );
@@ -124,6 +133,9 @@ export const AudioReviews: React.FC = () => {
         }
         .animate-scroll-up {
           animation: scroll-up 20s linear infinite;
+        }
+        .is-paused {
+          animation-play-state: paused !important;
         }
         .mask-vertical-fades {
           mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
@@ -147,32 +159,27 @@ export const AudioReviews: React.FC = () => {
           className="hidden" 
         />
 
-        {/* Reverted to Edge-to-Edge 4 Column Masonry Layout - Adjusted height to fit ~3 items */}
         <div className="relative h-[220px] md:h-[240px] w-full overflow-hidden flex gap-4 lg:gap-8 justify-center mask-vertical-fades group cursor-default px-4">
           
-          {/* Column 1 - Top to Bottom (Down) */}
-          <div className="flex-1 flex flex-col gap-6 animate-scroll-down">
+          <div className={`flex-1 flex flex-col gap-6 animate-scroll-down ${playingId ? 'is-paused' : ''}`}>
             {col1.map((r, i) => (
               <PlayerPill key={`col1-${r.id}-${i}`} r={r} isPlaying={playingId === r.id} uniqueKey={`c1-${i}`} />
             ))}
           </div>
 
-          {/* Column 2 - Bottom to Top (Up) */}
-          <div className="flex-1 hidden sm:flex flex-col gap-6 animate-scroll-up">
+          <div className={`flex-1 hidden sm:flex flex-col gap-6 animate-scroll-up ${playingId ? 'is-paused' : ''}`}>
             {col2.map((r, i) => (
               <PlayerPill key={`col2-${r.id}-${i}`} r={r} isPlaying={playingId === r.id} uniqueKey={`c2-${i}`} />
             ))}
           </div>
 
-          {/* Column 3 - Top to Bottom (Down) */}
-          <div className="flex-1 hidden md:flex flex-col gap-6 animate-scroll-down">
+          <div className={`flex-1 hidden md:flex flex-col gap-6 animate-scroll-down ${playingId ? 'is-paused' : ''}`}>
             {col3.map((r, i) => (
               <PlayerPill key={`col3-${r.id}-${i}`} r={r} isPlaying={playingId === r.id} uniqueKey={`c3-${i}`} />
             ))}
           </div>
 
-          {/* Column 4 - Bottom to Top (Up) */}
-          <div className="flex-1 hidden lg:flex flex-col gap-6 animate-scroll-up">
+          <div className={`flex-1 hidden lg:flex flex-col gap-6 animate-scroll-up ${playingId ? 'is-paused' : ''}`}>
             {col4.map((r, i) => (
               <PlayerPill key={`col4-${r.id}-${i}`} r={r} isPlaying={playingId === r.id} uniqueKey={`c4-${i}`} />
             ))}

@@ -315,6 +315,7 @@ export const CartDrawer: React.FC = () => {
                     items: cart.map((item) => ({
                       id: item.product.id,
                       quantity: item.quantity,
+                      price: item.price,
                     })),
                     value: cartSubtotal,
                     currency: "PKR",
@@ -323,6 +324,7 @@ export const CartDrawer: React.FC = () => {
                     items: cart.map((item) => ({
                       id: item.product.id,
                       quantity: item.quantity,
+                      price: item.price,
                     })),
                     value: cartSubtotal,
                     currency: "PKR",
@@ -330,11 +332,12 @@ export const CartDrawer: React.FC = () => {
                   setIsCartOpen(false);
                   router.push('/checkout');
                 }}
-                className="shadow-sm overflow-hidden py-[12px] text-[15px] max-h-[48px]"
+                className="shadow-sm overflow-hidden text-[13px] sm:text-[15px]"
                 variant="primary"
                 size="full"
               >
-                <span>Proceed to Checkout</span>
+                <span className="sm:hidden">CHECKOUT</span>
+                <span className="hidden sm:inline">PROCEED TO CHECKOUT</span>
                 <ArrowRight className="w-4 h-4 ml-2" />
               </AnimatedButton>
 

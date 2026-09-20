@@ -191,7 +191,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
                 </span>
               )}
               {product.isBestseller && (
-                <span className="rounded-full bg-amber-400 px-3 py-1 text-[11px] font-bold tracking-wide text-amber-950 shadow-sm">
+                <span className="rounded-full bg-amber-400 px-3 py-1 text-[11px] font-bold tracking-wide text-amber-950 shadow-sm transform-gpu will-change-transform">
                   BESTSELLER
                 </span>
               )}

@@ -37,7 +37,7 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
         {/* Badges */}
         <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10 pointer-events-none">
           {product.isBestseller && (
-            <span className="bg-[#9C4122] text-white text-[9px] font-bold tracking-widest uppercase px-2 py-1 rounded-2xl shadow-sm">
+            <span className="bg-[#9C4122] text-white text-[9px] font-bold tracking-widest uppercase px-2 py-1 rounded-2xl shadow-sm transform-gpu will-change-transform">
               BESTSELLER
             </span>
           )}
@@ -79,7 +79,7 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
       {/* Content Container */}
       <div className="p-4 flex flex-col flex-grow text-left">
         <Link href={`/product/${product.slug}`} className="flex flex-col flex-grow">
-          <h3 className="font-display font-medium text-[13px] sm:text-[15px] text-[#1A1A1A] leading-tight mb-1 group-hover:text-[#9C4122] transition-colors">
+          <h3 className="font-display font-medium text-sm sm:text-base text-[#1A1A1A] leading-tight mb-1 group-hover:text-[#9C4122] transition-colors">
             {product.name}
           </h3>
           
@@ -96,18 +96,18 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
                   );
                 })}
               </div>
-              <span className="text-[9px] sm:text-[10px] text-[#A1A7AA] font-medium tracking-wide">
+              <span className="text-[0.6rem] sm:text-xs text-[#A1A7AA] font-medium tracking-wide">
                 {(product.rating || 5).toFixed(1)} ({product.reviewCount})
               </span>
             </div>
           )}
 
           <div className="flex items-baseline gap-2 mb-4">
-            <span className="text-[#9C4122] font-bold text-[14px] sm:text-[15px]">
+            <span className="text-[#9C4122] font-bold text-sm sm:text-base">
               {formatPrice(product.price, settings?.currency || 'Rs.')}
             </span>
             {product.originalPrice && product.originalPrice > product.price && (
-              <span className="text-[10px] sm:text-[11px] text-[#A1A7AA] line-through">
+              <span className="text-xs sm:text-sm text-[#A1A7AA] line-through">
                 {formatPrice(product.originalPrice, settings?.currency || 'Rs.')}
               </span>
             )}
@@ -120,29 +120,25 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
               href={`/product/${product.slug}`}
               size="full"
               variant="primary"
-              hideLeaves={true}
-              className="flex-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2.5 sm:py-3 shrink-0"
+              className="flex-1 shrink-0"
               aria-label="Options"
             >
-              <span className="hidden sm:inline">OPTIONS</span>
-              <Eye className="w-4 h-4 sm:hidden" />
+              OPTIONS
             </AnimatedButton>
           ) : product.inStock ? (
             <AnimatedButton
               href={`/product/${product.slug}`}
               size="full"
               variant="primary"
-              hideLeaves={true}
-              className="flex-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2.5 sm:py-3 shrink-0"
+              className="flex-1 shrink-0"
               aria-label="View Details"
             >
-              <span className="hidden sm:inline">DETAILS</span>
-              <Eye className="w-4 h-4 sm:hidden" />
+              DETAILS
             </AnimatedButton>
           ) : (
             <button
               disabled
-              className="flex-1 bg-[#A1A7AA] cursor-not-allowed text-white text-[9px] sm:text-[10px] font-bold tracking-widest uppercase py-3 px-1 rounded-xl transition-colors text-center shadow-sm shrink-0"
+              className="flex-1 bg-[#A1A7AA] cursor-not-allowed text-white text-[0.6rem] sm:text-[0.7rem] font-bold tracking-widest uppercase py-3 px-1 rounded-xl transition-colors text-center shadow-sm shrink-0"
             >
               OUT OF STOCK
             </button>

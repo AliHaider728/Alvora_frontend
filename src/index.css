@@ -143,6 +143,7 @@
 
   html {
     font-family: var(--font-body);
+    font-size: clamp(14px, 1.5vw + 10px, 16px);
     background-color: var(--alvora-ivory);
     color: var(--alvora-charcoal);
     -webkit-font-smoothing: antialiased;
