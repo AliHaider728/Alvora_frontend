@@ -18,34 +18,37 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
   const [added, setAdded] = useState(false);
   
   // Gallery
-  const allImages = [bundle.image, ...(bundle.products || []).flatMap((p: any) => p.images || [])].filter(Boolean);
+  const allImages = [bundle.customImage, bundle.image, ...(bundle.products || []).flatMap((p: any) => p.images || p.product?.images || [])].filter(Boolean);
   const [activeImage, setActiveImage] = useState(allImages[0] || '/images/hero/alvora-hero.png');
   
   // Review Modal
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
 
   // Bundle to Product mapper for cart
-  const mapBundleToProduct = (b: any) => ({
-    id: b.id,
-    productType: 'bundle',
-    bundleData: b,
-    name: b.name,
-    slug: b.slug,
-    price: b.currentPrice || 0,
-    originalPrice: b.originalTotalPrice || 0,
-    images: b.image ? [b.image] : [],
-    inStock: true,
-    category: 'Bundles',
-    categorySlug: 'bundles',
-    sku: "BUNDLE-" + b.id,
-    rating: b.rating || 5,
-    reviewCount: b.reviewCount || 0,
-    tags: [],
-    features: [],
-    safetyInfo: '',
-    specifications: {},
-    ageGroups: []
-  });
+  const mapBundleToProduct = (b: any) => {
+    const bundleImg = b.customImage || b.image || (b.products?.[0]?.product?.images?.[0]) || (b.products?.[0]?.images?.[0]);
+    return {
+      id: b.id,
+      productType: 'bundle',
+      bundleData: b,
+      name: b.name,
+      slug: b.slug,
+      price: b.currentPrice || 0,
+      originalPrice: b.originalTotalPrice || 0,
+      images: bundleImg ? [bundleImg] : [],
+      inStock: true,
+      category: 'Bundles',
+      categorySlug: 'bundles',
+      sku: "BUNDLE-" + b.id,
+      rating: b.rating || 5,
+      reviewCount: b.reviewCount || 0,
+      tags: [],
+      features: [],
+      safetyInfo: '',
+      specifications: {},
+      ageGroups: []
+    };
+  };
 
   const handleAddToCart = () => {
     setAddingToCart(true);

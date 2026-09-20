@@ -23,27 +23,31 @@ export const BundleSection: React.FC = () => {
     if (!bundlesLoading && (!bundles || bundles.length === 0)) return null;
 
   const handleAddBundle = (bundle: Bundle) => {
-    const bundleProduct: any = {
-      id: bundle.id,
-      productType: 'bundle',
-      bundleData: bundle,
-      name: bundle.name,
-      slug: bundle.slug,
-      price: bundle.currentPrice || 0,
-      originalPrice: bundle.originalTotalPrice || 0,
-      images: bundle.image ? [bundle.image] : [],
-      inStock: true,
-      category: 'Bundles',
-      categorySlug: 'bundles',
-      sku: `BUNDLE-${bundle.id}`,
-      rating: 5,
-      reviewCount: 0,
-      tags: [],
-      features: [],
-      safetyInfo: '',
-      specifications: {},
-      ageGroups: []
+    const mapBundleToProduct = (bundle: any) => {
+      const displayImage = bundle.customImage || bundle.image || (bundle.products && bundle.products.length > 0 && (bundle.products[0].images?.[0] || bundle.products[0].product?.images?.[0])) || null;
+      return {
+        id: bundle.id,
+        productType: 'bundle',
+        bundleData: bundle,
+        name: bundle.name,
+        slug: bundle.slug,
+        price: bundle.currentPrice || 0,
+        originalPrice: bundle.originalTotalPrice || 0,
+        images: displayImage ? [displayImage] : [],
+        inStock: true,
+        category: 'Bundles',
+        categorySlug: 'bundles',
+        sku: `BUNDLE-${bundle.id}`,
+        rating: bundle.rating || 5,
+        reviewCount: bundle.reviewCount || 0,
+        tags: [],
+        features: [],
+        safetyInfo: '',
+        specifications: {},
+        ageGroups: []
+      };
     };
+    const bundleProduct = mapBundleToProduct(bundle);
     addToCart(bundleProduct, 1);
     setIsCartOpen(true);
   };

@@ -633,10 +633,17 @@ export const CheckoutPageClient: React.FC = () => {
                     }
 
                     return (
-                    <div key={`${item.product.id}-${item.variationId || item.selectedVariant || ''}`} className="flex items-start gap-3 rounded-2xl border border-[#EDE5DC] bg-[#FAF6F2]/60 p-2.5">
-                      <img
-                        src={getSafeImageSrc(variation?.image?.url || item.product.imageThumbnailUrls?.[0] || item.product.images[0])}
-                        alt={variation?.image?.alt || item.product.name}
+                      <div key={`${item.product.id}-${item.variationId || item.selectedVariant || ''}`} className="flex items-start gap-3 rounded-2xl border border-[#EDE5DC] bg-[#FAF6F2]/60 p-2.5">
+                        <img
+                          src={getSafeImageSrc(
+                            variation?.image?.url || 
+                            item.product.imageThumbnailUrls?.[0] || 
+                            item.product.images?.[0] || 
+                            item.product.bundleData?.customImage || 
+                            item.product.bundleData?.image || 
+                            item.product.bundleData?.products?.[0]?.product?.images?.[0]
+                          )}
+                          alt={variation?.image?.alt || item.product.name}
                         className="w-14 h-14 shrink-0 object-contain rounded-xl bg-white p-0.5"
                       />
                       <div className="flex-1 min-w-0">

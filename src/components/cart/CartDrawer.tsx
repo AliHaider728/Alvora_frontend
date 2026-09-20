@@ -135,7 +135,7 @@ export const CartDrawer: React.FC = () => {
                       item.product.images?.[0] ||
                       item.product.bundleData?.customImage ||
                       item.product.bundleData?.image ||
-                      item.product.bundleData?.products?.[0]?.images?.[0]
+                      item.product.bundleData?.products?.[0]?.product?.images?.[0]
                     )}
                     alt={variation?.image?.alt || item.product.name}
                     className="h-20 w-20 flex-shrink-0 rounded-xl bg-white object-contain p-1"
