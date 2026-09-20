@@ -115,41 +115,66 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
         </Link>
 
         <div className="flex gap-2 mt-auto">
-          {needsSelection ? (
-            <AnimatedButton
-              href={`/product/${product.slug}`}
-              size="full"
-              variant="primary"
-              className="flex-1 shrink-0"
-              aria-label="Options"
-            >
-              OPTIONS
-            </AnimatedButton>
-          ) : product.inStock ? (
-            <AnimatedButton
-              href={`/product/${product.slug}`}
-              size="full"
-              variant="primary"
-              className="flex-1 shrink-0"
-              aria-label="View Details"
-            >
-              DETAILS
-            </AnimatedButton>
-          ) : (
-            <button
-              disabled
-              className="flex-1 bg-[#A1A7AA] cursor-not-allowed text-white text-[0.6rem] sm:text-[0.7rem] font-bold tracking-widest uppercase py-3 px-1 rounded-xl transition-colors text-center shadow-sm shrink-0"
-            >
-              OUT OF STOCK
-            </button>
+          {/* COMPACT LAYOUT MOBILE: Only Icons */}
+          {layout === 'compact' && (
+            <div className="flex sm:hidden w-full gap-2">
+              <Link 
+                href={`/product/${product.slug}`}
+                className="flex-1 h-10 flex items-center justify-center rounded-xl bg-[#fec195] text-[#181818] shadow-sm transition-transform hover:scale-105"
+                title="View Details"
+              >
+                <Eye className="w-4 h-4" />
+              </Link>
+              <button 
+                onClick={needsSelection ? undefined : handleAddToCart}
+                disabled={!product.inStock}
+                className={`flex-1 h-10 flex items-center justify-center border border-[#EDE5DC] rounded-xl shadow-sm transition-transform ${product.inStock ? 'bg-white text-gray-500 hover:text-[#9C4122] hover:border-[#9C4122] hover:scale-105' : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
+                title="Add to Cart"
+              >
+                <ShoppingCart className="w-4 h-4" />
+              </button>
+            </div>
           )}
-          <button 
-            onClick={needsSelection ? undefined : handleAddToCart}
-            className="w-10 sm:w-12 shrink-0 flex items-center justify-center border border-[#EDE5DC] hover:border-[#9C4122] bg-white text-gray-500 hover:text-[#9C4122] rounded-xl transition-colors shadow-sm"
-            aria-label="Quick Add"
-          >
-            <ShoppingCart className="w-4 h-4" />
-          </button>
+
+          {/* STANDARD LAYOUT (OR DESKTOP COMPACT): Full Buttons */}
+          <div className={`w-full gap-2 ${layout === 'compact' ? 'hidden sm:flex' : 'flex'}`}>
+            {needsSelection ? (
+              <AnimatedButton
+                href={`/product/${product.slug}`}
+                size="full"
+                variant="primary"
+                className="flex-1 shrink-0"
+                aria-label="Options"
+              >
+                OPTIONS
+              </AnimatedButton>
+            ) : product.inStock ? (
+              <AnimatedButton
+                href={`/product/${product.slug}`}
+                size="full"
+                variant="primary"
+                className="flex-1 shrink-0"
+                aria-label="View Details"
+              >
+                DETAILS
+              </AnimatedButton>
+            ) : (
+              <button
+                disabled
+                className="flex-1 bg-[#A1A7AA] cursor-not-allowed text-white text-[0.6rem] sm:text-[0.7rem] font-bold tracking-widest uppercase py-3 px-1 rounded-xl transition-colors text-center shadow-sm shrink-0"
+              >
+                OUT OF STOCK
+              </button>
+            )}
+            <button 
+              onClick={needsSelection ? undefined : handleAddToCart}
+              disabled={!product.inStock && !needsSelection}
+              className={`w-10 sm:w-12 shrink-0 flex items-center justify-center border border-[#EDE5DC] rounded-xl shadow-sm transition-colors ${(!product.inStock && !needsSelection) ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-500 hover:text-[#9C4122] hover:border-[#9C4122]'}`}
+              aria-label="Quick Add"
+            >
+              <ShoppingCart className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </div>
     </div>

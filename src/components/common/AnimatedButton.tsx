@@ -15,10 +15,10 @@ export const AnimatedButton = React.forwardRef<HTMLButtonElement | HTMLAnchorEle
     let baseClass = "group relative inline-flex items-center justify-center whitespace-nowrap font-bold tracking-wide uppercase transition-all duration-300 ";
 
     // Responsive Size classes
-    if (size === 'sm') baseClass += "py-[6px] px-[20px] sm:py-[8px] sm:px-[36px] text-[10px] sm:text-[13px] ";
-    else if (size === 'md') baseClass += "py-[12px] px-[28px] sm:py-[15px] sm:px-[48px] text-[13px] sm:text-[17px] ";
-    else if (size === 'lg') baseClass += "py-[15px] px-[36px] text-[15px] sm:py-[18px] sm:px-[55px] sm:text-[18px] ";
-    else if (size === 'full') baseClass += "w-full py-[10px] px-[20px] sm:py-[15px] sm:px-[36px] text-[13px] sm:text-[17px] ";
+    if (size === 'sm') baseClass += "py-[6px] px-[20px] sm:py-[8px] sm:px-[24px] text-[10px] sm:text-[11px] ";
+    else if (size === 'md') baseClass += "py-[10px] px-[24px] sm:py-[12px] sm:px-[32px] text-[12px] sm:text-[13px] ";
+    else if (size === 'lg') baseClass += "py-[12px] px-[32px] sm:py-[14px] sm:px-[40px] text-[14px] sm:text-[15px] ";
+    else if (size === 'full') baseClass += "w-full py-[10px] px-[20px] sm:py-[10px] sm:px-[24px] text-[11px] sm:text-[13px] ";
 
     // Variant classes
     let svgColor = "text-[#181818]";

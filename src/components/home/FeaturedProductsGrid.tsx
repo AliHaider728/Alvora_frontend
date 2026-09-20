@@ -31,8 +31,9 @@ export const FeaturedProductsGrid: React.FC<Props> = ({ products }) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="h-full"
             >
-              <AlvoraProductCard product={product} />
+              <AlvoraProductCard product={product} layout="compact" />
             </motion.div>
           ))}
         </div>
