@@ -225,6 +225,13 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
                 </span>
                 <span className="text-[10px] text-[#1A1A1A]/50 font-medium">{displayEmail}</span>
               </div>
+              <button
+                onClick={handleSignOut}
+                title="Sign Out"
+                className="ml-1 p-2 rounded-full text-[#1A1A1A]/40 hover:text-red-600 hover:bg-red-50 transition-colors"
+              >
+                <LogOut className="w-[18px] h-[18px]" />
+              </button>
             </div>
           </div>
         </header>
