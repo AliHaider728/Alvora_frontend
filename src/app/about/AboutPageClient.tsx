@@ -1,222 +1,253 @@
 "use client";
 import React from 'react';
 import Image from 'next/image';
-import { ShieldCheck, Leaf, HeartHandshake, Instagram, Facebook, Users, Star, PackageCheck, Clock, Sparkles, Truck, Heart, LayoutGrid, Quote, Droplet } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Leaf, FlaskConical, Heart, Sparkles, Diamond } from 'lucide-react';
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.15 }
+  }
+};
 
 export const AboutPageClient: React.FC = () => {
   return (
-    <div className="alvora-container min-h-screen py-12 md:py-20">
-      <div className="max-w-6xl mx-auto">
+    <div className="bg-[#FAF6F2] min-h-screen overflow-hidden text-[#1A1A1A]">
+      
+      {/* SECTION 1: HERO */}
+      <section className="relative w-full h-[80vh] min-h-[600px] flex items-center justify-center overflow-hidden bg-[#F9F4F0]">
+        <div className="absolute inset-0 z-0 opacity-60 mix-blend-multiply">
+          <Image 
+            src="/images/Alvora_hero_background.avif" 
+            alt="Alvora Hero Background" 
+            fill 
+            className="object-cover object-center"
+            priority 
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#FAF6F2] via-[#FAF6F2]/80 to-transparent" />
+        </div>
         
-        {/* HERO BANNER */}
-        <div className="bg-[#FAF6F2] border border-[#E7D9D0] rounded-sm p-10 sm:p-16 mb-16 text-center shadow-sm relative overflow-hidden flex flex-col items-center justify-center">
-          <div className="relative z-10 max-w-3xl">
-            <span className="text-[10px] tracking-widest uppercase text-[#A86249] font-bold mb-4 block">
-              Our Mission
-            </span>
-            <h1 className="font-display text-3xl sm:text-5xl lg:text-6xl text-[#241916] font-medium leading-tight mb-6">
-              Skincare Rooted in Care, Backed by Science
-            </h1>
-            <p className="text-[#241916]/70 leading-relaxed text-base sm:text-lg max-w-2xl mx-auto">
-              Founded on the belief that beauty should be uncompromising. We formulate clean, effective skincare that respects your skin's natural barrier and delivers visible, radiant results without harsh chemicals.
-            </p>
-          </div>
-        </div>
+        <motion.div 
+          className="relative z-10 text-center px-4 max-w-4xl mx-auto flex flex-col items-center"
+          initial="hidden"
+          animate="visible"
+          variants={staggerContainer}
+        >
+          <motion.span variants={fadeInUp} className="text-xs font-bold tracking-[0.2em] text-[#C48B80] uppercase mb-6 block">
+            About Alvora
+          </motion.span>
+          
+          <motion.h1 variants={fadeInUp} className="font-display text-5xl md:text-6xl lg:text-7xl text-[#1A1A1A] mb-8 leading-[1.1]">
+            More Than Skincare,<br/>
+            <span className="italic font-light">It's a Ritual.</span>
+          </motion.h1>
+          
+          <motion.p variants={fadeInUp} className="text-[#1A1A1A]/70 text-base md:text-lg max-w-xl mx-auto mb-8 font-medium">
+            At Alvora, we believe in the power of skincare to bring out your natural glow — because healthy skin isn't a luxury, it's confidence.
+          </motion.p>
+          
+          <motion.div variants={fadeInUp} className="w-12 h-px bg-[#C48B80]/50" />
+        </motion.div>
+      </section>
 
-        {/* THREE FEATURE CARDS */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-20">
-          <div className="bg-white p-8 sm:p-10 rounded-sm border border-[#E7D9D0] shadow-sm text-center flex flex-col items-center">
-            <div className="w-16 h-16 rounded-full bg-[#F1C9BD] text-[#A86249] flex items-center justify-center mb-6">
-              <Leaf className="w-7 h-7" />
-            </div>
-            <h3 className="font-display text-xl text-[#241916] mb-3">Clean, Non-Toxic Ingredients</h3>
-            <p className="text-[#1A1A1A]/70 text-sm leading-relaxed">
-              We never use parabens, sulfates, or artificial fragrances. Only skin-loving ingredients that nourish and protect.
-            </p>
-          </div>
-
-          <div className="bg-white p-8 sm:p-10 rounded-sm border border-[#E7D9D0] shadow-sm text-center flex flex-col items-center">
-            <div className="w-16 h-16 rounded-full bg-[#EFCDBE] text-[#A86249] flex items-center justify-center mb-6">
-              <ShieldCheck className="w-7 h-7" />
-            </div>
-            <h3 className="font-display text-xl text-[#241916] mb-3">Dermatologist Approved</h3>
-            <p className="text-[#1A1A1A]/70 text-sm leading-relaxed">
-              Every formula is rigorously tested to ensure it is safe, effective, and gentle enough for even the most sensitive skin.
-            </p>
-          </div>
-
-          <div className="bg-white p-8 sm:p-10 rounded-sm border border-[#E7D9D0] shadow-sm text-center flex flex-col items-center">
-            <div className="w-16 h-16 rounded-full bg-[#FAF6F2] text-[#A86249] flex items-center justify-center mb-6">
-              <HeartHandshake className="w-7 h-7" />
-            </div>
-            <h3 className="font-display text-xl text-[#241916] mb-3">Happiness Guaranteed</h3>
-            <p className="text-[#1A1A1A]/70 text-sm leading-relaxed">
-              We stand behind our products. If your skin doesn't love our formulas, our support team is here to make it right.
-            </p>
-          </div>
-        </div>
-
-        {/* THE STORY BEHIND ALVORA SKINCARE */}
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16 mb-24">
-          <div className="w-full lg:w-1/2 relative aspect-[4/3] rounded-sm overflow-hidden shadow-md">
-            <Image 
-              src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=1200&auto=format&fit=crop"
-              alt="Premium Skincare"
-              fill
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover"
-            />
-          </div>
-          <div className="w-full lg:w-1/2 space-y-6">
-            <span className="text-[10px] tracking-widest uppercase text-[#A86249] font-bold block">
+      {/* SECTION 2: OUR STORY */}
+      <section className="py-24 md:py-32 px-6 lg:px-12 max-w-[1440px] mx-auto">
+        <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 items-center">
+          
+          <motion.div 
+            className="w-full lg:w-1/2"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+          >
+            <motion.span variants={fadeInUp} className="text-[10px] font-bold tracking-[0.2em] text-[#C48B80] uppercase mb-4 block">
               Our Story
-            </span>
-            <h2 className="font-display text-3xl sm:text-4xl text-[#241916] font-medium leading-tight">
-              The Story Behind Alvora Skincare
-            </h2>
-            <div className="space-y-4 text-[#1A1A1A]/70 leading-relaxed text-sm sm:text-base">
-              <p>
-                It all started with a simple idea: skincare shouldn't be a compromise between efficacy and safety. We noticed the market was flooded with harsh chemical treatments or natural products that simply didn't work. Alvora Skincare was born out of a desire to bridge that gap.
-              </p>
-              <p>
-                We spent years researching and partnering with top dermatologists to develop formulas that treat real skin concerns • from hyperpigmentation to barrier repair • using clean, scientifically-backed ingredients. We believe in transparency, sustainability, and giving you the radiant skin you deserve.
-              </p>
-            </div>
+            </motion.span>
             
-            <div className="pt-4 flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-[#F5EDE4] overflow-hidden relative">
-                 {/* Optional Avatar */}
-                 <div className="w-full h-full bg-[#EFCDBE]" />
-              </div>
-              <div>
-                <p className="font-display text-[#241916] font-medium text-lg">Sarah & James</p>
-                <p className="text-xs text-[#A86249] uppercase tracking-widest font-bold">Co-Founders</p>
+            <motion.h2 variants={fadeInUp} className="font-display text-4xl md:text-5xl text-[#1A1A1A] leading-tight mb-6">
+              Rooted in Care,<br/>Backed by Science.
+            </motion.h2>
+            
+            <motion.p variants={fadeInUp} className="text-[#1A1A1A]/70 text-sm leading-relaxed mb-12 max-w-lg">
+              Founded on the belief that beauty should be uncompromising, we formulate clean, effective skincare that respects your skin's natural barrier and delivers visible, radiant results without harsh chemicals.
+            </motion.p>
+            
+            <motion.div variants={staggerContainer} className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {[
+                { icon: Leaf, title: "Clean Ingredients", desc: "No harsh chemicals, just what your skin loves." },
+                { icon: FlaskConical, title: "Dermatologist Approved", desc: "Tested for safety, efficacy, and real results." },
+                { icon: Heart, title: "Happiness Guaranteed", desc: "Your satisfaction means everything to us." },
+                { icon: Sparkles, title: "Science Backed", desc: "Modern science meets nature's best." }
+              ].map((item, i) => (
+                <motion.div key={i} variants={fadeInUp} className="flex flex-col">
+                  <div className="w-10 h-10 rounded-full bg-[#FDF8F5] border border-[#F1C9BD] flex items-center justify-center text-[#C48B80] mb-3">
+                    <item.icon className="w-4 h-4 stroke-[1.5]" />
+                  </div>
+                  <h4 className="text-[11px] font-bold text-[#1A1A1A] mb-1">{item.title}</h4>
+                  <p className="text-[10px] text-[#1A1A1A]/60 leading-snug">{item.desc}</p>
+                </motion.div>
+              ))}
+            </motion.div>
+          </motion.div>
+          
+          <motion.div 
+            className="w-full lg:w-1/2 relative"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInUp}
+          >
+            <div className="relative aspect-[4/5] md:aspect-square lg:aspect-[4/5] w-full rounded-2xl overflow-hidden shadow-xl">
+              <Image 
+                src="/images/cta-lifestyle.webp" 
+                alt="Model with glowing skin" 
+                fill 
+                className="object-cover"
+              />
+              {/* Overlay text */}
+              <div className="absolute bottom-6 right-6 lg:bottom-10 lg:right-10 text-white drop-shadow-md" style={{ fontFamily: "var(--font-display), serif" }}>
+                <p className="text-3xl lg:text-4xl italic font-light tracking-wide rotate-[-4deg]">Healthy Skin,</p>
+                <p className="text-3xl lg:text-4xl italic font-light tracking-wide rotate-[-4deg] ml-6 mt-1">Happy You</p>
               </div>
             </div>
+          </motion.div>
+          
+        </div>
+      </section>
+
+      {/* SECTION 3: OUR MISSION */}
+      <section className="relative py-24 md:py-32 overflow-hidden bg-gradient-to-b from-white to-[#FAF6F2]">
+        {/* Subtle curved background shape overlay if desired */}
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-12 relative z-10">
+          <div className="flex flex-col-reverse lg:flex-row gap-16 lg:gap-24 items-center">
+            
+            <motion.div 
+              className="w-full lg:w-1/2"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+            >
+              <div className="relative aspect-[16/10] md:aspect-video w-full rounded-2xl overflow-hidden shadow-lg border border-white/50">
+                <Image 
+                  src="/images/cta-shelf.jpg" 
+                  alt="Alvora Skincare Products" 
+                  fill 
+                  className="object-cover"
+                />
+              </div>
+            </motion.div>
+            
+            <motion.div 
+              className="w-full lg:w-1/2"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={staggerContainer}
+            >
+              <motion.span variants={fadeInUp} className="text-[10px] font-bold tracking-[0.2em] text-[#C48B80] uppercase mb-4 block">
+                Our Mission
+              </motion.span>
+              
+              <motion.h2 variants={fadeInUp} className="font-display text-4xl md:text-5xl text-[#1A1A1A] leading-tight mb-6">
+                Skincare Rooted in Care,<br/>Backed by Science.
+              </motion.h2>
+              
+              <motion.p variants={fadeInUp} className="text-[#1A1A1A]/70 text-sm leading-relaxed mb-8 max-w-lg">
+                We're on a mission to make high-performance skincare accessible to everyone — with thoughtfully crafted formulas, clean ingredients, and real, lasting results.
+              </motion.p>
+              
+              <motion.p variants={fadeInUp} className="text-2xl md:text-3xl text-[#C48B80]" style={{ fontFamily: "var(--font-display), serif" }}>
+                <span className="italic font-light">Better Skin. A Kinder Tomorrow.</span>
+              </motion.p>
+            </motion.div>
+            
           </div>
         </div>
+      </section>
 
-        {/* JOIN OUR COMMUNITY BOX */}
-        <div className="bg-[#FAF6F2] rounded-sm p-8 sm:p-12 mb-20 flex flex-col md:flex-row items-center justify-between gap-8 border border-[#E7D9D0]">
-          <div className="max-w-xl text-center md:text-left">
-            <h3 className="font-display text-2xl sm:text-3xl text-[#241916] mb-3">Join Our Community</h3>
-            <p className="text-[#1A1A1A]/70 text-sm leading-relaxed">
-              Follow Alvora Skincare on our official social channels to see real results, get exclusive skincare tips, and share your glowing journey!
-            </p>
-          </div>
-          <div className="flex items-center gap-4 flex-shrink-0">
-            <a href="#" className="w-12 h-12 rounded-full bg-white text-[#A86249] flex items-center justify-center hover:bg-[#A86249] hover:text-white transition-colors shadow-sm border border-[#E7D9D0]">
-              <Instagram className="w-5 h-5" />
-            </a>
-            <a href="#" className="w-12 h-12 rounded-full bg-white text-[#A86249] flex items-center justify-center hover:bg-[#A86249] hover:text-white transition-colors shadow-sm border border-[#E7D9D0]">
-              <Facebook className="w-5 h-5" />
-            </a>
-          </div>
-        </div>
+      {/* SECTION 4: OUR VALUES */}
+      <section className="py-24 md:py-32 px-6 lg:px-12 max-w-6xl mx-auto text-center border-t border-[#E7D9D0]">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+        >
+          <motion.span variants={fadeInUp} className="text-[10px] font-bold tracking-[0.2em] text-[#C48B80] uppercase mb-4 block">
+            Our Values
+          </motion.span>
+          
+          <motion.h2 variants={fadeInUp} className="font-display text-4xl text-[#1A1A1A] mb-4">
+            What Drives Us
+          </motion.h2>
+          
+          <motion.p variants={fadeInUp} className="text-[#1A1A1A]/60 text-sm max-w-xl mx-auto mb-16">
+            Our values shape every product, every decision, and every step we take — because your skin deserves nothing less.
+          </motion.p>
+          
+          <motion.div variants={staggerContainer} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-12 gap-x-6 relative">
+            {[
+              { icon: Leaf, title: "Purity", desc: "Clean, safe, effective." },
+              { icon: FlaskConical, title: "Innovation", desc: "Backed by science." },
+              { icon: Heart, title: "Inclusivity", desc: "For every skin, always." },
+              { icon: Diamond, title: "Integrity", desc: "Always transparent." }
+            ].map((val, i) => (
+              <motion.div key={i} variants={fadeInUp} className={`flex flex-col items-center relative ${i !== 3 ? 'lg:after:content-[""] lg:after:absolute lg:after:right-0 lg:after:top-[10%] lg:after:h-[80%] lg:after:w-px lg:after:bg-[#E7D9D0]' : ''}`}>
+                <div className="w-12 h-12 rounded-full border border-[#C48B80] text-[#C48B80] flex items-center justify-center mb-4 bg-white">
+                  <val.icon className="w-5 h-5 stroke-[1.5]" />
+                </div>
+                <h4 className="text-xs font-bold text-[#1A1A1A] mb-1">{val.title}</h4>
+                <p className="text-[11px] text-[#1A1A1A]/60">{val.desc}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </motion.div>
+      </section>
 
-        {/* STATS BAR */}
-        <div className="bg-[#1A1A1A] p-8 sm:p-12 mb-20">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-            <div className="text-center space-y-3">
-              <div className="w-12 h-12 rounded-full bg-[#2A2A2A] text-[#F1C9BD] flex items-center justify-center mx-auto">
-                <Users className="w-5 h-5" />
-              </div>
-              <p className="font-display text-3xl sm:text-4xl text-white">12,000+</p>
-              <p className="text-[10px] sm:text-xs text-white/60 font-bold uppercase tracking-widest">Happy Customers</p>
-            </div>
-            <div className="text-center space-y-3">
-              <div className="w-12 h-12 rounded-full bg-[#2A2A2A] text-[#F1C9BD] flex items-center justify-center mx-auto">
-                <Star className="w-5 h-5" />
-              </div>
-              <p className="font-display text-3xl sm:text-4xl text-white">4.9/5</p>
-              <p className="text-[10px] sm:text-xs text-white/60 font-bold uppercase tracking-widest">Average Rating</p>
-            </div>
-            <div className="text-center space-y-3">
-              <div className="w-12 h-12 rounded-full bg-[#2A2A2A] text-[#F1C9BD] flex items-center justify-center mx-auto">
-                <PackageCheck className="w-5 h-5" />
-              </div>
-              <p className="font-display text-3xl sm:text-4xl text-white">500+</p>
-              <p className="text-[10px] sm:text-xs text-white/60 font-bold uppercase tracking-widest">Products Curated</p>
-            </div>
-            <div className="text-center space-y-3">
-              <div className="w-12 h-12 rounded-full bg-[#2A2A2A] text-[#F1C9BD] flex items-center justify-center mx-auto">
-                <Clock className="w-5 h-5" />
-              </div>
-              <p className="font-display text-3xl sm:text-4xl text-white">2-4 Days</p>
-              <p className="text-[10px] sm:text-xs text-white/60 font-bold uppercase tracking-widest">Nationwide Delivery</p>
-            </div>
+      {/* SECTION 5: FOUNDER'S NOTE */}
+      <section className="pb-24 px-4 sm:px-6 lg:px-12 max-w-6xl mx-auto">
+        <motion.div 
+          className="relative w-full rounded-[32px] overflow-hidden bg-gradient-to-br from-[#F5EDE4] to-[#F1C9BD]/40 p-10 md:p-16 border border-white/60 shadow-sm"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeInUp}
+        >
+          {/* Subtle texture/floral overlay in background */}
+          <div className="absolute right-0 top-0 bottom-0 w-1/2 opacity-30 pointer-events-none mix-blend-multiply flex justify-end">
+             <Image src="/images/hero-background.jpeg" alt="Texture" fill className="object-cover object-right" />
           </div>
-        </div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#F5EDE4] via-[#F5EDE4]/80 to-transparent pointer-events-none" />
 
-        {/* WHY CHOOSE ALVORA SKINCARE */}
-        <div className="mb-20">
-          <div className="text-center max-w-2xl mx-auto mb-12 space-y-4">
-            <span className="text-[10px] tracking-widest uppercase text-[#A86249] font-bold block">
-              Why Choose Us
+          <div className="relative z-10 max-w-xl">
+            <span className="text-[10px] font-bold tracking-[0.2em] text-[#C48B80] uppercase mb-4 block">
+              A Promise From Our Founder
             </span>
-            <h2 className="font-display text-3xl sm:text-4xl text-[#241916] font-medium leading-tight">
-              Why Customers Choose Alvora Skincare
+            
+            <h2 className="font-display text-3xl md:text-4xl text-[#1A1A1A] mb-6 leading-tight">
+              Skincare for a <br/>Brighter Tomorrow.
             </h2>
-            <p className="text-[#1A1A1A]/70 text-sm sm:text-base leading-relaxed">
-              From the moment you order to the moment you see the glow in the mirror, every step is built around safety, efficacy, and a premium experience.
+            
+            <p className="text-[#1A1A1A]/80 text-sm md:text-base leading-relaxed italic mb-8 font-serif">
+              "Alvora was born from a simple belief — that everyone deserves skincare that's safe, effective, and truly works. We're here to help you feel confident in your skin, every single day."
+            </p>
+            
+            <p className="text-xs font-bold text-[#1A1A1A]/60 uppercase tracking-widest">
+              — The Alvora Skincare Team
             </p>
           </div>
+        </motion.div>
+      </section>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white p-8 rounded-sm border border-[#E7D9D0] shadow-sm space-y-4 text-center flex flex-col items-center">
-              <div className="w-12 h-12 rounded-full bg-[#FAF6F2] text-[#A86249] flex items-center justify-center">
-                <PackageCheck className="w-5 h-5" />
-              </div>
-              <h3 className="font-display text-lg text-[#241916]">Sustainable Packaging</h3>
-              <p className="text-xs text-[#1A1A1A]/70 leading-relaxed">
-                Every order is carefully packed in protective, eco-conscious packaging so it arrives safe and sound.
-              </p>
-            </div>
-
-            <div className="bg-white p-8 rounded-sm border border-[#E7D9D0] shadow-sm space-y-4 text-center flex flex-col items-center">
-              <div className="w-12 h-12 rounded-full bg-[#FAF6F2] text-[#A86249] flex items-center justify-center">
-                <Truck className="w-5 h-5" />
-              </div>
-              <h3 className="font-display text-lg text-[#241916]">Fast Delivery Across Pakistan</h3>
-              <p className="text-xs text-[#1A1A1A]/70 leading-relaxed">
-                Quick and reliable delivery straight to your doorstep, nationwide, with Cash on Delivery available.
-              </p>
-            </div>
-
-            <div className="bg-white p-8 rounded-sm border border-[#E7D9D0] shadow-sm space-y-4 text-center flex flex-col items-center">
-              <div className="w-12 h-12 rounded-full bg-[#FAF6F2] text-[#A86249] flex items-center justify-center">
-                <Heart className="w-5 h-5" />
-              </div>
-              <h3 className="font-display text-lg text-[#241916]">Gentle, Skin-Safe Ingredients</h3>
-              <p className="text-xs text-[#1A1A1A]/70 leading-relaxed">
-                Every product is selected with your skin's health in mind, using non-toxic, clinically-tested formulations.
-              </p>
-            </div>
-
-            <div className="bg-white p-8 rounded-sm border border-[#E7D9D0] shadow-sm space-y-4 text-center flex flex-col items-center">
-              <div className="w-12 h-12 rounded-full bg-[#FAF6F2] text-[#A86249] flex items-center justify-center">
-                <Droplet className="w-5 h-5" />
-              </div>
-              <h3 className="font-display text-lg text-[#241916]">A Formula for Every Skin Type</h3>
-              <p className="text-xs text-[#1A1A1A]/70 leading-relaxed">
-                Explore hydrating serums, clarifying toners, barrier creams, and more • curated for every skin concern.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* OUR PROMISE QUOTE */}
-        <div className="bg-[#EFCDBE]/20 rounded-sm border border-[#EFCDBE] p-10 sm:p-16 text-center">
-          <div className="w-14 h-14 rounded-full bg-white text-[#A86249] flex items-center justify-center mx-auto mb-6 shadow-sm border border-[#E7D9D0]">
-            <Quote className="w-6 h-6" />
-          </div>
-          <p className="max-w-3xl mx-auto font-display text-xl sm:text-2xl text-[#241916] leading-relaxed">
-            "At Alvora Skincare, we're passionate about empowering you to feel confident in your own skin through clean, effective, and beautifully crafted formulas • because your skin deserves the best."
-          </p>
-          <p className="mt-8 text-[10px] font-bold text-[#A86249] uppercase tracking-widest">• The Alvora Skincare Team</p>
-        </div>
-        
-      </div>
     </div>
   );
 };
