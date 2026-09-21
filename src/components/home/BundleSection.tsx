@@ -106,7 +106,7 @@ export const BundleSection: React.FC = () => {
                   alt={bundle.name} 
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover object-center"
+                  className="object-contain object-center"
                 />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center">

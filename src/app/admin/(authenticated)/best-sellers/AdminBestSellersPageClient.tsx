@@ -1,11 +1,11 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect } from 'react';
 import { api } from '../../../../services/api';
 import { Product } from '../../../../types';
 import Image from 'next/image';
 import { ImageIcon, Loader2, ImagePlus, Trash2 } from 'lucide-react';
-import { useToast } from '../../../../context/ToastContext';a
+import { useToast } from '../../../../context/ToastContext';
 
 export const AdminBestSellersPageClient: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
