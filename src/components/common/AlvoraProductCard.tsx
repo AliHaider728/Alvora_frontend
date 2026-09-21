@@ -115,11 +115,7 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
             <span className="text-[#9C4122] font-bold text-sm sm:text-base">
               {formatPrice(product.price, settings?.currency || 'Rs.')}
             </span>
-            {product.originalPrice && product.originalPrice > product.price && (
-              <span className="text-xs sm:text-sm text-[#A1A7AA] line-through">
-                {formatPrice(product.originalPrice, settings?.currency || 'Rs.')}
-              </span>
-            )}
+            
           </div>
         </Link>
 

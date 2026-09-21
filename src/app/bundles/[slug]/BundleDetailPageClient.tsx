@@ -98,7 +98,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
             >
-              <Image src={activeImage} alt={bundle.name} fill className="object-cover" priority />
+              <Image src={activeImage} alt={bundle.name} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" priority />
               {bundle.discountPercent > 0 && (
                 <motion.div 
                   initial={{ opacity: 0, scale: 0.5 }}
@@ -128,10 +128,17 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
                 {bundle.description}
               </motion.p>
               
-              <motion.div variants={staggerVariants} className="flex items-center gap-4 mb-8">
-                <span className="text-3xl font-medium text-[#9C4122]">{formatPrice(bundle.currentPrice || 0)}</span>
+                            <motion.div variants={staggerVariants} className="flex flex-col gap-2 mb-8">
+                <div className="flex items-end gap-4">
+                  <span className="text-3xl font-medium text-[#9C4122]">{formatPrice(bundle.currentPrice || 0)}</span>
+                  {getBundleOriginalPrice(bundle) > (bundle.currentPrice || 0) && (
+                    <span className="text-xl text-[#1A1A1A]/40 line-through mb-1">{formatPrice(getBundleOriginalPrice(bundle))}</span>
+                  )}
+                </div>
                 {getBundleOriginalPrice(bundle) > (bundle.currentPrice || 0) && (
-                  <span className="text-xl text-[#1A1A1A]/40 line-through">{formatPrice(getBundleOriginalPrice(bundle))}</span>
+                  <span className="text-sm font-bold text-[#9C4122] bg-[#FAF6F2] self-start px-3 py-1 rounded-md">
+                    You Save {formatPrice(getBundleOriginalPrice(bundle) - (bundle.currentPrice || 0))} ({Math.round(((getBundleOriginalPrice(bundle) - (bundle.currentPrice || 0)) / getBundleOriginalPrice(bundle)) * 100)}%)
+                  </span>
                 )}
               </motion.div>
 
@@ -151,63 +158,24 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
                   <>Add Bundle to Cart</>
                 )}
               </motion.button>
+              <motion.div variants={staggerVariants} className="mt-12 pt-10 border-t border-[#E7D9D0]">
+                <h3 className="font-display text-2xl text-[#1A1A1A] mb-6">What's Included</h3>
+                <div className="flex flex-col gap-4">
+                  {bundle.products?.map((prod: any, idx: number) => (
+                    <div key={idx} className="flex gap-4 p-4 bg-white rounded-2xl border border-[#E7D9D0] shadow-sm">
+                      <div className="w-20 h-20 shrink-0 rounded-xl overflow-hidden relative bg-[#FAF6F2]">
+                        <Image src={prod.product?.images?.[0] || prod.images?.[0] || '/images/hero/alvora-hero.png'} alt={prod.product?.name || prod.name} fill sizes="80px" className="object-cover" />
+                      </div>
+                      <div className="flex flex-col justify-center">
+                        <span className="text-[10px] uppercase tracking-widest text-[#1A1A1A]/50 font-bold mb-1">Full Size</span>
+                        <h4 className="font-display text-base text-[#1A1A1A] mb-1">{prod.product?.name || prod.name}</h4>
+                        <span className="text-sm font-medium text-[#9C4122]">{(prod.product?.price || prod.price) ? formatPrice(prod.product?.price || prod.price) : "Included"}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
             </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Value Breakdown & What's Included */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto border-t border-[#E7D9D0]">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
-          
-          <div className="lg:col-span-4">
-            <motion.div 
-              className="bg-white rounded-3xl p-8 shadow-sm border border-[#E7D9D0] sticky top-24"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <h3 className="font-display text-2xl text-[#1A1A1A] mb-6">Value Breakdown</h3>
-              <div className="space-y-4 text-sm">
-                <div className="flex justify-between text-[#1A1A1A]/70">
-                  <span>Buying Separately:</span>
-                  <span className="line-through">{formatPrice(getBundleOriginalPrice(bundle))}</span>
-                </div>
-                <div className="flex justify-between font-bold text-[#1A1A1A] text-base border-t border-gray-100 pt-4">
-                  <span>Bundle Price:</span>
-                  <span>{formatPrice(bundle.currentPrice || 0)}</span>
-                </div>
-                <div className="flex justify-between text-[#9C4122] font-bold bg-[#FAF6F2] p-3 rounded-xl mt-4">
-                  <span>You Save:</span>
-                  <span>{formatPrice(getBundleOriginalPrice(bundle) - (bundle.currentPrice || 0))}</span>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-
-          <div className="lg:col-span-8">
-            <h2 className="font-display text-3xl text-[#1A1A1A] mb-8">What's Included</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {bundle.products?.map((prod: any, idx: number) => (
-                <motion.div 
-                  key={idx}
-                  className="flex gap-4 p-4 bg-white rounded-2xl border border-transparent hover:border-[#E7D9D0] hover:shadow-md transition-all group"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: idx * 0.1 }}
-                >
-                  <div className="w-24 h-24 shrink-0 rounded-xl overflow-hidden relative bg-[#FAF6F2]">
-                    <Image src={prod.product?.images?.[0] || prod.images?.[0] || '/images/hero/alvora-hero.png'} alt={prod.product?.name || prod.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
-                  </div>
-                  <div className="flex flex-col justify-center">
-                    <span className="text-[10px] uppercase tracking-widest text-[#1A1A1A]/50 font-bold mb-1">Full Size</span>
-                    <h4 className="font-display text-lg text-[#1A1A1A] mb-1">{prod.product?.name || prod.name}</h4>
-                    <span className="text-sm font-medium text-[#9C4122]">{(prod.product?.price || prod.price) ? formatPrice(prod.product?.price || prod.price) : "Included"}</span>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
           </div>
         </div>
       </section>

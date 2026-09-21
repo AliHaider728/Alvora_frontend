@@ -84,8 +84,19 @@ export const AudioReviews: React.FC = () => {
   const col3 = getColumnItems(2);
   const col4 = getColumnItems(3).reverse();
 
-  const PlayerPill = ({ r, isPlaying, uniqueKey }: { r: AudioReview, isPlaying: boolean, uniqueKey: string }) => (
-    <div key={uniqueKey} className="player-pill flex items-center gap-3 bg-[#1e272e] rounded-full p-2 pr-4 w-full shadow-sm flex-shrink-0 cursor-pointer hover:bg-[#2c3e50] transition-colors" onClick={() => togglePlay(r.audioUrl, r.id)}>
+  const PlayerPill = ({ r, isPlaying, uniqueKey }: { r: AudioReview, isPlaying: boolean, uniqueKey: string }) => {
+    const handleMouseEnter = () => {
+      if (isPlaying && audioRef.current) {
+        audioRef.current.pause();
+      }
+    };
+    const handleMouseLeave = () => {
+      if (isPlaying && audioRef.current) {
+        audioRef.current.play().catch(e => console.log(e));
+      }
+    };
+    return (
+    <div key={uniqueKey} className="player-pill flex items-center gap-3 bg-[#1e272e] rounded-full p-2 pr-4 w-full shadow-sm flex-shrink-0 cursor-pointer hover:bg-[#2c3e50] transition-colors" onClick={() => togglePlay(r.audioUrl, r.id)} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <div className="w-10 h-10 rounded-full bg-[#E5E7EB] flex items-center justify-center flex-shrink-0 text-gray-500">
         <User className="w-5 h-5" />
       </div>
@@ -115,7 +126,8 @@ export const AudioReviews: React.FC = () => {
         {playbackSpeed}x
       </button>
     </div>
-  );
+    );
+  };
 
   return (
     <section className="py-12 bg-[#FAF6F2] overflow-hidden">
