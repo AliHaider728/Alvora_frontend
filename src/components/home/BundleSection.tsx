@@ -99,7 +99,7 @@ export const BundleSection: React.FC = () => {
         return (
           <div key={bundle.id} className={`grid grid-cols-1 md:grid-cols-2 w-full min-h-[500px]`}>
             {/* Image Side */}
-            <div className={`w-full aspect-square ${imageBgClass} relative overflow-hidden ${isReverse ? "md:order-2" : "md:order-1"}`}>
+            <div className={`w-full aspect-[4/5] ${imageBgClass} relative overflow-hidden ${isReverse ? "md:order-2" : "md:order-1"}`}>
                             {displayImage ? (
                 <Image 
                   src={displayImage} 
