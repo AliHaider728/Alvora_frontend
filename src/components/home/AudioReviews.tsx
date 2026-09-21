@@ -9,6 +9,7 @@ export const AudioReviews: React.FC = () => {
   const [reviews, setReviews] = useState<AudioReview[]>([]);
   const [loading, setLoading] = useState(true);
   const [playingId, setPlayingId] = useState<string | null>(null);
+  const [isHovered, setIsHovered] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(1);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -130,7 +131,7 @@ export const AudioReviews: React.FC = () => {
   };
 
   return (
-    <section className="py-12 bg-[#FAF6F2] overflow-hidden group">
+    <section className="py-12 bg-[#FAF6F2] overflow-hidden" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes scroll-down {
           0% { transform: translateY(calc(-50% - 12px)); }
@@ -146,10 +147,7 @@ export const AudioReviews: React.FC = () => {
                 .animate-scroll-up {
           animation: scroll-up 6s linear infinite;
         }
-        .group:hover .animate-scroll-down,
-        .group:hover .animate-scroll-up {
-          animation-play-state: paused !important;
-        }
+        
         .is-paused {
           animation-play-state: paused !important;
         }
@@ -177,25 +175,25 @@ export const AudioReviews: React.FC = () => {
 
         <div className="relative h-[220px] md:h-[240px] w-full overflow-hidden flex gap-4 lg:gap-8 justify-center mask-vertical-fades cursor-default px-4">
           
-          <div className={`flex-1 flex flex-col gap-6 animate-scroll-down ${playingId ? 'is-paused' : ''}`}>
+          <div className={`flex-1 flex flex-col gap-6 animate-scroll-down ${(playingId || isHovered) ? 'is-paused' : ''}`}>
             {col1.map((r, i) => (
               <PlayerPill key={`col1-${r.id}-${i}`} r={r} isPlaying={playingId === r.id} uniqueKey={`c1-${i}`} />
             ))}
           </div>
 
-          <div className={`flex-1 hidden sm:flex flex-col gap-6 animate-scroll-up ${playingId ? 'is-paused' : ''}`}>
+          <div className={`flex-1 hidden sm:flex flex-col gap-6 animate-scroll-up ${(playingId || isHovered) ? 'is-paused' : ''}`}>
             {col2.map((r, i) => (
               <PlayerPill key={`col2-${r.id}-${i}`} r={r} isPlaying={playingId === r.id} uniqueKey={`c2-${i}`} />
             ))}
           </div>
 
-          <div className={`flex-1 hidden md:flex flex-col gap-6 animate-scroll-down ${playingId ? 'is-paused' : ''}`}>
+          <div className={`flex-1 hidden md:flex flex-col gap-6 animate-scroll-down ${(playingId || isHovered) ? 'is-paused' : ''}`}>
             {col3.map((r, i) => (
               <PlayerPill key={`col3-${r.id}-${i}`} r={r} isPlaying={playingId === r.id} uniqueKey={`c3-${i}`} />
             ))}
           </div>
 
-          <div className={`flex-1 hidden lg:flex flex-col gap-6 animate-scroll-up ${playingId ? 'is-paused' : ''}`}>
+          <div className={`flex-1 hidden lg:flex flex-col gap-6 animate-scroll-up ${(playingId || isHovered) ? 'is-paused' : ''}`}>
             {col4.map((r, i) => (
               <PlayerPill key={`col4-${r.id}-${i}`} r={r} isPlaying={playingId === r.id} uniqueKey={`c4-${i}`} />
             ))}
