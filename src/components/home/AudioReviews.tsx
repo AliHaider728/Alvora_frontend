@@ -130,7 +130,7 @@ export const AudioReviews: React.FC = () => {
   };
 
   return (
-    <section className="py-12 bg-[#FAF6F2] overflow-hidden">
+    <section className="py-12 bg-[#FAF6F2] overflow-hidden group">
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes scroll-down {
           0% { transform: translateY(calc(-50% - 12px)); }
@@ -171,7 +171,7 @@ export const AudioReviews: React.FC = () => {
           className="hidden" 
         />
 
-        <div className="relative h-[220px] md:h-[240px] w-full overflow-hidden flex gap-4 lg:gap-8 justify-center mask-vertical-fades group cursor-default px-4">
+        <div className="relative h-[220px] md:h-[240px] w-full overflow-hidden flex gap-4 lg:gap-8 justify-center mask-vertical-fades cursor-default px-4">
           
           <div className={`flex-1 flex flex-col gap-6 animate-scroll-down group-hover:[animation-play-state:paused] ${playingId ? 'is-paused' : ''}`}>
             {col1.map((r, i) => (
