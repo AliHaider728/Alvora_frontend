@@ -77,7 +77,7 @@ export const BundleSection: React.FC = () => {
             {/* Alternating Split Layout for Bundles */}
       {bundlesLoading ? (
         <div className="flex flex-col md:flex-row w-full min-h-[500px] animate-pulse">
-          <div className="w-full md:w-1/2 bg-[#E7D9D0] aspect-square md:aspect-auto" />
+          <div className="w-full md:w-1/2 bg-[#E7D9D0] aspect-square md:aspect-square lg:aspect-auto" />
           <div className="w-full md:w-1/2 bg-white flex flex-col justify-center p-8 md:p-16 lg:p-24 space-y-6">
             <div className="h-4 bg-[#E7D9D0] rounded w-24" />
             <div className="h-10 bg-[#E7D9D0] rounded w-3/4" />
@@ -99,14 +99,14 @@ export const BundleSection: React.FC = () => {
         return (
           <div key={bundle.id} className={`flex flex-col ${isReverse ? 'md:flex-row-reverse' : 'md:flex-row'} w-full min-h-[500px]`}>
             {/* Image Side */}
-            <div className={`w-full md:w-1/2 ${imageBgClass} relative aspect-square md:aspect-auto overflow-hidden`}>
-              {displayImage ? (
+            <div className={`w-full md:w-1/2 ${imageBgClass} relative aspect-square md:aspect-square lg:aspect-auto overflow-hidden min-h-[400px] h-full`}>
+                            {displayImage ? (
                 <Image 
                   src={displayImage} 
                   alt={bundle.name} 
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover"
+                  className="object-cover object-center"
                 />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center">

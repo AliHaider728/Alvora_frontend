@@ -158,21 +158,44 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
                   <>Add Bundle to Cart</>
                 )}
               </motion.button>
-              <motion.div variants={staggerVariants} className="mt-12 pt-10 border-t border-[#E7D9D0]">
-                <h3 className="font-display text-2xl text-[#1A1A1A] mb-6">What's Included</h3>
-                <div className="flex flex-col gap-4">
-                  {bundle.products?.map((prod: any, idx: number) => (
-                    <div key={idx} className="flex gap-4 p-4 bg-white rounded-2xl border border-[#E7D9D0] shadow-sm">
-                      <div className="w-20 h-20 shrink-0 rounded-xl overflow-hidden relative bg-[#FAF6F2]">
-                        <Image src={prod.product?.images?.[0] || prod.images?.[0] || '/images/hero/alvora-hero.png'} alt={prod.product?.name || prod.name} fill sizes="80px" className="object-cover" />
-                      </div>
-                      <div className="flex flex-col justify-center">
-                        <span className="text-[10px] uppercase tracking-widest text-[#1A1A1A]/50 font-bold mb-1">Full Size</span>
-                        <h4 className="font-display text-base text-[#1A1A1A] mb-1">{prod.product?.name || prod.name}</h4>
-                        <span className="text-sm font-medium text-[#9C4122]">{(prod.product?.price || prod.price) ? formatPrice(prod.product?.price || prod.price) : "Included"}</span>
-                      </div>
+
+              <motion.div variants={staggerVariants} className="mt-12 pt-10 border-t border-[#E7D9D0] grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Value Breakdown */}
+                <div className="bg-white rounded-3xl p-6 shadow-sm border border-[#E7D9D0]">
+                  <h3 className="font-display text-xl text-[#1A1A1A] mb-4">Value Breakdown</h3>
+                  <div className="space-y-3 text-sm">
+                    <div className="flex justify-between text-[#1A1A1A]/70">
+                      <span>Buying Separately:</span>
+                      <span className="line-through">{formatPrice(getBundleOriginalPrice(bundle))}</span>
                     </div>
-                  ))}
+                    <div className="flex justify-between font-bold text-[#1A1A1A] text-base border-t border-gray-100 pt-3">
+                      <span>Bundle Price:</span>
+                      <span>{formatPrice(bundle.currentPrice || 0)}</span>
+                    </div>
+                    <div className="flex justify-between text-[#9C4122] font-bold bg-[#FAF6F2] p-3 rounded-xl mt-3">
+                      <span>You Save:</span>
+                      <span>{formatPrice(getBundleOriginalPrice(bundle) - (bundle.currentPrice || 0))}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* What's Included */}
+                <div>
+                  <h3 className="font-display text-xl text-[#1A1A1A] mb-4">What's Included</h3>
+                  <div className="flex flex-col gap-3">
+                    {bundle.products?.map((prod: any, idx: number) => (
+                      <div key={idx} className="flex gap-4 p-3 bg-white rounded-2xl border border-[#E7D9D0] shadow-sm">
+                        <div className="w-16 h-16 shrink-0 rounded-xl overflow-hidden relative bg-[#FAF6F2]">
+                          <Image src={prod.product?.images?.[0] || prod.images?.[0] || '/images/hero/alvora-hero.png'} alt={prod.product?.name || prod.name} fill sizes="64px" className="object-cover" />
+                        </div>
+                        <div className="flex flex-col justify-center">
+                          <span className="text-[9px] uppercase tracking-widest text-[#1A1A1A]/50 font-bold mb-0.5">Full Size</span>
+                          <h4 className="font-display text-sm text-[#1A1A1A] leading-tight mb-1">{prod.product?.name || prod.name}</h4>
+                          <span className="text-xs font-medium text-[#9C4122]">{(prod.product?.price || prod.price) ? formatPrice(prod.product?.price || prod.price) : "Included"}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </motion.div>
             </motion.div>
