@@ -129,10 +129,10 @@ export const AudioReviews: React.FC = () => {
           100% { transform: translateY(calc(-50% - 12px)); }
         }
         .animate-scroll-down {
-          animation: scroll-down 10s linear infinite;
+          animation: scroll-down 6s linear infinite;
         }
         .animate-scroll-up {
-          animation: scroll-up 10s linear infinite;
+          animation: scroll-up 6s linear infinite;
         }
         .is-paused {
           animation-play-state: paused !important;

@@ -160,24 +160,25 @@ export const Footer: React.FC = () => {
               <label htmlFor="footer-email" className="sr-only">
                 Your email address
               </label>
-              <input
-                id="footer-email"
-                type="email"
-                required
-                placeholder="Enter your email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                className="alvora-input rounded-xl text-base sm:text-sm w-full h-[52px]"
-              />
-              <AnimatedButton
-                type="submit"
-                variant="terracotta"
-                size="full"
-                className="!h-[52px] !py-0"
-              >
-                Subscribe
-                <Send className="w-3.5 h-3.5 ml-2" />
-              </AnimatedButton>
+                <input
+                  id="footer-email"
+                  type="email"
+                  required
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  className="alvora-input rounded-xl text-base sm:text-sm w-full h-14"
+                />
+                <AnimatedButton
+                  type="submit"
+                  variant="terracotta"
+                  size="full"
+                  className="h-14"
+                  style={{ height: '56px', padding: 0 }}
+                >
+                  Subscribe
+                  <Send className="w-3.5 h-3.5 ml-2" />
+                </AnimatedButton>
             </form>
 
             {subscribed && (
