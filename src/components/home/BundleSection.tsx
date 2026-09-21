@@ -97,9 +97,9 @@ export const BundleSection: React.FC = () => {
         const discountValue = Number(bundle.discountPercent) || 0;
 
         return (
-          <div key={bundle.id} className={`flex flex-col ${isReverse ? 'md:flex-row-reverse' : 'md:flex-row'} w-full min-h-[500px]`}>
+          <div key={bundle.id} className={`grid grid-cols-1 md:grid-cols-2 w-full min-h-[500px]`}>
             {/* Image Side */}
-            <div className={`w-full md:w-1/2 ${imageBgClass} relative min-h-[300px] md:min-h-full flex self-stretch overflow-hidden`}>
+            <div className={`w-full h-full min-h-[350px] md:min-h-[500px] ${imageBgClass} relative overflow-hidden ${isReverse ? 'md:order-2' : 'md:order-1'}`}>
                             {displayImage ? (
                 <Image 
                   src={displayImage} 
@@ -126,7 +126,7 @@ export const BundleSection: React.FC = () => {
             </div>
             
             {/* Content Side */}
-            <div className={`w-full md:w-1/2 flex items-center justify-center p-12 lg:p-24 ${bgClass}`}>
+            <div className={`w-full h-full flex flex-col justify-center items-center p-12 lg:p-24 ${bgClass} ${isReverse ? 'md:order-1' : 'md:order-2'}`}>
               <motion.div 
                 initial="hidden"
                 whileInView="visible"
