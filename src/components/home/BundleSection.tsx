@@ -97,19 +97,17 @@ export const BundleSection: React.FC = () => {
         const discountValue = Number(bundle.discountPercent) || 0;
 
         return (
-          <div key={bundle.id} className={`grid grid-cols-1 md:grid-cols-2 w-full min-h-[500px]`}>
+          <div key={bundle.id} className={`flex flex-col ${isReverse ? "md:flex-row-reverse" : "md:flex-row"} w-full min-h-[500px]`}>
             {/* Image Side */}
-            <div className={`w-full h-full ${imageBgClass} flex items-center justify-center p-8 lg:p-16 ${isReverse ? "md:order-2" : "md:order-1"}`}>
+            <div className={`w-full md:w-1/2 ${imageBgClass} relative aspect-square md:aspect-auto overflow-hidden`}>
               {displayImage ? (
-                <div className="relative w-full max-w-[500px] aspect-square rounded-3xl overflow-hidden shadow-sm bg-white">
-                  <Image 
-                    src={displayImage} 
-                    alt={bundle.name} 
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover object-center"
-                  />
-                </div>
+                <Image 
+                  src={displayImage} 
+                  alt={bundle.name} 
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover"
+                />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center space-y-3 opacity-60">
@@ -128,7 +126,7 @@ export const BundleSection: React.FC = () => {
             </div>
             
             {/* Content Side */}
-            <div className={`w-full h-full flex flex-col justify-center items-center p-12 lg:p-24 ${bgClass} ${isReverse ? 'md:order-1' : 'md:order-2'}`}>
+            <div className={`w-full md:w-1/2 ${bgClass} flex flex-col justify-center p-8 md:p-16 lg:p-24 space-y-6 md:space-y-8`}>
               <motion.div 
                 initial="hidden"
                 whileInView="visible"
