@@ -146,7 +146,7 @@ export const Header: React.FC = () => {
                   <span className="mx-4 sm:mx-6 opacity-60">•</span>
                   7-DAY RETURNS
                   <span className="mx-4 sm:mx-6 opacity-60">•</span>
-                  CASH ON DELIVERY AVAILABLE
+                  100% AUTHENTIC INGREDIENTS
                   <span className="mx-4 sm:mx-6 opacity-60">•</span>
                 </div>
               ))}
