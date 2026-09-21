@@ -10,6 +10,7 @@ import { AnimatedButton } from './AnimatedButton';
 
 export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: Product, layout?: 'standard' | 'compact' }) => {
   const { addToCart, settings, toggleWishlist, isInWishlist } = useStore();
+  const productUrl = product.productType === 'bundle' ? '/bundles/' + product.slug : '/product/' + product.slug;
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();

@@ -26,7 +26,8 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
 
   // Bundle to Product mapper for cart
-  const mapBundleToProduct = (b: any) => {
+  const { products } = useStore();
+    const mapBundleToProduct = (b: any) => {
     const bundleImg = b.customImage || b.image || (b.products?.[0]?.product?.images?.[0]) || (b.products?.[0]?.images?.[0]);
     return {
       id: b.id,
@@ -186,12 +187,12 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
                     {bundle.products?.map((prod: any, idx: number) => (
                       <div key={idx} className="flex gap-4 p-3 bg-white rounded-2xl border border-[#E7D9D0] shadow-sm">
                         <div className="w-16 h-16 shrink-0 rounded-xl overflow-hidden relative bg-[#FAF6F2]">
-                          <Image src={prod.product?.images?.[0] || prod.images?.[0] || '/images/hero/alvora-hero.png'} alt={prod.product?.name || prod.name} fill sizes="64px" className="object-cover" />
+                          <Image src={products?.find(p => p.id === (prod.product?.id || prod.productId || prod.id))?.images?.[0] || prod.product?.images?.[0] || prod.images?.[0] || '/images/hero/alvora-hero.png'} alt={products?.find(p => p.id === (prod.product?.id || prod.productId || prod.id))?.name || prod.product?.name || prod.name} fill sizes="64px" className="object-cover" />
                         </div>
                         <div className="flex flex-col justify-center">
                           <span className="text-[9px] uppercase tracking-widest text-[#1A1A1A]/50 font-bold mb-0.5">Full Size</span>
-                          <h4 className="font-display text-sm text-[#1A1A1A] leading-tight mb-1">{prod.product?.name || prod.name}</h4>
-                          <span className="text-xs font-medium text-[#9C4122]">{(prod.product?.price || prod.price) ? formatPrice(prod.product?.price || prod.price) : "Included"}</span>
+                          <h4 className="font-display text-sm text-[#1A1A1A] leading-tight mb-1">{products?.find(p => p.id === (prod.product?.id || prod.productId || prod.id))?.name || prod.product?.name || prod.name}</h4>
+                          <span className="text-xs font-medium text-[#9C4122]">{(() => { const realP = products?.find(p => p.id === (prod.product?.id || prod.productId || prod.id)); const pPrice = realP?.price || prod.product?.price || prod.price; return pPrice ? formatPrice(pPrice) : "Included"; })()}</span>
                         </div>
                       </div>
                     ))}
@@ -228,9 +229,9 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
                   <div className="hidden md:block absolute top-6 left-[60%] w-[80%] h-px bg-[#E7D9D0] -z-10" />
                 )}
                 <div className="w-32 h-32 rounded-full overflow-hidden relative mb-6 border-4 border-white shadow-sm">
-                  <Image src={prod.product?.images?.[0] || prod.images?.[0] || '/images/hero/alvora-hero.png'} alt={prod.product?.name || prod.name} fill className="object-cover" />
+                  <Image src={products?.find(p => p.id === (prod.product?.id || prod.productId || prod.id))?.images?.[0] || prod.product?.images?.[0] || prod.images?.[0] || '/images/hero/alvora-hero.png'} alt={products?.find(p => p.id === (prod.product?.id || prod.productId || prod.id))?.name || prod.product?.name || prod.name} fill className="object-cover" />
                 </div>
-                <h4 className="font-bold text-[#1A1A1A] mb-2">{prod.product?.name || prod.name}</h4>
+                <h4 className="font-bold text-[#1A1A1A] mb-2">{products?.find(p => p.id === (prod.product?.id || prod.productId || prod.id))?.name || prod.product?.name || prod.name}</h4>
                 <p className="text-sm text-[#1A1A1A]/70">{prod.product?.shortDescription || prod.shortDescription || 'Apply evenly to clean skin.'}</p>
               </motion.div>
             ))}
