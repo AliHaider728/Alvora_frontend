@@ -30,8 +30,17 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
             alt={product.name}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
+            className={`object-cover transition-all duration-700 ease-in-out group-hover:scale-105 ${product.images[1] ? 'group-hover:opacity-0' : ''}`}
           />
+          {product.images[1] && (
+            <Image
+              src={getSafeImageSrc(product.images[1])}
+              alt={`${product.name} alternate view`}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="object-cover transition-all duration-700 ease-in-out opacity-0 group-hover:opacity-100 group-hover:scale-105 absolute inset-0"
+            />
+          )}
         </Link>
         
         {/* Badges */}
