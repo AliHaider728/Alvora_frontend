@@ -31,7 +31,7 @@ export const AboutPageClient: React.FC = () => {
             className="object-cover object-[80%_center] md:object-right xl:object-center"
             priority 
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#FAF6F2]/80 via-[#FAF6F2]/40 to-transparent md:from-transparent md:via-transparent md:to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#FAF6F2]/95 via-[#FAF6F2]/80 md:via-[#FAF6F2]/50 to-transparent md:to-transparent/10" />
         </div>
         
         <motion.div 
