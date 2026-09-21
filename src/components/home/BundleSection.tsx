@@ -99,7 +99,7 @@ export const BundleSection: React.FC = () => {
         return (
           <div key={bundle.id} className={`flex flex-col ${isReverse ? 'md:flex-row-reverse' : 'md:flex-row'} w-full min-h-[500px]`}>
             {/* Image Side */}
-            <div className={`w-full md:w-1/2 ${imageBgClass} relative aspect-square md:aspect-square lg:aspect-auto overflow-hidden min-h-[400px] h-full`}>
+            <div className={`w-full md:w-1/2 ${imageBgClass} relative min-h-[300px] md:min-h-full flex self-stretch overflow-hidden`}>
                             {displayImage ? (
                 <Image 
                   src={displayImage} 
@@ -160,9 +160,7 @@ export const BundleSection: React.FC = () => {
                 <div className="flex flex-col gap-6">
                   <div className="flex items-end gap-3">
                     <span className="text-2xl font-medium text-[#9C4122]">{formatPrice(bundle.currentPrice || 0)}</span>
-                    {getBundleOriginalPrice(bundle) > (bundle.currentPrice || 0) && (
-                      <span className="text-base text-[#1A1A1A]/40 line-through pb-0.5">{formatPrice(getBundleOriginalPrice(bundle))}</span>
-                    )}
+                    
                   </div>
 
                   <div className="flex flex-col sm:flex-row gap-3">
