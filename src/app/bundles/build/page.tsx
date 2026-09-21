@@ -96,17 +96,15 @@ export default function BuildBundlePage() {
                     key={product.id}
                     className={`relative flex flex-col bg-white rounded-[24px] p-2.5 pb-4 transition-all duration-300 ${selectedQty > 0 ? 'border-2 border-[#C48B80] shadow-md rounded-[24px] overflow-hidden' : 'border border-[#EDE5DC] shadow-sm hover:shadow-md hover:-translate-y-0.5 rounded-[24px] overflow-hidden'}`}
                   >
-                    <button className="absolute top-4 right-4 z-20 w-7 h-7 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-[#1A1A1A]/40 hover:text-[#C48B80] shadow-sm transition-colors border border-gray-100">
-                      <Heart className="w-3.5 h-3.5" />
-                    </button>
+                    
                     
                     {selectedQty > 0 && (
-                      <div className="absolute top-4 right-14 z-20 w-7 h-7 bg-[#C48B80] rounded-full flex items-center justify-center text-white shadow-sm border-2 border-white">
+                      <div className="absolute top-4 right-4 z-20 w-7 h-7 bg-[#C48B80] rounded-full flex items-center justify-center text-white shadow-sm border-2 border-white">
                         <Check className="w-3 h-3 stroke-[3]" />
                       </div>
                     )}
 
-                    <div className="relative aspect-[4/5] bg-[#F9F7F5] w-full overflow-hidden rounded-[16px] mb-4">
+                    <div className="relative aspect-[4/5] bg-[#F9F7F5] w-full overflow-hidden rounded-[24px] mb-4">
                       {product.images && product.images.length > 0 && (
                         <Image 
                           src={product.images[0]} 
@@ -169,7 +167,7 @@ export default function BuildBundlePage() {
                 {distinctCount >= MIN_PRODUCTS ? (
                   <>
                     <div className="w-4 h-4 bg-[#C48B80] rounded-full text-white flex items-center justify-center"><Check className="w-2.5 h-2.5" /></div>
-                    Routine Unlocked ï¿½ 15% Saved
+                    Routine Unlocked - 15% Saved
                   </>
                 ) : (
                   <>
@@ -300,13 +298,15 @@ export default function BuildBundlePage() {
         <div className="text-center py-16 bg-gradient-to-b from-[#FAF6F2] to-white rounded-[32px] mx-2 mt-12 relative overflow-hidden border border-white/40 shadow-inner">
           <p className="text-[10px] font-bold tracking-[0.2em] text-[#C48B80] uppercase mb-3 relative z-10 block bg-white/70 backdrop-blur-sm px-4 py-1.5 rounded-full w-max mx-auto">ALVORA</p>
           <h2 className="font-display text-2xl md:text-3xl text-[#1A1A1A] mb-3 relative z-10">Your Skin Deserves the Best</h2>
-          <p className="text-[13px] text-[#1A1A1A]/70 relative z-10 max-w-sm mx-auto font-medium">Build a routine that works for your unique skin ï¿½ and save while you do.</p>
+          <p className="text-[13px] text-[#1A1A1A]/70 relative z-10 max-w-sm mx-auto font-medium">Build a routine that works for your unique skin - and save while you do.</p>
         </div>
 
       </div>
     </div>
   );
 }
+
+
 
 
 
