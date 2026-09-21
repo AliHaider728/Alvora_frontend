@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import React, { useState } from 'react';
 import { Eye, Search, Truck, X, CheckCircle2, Send, Trash2 } from 'lucide-react';
 import { useStore } from '../../../../context/StoreContext';
@@ -204,7 +204,7 @@ export const AdminOrdersPageClient: React.FC = () => {
                 onClick={() => void handleBulkStatusChange(status as Order['status'])}
                 className={`px-3 py-1.5 text-[11px] font-bold rounded-xl transition-colors border ${
                   status === 'Processing' ? 'bg-amber-100 text-amber-800 border-amber-200 hover:bg-amber-200' :
-                  status === 'Shipped' ? 'bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm text-[#C48B80] border-[#C48B80] hover:bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm' :
+                  status === 'Shipped' ? 'bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm text-[#C48B80] border-[#C48B80] hover:bg-gradient-to-r hover:from-[#9C4122] hover:to-[#B34E28] hover:text-white hover:border-transparent hover:shadow-sm' :
                   status === 'Delivered' ? 'bg-emerald-100 text-emerald-800 border-emerald-200 hover:bg-emerald-200' :
                   'bg-rose-100 text-[#C48B80] border-[#E7D9D0] hover:bg-rose-200'
                 } disabled:opacity-50`}
@@ -283,7 +283,7 @@ export const AdminOrdersPageClient: React.FC = () => {
                               
                               {/* Legacy simple variant string */}
                               {!it.selectedAttributes && it.selectedVariant && (
-                                <span className="text-[#1A1A1A]/40">• {it.selectedVariant}</span>
+                                <span className="text-[#1A1A1A]/40">� {it.selectedVariant}</span>
                               )}
                               
                               {/* New attribute-based variations */}

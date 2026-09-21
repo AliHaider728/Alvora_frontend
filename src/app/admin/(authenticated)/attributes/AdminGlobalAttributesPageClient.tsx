@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import React, { useEffect, useState } from 'react';
 import { Settings, Plus, Trash2, Edit2, GripVertical, AlertCircle, Save, X, Image as ImageIcon } from 'lucide-react';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
@@ -69,7 +69,7 @@ function SortableTermItem({ term, onEdit, onDelete, displayType, inUseCount }: {
       <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
         <button
           onClick={() => onEdit(term)}
-          className="p-1.5 text-[#1A1A1A]/40 hover:text-[#C48B80] rounded-lg hover:bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm"
+          className="p-1.5 text-[#1A1A1A]/40 hover:text-[#C48B80] rounded-lg hover:bg-gradient-to-r hover:from-[#9C4122] hover:to-[#B34E28] hover:text-white hover:border-transparent hover:shadow-sm"
           title="Edit"
         >
           <Edit2 className="w-4 h-4" />
