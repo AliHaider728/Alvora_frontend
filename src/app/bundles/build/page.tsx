@@ -1,4 +1,5 @@
-ï»¿import React, { useState, useMemo } from 'react';
+"use client";
+import React, { useState, useMemo } from 'react';
 import Image from 'next/image';
 import { useStore } from '../../../context/StoreContext';
 import { formatPrice } from '../../../utils/formatters';
@@ -190,7 +191,7 @@ export default function BuildBundlePage() {
                 {distinctCount >= MIN_PRODUCTS ? (
                   <>
                     <div className="w-4 h-4 bg-[#C48B80] rounded-full text-white flex items-center justify-center"><Check className="w-2.5 h-2.5" /></div>
-                    Routine Unlocked â€” 15% Saved
+                    Routine Unlocked — 15% Saved
                   </>
                 ) : (
                   <>
@@ -321,10 +322,11 @@ export default function BuildBundlePage() {
         <div className="text-center py-16 bg-[#E7D6CE] rounded-[32px] mx-2 mt-12 relative overflow-hidden border border-white/40 shadow-inner">
           <p className="text-[10px] font-bold tracking-[0.2em] text-[#C48B80] uppercase mb-3 relative z-10 block bg-white/70 backdrop-blur-sm px-4 py-1.5 rounded-full w-max mx-auto">ALVORA</p>
           <h2 className="font-display text-2xl md:text-3xl text-[#1A1A1A] mb-3 relative z-10">Your Skin Deserves the Best</h2>
-          <p className="text-[13px] text-[#1A1A1A]/70 relative z-10 max-w-sm mx-auto font-medium">Build a routine that works for your unique skin â€” and save while you do.</p>
+          <p className="text-[13px] text-[#1A1A1A]/70 relative z-10 max-w-sm mx-auto font-medium">Build a routine that works for your unique skin — and save while you do.</p>
         </div>
 
       </div>
     </div>
   );
 }
+
