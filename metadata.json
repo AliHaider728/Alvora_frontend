@@ -1,6 +1,0 @@
-{
-  "name": "Alvora Skincare",
-  "description": "Premium e-commerce store for skincare with customer storefront, full shopping experience, and admin management.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
