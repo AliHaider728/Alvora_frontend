@@ -1,5 +1,5 @@
-import { getBundleOriginalPrice } from '../../utils/products';
 "use client";
+import { getBundleOriginalPrice } from '../../utils/products';
 
 import React, { useMemo } from "react";
 import Link from "next/link";
