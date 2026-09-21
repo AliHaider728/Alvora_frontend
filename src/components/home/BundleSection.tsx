@@ -99,15 +99,9 @@ export const BundleSection: React.FC = () => {
         return (
           <div key={bundle.id} className={`grid grid-cols-1 md:grid-cols-2 w-full min-h-[500px]`}>
             {/* Image Side */}
-            <div className={`w-full aspect-square ${imageBgClass} relative overflow-hidden ${isReverse ? "md:order-2" : "md:order-1"}`}>
+            <div className={`w-full ${imageBgClass} relative overflow-hidden flex items-center justify-center ${isReverse ? "md:order-2" : "md:order-1"}`}>
                             {displayImage ? (
-                <Image 
-                  src={displayImage} 
-                  alt={bundle.name} 
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover object-center"
-                />
+                <img src={displayImage} alt={bundle.name} className="w-full h-auto object-contain object-center" />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center space-y-3 opacity-60">
