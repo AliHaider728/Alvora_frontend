@@ -59,10 +59,10 @@ export const AboutPageClient: React.FC = () => {
 
       {/* SECTION 2: OUR STORY */}
       <section className="py-24 md:py-32 px-6 lg:px-12 max-w-[1440px] mx-auto">
-        <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 items-center">
+        <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 items-stretch">
           
           <motion.div 
-            className="w-full lg:w-1/2"
+            className="w-full lg:w-1/2 flex flex-col justify-center"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
@@ -99,13 +99,13 @@ export const AboutPageClient: React.FC = () => {
           </motion.div>
           
           <motion.div 
-            className="w-full lg:w-1/2 relative"
+            className="w-full lg:w-1/2 relative min-h-[400px] md:min-h-[500px] lg:min-h-0"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeInUp}
           >
-            <div className="relative aspect-[4/5] md:aspect-square lg:aspect-[4/5] w-full rounded-2xl overflow-hidden shadow-xl">
+            <div className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden shadow-xl">
               <Image 
                 src="/images/cta-lifestyle.webp" 
                 alt="Model with glowing skin" 
