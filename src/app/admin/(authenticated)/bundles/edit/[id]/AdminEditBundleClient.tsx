@@ -117,7 +117,7 @@ export default function AdminEditBundleClient({ bundleId }: { bundleId: string }
   }, [products, searchTerm, selectedProducts]);
 
   const originalTotal = useMemo(() => {
-    return selectedProducts.reduce((sum, sp) => sum + ((sp.product.price || 0) * sp.qty), 0);
+    return selectedProducts.reduce((sum, sp) => sum + ((sp.product.originalPrice || sp.product.price || 0) * sp.qty), 0);
   }, [selectedProducts]);
 
   const currentSaleTotal = useMemo(() => {
@@ -213,6 +213,12 @@ export default function AdminEditBundleClient({ bundleId }: { bundleId: string }
     }
 
     // Price logic warning
+    if (finalPrice >= originalTotal) {
+      setSaveError("The bundle selling price (" + formatPrice(finalPrice) + ") must be less than the combined original price (" + formatPrice(originalTotal) + ") to show a valid discount.");
+      window.scrollTo(0,0);
+      return;
+    }
+
     if (finalPrice > currentSaleTotal) {
       const confirm = window.confirm("The final bundle price is higher than buying the items individually on sale. Proceed anyway?");
       if (!confirm) return;

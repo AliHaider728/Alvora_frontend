@@ -183,6 +183,12 @@ export default function AdminCreateBundleClient() {
     }
 
     // Price logic warning
+    if (finalPrice >= currentOriginalTotal) {
+      setSaveError("The bundle selling price (" + formatPrice(finalPrice) + ") must be less than the combined original price (" + formatPrice(currentOriginalTotal) + ") to show a valid discount.");
+      window.scrollTo(0,0);
+      return;
+    }
+
     if (finalPrice > currentSaleTotal) {
       const confirm = window.confirm("The final bundle price is higher than buying the items individually on sale. Proceed anyway?");
       if (!confirm) return;
