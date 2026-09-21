@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
@@ -23,15 +23,15 @@ export const AboutPageClient: React.FC = () => {
       
       {/* SECTION 1: HERO */}
       <section className="relative w-full h-[80vh] min-h-[600px] flex items-center justify-center overflow-hidden bg-[#F9F4F0]">
-        <div className="absolute inset-0 z-0 opacity-60 mix-blend-multiply">
+        <div className="absolute inset-0 z-0 opacity-100">
           <Image 
-            src="/images/Alvora_hero_background.avif" 
+            src="/images/about-hero.png" 
             alt="Alvora Hero Background" 
             fill 
-            className="object-cover object-center"
+            className="object-cover object-[80%_center] md:object-right xl:object-center"
             priority 
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#FAF6F2] via-[#FAF6F2]/80 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#FAF6F2]/80 via-[#FAF6F2]/40 to-transparent md:from-transparent md:via-transparent md:to-transparent" />
         </div>
         
         <motion.div 
@@ -251,5 +251,7 @@ export const AboutPageClient: React.FC = () => {
     </div>
   );
 };
+
+
 
 
