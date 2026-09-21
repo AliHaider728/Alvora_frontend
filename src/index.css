@@ -615,3 +615,16 @@ input[type="checkbox"]:focus-visible {
   100% { transform: rotate(0); }
 }
 
+
+@keyframes marquee-4 {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-25%); }
+}
+.animate-marquee-4 {
+  animation: marquee-4 25s linear infinite;
+  display: flex;
+  width: max-content;
+}
+.animate-marquee-4:hover {
+  animation-play-state: paused;
+}

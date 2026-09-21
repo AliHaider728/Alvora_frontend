@@ -138,12 +138,19 @@ export const Header: React.FC = () => {
       >
         {/* SHIPPING BAR */}
         {!searchOpen && (
-          <div className="flex min-h-8 items-center justify-center bg-gradient-to-r from-[#D4784F] via-[#9C4122] to-[#D4784F] px-4 text-center text-[11px] font-medium uppercase tracking-[0.14em] text-white sm:min-h-8.5 sm:text-xs">
-            FREE SHIPPING ON ORDERS OVER {settings?.freeShippingThreshold ? formatPrice(settings.freeShippingThreshold, settings.currency) : 'RS. 5,000'}
-            <span className="mx-2 opacity-60">•</span>
-            30-DAY RETURNS
-            <span className="mx-2 hidden opacity-60 sm:inline">•</span>
-            <span className="hidden sm:inline">SAMPLES WITH EVERY ORDER</span>
+          <div className="flex min-h-8 sm:min-h-8.5 items-center bg-gradient-to-r from-[#D4784F] via-[#9C4122] to-[#D4784F] overflow-hidden text-[11px] font-medium uppercase tracking-[0.14em] text-white sm:text-xs">
+            <div className="animate-marquee-4 cursor-default">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="flex items-center whitespace-nowrap px-4">
+                  FREE SHIPPING ON ORDERS OVER {settings?.freeShippingThreshold ? formatPrice(settings.freeShippingThreshold, settings.currency) : 'RS. 5,000'}
+                  <span className="mx-4 sm:mx-6 opacity-60">•</span>
+                  7-DAY RETURNS
+                  <span className="mx-4 sm:mx-6 opacity-60">•</span>
+                  CASH ON DELIVERY AVAILABLE
+                  <span className="mx-4 sm:mx-6 opacity-60">•</span>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
