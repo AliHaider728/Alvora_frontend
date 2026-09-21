@@ -54,10 +54,10 @@ export default function BuildBundlePage() {
   };
 
   return (
-    <div className="bg-[#FAF6F2] min-h-screen pb-16">
+    <div className="bg-gradient-to-b from-[#FAF6F2] to-white min-h-screen pb-16">
       
       {/* Hero Banner */}
-      <section className="relative w-full h-[450px] md:h-[500px] flex flex-col items-center justify-center overflow-hidden bg-[#E7D6CE]">
+      <section className="relative w-full h-[450px] md:h-[500px] flex flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-[#FAF6F2] to-white">
         {/* Abstract shapes / Image placeholder */}
         <div className="absolute inset-0 opacity-40 mix-blend-multiply">
            <Image src="/images/hero/alvora-hero.png" alt="Build Your Routine Background" fill className="object-cover object-top" priority />
@@ -68,26 +68,7 @@ export default function BuildBundlePage() {
           <h1 className="font-display text-4xl md:text-5xl lg:text-[64px] text-[#1A1A1A] mb-4">Build Your Routine</h1>
           <p className="text-[#1A1A1A]/80 text-base md:text-lg max-w-xl mx-auto mb-10">Choose 2+ essentials and save 15% on your routine.</p>
           
-          {/* Progress Bar Badge */}
-          <div className="inline-flex items-center bg-white/60 backdrop-blur-md border border-white/40 rounded-full p-1.5 shadow-sm">
-            <div className="flex items-center px-4 py-2 bg-white rounded-full text-xs font-bold text-[#1A1A1A] shadow-sm">
-              {distinctCount > 0 ? (
-                <div className="w-4 h-4 md:w-5 md:h-5 bg-[#C48B80] rounded-full text-white flex items-center justify-center mr-2 shadow-inner">
-                  <Check className="w-2.5 h-2.5 md:w-3 md:h-3" />
-                </div>
-              ) : (
-                <div className="w-4 h-4 md:w-5 md:h-5 border-2 border-gray-300 rounded-full mr-2" />
-              )}
-              {distinctCount} of {MIN_PRODUCTS} items selected
-            </div>
-            <div className="px-5 py-2 text-xs font-bold text-[#1A1A1A]">
-              {distinctCount >= MIN_PRODUCTS ? (
-                <span className="text-[#C48B80]">15% Discount Unlocked!</span>
-              ) : (
-                <span>Add {MIN_PRODUCTS - distinctCount} more to unlock 15%</span>
-              )}
-            </div>
-          </div>
+          
         </div>
       </section>
 
@@ -102,10 +83,7 @@ export default function BuildBundlePage() {
                 <span className="text-[10px] font-bold tracking-[0.2em] text-[#C48B80] uppercase mb-2 block">Our Skincare Essentials</span>
                 <h2 className="font-display text-2xl md:text-3xl text-[#1A1A1A]">Clean ingredients. Real results.</h2>
               </div>
-              <div className="flex items-center gap-2 bg-white px-4 py-2.5 rounded-full border border-[#EDE5DC] shadow-sm self-start sm:self-auto cursor-pointer">
-                <span className="text-[11px] font-bold text-[#1A1A1A]/70 uppercase tracking-wider">Sort by</span>
-                <ChevronDown className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
-              </div>
+              
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
@@ -116,7 +94,7 @@ export default function BuildBundlePage() {
                 return (
                   <div 
                     key={product.id}
-                    className={`relative flex flex-col bg-white rounded-[24px] p-2.5 pb-4 transition-all duration-300 ${selectedQty > 0 ? 'border-[1.5px] border-[#C48B80] shadow-md ring-2 ring-[#C48B80]/10' : 'border border-[#EDE5DC] shadow-sm hover:shadow-md hover:-translate-y-0.5'}`}
+                    className={`relative flex flex-col bg-white rounded-[24px] p-2.5 pb-4 transition-all duration-300 ${selectedQty > 0 ? 'border-2 border-[#C48B80] shadow-md rounded-[24px] overflow-hidden' : 'border border-[#EDE5DC] shadow-sm hover:shadow-md hover:-translate-y-0.5 rounded-[24px] overflow-hidden'}`}
                   >
                     <button className="absolute top-4 right-4 z-20 w-7 h-7 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-[#1A1A1A]/40 hover:text-[#C48B80] shadow-sm transition-colors border border-gray-100">
                       <Heart className="w-3.5 h-3.5" />
@@ -150,7 +128,7 @@ export default function BuildBundlePage() {
                       
                       <div className="mt-auto h-9">
                         {selectedQty > 0 ? (
-                          <div className="flex items-center justify-between bg-[#FAF6F2] border border-[#E7D9D0] rounded-full h-full px-1">
+                          <div className="flex items-center justify-between bg-[#FDFDFD] border border-[#E7D9D0] rounded-full h-full px-1">
                             <button 
                               onClick={() => handleRemoveProduct(product)}
                               className="w-7 h-7 flex items-center justify-center text-[#C48B80] bg-white rounded-full shadow-sm hover:bg-[#C48B80] hover:text-white transition-colors"
@@ -168,7 +146,7 @@ export default function BuildBundlePage() {
                         ) : (
                           <button 
                             onClick={() => handleAddProduct(product)}
-                            className="w-full h-full flex items-center justify-center gap-2 bg-[#FAF6F2] hover:bg-[#F5EDE4] text-[#1A1A1A] text-[10px] font-bold tracking-widest uppercase rounded-full transition-colors border border-[#EDE5DC]"
+                            className="w-full h-full flex items-center justify-center gap-2 bg-[#FDFDFD] hover:bg-[#F5EDE4] text-[#1A1A1A] text-[10px] font-bold tracking-widest uppercase rounded-full transition-colors border border-[#EDE5DC]"
                           >
                             <ShoppingCart className="w-3 h-3" />
                             Add to Routine
@@ -187,7 +165,7 @@ export default function BuildBundlePage() {
             <div className="sticky top-28 bg-[#FDFDFD] border border-[#EDE5DC] p-6 rounded-[32px] shadow-[0_8px_40px_rgb(0,0,0,0.06)]">
               
               {/* Unlocked Banner */}
-              <div className={`flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl mb-6 text-[10px] md:text-[11px] font-bold tracking-wide uppercase transition-colors ${distinctCount >= MIN_PRODUCTS ? 'bg-[#FAF6F2] text-[#C48B80] border border-[#F1C9BD]' : 'bg-gray-50 text-gray-400 border border-gray-100'}`}>
+              <div className={`flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl mb-6 text-[10px] md:text-[11px] font-bold tracking-wide uppercase transition-colors ${distinctCount >= MIN_PRODUCTS ? 'bg-[#FDFDFD] text-[#C48B80] border border-[#F1C9BD]' : 'bg-gray-50 text-gray-400 border border-gray-100'}`}>
                 {distinctCount >= MIN_PRODUCTS ? (
                   <>
                     <div className="w-4 h-4 bg-[#C48B80] rounded-full text-white flex items-center justify-center"><Check className="w-2.5 h-2.5" /></div>
@@ -276,7 +254,7 @@ export default function BuildBundlePage() {
         </div>
 
         {/* Value Props Bar */}
-        <div className="border-t border-[#EDE5DC] py-10 mt-20 flex flex-wrap justify-between gap-6 px-4 md:px-12 bg-[#FAF6F2]">
+        <div className="border-t border-[#EDE5DC] py-10 mt-20 flex flex-wrap justify-between gap-6 px-4 md:px-12 bg-[#FDFDFD]">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full border border-[#C48B80] text-[#C48B80] flex items-center justify-center bg-white shadow-sm">
               <Leaf className="w-4 h-4" />
@@ -319,7 +297,7 @@ export default function BuildBundlePage() {
         </div>
 
         {/* Footer Banner */}
-        <div className="text-center py-16 bg-[#E7D6CE] rounded-[32px] mx-2 mt-12 relative overflow-hidden border border-white/40 shadow-inner">
+        <div className="text-center py-16 bg-gradient-to-b from-[#FAF6F2] to-white rounded-[32px] mx-2 mt-12 relative overflow-hidden border border-white/40 shadow-inner">
           <p className="text-[10px] font-bold tracking-[0.2em] text-[#C48B80] uppercase mb-3 relative z-10 block bg-white/70 backdrop-blur-sm px-4 py-1.5 rounded-full w-max mx-auto">ALVORA</p>
           <h2 className="font-display text-2xl md:text-3xl text-[#1A1A1A] mb-3 relative z-10">Your Skin Deserves the Best</h2>
           <p className="text-[13px] text-[#1A1A1A]/70 relative z-10 max-w-sm mx-auto font-medium">Build a routine that works for your unique skin ï¿½ and save while you do.</p>
@@ -329,4 +307,6 @@ export default function BuildBundlePage() {
     </div>
   );
 }
+
+
 
