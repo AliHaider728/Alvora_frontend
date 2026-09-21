@@ -211,3 +211,25 @@ export const getVariationDisplayLabel = (
   // 8. Variation ${index + 1}
   return `Variation ${index + 1}`;
 };
+export function getBundleOriginalPrice(bundle: any): number {
+  if (!bundle) return 0;
+  
+  const current = Number(bundle.currentPrice || 0);
+  let original = Number(bundle.originalTotalPrice || 0);
+
+  // If original is same as current or less, try calculating from products
+  if (original <= current && bundle.products && Array.isArray(bundle.products)) {
+    const sum = bundle.products.reduce((total: number, p: any) => {
+      const price = Number(p.price || p.product?.price || 0);
+      const qty = Number(p.bundle_quantity || p.quantity || 1);
+      return total + (price * qty);
+    }, 0);
+    
+    if (sum > current) {
+      original = sum;
+    }
+  }
+
+  // If still less than or equal to current, return current (or 0) so we can hide strikethrough easily
+  return original > current ? original : current;
+}

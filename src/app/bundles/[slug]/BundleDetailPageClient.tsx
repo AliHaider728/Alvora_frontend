@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { Star, Plus, Minus, Info, BadgeCheck, Check, ShoppingCart, MessageSquarePlus } from 'lucide-react';
 import { useStore } from '../../../context/StoreContext';
 import { formatPrice } from '../../../utils/formatters';
+import { getBundleOriginalPrice } from '../../../utils/products';
 import { ReviewSummary } from '../../../components/common/ReviewSummary';
 import { AlvoraProductCard } from '../../../components/common/AlvoraProductCard';
 import { ReviewModal } from '../../../components/common/ReviewModal';
@@ -34,7 +35,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
       name: b.name,
       slug: b.slug,
       price: b.currentPrice || 0,
-      originalPrice: b.originalTotalPrice || 0,
+      originalPrice: getBundleOriginalPrice(b),
       images: bundleImg ? [bundleImg] : [],
       inStock: true,
       category: 'Bundles',
@@ -129,8 +130,8 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
               
               <motion.div variants={staggerVariants} className="flex items-center gap-4 mb-8">
                 <span className="text-3xl font-medium text-[#9C4122]">{formatPrice(bundle.currentPrice || 0)}</span>
-                {(bundle.originalTotalPrice || 0) > (bundle.currentPrice || 0) && (
-                  <span className="text-xl text-[#1A1A1A]/40 line-through">{formatPrice(bundle.originalTotalPrice || 0)}</span>
+                {getBundleOriginalPrice(bundle) > (bundle.currentPrice || 0) && (
+                  <span className="text-xl text-[#1A1A1A]/40 line-through">{formatPrice(getBundleOriginalPrice(bundle))}</span>
                 )}
               </motion.div>
 
@@ -170,7 +171,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
               <div className="space-y-4 text-sm">
                 <div className="flex justify-between text-[#1A1A1A]/70">
                   <span>Buying Separately:</span>
-                  <span className="line-through">{formatPrice(bundle.originalTotalPrice || 0)}</span>
+                  <span className="line-through">{formatPrice(getBundleOriginalPrice(bundle))}</span>
                 </div>
                 <div className="flex justify-between font-bold text-[#1A1A1A] text-base border-t border-gray-100 pt-4">
                   <span>Bundle Price:</span>
@@ -178,7 +179,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
                 </div>
                 <div className="flex justify-between text-[#9C4122] font-bold bg-[#FAF6F2] p-3 rounded-xl mt-4">
                   <span>You Save:</span>
-                  <span>{formatPrice((bundle.originalTotalPrice || 0) - (bundle.currentPrice || 0))}</span>
+                  <span>{formatPrice(getBundleOriginalPrice(bundle) - (bundle.currentPrice || 0))}</span>
                 </div>
               </div>
             </motion.div>

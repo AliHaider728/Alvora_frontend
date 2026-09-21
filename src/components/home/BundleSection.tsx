@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useStore } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/formatters';
+import { getBundleOriginalPrice } from '../../utils/products';
 import { Product, Bundle } from '../../types';
 import { AnimatedButton } from '../common/AnimatedButton';
 
@@ -32,7 +33,7 @@ export const BundleSection: React.FC = () => {
         name: bundle.name,
         slug: bundle.slug,
         price: bundle.currentPrice || 0,
-        originalPrice: bundle.originalTotalPrice || 0,
+        originalPrice: getBundleOriginalPrice(bundle),
         images: displayImage ? [displayImage] : [],
         inStock: true,
         category: 'Bundles',
@@ -159,7 +160,9 @@ export const BundleSection: React.FC = () => {
                 <div className="flex flex-col gap-6">
                   <div className="flex items-end gap-3">
                     <span className="text-2xl font-medium text-[#9C4122]">{formatPrice(bundle.currentPrice || 0)}</span>
-                    <span className="text-base text-[#1A1A1A]/40 line-through pb-0.5">{formatPrice(bundle.originalTotalPrice || 0)}</span>
+                    {getBundleOriginalPrice(bundle) > (bundle.currentPrice || 0) && (
+                      <span className="text-base text-[#1A1A1A]/40 line-through pb-0.5">{formatPrice(getBundleOriginalPrice(bundle))}</span>
+                    )}
                   </div>
 
                   <div className="flex flex-col sm:flex-row gap-3">

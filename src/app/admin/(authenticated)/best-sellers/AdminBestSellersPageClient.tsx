@@ -5,7 +5,7 @@ import { api } from '../../../../services/api';
 import { Product } from '../../../../types';
 import Image from 'next/image';
 import { ImageIcon, Loader2, ImagePlus, Trash2 } from 'lucide-react';
-import { useToast } from '../../../../context/ToastContext';
+import { useToast } from '../../../../context/ToastContext';a
 
 export const AdminBestSellersPageClient: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -258,7 +258,7 @@ export const AdminBestSellersPageClient: React.FC = () => {
             return (
               <div key={bundle.id} className="bg-white border border-[#E7D9D0] rounded-2xl p-5 flex flex-col shadow-sm">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="h-10 w-10 shrink-0 bg-[#FAF6F2] rounded-lg overflow-hidden border">
+                  <div className="h-10 w-10 shrink-0 bg-alvora-ivory rounded-lg overflow-hidden border">
                     {bundle.image && <Image src={bundle.image} alt="" width={40} height={40} className="object-cover w-full h-full" />}
                   </div>
                   <div className="flex-1 min-w-0">

@@ -21,7 +21,7 @@ export default function BestSellersClient() {
     name: b.name,
     slug: b.slug,
     price: b.currentPrice || 0,
-    originalPrice: b.originalTotalPrice || 0,
+    originalPrice: getBundleOriginalPrice(b),
     images: b.customImage ? [b.customImage] : (b.image ? [b.image] : []),
     inStock: true,
     category: 'Bundles',
