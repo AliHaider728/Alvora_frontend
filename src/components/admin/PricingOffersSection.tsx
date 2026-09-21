@@ -1,7 +1,8 @@
-﻿"use client";
+"use client";
 import React from 'react';
 import { Plus, Trash2, Tag, Gift, BadgePercent } from 'lucide-react';
 import { PricingOffers, QuantityBreakTier } from '../../../types';
+import { Toggle } from '../ui/Toggle';
 
 // Re-use the same fieldClassName constant pattern from AdminProductFormPageClient
 const fieldCls =
@@ -9,43 +10,6 @@ const fieldCls =
 
 const smallFieldCls =
   'w-full rounded-xl border border-[#E7D9D0] bg-white px-2.5 py-2 text-sm text-[#1A1A1A] outline-none transition focus:border-[#C48B80] focus:ring-2 focus:ring-rose-100';
-
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// Toggle — matches the style used elsewhere in the admin panel
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-const Toggle: React.FC<{
-  checked: boolean;
-  onChange: (next: boolean) => void;
-  label: string;
-  description?: string;
-}> = ({ checked, onChange, label, description }) => (
-  <label className="flex cursor-pointer items-start gap-3">
-    <div className="relative mt-0.5 shrink-0">
-      <input
-        type="checkbox"
-        className="sr-only"
-        checked={checked}
-        onChange={e => onChange(e.target.checked)}
-      />
-      <div
-        className={`h-5 w-9 rounded-full transition-colors duration-200 ${
-          checked ? 'bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm' : 'bg-slate-200'
-        }`}
-      />
-      <div
-        className={`absolute top-0.5 left-0.5 h-4 w-4 rounded-full bg-white shadow transition-transform duration-200 ${
-          checked ? 'translate-x-4' : 'translate-x-0'
-        }`}
-      />
-    </div>
-    <div>
-      <span className="text-sm font-bold text-[#1A1A1A]">{label}</span>
-      {description && (
-        <p className="mt-0.5 text-xs text-[#1A1A1A]/50">{description}</p>
-      )}
-    </div>
-  </label>
-);
 
 // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Helpers

@@ -177,7 +177,7 @@ export const AdminBestSellersPageClient: React.FC = () => {
             return (
               <div key={product.id} className="bg-white border border-[#E7D9D0] rounded-2xl p-5 flex flex-col shadow-sm">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="h-10 w-10 shrink-0 bg-[#FAF6F2] rounded-lg overflow-hidden border">
+                  <div className="h-10 w-10 shrink-0 bg-alvora-ivory rounded-lg overflow-hidden border">
                     {product.images?.[0] && <Image src={product.images[0]} alt="" width={40} height={40} className="object-cover w-full h-full" />}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -216,7 +216,7 @@ export const AdminBestSellersPageClient: React.FC = () => {
                   )}
 
                   {/* Actions overlay */}
-                  <div className={`absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/60 to-transparent flex gap-2 transition-opacity ${hasOverride ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+                  <div className={`absolute inset-x-0 bottom-0 p-3 bg-linear-to-t from-black/60 to-transparent flex gap-2 transition-opacity ${hasOverride ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
                     <label className="flex-1 flex items-center justify-center gap-2 cursor-pointer bg-white text-gray-900 text-xs font-bold py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors">
                       <ImagePlus className="w-4 h-4" />
                       {hasOverride ? 'Replace' : 'Upload Override'}
@@ -302,7 +302,7 @@ export const AdminBestSellersPageClient: React.FC = () => {
                   )}
 
                   {/* Actions overlay */}
-                  <div className={`absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/60 to-transparent flex gap-2 transition-opacity ${hasOverride ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+                  <div className={`absolute inset-x-0 bottom-0 p-3 bg-linear-to-t from-black/60 to-transparent flex gap-2 transition-opacity ${hasOverride ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
                     <label className="flex-1 flex items-center justify-center gap-2 cursor-pointer bg-white text-gray-900 text-xs font-bold py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors">
                       <ImagePlus className="w-4 h-4" />
                       {hasOverride ? 'Replace' : 'Upload Override'}
