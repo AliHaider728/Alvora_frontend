@@ -24,7 +24,7 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
     <div className="group relative bg-white rounded-2xl flex flex-col h-full border border-[#EDE5DC] hover:shadow-md transition-shadow duration-300">
       {/* Image Container */}
       <div className="relative aspect-square bg-[#F5EDE4] overflow-hidden block rounded-t-2xl">
-        <Link href={`/product/${product.slug}`} className="absolute inset-0 z-0">
+        <Link href={productUrl} className="absolute inset-0 z-0">
           <Image
             src={getSafeImageSrc(product.images[0])}
             alt={product.name}
@@ -76,7 +76,7 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
             <ShoppingCart className="w-4 h-4" />
           </button>
           <Link 
-            href={`/product/${product.slug}`}
+            href={productUrl}
             className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-gray-700 hover:text-[#9C4122] shadow-sm transition-colors" 
             title="View Details"
           >
@@ -87,7 +87,7 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
 
       {/* Content Container */}
       <div className="p-4 flex flex-col flex-grow text-left">
-        <Link href={`/product/${product.slug}`} className="flex flex-col flex-grow">
+        <Link href={productUrl} className="flex flex-col flex-grow">
           <h3 className="font-display font-medium text-sm sm:text-base text-[#1A1A1A] leading-tight mb-1 group-hover:text-[#9C4122] transition-colors">
             {product.name}
           </h3>
@@ -124,7 +124,7 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
           {layout === 'compact' && (
             <div className="flex sm:hidden w-full gap-2">
               <Link 
-                href={`/product/${product.slug}`}
+                href={productUrl}
                 className="flex-1 h-10 flex items-center justify-center rounded-xl bg-[#fec195] text-[#181818] shadow-sm transition-transform hover:scale-105"
                 title="View Details"
               >
@@ -145,7 +145,7 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
           <div className={`w-full gap-2 ${layout === 'compact' ? 'hidden sm:flex' : 'flex'}`}>
             {needsSelection ? (
               <AnimatedButton
-                href={`/product/${product.slug}`}
+                href={productUrl}
                 size="full"
                 variant="primary"
                 className="flex-1 shrink-0"
@@ -155,7 +155,7 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
               </AnimatedButton>
             ) : product.inStock ? (
               <AnimatedButton
-                href={`/product/${product.slug}`}
+                href={productUrl}
                 size="full"
                 variant="primary"
                 className="flex-1 shrink-0"

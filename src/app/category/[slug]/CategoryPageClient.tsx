@@ -39,7 +39,7 @@ export const CategoryPageClient: React.FC = () => {
       router.push(pathname + query, { scroll: false });
     }
   };
-  const { products, categories, productsLoading } = useStore();
+  const { products, bundles, categories, productsLoading } = useStore();
 
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   
@@ -122,8 +122,39 @@ export const CategoryPageClient: React.FC = () => {
     : undefined;
 
   // Filter Logic
+  const allItems = useMemo(() => {
+    const bundleProducts = (bundles || []).map(b => {
+      const displayImage = b.image || b.customImage || (b.products && b.products.length > 0 && (b.products[0].product?.images?.[0] || b.products[0].images?.[0] || null));
+      return {
+        id: b.id,
+        productType: 'bundle',
+        bundleData: b,
+        name: b.name,
+        slug: b.slug,
+        price: b.currentPrice || 0,
+        originalPrice: b.products?.reduce((sum, p) => sum + (p.product?.price || p.price || 0), 0) || 0,
+        images: displayImage ? [displayImage] : [],
+        inStock: true,
+        category: 'Bundles',
+        categorySlug: 'bundles',
+        categorySlugs: ['bundles', 'all'],
+        sku: 'BUNDLE-' + b.id,
+        rating: b.rating || 5,
+        reviewCount: b.reviewCount || 0,
+        tags: [],
+        features: [],
+        safetyInfo: '',
+        specifications: {},
+        ageGroups: [],
+        isVisibleOnStorefront: true,
+        status: 'active'
+      };
+    });
+    return [...products, ...(bundleProducts as any)];
+  }, [products, bundles]);
+
   const filteredProducts = useMemo(() => {
-    return products.filter(p => {
+    return allItems.filter(p => {
       if (!isProductVisibleOnStorefront(p)) return false;
       // Category match
       const productCategorySlugs = p.categorySlugs?.length ? p.categorySlugs : p.categorySlug ? [p.categorySlug] : [];
@@ -145,7 +176,7 @@ export const CategoryPageClient: React.FC = () => {
       }
       return true;
     });
-  }, [products, selectedCategories, selectedAges, priceRange, minRating]);
+  }, [allItems, selectedCategories, selectedAges, priceRange, minRating]);
 
   // Sort Logic
   const sortedProducts = useMemo(() => {
