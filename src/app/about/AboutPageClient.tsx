@@ -175,7 +175,7 @@ export const AboutPageClient: React.FC = () => {
       </section>
 
       {/* SECTION 4: OUR VALUES */}
-      <section className="py-24 md:py-32 px-6 lg:px-12 max-w-6xl mx-auto text-center border-t border-[#E7D9D0]">
+      <section className="py-24 md:py-32 px-6 lg:px-12 max-w-[1440px] mx-auto text-center border-t border-[#E7D9D0]">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -214,7 +214,7 @@ export const AboutPageClient: React.FC = () => {
       </section>
 
       {/* SECTION 5: FOUNDER'S NOTE */}
-      <section className="pb-24 px-4 sm:px-6 lg:px-12 max-w-6xl mx-auto">
+      <section className="pb-24 px-4 sm:px-6 lg:px-12 max-w-[1440px] mx-auto">
         <motion.div 
           className="relative w-full rounded-[32px] overflow-hidden bg-gradient-to-br from-[#F5EDE4] to-[#F1C9BD]/40 p-10 md:p-16 border border-white/60 shadow-sm"
           initial="hidden"
@@ -251,3 +251,5 @@ export const AboutPageClient: React.FC = () => {
     </div>
   );
 };
+
+
