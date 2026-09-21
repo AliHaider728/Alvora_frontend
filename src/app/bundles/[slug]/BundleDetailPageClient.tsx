@@ -198,12 +198,12 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
                   transition={{ delay: idx * 0.1 }}
                 >
                   <div className="w-24 h-24 shrink-0 rounded-xl overflow-hidden relative bg-[#FAF6F2]">
-                    <Image src={prod.images?.[0] || '/images/hero/alvora-hero.png'} alt={prod.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <Image src={prod.product?.images?.[0] || prod.images?.[0] || '/images/hero/alvora-hero.png'} alt={prod.product?.name || prod.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
                   </div>
                   <div className="flex flex-col justify-center">
                     <span className="text-[10px] uppercase tracking-widest text-[#1A1A1A]/50 font-bold mb-1">Full Size</span>
-                    <h4 className="font-display text-lg text-[#1A1A1A] mb-1">{prod.name}</h4>
-                    <span className="text-sm font-medium text-[#9C4122]">{formatPrice(prod.price)}</span>
+                    <h4 className="font-display text-lg text-[#1A1A1A] mb-1">{prod.product?.name || prod.name}</h4>
+                    <span className="text-sm font-medium text-[#9C4122]">{(prod.product?.price || prod.price) ? formatPrice(prod.product?.price || prod.price) : "Included"}</span>
                   </div>
                 </motion.div>
               ))}
@@ -237,10 +237,10 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
                   <div className="hidden md:block absolute top-6 left-[60%] w-[80%] h-px bg-[#E7D9D0] -z-10" />
                 )}
                 <div className="w-32 h-32 rounded-full overflow-hidden relative mb-6 border-4 border-white shadow-sm">
-                  <Image src={prod.images?.[0] || '/images/hero/alvora-hero.png'} alt={prod.name} fill className="object-cover" />
+                  <Image src={prod.product?.images?.[0] || prod.images?.[0] || '/images/hero/alvora-hero.png'} alt={prod.product?.name || prod.name} fill className="object-cover" />
                 </div>
-                <h4 className="font-bold text-[#1A1A1A] mb-2">{prod.name}</h4>
-                <p className="text-sm text-[#1A1A1A]/70">{prod.shortDescription || 'Apply evenly to clean skin.'}</p>
+                <h4 className="font-bold text-[#1A1A1A] mb-2">{prod.product?.name || prod.name}</h4>
+                <p className="text-sm text-[#1A1A1A]/70">{prod.product?.shortDescription || prod.shortDescription || 'Apply evenly to clean skin.'}</p>
               </motion.div>
             ))}
           </div>

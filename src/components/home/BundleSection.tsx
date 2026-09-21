@@ -93,7 +93,7 @@ export const BundleSection: React.FC = () => {
         const bgClass = isReverse ? 'bg-[#FAF6F2]' : 'bg-white';
         const imageBgClass = isReverse ? 'bg-[#1A1A1A]' : 'bg-[#F1C9BD]';
 
-        const displayImage = bundle.image || bundle.customImage || (bundle.products && bundle.products.length > 0 && bundle.products[0].images ? bundle.products[0].images[0] : null);
+        const displayImage = bundle.image || bundle.customImage || (bundle.products && bundle.products.length > 0 && (bundle.products[0].product?.images?.[0] || bundle.products[0].images?.[0] || null));
         const discountValue = Number(bundle.discountPercent) || 0;
 
         return (
@@ -148,9 +148,9 @@ export const BundleSection: React.FC = () => {
                   <h4 className="text-[10px] uppercase tracking-widest font-bold text-[#1A1A1A] mb-3">Includes:</h4>
                   <ul className="space-y-2">
                     {bundle.products?.map(p => (
-                      <li key={p.id} className="text-[#1A1A1A]/70 text-sm flex items-center">
+                      <li key={p.id || p.product_id || p.product?.id || Math.random()} className="text-[#1A1A1A]/70 text-sm flex items-center">
                         <span className="w-1 h-1 rounded-full bg-[#9C4122] mr-3"></span>
-                        {p.name}
+                          {p.product?.name || p.name}
                       </li>
                     ))}
                   </ul>
