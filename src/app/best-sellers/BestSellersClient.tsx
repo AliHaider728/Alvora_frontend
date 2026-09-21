@@ -6,6 +6,7 @@ import { RitualAnimation } from '../../components/shop/RitualAnimation';
 import { ScrollRevealText } from '../../components/common/ScrollRevealText';
 import { AlvoraProductCard } from '../../components/common/AlvoraProductCard';
 import { Bundle, Product } from '../../types';
+import { getBundleOriginalPrice } from '../../utils/products';
 
 export default function BestSellersClient() {
   const { bundles } = useStore();

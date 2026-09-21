@@ -309,7 +309,7 @@ export interface OrderItem {
   image: string;
   selectedVariant?: string; // Legacy
   variationId?: string;
-  productType?: 'simple' | 'variable';
+  productType?: 'simple' | 'variable' | 'bundle';
   sku?: string;
   selectedAttributes?: Record<string, string>;
 }

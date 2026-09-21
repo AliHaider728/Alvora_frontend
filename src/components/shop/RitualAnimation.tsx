@@ -1,3 +1,4 @@
+import { getBundleOriginalPrice } from '../../utils/products';
 "use client";
 
 import React, { useMemo } from "react";
