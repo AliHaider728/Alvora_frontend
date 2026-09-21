@@ -172,7 +172,7 @@ export const AdminBestSellersPageClient: React.FC = () => {
             const overrideImage = product.tags?.find(t => t.startsWith('bestseller_image:'))?.split('bestseller_image:')[1];
             const hasOverride = !!overrideImage;
             const displayUrl = overrideImage || (product.images && product.images[0]) || '';
-            const isUploading = uploadingId === product.id;
+            const isUploading = uploadingId === product.id; 
 
             return (
               <div key={product.id} className="bg-white border border-[#E7D9D0] rounded-2xl p-5 flex flex-col shadow-sm">
