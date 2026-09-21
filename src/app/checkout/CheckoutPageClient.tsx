@@ -46,6 +46,7 @@ export const CheckoutPageClient: React.FC = () => {
     cartSubtotal,
     appliedCoupon,
     couponDiscountAmount,
+    routineDiscountAmount,
     categories,
     settings,
     placeOrder,
@@ -147,7 +148,7 @@ export const CheckoutPageClient: React.FC = () => {
       : 0;
   const shippingFee = Math.max(hasShippingOverride ? highestOverrideFee : 0, defaultShippingFee);
   const taxFee = Math.round(cartSubtotal * settings.taxRate);
-  const finalTotal = Math.max(0, cartSubtotal - couponDiscountAmount + shippingFee + taxFee);
+  const finalTotal = Math.max(0, cartSubtotal - couponDiscountAmount - routineDiscountAmount + shippingFee + taxFee);
 
   const handleShippingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -232,12 +233,13 @@ export const CheckoutPageClient: React.FC = () => {
           selectedVariant: item.selectedVariant,
           variationId: item.variationId,
           productType: item.product.productType || 'simple',
+            isRoutine: item.isRoutine,
           sku: sku,
           selectedAttributes: attributes
         };
       }),
       subtotal: cartSubtotal,
-      discount: couponDiscountAmount,
+      discount: couponDiscountAmount + routineDiscountAmount,
       shipping: shippingFee,
       total: finalTotal,
       status: 'Pending',

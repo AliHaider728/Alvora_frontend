@@ -24,6 +24,7 @@ export const CartDrawer: React.FC = () => {
     applyCoupon,
     removeCoupon,
     couponDiscountAmount,
+    routineDiscountAmount,
     settings
   } = useStore();
 
@@ -46,7 +47,7 @@ export const CartDrawer: React.FC = () => {
     }
   };
 
-  const finalTotal = Math.max(0, cartSubtotal - couponDiscountAmount);
+  const finalTotal = Math.max(0, cartSubtotal - couponDiscountAmount - routineDiscountAmount);
 
   return (
     <div className="fixed inset-0 z-[100] overflow-hidden flex justify-end">
@@ -174,6 +175,7 @@ export const CartDrawer: React.FC = () => {
                       )}
 
                       {item.product.category && item.product.category !== "Uncategorized" && (<span className="text-[10px] text-[#9C4122] font-semibold uppercase block tracking-wider mt-0.5">{item.product.category}</span>)}
+                        {item.isRoutine && (<span className="text-[10px] bg-[#C48B80] text-white px-1.5 py-0.5 rounded uppercase tracking-wider mt-1 inline-block">Routine Item</span>)}
                       
                       {variation && (
                         <div className="mt-1 flex flex-wrap gap-1">

@@ -272,6 +272,8 @@ export interface CartItem {
   freeUnits?: number;
   /** Server-resolved unit price (after QB tier discount). Falls back to product.price if no offer. */
   resolvedUnitPrice?: number;
+    /** Flag indicating this item was added via the Custom Routine builder */
+    isRoutine?: boolean;
 }
 
 export interface WishlistItem {
@@ -468,3 +470,4 @@ export interface AudioReview {
   isActive: boolean;
   createdAt: string;
 }
+

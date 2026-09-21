@@ -13,13 +13,13 @@ export default function BuildBundlePage() {
   // State is now an array of { product, quantity }
   const [selectedItems, setSelectedItems] = useState<{product: Product, quantity: number}[]>([]);
 
-  const MAX_PRODUCTS = 3;
+  const MIN_PRODUCTS = 2;
   const BUNDLE_DISCOUNT = 0.15; // 15% discount
 
   const totalQuantity = selectedItems.reduce((sum, item) => sum + item.quantity, 0);
 
   const handleAddProduct = (product: Product) => {
-    if (totalQuantity >= MAX_PRODUCTS) return;
+    
 
     setSelectedItems(prev => {
       const existing = prev.find(p => p.product.id === product.id);
@@ -44,15 +44,13 @@ export default function BuildBundlePage() {
     });
   };
 
-  const handleAddBundleToCart = () => {
-    if (totalQuantity < MAX_PRODUCTS) return;
+    const handleAddBundleToCart = () => {
+    if (selectedItems.length < MIN_PRODUCTS) return;
 
-    // Add each product to cart with its respective quantity
     selectedItems.forEach(item => {
-      addToCart(item.product, item.quantity);
+      addToCart(item.product, item.quantity, undefined, undefined, { isRoutine: true });
     });
     
-    // Reset and open cart
     setSelectedItems([]);
     setIsCartOpen(true);
   };
@@ -73,7 +71,7 @@ export default function BuildBundlePage() {
               Build Your Routine
             </h1>
             <p className="text-[#241916]/70 max-w-xl mx-auto">
-              Select {MAX_PRODUCTS} items to create your perfect personalized regimen and save 15%.
+              Select at least {MIN_PRODUCTS} items to build your routine and save 15%.
             </p>
           </div>
 
@@ -84,7 +82,7 @@ export default function BuildBundlePage() {
               {products.map(product => {
                 const selectedItem = selectedItems.find(p => p.product.id === product.id);
                 const selectedQty = selectedItem ? selectedItem.quantity : 0;
-                const isFull = totalQuantity >= MAX_PRODUCTS;
+                const isFull = false;
                 const isDisabledForAdd = isFull;
 
                 return (
@@ -158,45 +156,67 @@ export default function BuildBundlePage() {
                 <h3 className="font-display text-2xl text-[#1A1A1A] mb-6">Your Routine</h3>
                 
                 <div className="space-y-4 mb-8">
-                  {[...Array(MAX_PRODUCTS)].map((_, i) => {
-                    const product = flatSelectedProducts[i];
-                    return (
-                      <div key={i} className="flex items-center gap-4 border-b border-gray-100 pb-4 last:border-0 last:pb-0">
-                        <div className="w-16 h-16 bg-[#FAF6F2] relative flex-shrink-0 rounded-lg overflow-hidden border border-gray-100">
-                          {product?.images?.[0] && (
-                            <Image 
-                              src={product.images[0]} 
-                              alt={product.name} 
-                              fill
-                              sizes="64px"
-                              className="object-cover" 
-                            />
-                          )}
-                        </div>
-                        <div className="flex-grow">
-                          {product ? (
-                            <>
-                              <p className="text-sm font-medium text-[#1A1A1A] line-clamp-1">{product.name}</p>
-                              <p className="text-sm text-[#1A1A1A]/60">{formatPrice(product.price)}</p>
-                            </>
-                          ) : (
-                            <p className="text-sm text-[#1A1A1A]/40 italic">Select an item...</p>
-                          )}
-                        </div>
+                  {selectedItems.length === 0 ? (
+                      <div className="flex flex-col items-center justify-center text-center py-8">
+                        <p className="text-sm text-[#1A1A1A]/40 italic">Start building your routine by adding products from the left.</p>
                       </div>
-                    );
-                  })}
+                    ) : (
+                      selectedItems.map((item, i) => (
+                        <div key={i} className="flex items-center gap-4 border-b border-gray-100 pb-4 last:border-0 last:pb-0 relative">
+                          <button 
+                            onClick={() => handleRemoveProduct(item.product)}
+                            className="absolute -top-1 -right-1 w-5 h-5 bg-gray-100 hover:bg-[#C48B80] text-gray-400 hover:text-white rounded-full flex items-center justify-center transition-colors"
+                            aria-label="Remove item"
+                          >
+                            <span className="text-xs font-bold leading-none mb-0.5">&times;</span>
+                          </button>
+                          <div className="w-16 h-16 bg-[#FAF6F2] relative flex-shrink-0 rounded-lg overflow-hidden border border-gray-100">
+                            {item.product?.images?.[0] && (
+                              <Image 
+                                src={item.product.images[0]} 
+                                alt={item.product.name} 
+                                fill
+                                sizes="64px"
+                                className="object-cover" 
+                              />
+                            )}
+                          </div>
+                          <div className="flex-grow flex flex-col gap-1">
+                            <p className="text-sm font-medium text-[#1A1A1A] line-clamp-1 pr-4">{item.product.name}</p>
+                            <div className="flex items-center justify-between">
+                              <p className="text-sm text-[#1A1A1A]/60">{formatPrice(item.product.price)}</p>
+                              
+                              <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden h-7">
+                                <button 
+                                  onClick={() => handleRemoveProduct(item.product)}
+                                  className="w-7 flex items-center justify-center text-gray-500 hover:bg-gray-100"
+                                >
+                                  <Minus className="w-3 h-3" />
+                                </button>
+                                <span className="text-xs font-medium w-6 text-center">{item.quantity}</span>
+                                <button 
+                                  onClick={() => handleAddProduct(item.product)}
+                                  className="w-7 flex items-center justify-center text-gray-500 hover:bg-gray-100"
+                                >
+                                  <Plus className="w-3 h-3" />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    )}
                 </div>
 
                 <div className="pt-6 border-t border-gray-100">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-[#1A1A1A]/70">Subtotal</span>
-                    <span className={`font-medium ${totalQuantity === MAX_PRODUCTS ? 'line-through text-[#1A1A1A]/40' : 'text-[#1A1A1A]'}`}>
+                    <span className={`font-medium ${selectedItems.length >= MIN_PRODUCTS ? 'line-through text-[#1A1A1A]/40' : 'text-[#1A1A1A]'}`}>
                       {formatPrice(originalPrice)}
                     </span>
                   </div>
                   
-                  {totalQuantity === MAX_PRODUCTS && (
+                  {selectedItems.length >= MIN_PRODUCTS && (
                     <div className="flex justify-between items-center mb-6">
                       <span className="text-[#C48B80] font-medium">Bundle Price (15% off)</span>
                       <span className="text-xl font-bold text-[#C48B80]">{formatPrice(finalPrice)}</span>
@@ -205,10 +225,10 @@ export default function BuildBundlePage() {
 
                   <button 
                     onClick={handleAddBundleToCart}
-                    disabled={totalQuantity < MAX_PRODUCTS}
-                    className={`w-full mt-4 py-4 text-[11px] font-bold tracking-widest uppercase transition-all duration-300 rounded-[8px] ${totalQuantity === MAX_PRODUCTS ? 'bg-[#1A1A1A] hover:bg-[#C48B80] text-white shadow-md' : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
+                    disabled={selectedItems.length < MIN_PRODUCTS}
+                    className={`w-full mt-4 py-4 text-[11px] font-bold tracking-widest uppercase transition-all duration-300 rounded-[8px] ${selectedItems.length >= MIN_PRODUCTS ? 'bg-[#1A1A1A] hover:bg-[#C48B80] text-white shadow-md' : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
                   >
-                    {totalQuantity < MAX_PRODUCTS ? `Select ${MAX_PRODUCTS - totalQuantity} More` : 'Add Routine to Cart'}
+                    {selectedItems.length < MIN_PRODUCTS ? (selectedItems.length === 0 ? 'Select at least 2 items' : `Select ${MIN_PRODUCTS - selectedItems.length} More to unlock 15% off`) : 'Add Routine to Cart'}
                   </button>
                 </div>
               </div>

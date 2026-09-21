@@ -186,7 +186,8 @@ export interface StoreContextType {
   cart: CartItem[];
   isCartOpen: boolean;
   setIsCartOpen: (open: boolean) => void;
-  addToCart: (product: Product, quantity?: number, selectedVariant?: string, variationId?: string, options?: { appliedOfferLabel?: string; freeUnits?: number; resolvedUnitPrice?: number }) => void;
+  addToCart: (product: Product, quantity?: number, selectedVariant?: string, variationId?: string, options?: { appliedOfferLabel?: string; freeUnits?: number; resolvedUnitPrice?: number; isRoutine?: boolean }) => void;
+    routineDiscountAmount: number;
   removeFromCart: (productId: string, selectedVariant?: string, variationId?: string) => void;
   updateCartQuantity: (productId: string, quantity: number, selectedVariant?: string, variationId?: string) => void;
   clearCart: () => void;
@@ -500,7 +501,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, [products]);
 
   // Cart operations
-  const addToCart = (product: Product, quantity = 1, selectedVariant?: string, variationId?: string, options?: { appliedOfferLabel?: string; freeUnits?: number; resolvedUnitPrice?: number }) => {
+  const addToCart = (product: Product, quantity = 1, selectedVariant?: string, variationId?: string, options?: { appliedOfferLabel?: string; freeUnits?: number; resolvedUnitPrice?: number; isRoutine?: boolean }) => {
     if (!product || !product.id || String(product.id).trim() === '' || String(product.id) === 'undefined') {
       console.error('[StoreContext] Critical Error: Rejected attempt to add malformed product to cart (missing valid id).', product);
       return;
@@ -663,7 +664,21 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setAppliedCoupon(null);
   };
 
-  const couponDiscountAmount = React.useMemo(() => {
+  const routineDiscountAmount = React.useMemo(() => {
+      const routineItems = cart.filter(item => item.isRoutine);
+      // Group by distinct product ID
+      const distinctProductIds = new Set(routineItems.map(item => item.product.id));
+      if (distinctProductIds.size >= 2) {
+        const routineSubtotal = routineItems.reduce((acc, item) => {
+          let price = item.resolvedUnitPrice !== undefined ? item.resolvedUnitPrice : getBasePrice(item);
+          return acc + price * item.quantity;
+        }, 0);
+        return Math.round(routineSubtotal * 0.15); // 15% discount
+      }
+      return 0;
+    }, [cart]);
+
+    const couponDiscountAmount = React.useMemo(() => {
     if (!appliedCoupon) return 0;
     if (appliedCoupon.discountType === 'percentage') {
       return (cartSubtotal * appliedCoupon.amount) / 100;
@@ -968,6 +983,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         applyCoupon,
         removeCoupon,
         couponDiscountAmount: isHydrated ? couponDiscountAmount : 0,
+          routineDiscountAmount: isHydrated ? routineDiscountAmount : 0,
         wishlist: isHydrated ? wishlist : [],
         toggleWishlist,
         isInWishlist,
