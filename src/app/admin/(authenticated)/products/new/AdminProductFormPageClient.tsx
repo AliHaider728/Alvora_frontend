@@ -1,6 +1,6 @@
 "use client";
 import { AnimatedButton } from "../../../../../components/common/AnimatedButton";
-import { Switch } from "../../../../../components/ui/Switch";
+import { Switch } from "@/src/components/ui/Switch";
 import React, { useEffect, useRef, useState } from 'react';
 import {
   ArrowLeft,
