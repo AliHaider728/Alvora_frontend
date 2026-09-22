@@ -32,15 +32,20 @@ import { trackInitiateCheckout } from "../../lib/metaPixel";
 import { trackTikTokInitiateCheckout, trackTikTokAddPaymentInfo, trackTikTokPurchase, trackTikTokPlaceAnOrder } from "../../lib/tiktokPixel";
 
 export const CheckoutPageClient: React.FC = () => {
-  const [checkoutRequestId] = useState(() => {
-    const existing = ((typeof window !== "undefined") ? sessionStorage : null)?.getItem('pb_checkout_request_id');
-    if (existing) return existing;
-    const generated = typeof crypto.randomUUID === 'function'
-      ? crypto.randomUUID()
-      : `pb_${Date.now()}_${Math.random().toString(36).slice(2)}`;
-    ((typeof window !== "undefined") ? sessionStorage : null)?.setItem('pb_checkout_request_id', generated);
-    return generated;
-  });
+  const [checkoutRequestId, setCheckoutRequestId] = useState<string>('');
+
+  useEffect(() => {
+    const existing = sessionStorage.getItem('pb_checkout_request_id');
+    if (existing) {
+      setCheckoutRequestId(existing);
+    } else {
+      const generated = typeof crypto.randomUUID === 'function'
+        ? crypto.randomUUID()
+        : `pb_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+      sessionStorage.setItem('pb_checkout_request_id', generated);
+      setCheckoutRequestId(generated);
+    }
+  }, []);
   const {
     cart,
     cartSubtotal,

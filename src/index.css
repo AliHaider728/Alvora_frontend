@@ -47,7 +47,7 @@
 
   /* Typography */
   --font-primary: var(--font-poppins, 'Poppins'), sans-serif;
-  --font-display: var(--font-primary);
+  --font-display: var(--font-playfair, 'Playfair Display', serif);
 
   --font-body: var(--font-primary);
 
@@ -85,9 +85,9 @@
 
 /* Tailwind v4 theme extension */
 @theme inline {
-  --font-display: var(--font-primary);
+  --font-display: var(--font-playfair, 'Playfair Display', serif);
   --font-sans: var(--font-primary);
-  --font-heading: var(--font-primary);
+  --font-heading: var(--font-playfair, 'Playfair Display', serif);
 
   --color-alvora-ivory:      #FAF6F2;
   --color-alvora-cream:      #F5EDE4;

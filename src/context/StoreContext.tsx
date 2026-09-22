@@ -246,44 +246,51 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const { showToast } = useToast();
 
   // LocalStorage state initialization
-  const [products, setProducts] = useState<Product[]>(() => {
-    if (USE_MOCK_DATA) return MOCK_PRODUCTS.map(normalizeProduct);
-    const saved = (typeof window !== 'undefined' ? localStorage.getItem.bind(localStorage) : () => null)('alvora_products');
-    const initialProducts = saved ? JSON.parse(saved) : [];
-    return initialProducts.map(normalizeProduct);
-  });
+  const [products, setProducts] = useState<Product[]>(() => USE_MOCK_DATA ? MOCK_PRODUCTS.map(normalizeProduct) : []);
   const [productsLoading, setProductsLoading] = useState(true);
 
-  const [categories, setCategories] = useState<Category[]>(() => {
-    if (USE_MOCK_DATA) return MOCK_CATEGORIES.map(normalizeCategory);
-    const saved = (typeof window !== 'undefined' ? localStorage.getItem.bind(localStorage) : () => null)('alvora_categories');
-    const initialCategories = saved ? JSON.parse(saved) : INITIAL_CATEGORIES;
-    return initialCategories.map(normalizeCategory);
-  });
+  const [categories, setCategories] = useState<Category[]>(() => USE_MOCK_DATA ? MOCK_CATEGORIES.map(normalizeCategory) : INITIAL_CATEGORIES.map(normalizeCategory));
 
-  const [orders, setOrders] = useState<Order[]>(() => {
-    const saved = (typeof window !== 'undefined' ? localStorage.getItem.bind(localStorage) : () => null)('alvora_orders');
-    const initialOrders = saved ? JSON.parse(saved) : INITIAL_ORDERS;
-    return initialOrders.map(normalizeOrder);
-  });
+  const [orders, setOrders] = useState<Order[]>(() => INITIAL_ORDERS.map(normalizeOrder));
 
-  const [customers, setCustomers] = useState<Customer[]>(() => {
-    const saved = (typeof window !== 'undefined' ? localStorage.getItem.bind(localStorage) : () => null)('alvora_customers');
-    return saved ? JSON.parse(saved) : INITIAL_CUSTOMERS;
-  });
+  const [customers, setCustomers] = useState<Customer[]>(() => INITIAL_CUSTOMERS);
 
-  const [coupons, setCoupons] = useState<Coupon[]>(() => {
-    const saved = (typeof window !== 'undefined' ? localStorage.getItem.bind(localStorage) : () => null)('alvora_coupons');
-    return saved ? JSON.parse(saved) : INITIAL_COUPONS;
-  });
+  const [coupons, setCoupons] = useState<Coupon[]>(() => INITIAL_COUPONS);
 
-  const [reviews, setReviews] = useState<Review[]>(() => {
-    const saved = (typeof window !== 'undefined' ? localStorage.getItem.bind(localStorage) : () => null)('alvora_reviews');
-    return saved ? JSON.parse(saved) : INITIAL_REVIEWS;
-  });
+  const [reviews, setReviews] = useState<Review[]>(() => INITIAL_REVIEWS);
 
   const [settings, setSettings] = useState<StoreSettings>(() => normalizeStoreSettings(INITIAL_SETTINGS));
   const [isHydrated, setIsHydrated] = useState(false);
+
+  
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !USE_MOCK_DATA) {
+      try {
+        const p = localStorage.getItem('alvora_products');
+        if (p) setProducts(JSON.parse(p).map(normalizeProduct));
+        
+        const c = localStorage.getItem('alvora_categories');
+        if (c) setCategories(JSON.parse(c).map(normalizeCategory));
+        
+        const o = localStorage.getItem('alvora_orders');
+        if (o) setOrders(JSON.parse(o).map(normalizeOrder));
+        
+        const cu = localStorage.getItem('alvora_customers');
+        if (cu) setCustomers(JSON.parse(cu));
+        
+        const co = localStorage.getItem('alvora_coupons');
+        if (co) setCoupons(JSON.parse(co));
+        
+        const r = localStorage.getItem('alvora_reviews');
+        if (r) setReviews(JSON.parse(r));
+        
+        const w = localStorage.getItem('alvora_wishlist');
+        if (w) setWishlist(JSON.parse(w));
+      } catch (e) {
+        console.error("Hydration error:", e);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (USE_MOCK_DATA) {
@@ -319,10 +326,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setIsCartHydrated(true);
   }, []);
 
-  const [wishlist, setWishlist] = useState<string[]>(() => {
-    const saved = (typeof window !== 'undefined' ? localStorage.getItem.bind(localStorage) : () => null)('alvora_wishlist');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [wishlist, setWishlist] = useState<string[]>([]);
 
   const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -961,7 +965,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   return (
         <StoreContext.Provider value={{
         bundles,
-
+bundlesLoading,
         products: isHydrated ? products : [],
         productsLoading,
         categories: isHydrated ? categories : INITIAL_CATEGORIES,

@@ -22,7 +22,7 @@ const SHOP_LINKS = [
 
 const HELP_LINKS = [
   { label: 'FAQs',                href: '/faq' },
-  { label: 'Shipping & Returns',  href: '/shipping' },
+  { label: 'Shipping & Returns',  href: '/return-policy' },
   { label: 'Track Order',         href: '/account' },
   { label: 'Contact Us',          href: '/contact' },
 ];
@@ -202,9 +202,9 @@ export const Footer: React.FC = () => {
             &copy; {new Date().getFullYear()} Alvora Skincare. All Rights Reserved.
           </p>
           <div className="flex items-center gap-5">
-            <Link href="/privacy-policy" className="text-xs text-[#A1A7AA] hover:text-[#C48B80] transition-colors">
+            {/* <Link href="/privacy-policy" className="text-xs text-[#A1A7AA] hover:text-[#C48B80] transition-colors">
               Privacy Policy
-            </Link>
+            </Link> */}
             <Link href="/return-policy" className="text-xs text-[#A1A7AA] hover:text-[#C48B80] transition-colors">
               Terms of Service
             </Link>

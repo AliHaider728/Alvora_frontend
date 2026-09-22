@@ -6,7 +6,7 @@ import { AuthModalWrapper } from './AuthModalWrapper';
 import { StorefrontLayoutWrapper } from '../components/common/StorefrontLayoutWrapper';
 import MetaPixel from '../components/analytics/MetaPixel';
 import TikTokPixel from '../components/analytics/TikTokPixel';
-import { Poppins } from 'next/font/google';
+import { Poppins, Playfair_Display } from 'next/font/google';
 import type { Metadata } from 'next';
 
 const poppins = Poppins({
@@ -17,6 +17,15 @@ const poppins = Poppins({
   display: 'swap',
   preload: true,
 });
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800', '900'],
+  style: ['normal', 'italic'],
+  variable: '--font-playfair',
+  display: 'swap',
+  preload: true,
+});
+
 
 
 export const metadata: Metadata = {
@@ -49,7 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_ALVORA_GA_MEASUREMENT_ID;
 
   return (
-    <html lang="en" className={poppins.variable} data-scroll-behavior="smooth">
+    <html lang="en" className={`${poppins.variable} ${playfair.variable}`} data-scroll-behavior="smooth">
       <head>
         {/* Meta Pixel stub • loads fbq global before any pixel fires */}
         <Script
