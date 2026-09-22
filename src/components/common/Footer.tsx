@@ -197,7 +197,7 @@ export const Footer: React.FC = () => {
 
       {/* ── Bottom Bar ── */}
       <div className="border-t border-[#EDE5DC] pb-24 xl:pb-0">
-        <div className="mx-auto w-full max-w-375 px-5 sm:px-8 lg:px-12 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-12 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-[#A1A7AA] text-center sm:text-left">
             &copy; {new Date().getFullYear()} Alvora Skincare. All Rights Reserved.
           </p>
@@ -205,7 +205,7 @@ export const Footer: React.FC = () => {
             {/* <Link href="/privacy-policy" className="text-xs text-[#A1A7AA] hover:text-[#C48B80] transition-colors">
               Privacy Policy
             </Link> */}
-            <span className="text-xs text-[#A1A7AA]">Designed & Developed by <a href="https://tecnosphere.com.pk" target="_blank" rel="noopener noreferrer" className="hover:text-[#C48B80] transition-colors">Tecnosphere</a></span>
+            <span className="text-xs text-[#A1A7AA] pr-12 sm:pr-0">Designed & Developed by <a href="https://tecnosphere.com.pk" target="_blank" rel="noopener noreferrer" className="hover:text-[#C48B80] transition-colors">Tecnosphere</a></span>
           </div>
         </div>
       </div>

@@ -113,7 +113,7 @@ export const AboutPageClient: React.FC = () => {
                 className="object-cover"
               />
               {/* Overlay text */}
-              <div className="absolute bottom-6 right-6 lg:bottom-10 lg:right-10 text-white drop-shadow-md" style={{ fontFamily: "var(--font-display), serif" }}>
+              <div className="absolute bottom-6 right-6 lg:bottom-10 lg:right-10 text-white drop-shadow-md" >
                 <p className="text-3xl lg:text-4xl italic font-light tracking-wide rotate-[-4deg]">Healthy Skin,</p>
                 <p className="text-3xl lg:text-4xl italic font-light tracking-wide rotate-[-4deg] ml-6 mt-1">Happy You</p>
               </div>
@@ -165,7 +165,7 @@ export const AboutPageClient: React.FC = () => {
                 We're on a mission to make high-performance skincare accessible to everyone — with thoughtfully crafted formulas, clean ingredients, and real, lasting results.
               </motion.p>
               
-              <motion.p variants={fadeInUp} className="text-2xl md:text-3xl text-[#C48B80]" style={{ fontFamily: "var(--font-display), serif" }}>
+              <motion.p variants={fadeInUp} className="text-2xl md:text-3xl text-[#C48B80]" >
                 <span className="italic font-light">Better Skin. A Kinder Tomorrow.</span>
               </motion.p>
             </motion.div>
@@ -237,7 +237,7 @@ export const AboutPageClient: React.FC = () => {
               Skincare for a <br/>Brighter Tomorrow.
             </h2>
             
-            <p className="text-[#1A1A1A]/80 text-sm md:text-base leading-relaxed italic mb-8 font-serif">
+            <p className="text-[#1A1A1A]/80 text-sm md:text-base leading-relaxed italic mb-8 ">
               "Alvora was born from a simple belief — that everyone deserves skincare that's safe, effective, and truly works. We're here to help you feel confident in your skin, every single day."
             </p>
             
