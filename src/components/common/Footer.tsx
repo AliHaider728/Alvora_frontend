@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Send, CheckCircle2, Instagram, Facebook, Youtube } from 'lucide-react';
+import { Send, CheckCircle2, Instagram, Facebook } from 'lucide-react';
 import { AnimatedButton } from './AnimatedButton';
 import { Logo } from './Logo';
 import { useStore } from '../../context/StoreContext';
@@ -78,17 +78,6 @@ export const Footer: React.FC = () => {
                   className="w-9 h-9 rounded-full border border-[#EDE5DC] bg-white flex items-center justify-center text-[#4D3D2D] hover:border-[#C48B80] hover:text-[#C48B80] transition-colors"
                 >
                   <Facebook className="w-4 h-4" />
-                </a>
-              )}
-              {settings.socialLinks?.youtube && (
-                <a
-                  href={settings.socialLinks.youtube}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Alvora on YouTube"
-                  className="w-9 h-9 rounded-full border border-[#EDE5DC] bg-white flex items-center justify-center text-[#4D3D2D] hover:border-[#C48B80] hover:text-[#C48B80] transition-colors"
-                >
-                  <Youtube className="w-4 h-4" />
                 </a>
               )}
               {settings.socialLinks?.tiktok && (
