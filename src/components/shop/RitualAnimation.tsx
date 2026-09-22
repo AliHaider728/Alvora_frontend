@@ -193,7 +193,7 @@ export function RitualAnimation() {
           
           {STEPS.map((s, i) => (
             <div key={s.slug} className="flex flex-col items-center text-center gap-6 relative">
-              <div className="relative w-full aspect-square max-w-[280px] bg-white rounded-3xl p-4 shadow-sm border border-[#E7D9D0]">
+              <div className="relative w-full aspect-square max-w-[280px] bg-transparent p-4">
                 <img
                   src={s.img}
                   alt={s.sub}
@@ -349,12 +349,12 @@ export function RitualAnimation() {
             <motion.div className="relative flex w-[64%] flex-col items-center pointer-events-none" style={{ opacity: finalOpacity }}>
               {finalBundle ? (
                 <>
-                  <div className="relative w-full aspect-square bg-white rounded-3xl p-4 shadow-sm border border-[#E7D9D0]">
+                  <div className="relative w-full aspect-square bg-transparent p-4">
                     <Image 
                       src={finalBundle.customImage || finalBundle.image || (finalBundle.products?.[0]?.images?.[0]) || '/images/hero/alvora-hero.png'} 
                       alt={finalBundle.name} 
                       fill 
-                      className="object-cover rounded-2xl" 
+                      className="object-contain drop-shadow-md" 
                     />
                   </div>
                   {/* Action Buttons for Bundle */}

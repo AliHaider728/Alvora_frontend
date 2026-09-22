@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect } from 'react';
 import { api } from '../../../../services/api';
@@ -186,7 +186,7 @@ export const AdminBestSellersPageClient: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="relative w-full aspect-4/5 bg-alvora-ivory rounded-xl overflow-hidden border border-[#E7D9D0] mb-4 group">
+                <div className="relative w-full aspect-4/5 bg-transparent rounded-xl overflow-hidden border border-[#E7D9D0] mb-4 group" style={{ backgroundImage: 'repeating-conic-gradient(#f3f4f6 0% 25%, transparent 0% 50%)', backgroundSize: '16px 16px' }}>
                   {displayUrl ? (
                     <Image src={displayUrl} alt={product.name} fill className="object-cover" />
                   ) : (
@@ -267,7 +267,7 @@ export const AdminBestSellersPageClient: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="relative w-full aspect-square bg-alvora-ivory rounded-xl overflow-hidden border border-[#E7D9D0] mb-4 group">
+                <div className="relative w-full aspect-square bg-transparent rounded-xl overflow-hidden border border-[#E7D9D0] mb-4 group" style={{ backgroundImage: 'repeating-conic-gradient(#f3f4f6 0% 25%, transparent 0% 50%)', backgroundSize: '16px 16px' }}>
                   {displayUrl ? (
                     <Image src={displayUrl} alt={bundle.name} fill className="object-cover" />
                   ) : (
