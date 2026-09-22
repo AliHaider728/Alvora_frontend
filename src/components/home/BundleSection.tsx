@@ -188,7 +188,7 @@ export const BundleSection: React.FC = () => {
         );
       })}
 
-      {/* Build Your Own Bundle CTA */}
+      {/* Create Own Routine CTA */}
       <div className="bg-[#EFCDBE]/20 py-12 border-t border-[#EFCDBE]">
         <div className="alvora-container">
           <motion.div 
@@ -199,7 +199,7 @@ export const BundleSection: React.FC = () => {
             viewport={{ once: true }}
           >
             <div className="max-w-xl text-center md:text-left">
-              <h3 className="font-display text-2xl text-[#241916] mb-2">Build Your Own Bundle</h3>
+              <h3 className="font-display text-2xl text-[#241916] mb-2">Create Own Routine</h3>
               <p className="text-[#241916]/80 text-sm">
                 Mix and match any 3 products to create your perfect routine and automatically save 15%.
               </p>
@@ -210,7 +210,7 @@ export const BundleSection: React.FC = () => {
               className="flex-shrink-0"
               size="md"
             >
-              Create Your Routine
+              Create Own Routine
             </AnimatedButton>
           </motion.div>
         </div>

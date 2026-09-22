@@ -37,7 +37,7 @@ export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-            className="mb-8 font-display text-4xl leading-[1.2] text-[#241916] md:text-5xl lg:text-6xl tracking-tight"
+            className="mb-8 font-display text-4xl leading-[1.2] text-[#241916] md:text-5xl lg:text-5xl tracking-tight"
           >
             Healthy Skin.<br className="hidden sm:inline" />
             <span className="italic text-[#A86249]">Naturally You.</span>

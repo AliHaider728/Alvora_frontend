@@ -49,6 +49,7 @@ export default function AdminCreateBundleClient() {
   const [routineSteps, setRoutineSteps] = useState(true);
   const [showShop, setShowShop] = useState(true);
   const [featureHome, setFeatureHome] = useState(false);
+  const [isBestseller, setIsBestseller] = useState(false);
 
   // Images
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -216,6 +217,7 @@ export default function AdminCreateBundleClient() {
         routineSteps,
         showShop,
         featureHome,
+        isBestseller,
         customImage: customImageUrl,
         products: selectedProducts.map(sp => ({
           product_id: sp.product.id,
@@ -610,6 +612,10 @@ export default function AdminCreateBundleClient() {
                 <label className="flex items-center gap-3">
                   <input type="checkbox" checked={featureHome} onChange={e => setFeatureHome(e.target.checked)} className="w-4 h-4 rounded text-[#A85A3B] focus:ring-[#A85A3B]" />
                   <span className="text-sm text-gray-700">Feature on Homepage</span>
+                </label>
+                <label className="flex items-center gap-3">
+                  <input type="checkbox" checked={isBestseller} onChange={e => setIsBestseller(e.target.checked)} className="w-4 h-4 rounded text-[#A85A3B] focus:ring-[#A85A3B]" />
+                  <span className="text-sm text-gray-700">Bestseller Status</span>
                 </label>
                 <label className="flex items-center gap-3">
                   <input type="checkbox" defaultChecked className="w-4 h-4 rounded text-[#A85A3B] focus:ring-[#A85A3B]" />

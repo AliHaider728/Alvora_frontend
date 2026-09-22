@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { Mail, Phone, MapPin, Send, CheckCircle2 } from 'lucide-react';
 import { Breadcrumbs } from '../../components/common/Breadcrumbs';
 import { SeoHead } from '../../components/common/SeoHead';
@@ -122,7 +123,29 @@ export const ContactPageClient: React.FC = () => {
     <div className="min-h-screen bg-[#FAF6F2] font-sans pb-24">
       <SeoHead title="Contact Us" />
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12">
+      {/* SECTION 1: HERO */}
+      <section className="relative w-full h-[60vh] min-h-[400px] flex items-center justify-center overflow-hidden bg-[#F9F4F0]">
+        <div className="absolute inset-0 z-0 opacity-100">
+          <Image 
+            src="/images/contact-hero.png" 
+            alt="Alvora Contact Hero" 
+            fill 
+            className="object-cover object-[80%_center] md:object-center"
+            priority 
+          />
+        </div>
+        <div className="absolute inset-0 bg-black/20 z-10" />
+        <div className="relative z-20 text-center max-w-4xl mx-auto px-4 mt-16">
+          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl text-white mb-4 drop-shadow-md">
+            We're Here for You
+          </h1>
+          <p className="text-white/90 text-lg md:text-xl font-medium max-w-2xl mx-auto drop-shadow-sm">
+            Reach out with any questions, concerns, or feedback. Your skincare journey is our priority.
+          </p>
+        </div>
+      </section>
+
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 mt-8 pb-12">
         <Breadcrumbs items={[{ label: 'Contact Us' }]} />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 mt-8">
