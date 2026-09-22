@@ -1,7 +1,5 @@
 "use client";
 import React, { useState } from 'react';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Send, CheckCircle2 } from 'lucide-react';
 import { Breadcrumbs } from '../../components/common/Breadcrumbs';
 import { SeoHead } from '../../components/common/SeoHead';
@@ -124,39 +122,7 @@ export const ContactPageClient: React.FC = () => {
     <div className="min-h-screen bg-[#FAF6F2] font-sans pb-24">
       <SeoHead title="Contact Us" />
 
-      
-      {/* HERO SECTION */}
-      <section className="relative w-full h-[60vh] min-h-[400px] md:h-[70vh] md:min-h-[500px] flex items-end justify-center overflow-hidden bg-[#FAF6F2]">
-        <div className="absolute inset-0 z-0">
-          <Image 
-            src="/images/contact-hero.png" 
-            alt="Contact Alvora" 
-            fill 
-            className="object-cover object-center"
-            priority 
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#FAF6F2] via-[#FAF6F2]/40 to-transparent" />
-        </div>
-        
-        <motion.div 
-          className="relative z-10 text-center px-4 max-w-2xl mx-auto pb-16 md:pb-24"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <span className="text-xs font-bold tracking-[0.2em] text-[#C48B80] uppercase mb-4 block drop-shadow-sm">
-            Get in Touch
-          </span>
-          <h1 className="font-display text-4xl md:text-5xl text-[#1A1A1A] mb-4">
-            We're Here for You
-          </h1>
-          <p className="text-[#1A1A1A]/80 text-sm md:text-base font-medium">
-            Whether you need skincare advice, help with an order, or just want to chat, our team is always ready to assist.
-          </p>
-        </motion.div>
-      </section>
-
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-12">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12">
         <Breadcrumbs items={[{ label: 'Contact Us' }]} />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 mt-8">
@@ -167,9 +133,9 @@ export const ContactPageClient: React.FC = () => {
             <div className="bg-white p-8 sm:p-10 rounded-3xl shadow-sm space-y-6 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#F1C9BD]/20 to-[#C48B80]/20 rounded-bl-full -mr-10 -mt-10" />
               
-              <h2 className="font-display text-3xl text-[#1A1A1A]">Store Information</h2>
+              <h1 className="font-display text-4xl text-[#1A1A1A]">Get in Touch</h1>
               <p className="text-[#1A1A1A]/70 text-base leading-relaxed">
-                Find all our official contact details below or fill out the form to send us a direct message.
+                Have questions about our skincare, orders, delivery, or anything else? Send us a message and our team will get back to you as soon as possible.
               </p>
 
               <div className="space-y-6 pt-6 border-t border-gray-100">
