@@ -205,9 +205,7 @@ export const Footer: React.FC = () => {
             {/* <Link href="/privacy-policy" className="text-xs text-[#A1A7AA] hover:text-[#C48B80] transition-colors">
               Privacy Policy
             </Link> */}
-            <Link href="/return-policy" className="text-xs text-[#A1A7AA] hover:text-[#C48B80] transition-colors">
-              Terms of Service
-            </Link>
+            <span className="text-xs text-[#A1A7AA]">Designed & Developed by <a href="https://tecnosphere.com.pk" target="_blank" rel="noopener noreferrer" className="hover:text-[#C48B80] transition-colors">Tecnosphere</a></span>
           </div>
         </div>
       </div>

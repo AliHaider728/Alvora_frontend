@@ -29,8 +29,8 @@ export const ReviewSummary: React.FC<ReviewSummaryProps> = ({ rating, reviewCoun
           return (
             <span key={index} className="relative h-3.5 w-3.5 text-slate-200">
               <Star className="absolute inset-0 h-3.5 w-3.5" />
-              <span className="absolute inset-0 overflow-hidden text-amber-400" style={{ width: `${fill}%` }}>
-                <Star className="h-3.5 w-3.5 fill-amber-400" />
+              <span className="absolute inset-0 overflow-hidden text-[#C48B80]" style={{ width: `${fill}%` }}>
+                <Star className="h-3.5 w-3.5 fill-[#C48B80]" />
               </span>
             </span>
           );

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Heart, Trash2, ShoppingBag } from 'lucide-react';
 import { SkeletonCard } from '../../components/common/SkeletonCard';
 import { useStore } from '../../context/StoreContext';
-import { ProductCard } from '../../components/common/ProductCard';
+import { AlvoraProductCard } from '../../components/common/AlvoraProductCard';
 import { Breadcrumbs } from '../../components/common/Breadcrumbs';
 import { SeoHead } from '../../components/common/SeoHead';
 import { isProductVisibleOnStorefront } from '../../utils/products';
@@ -26,7 +26,7 @@ export default function WishlistPage() {
         <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-sm mb-8 flex items-center justify-between">
           <div>
             <h1 className="font-heading font-black text-2xl sm:text-3xl text-slate-900 flex items-center gap-2">
-              <Heart className="w-7 h-7 text-rose-500 fill-rose-500 shrink-0" />
+              <Heart className="w-7 h-7 text-[#C48B80] fill-[#C48B80] shrink-0" />
               <span>Saved Favorite Products</span>
             </h1>
             <p className="text-xs text-slate-500 mt-1 font-medium">
@@ -37,7 +37,7 @@ export default function WishlistPage() {
 
         {productsLoading ? (<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">{[...Array(3)].map((_, i) => <SkeletonCard key={i} />)}</div>) : wishlistedProducts.length === 0 ? (
           <div className="bg-white rounded-3xl p-12 text-center border border-slate-100 space-y-4">
-            <div className="w-16 h-16 rounded-full bg-rose-50 text-rose-400 flex items-center justify-center mx-auto">
+            <div className="w-16 h-16 rounded-full bg-[#FDF8F5] border border-[#F1C9BD] text-[#C48B80] flex items-center justify-center mx-auto">
               <Heart className="w-8 h-8" />
             </div>
             <h3 className="font-heading font-bold text-lg text-slate-800">Your Wishlist is Empty</h3>
@@ -53,7 +53,7 @@ export default function WishlistPage() {
         ) : (
           <div className="grid grid-cols-1 items-start gap-5 sm:grid-cols-2 lg:gap-6">
             {wishlistedProducts.map(p => (
-              <ProductCard key={p.id} product={p} />
+              <AlvoraProductCard key={p.id} product={p} />
             ))}
           </div>
         )}

@@ -8,7 +8,7 @@ import { Logo as StoreLogo } from '../../components/common/Logo';
 
 export default function ResetPasswordPage() {
   return (
-    <Suspense fallback={<div className="flex-1 bg-slate-50 font-sans py-16 flex items-center justify-center p-4">Loading...</div>}>
+    <Suspense fallback={<div className="flex-1 bg-[#FAF6F2] font-sans py-16 flex items-center justify-center p-4">Loading...</div>}>
       <ResetPasswordForm />
     </Suspense>
   );
@@ -114,7 +114,7 @@ function ResetPasswordForm() {
                   onChange={(e) => setTokenInput(e.target.value)}
                   required
                   maxLength={6}
-                  className="w-full rounded-2xl border-2 border-slate-100 bg-slate-50 py-3.5 px-4 font-medium text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-[#C48B80] focus:bg-white focus:shadow-lg focus:shadow-rose-100 text-center tracking-[0.5em] font-mono text-lg sm:text-xl"
+                  className="w-full rounded-2xl border-2 border-slate-100 bg-[#FAF6F2] py-3.5 px-4 font-medium text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-[#C48B80] focus:bg-white focus:shadow-lg focus:shadow-[#F1C9BD]/30 text-center tracking-[0.5em] font-mono text-lg sm:text-xl"
                   placeholder="------"
                 />
               </div>
@@ -130,7 +130,7 @@ function ResetPasswordForm() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full rounded-2xl border-2 border-slate-100 bg-slate-50 py-3.5 pl-11 pr-4 text-base sm:text-sm font-medium text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-[#C48B80] focus:bg-white focus:shadow-lg focus:shadow-rose-100"
+                  className="w-full rounded-2xl border-2 border-slate-100 bg-[#FAF6F2] py-3.5 pl-11 pr-4 text-base sm:text-sm font-medium text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-[#C48B80] focus:bg-white focus:shadow-lg focus:shadow-[#F1C9BD]/30"
                   placeholder="At least 8 characters"
                 />
               </div>
@@ -147,7 +147,7 @@ function ResetPasswordForm() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
-                  className="w-full rounded-2xl border-2 border-slate-100 bg-slate-50 py-3.5 pl-11 pr-4 text-base sm:text-sm font-medium text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-[#C48B80] focus:bg-white focus:shadow-lg focus:shadow-rose-100"
+                  className="w-full rounded-2xl border-2 border-slate-100 bg-[#FAF6F2] py-3.5 pl-11 pr-4 text-base sm:text-sm font-medium text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-[#C48B80] focus:bg-white focus:shadow-lg focus:shadow-[#F1C9BD]/30"
                   placeholder="Confirm new password"
                 />
               </div>
@@ -156,7 +156,7 @@ function ResetPasswordForm() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="group relative w-full overflow-hidden rounded-xl bg-slate-900 py-3.5 text-sm font-bold text-white shadow-xl shadow-slate-900/20 transition-all hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-slate-900/30 disabled:opacity-70"
+              className="group relative w-full overflow-hidden rounded-xl bg-[#C48B80] py-3.5 text-sm font-bold text-white shadow-xl shadow-[#C48B80]/20 transition-all hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-[#C48B80]/30 disabled:opacity-70"
             >
               <div className="relative z-10 flex items-center justify-center gap-2">
                 <span>{isSubmitting ? 'Saving...' : 'Save Password'}</span>

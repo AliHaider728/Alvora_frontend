@@ -100,7 +100,7 @@ export default function FaqPage() {
               <div
                 key={idx}
                 className={`group bg-white rounded-3xl border shadow-xs overflow-hidden transition-colors duration-300 ${
-                  isOpen ? 'border-rose-200 shadow-sm' : 'border-slate-100'
+                  isOpen ? 'border-[#F1C9BD] shadow-sm' : 'border-slate-100'
                 }`}
               >
                 <button

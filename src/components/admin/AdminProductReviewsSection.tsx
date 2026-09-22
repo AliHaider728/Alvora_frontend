@@ -129,7 +129,7 @@ export const AdminProductReviewsSection: React.FC<AdminProductReviewsSectionProp
           >
             <Star
               className={`w-5 h-5 ${
-                star <= rating ? 'fill-amber-400 text-[#C48B80]' : 'fill-slate-100 text-slate-200'
+                star <= rating ? 'fill-[#C48B80] text-[#C48B80]' : 'fill-slate-100 text-slate-200'
               }`}
             />
           </button>

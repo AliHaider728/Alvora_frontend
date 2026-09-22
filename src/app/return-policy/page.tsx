@@ -14,7 +14,7 @@ export default function ReturnPolicyPage() {
 
         <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm space-y-8">
           <div className="text-center space-y-4 pb-8 border-b border-slate-100">
-            <div className="w-16 h-16 rounded-2xl bg-amber-100 text-amber-500 flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 rounded-2xl bg-[#FDF8F5] border border-[#F1C9BD] text-[#C48B80] flex items-center justify-center mx-auto mb-4">
               <RefreshCw className="w-8 h-8" />
             </div>
             <h1 className="font-heading font-black text-3xl text-slate-900">30-Day Happiness Guarantee</h1>

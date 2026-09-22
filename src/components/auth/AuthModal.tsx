@@ -115,12 +115,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultMo
         <div className="p-6 sm:p-8">
           <div className="flex justify-between items-start mb-6">
             <div>
-              <h2 className="font-heading font-black text-2xl text-slate-900">{titles[mode]}</h2>
-              <p className="text-sm text-slate-500 mt-1">{subtitles[mode]}</p>
+              <h2 className="font-display font-black text-2xl text-[#1A1A1A]">{titles[mode]}</h2>
+              <p className="text-sm text-[#1A1A1A]/70 mt-1">{subtitles[mode]}</p>
             </div>
             <button 
               onClick={onClose}
-              className="p-2 -mr-2 -mt-2 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+              className="p-2 -mr-2 -mt-2 rounded-full text-[#1A1A1A]/50 hover:text-[#1A1A1A]/80 hover:bg-slate-100 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -185,7 +185,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultMo
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#1A1A1A]/50 hover:text-[#1A1A1A]/80 transition-colors"
                     aria-label={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -209,7 +209,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultMo
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#1A1A1A]/50 hover:text-[#1A1A1A]/80 transition-colors"
                     aria-label={showConfirmPassword ? "Hide password" : "Show password"}
                   >
                     {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -222,7 +222,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultMo
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-3.5 rounded-xl bg-[#1A1A1A] hover:bg-black text-white font-heading font-black text-sm shadow-md shadow-sm disabled:opacity-50 flex items-center justify-center transition-all"
+                className="w-full py-3.5 rounded-xl bg-[#C48B80] hover:bg-[#B07B71] text-white font-display font-black text-sm shadow-md shadow-sm disabled:opacity-50 flex items-center justify-center transition-all"
               >
                 {isSubmitting ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -237,12 +237,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultMo
             {mode === 'forgot-password' ? (
               <button 
                 onClick={() => setMode('login')}
-                className="text-xs font-bold text-slate-500 hover:text-slate-700 transition-colors"
+                className="text-xs font-bold text-[#1A1A1A]/70 hover:text-slate-700 transition-colors"
               >
                 Back to Login
               </button>
             ) : (
-              <p className="text-xs text-slate-500 font-medium">
+              <p className="text-xs text-[#1A1A1A]/70 font-medium">
                 {mode === 'login' ? "Don't have an account? " : "Already have an account? "}
                 <button 
                   onClick={() => setMode(mode === 'login' ? 'signup' : 'login')}

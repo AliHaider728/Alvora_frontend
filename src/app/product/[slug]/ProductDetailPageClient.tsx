@@ -698,7 +698,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                     {product.brand}
                   </span>
                   {(product.soldCount ?? 0) >= 50 && (
-                    <span className="text-xs font-bold tracking-wider text-white bg-orange-500 px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
+                    <span className="text-xs font-bold tracking-wider text-white bg-[#B34E28] px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
                       ðŸ”¥ {product.soldCount}+ Sold
                     </span>
                   )}
@@ -760,12 +760,12 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                 <div className="text-left sm:text-right">
                   <span className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold ${
                     ((isVariable ? (product.attributes?.length || 0) > 0 : variantGroups.length > 0) && !allVariantsSelected)
-                      ? 'bg-amber-100 text-amber-800'
-                      : effectiveAvailable ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-[#C48B80]'
+                      ? 'bg-[#FDF8F5] text-[#C48B80]'
+                      : effectiveAvailable ? 'bg-emerald-100 text-emerald-800' : 'bg-[#F1C9BD] text-[#C48B80]'
                   }`}>
                     <span className={`w-2 h-2 rounded-full ${
                       ((isVariable ? (product.attributes?.length || 0) > 0 : variantGroups.length > 0) && !allVariantsSelected)
-                        ? 'bg-amber-500'
+                        ? 'bg-[#C48B80]'
                         : effectiveAvailable ? 'bg-emerald-500' : 'bg-[#9C4122]'
                     }`} />
                     {((isVariable ? (product.attributes?.length || 0) > 0 : variantGroups.length > 0) && !allVariantsSelected)
@@ -778,7 +778,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
               </div>
 
               {/* Delivery Charge Info Badge */}
-              <div className="mb-3 flex items-center gap-2.5 rounded-2xl border border-[#C48B80] bg-rose-50 p-3 text-xs font-semibold text-[#C48B80]">
+              <div className="mb-3 flex items-center gap-2.5 rounded-2xl border border-[#C48B80] bg-[#FDF8F5] p-3 text-xs font-semibold text-[#C48B80]">
                 <Truck className="w-4 h-4 text-[#C48B80] shrink-0" />
                 <span>
                   Delivery Fee:{' '}
@@ -923,7 +923,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                                     !isOptionInStock
                                       ? 'border-[#EDE5DC] opacity-50 cursor-not-allowed'
                                       : isSelected
-                                      ? 'border-[#9C4122] shadow-md ring-2 ring-rose-200 ring-offset-1'
+                                      ? 'border-[#9C4122] shadow-md ring-2 ring-[#F1C9BD] ring-offset-1'
                                       : 'border-[#EDE5DC] hover:border-slate-300'
                                   }`}
                                 >
@@ -997,7 +997,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                                 !isOptionInStock
                                   ? 'bg-[#F5EDE4] text-[#1A1A1A]/40 cursor-not-allowed opacity-60 line-through'
                                   : isSelected
-                                  ? 'bg-gradient-to-br from-[#D4784F] to-[#9C4122] text-white ring-2 ring-rose-200 shadow-sm'
+                                  ? 'bg-gradient-to-br from-[#D4784F] to-[#9C4122] text-white ring-2 ring-[#F1C9BD] shadow-sm'
                                   : 'bg-[#F5EDE4] text-[#1A1A1A]/80 hover:bg-[#EDE5DC]'
                               }`}
                             >
@@ -1123,7 +1123,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                 <span>100% Child Safe</span>
               </div>
               <div className="rounded-2xl bg-[#FAF6F2] p-2 sm:p-2.5">
-                <RotateCcw className="w-4 h-4 mx-auto text-amber-500 mb-1" />
+                <RotateCcw className="w-4 h-4 mx-auto text-[#C48B80] mb-1" />
                 <span>Easy 7-Day Returns</span>
               </div>
             </div>
@@ -1252,7 +1252,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                   onClick={() => setReviewModalOpen(true)}
                   className="px-5 py-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-display font-bold text-xs flex items-center gap-2 shadow-sm"
                 >
-                  <MessageSquarePlus className="w-4 h-4 text-amber-400" />
+                  <MessageSquarePlus className="w-4 h-4 text-[#C48B80]" />
                   <span>Write a Review</span>
                 </button>
               </div>
@@ -1283,11 +1283,11 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                           </div>
                         </div>
 
-                        <div className="flex text-amber-400">
+                        <div className="flex text-[#C48B80]">
                           {[...Array(5)].map((_, i) => (
                             <Star
                               key={i}
-                              className={`w-3.5 h-3.5 ${i < review.rating ? 'fill-amber-400' : 'text-[#EDE5DC]'}`}
+                              className={`w-3.5 h-3.5 ${i < review.rating ? 'fill-[#C48B80]' : 'text-[#EDE5DC]'}`}
                             />
                           ))}
                         </div>

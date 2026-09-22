@@ -18,7 +18,7 @@ export default function AccountPage() {
 
   if (isLoading) {
     return (
-      <div className="flex-1 bg-slate-50 flex items-center justify-center">
+      <div className="flex-1 bg-[#FAF6F2] flex items-center justify-center">
         <Loader2 className="w-8 h-8 text-[#C48B80] animate-spin" />
       </div>
     );
@@ -26,19 +26,19 @@ export default function AccountPage() {
 
   if (!isLoggedIn || !customerProfile) {
     return (
-      <div className="flex-1 bg-slate-50 font-sans py-12 px-4 flex items-center justify-center">
+      <div className="flex-1 bg-[#FAF6F2] font-sans py-12 px-4 flex items-center justify-center">
         <SeoHead title="My Account" />
         <div className="bg-white p-10 rounded-3xl border border-slate-100 shadow-xl max-w-md w-full text-center space-y-6">
-          <div className="mx-auto w-16 h-16 bg-rose-100 rounded-full flex items-center justify-center mb-2">
+          <div className="mx-auto w-16 h-16 rounded-full bg-[#FDF8F5] border border-[#F1C9BD] flex items-center justify-center mb-4 text-[#C48B80]">
             <User className="w-8 h-8 text-[#C48B80]" />
           </div>
-          <h2 className="font-heading font-black text-2xl text-slate-900">Please Log In</h2>
+          <h2 className="font-display font-black text-2xl text-[#1A1A1A]">Please Log In</h2>
           <p className="text-sm text-slate-500 font-medium">
             You must be logged in to view your order history, tracking details, and saved wishlist.
           </p>
           <button
             onClick={() => openAuthModal('login')}
-            className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-rose-500 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white font-heading font-black text-sm shadow-md transition-all"
+            className="w-full py-3.5 rounded-xl bg-[#C48B80] hover:bg-[#B07B71] text-white font-display font-bold text-sm shadow-md transition-colors"
           >
             Log In / Sign Up
           </button>
@@ -51,7 +51,7 @@ export default function AccountPage() {
   const customerOrders = orders.filter(o => o.email?.toLowerCase() === customerProfile.email?.toLowerCase());
 
   return (
-    <div className="flex-1 bg-slate-50 font-sans py-6">
+    <div className="flex-1 bg-[#FAF6F2] font-sans py-6">
       <SeoHead title="My Account & Order History" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -64,15 +64,15 @@ export default function AccountPage() {
               <img
                 src={customerProfile.avatar}
                 alt={customerProfile.name}
-                className="w-16 h-16 rounded-full object-cover ring-4 ring-rose-100"
+                className="w-16 h-16 rounded-full object-cover ring-4 ring-[#F1C9BD]"
               />
             ) : (
-              <div className="w-16 h-16 rounded-full ring-4 ring-rose-100 flex items-center justify-center bg-[#C48B80] text-white font-heading font-black text-2xl">
+              <div className="w-16 h-16 rounded-full ring-4 ring-[#F1C9BD] flex items-center justify-center bg-[#C48B80] text-white font-display font-black text-2xl">
                 {customerProfile.name?.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() || 'U'}
               </div>
             )}
             <div className="min-w-0">
-              <h1 className="font-heading font-black text-2xl text-slate-900 truncate">{customerProfile.name}</h1>
+              <h1 className="font-display font-black text-2xl text-[#1A1A1A] truncate">{customerProfile.name}</h1>
               <span className="text-xs text-slate-500 font-medium truncate block">{customerProfile.email} {customerProfile.phone ? `• ${customerProfile.phone}` : ''}</span>
             </div>
           </div>
@@ -91,7 +91,7 @@ export default function AccountPage() {
           <aside className="space-y-2 bg-white p-4 rounded-3xl border border-slate-100 shadow-sm h-fit">
             <button
               onClick={() => setActiveTab('orders')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-heading font-bold text-xs transition-colors ${
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-display font-bold text-xs transition-colors ${
                 activeTab === 'orders' ? 'bg-[#C48B80] text-white' : 'text-slate-700 hover:bg-slate-100'
               }`}
             >
@@ -100,7 +100,7 @@ export default function AccountPage() {
             </button>
             <button
               onClick={() => setActiveTab('profile')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-heading font-bold text-xs transition-colors ${
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-display font-bold text-xs transition-colors ${
                 activeTab === 'profile' ? 'bg-[#C48B80] text-white' : 'text-slate-700 hover:bg-slate-100'
               }`}
             >
@@ -112,7 +112,7 @@ export default function AccountPage() {
           <main className="lg:col-span-3">
             {activeTab === 'orders' && (
               <div className="space-y-4">
-                <h2 className="font-heading font-black text-xl text-slate-900 mb-4">Your Recent Orders</h2>
+                <h2 className="font-display font-black text-xl text-[#1A1A1A] mb-4">Your Recent Orders</h2>
                 {customerOrders.length === 0 ? (
                   <p className="text-xs text-slate-500 p-6 bg-white rounded-3xl text-center">No past orders found.</p>
                 ) : (
@@ -121,14 +121,14 @@ export default function AccountPage() {
                       <div key={order.id} className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm space-y-4">
                         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
                           <div>
-                            <span className="font-heading font-bold text-sm text-slate-900">{order.id}</span>
+                            <span className="font-display font-bold text-sm text-[#1A1A1A]">{order.id}</span>
                             <span className="text-xs text-slate-400 block">{order.date}</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <span className={`px-3 py-1 rounded-full font-bold text-xs ${
                               order.status === 'Delivered' ? 'bg-emerald-100 text-emerald-800' :
-                              order.status === 'Shipped' ? 'bg-rose-50 text-[#C48B80]' :
-                              order.status === 'Cancelled' ? 'bg-rose-100 text-[#C48B80]' : 'bg-amber-100 text-amber-800'
+                              order.status === 'Shipped' ? 'bg-[#F5EDE4] text-[#C48B80]' :
+                              order.status === 'Cancelled' ? 'bg-[#F1C9BD] text-[#C48B80]' : 'bg-amber-100 text-amber-800'
                             }`}>
                               {order.status}
                             </span>
@@ -143,14 +143,14 @@ export default function AccountPage() {
                               <span className="flex-1 font-medium text-slate-800">
                                 {it.name} (Qty: {it.quantity}) {it.selectedVariant ? `[${it.selectedVariant}]` : ''}
                               </span>
-                              <span className="font-bold text-slate-900">{formatPrice(it.price * it.quantity, settings.currency)}</span>
+                              <span className="font-bold text-[#1A1A1A]">{formatPrice(it.price * it.quantity, settings.currency)}</span>
                             </div>
                           ))}
                         </div>
 
                         <div className="pt-3 border-t border-slate-100 flex flex-wrap gap-2 justify-between items-center text-xs">
                           <span className="text-slate-500 font-medium">Tracking Code: {order.trackingNumber || 'Pending'}</span>
-                          <span className="font-heading font-extrabold text-base text-[#C48B80]">Total: {formatPrice(order.total, settings.currency)}</span>
+                          <span className="font-display font-extrabold text-base text-[#C48B80]">Total: {formatPrice(order.total, settings.currency)}</span>
                         </div>
                       </div>
                     );
@@ -161,9 +161,9 @@ export default function AccountPage() {
 
             {activeTab === 'profile' && (
               <div className="space-y-4">
-                <h2 className="font-heading font-black text-xl text-slate-900 mb-4">Security Settings</h2>
+                <h2 className="font-display font-black text-xl text-[#1A1A1A] mb-4">Security Settings</h2>
                 <div className="bg-white p-5 sm:p-8 rounded-3xl border border-slate-100 shadow-sm max-w-xl">
-                  <h3 className="font-heading font-bold text-sm text-slate-900 mb-4">Change Password</h3>
+                  <h3 className="font-display font-bold text-sm text-[#1A1A1A] mb-4">Change Password</h3>
                   <form 
                     onSubmit={async (e) => {
                       e.preventDefault();
@@ -207,7 +207,7 @@ export default function AccountPage() {
                     </div>
                     <button
                       type="submit"
-                      className="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-heading font-bold text-xs shadow-md transition-colors"
+                      className="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-display font-bold text-xs shadow-md transition-colors"
                     >
                       Update Password
                     </button>

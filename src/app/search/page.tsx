@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Search, SlidersHorizontal } from 'lucide-react';
 import { SkeletonCard } from '../../components/common/SkeletonCard';
 import { useStore } from '../../context/StoreContext';
-import { ProductCard } from '../../components/common/ProductCard';
+import { AlvoraProductCard } from '../../components/common/AlvoraProductCard';
 import { Breadcrumbs } from '../../components/common/Breadcrumbs';
 import { SeoHead } from '../../components/common/SeoHead';
 import { isProductVisibleOnStorefront } from '../../utils/products';
@@ -92,7 +92,7 @@ function SearchResultsContent() {
         ) : (
           <div className="grid grid-cols-1 items-start gap-5 sm:grid-cols-2 lg:gap-6">
             {sortedResults.map(p => (
-              <ProductCard key={p.id} product={p} />
+              <AlvoraProductCard key={p.id} product={p} />
             ))}
           </div>
         )}

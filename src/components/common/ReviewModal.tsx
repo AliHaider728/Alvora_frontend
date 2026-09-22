@@ -74,7 +74,7 @@ export function ReviewModal({ productId, productName, isOpen, onClose }: ReviewM
 
           <div>
             <label className="text-xs font-bold text-[#1A1A1A]/80 block mb-1">Rating</label>
-            <div className="flex gap-2 text-amber-400">
+            <div className="flex gap-2 text-[#C48B80]">
               {[1, 2, 3, 4, 5].map(star => (
                 <button
                   key={star}
@@ -82,7 +82,7 @@ export function ReviewModal({ productId, productName, isOpen, onClose }: ReviewM
                   onClick={() => setNewRating(star)}
                   className="p-1 hover:scale-110 transition-transform"
                 >
-                  <Star className={`w-6 h-6 ${star <= newRating ? 'fill-amber-400' : 'text-[#EDE5DC]'}`} />
+                  <Star className={`w-6 h-6 ${star <= newRating ? 'fill-[#C48B80]' : 'text-[#EDE5DC]'}`} />
                 </button>
               ))}
             </div>
