@@ -207,8 +207,8 @@ export const BundleSection: React.FC = () => {
             <AnimatedButton 
               href="/bundles/build"
               variant="primary"
-              className="flex-shrink-0 text-[11px]"
-              size="sm"
+              className="flex-shrink-0"
+              size="md"
             >
               Create Your Routine
             </AnimatedButton>

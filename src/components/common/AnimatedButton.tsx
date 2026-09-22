@@ -79,7 +79,7 @@ export const AnimatedButton = React.forwardRef<HTMLButtonElement | HTMLAnchorEle
     const innerContent = (
       <>
         {!hideLeaves && SVGs}
-        <span className="relative z-10 flex items-center justify-center gap-2">{children}</span>
+        <span className={`relative z-10 flex items-center justify-center gap-2 ${!hideLeaves ? "px-6 sm:px-8" : ""}`}>{children}</span>
       </>
     );
 
