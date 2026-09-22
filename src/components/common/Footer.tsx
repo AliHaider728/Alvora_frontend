@@ -110,7 +110,7 @@ export const Footer: React.FC = () => {
 
           {/* Col 2 — Shop */}
           <div className="lg:pl-4">
-            <h4 className="text-[13px] lg:text-[14px] font-bold tracking-wider uppercase text-[#1A1A1A] mb-6">
+            <h4 className="text-[13px] lg:text-[14px] font-bold tracking-wider uppercase text-[#1A1A1A] mb-6 font-body">
               SHOP
             </h4>
             <ul className="flex flex-col gap-4 lg:gap-5">
@@ -131,7 +131,7 @@ export const Footer: React.FC = () => {
 
           {/* Col 4 — Help */}
           <div className="lg:pl-4">
-            <h4 className="text-[13px] lg:text-[14px] font-bold tracking-wider uppercase text-[#1A1A1A] mb-6">
+            <h4 className="text-[13px] lg:text-[14px] font-bold tracking-wider uppercase text-[#1A1A1A] mb-6 font-body">
               HELP
             </h4>
             <ul className="flex flex-col gap-4 lg:gap-5">
@@ -150,7 +150,7 @@ export const Footer: React.FC = () => {
 
           {/* Col 5 — Newsletter */}
           <div className="lg:pl-4 lg:col-span-1">
-            <h4 className="text-[13px] lg:text-[14px] font-bold tracking-wider uppercase text-[#1A1A1A] mb-6">
+            <h4 className="text-[13px] lg:text-[14px] font-bold tracking-wider uppercase text-[#1A1A1A] mb-6 font-body">
               STAY IN THE GLOW
             </h4>
             <p className="text-[15px] lg:text-base text-[#1A1A1A]/80 leading-relaxed mb-5">
