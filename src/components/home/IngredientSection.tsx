@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import Link from 'next/link';
+import { AnimatedButton } from '../common/AnimatedButton';
 import { motion, useReducedMotion } from 'framer-motion';
 import Image from 'next/image';
 
@@ -70,14 +71,14 @@ export const IngredientSection: React.FC = () => {
             <p className="text-[#1A1A1A]/70 leading-relaxed text-base mb-10">
               We use powerful, clean ingredients backed by science to deliver visible results and lasting skin health.
             </p>
-            <Link 
+            <AnimatedButton 
               href="/about" 
-              className="group inline-flex items-center text-[10px] font-bold tracking-widest text-[#1A1A1A] uppercase relative"
+              size="sm" 
+              variant="primary"
+              className="!py-[12px] !px-[32px] !text-[12px]"
             >
-              <span>DISCOVER INGREDIENTS</span>
-              <span className="ml-2 group-hover:translate-x-1 transition-transform">&rarr;</span>
-              <span className="absolute -bottom-1 left-0 w-full h-[1px] bg-[#1A1A1A] scale-x-100 group-hover:scale-x-0 origin-left transition-transform duration-300"></span>
-            </Link>
+              DISCOVER INGREDIENTS
+            </AnimatedButton>
           </div>
 
           {/* Right: Ingredients Grid */}
