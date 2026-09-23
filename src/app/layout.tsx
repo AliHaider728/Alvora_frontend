@@ -23,8 +23,8 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Alvora Skincare - Premium Skincare',
-    template: '%s | Alvora Skincare',
+    default: 'ALVORA | Glowing & Healthy Skin',
+    template: '%s | ALVORA',
   },
   description:
     'Thoughtfully formulated skincare that nourishes, protects and brings out your most radiant skin. Shop serums, moisturizers, cleansers and more.',
@@ -32,14 +32,14 @@ export const metadata: Metadata = {
   authors: [{ name: 'Alvora Skincare' }],
   openGraph: {
     type: 'website',
-    siteName: 'Alvora Skincare',
-    title: 'Alvora Skincare - Premium Skincare',
+    siteName: 'ALVORA',
+    title: 'ALVORA | Glowing & Healthy Skin',
     description:
       'Thoughtfully formulated skincare that nourishes, protects and brings out your most radiant skin.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Alvora Skincare',
+    title: 'ALVORA | Glowing & Healthy Skin',
     description: 'Premium skincare formulated with pure ingredients.',
   },
   icons: {
