@@ -7,6 +7,7 @@ import { useStore } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/formatters';
 import { getBundleOriginalPrice } from '../../utils/products';
 import { Product, Bundle } from '../../types';
+import { Star } from 'lucide-react';
 import { AnimatedButton } from '../common/AnimatedButton';
 
 export const BundleSection: React.FC = () => {
@@ -156,11 +157,27 @@ export const BundleSection: React.FC = () => {
                   </ul>
                 </div>
 
+                {/* Reviews */}
+                {((bundle.reviewCount || 0) > 0) && (
+                  <div className="flex items-center gap-2 mb-4 -mt-2">
+                    <div className="flex text-amber-400">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className={`w-3.5 h-3.5 ${i < Math.round(bundle.rating || 5) ? 'fill-amber-400' : 'text-[#EDE5DC]'}`} />
+                      ))}
+                    </div>
+                    <span className="text-xs text-[#1A1A1A]/60 font-medium">({bundle.reviewCount} Reviews)</span>
+                  </div>
+                )}
+
                 {/* Price & CTA */}
-                <div className="flex flex-col gap-6">
-                  <div className="flex items-end gap-3">
-                    <span className="text-2xl font-medium text-[#9C4122]">{formatPrice(bundle.currentPrice || 0)}</span>
-                    
+                <div className="flex flex-col gap-5">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className="text-3xl font-display text-[#1A1A1A]">{formatPrice(bundle.currentPrice || 0)}</span>
+                    {getBundleOriginalPrice(bundle) > (bundle.currentPrice || 0) && (
+                      <span className="text-[11px] font-bold text-[#9C4122] bg-[#F1C9BD]/30 px-2.5 py-1 rounded-md">
+                        You Save {formatPrice(getBundleOriginalPrice(bundle) - (bundle.currentPrice || 0))} ({Math.round(((getBundleOriginalPrice(bundle) - (bundle.currentPrice || 0)) / getBundleOriginalPrice(bundle)) * 100)}%)
+                      </span>
+                    )}
                   </div>
 
                   <div className="flex flex-col sm:flex-row gap-3">

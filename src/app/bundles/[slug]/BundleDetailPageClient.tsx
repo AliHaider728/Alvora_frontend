@@ -19,7 +19,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
   const [added, setAdded] = useState(false);
   
   // Gallery
-  const allImages = [bundle.customImage, bundle.image, ...(bundle.products || []).flatMap((p: any) => p.images || p.product?.images || [])].filter(Boolean);
+  const allImages = Array.from(new Set([bundle.customImage, bundle.image, ...(bundle.products || []).flatMap((p: any) => p.images || p.product?.images || [])].filter(Boolean)));
   const [activeImage, setActiveImage] = useState(allImages[0] || '/images/hero/alvora-hero.png');
   
   // Review Modal
@@ -80,10 +80,11 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
       <section className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           
-          {/* Gallery */}
+                    {/* Gallery */}
           <div className="flex flex-col-reverse sm:flex-row gap-4">
-            <div className="flex sm:flex-col gap-3 overflow-x-auto sm:overflow-visible no-scrollbar pb-2 sm:pb-0">
-              {allImages.slice(0, 5).map((img, idx) => (
+            {allImages.length > 1 && (
+              <div className="flex sm:flex-col gap-3 overflow-x-auto sm:overflow-visible no-scrollbar pb-2 sm:pb-0">
+                {allImages.slice(0, 5).map((img, idx) => (
                 <button 
                   key={idx}
                   onClick={() => setActiveImage(img)}
@@ -93,6 +94,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
                 </button>
               ))}
             </div>
+            )}
             <motion.div 
               className="relative w-full aspect-square rounded-3xl overflow-hidden bg-white shadow-sm"
               initial={{ opacity: 0, scale: 0.95 }}
