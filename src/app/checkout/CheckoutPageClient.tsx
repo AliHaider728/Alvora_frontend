@@ -250,7 +250,7 @@ export const CheckoutPageClient: React.FC = () => {
       status: 'Pending',
       shippingAddress: {
         fullName: fullName.trim(),
-        phone: phone.trim(),
+        phone: finalPhone,
         street: street.trim(),
         city: city.trim(),
         state: state.trim(),
@@ -507,8 +507,7 @@ export const CheckoutPageClient: React.FC = () => {
                       <input
                         type="tel"
                         required
-                        inputMode="numeric"
-                        pattern="[0-9]*"
+                        inputMode="tel"
                         placeholder="e.g. +923001234567 or 03001234567"
                           value={phone}
                           onChange={e => { setPhone(e.target.value); setFieldErrors(p => ({...p, phone: ''})); }}
