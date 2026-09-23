@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { QuantityBreaks, QuantityBreakTier } from '../../types';
 import { X } from 'lucide-react';
 
@@ -27,7 +27,7 @@ export const QuantityBreaksSelector: React.FC<QuantityBreaksSelectorProps> = ({
   const activeTier = activeTierIndex !== -1 ? sortedTiers[sortedTiers.length - 1 - activeTierIndex] : null;
 
   // The base price is considered tier 1 price if there's no tier 1
-  const tier1Price = sortedTiers[0]?.pricePerUnit || basePrice;
+  
 
   return (
     <div className="mt-5 mb-2">
@@ -38,8 +38,8 @@ export const QuantityBreaksSelector: React.FC<QuantityBreaksSelectorProps> = ({
           const isActive = activeTier?.minQty === tier.minQty;
           
           let savePct = 0;
-          if (tier1Price > 0 && tier.pricePerUnit < tier1Price) {
-            savePct = Math.round(((tier1Price - tier.pricePerUnit) / tier1Price) * 100);
+          if (basePrice > 0 && tier.pricePerUnit < basePrice) {
+            savePct = Math.round(((basePrice - tier.pricePerUnit) / basePrice) * 100);
           }
 
           return (
@@ -91,7 +91,7 @@ export const QuantityBreaksSelector: React.FC<QuantityBreaksSelectorProps> = ({
                   <span className="text-[10px] font-semibold text-slate-400">/each</span>
                 </div>
                 <span className={`mt-0.5 text-[11px] font-semibold ${isActive ? 'text-[#9C4122]/90' : 'text-slate-500'}`}>
-                  {tier.label || (savePct > 0 ? `Buy ${tier.minQty}, Save Rs. ${(tier1Price - tier.pricePerUnit) * tier.minQty}` : `Buy ${tier.minQty}`)}
+                  {tier.label || (savePct > 0 ? `Buy ${tier.minQty}, Save Rs. ${(basePrice - tier.pricePerUnit) * tier.minQty}` : `Buy ${tier.minQty}`)}
                 </span>
                 
                 {isActive && (
