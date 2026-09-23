@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { QuantityBreaks, QuantityBreakTier } from '../../types';
 import { X } from 'lucide-react';
 
@@ -30,9 +30,10 @@ export const QuantityBreaksSelector: React.FC<QuantityBreaksSelectorProps> = ({
   const tier1Price = sortedTiers[0]?.pricePerUnit || basePrice;
 
   return (
-    <div className="mt-6 mb-2">
-      <h3 className="mb-3 text-sm font-bold text-slate-800">Select Quantity Offer</h3>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+    <div className="mt-5 mb-2">
+      <h3 className="mb-2 text-sm font-bold text-slate-800">Select Quantity Offer</h3>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
         {sortedTiers.map((tier) => {
           const isActive = activeTier?.minQty === tier.minQty;
           
@@ -46,60 +47,71 @@ export const QuantityBreaksSelector: React.FC<QuantityBreaksSelectorProps> = ({
               key={tier.minQty}
               type="button"
               onClick={() => onTierSelect(tier, isActive)}
-              className={`relative flex flex-col items-start rounded-2xl border-2 p-3 text-left transition-all ${
-                isActive
-                  ? 'border-[#C48B80] bg-rose-50/50 shadow-sm'
-                  : 'border-slate-100 bg-white hover:border-rose-200 hover:bg-rose-50/30'
-              }`}
+              className={elative flex flex-col items-start rounded-xl p-2.5 text-left transition-all duration-200 }
             >
-              {/* Deselect Indicator / Radio */}
-              <div className="absolute right-3 top-3">
+              {/* Radio Indicator */}
+              <div className="absolute right-2.5 top-2.5">
                 {isActive ? (
-                  <div className="flex items-center justify-center gap-1 text-[9px] font-bold uppercase tracking-wider text-[#C48B80] bg-rose-100/50 px-2 py-1 rounded-full border border-[#C48B80]/30 hover:bg-[#C48B80] hover:text-white transition-colors" title="Click to remove selection">
-                    <X className="h-3 w-3" /> Remove
+                  <div className="flex h-3.5 w-3.5 items-center justify-center rounded-full border-2 border-[#9C4122]">
+                    <div className="h-1.5 w-1.5 rounded-full bg-[#9C4122]" />
                   </div>
                 ) : (
-                  <div className="flex h-4 w-4 items-center justify-center rounded-full border-2 border-slate-300 transition-colors" />
+                  <div className="flex h-3.5 w-3.5 items-center justify-center rounded-full border border-slate-300" />
                 )}
               </div>
 
               {/* Badges */}
-              <div className="mb-1.5 flex w-full flex-wrap gap-1.5 pr-8">
+              <div className="mb-1.5 flex w-full flex-wrap gap-1.5 pr-6">
                 {tier.badge && (
-                  <span className={`inline-flex items-center rounded-lg px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider ${
-                    isActive ? 'bg-[#C48B80] text-white' : 'bg-slate-800 text-white'
-                  }`}>
+                  <span className={inline-flex items-center rounded px-1.5 py-0.5 text-[8.5px] font-bold uppercase tracking-wider }>
                     {tier.badge}
                   </span>
                 )}
                 {savePct > 0 && (
-                  <span className="inline-flex items-center rounded-lg bg-emerald-100 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider text-emerald-700">
+                  <span className="inline-flex items-center rounded bg-emerald-50 px-1.5 py-0.5 text-[8.5px] font-bold uppercase tracking-wider text-emerald-700 border border-emerald-100/50">
                     Save {savePct}%
                   </span>
                 )}
+                {/* Fallback to keep layout stable if no badges */}
+                {!tier.badge && savePct === 0 && <div className="h-[18px]"></div>}
               </div>
 
-              {/* Label & Price */}
-              <div className="mt-1 flex w-full flex-col">
-                <span className={`text-sm font-bold leading-tight ${isActive ? 'text-[#C48B80]' : 'text-slate-700'}`}>
-                  {tier.label || (savePct > 0 ? `Buy ${tier.minQty}, Save Rs. ${(tier1Price - tier.pricePerUnit) * tier.minQty}` : `Buy ${tier.minQty}`)}
-                </span>
-                <div className="mt-1 flex items-baseline gap-1">
-                  <span className={`text-lg font-black ${isActive ? 'text-[#C48B80]' : 'text-slate-900'}`}>
+              {/* Content */}
+              <div className="flex w-full flex-col">
+                <div className="flex items-baseline gap-1">
+                  <span className={	ext-[15px] font-black }>
                     Rs. {tier.pricePerUnit.toLocaleString()}
                   </span>
-                  <span className="text-xs font-bold text-slate-500">/ each</span>
+                  <span className="text-[10px] font-semibold text-slate-400">/each</span>
                 </div>
+                <span className={mt-0.5 text-[11px] font-semibold }>
+                  {tier.label || (savePct > 0 ? Buy , Save Rs.  : Buy )}
+                </span>
+                
                 {isActive && (
-                  <span className="mt-1 block text-[11px] font-bold text-[#C48B80]">
-                    Total: Rs. {(tier.pricePerUnit * tier.minQty).toLocaleString()}
-                  </span>
+                  <div className="mt-1.5 w-full border-t border-[#9C4122]/15 pt-1.5 flex items-center justify-between">
+                    <span className="block text-[10px] font-bold text-[#9C4122]">
+                      Total: Rs. {(tier.pricePerUnit * tier.minQty).toLocaleString()}
+                    </span>
+                  </div>
                 )}
               </div>
             </button>
           );
         })}
       </div>
+
+      {activeTier && (
+        <div className="mt-2 flex justify-start">
+          <button 
+            type="button"
+            onClick={() => onTierSelect(activeTier, true)}
+            className="flex items-center gap-1 text-[11px] font-medium text-slate-500 hover:text-[#9C4122] transition-colors"
+          >
+            <X className="h-3 w-3" /> Clear selection
+          </button>
+        </div>
+      )}
     </div>
   );
 };
