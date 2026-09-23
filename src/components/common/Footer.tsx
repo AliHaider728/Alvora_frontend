@@ -14,10 +14,10 @@ import { useAuth } from '../../context/AuthContext';
    â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 const SHOP_LINKS = [
+  { label: 'Shop',           href: '/category/all' },
+  { label: 'About',          href: '/about' },
   { label: 'Best Sellers',   href: '/best-sellers' },
-  { label: 'Serums',         href: '/category/serums' },
-  { label: 'Moisturizers',   href: '/category/moisturizers' },
-  { label: 'Cleansers',      href: '/category/cleansers' },
+  { label: 'Wishlist',       href: '/wishlist' },
 ];
 
 const HELP_LINKS = [
@@ -218,7 +218,7 @@ export const Footer: React.FC = () => {
                 rel="noopener noreferrer" 
                 className="inline-block animate-shine font-bold tracking-wide hover:opacity-80 transition-opacity"
               >
-                Tecnosphere
+                TecnoSphere
               </a>
             </span>
           </div>
