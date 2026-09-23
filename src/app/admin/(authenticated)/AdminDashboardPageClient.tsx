@@ -13,26 +13,32 @@ export const AdminDashboardPageClient: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
+  const fetchData = async () => {
+    setLoading(true);
+    setFetchError(null);
+    try {
+      const [pRes, oRes, cRes] = await Promise.all([
+        api.getProducts(),
+        api.getOrders(),
+        api.getCustomers()
+      ]);
+      const normalizedProducts = Array.isArray(pRes)
+        ? pRes
+        : Array.isArray((pRes as any)?.products)
+          ? (pRes as any).products
+          : [];
+      setProducts(normalizedProducts);
+      if (oRes) setOrders(oRes);
+      if (cRes) setCustomers(cRes);
+    } catch (err: any) {
+      console.error("Dashboard fetch error:", err);
+      setFetchError(err.message || 'Unable to load dashboard data. Please check your connection.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      setFetchError(null);
-      try {
-        const [pRes, oRes, cRes] = await Promise.all([
-          api.getProducts(),
-          api.getOrders(),
-          api.getCustomers()
-        ]);
-        if (pRes) setProducts(Array.isArray(pRes) ? pRes : pRes.products || []);
-        if (oRes) setOrders(oRes);
-        if (cRes) setCustomers(cRes);
-      } catch (err: any) {
-        console.error("Dashboard fetch error:", err);
-        setFetchError(err.message || 'Unable to load dashboard data. Please check your connection.');
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchData();
   }, []);
 

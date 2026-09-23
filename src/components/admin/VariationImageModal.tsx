@@ -35,9 +35,12 @@ export const VariationImageModal: React.FC<VariationImageModalProps> = ({
 
     try {
       const res = await api.uploadProductImage(formData);
+      if (!res) {
+        throw new Error('Image upload failed.');
+      }
       setSelectedImage({
         url: res.secureUrl,
-        publicId: res.secureUrl.split('/').pop()?.split('.')[0] || '', // Fallback extraction
+        publicId: res.secureUrl.split('/').pop()?.split('.')[0] || '',
         alt: altText
       });
     } catch (err) {

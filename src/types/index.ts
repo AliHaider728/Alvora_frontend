@@ -457,6 +457,8 @@ export interface Bundle {
   discountPercent: number;
   isActive: boolean;
   isBestseller?: boolean;
+  rating?: number;
+  reviewCount?: number;
   displayOrder: number;
   originalTotalPrice?: number;
   currentPrice?: number;

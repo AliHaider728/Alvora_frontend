@@ -48,10 +48,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const slug = (await params).slug;
   
-  let product = null;
-  let reviews = [];
-  let relatedProducts = [];
-  let schemaData = null;
+  let product: any = null;
+  let reviews: any[] = [];
+  let relatedProducts: any[] = [];
+  let schemaData: any = null;
   
   try {
         product = await api.getProduct(slug);

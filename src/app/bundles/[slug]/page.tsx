@@ -45,9 +45,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const slug = (await params).slug;
   
-  let bundle = null;
-  let reviews = [];
-  let relatedBundles = [];
+  let bundle: any = null;
+  let reviews: any[] = [];
+  let relatedBundles: any[] = [];
   
   try {
     const [fetchedBundle, fetchedRelated] = await Promise.all([
@@ -56,14 +56,16 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     ]);
 
     bundle = fetchedBundle;
-    relatedBundles = (fetchedRelated.bundles || []).filter((b: any) => b.slug !== slug).slice(0, 4);
+    const bundleList = Array.isArray(fetchedRelated?.bundles) ? fetchedRelated.bundles : [];
+    relatedBundles = bundleList.filter((b: any) => b.slug !== slug).slice(0, 4);
 
     if (!bundle) {
       notFound();
     }
     
     // Fetch reviews using bundle.id (bundles have their own reviews)
-    reviews = await api.getProductReviews(bundle.id).catch(() => []);
+    const reviewResult = await api.getProductReviews(bundle.id).catch(() => []);
+    reviews = Array.isArray(reviewResult) ? reviewResult : [];
 
   } catch (e) {
     console.error(`[Page] Error fetching bundle for slug ${slug}:`, e);

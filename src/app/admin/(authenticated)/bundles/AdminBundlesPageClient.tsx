@@ -24,8 +24,13 @@ export const AdminBundlesPageClient = () => {
         api.getBundles({ fetchAll: true }),
         api.getProducts()
       ]);
-      setBundles(bundlesRes.bundles || []);
-      setProducts(Array.isArray(productsRes) ? productsRes : productsRes.products || []);
+      setBundles(bundlesRes?.bundles || []);
+      const normalizedProducts = Array.isArray(productsRes)
+        ? productsRes
+        : Array.isArray((productsRes as any)?.products)
+          ? (productsRes as any).products
+          : [];
+      setProducts(normalizedProducts);
     } catch (e) {
       console.error(e);
     } finally {

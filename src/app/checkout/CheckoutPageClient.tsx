@@ -127,18 +127,16 @@ export const CheckoutPageClient: React.FC = () => {
       return;
     }
     if (deliveryType === 'category') {
-      const category = categories.find(candidate => candidate.slug === item.product.categorySlug);
+      const category = categories.find(candidate => candidate.slug === (item.product.categorySlug || ''));
       const categoryType = category?.deliveryType || category?.deliveryChargeType;
       if (categoryType === 'none') {
         deliveryUnavailable = true;
       } else if (categoryType === 'free') {
         return;
       } else if (categoryType === 'fixed' || category?.deliveryCharge !== undefined) {
+        const categoryFee = category ? Number(category.customDeliveryFee ?? category.deliveryFee ?? category.deliveryCharge ?? flatRate) : flatRate;
         hasShippingOverride = true;
-        highestOverrideFee = Math.max(
-          highestOverrideFee,
-          Number(category.customDeliveryFee ?? category.deliveryFee ?? category.deliveryCharge) || flatRate
-        );
+        highestOverrideFee = Math.max(highestOverrideFee, categoryFee || flatRate);
       } else {
         hasDefaultShippingItem = true;
       }
@@ -188,12 +186,13 @@ export const CheckoutPageClient: React.FC = () => {
     }
 
     const standardizedPhone = '0' + cleanPhone.slice(-10);
-    setPhone(standardizedPhone);
+    const finalPhone = standardizedPhone;
+    setPhone(finalPhone);
 
-    await handlePaymentSubmit();
+    await handlePaymentSubmit(finalPhone);
   };
 
-  const handlePaymentSubmit = async () => {
+  const handlePaymentSubmit = async (finalPhoneOverride?: string) => {
     if (isPlacingOrder) return;
     setIsPlacingOrder(true);
     
@@ -202,12 +201,12 @@ export const CheckoutPageClient: React.FC = () => {
     const created = await placeOrder({
       customerName: fullName.trim(),
       email: email.trim(),
-      phone: phone.trim(),
+      phone: (finalPhoneOverride || phone.trim()),
       items: cart.map(item => {
         let price = item.product.price;
         let image = item.product.images[0];
         let sku = item.product.sku;
-        let attributes = undefined;
+        let attributes: Record<string, string> | undefined = undefined;
 
         if (item.product.productType === 'variable' && item.variationId) {
            const variation = item.product.variations?.find(v => String(v.id) === String(item.variationId));
@@ -253,7 +252,7 @@ export const CheckoutPageClient: React.FC = () => {
       status: 'Pending',
       shippingAddress: {
         fullName: fullName.trim(),
-        phone: finalPhone,
+        phone: finalPhoneOverride || phone.trim(),
         street: street.trim(),
         city: city.trim(),
         state: state.trim(),
@@ -273,7 +272,7 @@ export const CheckoutPageClient: React.FC = () => {
 
 
     // Meta Pixel - Purchase
-    const metaEventId = `purchase_${created.orderId || created.id}`;
+    const metaEventId = `purchase_${created.id}`;
 
     if (typeof window !== "undefined" && window.fbq) {
       try {

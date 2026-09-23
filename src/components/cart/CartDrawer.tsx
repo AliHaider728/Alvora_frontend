@@ -317,7 +317,7 @@ export const CartDrawer: React.FC = () => {
                     items: cart.map((item) => ({
                       id: item.product.id,
                       quantity: item.quantity,
-                      price: item.price,
+                      price: item.resolvedUnitPrice ?? item.product.price,
                     })),
                     value: cartSubtotal,
                     currency: "PKR",
@@ -326,7 +326,7 @@ export const CartDrawer: React.FC = () => {
                     items: cart.map((item) => ({
                       id: item.product.id,
                       quantity: item.quantity,
-                      price: item.price,
+                      price: item.resolvedUnitPrice ?? item.product.price,
                     })),
                     value: cartSubtotal,
                     currency: "PKR",

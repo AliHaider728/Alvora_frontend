@@ -67,7 +67,7 @@ export const AdminReviewsPageClient: React.FC = () => {
 
     setIsSubmitting(true);
     try {
-      await addAdminReview({ ...newReview }, reviewImageFile || undefined);
+      await addAdminReview({ ...newReview });
       showToast('Review added successfully', 'success');
       setIsAddModalOpen(false);
       setNewReview({ productId: '', reviewerName: '', rating: 5, title: '', content: '', verifiedPurchase: true });
@@ -124,21 +124,22 @@ export const AdminReviewsPageClient: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
-    confirm({
+    const confirmed = await confirm({
       title: 'Delete Review',
-      message: 'Are you sure you want to permanently delete this review?',
-      type: 'danger',
-      confirmText: 'Delete',
-      onConfirm: async () => {
-        try {
-          await deleteReview(id);
-          showToast('Review deleted', 'success');
-          fetchReviews();
-        } catch (err: any) {
-          showToast(err.message || 'Failed to delete', 'error');
-        }
-      }
+      description: 'Are you sure you want to permanently delete this review?',
+      confirmLabel: 'Delete',
+      destructive: true
     });
+
+    if (!confirmed) return;
+
+    try {
+      await deleteReview(id);
+      showToast('Review deleted', 'success');
+      fetchReviews();
+    } catch (err: any) {
+      showToast(err.message || 'Failed to delete', 'error');
+    }
   };
 
   const renderStars = (rating: number) => {

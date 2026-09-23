@@ -22,7 +22,7 @@ export const AdminContactMessagesClient: React.FC = () => {
   const fetchMessages = async () => {
     try {
       const data = await api.getContactMessages();
-      setMessages(data);
+      setMessages(data ?? []);
     } catch (err: any) {
       showToast(err.message || 'Failed to load messages', 'error');
     } finally {

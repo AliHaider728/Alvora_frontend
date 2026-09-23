@@ -37,16 +37,17 @@ export default function AdminCreateBundleClient() {
   const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>([]);
   
   // Pricing & Stock Modes
-  const [discountType, setDiscountType] = useState<'percentage' | 'fixed_price'>('percentage');
+  const [discountType, setDiscountType] = useState<'percentage' | 'fixed' | 'custom'>('percentage');
   const [discountValue, setDiscountValue] = useState(0);
   const [customPrice, setCustomPrice] = useState(0);
   
   const [autoCalcStock, setAutoCalcStock] = useState(true);
+  const [manualStock, setManualStock] = useState(0);
   const [bundleStock, setBundleStock] = useState(10);
   
   // Display Options
   const [badgeText, setBadgeText] = useState('');
-  const [routineSteps, setRoutineSteps] = useState(true);
+  const [routineSteps, setRoutineSteps] = useState('');
   const [showShop, setShowShop] = useState(true);
   const [featureHome, setFeatureHome] = useState(false);
   const [isBestseller, setIsBestseller] = useState(false);
@@ -62,7 +63,7 @@ export default function AdminCreateBundleClient() {
   const fetchProducts = async () => {
     try {
       const res = await api.getProducts();
-      setProducts(Array.isArray(res) ? res : res.products || []);
+      setProducts(Array.isArray(res) ? res : Array.isArray((res as any)?.products) ? (res as any).products : []);
     } catch (e) {
       console.error(e);
     } finally {
@@ -91,6 +92,9 @@ export default function AdminCreateBundleClient() {
   const finalPrice = useMemo(() => {
     if (discountType === 'percentage') {
       return currentSaleTotal * (1 - (discountValue / 100));
+    }
+    if (discountType === 'fixed') {
+      return Math.max(0, currentSaleTotal - discountValue);
     }
     return customPrice;
   }, [discountType, discountValue, customPrice, currentSaleTotal]);
@@ -177,7 +181,7 @@ export default function AdminCreateBundleClient() {
     }
     
     // Out of stock warning
-    const hasOutOfStock = selectedProducts.some(sp => (sp.product.stockQuantity || 0) < sp.qty);
+    const hasOutOfStock = selectedProducts.some(sp => sp.product.trackInventory !== false && (sp.product.stockQuantity || 0) < sp.qty);
     if (hasOutOfStock) {
       const confirm = window.confirm("One or more included products do not have enough stock. Are you sure you want to create this bundle?");
       if (!confirm) return;
@@ -284,7 +288,7 @@ export default function AdminCreateBundleClient() {
           <button 
             disabled={saving}
             onClick={() => handleSubmit('published')}
-            className="px-5 py-2 text-sm font-medium text-white bg-[#1A1A1A] hover:bg-black rounded-lg shadow-md transition-colors flex items-center gap-2"
+            className="px-5 py-2 text-sm font-medium text-white bg-alvora-charcoal hover:bg-black rounded-lg shadow-md transition-colors flex items-center gap-2"
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             Create Bundle
@@ -415,7 +419,7 @@ export default function AdminCreateBundleClient() {
                   </thead>
                   <tbody className="divide-y divide-gray-100">
                     {selectedProducts.map((sp) => {
-                      const outOfStock = (sp.product.stockQuantity || 0) < sp.qty;
+                      const outOfStock = sp.product.trackInventory !== false && (sp.product.stockQuantity || 0) < sp.qty;
                       return (
                         <tr key={sp.product.id} className={outOfStock ? "bg-red-50/50" : ""}>
                           <td className="p-4 flex items-center gap-3">
@@ -424,8 +428,8 @@ export default function AdminCreateBundleClient() {
                             </div>
                             <div>
                               <p className="font-medium text-gray-900 line-clamp-1">{sp.product.name}</p>
-                              {sp.product.discountPrice && (
-                                <p className="text-xs text-green-600 font-medium">Sale: {formatPrice(sp.product.discountPrice)}</p>
+                              {sp.product.originalPrice && sp.product.originalPrice > sp.product.price && (
+                                <p className="text-xs text-green-600 font-medium">Sale: {formatPrice(sp.product.price)}</p>
                               )}
                             </div>
                           </td>
@@ -446,8 +450,8 @@ export default function AdminCreateBundleClient() {
                           </td>
                           <td className="p-4">
                             <span className={`px-2 py-1 rounded-md text-xs font-medium ${outOfStock ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-700'}`}>
-                              {sp.product.stockQuantity || 0}
-                            </span>
+                              {sp.product.trackInventory === false ? 'Unlimited' : (sp.product.stockQuantity || 0)}
+                              </span>
                           </td>
                           <td className="p-4 text-gray-600">{formatPrice(sp.product.price || 0)}</td>
                           <td className="p-4">
@@ -483,7 +487,7 @@ export default function AdminCreateBundleClient() {
                 <AlertCircle className="w-3 h-3" /> Minimum 2 products required for a bundle.
               </p>
             )}
-            {selectedProducts.some(sp => (sp.product.stockQuantity || 0) < sp.qty) && (
+            {selectedProducts.some(sp => sp.product.trackInventory !== false && (sp.product.stockQuantity || 0) < sp.qty) && (
               <p className="text-red-600 text-xs mt-2 flex items-center gap-1 font-medium">
                 <AlertCircle className="w-3 h-3" /> Warning: One or more selected items do not have enough stock.
               </p>
@@ -511,7 +515,7 @@ export default function AdminCreateBundleClient() {
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">Discount Type</label>
                   <div className="grid grid-cols-3 gap-2">
-                    {['percentage', 'fixed', 'custom'].map(t => (
+                    {(['percentage', 'fixed', 'custom'] as const).map(t => (
                       <button 
                         key={t} onClick={() => setDiscountType(t)}
                         className={`py-2 text-xs font-medium rounded-lg border capitalize transition-colors ${discountType === t ? 'bg-[#A85A3B] text-white border-[#A85A3B]' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'}`}
@@ -585,7 +589,7 @@ export default function AdminCreateBundleClient() {
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">Routine Steps (Optional)</label>
-                  <textarea rows={3} value={routineSteps} onChange={e => setRoutineSteps(e.target.value)} placeholder="Step 1: Face Wash&#10;Step 2: Serum" className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none resize-none" />
+                  <textarea rows={3} value={typeof routineSteps === 'string' ? routineSteps : ''} onChange={e => setRoutineSteps(e.target.value)} placeholder="Step 1: Face Wash&#10;Step 2: Serum" className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none resize-none" />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">Benefits / Highlights</label>
@@ -646,7 +650,7 @@ export default function AdminCreateBundleClient() {
                       {uploadingImage ? (
                          <Loader2 className="w-8 h-8 animate-spin text-[#A85A3B]" />
                       ) : customImageUrl ? (
-                        <div className="relative w-full aspect-video md:aspect-[21/9] rounded-lg overflow-hidden">
+                        <div className="relative w-full aspect-video md:aspect-21/9 rounded-lg overflow-hidden">
                           <Image src={customImageUrl} alt="Preview" fill className="object-cover" />
                           <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
                             <span className="text-white text-sm font-bold flex items-center gap-2">
@@ -674,11 +678,11 @@ export default function AdminCreateBundleClient() {
         </div>
 
         {/* RIGHT COLUMN - Sticky Summary & Preview */}
-        <div className="w-full xl:w-[400px] space-y-6">
+        <div className="w-full xl:w-100 space-y-6">
           
           <div className="sticky top-24 space-y-6">
             {/* PRICING SUMMARY CARD */}
-            <div className="bg-[#1A1A1A] p-6 rounded-2xl text-white shadow-xl">
+            <div className="bg-alvora-charcoal p-6 rounded-2xl text-white shadow-xl">
               <h3 className="text-lg font-display mb-6">Pricing Summary</h3>
               
               <div className="space-y-3 mb-6 text-sm">
@@ -710,7 +714,7 @@ export default function AdminCreateBundleClient() {
             <div id="preview-card" className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm scroll-mt-24">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-widest">Live Preview</h3>
-                {badgeText && <span className="bg-[#FAF6F2] text-[#A85A3B] px-2 py-1 text-[10px] font-bold uppercase tracking-widest rounded">{badgeText}</span>}
+                {badgeText && <span className="bg-alvora-ivory text-[#A85A3B] px-2 py-1 text-[10px] font-bold uppercase tracking-widest rounded">{badgeText}</span>}
               </div>
               
               <div className="aspect-square bg-gray-100 rounded-xl mb-4 relative overflow-hidden flex items-center justify-center p-4">
@@ -729,7 +733,7 @@ export default function AdminCreateBundleClient() {
                 {totalSavings > 0 && <span className="text-sm text-gray-400 line-through">{formatPrice(currentOriginalTotal)}</span>}
               </div>
 
-              <button className="w-full py-3 bg-[#1A1A1A] text-white text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-black transition-colors pointer-events-none">
+              <button className="w-full py-3 bg-alvora-charcoal text-white text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-black transition-colors pointer-events-none">
                 Add Bundle to Cart
               </button>
             </div>

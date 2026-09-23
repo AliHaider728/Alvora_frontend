@@ -13,9 +13,9 @@ import { AnimatedButton } from '../common/AnimatedButton';
 export const BundleSection: React.FC = () => {
   const { bundles, bundlesLoading, addToCart, setIsCartOpen } = useStore();
   const shouldReduceMotion = useReducedMotion();
-  const variants = shouldReduceMotion ? {} : {
+  const variants = shouldReduceMotion ? undefined : {
     hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] } }
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' as const } }
   };
 
   const [mounted, setMounted] = useState(false);
@@ -25,29 +25,49 @@ export const BundleSection: React.FC = () => {
     if (!bundlesLoading && (!bundles || bundles.length === 0)) return null;
 
   const handleAddBundle = (bundle: Bundle) => {
-    const mapBundleToProduct = (bundle: any) => {
+    const mapBundleToProduct = (bundle: Bundle): Product => {
       const displayImage = bundle.customImage || bundle.image || (bundle.products && bundle.products.length > 0 && (bundle.products[0].images?.[0] || bundle.products[0].product?.images?.[0])) || null;
       return {
-        id: bundle.id,
+        id: String(bundle.id),
         productType: 'bundle',
         bundleData: bundle,
         name: bundle.name,
         slug: bundle.slug,
-        price: bundle.currentPrice || 0,
-        originalPrice: getBundleOriginalPrice(bundle),
+        price: Number(bundle.currentPrice || 0),
+        originalPrice: Number(getBundleOriginalPrice(bundle) || 0),
         images: displayImage ? [displayImage] : [],
         inStock: true,
         category: 'Bundles',
         categorySlug: 'bundles',
         sku: `BUNDLE-${bundle.id}`,
-        rating: bundle.rating || 5,
-        reviewCount: bundle.reviewCount || 0,
+        rating: Number(bundle.rating || 5),
+        reviewCount: Number(bundle.reviewCount || 0),
         tags: [],
         features: [],
         safetyInfo: '',
         specifications: {},
-        ageGroups: []
-      };
+        ageGroups: [],
+        brand: 'Alvora',
+        description: bundle.description || '',
+        shortDescription: bundle.shortDescription || bundle.description || '',
+        attributes: [],
+        variations: [],
+        defaultAttributes: {},
+        defaultVariationId: '',
+        isVisible: true,
+        status: 'published',
+        productDetailBlocks: [],
+        productDetailCustomCss: '',
+        categoryNames: ['Bundles'],
+        categorySlugs: ['bundles'],
+        isFeatured: false,
+        isNewArrival: false,
+        isBestseller: Boolean(bundle.isBestseller),
+        isSpotlight: false,
+        soldCount: 0,
+        metaTitle: bundle.name,
+        metaDescription: bundle.description || '',
+      } as Product;
     };
     const bundleProduct = mapBundleToProduct(bundle);
     addToCart(bundleProduct, 1);

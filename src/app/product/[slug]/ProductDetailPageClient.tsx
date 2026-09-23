@@ -33,8 +33,8 @@ import Image from "next/image";
 import dynamic from 'next/dynamic';
 import { formatPrice } from '../../../utils/formatters';
 import { useScrollLock } from '../../../hooks/useScrollLock';
-import { AlvoraProductCard } from '../../../components/common/AlvoraProductCard';
 import { ReviewModal } from '../../../components/common/ReviewModal';
+import { ProductImage } from '../../../components/common/ProductImage';
 import { api, getLastApiError } from '../../../services/api';
 import {
   getEffectiveAvailableQuantity,
@@ -46,15 +46,14 @@ import {
   getVariationAttributeValue,
   isProductVisibleOnStorefront,
   isVariantOptionAvailable,
-  normalizeInventory,
-  getVariantImages
+  normalizeInventory
 } from '../../../utils/products';
 import { ProductDetailContent } from '../../../components/product/ProductDetailContent';
+import { AlvoraProductCard } from '../../../components/common/AlvoraProductCard';
 import { Review, Product } from '../../../types';
 import { getSafeImageSrc } from '../../../utils/images';
 
 // Dynamically import below-the-fold and non-critical components to reduce initial JS payload
-const AlvoraProductCard = dynamic(() => import('../../../components/common/AlvoraProductCard').then(mod => mod.AlvoraProductCard), { ssr: false });
 const ReviewSummary = dynamic(() => import('../../../components/common/ReviewSummary').then(mod => mod.ReviewSummary), { ssr: false });
 const QuantityBreaksSelector = dynamic(() => import('../../../components/product/QuantityBreaksSelector').then(mod => mod.QuantityBreaksSelector), { ssr: false });
 const BogoBanner = dynamic(() => import('../../../components/product/BogoBanner').then(mod => mod.BogoBanner), { ssr: false });

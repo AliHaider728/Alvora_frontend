@@ -210,7 +210,7 @@ export const AdminProductFormPageClient: React.FC = () => {
   const [ageGroups, setAgeGroups] = useState<AgeGroupCategory[]>(['6-8']);
   const [material, setMaterial] = useState('');
   const [safetyInfo, setSafetyInfo] = useState('');
-  const [weight, setWeight] = useState<number>();
+  const [weight, setWeight] = useState<number | ''>('');
   const [deliveryType, setDeliveryType] = useState<DeliveryChargeType>('free');
   const [customDeliveryFee, setCustomDeliveryFee] = useState<number>();
   const [status, setStatus] = useState<'draft' | 'published'>('published');
@@ -381,7 +381,7 @@ export const AdminProductFormPageClient: React.FC = () => {
     setTrackInventory(productInventory.trackInventory);
     setStockQuantity(productInventory.stockQuantity);
     setStockStatus(productInventory.stockStatus);
-    setLowStockThreshold(editingProduct.lowStockThreshold);
+    setLowStockThreshold(editingProduct.lowStockThreshold ?? undefined);
     setProductType(inferProductType(editingProduct));
     setAttributes(editingProduct.attributes || []);
     const normalizedVariations = normalizeVariationRecords(editingProduct.variations);
@@ -400,9 +400,9 @@ export const AdminProductFormPageClient: React.FC = () => {
       : editingProduct.ageGroup ? [editingProduct.ageGroup] : ['6-8']);
     setMaterial(editingProduct.specifications?.Material || '');
     setSafetyInfo(editingProduct.safetyInfo || '');
-    setWeight(editingProduct.weight);
+    setWeight(editingProduct.weight ?? '');
     setDeliveryType(editingProduct.deliveryType || editingProduct.deliveryChargeType || 'free');
-    setCustomDeliveryFee(editingProduct.customDeliveryFee);
+    setCustomDeliveryFee(editingProduct.customDeliveryFee ?? undefined);
     setStatus(editingProduct.status || 'published');
     setIsVisible(editingProduct.isVisible !== false);
     setIsFeatured(editingProduct.isFeatured === true);
@@ -761,7 +761,7 @@ export const AdminProductFormPageClient: React.FC = () => {
       )) nextErrors.sku = 'This SKU is already in use.';
     }
 
-    if (weight !== undefined && weight !== '' && (!Number.isFinite(Number(weight)) || Number(weight) < 0)) nextErrors.weight = 'Weight must be zero or greater.';
+    if (weight !== '' && weight !== undefined && weight !== null && (!Number.isFinite(Number(weight)) || Number(weight) < 0)) nextErrors.weight = 'Weight must be zero or greater.';
     if (deliveryType === 'fixed' && (customDeliveryFee === undefined || customDeliveryFee < 0)) {
       nextErrors.customDeliveryFee = 'Enter a non-negative custom shipping fee.';
     }
@@ -904,10 +904,10 @@ export const AdminProductFormPageClient: React.FC = () => {
       isNewArrival,
       isBestseller,
       isSpotlight,
-      soldCount: soldCount === '' ? null : soldCount,
+      soldCount: soldCount === '' ? undefined : soldCount,
       isVisible,
       status,
-      weight: weight ?? null,
+      weight: weight === '' ? undefined : Number(weight),
       tags: editingProduct?.tags || [],
 
       productType,
@@ -1192,7 +1192,7 @@ export const AdminProductFormPageClient: React.FC = () => {
             <div className="grid gap-5 sm:grid-cols-2">
               <label>
                 <span className="mb-1.5 block text-xs font-bold text-[#1A1A1A]/80">Weight / Volume (ml/g)</span>
-                <input type="number" min="0" step="0.01" value={weight ?? ''} onChange={event => { setWeight(event.target.value === '' ? undefined : Number(event.target.value)); markDirty(); clearError('weight'); }} className={inputClass('weight')} placeholder="e.g. 100" />
+                <input type="number" min="0" step="0.01" value={weight ?? ''} onChange={event => { setWeight(event.target.value === '' ? '' : Number(event.target.value)); markDirty(); clearError('weight'); }} className={inputClass('weight')} placeholder="e.g. 100" />
                 <FieldError message={errors.weight} />
               </label>
               <label>

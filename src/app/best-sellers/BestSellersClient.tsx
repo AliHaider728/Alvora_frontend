@@ -33,6 +33,8 @@ export default function BestSellersClient() {
     tags: b.customImage ? [`bestseller_image:${b.customImage}`] : [],
     features: [],
     description: b.description || '',
+    safetyInfo: '',
+    specifications: {},
     ageGroups: [],
     brand: 'Alvora'
   });

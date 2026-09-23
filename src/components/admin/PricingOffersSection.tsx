@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import { Plus, Trash2, Tag, Gift, BadgePercent } from 'lucide-react';
-import { PricingOffers, QuantityBreakTier } from '../../../types';
+import { PricingOffers, QuantityBreakTier } from '../../types';
 import { Toggle } from '../ui/Toggle';
 
 // Re-use the same fieldClassName constant pattern from AdminProductFormPageClient

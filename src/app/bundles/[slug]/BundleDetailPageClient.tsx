@@ -10,6 +10,7 @@ import { getBundleOriginalPrice } from '../../../utils/products';
 import { ReviewSummary } from '../../../components/common/ReviewSummary';
 import { AlvoraProductCard } from '../../../components/common/AlvoraProductCard';
 import { ReviewModal } from '../../../components/common/ReviewModal';
+import { Product } from '../../../types';
 
 export function BundleDetailPageClient({ initialBundle, initialReviews, relatedBundles }: any) {
   const { addToCart, setIsCartOpen } = useStore();
@@ -37,29 +38,51 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
 
   // Bundle to Product mapper for cart
   const { products } = useStore();
-    const mapBundleToProduct = (b: any) => {
+  const mapBundleToProduct = (b: any): Product => {
     const bundleImg = b.customImage || b.image || (b.products?.[0]?.product?.images?.[0]) || (b.products?.[0]?.images?.[0]);
     return {
-      id: b.id,
+      id: String(b.id),
       productType: 'bundle',
       bundleData: b,
       name: b.name,
       slug: b.slug,
-      price: b.currentPrice || 0,
-      originalPrice: getBundleOriginalPrice(b),
+      price: Number(b.currentPrice || 0),
+      originalPrice: Number(getBundleOriginalPrice(b) || 0),
       images: bundleImg ? [bundleImg] : [],
       inStock: true,
       category: 'Bundles',
       categorySlug: 'bundles',
-      sku: "BUNDLE-" + b.id,
-      rating: b.rating || 5,
-      reviewCount: b.reviewCount || 0,
+      sku: `BUNDLE-${b.id}`,
+      rating: Number(b.rating || 5),
+      reviewCount: Number(b.reviewCount || 0),
       tags: [],
       features: [],
       safetyInfo: '',
       specifications: {},
-      ageGroups: []
-    };
+      ageGroups: [],
+      brand: 'Alvora',
+      description: b.description || '',
+      shortDescription: b.shortDescription || b.description || '',
+      variantGroups: [] as any,
+      attributes: [],
+      variations: [],
+      defaultAttributes: {},
+      defaultVariationId: '',
+      isVisible: true,
+      status: 'published',
+      productDetailBlocks: [],
+      productDetailCustomCss: '',
+      categoryNames: ['Bundles'],
+      categorySlugs: ['bundles'],
+      isFeatured: false,
+      isNewArrival: false,
+      isBestseller: Boolean(b.isBestseller),
+      isSpotlight: false,
+      soldCount: 0,
+      metaTitle: b.name,
+      metaDescription: b.description || '',
+      priceBreaks: undefined as any,
+    } as Product;
   };
 
   const handleAddToCart = () => {
