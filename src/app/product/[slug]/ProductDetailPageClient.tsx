@@ -707,10 +707,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                 {product.name}
               </h1>
 
-              <div className="mb-3 grid gap-1.5 rounded-2xl border border-[#EDE5DC] bg-[#FAF6F2]/70 px-3 py-2.5 text-xs sm:grid-cols-2" aria-label="Product categories and recommended age groups">
-                <div><span className="font-black text-[#1A1A1A]/80">Categories: </span><span className="font-semibold text-[#C48B80]">{getProductCategoryNames(product).join(', ') || 'Uncategorized'}</span></div>
-                <div><span className="font-black text-[#1A1A1A]/80">Age: </span><span className="font-semibold text-[#C48B80]">{formatProductAgeGroups(product).replace(/^Ages\s*/i, '')}</span></div>
-              </div>
+
 
               {/* Price & Stock */}
               <div className="mb-3 flex flex-col items-start gap-3 rounded-2xl border border-[#EDE5DC] bg-[#FAF6F2] p-3 sm:flex-row sm:items-center sm:justify-between sm:p-4">
@@ -1112,10 +1109,15 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
               </div>
               <div className="rounded-2xl bg-[#FAF6F2] p-2 sm:p-2.5">
                 <RotateCcw className="w-4 h-4 mx-auto text-[#C48B80] mb-1" />
-                <span>Easy 7-Day Returns</span>
+                                  <span>Easy 7-Day Returns</span>
+                </div>
+              </div>
+
+              <div className="mt-4 grid gap-1.5 rounded-2xl border border-[#EDE5DC] bg-[#FAF6F2]/70 px-3 py-2.5 text-xs sm:grid-cols-2" aria-label="Product categories and recommended age groups">
+                <div><span className="font-black text-[#1A1A1A]/80">Categories: </span><span className="font-semibold text-[#C48B80]">{getProductCategoryNames(product).join(', ') || 'Uncategorized'}</span></div>
+                <div><span className="font-black text-[#1A1A1A]/80">Age: </span><span className="font-semibold text-[#C48B80]">{formatProductAgeGroups(product).replace(/^Ages\s*/i, '')}</span></div>
               </div>
             </div>
-          </div>
         </div>
 
         {/* Product Information Tabs */}

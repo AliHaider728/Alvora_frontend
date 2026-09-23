@@ -54,16 +54,15 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   let schemaData = null;
   
   try {
-    // Parallel data fetching instead of sequential waterfall
-    const [fetchedProduct, fetchedReviews, fetchedRelated] = await Promise.all([
-      api.getProduct(slug),
-      api.getProductReviews(slug).catch(() => []),
-      api.getRelatedProducts(slug).catch(() => [])
-    ]);
-
-    product = fetchedProduct;
-    reviews = fetchedReviews || [];
-    relatedProducts = fetchedRelated || [];
+        product = await api.getProduct(slug);
+    if (product) {
+      const [fetchedReviews, fetchedRelated] = await Promise.all([
+        api.getProductReviews(product.id).catch(() => []),
+        api.getRelatedProducts(product.id).catch(() => [])
+      ]);
+      reviews = fetchedReviews || [];
+      relatedProducts = fetchedRelated || [];
+    }
 
     if (!product) {
       console.error(`[Page] api.getProduct returned null for slug: ${slug}`);

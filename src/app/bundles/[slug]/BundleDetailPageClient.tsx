@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Star, Plus, Minus, Info, BadgeCheck, Check, ShoppingCart, MessageSquarePlus } from 'lucide-react';
+import { Star, Plus, Minus, Info, BadgeCheck, Check, ShoppingCart, MessageSquarePlus, ZoomIn } from 'lucide-react';
 import { useStore } from '../../../context/StoreContext';
 import { formatPrice } from '../../../utils/formatters';
 import { getBundleOriginalPrice } from '../../../utils/products';
@@ -21,6 +21,16 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
   // Gallery
   const allImages = Array.from(new Set([bundle.customImage, bundle.image, ...(bundle.products || []).flatMap((p: any) => p.images || p.product?.images || [])].filter(Boolean)));
   const [activeImage, setActiveImage] = useState(allImages[0] || '/images/hero/alvora-hero.png');
+  const [isZooming, setIsZooming] = useState(false);
+  const [zoomOrigin, setZoomOrigin] = useState('50% 50%');
+  const handleZoomPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType !== 'mouse' || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const x = Math.min(100, Math.max(0, ((event.clientX - bounds.left) / bounds.width) * 100));
+    const y = Math.min(100, Math.max(0, ((event.clientY - bounds.top) / bounds.height) * 100));
+    setZoomOrigin(`${x}% ${y}%`);
+    setIsZooming(true);
+  };
   
   // Review Modal
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
@@ -96,12 +106,15 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
             </div>
             )}
             <motion.div 
-              className="relative w-full aspect-square rounded-3xl overflow-hidden bg-white shadow-sm"
+              className="group/gallery relative w-full aspect-square rounded-3xl overflow-hidden bg-white shadow-sm cursor-zoom-in"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
+              onPointerMove={handleZoomPointerMove}
+              onPointerLeave={() => { setIsZooming(false); setZoomOrigin('50% 50%'); }}
             >
-              <Image src={activeImage} alt={bundle.name} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" priority />
+              <Image src={activeImage} alt={bundle.name} fill sizes="(max-width: 768px) 100vw, 50vw" className={`object-cover object-center transition-transform duration-200 ease-out motion-reduce:transition-none ${isZooming ? 'scale-[1.75]' : 'scale-100'}`} style={{ transformOrigin: zoomOrigin }} priority />
+              <span className="pointer-events-none absolute bottom-3 right-3 z-10 inline-flex items-center gap-1.5 rounded-full bg-slate-950/70 px-3 py-1.5 text-[10px] font-bold text-white opacity-0 backdrop-blur transition-opacity group-hover/gallery:opacity-100"><ZoomIn className="h-3.5 w-3.5" /> Hover to zoom</span>
               {bundle.discountPercent > 0 && (
                 <motion.div 
                   initial={{ opacity: 0, scale: 0.5 }}

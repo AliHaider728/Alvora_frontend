@@ -151,7 +151,10 @@ export const CheckoutPageClient: React.FC = () => {
     hasDefaultShippingItem && cartSubtotal < settings.freeShippingThreshold
       ? settings.standardShippingFee || 250
       : 0;
-  const shippingFee = Math.max(hasShippingOverride ? highestOverrideFee : 0, defaultShippingFee);
+  let shippingFee = Math.max(hasShippingOverride ? highestOverrideFee : 0, defaultShippingFee);
+  if (cartSubtotal >= settings.freeShippingThreshold) {
+    shippingFee = 0;
+  }
   const taxFee = Math.round(cartSubtotal * settings.taxRate);
   const finalTotal = Math.max(0, cartSubtotal - couponDiscountAmount - routineDiscountAmount + shippingFee + taxFee);
 
