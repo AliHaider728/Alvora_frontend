@@ -14,8 +14,8 @@ import { useAuth } from '../../context/AuthContext';
    â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 const SHOP_LINKS = [
-  { label: 'Our Collection', href: '/category/all' },
   { label: 'About',          href: '/about' },
+  { label: 'Our Collection', href: '/category/all' },
   { label: 'Best Sellers',   href: '/best-sellers' },
   { label: 'Wishlist',       href: '/wishlist' },
 ];
