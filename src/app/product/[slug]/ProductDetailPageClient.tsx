@@ -417,7 +417,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
   const flatRate = settings.flatDeliveryRate ?? settings.standardShippingFee;
   const productDeliveryType = getProductDeliveryType(product);
   const deliveryFee = productDeliveryType === 'fixed'
-    ? (product.customDeliveryFee ?? flatRate)
+    ? (Number(product.customDeliveryFee) || flatRate)
     : productDeliveryType === 'free'
     ? 0
     : flatRate;

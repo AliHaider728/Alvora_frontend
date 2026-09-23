@@ -811,6 +811,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const placeOrder = async (orderData: Omit<Order, 'id' | 'date'>) => {
     const response = await api.createOrder({
       ...orderData,
+      shippingFee: orderData.shipping,
       deliveryCharge: orderData.shipping,
       discountAmount: orderData.discount
     });

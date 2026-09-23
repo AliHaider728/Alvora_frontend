@@ -120,7 +120,7 @@ export const CheckoutPageClient: React.FC = () => {
     }
     if (deliveryType === 'fixed') {
       hasShippingOverride = true;
-      highestOverrideFee = Math.max(highestOverrideFee, item.product.customDeliveryFee ?? flatRate);
+      highestOverrideFee = Math.max(highestOverrideFee, Number(item.product.customDeliveryFee) || flatRate);
       return;
     }
     if (deliveryType === 'free') {
@@ -137,7 +137,7 @@ export const CheckoutPageClient: React.FC = () => {
         hasShippingOverride = true;
         highestOverrideFee = Math.max(
           highestOverrideFee,
-          category.customDeliveryFee ?? category.deliveryFee ?? category.deliveryCharge ?? flatRate
+          Number(category.customDeliveryFee ?? category.deliveryFee ?? category.deliveryCharge) || flatRate
         );
       } else {
         hasDefaultShippingItem = true;
