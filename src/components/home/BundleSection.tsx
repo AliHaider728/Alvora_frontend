@@ -68,7 +68,7 @@ export const BundleSection: React.FC = () => {
               Alvora Bundles
             </h2>
             <p className="text-[#241916]/70 leading-relaxed max-w-xl mx-auto">
-              Achieve your skin goals faster with our expertly curated routines. Save up to 25% when you shop our sets.
+              Achieve your skincare goals with thoughtfully curated routines designed to cleanse, nourish, and bring out your natural glow.
             </p>
           </div>
         </div>
@@ -99,8 +99,24 @@ export const BundleSection: React.FC = () => {
 
         return (
           <div key={bundle.id} className={`flex flex-col ${isReverse ? "md:flex-row-reverse" : "md:flex-row"} w-full min-h-[500px]`}>
-            {/* Image Side */}
+                        {/* Image Side */}
             <div className={`w-full md:w-1/2 ${imageBgClass} relative aspect-square md:aspect-auto overflow-hidden`}>
+              
+              {/* Date Badge Logic */}
+              {(() => {
+                if (!bundle.startDate || !bundle.endDate) return null;
+                const end = new Date(bundle.endDate).getTime();
+                const now = new Date().getTime();
+                if (end > now) {
+                  return (
+                    <div className="absolute top-6 right-6 md:top-8 md:right-8 bg-black/80 backdrop-blur-md text-white text-[9px] font-bold px-3 py-1.5 uppercase tracking-[0.2em] z-20 rounded-full shadow-lg border border-white/20 flex items-center gap-1.5">
+                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></div>
+                      Ends {new Date(bundle.endDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                    </div>
+                  );
+                }
+                return null;
+              })()}
               {displayImage ? (
                 <Image 
                   src={displayImage} 

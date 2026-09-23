@@ -445,6 +445,8 @@ export interface HomepageSectionSetting {
 }
 
 export interface Bundle {
+  startDate?: string;
+  endDate?: string;
   id: string;
   name: string;
   slug: string;

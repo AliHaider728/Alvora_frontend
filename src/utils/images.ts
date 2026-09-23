@@ -12,7 +12,7 @@ export const getSafeImageSrc = (source?: string | any | null, options?: ImageOpt
   const fallbackSrc = typeof fallbackImage === "string" ? fallbackImage : (fallbackImage as any).src;
   const url = (typeof source === 'string' ? source.trim() : source) || fallbackSrc;
   
-  // Only apply transformations to genuine Cloudinary URLs
+  // Only apply transformations to genuine Cloudinary URLs  
   if (url.includes('res.cloudinary.com') && url.includes('/image/upload/')) {
     const transforms: string[] = ['f_auto', `q_${options?.quality || 'auto'}`];
     
