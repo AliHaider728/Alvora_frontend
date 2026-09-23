@@ -14,7 +14,7 @@ import { useAuth } from '../../context/AuthContext';
    â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 const SHOP_LINKS = [
-  { label: 'Shop',           href: '/category/all' },
+  { label: 'Our Collection', href: '/category/all' },
   { label: 'About',          href: '/about' },
   { label: 'Best Sellers',   href: '/best-sellers' },
   { label: 'Wishlist',       href: '/wishlist' },
@@ -99,9 +99,7 @@ export const Footer: React.FC = () => {
 
           {/* Col 2 — Shop */}
           <div className="lg:pl-4">
-            <h4 className="text-[13px] lg:text-[14px] font-bold tracking-wider uppercase text-[#1A1A1A] mb-6 font-body">
-              SHOP
-            </h4>
+            <h4 className="text-[13px] lg:text-[14px] font-bold tracking-wider uppercase text-[#1A1A1A] mb-6 font-body">EXPLORE</h4>
             <ul className="flex flex-col gap-4 lg:gap-5">
               {SHOP_LINKS.map(l => (
                 <li key={l.href + l.label}>
