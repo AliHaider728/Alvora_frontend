@@ -296,9 +296,9 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
 
               {/* Live preview */}
               <div className="col-span-2 sm:col-span-1 flex items-end">
-                <div className="w-full rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2.5 text-sm font-bold text-emerald-800">
-                  ðŸŽ {bogoAutoLabel}
-                </div>
+                                  <div className="w-full rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2.5 text-sm font-bold text-emerald-800 flex items-center gap-1.5">
+                    <Tag className="h-4 w-4 shrink-0" /> {bogoAutoLabel}
+                  </div>
               </div>
             </div>
 
@@ -409,9 +409,9 @@ export const PricingOffersSection: React.FC<Props> = ({ value, onChange, basePri
 
               {/* Live preview */}
               <div className="col-span-2 sm:col-span-1 flex items-end">
-                <div className="w-full rounded-xl border border-[#C48B80] bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm px-3 py-2.5 text-sm font-bold text-[#C48B80]">
-                  ðŸ•ï¸ {flatAutoLabel}
-                </div>
+                                  <div className="w-full rounded-xl border border-[#C48B80] bg-gradient-to-r from-[#9C4122] to-[#B34E28] hover:from-[#9C4122] hover:to-[#7A321A] text-white border-transparent shadow-sm px-3 py-2.5 text-sm font-bold flex items-center gap-1.5">
+                    <Tag className="h-4 w-4 shrink-0 text-white/50" /> {flatAutoLabel}
+                  </div>
               </div>
             </div>
 
