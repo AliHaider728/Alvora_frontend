@@ -657,11 +657,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
               <span className="pointer-events-none absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-slate-950/70 px-3 py-1.5 text-[10px] font-bold text-white opacity-0 backdrop-blur transition-opacity group-hover/gallery:opacity-100"><ZoomIn className="h-3.5 w-3.5" /> Click to enlarge</span>
-              {(product.discountPercent ?? 0) > 0 && (
-                <span className="absolute top-4 left-4 z-10 bg-gradient-to-br from-[#D4784F] to-[#9C4122] text-white font-display font-extrabold text-xs px-3 py-1.5 rounded-full shadow-md">
-                  -{product.discountPercent}% OFF
-                </span>
-              )}
+              
             </button>
 
             {/* Gallery Thumbnails */}
@@ -723,11 +719,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                     <span className="font-display text-3xl font-medium text-[#1A1A1A] sm:text-3xl">
                       {formatPrice(displayPrice, settings.currency)}
                     </span>
-                    {(product.originalPrice ?? 0) > 0 && (
-                      <div className="text-xl font-bold text-[#9C4122] line-through md:text-2xl">
-                        {formatPrice(currentOriginalPrice ?? product.originalPrice!, settings.currency)}
-                      </div>
-                    )}
+                    
                   </div>
                   {/* BOGO Banner */}
                   {product.pricingOffers?.bogo?.enabled && (
@@ -750,11 +742,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                       Prices vary by selection
                     </span>
                   )}
-                  {(product.discountPercent ?? 0) > 0 && (
-                    <span className="text-xs font-bold text-emerald-600">
-                      You save {formatPrice(product.originalPrice! - displayPrice, settings.currency)} ({product.discountPercent}% discount)
-                    </span>
-                  )}
+                  
                 </div>
 
                 <div className="text-left sm:text-right">

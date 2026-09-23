@@ -185,11 +185,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
             </span>
           ) : (
             <>
-              {(product.discountPercent ?? 0) > 0 && (
-                <span className="rounded-full bg-rose-500 px-3 py-1 text-[11px] font-extrabold tracking-wide text-white shadow-sm">
-                  -{product.discountPercent}%
-                </span>
-              )}
+              
               {product.isBestseller && (
                 <span className="rounded-full bg-amber-400 px-3 py-1 text-[11px] font-bold tracking-wide text-amber-950 shadow-sm transform-gpu will-change-transform">
                   BESTSELLER
@@ -264,11 +260,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, 
           <span className={`font-black leading-none tracking-tight text-[#C48B80] ${compact ? 'text-xl sm:text-2xl' : 'text-2xl sm:text-3xl'}`}>
             {pricePrefix}{displayPriceStr}
           </span>
-          {displayOriginalPrice && displayOriginalPrice > displayPrice && !pricePrefix && (
-            <span className="text-base font-medium text-slate-400 line-through">
-              {formatPrice(displayOriginalPrice, settings.currency)}
-            </span>
-          )}
+          
         </div>
 
         {cardDescription ? (
