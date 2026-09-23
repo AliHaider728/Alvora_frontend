@@ -19,7 +19,7 @@ const FAQS = [
   },
   {
     question: "What is your return policy?",
-    answer: "We offer a 30-day return policy. If you're not satisfied with your purchase, contact us within 30 days for a full refund or exchange."
+    answer: "We offer a 7-day return policy. If you're not satisfied with your purchase, contact us within 7 days for a full refund or exchange."
   },
   {
     question: "Are your products suitable for sensitive skin?",

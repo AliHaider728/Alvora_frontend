@@ -17,7 +17,7 @@ export default function ReturnPolicyPage() {
             <div className="w-16 h-16 rounded-2xl bg-[#FDF8F5] border border-[#F1C9BD] text-[#C48B80] flex items-center justify-center mx-auto mb-4">
               <RefreshCw className="w-8 h-8" />
             </div>
-            <h1 className="font-heading font-black text-3xl text-slate-900">30-Day Happiness Guarantee</h1>
+            <h1 className="font-heading font-black text-3xl text-slate-900">7-Day Happiness Guarantee</h1>
             <p className="text-slate-500 max-w-lg mx-auto">
               We want you to love every product from Alvora Skincare.
             </p>
@@ -31,7 +31,7 @@ export default function ReturnPolicyPage() {
               <div>
                 <h3 className="font-heading font-bold text-lg text-slate-900 mb-2">Our Return Policy</h3>
                 <p className="text-sm text-slate-600 leading-relaxed">
-                  If you are not completely delighted with your product, you can return it within 30 days of delivery in its original box for a full refund or exchange.
+                  If you are not completely delighted with your product, you can return it within 7 days of delivery in its original box for a full refund or exchange.
                 </p>
               </div>
             </div>
