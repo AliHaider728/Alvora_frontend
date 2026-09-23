@@ -187,14 +187,40 @@ export const Footer: React.FC = () => {
       {/* ── Bottom Bar ── */}
       <div className="border-t border-[#EDE5DC] pb-24 xl:pb-0">
         <div className="mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-12 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-[#A1A7AA] text-center sm:text-left">
+          <p className="text-sm text-[#7A7A7A] font-medium text-center sm:text-left">
             &copy; {new Date().getFullYear()} Alvora Skincare. All Rights Reserved.
           </p>
           <div className="flex items-center gap-5">
             {/* <Link href="/privacy-policy" className="text-xs text-[#A1A7AA] hover:text-[#C48B80] transition-colors">
               Privacy Policy
             </Link> */}
-            <span className="text-xs text-[#A1A7AA] pr-12 sm:pr-0">Designed & Developed by <a href="https://tecnosphere.com.pk" target="_blank" rel="noopener noreferrer" className="hover:text-[#C48B80] transition-colors">Tecnosphere</a></span>
+            <style>
+              {`
+                @keyframes shine {
+                  from { background-position: 200% center; }
+                  to { background-position: -200% center; }
+                }
+                .animate-shine {
+                  background: linear-gradient(90deg, #A85A3B, #F1C9BD, #A85A3B, #F1C9BD);
+                  background-size: 200% auto;
+                  color: transparent;
+                  -webkit-background-clip: text;
+                  background-clip: text;
+                  animation: shine 4s linear infinite;
+                }
+              `}
+            </style>
+            <span className="text-sm sm:text-base text-[#7A7A7A] pr-12 sm:pr-0 font-medium">
+              Designed & Developed by{' '}
+              <a 
+                href="https://tecnosphere.com.pk" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="inline-block animate-shine font-bold tracking-wide hover:opacity-80 transition-opacity"
+              >
+                Tecnosphere
+              </a>
+            </span>
           </div>
         </div>
       </div>
