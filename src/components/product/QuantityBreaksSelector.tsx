@@ -47,7 +47,11 @@ export const QuantityBreaksSelector: React.FC<QuantityBreaksSelectorProps> = ({
               key={tier.minQty}
               type="button"
               onClick={() => onTierSelect(tier, isActive)}
-              className={elative flex flex-col items-start rounded-xl p-2.5 text-left transition-all duration-200 }
+              className={`relative flex flex-col items-start rounded-xl p-2.5 text-left transition-all duration-200 ${
+                isActive
+                  ? 'border-2 border-[#9C4122] bg-[#FAF3F0] shadow-sm'
+                  : 'border border-[#EDE5DC] bg-white hover:border-[#C48B80] hover:shadow-sm'
+              }`}
             >
               {/* Radio Indicator */}
               <div className="absolute right-2.5 top-2.5">
@@ -63,7 +67,9 @@ export const QuantityBreaksSelector: React.FC<QuantityBreaksSelectorProps> = ({
               {/* Badges */}
               <div className="mb-1.5 flex w-full flex-wrap gap-1.5 pr-6">
                 {tier.badge && (
-                  <span className={inline-flex items-center rounded px-1.5 py-0.5 text-[8.5px] font-bold uppercase tracking-wider }>
+                  <span className={`inline-flex items-center rounded px-1.5 py-0.5 text-[8.5px] font-bold uppercase tracking-wider ${
+                    isActive ? 'bg-[#9C4122] text-white' : 'bg-[#9C4122] text-white'
+                  }`}>
                     {tier.badge}
                   </span>
                 )}
@@ -79,13 +85,13 @@ export const QuantityBreaksSelector: React.FC<QuantityBreaksSelectorProps> = ({
               {/* Content */}
               <div className="flex w-full flex-col">
                 <div className="flex items-baseline gap-1">
-                  <span className={	ext-[15px] font-black }>
+                  <span className={`text-[15px] font-black ${isActive ? 'text-[#9C4122]' : 'text-slate-900'}`}>
                     Rs. {tier.pricePerUnit.toLocaleString()}
                   </span>
                   <span className="text-[10px] font-semibold text-slate-400">/each</span>
                 </div>
-                <span className={mt-0.5 text-[11px] font-semibold }>
-                  {tier.label || (savePct > 0 ? Buy , Save Rs.  : Buy )}
+                <span className={`mt-0.5 text-[11px] font-semibold ${isActive ? 'text-[#9C4122]/90' : 'text-slate-500'}`}>
+                  {tier.label || (savePct > 0 ? `Buy ${tier.minQty}, Save Rs. ${(tier1Price - tier.pricePerUnit) * tier.minQty}` : `Buy ${tier.minQty}`)}
                 </span>
                 
                 {isActive && (
