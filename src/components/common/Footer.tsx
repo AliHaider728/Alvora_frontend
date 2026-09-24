@@ -14,10 +14,10 @@ import { useAuth } from '../../context/AuthContext';
    â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 const SHOP_LINKS = [
-  { label: 'About',          href: '/about' },
-  { label: 'Our Collection', href: '/category/all' },
-  { label: 'Best Sellers',   href: '/best-sellers' },
-  { label: 'Wishlist',       href: '/wishlist' },
+  { label: 'Build Your Routine', href: '/bundles/build' },
+  { label: 'Our Collection',     href: '/category/all' },
+  { label: 'Best Sellers',       href: '/best-sellers' },
+  { label: 'Wishlist',           href: '/wishlist' },
 ];
 
 const HELP_LINKS = [
