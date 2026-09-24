@@ -8,16 +8,18 @@ import { AnimatedButton } from "../common/AnimatedButton";
 
 export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref }) => {
   return (
-    <section className="relative min-h-[100dvh] w-full bg-[url('/images/home-hero-mobile.jpg')] sm:bg-[url('/images/home-hero-desktop.png')] bg-cover bg-bottom sm:bg-center bg-scroll sm:bg-fixed bg-no-repeat overflow-hidden">
+    <section className="relative min-h-[100svh] w-full bg-[url('/images/home-hero-mobile.jpg')] sm:bg-[url('/images/home-hero-desktop.png')] bg-cover bg-bottom sm:bg-center bg-scroll sm:bg-fixed bg-no-repeat overflow-hidden">
       {/* Overlay to improve text contrast against dark parts of the image (Mobile: solid fade, Desktop: gradient from left) */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#FAF6F2]/80 via-[#FAF6F2]/20 to-transparent sm:bg-none sm:bg-gradient-to-r sm:from-[#FAF6F2]/90 sm:via-[#FAF6F2]/30 sm:to-transparent pointer-events-none transition-colors duration-300" />
+      {/* Subtle overlay for bottom/right icons contrast (Bug 32) */}
+      <div className="hidden sm:block absolute inset-0 bg-gradient-to-tl from-black/50 via-transparent to-transparent pointer-events-none opacity-80" />
       
       {/* 
         The Header is fixed and overlays this section. 
         We add padding-top to ensure the content starts safely below the header,
         but the background itself starts from the very top of the page.
       */}
-      <div className="relative z-10 mx-auto flex min-h-[100dvh] max-w-7xl flex-col justify-start pt-32 sm:justify-center px-5 sm:pt-24 sm:px-8 lg:px-12">
+      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-start pt-32 sm:justify-center px-5 sm:pt-24 sm:px-8 lg:px-12">
         <div className="max-w-xl pb-16">
           {/* Eyebrow */}
           <motion.div 
