@@ -23,7 +23,7 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: {
-    default: 'ALVORA',
+    default: 'ALVORA | Glowing & Healthy Skin',
     template: '%s | ALVORA',
   },
   description:

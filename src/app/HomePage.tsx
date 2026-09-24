@@ -26,7 +26,7 @@ export const HomePage: React.FC<Props> = ({ products, categories, settings }) =>
   return (
     <div className="min-h-[100dvh] bg-[#FAF6F2] font-sans flex flex-col overflow-x-hidden w-full">
       <SeoHead
-        title="ALVORA"
+        title="ALVORA | Glowing & Healthy Skin"
         description={settings.metaDescription || "Pure Ingredients. Visible Results."}
       />
 

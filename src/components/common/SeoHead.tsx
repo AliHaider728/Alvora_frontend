@@ -11,7 +11,7 @@ interface SeoHeadProps {
 }
 
 export const SeoHead: React.FC<SeoHeadProps> = ({ title, description, product, canonicalUrl }) => {
-  const defaultTitle = "ALVORA";
+  const defaultTitle = "ALVORA | Glowing & Healthy Skin";
   const defaultDesc = "Shop premium skincare, serums, moisturizers, and cleansers in Pakistan with Cash on Delivery & Free Express Shipping.";
 
   let finalTitle = defaultTitle;
@@ -19,8 +19,8 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ title, description, product, c
     finalTitle = `${product.metaTitle} | ALVORA`;
   } else if (title) {
     const cleanTitle = title.replace(/\s*[-|]\s*Alvora Skincare/i, '').trim();
-    if (cleanTitle.toUpperCase() === 'ALVORA') {
-      finalTitle = "ALVORA";
+    if (cleanTitle.toUpperCase() === 'ALVORA' || cleanTitle.toUpperCase() === 'ALVORA | GLOWING & HEALTHY SKIN') {
+      finalTitle = defaultTitle;
     } else {
       finalTitle = `${cleanTitle} | ALVORA`;
     }

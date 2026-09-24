@@ -3,7 +3,7 @@ import { HomePage } from './HomePage';
 import { USE_MOCK_DATA, MOCK_PRODUCTS, MOCK_CATEGORIES, MOCK_SETTINGS } from '../data/mock';
 
 export const metadata = {
-  title: 'ALVORA',
+  title: 'ALVORA | Glowing & Healthy Skin',
   description: 'Discover premium skincare with Alvora. Shop our collection for glowing and healthy skin.',
 };
 
