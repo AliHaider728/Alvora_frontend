@@ -11,10 +11,20 @@ interface SeoHeadProps {
 }
 
 export const SeoHead: React.FC<SeoHeadProps> = ({ title, description, product, canonicalUrl }) => {
-  const defaultTitle = "Alvora Skincare - Clean, Effective Skincare";
+  const defaultTitle = "ALVORA";
   const defaultDesc = "Shop premium skincare, serums, moisturizers, and cleansers in Pakistan with Cash on Delivery & Free Express Shipping.";
 
-  const finalTitle = product?.metaTitle || (title ? `${title} | Alvora Skincare` : defaultTitle);
+  let finalTitle = defaultTitle;
+  if (product?.metaTitle) {
+    finalTitle = `${product.metaTitle} | ALVORA`;
+  } else if (title) {
+    const cleanTitle = title.replace(/\s*[-|]\s*Alvora Skincare/i, '').trim();
+    if (cleanTitle.toUpperCase() === 'ALVORA') {
+      finalTitle = "ALVORA";
+    } else {
+      finalTitle = `${cleanTitle} | ALVORA`;
+    }
+  }
   const finalDesc = description || product?.metaDescription || product?.shortDescription || product?.description || defaultDesc;
   const currentUrl = canonicalUrl || (typeof window !== 'undefined' ? (typeof window !== 'undefined' ? window.location.href : '') : '');
   const imageUrl = product?.images[0] || '/images/hero/alvora-hero.png';
