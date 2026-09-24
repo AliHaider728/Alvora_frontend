@@ -53,20 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${poppins.variable}`} data-scroll-behavior="smooth">
       <head>
-        {/* Meta Pixel stub • loads fbq global before any pixel fires */}
-        <Script
-          id="meta-pixel-stub"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              !function(f,b,e,v,n,t,s)
-              {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-              n.queue=[];}(window,document,'script');
-            `,
-          }}
-        />
+        
 
         {GA_MEASUREMENT_ID && (
           <>
