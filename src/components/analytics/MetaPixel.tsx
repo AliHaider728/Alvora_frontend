@@ -2,7 +2,7 @@
 
 import Script from "next/script";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 
 declare global {
   interface Window {
@@ -13,7 +13,7 @@ declare global {
 
 const PIXEL_ID = process.env.NEXT_PUBLIC_ALVORA_META_PIXEL_ID || '1067956912353331';
 
-export default function MetaPixel() {
+function PixelEvents() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [loaded, setLoaded] = useState(false);
@@ -31,10 +31,17 @@ export default function MetaPixel() {
     }
   }, [pathname, searchParams, loaded]);
 
+  return null;
+}
+
+export default function MetaPixel() {
   if (!PIXEL_ID) return null;
 
   return (
     <>
+      <Suspense fallback={null}>
+        <PixelEvents />
+      </Suspense>
       <Script
         id="meta-pixel"
         strategy="afterInteractive"
