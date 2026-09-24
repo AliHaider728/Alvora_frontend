@@ -222,7 +222,7 @@ export default function AdminCreateBundleClient() {
         showShop,
         featureHome,
         isBestseller,
-        customImage: customImageUrl,
+        image: customImageUrl,
         products: selectedProducts.map(sp => ({
           product_id: sp.product.id,
           quantity: sp.qty,

@@ -89,7 +89,7 @@ export const AdminBundlesPageClient = () => {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filteredBundles.map(bundle => {
             const isActive = bundle.status === 'published';
-            const bundleImage = bundle.customImage || bundle.image || (bundle.products?.[0]?.images?.[0]);
+            const bundleImage = bundle.image || (bundle.products?.[0]?.images?.[0]);
 
             return (
               <div key={bundle.id} className="group flex flex-col bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">

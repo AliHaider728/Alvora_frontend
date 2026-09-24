@@ -20,7 +20,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
   const [added, setAdded] = useState(false);
   
   // Gallery
-  const allImages = Array.from(new Set([bundle.customImage, bundle.image, ...(bundle.products || []).flatMap((p: any) => p.images || p.product?.images || [])].filter(Boolean)));
+  const allImages = Array.from(new Set([bundle.image, ...(bundle.products || []).flatMap((p: any) => p.images || p.product?.images || [])].filter(Boolean)));
   const [activeImage, setActiveImage] = useState(allImages[0] || '/images/hero/alvora-hero.png');
   const [isZooming, setIsZooming] = useState(false);
   const [zoomOrigin, setZoomOrigin] = useState('50% 50%');
@@ -39,7 +39,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
   // Bundle to Product mapper for cart
   const { products } = useStore();
   const mapBundleToProduct = (b: any): Product => {
-    const bundleImg = b.customImage || b.image || (b.products?.[0]?.product?.images?.[0]) || (b.products?.[0]?.images?.[0]);
+    const bundleImg = b.image || (b.products?.[0]?.product?.images?.[0]) || (b.products?.[0]?.images?.[0]);
     return {
       id: String(b.id),
       productType: 'bundle',

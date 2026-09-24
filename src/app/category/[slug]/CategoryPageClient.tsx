@@ -124,7 +124,7 @@ export const CategoryPageClient: React.FC = () => {
   // Filter Logic
   const allItems = useMemo(() => {
     const bundleProducts = (bundles || []).map(b => {
-      const displayImage = b.image || b.customImage || (b.products && b.products.length > 0 && (b.products[0].product?.images?.[0] || b.products[0].images?.[0] || null));
+      const displayImage = b.image || (b.products && b.products.length > 0 && (b.products[0].product?.images?.[0] || b.products[0].images?.[0] || null));
       return {
         id: b.id,
         productType: 'bundle',

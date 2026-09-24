@@ -87,7 +87,7 @@ export default function AdminEditBundleClient({ bundleId }: { bundleId: string }
         setCustomPrice(bundle.customPrice || 0);
         setAutoCalcStock(bundle.autoCalcStock !== false);
         setManualStock(bundle.manualStock || 0);
-        setCustomImageUrl(bundle.customImage || bundle.image || '');
+        setCustomImageUrl(bundle.image || '');
         setBadgeText(bundle.badgeText || '');
         setRoutineSteps(bundle.routineSteps || '');
         setShowShop(bundle.showShop !== false);
@@ -251,7 +251,7 @@ export default function AdminEditBundleClient({ bundleId }: { bundleId: string }
         showShop,
         featureHome,
         isBestseller,
-        customImage: customImageUrl,
+        image: customImageUrl,
         products: selectedProducts.map(sp => ({
           product_id: sp.product.id,
           quantity: sp.qty,

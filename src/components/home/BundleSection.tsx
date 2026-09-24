@@ -26,7 +26,7 @@ export const BundleSection: React.FC = () => {
 
   const handleAddBundle = (bundle: Bundle) => {
     const mapBundleToProduct = (bundle: Bundle): Product => {
-      const displayImage = bundle.customImage || bundle.image || (bundle.products && bundle.products.length > 0 && (bundle.products[0].images?.[0] || bundle.products[0].product?.images?.[0])) || null;
+      const displayImage = bundle.image || (bundle.products && bundle.products.length > 0 && (bundle.products[0].images?.[0] || bundle.products[0].product?.images?.[0])) || null;
       return {
         id: String(bundle.id),
         productType: 'bundle',
@@ -114,7 +114,7 @@ export const BundleSection: React.FC = () => {
         const bgClass = isReverse ? 'bg-[#FAF6F2]' : 'bg-white';
         const imageBgClass = isReverse ? 'bg-[#1A1A1A]' : 'bg-[#F1C9BD]';
 
-        const displayImage = bundle.image || bundle.customImage || (bundle.products && bundle.products.length > 0 && (bundle.products[0].product?.images?.[0] || bundle.products[0].images?.[0] || null));
+        const displayImage = bundle.image || (bundle.products && bundle.products.length > 0 && (bundle.products[0].product?.images?.[0] || bundle.products[0].images?.[0] || null));
         const discountValue = Number(bundle.discountPercent) || 0;
 
         return (
