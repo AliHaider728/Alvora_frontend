@@ -10,6 +10,7 @@ export const AudioReviews: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [playingId, setPlayingId] = useState<string | null>(null);
   const [playingCol, setPlayingCol] = useState<number | null>(null);
+  const [currentTime, setCurrentTime] = useState<number>(0);
   const [isHovered, setIsHovered] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(1);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -38,6 +39,8 @@ export const AudioReviews: React.FC = () => {
       if (audioRef.current) {
         audioRef.current.src = url;
         audioRef.current.playbackRate = playbackSpeed;
+        audioRef.current.currentTime = 0;
+        setCurrentTime(0);
         const playPromise = audioRef.current.play();
         if (playPromise !== undefined) {
           playPromise.catch((error) => {
@@ -63,10 +66,10 @@ export const AudioReviews: React.FC = () => {
     if (!val) return '0:15';
     const str = String(val);
     if (str.includes(':')) return str;
-    const sec = parseInt(str, 10);
+    const sec = parseFloat(str);
     if (!isNaN(sec)) {
       const m = Math.floor(sec / 60);
-      const s = sec % 60;
+      const s = Math.floor(sec % 60);
       return `${m}:${s.toString().padStart(2, '0')}`;
     }
     return '0:15';
@@ -108,14 +111,14 @@ export const AudioReviews: React.FC = () => {
         {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current ml-0.5" />}
       </button>
       <div className="flex-1 flex flex-col justify-center h-full gap-0.5">
-        <div className="flex items-end gap-[2px] h-4 overflow-hidden opacity-80">
+        <div className="flex items-center gap-[2px] h-6 overflow-hidden">
           {[...Array(24)].map((_, i) => {
             const h = [3,6,9,12,8,14,10,6,12,8,4,3,3,6,9,12,8,14,10,6,12,8,4,3][i];
             const delay = (i * 0.13) % 1.2;
             return (
               <div 
                 key={i} 
-                className={`w-[2px] rounded-full bg-white ${isPlaying ? 'animate-audio-bar' : 'transition-all duration-300'}`}
+                className={`w-[2px] rounded-full ${isPlaying ? 'bg-[#0ea5e9] animate-audio-bar' : 'bg-gray-500 transition-all duration-300'}`}
                 style={{ 
                   height: `${h}px`,
                   animationDelay: isPlaying ? `${delay}s` : '0s'
@@ -124,8 +127,8 @@ export const AudioReviews: React.FC = () => {
             );
           })}
         </div>
-        <span className="text-[10px] text-gray-400 font-medium truncate pr-2">
-          {formatDuration(r.duration)}
+        <span className="text-[10px] text-gray-400 font-medium truncate pr-2 mt-0.5">
+          {isPlaying ? `${formatDuration(currentTime)} / ${formatDuration(r.duration)}` : formatDuration(r.duration)}
         </span>
       </div>
       <button onClick={cycleSpeed} className="w-7 h-7 rounded-full bg-[#0ea5e9] hover:bg-[#0284c7] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0 transition-colors">
@@ -144,7 +147,7 @@ export const AudioReviews: React.FC = () => {
         }
         .animate-audio-bar {
           animation: audio-bar-pulse 0.8s ease-in-out infinite;
-          transform-origin: bottom;
+          transform-origin: center;
         }
         @keyframes scroll-down {
           0% { transform: translateY(calc(-50% - 12px)); }
@@ -182,7 +185,8 @@ export const AudioReviews: React.FC = () => {
 
         <audio 
           ref={audioRef} 
-          onEnded={() => setPlayingId(null)} 
+          onEnded={() => { setPlayingId(null); setPlayingCol(null); setCurrentTime(0); }} 
+          onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
           className="hidden" 
         />
 
