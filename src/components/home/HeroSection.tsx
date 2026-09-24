@@ -14,7 +14,7 @@ export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref 
       {/* Subtle overlay for bottom/right icons contrast (Bug 32) */}
       <div className="hidden sm:block absolute inset-0 bg-gradient-to-tl from-black/50 via-transparent to-transparent pointer-events-none opacity-80" />
       {/* Navbar contrast overlay: ensures dark header icons remain visible against the image */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#FAF6F2]/90 via-[#FAF6F2]/20 to-transparent h-32 sm:h-40 pointer-events-none" />
+      <div className="absolute inset-x-0 top-0 h-[180px] bg-gradient-to-b from-[#FAF6F2] via-[#FAF6F2]/80 to-transparent pointer-events-none" />
       
       {/* 
         The Header is fixed and overlays this section. 
