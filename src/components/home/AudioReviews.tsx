@@ -92,18 +92,9 @@ export const AudioReviews: React.FC = () => {
   const col4 = getColumnItems(3).reverse();
 
   const PlayerPill = ({ r, isPlaying, uniqueKey, colIndex }: { r: AudioReview, isPlaying: boolean, uniqueKey: string, colIndex: number }) => {
-    const handleMouseEnter = () => {
-      if (isPlaying && audioRef.current) {
-        audioRef.current.pause();
-      }
-    };
-    const handleMouseLeave = () => {
-      if (isPlaying && audioRef.current) {
-        audioRef.current.play().catch(e => console.log(e));
-      }
-    };
+
     return (
-    <div key={uniqueKey} className="player-pill flex items-center gap-3 bg-[#1e272e] rounded-full p-2 pr-4 w-full shadow-sm flex-shrink-0 cursor-pointer hover:bg-[#2c3e50] transition-colors" onClick={() => togglePlay(r.audioUrl, r.id, colIndex)} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+    <div key={uniqueKey} className="player-pill flex items-center gap-3 bg-[#1e272e] rounded-full p-2 pr-4 w-full shadow-sm flex-shrink-0 cursor-pointer hover:bg-[#2c3e50] transition-colors" onClick={() => togglePlay(r.audioUrl, r.id, colIndex)} >
       <div className="w-10 h-10 rounded-full bg-[#E5E7EB] flex items-center justify-center flex-shrink-0 text-gray-500">
         <User className="w-5 h-5" />
       </div>
@@ -111,14 +102,15 @@ export const AudioReviews: React.FC = () => {
         {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current ml-0.5" />}
       </button>
       <div className="flex-1 flex flex-col justify-center h-full gap-0.5">
-        <div className="flex items-center gap-[2px] h-6 overflow-hidden">
-          {[...Array(24)].map((_, i) => {
-            const h = [3,6,9,12,8,14,10,6,12,8,4,3,3,6,9,12,8,14,10,6,12,8,4,3][i];
+        <div className="flex items-center justify-between gap-[1px] sm:gap-[2px] w-full h-6 overflow-hidden pr-2">
+          {[...Array(38)].map((_, i) => {
+            const pattern = [3,6,9,12,8,14,10,6,12,8,4,3,3,6,9,12,8,14,10,6,12,8,4,3,6,10,14,8,12,6,4,3,6,9,12,8,4,3];
+            const h = pattern[i % pattern.length];
             const delay = (i * 0.13) % 1.2;
             return (
               <div 
                 key={i} 
-                className={`w-[2px] rounded-full ${isPlaying ? 'bg-[#0ea5e9] animate-audio-bar' : 'bg-gray-500 transition-all duration-300'}`}
+                className={`flex-1 max-w-[2.5px] min-w-[1.5px] rounded-full ${isPlaying ? 'bg-[#0ea5e9] animate-audio-bar' : 'bg-gray-500 transition-all duration-300'}`}
                 style={{ 
                   height: `${h}px`,
                   animationDelay: isPlaying ? `${delay}s` : '0s'
