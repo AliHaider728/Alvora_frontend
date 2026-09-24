@@ -254,7 +254,7 @@ export const BundleSection: React.FC = () => {
             <div className="max-w-xl text-center md:text-left">
               <h3 className="font-display text-2xl text-[#241916] mb-2">Create Own Routine</h3>
               <p className="text-[#241916]/80 text-sm">
-                Mix and match any 3 products to create your perfect routine and automatically save 15%.
+                Mix and match your skincare essentials. Build your routine and discover your personalised savings.
               </p>
             </div>
             <AnimatedButton 

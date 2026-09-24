@@ -187,6 +187,8 @@ export const api = {
     return settings;
   },
   getAdminAppearance: () => fetchJson<any>('/settings/appearance/admin'),
+  getRoutineSettings: () => fetchJson<import('../lib/routineDiscount').RoutineDiscountSettings>('/settings/routine'),
+  updateRoutineSettings: (data: import('../lib/routineDiscount').RoutineDiscountSettings) => fetchJson<import('../lib/routineDiscount').RoutineDiscountSettings>('/settings/routine', { method: 'PUT', body: JSON.stringify(data) }),
   updateSettings: (data: any) => fetchJson<any>('/settings', { method: 'PUT', body: JSON.stringify(data) }),
   updateAppearance: (data: any) => fetchJson<any>('/settings/appearance', { method: 'PUT', body: JSON.stringify(data) }),
   resetAppearance: () => fetchJson<any>('/settings/appearance/reset', { method: 'POST' }),

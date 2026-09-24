@@ -29,6 +29,7 @@ import { useToast } from './ToastContext';
 import { trackInitiateCheckout } from '../lib/metaPixel';
 import { trackTikTokAddToWishlist } from '../lib/tiktokPixel';
 import { resolveCartLine } from '../lib/pricingOffers';
+import { calculateRoutineDiscount, type RoutineDiscountSettings } from '../lib/routineDiscount';
 
 type MongoRecord = {
   _id?: unknown;
@@ -63,7 +64,7 @@ const consolidateCartItems = (items: unknown): CartItem[] => {
     const key = getCartLineKey(item.product.id, item.selectedVariant, item.variationId);
     const existing = consolidated.get(key);
     if (existing) {
-      consolidated.set(key, { ...existing, product: item.product, quantity: existing.quantity + quantity });
+      consolidated.set(key, { ...existing, product: item.product, quantity: existing.quantity + quantity, isRoutine: existing.isRoutine || item.isRoutine });
     } else {
       consolidated.set(key, { ...item, quantity });
     }
@@ -187,7 +188,9 @@ export interface StoreContextType {
   isCartOpen: boolean;
   setIsCartOpen: (open: boolean) => void;
   addToCart: (product: Product, quantity?: number, selectedVariant?: string, variationId?: string, options?: { appliedOfferLabel?: string; freeUnits?: number; resolvedUnitPrice?: number; isRoutine?: boolean }) => void;
-    routineDiscountAmount: number;
+  routineDiscountAmount: number;
+  routineDiscountPercent: number;
+  saveRoutineDiscountSettings: (settings: RoutineDiscountSettings) => Promise<boolean>;
   removeFromCart: (productId: string, selectedVariant?: string, variationId?: string) => void;
   updateCartQuantity: (productId: string, quantity: number, selectedVariant?: string, variationId?: string) => void;
   clearCart: () => void;
@@ -541,6 +544,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           return { 
             ...item, 
             quantity: newQty,
+            isRoutine: item.isRoutine || options?.isRoutine,
             appliedOfferLabel: resolved.appliedLabel,
             freeUnits: resolved.freeUnits,
             resolvedUnitPrice: resolved.unitPrice
@@ -554,6 +558,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         quantity, 
         selectedVariant, 
         variationId,
+        isRoutine: options?.isRoutine === true,
         appliedOfferLabel: '',
         freeUnits: 0,
         resolvedUnitPrice: 0
@@ -668,28 +673,25 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setAppliedCoupon(null);
   };
 
-  const routineDiscountAmount = React.useMemo(() => {
-      const routineItems = cart.filter(item => item.isRoutine);
-      // Group by distinct product ID
-      const distinctProductIds = new Set(routineItems.map(item => item.product.id));
-      if (distinctProductIds.size >= 2) {
-        const routineSubtotal = routineItems.reduce((acc, item) => {
-          let price = item.resolvedUnitPrice !== undefined ? item.resolvedUnitPrice : getBasePrice(item);
-          return acc + price * item.quantity;
-        }, 0);
-        return Math.round(routineSubtotal * 0.15); // 15% discount
-      }
-      return 0;
-    }, [cart]);
+  const routineDiscount = calculateRoutineDiscount(cart.filter(item => item.isRoutine).map(item => ({
+    productId: item.product.id,
+    quantity: item.quantity,
+    unitPrice: item.resolvedUnitPrice ?? getBasePrice(item),
+  })), settings.routineDiscount);
+  const routineDiscountAmount = routineDiscount.savings;
+
+  const saveRoutineDiscountSettings = async (input: RoutineDiscountSettings) => {
+    const saved = await api.updateRoutineSettings(input);
+    if (!saved) return false;
+    setSettings(prev => ({ ...prev, routineDiscount: saved }));
+    return true;
+  };
 
     const couponDiscountAmount = React.useMemo(() => {
     if (!appliedCoupon) return 0;
-    if (appliedCoupon.discountType === 'percentage') {
-      return (cartSubtotal * appliedCoupon.amount) / 100;
-    } else {
-      return Math.min(cartSubtotal, appliedCoupon.amount);
-    }
-  }, [appliedCoupon, cartSubtotal]);
+    const requested = appliedCoupon.discountType === 'percentage' ? (cartSubtotal * appliedCoupon.amount) / 100 : appliedCoupon.amount;
+    return Math.min(Math.max(0, cartSubtotal - routineDiscountAmount), requested);
+  }, [appliedCoupon, cartSubtotal, routineDiscountAmount]);
 
   // Wishlist toggle
   const toggleWishlist = (productId: string) => {
@@ -811,6 +813,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const placeOrder = async (orderData: Omit<Order, 'id' | 'date'>) => {
     const response = await api.createOrder({
       ...orderData,
+      appliedCoupon: appliedCoupon ? { code: appliedCoupon.code } : null,
       shippingFee: orderData.shipping,
       deliveryCharge: orderData.shipping,
       discountAmount: orderData.discount
@@ -989,6 +992,8 @@ bundlesLoading,
         removeCoupon,
         couponDiscountAmount: isHydrated ? couponDiscountAmount : 0,
           routineDiscountAmount: isHydrated ? routineDiscountAmount : 0,
+        routineDiscountPercent: isHydrated ? routineDiscount.percent : 0,
+        saveRoutineDiscountSettings,
         wishlist: isHydrated ? wishlist : [],
         toggleWishlist,
         isInWishlist,

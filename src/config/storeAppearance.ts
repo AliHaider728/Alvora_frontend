@@ -1,4 +1,5 @@
 import type { HomepageSectionSetting, StoreSettings, StorefrontNavigationItem } from '../types';
+import { normalizeRoutineSettings } from '../lib/routineDiscount';
 
 export const INTERNAL_PAGE_OPTIONS = [
   { value: '/', label: 'Home' },
@@ -73,6 +74,7 @@ const mergeSections = (incoming?: Partial<HomepageSectionSetting>[]) => DEFAULT_
 }));
 
 export const normalizeStoreSettings = (settings: Partial<StoreSettings>): StoreSettings => ({
+  routineDiscount: normalizeRoutineSettings(settings.routineDiscount),
   storeName: settings.storeName || 'Alvora Skincare',
   tagline: settings.tagline || 'Where Imagination Comes to Life',
   email: settings.email || 'Sales@alvora.pk',

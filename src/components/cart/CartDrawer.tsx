@@ -25,6 +25,7 @@ export const CartDrawer: React.FC = () => {
     removeCoupon,
     couponDiscountAmount,
     routineDiscountAmount,
+    routineDiscountPercent,
     settings
   } = useStore();
 
@@ -291,6 +292,12 @@ export const CartDrawer: React.FC = () => {
                 <span className="font-bold text-[#1A1A1A]/90">{formatPrice(cartSubtotal, settings.currency)}</span>
               </div>
 
+              {routineDiscountAmount > 0 && (
+                <div className="flex justify-between gap-3 text-[#9C4122] font-semibold">
+                  <span>Routine Savings ({routineDiscountPercent}%)</span>
+                  <span>-{formatPrice(routineDiscountAmount, settings.currency)}</span>
+                </div>
+              )}
               {appliedCoupon && (
                 <div className="flex justify-between text-emerald-600 font-medium">
                   <span>Discount</span>

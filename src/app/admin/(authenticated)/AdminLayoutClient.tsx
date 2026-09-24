@@ -80,6 +80,7 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
     { label: 'Coupons & Deals', path: '/admin/coupons', icon: Tag },
     { label: 'Sales Reports', path: '/admin/reports', icon: BarChart3 },
     { label: 'Store Settings', path: '/admin/settings', icon: Settings },
+    { label: 'Routine Discounts', path: '/admin/routine-discounts', icon: Gift },
     ...(isSuperAdmin() ? [{ label: 'Store Appearance', path: '/admin/store-appearance', icon: Palette }] : []),
   ];
 

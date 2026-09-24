@@ -304,6 +304,7 @@ export interface Review {
 }
 
 export interface OrderItem {
+  isRoutine?: boolean;
   productId: string;
   name: string;
   quantity: number;
@@ -382,6 +383,7 @@ export interface Coupon {
 }
 
 export interface StoreSettings {
+  routineDiscount?: import('../lib/routineDiscount').RoutineDiscountSettings;
   storeName: string;
   tagline: string;
   email: string;

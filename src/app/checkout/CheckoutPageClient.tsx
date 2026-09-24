@@ -52,6 +52,7 @@ export const CheckoutPageClient: React.FC = () => {
     appliedCoupon,
     couponDiscountAmount,
     routineDiscountAmount,
+    routineDiscountPercent,
     categories,
     settings,
     placeOrder,
@@ -235,7 +236,7 @@ export const CheckoutPageClient: React.FC = () => {
           productId: item.product.id,
           name: item.product.name,
           quantity: item.quantity,
-          price: price,
+          price: item.resolvedUnitPrice ?? price,
           image: image,
           selectedVariant: item.selectedVariant,
           variationId: item.variationId,
@@ -726,6 +727,12 @@ export const CheckoutPageClient: React.FC = () => {
                     <span className="font-bold text-[#1A1A1A]/90">{formatPrice(cartSubtotal, settings.currency)}</span>
                   </div>
 
+                  {routineDiscountAmount > 0 && (
+                    <div className="flex justify-between gap-3 font-semibold text-[#9C4122]">
+                      <span>Routine Savings ({routineDiscountPercent}%)</span>
+                      <span>-{formatPrice(routineDiscountAmount, settings.currency)}</span>
+                    </div>
+                  )}
                   {appliedCoupon && (
                     <div className="flex justify-between text-emerald-600 font-medium">
                       <span>Coupon Discount ({appliedCoupon.code})</span>
