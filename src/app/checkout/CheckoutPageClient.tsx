@@ -26,6 +26,7 @@ import { SeoHead } from '../../components/common/SeoHead';
 import { Breadcrumbs } from '../../components/common/Breadcrumbs';
 import { Order } from '../../types';
 import { formatPrice } from '../../utils/formatters';
+import { validatePakistaniPhone } from '../../utils/validation';
 import { getProductDeliveryType } from '../../utils/products';
 import { getSafeImageSrc } from '../../utils/images';
 import { trackInitiateCheckout } from "../../lib/metaPixel";
@@ -173,11 +174,15 @@ export const CheckoutPageClient: React.FC = () => {
       return;
     }
 
-    const cleanPhone = phone.replace(/[\s\-()]/g, '');
-    const phoneRegex = /^(?:\+92|0092|0)?3[0-9]{9}$/;
-
-    if (phone.trim() && !phoneRegex.test(cleanPhone)) {
-      errors.phone = "Please enter a valid Pakistani phone (e.g. 03001234567 or +923001234567)";
+    let finalPhone = phone;
+    if (phone.trim()) {
+      const phoneValidation = validatePakistaniPhone(phone);
+      if (!phoneValidation.isValid) {
+        errors.phone = phoneValidation.error || "Invalid phone number";
+      } else {
+        finalPhone = phoneValidation.normalized || phone;
+        setPhone(finalPhone);
+      }
     }
 
     if (Object.keys(errors).length > 0) {
@@ -185,10 +190,6 @@ export const CheckoutPageClient: React.FC = () => {
       showToast('Please correct the errors in the form before proceeding.', 'error');
       return;
     }
-
-    const standardizedPhone = '0' + cleanPhone.slice(-10);
-    const finalPhone = standardizedPhone;
-    setPhone(finalPhone);
 
     await handlePaymentSubmit(finalPhone);
   };
