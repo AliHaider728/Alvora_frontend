@@ -11,17 +11,21 @@ import { ReviewSummary } from '../../../components/common/ReviewSummary';
 import { AlvoraProductCard } from '../../../components/common/AlvoraProductCard';
 import { ReviewModal } from '../../../components/common/ReviewModal';
 import { Product } from '../../../types';
+import { getBundleImages } from '../../../utils/bundleImages';
+import { getSafeImageSrc } from '../../../utils/images';
 
 export function BundleDetailPageClient({ initialBundle, initialReviews, relatedBundles }: any) {
   const { addToCart, setIsCartOpen } = useStore();
-  const [bundle] = useState(initialBundle);
+  const bundle = initialBundle;
   const [reviews, setReviews] = useState(initialReviews || []);
   const [addingToCart, setAddingToCart] = useState(false);
   const [added, setAdded] = useState(false);
   
   // Gallery
-  const allImages = Array.from(new Set([bundle.image, ...(bundle.products || []).flatMap((p: any) => p.images || p.product?.images || [])].filter(Boolean)));
-  const [activeImage, setActiveImage] = useState(allImages[0] || '/images/hero/alvora-hero.png');
+  const allImages = useMemo(() => getBundleImages(bundle), [bundle]);
+  const [selectedImage, setActiveImage] = useState<string | undefined>(undefined);
+  const activeImage = selectedImage && allImages.includes(selectedImage) ? selectedImage : getSafeImageSrc(allImages[0]);
+  useEffect(() => { setActiveImage(undefined); }, [bundle.id]);
   const [isZooming, setIsZooming] = useState(false);
   const [zoomOrigin, setZoomOrigin] = useState('50% 50%');
   const handleZoomPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
@@ -39,7 +43,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
   // Bundle to Product mapper for cart
   const { products } = useStore();
   const mapBundleToProduct = (b: any): Product => {
-    const bundleImg = b.image || (b.products?.[0]?.product?.images?.[0]) || (b.products?.[0]?.images?.[0]);
+    const bundleImg = getBundleImages(b)[0];
     return {
       id: String(b.id),
       productType: 'bundle',
@@ -114,16 +118,19 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           
                     {/* Gallery */}
-          <div className="flex flex-col-reverse sm:flex-row gap-4">
+          <div data-testid="bundle-gallery" className="flex min-w-0 flex-col-reverse sm:flex-row gap-4">
             {allImages.length > 1 && (
-              <div className="flex sm:flex-col gap-3 overflow-x-auto sm:overflow-visible no-scrollbar pb-2 sm:pb-0">
-                {allImages.slice(0, 5).map((img, idx) => (
+              <div aria-label="Bundle gallery thumbnails" className="flex gap-3 overflow-x-auto pb-2 sm:max-h-[600px] sm:flex-col sm:overflow-y-auto sm:overflow-x-hidden sm:pb-0 sm:pr-1">
+                {allImages.map((img, idx) => (
                 <button 
                   key={idx}
+                  type="button"
+                  aria-label={`View ${bundle.name} image ${idx + 1}`}
+                  aria-pressed={activeImage === img}
                   onClick={() => setActiveImage(img)}
                   className={`relative w-16 h-16 shrink-0 rounded-xl overflow-hidden border-2 transition-all ${activeImage === img ? 'border-[#9C4122]' : 'border-transparent opacity-70 hover:opacity-100'}`}
                 >
-                  <Image src={img} alt="Thumbnail" fill className="object-cover" />
+                  <Image src={getSafeImageSrc(img)} alt={`${bundle.name} gallery image ${idx + 1}`} fill sizes="64px" className="object-cover" />
                 </button>
               ))}
             </div>

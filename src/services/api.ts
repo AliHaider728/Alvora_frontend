@@ -294,7 +294,7 @@ export const api = {
       return MOCK_BUNDLES.find(b => b.slug === slug) || null;
     }
     try {
-      let res = await fetch(`${API_BASE_URL}/bundles/slug/${slug}`, {
+      let res = await fetch(`${API_BASE_URL}/bundles/${encodeURIComponent(slug)}`, {
         cache: "no-store",
         headers: { "Accept": "application/json" }
       });

@@ -447,6 +447,7 @@ export interface HomepageSectionSetting {
 }
 
 export interface Bundle {
+  galleryImages?: string[];
   startDate?: string;
   endDate?: string;
   id: string;

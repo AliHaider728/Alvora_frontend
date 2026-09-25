@@ -8,6 +8,7 @@ import {
   Box, Tag, Eye, Info, Check, AlertCircle, Save, Layers, Loader2, Upload 
 } from 'lucide-react';
 import Image from 'next/image';
+import { BundleGalleryImages } from '../../../../../../components/admin/BundleGalleryImages';
 
 interface SelectedProduct {
   product: Product;
@@ -47,6 +48,8 @@ export default function AdminEditBundleClient({ bundleId }: { bundleId: string }
   // Images & Marketing
   const [customImageUrl, setCustomImageUrl] = useState('');
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
+  const [uploadingGallery, setUploadingGallery] = useState(false);
   const [badgeText, setBadgeText] = useState('Best Value');
   const [routineSteps, setRoutineSteps] = useState('');
 
@@ -88,6 +91,7 @@ export default function AdminEditBundleClient({ bundleId }: { bundleId: string }
         setAutoCalcStock(bundle.autoCalcStock !== false);
         setManualStock(bundle.manualStock || 0);
         setCustomImageUrl(bundle.image || '');
+        setGalleryImages(Array.isArray(bundle.galleryImages) ? bundle.galleryImages : []);
         setBadgeText(bundle.badgeText || '');
         setRoutineSteps(bundle.routineSteps || '');
         setShowShop(bundle.showShop !== false);
@@ -197,6 +201,7 @@ export default function AdminEditBundleClient({ bundleId }: { bundleId: string }
   };
 
   const handleSubmit = async (targetStatus: string) => {
+    if (saving || uploadingImage || uploadingGallery) return;
     setSaveError(null);
     if (!name.trim()) {
       setSaveError("Bundle Name is required.");
@@ -252,6 +257,7 @@ export default function AdminEditBundleClient({ bundleId }: { bundleId: string }
         featureHome,
         isBestseller,
         image: customImageUrl,
+        galleryImages,
         products: selectedProducts.map(sp => ({
           product_id: sp.product.id,
           quantity: sp.qty,
@@ -285,7 +291,7 @@ export default function AdminEditBundleClient({ bundleId }: { bundleId: string }
             Cancel
           </button>
           <button 
-            disabled={saving}
+            disabled={saving || uploadingImage || uploadingGallery}
             onClick={() => {
                document.getElementById('preview-card')?.scrollIntoView({ behavior: 'smooth' });
             }} 
@@ -295,14 +301,14 @@ export default function AdminEditBundleClient({ bundleId }: { bundleId: string }
             Preview Bundle
           </button>
           <button 
-            disabled={saving}
+            disabled={saving || uploadingImage || uploadingGallery}
             onClick={() => handleSubmit('draft')}
             className="px-4 py-2 text-sm font-medium text-[#A85A3B] bg-[#A85A3B]/10 hover:bg-[#A85A3B]/20 rounded-lg transition-colors"
           >
             {saving ? 'Saving...' : 'Save Draft'}
           </button>
           <button 
-            disabled={saving}
+            disabled={saving || uploadingImage || uploadingGallery}
             onClick={() => handleSubmit('published')}
             className="px-5 py-2 text-sm font-medium text-white bg-alvora-charcoal hover:bg-black rounded-lg shadow-md transition-colors flex items-center gap-2"
           >
@@ -681,10 +687,11 @@ export default function AdminEditBundleClient({ bundleId }: { bundleId: string }
                           <p className="text-xs text-gray-500">PNG, JPG up to 5MB (Square or Landscape)</p>
                         </div>
                       )}
-                      <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={uploadingImage} />
+                      <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={saving || uploadingImage || uploadingGallery} />
                     </label>
                   </div>
                 </div>
+                <BundleGalleryImages images={galleryImages} onChange={setGalleryImages} onUploadingChange={setUploadingGallery} disabled={saving || uploadingImage} />
               </div>
             </div>
           </section>
