@@ -52,7 +52,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <html lang="en" className={`${poppins.variable}`} data-scroll-behavior="smooth">
-      <head>{GA_MEASUREMENT_ID && (
+      {GA_MEASUREMENT_ID && (
           <>
             <Script
               strategy="lazyOnload"
@@ -72,7 +72,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             />
           </>
         )}
-      </head>
       <body
         style={{
           background: 'var(--alvora-ivory)',
