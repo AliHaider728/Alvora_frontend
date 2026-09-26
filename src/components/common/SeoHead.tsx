@@ -16,13 +16,13 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ title, description, product, c
 
   let finalTitle = defaultTitle;
   if (product?.metaTitle) {
-    finalTitle = `${product.metaTitle} | ALVORA`;
+    finalTitle = `${product.metaTitle} | ALVORA | Glowing & Healthy Skin`;
   } else if (title) {
     const cleanTitle = title.replace(/\s*[-|]\s*Alvora Skincare/i, '').trim();
     if (cleanTitle.toUpperCase() === 'ALVORA' || cleanTitle.toUpperCase() === 'ALVORA | GLOWING & HEALTHY SKIN') {
       finalTitle = defaultTitle;
     } else {
-      finalTitle = `${cleanTitle} | ALVORA`;
+      finalTitle = `${cleanTitle} | ALVORA | Glowing & Healthy Skin`;
     }
   }
   const finalDesc = description || product?.metaDescription || product?.shortDescription || product?.description || defaultDesc;

@@ -1,7 +1,7 @@
 import { AdminSettingsPageClient } from './AdminSettingsPageClient';
 
 export const metadata = {
-  title: 'AdminSettingsPage | Alvora Skincare Admin',
+  title: 'AdminSettingsPage ',
 };
 
 export default function Page() {

@@ -1,7 +1,7 @@
 import { AdminBundlesPageClient } from './AdminBundlesPageClient';
 
 export const metadata = {
-  title: 'Bundles | Alvora Skincare Admin',
+  title: 'Bundles ',
 };
 
 export default function Page() {

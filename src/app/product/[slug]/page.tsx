@@ -14,10 +14,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const product = await api.getProduct(slug);
     if (!product) {
       console.error(`[generateMetadata] api.getProduct returned null for slug: ${slug}`);
-      return { title: `${slug} | Alvora Skincare` };
+      return { title: `${slug} ` };
     }
 
-    const finalTitle = product.metaTitle || `${product.name} | Alvora Skincare`;
+    const finalTitle = product.metaTitle || `${product.name} `;
     const finalDesc = product.metaDescription || product.shortDescription || product.description || defaultDesc;
     const imageUrl = product.images?.[0] || '/images/hero/alvora-hero.png';
     
@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       }
     };
   } catch (e) {
-    return { title: `${slug} | Alvora Skincare` };
+    return { title: `${slug} ` };
   }
 }
 

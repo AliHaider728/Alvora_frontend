@@ -1,7 +1,7 @@
 import { AdminGlobalAttributesPageClient } from './AdminGlobalAttributesPageClient';
 
 export const metadata = {
-  title: 'AdminGlobalAttributesPage | Alvora Skincare Admin',
+  title: 'AdminGlobalAttributesPage ',
 };
 
 export default function Page() {

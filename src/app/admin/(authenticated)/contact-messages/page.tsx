@@ -1,7 +1,7 @@
 import { AdminContactMessagesClient } from './AdminContactMessagesClient';
 
 export const metadata = {
-  title: 'AdminContactMessages | Alvora Skincare Admin',
+  title: 'AdminContactMessages ',
 };
 
 export default function Page() {

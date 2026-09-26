@@ -24,7 +24,7 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: {
     default: 'ALVORA | Glowing & Healthy Skin',
-    template: '%s | ALVORA',
+    template: '%s | ALVORA | Glowing & Healthy Skin',
   },
   description:
     'Thoughtfully formulated skincare that nourishes, protects and brings out your most radiant skin. Shop serums, moisturizers, cleansers and more.',

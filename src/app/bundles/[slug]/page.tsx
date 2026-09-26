@@ -11,10 +11,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   try {
     const bundle = await api.getBundle(slug);
     if (!bundle) {
-      return { title: `Bundle | Alvora Skincare` };
+      return { title: `Bundle ` };
     }
 
-    const finalTitle = `${bundle.name} | Alvora Skincare Bundles`;
+    const finalTitle = `${bundle.name}  Bundles`;
     const finalDesc = bundle.description || defaultDesc;
     const imageUrl = bundle.image || '/images/hero/alvora-hero.png';
     
@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       }
     };
   } catch (e) {
-    return { title: `Bundle | Alvora Skincare` };
+    return { title: `Bundle ` };
   }
 }
 

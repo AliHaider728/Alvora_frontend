@@ -1,7 +1,7 @@
 import { AdminProductFormPageClient } from './AdminProductFormPageClient';
 
 export const metadata = {
-  title: 'AdminProductFormPage | Alvora Skincare Admin',
+  title: 'AdminProductFormPage ',
 };
 
 export default function Page() {

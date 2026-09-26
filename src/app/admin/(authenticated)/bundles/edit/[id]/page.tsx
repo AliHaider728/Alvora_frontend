@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import AdminEditBundleClient from './AdminEditBundleClient';
 
 export const metadata: Metadata = {
-  title: 'Edit Bundle | Alvora Admin',
+  title: 'Edit Bundle ',
 };
 
 export default async function EditBundlePage({ params }: { params: Promise<{ id: string }> }) {

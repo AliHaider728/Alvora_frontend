@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import AdminCreateBundleClient from './AdminCreateBundleClient';
 
 export const metadata: Metadata = {
-  title: 'Create Bundle | Alvora Admin',
+  title: 'Create Bundle ',
 };
 
 export default function CreateBundlePage() {

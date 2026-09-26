@@ -1,7 +1,7 @@
 import { AdminProductFormPageClient } from "./AdminProductFormPageClient";
 
 export const metadata = {
-  title: "Edit Product | Alvora Skincare Admin",
+  title: "Edit Product ",
 };
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {

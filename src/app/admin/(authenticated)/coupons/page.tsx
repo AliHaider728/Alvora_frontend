@@ -1,7 +1,7 @@
 import { AdminCouponsPageClient } from './AdminCouponsPageClient';
 
 export const metadata = {
-  title: 'AdminCouponsPage | Alvora Skincare Admin',
+  title: 'AdminCouponsPage ',
 };
 
 export default function Page() {

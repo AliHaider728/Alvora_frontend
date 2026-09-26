@@ -2,7 +2,7 @@ import React from 'react';
 import { ContactPageClient } from './ContactPageClient';
 
 export const metadata = {
-  title: 'Contact Us | Alvora Skincare',
+  title: 'Contact Us ',
 };
 
 export default function Page() {

@@ -7,7 +7,7 @@ import { notFound } from "next/navigation";
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const slug = (await params).slug;
   if (slug === 'all') {
-    return { title: 'All Products | Alvora Skincare', description: 'Explore all products at Alvora Skincare' };
+    return { title: 'All Products', description: 'Explore all products at Alvora Skincare' };
   }
   try {
     const categories = await api.getCategories();
@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       const cat = categories.find((c: any) => c.slug === slug);
       if (cat) {
         return { 
-          title: `${cat.name} | Alvora Skincare`,
+          title: `${cat.name} `,
           description: cat.description || `Explore our selection of ${cat.name} products.`
         };
       }
@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   } catch (e) {}
   
   return {
-    title: `${slug} | Alvora Skincare`,
+    title: `${slug} `,
   };
 }
 
