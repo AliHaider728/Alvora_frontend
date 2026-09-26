@@ -30,6 +30,7 @@ import { trackInitiateCheckout } from '../lib/metaPixel';
 import { trackTikTokAddToWishlist } from '../lib/tiktokPixel';
 import { resolveCartLine } from '../lib/pricingOffers';
 import { calculateRoutineDiscount, type RoutineDiscountSettings } from '../lib/routineDiscount';
+import { createRoutineCartItem } from '../lib/routineCart';
 
 type MongoRecord = {
   _id?: unknown;
@@ -52,7 +53,7 @@ const getCartLineKey = (
     : `${productId}::legacy::${selectedVariant?.trim() || ''}`;
 };
 
-const consolidateCartItems = (items: unknown): CartItem[] => {
+const consolidateCartItems = (items: unknown, routineSettings?: RoutineDiscountSettings): CartItem[] => {
   if (!Array.isArray(items)) return [];
 
   const consolidated = new Map<string, CartItem>();
@@ -61,7 +62,7 @@ const consolidateCartItems = (items: unknown): CartItem[] => {
     const item = candidate as CartItem;
     if (!item.product?.id || String(item.product.id).trim() === '' || String(item.product.id) === 'undefined') continue;
     const quantity = Math.max(1, Math.floor(Number(item.quantity) || 1));
-    const key = getCartLineKey(item.product.id, item.selectedVariant, item.variationId);
+    const key = `${item.isRoutine ? 'routine' : 'product'}::${getCartLineKey(item.product.id, item.selectedVariant, item.variationId)}`;
     const existing = consolidated.get(key);
     if (existing) {
       consolidated.set(key, { ...existing, product: item.product, quantity: existing.quantity + quantity, isRoutine: existing.isRoutine || item.isRoutine });
@@ -69,13 +70,18 @@ const consolidateCartItems = (items: unknown): CartItem[] => {
       consolidated.set(key, { ...item, quantity });
     }
   }
-  return [...consolidated.values()];
+  const result = [...consolidated.values()];
+  const legacy = result.filter(item => item.isRoutine && !item.routineComponents?.length);
+  if (!legacy.length) return result;
+  const group = createRoutineCartItem(legacy.map(item => ({ productId: item.product.id, name: item.product.name, quantity: item.quantity, unitPrice: item.resolvedUnitPrice ?? item.product.price, image: item.product.images?.[0], variationId: item.variationId, selectedVariant: item.selectedVariant })), routineSettings, 'routine-legacy');
+  return [...result.filter(item => !legacy.includes(item)), group];
 };
 
 const readStoredCart = (): CartItem[] => {
   try {
     const saved = (typeof window !== 'undefined' ? localStorage.getItem.bind(localStorage) : () => null)('alvora_cart');
-    return saved ? consolidateCartItems(JSON.parse(saved)) : [];
+    const settings = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('alvora_settings') || '{}') : {};
+    return saved ? consolidateCartItems(JSON.parse(saved), settings.routineDiscount) : [];
   } catch {
     return [];
   }
@@ -188,6 +194,7 @@ export interface StoreContextType {
   isCartOpen: boolean;
   setIsCartOpen: (open: boolean) => void;
   addToCart: (product: Product, quantity?: number, selectedVariant?: string, variationId?: string, options?: { appliedOfferLabel?: string; freeUnits?: number; resolvedUnitPrice?: number; isRoutine?: boolean }) => void;
+  addRoutineToCart: (components: import('../types').RoutineComponent[]) => void;
   routineDiscountAmount: number;
   routineDiscountPercent: number;
   saveRoutineDiscountSettings: (settings: RoutineDiscountSettings) => Promise<boolean>;
@@ -508,14 +515,20 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, [products]);
 
   // Cart operations
+  const addRoutineToCart = (components: import('../types').RoutineComponent[]) => {
+    const item = createRoutineCartItem(components, settings.routineDiscount);
+    setCart(prev => [...prev, item]);
+    setIsCartOpen(true);
+  };
   const addToCart = (product: Product, quantity = 1, selectedVariant?: string, variationId?: string, options?: { appliedOfferLabel?: string; freeUnits?: number; resolvedUnitPrice?: number; isRoutine?: boolean }) => {
     if (!product || !product.id || String(product.id).trim() === '' || String(product.id) === 'undefined') {
       console.error('[StoreContext] Critical Error: Rejected attempt to add malformed product to cart (missing valid id).', product);
       return;
     }
 
+    if (!Number.isInteger(quantity) || quantity < 1) return;
     setCart(prev => {
-      const normalizedCart = consolidateCartItems(prev);
+      const normalizedCart = consolidateCartItems(prev, settings.routineDiscount);
       const lineKey = getCartLineKey(product.id, selectedVariant, variationId);
       const existing = normalizedCart.find(item =>
         getCartLineKey(item.product.id, item.selectedVariant, item.variationId) === lineKey
@@ -615,6 +628,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setCart(prev =>
       prev.map(item => {
         if (getCartLineKey(item.product.id, item.selectedVariant, item.variationId) !== lineKey) return item;
+        if (item.routineComponents?.length) return { ...item, quantity };
         const basePrice = getBasePrice(item);
         const resolved = resolveCartLine(item.product.pricingOffers, basePrice, quantity);
         return { 
@@ -673,7 +687,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setAppliedCoupon(null);
   };
 
-  const routineDiscount = calculateRoutineDiscount(cart.filter(item => item.isRoutine).map(item => ({
+  const routineDiscount = calculateRoutineDiscount(cart.filter(item => item.isRoutine && !item.routineComponents?.length).map(item => ({
     productId: item.product.id,
     quantity: item.quantity,
     unitPrice: item.resolvedUnitPrice ?? getBasePrice(item),
@@ -982,6 +996,7 @@ bundlesLoading,
         isCartOpen,
         setIsCartOpen,
         addToCart,
+        addRoutineToCart,
         removeFromCart,
         updateCartQuantity,
         clearCart,

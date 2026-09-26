@@ -1,4 +1,5 @@
 "use client";
+import { RoutineContents } from '../common/RoutineContents';
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname, useParams } from 'next/navigation';
@@ -74,6 +75,7 @@ export const CartDrawer: React.FC = () => {
           </div>
 
           <button
+            aria-label="Close shopping bag"
             onClick={() => setIsCartOpen(false)}
             className="p-1.5 sm:p-2 rounded-full hover:bg-white text-[#1A1A1A]/60 hover:text-[#1A1A1A]/90 transition-colors"
           >
@@ -175,8 +177,10 @@ export const CartDrawer: React.FC = () => {
                         </div>
                       )}
 
+                      <RoutineContents components={item.routineComponents} />
+                      {item.routineComponents && <p className="mt-1 text-xs font-semibold text-[#9C4122]">{item.routineDiscountPercent}% routine savings included</p>}
                       {item.product.category && item.product.category !== "Uncategorized" && (<span className="text-[10px] text-[#9C4122] font-semibold uppercase block tracking-wider mt-0.5">{item.product.category}</span>)}
-                        {item.isRoutine && (<span className="text-[10px] bg-[#C48B80] text-white px-1.5 py-0.5 rounded uppercase tracking-wider mt-1 inline-block">Routine Item</span>)}
+                        {item.isRoutine && (<span className="text-[10px] bg-[#C48B80] text-white px-1.5 py-0.5 rounded uppercase tracking-wider mt-1 inline-block">Custom Routine</span>)}
                       
                       {variation && (
                         <div className="mt-1 flex flex-wrap gap-1">
@@ -214,6 +218,7 @@ export const CartDrawer: React.FC = () => {
                     <div className="flex items-center justify-between mt-2">
                       <div className="flex items-center border border-[#EDE5DC] rounded-lg sm:rounded-xl bg-white h-8 sm:h-9">
                         <button
+                          aria-label={`Decrease quantity of ${item.product.name}`}
                           onClick={() => updateCartQuantity(item.product.id, item.quantity - 1, item.selectedVariant, item.variationId)}
                           className="w-8 sm:w-9 h-full flex items-center justify-center text-[#1A1A1A]/70 hover:bg-[#EDE5DC] rounded-l-lg sm:rounded-l-xl transition-colors"
                         >
@@ -221,6 +226,7 @@ export const CartDrawer: React.FC = () => {
                         </button>
                         <span className="w-6 sm:w-8 text-center text-[11px] sm:text-xs font-bold text-[#1A1A1A]/90">{item.quantity}</span>
                         <button
+                          aria-label={`Increase quantity of ${item.product.name}`}
                           onClick={() => updateCartQuantity(item.product.id, item.quantity + 1, item.selectedVariant, item.variationId)}
                           className="w-8 sm:w-9 h-full flex items-center justify-center text-[#1A1A1A]/70 hover:bg-[#EDE5DC] rounded-r-lg sm:rounded-r-xl transition-colors"
                         >
@@ -361,8 +367,6 @@ export const CartDrawer: React.FC = () => {
     </div>
   );
 };
-
-
 
 
 

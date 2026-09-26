@@ -262,6 +262,8 @@ export interface AgeGroupOption {
 }
 
 export interface CartItem {
+  routineComponents?: RoutineComponent[];
+  routineDiscountPercent?: number;
   product: Product;
   quantity: number;
   selectedVariant?: string; // Legacy
@@ -304,6 +306,7 @@ export interface Review {
 }
 
 export interface OrderItem {
+  routineComponents?: RoutineComponent[];
   isRoutine?: boolean;
   productId: string;
   name: string;
@@ -315,6 +318,16 @@ export interface OrderItem {
   productType?: 'simple' | 'variable' | 'bundle';
   sku?: string;
   selectedAttributes?: Record<string, string>;
+}
+
+export interface RoutineComponent {
+  productId: string;
+  name: string;
+  quantity: number;
+  unitPrice: number;
+  image?: string;
+  variationId?: string;
+  selectedVariant?: string;
 }
 
 export interface Order {

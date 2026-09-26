@@ -83,9 +83,9 @@ try {
   await checkTotals(20, 5000, 1000, 4000);
   console.log('PASS: 3 distinct, qty 3 + 1 + 1, 20%, total Rs. 4,000');
   await clickText('aside[aria-label="Your Routine"] button', 'Add routine to cart');
-  await page.waitForFunction(() => JSON.parse(localStorage.getItem('alvora_cart') || '[]').length === 3);
-  assert.ok(await page.evaluate(() => JSON.parse(localStorage.getItem('alvora_cart')).every(item => item.isRoutine === true)));
-  assert.ok(await page.evaluate(() => document.body.textContent.includes('Routine Savings (20%)')));
+  await page.waitForFunction(() => JSON.parse(localStorage.getItem('alvora_cart') || '[]').length === 1);
+  assert.ok(await page.evaluate(() => { const [item] = JSON.parse(localStorage.getItem('alvora_cart')); return item.isRoutine === true && item.routineComponents.length === 3 && item.routineDiscountPercent === 20 && item.resolvedUnitPrice === 4000; }));
+  assert.ok(await page.evaluate(() => document.body.textContent.includes('20% routine savings included')));
   await page.goto(`${base}/checkout`, { waitUntil: 'networkidle2', timeout: 60000 });
   await page.waitForFunction(() => document.body.textContent.includes('Routine Savings (20%)'));
   console.log('PASS: routine flag, quantities and 20% savings persist through cart and checkout reload');

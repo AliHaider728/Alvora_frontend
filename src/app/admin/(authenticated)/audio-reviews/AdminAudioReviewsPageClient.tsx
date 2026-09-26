@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import { Plus, Trash2, Edit2, Play, Pause, Save, X } from "lucide-react";
-import { api, API_BASE_URL, getAuthToken } from "../../../../services/api";
+import { API_BASE_URL, getAuthToken } from "../../../../services/api";
 import { AudioReview } from "../../../../types";
+import { useReviewAudio } from "../../../../hooks/useReviewAudio";
 
 export default function AdminAudioReviewsPageClient() {
   const [reviews, setReviews] = useState<AudioReview[]>([]);
@@ -22,8 +23,7 @@ export default function AdminAudioReviewsPageClient() {
   const [editingId, setEditingId] = useState<string | null>(null);
   
   // Audio playback state
-  const [playingId, setPlayingId] = useState<string | null>(null);
-  const audioRef = React.useRef<HTMLAudioElement | null>(null);
+  const { audioProps, playingId, error: playbackError, togglePlay } = useReviewAudio();
 
   useEffect(() => {
     fetchReviews();
@@ -133,19 +133,6 @@ export default function AdminAudioReviewsPageClient() {
     }
   };
 
-  const togglePlay = (url: string, id: string) => {
-    if (playingId === id) {
-      audioRef.current?.pause();
-      setPlayingId(null);
-    } else {
-      if (audioRef.current) {
-        audioRef.current.src = url;
-        audioRef.current.play();
-        setPlayingId(id);
-      }
-    }
-  };
-
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -159,7 +146,8 @@ export default function AdminAudioReviewsPageClient() {
         </button>
       </div>
 
-      <audio ref={audioRef} onEnded={() => setPlayingId(null)} className="hidden" />
+      <audio {...audioProps} className="hidden" />
+      {playbackError && <p role="alert" className="bg-red-50 text-red-600 p-4 rounded-md">{playbackError}</p>}
 
       {error && !isFormOpen && (
         <div className="bg-red-50 text-red-600 p-4 rounded-md">
@@ -253,6 +241,8 @@ export default function AdminAudioReviewsPageClient() {
                   <tr key={r.id}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <button 
+                        aria-pressed={playingId === r.id}
+                        aria-label={`${playingId === r.id ? "Pause" : "Play"} voice review by ${r.customerName}`}
                         onClick={() => togglePlay(r.audioUrl, r.id)}
                         className="w-8 h-8 flex items-center justify-center rounded-full bg-[#F1C9BD] text-[#A86249] hover:bg-[#EFCDBE]"
                       >

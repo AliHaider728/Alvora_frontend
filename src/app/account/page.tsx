@@ -1,4 +1,5 @@
 "use client";
+import { RoutineContents } from '../../components/common/RoutineContents';
 import React, { useState } from 'react';
 import { User, Package, MapPin, LogOut, Clock, XCircle, AlertCircle, CheckCircle2, Loader2, ArrowLeft } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
@@ -141,7 +142,7 @@ export default function AccountPage() {
                             <div key={i} className="flex items-center gap-3 text-xs sm:text-sm">
                               <img src={getSafeImageSrc(it.image)} alt="" className="w-10 h-10 object-cover rounded-lg bg-slate-100" />
                               <span className="flex-1 font-medium text-slate-800">
-                                {it.name} (Qty: {it.quantity}) {it.selectedVariant ? `[${it.selectedVariant}]` : ''}
+                                {it.name} (Qty: {it.quantity}) {it.selectedVariant ? `[${it.selectedVariant}]` : ''}<RoutineContents components={it.routineComponents} />
                               </span>
                               <span className="font-bold text-[#1A1A1A]">{formatPrice(it.price * it.quantity, settings.currency)}</span>
                             </div>

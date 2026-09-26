@@ -1,4 +1,5 @@
 "use client";
+import { RoutineContents } from '../../components/common/RoutineContents';
 import { AnimatedButton } from "../../components/common/AnimatedButton";
 import React, { useEffect, useState } from 'react';
 import Link from "next/link";
@@ -55,6 +56,7 @@ export const CheckoutPageClient: React.FC = () => {
     routineDiscountAmount,
     routineDiscountPercent,
     categories,
+    products,
     settings,
     placeOrder,
     updateCartQuantity
@@ -113,23 +115,28 @@ export const CheckoutPageClient: React.FC = () => {
   let hasShippingOverride = false;
   let hasDefaultShippingItem = false;
   let deliveryUnavailable = false;
-  cart.forEach((item) => {
+  const deliveryItems = cart.flatMap(item => item.routineComponents?.length
+    ? item.routineComponents.map(component => ({ product: products.find(product => product.id === component.productId) }))
+    : [{ product: item.product }]);
+  deliveryItems.forEach((item) => {
+    const product = item.product;
+    if (!product) { deliveryUnavailable = true; return; }
     const flatRate = settings.flatDeliveryRate ?? settings.standardShippingFee;
-    const deliveryType = getProductDeliveryType(item.product);
+    const deliveryType = getProductDeliveryType(product);
     if (deliveryType === 'none') {
       deliveryUnavailable = true;
       return;
     }
     if (deliveryType === 'fixed') {
       hasShippingOverride = true;
-      highestOverrideFee = Math.max(highestOverrideFee, Number(item.product.customDeliveryFee) || flatRate);
+      highestOverrideFee = Math.max(highestOverrideFee, Number(product.customDeliveryFee) || flatRate);
       return;
     }
     if (deliveryType === 'free') {
       return;
     }
     if (deliveryType === 'category') {
-      const category = categories.find(candidate => candidate.slug === (item.product.categorySlug || ''));
+      const category = categories.find(candidate => candidate.slug === (product.categorySlug || ''));
       const categoryType = category?.deliveryType || category?.deliveryChargeType;
       if (categoryType === 'none') {
         deliveryUnavailable = true;
@@ -243,6 +250,7 @@ export const CheckoutPageClient: React.FC = () => {
           variationId: item.variationId,
           productType: item.product.productType || 'simple',
             isRoutine: item.isRoutine,
+          routineComponents: item.routineComponents,
           sku: sku,
           selectedAttributes: attributes
         };
@@ -446,7 +454,7 @@ export const CheckoutPageClient: React.FC = () => {
                 {completedOrder.items.map((it, idx) => (
                   <div key={idx} className="flex items-center justify-between text-xs sm:text-sm">
                     <span className="text-[#1A1A1A]/90 font-medium">
-                      {it.quantity}x {it.name} {it.selectedVariant ? `(${it.selectedVariant})` : ''}
+                      {it.quantity}x {it.name} {it.selectedVariant ? `(${it.selectedVariant})` : ''}<RoutineContents components={it.routineComponents} />
                     </span>
                     <span className="font-bold text-[#1A1A1A]">{formatPrice(it.price * it.quantity, settings.currency)}</span>
                   </div>
@@ -660,6 +668,8 @@ export const CheckoutPageClient: React.FC = () => {
                         <h4 className="font-display font-bold text-xs text-[#1A1A1A]/90 truncate">
                           {item.product.name}
                         </h4>
+                        <RoutineContents components={item.routineComponents} />
+                        {item.routineComponents && <p className="mt-1 text-xs text-[#9C4122]">{item.routineDiscountPercent}% routine savings included</p>}
                         {variation && (
                           <div className="mt-0.5 flex flex-wrap gap-1">
                             {Object.entries(variation.attributes).map(([key, val]) => (
@@ -766,4 +776,3 @@ export const CheckoutPageClient: React.FC = () => {
     </div>
   );
 };
-

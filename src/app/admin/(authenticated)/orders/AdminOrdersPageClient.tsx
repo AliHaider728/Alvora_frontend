@@ -1,4 +1,5 @@
 "use client";
+import { RoutineContents } from '../../../../components/common/RoutineContents';
 import React, { useState } from 'react';
 import { Eye, Search, Truck, X, CheckCircle2, Send, Trash2 } from 'lucide-react';
 import { useStore } from '../../../../context/StoreContext';
@@ -277,6 +278,7 @@ export const AdminOrdersPageClient: React.FC = () => {
                           )}
                           <div className="flex flex-col min-w-0 flex-1">
                             <span className="text-[11px] font-bold text-[#1A1A1A] line-clamp-1" title={it.name || 'Unknown Item'}>{it.name || 'Unknown Item'}</span>
+                            <RoutineContents components={it.routineComponents} />
                             <div className="text-[10px] text-[#1A1A1A]/50 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mt-0.5">
                               <span className="font-bold text-[#1A1A1A]/80">{it.quantity || 0}x</span>
                               <span className="text-[#1A1A1A]/70">{formatPrice(it.price || 0, settings.currency)}</span>
@@ -395,6 +397,7 @@ export const AdminOrdersPageClient: React.FC = () => {
                       <span>
                         {it.quantity}x {it.name}
                       </span>
+                      <RoutineContents components={it.routineComponents} />
                       {it.selectedAttributes && (
                         <div className="mt-0.5 flex flex-wrap gap-1">
                           {Object.entries(it.selectedAttributes).map(([k, v]) => (
@@ -425,4 +428,3 @@ export const AdminOrdersPageClient: React.FC = () => {
     </div>
   );
 };
-

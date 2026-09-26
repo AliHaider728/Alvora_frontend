@@ -40,7 +40,7 @@ function QuantityControl({ name, quantity, onChange, max }: { name: string; quan
 }
 
 export function RoutineBuilder() {
-  const { products, productsLoading, settings, addToCart } = useStore();
+  const { products, productsLoading, settings, addRoutineToCart } = useStore();
   const config = normalizeRoutineSettings(settings.routineDiscount);
   const [selected, setSelected] = useState<Record<string, Selection>>({});
   const [added, setAdded] = useState(false);
@@ -71,11 +71,12 @@ export function RoutineBuilder() {
     });
   };
   const addRoutine = () => {
-    if (invalidSelection || !lines.length || added) return;
-    lines.forEach(({ product, choice, quantity }) => {
-      const variantLabel = choice.variation ? Object.entries(choice.variation.attributes).map(([key, value]) => `${key}: ${value}`).join(', ') : undefined;
-      addToCart(product, quantity, variantLabel, choice.variation?.id, { isRoutine: true });
-    });
+    if (invalidSelection || !lines.length) return;
+    addRoutineToCart(lines.map(({ product, choice, quantity, unitPrice }) => ({
+      productId: product.id, name: product.name, quantity, unitPrice,
+      image: choice.variation?.image?.url || product.images?.[0], variationId: choice.variation?.id,
+      selectedVariant: choice.variation ? Object.entries(choice.variation.attributes).map(([key, value]) => `${key}: ${value}`).join(', ') : undefined,
+    })));
     setAdded(true);
   };
 
@@ -120,6 +121,7 @@ export function RoutineBuilder() {
                   <div className="mt-auto flex justify-center pt-1">
                     {quantity > 0 ? <QuantityControl name={product.name} quantity={quantity} onChange={q => setQuantity(product, q)} max={choice.max} /> : needsOptions ? <Link href={`/product/${product.slug}`} className="text-xs font-semibold text-[#9C4122]">View options <ArrowRight className="inline" size={13} /></Link> : <button type="button" disabled={!choice.available} onClick={() => setQuantity(product, 1)} className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-[#E7D9D0] bg-[#FAF6F2] px-2 py-2.5 text-[11px] font-semibold hover:border-[#C48B80] hover:bg-[#F7E5DE] disabled:opacity-40"><Plus size={14} />{choice.available ? 'Add to Routine' : 'Out of stock'}</button>}
                   </div>
+                  {quantity > 0 && <button type="button" aria-label={`Remove ${product.name} from selection`} onClick={() => setQuantity(product, 0)} className="mt-3 flex min-h-9 w-full items-center justify-center gap-1 rounded-lg border border-[#DDB9AC] bg-white/80 text-xs font-semibold text-[#9C4122] hover:bg-[#F7E5DE]"><X size={14} />Remove</button>}
                 </div>
               </article>;
             })}
@@ -138,7 +140,7 @@ export function RoutineBuilder() {
             {lines.map(({ product, choice, quantity, unitPrice }) => <div key={product.id} className="flex gap-3 border-b border-[#DFC3B6]/50 pb-4">
               <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border border-white bg-[#F5EDE4]"><RoutinePhoto key={choice.variation?.id} product={product} variationId={choice.variation?.id} small /></div>
               <div className="min-w-0 flex-1"><p className="text-xs font-semibold leading-5">{product.name}</p><p className="mb-2 mt-1 text-xs text-[#74665C]">{formatPrice(unitPrice * quantity, settings.currency)}{choice.variation && ` · ${Object.values(choice.variation.attributes).join(' / ')}`}</p><QuantityControl name={product.name} quantity={quantity} onChange={q => setQuantity(product, q)} max={choice.max} /></div>
-              <button aria-label={`Remove ${product.name}`} onClick={() => setQuantity(product, 0)} className="-mr-1 self-start rounded-full p-2 text-[#8B776B] hover:bg-white"><X size={14} /></button>
+              <button aria-label={`Remove ${product.name}`} onClick={() => setQuantity(product, 0)} type="button" className="flex min-h-9 shrink-0 items-center gap-1 self-start rounded-lg border border-[#DDB9AC] px-2 text-xs text-[#9C4122] hover:bg-white"><X size={14} /><span>Remove</span></button>
             </div>)}
           </div>
           <div aria-live="polite" className="mt-5 space-y-3" data-testid="routine-totals">
@@ -148,7 +150,7 @@ export function RoutineBuilder() {
             <p className="text-right text-[10px] text-[#8B776B]">Delivery & taxes calculated at checkout</p>
           </div>
           {invalidSelection && <p role="alert" className="mt-3 text-xs text-red-700">Availability changed. Reduce the quantity or remove the unavailable product.</p>}
-          <button type="button" disabled={!lines.length || invalidSelection || added} onClick={addRoutine} className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#9C4122] to-[#B86343] px-4 py-4 text-xs font-semibold uppercase tracking-wider text-white shadow-sm transition-shadow hover:shadow-md disabled:opacity-50"><ShoppingBag size={16} />{added ? 'Routine added to cart' : 'Add routine to cart'}<ArrowRight size={16} /></button>
+          <button type="button" disabled={!lines.length || invalidSelection} onClick={addRoutine} className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#9C4122] to-[#B86343] px-4 py-4 text-xs font-semibold uppercase tracking-wider text-white shadow-sm transition-shadow hover:shadow-md disabled:opacity-50"><ShoppingBag size={16} />{added ? 'Add routine again' : 'Add routine to cart'}<ArrowRight size={16} /></button>
           <p className="mt-3 text-center text-[10px] text-[#8B776B]">{totals.totalQuantity} {totals.totalQuantity === 1 ? 'item' : 'items'} · Thoughtfully chosen by you</p>
         </aside>
       </div>
