@@ -502,73 +502,72 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
     if (cartActionLocked.current) return;
     cartActionLocked.current = true;
     setCartActionState('adding');
-    addTimerRef.current = setTimeout(() => {
-      // Derive effective price based on selected quantity
-      let effectivePrice = currentPrice;
-      let qbLabel = '';
-      if (product.pricingOffers?.quantityBreaks?.enabled) {
-        const sortedTiers = [...(product.pricingOffers.quantityBreaks.tiers || [])].sort((a, b) => b.minQty - a.minQty);
-        const matchedTier = sortedTiers.find(t => quantity >= t.minQty);
-        if (matchedTier) {
-          effectivePrice = matchedTier.pricePerUnit;
-          qbLabel = matchedTier.label;
-        }
-      }
 
-      let freeUnits = 0;
-      let bogoLabel = '';
-      const bogo = product.pricingOffers?.bogo;
-      if (bogo?.enabled && bogo.buyQty > 0) {
-        freeUnits = Math.floor(quantity / bogo.buyQty) * bogo.getQty;
-        if (freeUnits > 0) {
-          const defaultBogoLabel = `Buy ${bogo.buyQty} Get ${bogo.getQty} Free`;
-          const baseLabel = bogo.label || defaultBogoLabel;
-          bogoLabel = freeUnits === 1 ? `${baseLabel} (1 free unit applied)` : `${baseLabel} (${freeUnits} free units applied)`;
-        }
+    // Derive effective price based on selected quantity
+    let effectivePrice = currentPrice;
+    let qbLabel = '';
+    if (product.pricingOffers?.quantityBreaks?.enabled) {
+      const sortedTiers = [...(product.pricingOffers.quantityBreaks.tiers || [])].sort((a, b) => b.minQty - a.minQty);
+      const matchedTier = sortedTiers.find(t => quantity >= t.minQty);
+      if (matchedTier) {
+        effectivePrice = matchedTier.pricePerUnit;
+        qbLabel = matchedTier.label;
       }
+    }
 
-      const appliedOfferLabel = [qbLabel, bogoLabel].filter(Boolean).join(' • ');
-
-      if (isVariable) {
-        addToCart(
-          { ...product, price: effectivePrice },
-          quantity,
-          undefined,
-          currentVariation?.id,
-          { appliedOfferLabel, freeUnits, resolvedUnitPrice: effectivePrice }
-        );
-      } else {
-        const productToCart = totalVariantOffset ? { ...product, price: effectivePrice } : { ...product, price: effectivePrice };
-        addToCart(
-          productToCart,
-          quantity,
-          formattedVariantString || undefined,
-          undefined,
-          { appliedOfferLabel, freeUnits, resolvedUnitPrice: effectivePrice }
-        );
+    let freeUnits = 0;
+    let bogoLabel = '';
+    const bogo = product.pricingOffers?.bogo;
+    if (bogo?.enabled && bogo.buyQty > 0) {
+      freeUnits = Math.floor(quantity / bogo.buyQty) * bogo.getQty;
+      if (freeUnits > 0) {
+        const defaultBogoLabel = `Buy ${bogo.buyQty} Get ${bogo.getQty} Free`;
+        const baseLabel = bogo.label || defaultBogoLabel;
+        bogoLabel = freeUnits === 1 ? `${baseLabel} (1 free unit applied)` : `${baseLabel} (${freeUnits} free units applied)`;
       }
-      trackAddToCart({
-        id: product.id,
-        name: product.name,
-        price: effectivePrice,
+    }
+
+    const appliedOfferLabel = [qbLabel, bogoLabel].filter(Boolean).join(' • ');
+
+    if (isVariable) {
+      addToCart(
+        { ...product, price: effectivePrice },
         quantity,
-        currency: "PKR",
-      });
-
-      trackTikTokAddToCart({
-        id: product.id,
-        name: product.name,
-        price: effectivePrice,
+        undefined,
+        currentVariation?.id,
+        { appliedOfferLabel, freeUnits, resolvedUnitPrice: effectivePrice }
+      );
+    } else {
+      const productToCart = totalVariantOffset ? { ...product, price: effectivePrice } : { ...product, price: effectivePrice };
+      addToCart(
+        productToCart,
         quantity,
-        currency: "PKR",
-      });
-      showToast(`Added ${quantity} x ${product.name} to cart.`, 'success');
-      setCartActionState('added');
-      resetTimerRef.current = setTimeout(() => {
-        cartActionLocked.current = false;
-        setCartActionState('idle');
-      }, 900);
-    }, 180);
+        formattedVariantString || undefined,
+        undefined,
+        { appliedOfferLabel, freeUnits, resolvedUnitPrice: effectivePrice }
+      );
+    }
+    trackAddToCart({
+      id: product.id,
+      name: product.name,
+      price: effectivePrice,
+      quantity,
+      currency: "PKR",
+    });
+
+    trackTikTokAddToCart({
+      id: product.id,
+      name: product.name,
+      price: effectivePrice,
+      quantity,
+      currency: "PKR",
+    });
+    showToast(`Added ${quantity} x ${product.name} to cart.`, 'success');
+    setCartActionState('added');
+    resetTimerRef.current = setTimeout(() => {
+      cartActionLocked.current = false;
+      setCartActionState('idle');
+    }, 900);
   };
 
   const handleToggleWishlist = () => {

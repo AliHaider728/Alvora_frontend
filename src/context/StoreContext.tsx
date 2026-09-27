@@ -1,6 +1,6 @@
-﻿"use client";
+"use client";
 import { revalidateProductPage } from "../app/actions/revalidate";
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import {
   Product,
   ProductInput,
@@ -355,17 +355,17 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     fetchBundles().finally(() => setBundlesLoading(false));
   }, []);
 
-  const refreshProducts = async () => {
+  const refreshProducts = useCallback(async () => {
     const realProducts = await api.getProducts();
     if (realProducts) setProducts(realProducts.map(normalizeProduct));
-  };
+  }, []);
 
-  const refreshCategories = async () => {
+  const refreshCategories = useCallback(async () => {
     const result = isSuperAdmin() ? await api.getAdminCategories() : await api.getCategories();
     const normalized = result ? result.map(normalizeCategory) : [];
     if (result) setCategories(normalized);
     return normalized;
-  };
+  }, []);
 
   // â”€â”€â”€ Settings: fetched independently, never mixed with auth-gated data â”€â”€â”€
   // This MUST run on mount and NEVER be re-triggered by pb-auth-changed.
@@ -515,12 +515,12 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, [products]);
 
   // Cart operations
-  const addRoutineToCart = (components: import('../types').RoutineComponent[]) => {
+  const addRoutineToCart = useCallback((components: import('../types').RoutineComponent[]) => {
     const item = createRoutineCartItem(components, settings.routineDiscount);
     setCart(prev => [...prev, item]);
     setIsCartOpen(true);
-  };
-  const addToCart = (product: Product, quantity = 1, selectedVariant?: string, variationId?: string, options?: { appliedOfferLabel?: string; freeUnits?: number; resolvedUnitPrice?: number; isRoutine?: boolean }) => {
+  }, [settings.routineDiscount]);
+  const addToCart = useCallback((product: Product, quantity = 1, selectedVariant?: string, variationId?: string, options?: { appliedOfferLabel?: string; freeUnits?: number; resolvedUnitPrice?: number; isRoutine?: boolean }) => {
     if (!product || !product.id || String(product.id).trim() === '' || String(product.id) === 'undefined') {
       console.error('[StoreContext] Critical Error: Rejected attempt to add malformed product to cart (missing valid id).', product);
       return;
@@ -587,14 +587,14 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       }];
     });
     setIsCartOpen(true);
-  };
+  }, [settings.routineDiscount]);
 
-  const removeFromCart = (productId: string, selectedVariant?: string, variationId?: string) => {
+  const removeFromCart = useCallback((productId: string, selectedVariant?: string, variationId?: string) => {
     const lineKey = getCartLineKey(productId, selectedVariant, variationId);
     setCart(prev => prev.filter(item =>
       getCartLineKey(item.product.id, item.selectedVariant, item.variationId) !== lineKey
     ));
-  };
+  }, []);
 
   const getBasePrice = (item: CartItem): number => {
     let price = item.product.price;
@@ -619,7 +619,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return price;
   };
 
-  const updateCartQuantity = (productId: string, quantity: number, selectedVariant?: string, variationId?: string) => {
+  const updateCartQuantity = useCallback((productId: string, quantity: number, selectedVariant?: string, variationId?: string) => {
     if (quantity <= 0) {
       removeFromCart(productId, selectedVariant, variationId);
       return;
@@ -640,12 +640,12 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         };
       })
     );
-  };
+  }, []);
 
-  const clearCart = () => {
+  const clearCart = useCallback(() => {
     setCart([]);
     setAppliedCoupon(null);
-  };
+  }, []);
 
   const cartTotalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
   const cartSubtotal = cart.reduce((acc, item) => {
@@ -654,7 +654,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, 0);
 
   // Coupon application logic
-  const applyCoupon = async (code: string) => {
+  const applyCoupon = useCallback(async (code: string) => {
     const trimmed = code.trim().toUpperCase();
     if (!trimmed) {
       return { success: false, message: 'Please enter a coupon code.' };
@@ -681,11 +681,11 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     } catch (err: any) {
       return { success: false, message: err.message || 'Invalid or expired coupon code.' };
     }
-  };
+  }, [cartSubtotal]);
 
-  const removeCoupon = () => {
+  const removeCoupon = useCallback(() => {
     setAppliedCoupon(null);
-  };
+  }, []);
 
   const routineDiscount = calculateRoutineDiscount(cart.filter(item => item.isRoutine && !item.routineComponents?.length).map(item => ({
     productId: item.product.id,
@@ -708,7 +708,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, [appliedCoupon, cartSubtotal, routineDiscountAmount]);
 
   // Wishlist toggle
-  const toggleWishlist = (productId: string) => {
+  const toggleWishlist = useCallback((productId: string) => {
     const isAdding = !wishlist.includes(productId);
     setWishlist(prev =>
       prev.includes(productId) ? prev.filter(id => id !== productId) : [...prev, productId]
@@ -730,12 +730,12 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       `${isAdding ? 'Added' : 'Removed'}${productName ? ` ${productName}` : ' product'} ${isAdding ? 'to' : 'from'} wishlist.`,
       isAdding ? 'success' : 'info'
     );
-  };
+  }, [wishlist, products, showToast]);
 
-  const isInWishlist = (productId: string) => wishlist.includes(productId);
+  const isInWishlist = useCallback((productId: string) => wishlist.includes(productId), [wishlist]);
 
   // Admin CRUD handlers
-  const addProduct = async (productData: ProductInput) => {
+  const addProduct = useCallback(async (productData: ProductInput) => {
     const savedProduct = await api.createProduct(productData);
     if (!savedProduct) return null;
 
@@ -744,9 +744,9 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     await refreshProducts();
     await revalidateProductPage(normalizedProduct.slug || normalizedProduct.id);
     return normalizedProduct;
-  };
+  }, []);
 
-  const updateProduct = async (id: string, productData: Partial<ProductInput>) => {
+  const updateProduct = useCallback(async (id: string, productData: Partial<ProductInput>) => {
     const savedProduct = await api.updateProduct(id, productData);
     if (!savedProduct) return null;
 
@@ -764,14 +764,14 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
     
     return normalizedProduct;
-  };
+  }, []);
 
-  const deleteProduct = async (id: string) => {
+  const deleteProduct = useCallback(async (id: string) => {
     const result = await api.deleteProduct(id);
     if (!result) return false;
     setProducts(prev => prev.filter(p => p.id !== id));
     return true;
-  };
+  }, []);
 
   const addCategory = async (categoryData: Partial<Category>) => {
     const saved = await api.createCategory(categoryData);
@@ -824,7 +824,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return true;
   };
 
-  const placeOrder = async (orderData: Omit<Order, 'id' | 'date'>) => {
+  const placeOrder = useCallback(async (orderData: Omit<Order, 'id' | 'date'>) => {
     const response = await api.createOrder({
       ...orderData,
       appliedCoupon: appliedCoupon ? { code: appliedCoupon.code } : null,
@@ -884,7 +884,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     clearCart();
     return newOrder;
-  };
+  }, [appliedCoupon, clearCart]);
 
   const addCoupon = async (couponData: Omit<Coupon, 'id' | 'usedCount'>) => {
     const saved = await api.createCoupon(couponData);
@@ -909,18 +909,18 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return true;
   };
 
-  const updateSettings = async (newSettings: Partial<StoreSettings>) => {
+  const updateSettings = useCallback(async (newSettings: Partial<StoreSettings>) => {
     const saved = await api.updateSettings({ ...settings, ...newSettings });
     if (!saved) return false;
     setSettings(normalizeStoreSettings(saved));
     return true;
-  };
+  }, [settings]);
 
-  const updateAppearanceSettings = (
+  const updateAppearanceSettings = useCallback((
     newSettings: Pick<StoreSettings, 'storefrontNavigation' | 'homepageSections'>
   ) => {
     setSettings(prev => normalizeStoreSettings({ ...prev, ...newSettings }));
-  };
+  }, []);
 
   const submitCustomerReview = async (reviewData: Omit<Review, 'id' | 'createdAt' | 'updatedAt' | 'source' | 'status' | 'approvedAt' | 'approvedBy'>) => {
     try {
@@ -980,8 +980,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return { ...result, reviews: formattedReviews };
   };
 
-  return (
-        <StoreContext.Provider value={{
+  const contextValue = useMemo(() => ({
         bundles,
 bundlesLoading,
         products: isHydrated ? products : [],
@@ -1036,8 +1035,22 @@ bundlesLoading,
         rejectReview,
         deleteReview,
         refreshAdminReviews
-      }}
-    >
+  }), [
+    bundles, bundlesLoading, products, productsLoading, categories, orders, customers, coupons, reviews, settings,
+    cart, isCartOpen, isHydrated, addToCart, addRoutineToCart, removeFromCart, updateCartQuantity, clearCart,
+    cartTotalItems, cartSubtotal, appliedCoupon, applyCoupon, removeCoupon, couponDiscountAmount,
+    routineDiscountAmount, routineDiscount, saveRoutineDiscountSettings,
+    wishlist, toggleWishlist, isInWishlist,
+    addProduct, updateProduct, deleteProduct, refreshProducts, refreshCategories,
+    addCategory, updateCategory, deleteCategory,
+    updateOrderStatus, updateOrderTracking, deleteOrder, placeOrder,
+    addCoupon, updateCoupon, deleteCoupon,
+    updateSettings, updateAppearanceSettings,
+    submitCustomerReview, addAdminReview, updateReview, approveReview, rejectReview, deleteReview, refreshAdminReviews
+  ]);
+
+  return (
+    <StoreContext.Provider value={contextValue}>
       {children}
     </StoreContext.Provider>
   );
