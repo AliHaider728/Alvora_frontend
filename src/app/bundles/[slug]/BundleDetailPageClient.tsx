@@ -79,16 +79,19 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
     } as Product;
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
+    if (addingToCart) return;
     warmCartImage(getSafeImageSrc(getThumbnailSource(allImages[0])));
     setAddingToCart(true);
-    setTimeout(() => {
+    await new Promise(resolve => setTimeout(resolve, 0));
+    try {
       addToCart(mapBundleToProduct(bundle), 1);
-      setAddingToCart(false);
       setAdded(true);
-      setIsCartOpen(true);
+      setTimeout(() => setIsCartOpen(true), 200);
       setTimeout(() => setAdded(false), 2000);
-    }, 600);
+    } finally {
+      setAddingToCart(false);
+    }
   };
 
   const staggerVariants = {
