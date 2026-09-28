@@ -122,16 +122,7 @@ export const ContactPageClient: React.FC = () => {
             priority 
           />
         </div>
-        <div className="absolute inset-0 bg-black/20 z-10" />
-        <div className="relative z-20 text-center max-w-4xl mx-auto px-4 mt-16">
-          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl text-white mb-4 drop-shadow-md">
-            We're Here for You
-          </h1>
-          <p className="text-white/90 text-lg md:text-xl font-medium max-w-2xl mx-auto drop-shadow-sm">
-            Reach out with any questions, concerns, or feedback. Your skincare journey is our priority.
-          </p>
-        </div>
-      </section>
+        </section>
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 mt-8 pb-12">
         <Breadcrumbs items={[{ label: 'Contact Us' }]} />
