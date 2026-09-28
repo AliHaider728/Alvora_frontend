@@ -11,10 +11,10 @@ import ReactDOM from "react-dom";
 export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref }) => {
   if (typeof ReactDOM.preload === "function") {
     ReactDOM.preload("/images/home-hero-mobile.jpg", { as: "image", fetchPriority: "high" });
-    ReactDOM.preload("/images/home-hero-desktop.png", { as: "image", fetchPriority: "high" });
+    ReactDOM.preload("/images/home-hero-desktop.webp", { as: "image", fetchPriority: "high" });
   }
   return (
-    <section className="relative min-h-[100svh] w-full bg-[url('/images/home-hero-mobile.jpg')] sm:bg-[url('/images/home-hero-desktop.png')] bg-cover bg-bottom sm:bg-center bg-scroll sm:bg-fixed bg-no-repeat overflow-hidden">
+    <section className="relative min-h-[100svh] w-full bg-[url('/images/home-hero-mobile.jpg')] sm:bg-[url('/images/home-hero-desktop.webp')] bg-cover bg-bottom sm:bg-center bg-scroll sm:bg-fixed bg-no-repeat overflow-hidden">
       {/* Overlay to improve text contrast against dark parts of the image (Mobile: solid fade, Desktop: gradient from left) */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#FAF6F2]/80 via-[#FAF6F2]/20 to-transparent sm:bg-none sm:bg-gradient-to-r sm:from-[#FAF6F2]/90 sm:via-[#FAF6F2]/30 sm:to-transparent pointer-events-none transition-colors duration-300" />
       {/* Subtle overlay for bottom/right icons contrast (Bug 32) */}
