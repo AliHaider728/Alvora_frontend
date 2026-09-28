@@ -2,26 +2,19 @@
 
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowRight, ArrowDown } from "lucide-react";
 import { motion } from "framer-motion";
 import { AnimatedButton } from "../common/AnimatedButton";
+import ReactDOM from "react-dom";
 
 export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref }) => {
+  if (typeof ReactDOM.preload === "function") {
+    ReactDOM.preload("/images/alvora-hero-section-background.webp", { as: "image", fetchPriority: "high" });
+  }
+  
   return (
-    <section className="relative h-[85vh] min-h-[600px] max-h-[900px] w-full bg-[#FAF6F2] overflow-hidden">
+    <section className="relative h-[85vh] min-h-[600px] max-h-[900px] w-full bg-[url('/images/alvora-hero-section-background.webp')] bg-cover bg-bottom sm:bg-[80%_center] sm:bg-fixed bg-no-repeat overflow-hidden">
       
-      {/* Background Image using Next.js Image component */}
-      <Image
-        src="/images/alvora-hero-section-background.webp"
-        alt="Alvora Skincare Collection"
-        fill
-        priority
-        quality={90}
-        sizes="100vw"
-        className="object-cover object-[80%_center] sm:object-right z-0"
-      />
-
       {/* Overlay to improve text contrast against dark parts of the image (Mobile: solid fade, Desktop: gradient from left) */}
       <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#FAF6F2]/80 via-[#FAF6F2]/20 to-transparent sm:bg-none sm:bg-gradient-to-r sm:from-[#FAF6F2]/90 sm:via-[#FAF6F2]/30 sm:to-transparent pointer-events-none transition-colors duration-300" />
       
