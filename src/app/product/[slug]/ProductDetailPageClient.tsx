@@ -51,6 +51,7 @@ import {
 import { ProductDetailContent } from '../../../components/product/ProductDetailContent';
 import { AlvoraProductCard } from '../../../components/common/AlvoraProductCard';
 import { Review, Product } from '../../../types';
+import { warmCartProduct } from '../../../utils/cartImages';
 import { getSafeImageSrc } from '../../../utils/images';
 
 // Dynamically import below-the-fold and non-critical components to reduce initial JS payload
@@ -87,6 +88,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
   const product = initialProduct || products.find(
     p => (p.slug === slug || p.id === slug) && isProductVisibleOnStorefront(p)
   );
+
 
   // Gallery state
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -295,6 +297,8 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
         });
       })
     : undefined, [isVariable, product?.variations, variationAttributes, selectedAttributes]);
+
+  useEffect(() => { if (product) warmCartProduct(product, currentVariation?.id); }, [product, currentVariation?.id]);
 
   useEffect(() => {
     if (!isVariable) return;

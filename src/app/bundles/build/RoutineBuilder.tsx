@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Check, Plus, Minus, X, ShoppingBag, Sparkles, ArrowRight, Leaf, ShieldCheck, FlaskConical } from 'lucide-react';
 import { useStore } from '../../../context/StoreContext';
 import { Product } from '../../../types';
+import { warmCartProduct, getThumbnailSource } from '../../../utils/cartImages';
 import { getSafeImageSrc } from '../../../utils/images';
 import { formatPrice } from '../../../utils/formatters';
 import { isProductVisibleOnStorefront } from '../../../utils/products';
@@ -58,6 +59,7 @@ export function RoutineBuilder() {
   const maximumDiscount = Math.max(...config.tiers.map(t => t.discountPercent)) + (config.quantityBonusEnabled ? config.quantityBonusPercent : 0);
   const invalidSelection = lines.some(line => !line.choice.available || line.quantity > line.choice.max);
   const setQuantity = (product: Product, quantity: number) => {
+    if (quantity > 0) warmCartProduct(product, selected[product.id]?.variationId);
     setAdded(false);
     setSelected(current => {
       const next = { ...current };
@@ -74,7 +76,7 @@ export function RoutineBuilder() {
     if (invalidSelection || !lines.length) return;
     addRoutineToCart(lines.map(({ product, choice, quantity, unitPrice }) => ({
       productId: product.id, name: product.name, quantity, unitPrice,
-      image: choice.variation?.image?.url || product.images?.[0], variationId: choice.variation?.id,
+      image: getThumbnailSource(choice.variation?.image?.url || product.images?.[0]), variationId: choice.variation?.id,
       selectedVariant: choice.variation ? Object.entries(choice.variation.attributes).map(([key, value]) => `${key}: ${value}`).join(', ') : undefined,
     })));
     setAdded(true);

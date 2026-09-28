@@ -30,6 +30,7 @@ import { trackInitiateCheckout } from '../lib/metaPixel';
 import { trackTikTokAddToWishlist } from '../lib/tiktokPixel';
 import { resolveCartLine } from '../lib/pricingOffers';
 import { calculateRoutineDiscount, type RoutineDiscountSettings } from '../lib/routineDiscount';
+import { warmCartProduct } from '../utils/cartImages';
 import { createRoutineCartItem } from '../lib/routineCart';
 
 type MongoRecord = {
@@ -517,6 +518,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // Cart operations
   const addRoutineToCart = useCallback((components: import('../types').RoutineComponent[]) => {
     const item = createRoutineCartItem(components, settings.routineDiscount);
+    warmCartProduct(item.product);
     setCart(prev => [...prev, item]);
     setIsCartOpen(true);
   }, [settings.routineDiscount]);
@@ -527,6 +529,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
 
     if (!Number.isInteger(quantity) || quantity < 1) return;
+    warmCartProduct(product, variationId);
     setCart(prev => {
       const normalizedCart = consolidateCartItems(prev, settings.routineDiscount);
       const lineKey = getCartLineKey(product.id, selectedVariant, variationId);

@@ -1,9 +1,9 @@
 "use client";
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Star, Plus, Minus, Info, BadgeCheck, Check, ShoppingCart, MessageSquarePlus, ZoomIn } from 'lucide-react';
+import { Star, Plus, Minus, Info, BadgeCheck, Check, ShoppingCart, MessageSquarePlus } from 'lucide-react';
 import { useStore } from '../../../context/StoreContext';
 import { formatPrice } from '../../../utils/formatters';
 import { getBundleOriginalPrice } from '../../../utils/products';
@@ -12,7 +12,9 @@ import { AlvoraProductCard } from '../../../components/common/AlvoraProductCard'
 import { ReviewModal } from '../../../components/common/ReviewModal';
 import { Product } from '../../../types';
 import { getBundleImages } from '../../../utils/bundleImages';
+import { getThumbnailSource, warmCartImage } from '../../../utils/cartImages';
 import { getSafeImageSrc } from '../../../utils/images';
+import { BundleGallery } from '../../../components/common/BundleGallery';
 
 export function BundleDetailPageClient({ initialBundle, initialReviews, relatedBundles }: any) {
   const { addToCart, setIsCartOpen } = useStore();
@@ -23,20 +25,8 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
   
   // Gallery
   const allImages = useMemo(() => getBundleImages(bundle), [bundle]);
-  const [selectedImage, setActiveImage] = useState<string | undefined>(undefined);
-  const activeImage = selectedImage && allImages.includes(selectedImage) ? selectedImage : getSafeImageSrc(allImages[0]);
-  useEffect(() => { setActiveImage(undefined); }, [bundle.id]);
-  const [isZooming, setIsZooming] = useState(false);
-  const [zoomOrigin, setZoomOrigin] = useState('50% 50%');
-  const handleZoomPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (event.pointerType !== 'mouse' || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-    const bounds = event.currentTarget.getBoundingClientRect();
-    const x = Math.min(100, Math.max(0, ((event.clientX - bounds.left) / bounds.width) * 100));
-    const y = Math.min(100, Math.max(0, ((event.clientY - bounds.top) / bounds.height) * 100));
-    setZoomOrigin(`${x}% ${y}%`);
-    setIsZooming(true);
-  };
-  
+  useEffect(() => { if (allImages[0]) warmCartImage(getSafeImageSrc(getThumbnailSource(allImages[0]))); }, [allImages]);
+
   // Review Modal
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
 
@@ -90,6 +80,7 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
   };
 
   const handleAddToCart = () => {
+    warmCartImage(getSafeImageSrc(getThumbnailSource(allImages[0])));
     setAddingToCart(true);
     setTimeout(() => {
       addToCart(mapBundleToProduct(bundle), 1);
@@ -117,46 +108,8 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
       <section className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           
-                    {/* Gallery */}
-          <div data-testid="bundle-gallery" className="flex min-w-0 flex-col-reverse sm:flex-row gap-4">
-            {allImages.length > 1 && (
-              <div aria-label="Bundle gallery thumbnails" className="flex gap-3 overflow-x-auto pb-2 sm:max-h-[600px] sm:flex-col sm:overflow-y-auto sm:overflow-x-hidden sm:pb-0 sm:pr-1">
-                {allImages.map((img, idx) => (
-                <button 
-                  key={idx}
-                  type="button"
-                  aria-label={`View ${bundle.name} image ${idx + 1}`}
-                  aria-pressed={activeImage === img}
-                  onClick={() => setActiveImage(img)}
-                  className={`relative w-16 h-16 shrink-0 rounded-xl overflow-hidden border-2 transition-all ${activeImage === img ? 'border-[#9C4122]' : 'border-transparent opacity-70 hover:opacity-100'}`}
-                >
-                  <Image src={getSafeImageSrc(img)} alt={`${bundle.name} gallery image ${idx + 1}`} fill sizes="64px" className="object-cover" />
-                </button>
-              ))}
-            </div>
-            )}
-            <motion.div 
-              className="group/gallery relative w-full aspect-square rounded-3xl overflow-hidden bg-white shadow-sm cursor-zoom-in"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-              onPointerMove={handleZoomPointerMove}
-              onPointerLeave={() => { setIsZooming(false); setZoomOrigin('50% 50%'); }}
-            >
-              <Image src={activeImage} alt={bundle.name} fill sizes="(max-width: 768px) 100vw, 50vw" className={`object-cover object-center transition-transform duration-200 ease-out motion-reduce:transition-none ${isZooming ? 'scale-[1.75]' : 'scale-100'}`} style={{ transformOrigin: zoomOrigin }} priority />
-              <span className="pointer-events-none absolute bottom-3 right-3 z-10 inline-flex items-center gap-1.5 rounded-full bg-slate-950/70 px-3 py-1.5 text-[10px] font-bold text-white opacity-0 backdrop-blur transition-opacity group-hover/gallery:opacity-100"><ZoomIn className="h-3.5 w-3.5" /> Hover to zoom</span>
-              {bundle.discountPercent > 0 && (
-                <motion.div 
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.3, type: "spring" }}
-                  className="absolute top-6 left-6 bg-gradient-to-br from-[#D4784F] to-[#9C4122] text-white text-[11px] font-bold px-4 py-2 uppercase tracking-widest rounded-full shadow-lg"
-                >
-                  Save {bundle.discountPercent}%
-                </motion.div>
-              )}
-            </motion.div>
-          </div>
+          {/* Gallery */}
+          <BundleGallery images={allImages} name={bundle.name} discountPercent={Number(bundle.discountPercent || 0)} />
 
           {/* Info */}
           <div className="flex flex-col justify-center space-y-6">

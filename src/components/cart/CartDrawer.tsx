@@ -1,4 +1,6 @@
 "use client";
+import { CartThumbnail } from '../../components/common/CartThumbnail';
+import { getCartImageSource } from '../../utils/cartImages';
 import { RoutineContents } from '../common/RoutineContents';
 import React, { useState } from 'react';
 import Link from 'next/link';
@@ -6,7 +8,6 @@ import { useRouter, usePathname, useParams } from 'next/navigation';
 import { X, ShoppingBag, Trash2, Plus, Minus, Tag, ArrowRight, ShieldCheck, Gift } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/formatters';
-import { getSafeImageSrc } from '../../utils/images';
 import { getVariationDisplayLabel } from '../../utils/products';
 import { useScrollLock } from '../../hooks/useScrollLock';
 import { trackInitiateCheckout } from "../../lib/metaPixel";
@@ -37,8 +38,6 @@ export const CartDrawer: React.FC = () => {
 
   const router = useRouter();
 
-  if (!isCartOpen) return null;
-
   const handleApplyCoupon = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!couponCodeInput) return;
@@ -52,7 +51,7 @@ export const CartDrawer: React.FC = () => {
   const finalTotal = Math.max(0, cartSubtotal - couponDiscountAmount - routineDiscountAmount);
 
   return (
-    <div className="fixed inset-0 z-[100] overflow-hidden flex justify-end">
+    <div role="dialog" aria-label="Shopping bag" aria-modal={isCartOpen || undefined} aria-hidden={!isCartOpen} inert={!isCartOpen} className={`fixed inset-0 z-[100] overflow-hidden justify-end ${isCartOpen ? "flex" : "hidden"}`}>
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-[#1A1A1A]/50 backdrop-blur-xs transition-opacity duration-300"
@@ -132,18 +131,7 @@ export const CartDrawer: React.FC = () => {
                   key={`${item.product.id}-${item.selectedVariant || ''}-${item.variationId || ''}`}
                   className="flex gap-2.5 sm:gap-3.5 p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl bg-[#FAF6F2] border border-[#EDE5DC] hover:border-[#EDE5DC] transition-all"
                 >
-                  <img
-                    src={getSafeImageSrc(
-                      variation?.image?.url ||
-                      item.product.imageThumbnailUrls?.[0] ||
-                      item.product.images?.[0] ||
-                      item.product.bundleData?.customImage ||
-                      item.product.bundleData?.image ||
-                      item.product.bundleData?.products?.[0]?.product?.images?.[0]
-                    )}
-                    alt={variation?.image?.alt || item.product.name}
-                    className="h-[72px] w-[72px] sm:h-20 sm:w-20 flex-shrink-0 rounded-lg sm:rounded-xl bg-white object-contain p-1"
-                  />
+                  <CartThumbnail src={getCartImageSource(item.product, item.variationId)} alt={variation?.image?.alt || item.product.name} />
 
                   <div className="flex-1 flex flex-col justify-between">
                     <div>
@@ -367,7 +355,6 @@ export const CartDrawer: React.FC = () => {
     </div>
   );
 };
-
 
 
 
