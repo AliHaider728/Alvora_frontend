@@ -8,9 +8,9 @@ import { MOCK_BUNDLES } from '../data/mock/bundles';
 
 const USE_MOCK_DATA = process.env.NEXT_PUBLIC_ALVORA_USE_MOCK_DATA === 'true';
 
-export const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://alvora-backend.vercel.app/api' 
-  : (process.env.NEXT_PUBLIC_ALVORA_API_URL || 'http://localhost:5001/api');
+const rawApiUrl = process.env.NEXT_PUBLIC_ALVORA_API_URL || 'https://alvora-backend.vercel.app/api';
+const firstApiUrl = rawApiUrl.split(',')[0].trim();
+export const API_BASE_URL = firstApiUrl.startsWith('http') ? firstApiUrl : `https://${firstApiUrl}`;
 
 // Helper for Token Management
 export const getAuthToken = (): string | null => {

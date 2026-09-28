@@ -7,7 +7,9 @@ export const metadata = {
   description: 'Discover premium skincare with Alvora. Shop our collection for glowing and healthy skin.',
 };
 
-const API_URL = process.env.NEXT_PUBLIC_ALVORA_API_URL || 'http://localhost:6000/api';
+const rawApiUrl = process.env.NEXT_PUBLIC_ALVORA_API_URL || 'https://alvora-backend.vercel.app/api';
+const firstApiUrl = rawApiUrl.split(',')[0].trim();
+const API_URL = firstApiUrl.startsWith('http') ? firstApiUrl : `https://${firstApiUrl}`;
 
 async function fetchData() {
   if (USE_MOCK_DATA) {
