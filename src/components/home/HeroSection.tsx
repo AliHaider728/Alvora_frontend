@@ -6,7 +6,13 @@ import { ArrowRight, ArrowDown } from "lucide-react";
 import { motion } from "framer-motion";
 import { AnimatedButton } from "../common/AnimatedButton";
 
+import ReactDOM from "react-dom";
+
 export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref }) => {
+  if (typeof ReactDOM.preload === "function") {
+    ReactDOM.preload("/images/home-hero-mobile.jpg", { as: "image", fetchPriority: "high" });
+    ReactDOM.preload("/images/home-hero-desktop.png", { as: "image", fetchPriority: "high" });
+  }
   return (
     <section className="relative min-h-[100svh] w-full bg-[url('/images/home-hero-mobile.jpg')] sm:bg-[url('/images/home-hero-desktop.png')] bg-cover bg-bottom sm:bg-center bg-scroll sm:bg-fixed bg-no-repeat overflow-hidden">
       {/* Overlay to improve text contrast against dark parts of the image (Mobile: solid fade, Desktop: gradient from left) */}
