@@ -115,7 +115,7 @@ export const ContactPageClient: React.FC = () => {
       <section className="relative w-full h-[60vh] min-h-[400px] flex items-center justify-center overflow-hidden bg-[#F9F4F0]">
         <div className="absolute inset-0 z-0 opacity-100">
           <Image 
-            src="/images/contact-hero.png" 
+            src="/images/contact-page-bg.png" 
             alt="Alvora Contact Hero" 
             fill 
             className="object-cover object-[80%_center] md:object-center"
