@@ -399,9 +399,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
 
   if (productsLoading && !product) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center p-6">
-        <Loader2 className="h-10 w-10 animate-spin text-[#9C4122]" />
-      </div>
+      <SkeletonDetail />
     );
   }
 
