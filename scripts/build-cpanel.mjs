@@ -33,8 +33,8 @@ if (existsSync(join(deployDir, 'node_modules'))) {
 cpSync(join(rootDir, '.next', 'static'), join(deployDir, '.next', 'static'), { recursive: true });
 cpSync(join(rootDir, 'public'), join(deployDir, 'public'), { recursive: true });
 
-if (existsSync(join(rootDir, '.env.production'))) {
-  cpSync(join(rootDir, '.env.production'), join(deployDir, '.env'));
+if (existsSync(join(rootDir, '.env'))) {
+  cpSync(join(rootDir, '.env'), join(deployDir, '.env'));
 }
 
 writeFileSync(
