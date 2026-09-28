@@ -492,7 +492,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
     .map(([k, v]) => `${k}: ${v}`)
     .join(', ');
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!allVariantsSelected) {
       showToast('Please select every product option before adding to cart.', 'error');
       return;
@@ -504,6 +504,8 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
     if (cartActionLocked.current) return;
     cartActionLocked.current = true;
     setCartActionState('adding');
+
+    await new Promise(resolve => setTimeout(resolve, 0));
 
     // Derive effective price based on selected quantity
     let effectivePrice = currentPrice;

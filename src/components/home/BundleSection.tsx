@@ -7,7 +7,7 @@ import { useStore } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/formatters';
 import { getBundleOriginalPrice } from '../../utils/products';
 import { Product, Bundle } from '../../types';
-import { Star } from 'lucide-react';
+import { Star, Loader2 } from 'lucide-react';
 import { AnimatedButton } from '../common/AnimatedButton';
 
 export const BundleSection: React.FC = () => {
@@ -19,12 +19,17 @@ export const BundleSection: React.FC = () => {
   };
 
   const [mounted, setMounted] = useState(false);
+  const [loadingBundleId, setLoadingBundleId] = useState<string | null>(null);
   useEffect(() => setMounted(true), []);
 
   if (!mounted) return null;
     if (!bundlesLoading && (!bundles || bundles.length === 0)) return null;
 
-  const handleAddBundle = (bundle: Bundle) => {
+  const handleAddBundle = async (bundle: Bundle) => {
+    if (loadingBundleId) return;
+    setLoadingBundleId(String(bundle.id));
+    await new Promise(resolve => setTimeout(resolve, 0));
+    try {
     const mapBundleToProduct = (bundle: Bundle): Product => {
       const displayImage = bundle.image || (bundle.products && bundle.products.length > 0 && (bundle.products[0].images?.[0] || bundle.products[0].product?.images?.[0])) || null;
       return {
@@ -71,7 +76,10 @@ export const BundleSection: React.FC = () => {
     };
     const bundleProduct = mapBundleToProduct(bundle);
     addToCart(bundleProduct, 1);
-    setIsCartOpen(true);
+      setTimeout(() => setIsCartOpen(true), 200);
+    } finally {
+      setLoadingBundleId(null);
+    }
   };
 
   return (
@@ -219,11 +227,12 @@ export const BundleSection: React.FC = () => {
                   <div className="flex flex-col sm:flex-row gap-3">
                     <AnimatedButton
                       onClick={() => handleAddBundle(bundle)}
+                      disabled={loadingBundleId === String(bundle.id)}
                       variant="primary"
                       size="sm"
                       className="flex-1 text-[11px]"
                     >
-                      ADD TO CART
+                      {loadingBundleId === String(bundle.id) ? <><Loader2 className="w-4 h-4 mr-2 animate-spin inline" /> ADDING...</> : 'ADD TO CART'}
                     </AnimatedButton>
                     <AnimatedButton
                       href={`/bundles/${bundle.slug}`}

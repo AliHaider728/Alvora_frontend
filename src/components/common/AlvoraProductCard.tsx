@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Heart, Eye, ArrowLeftRight, ShoppingCart } from 'lucide-react';
+import { Heart, Eye, ArrowLeftRight, ShoppingCart, Loader2 } from 'lucide-react';
 import { Product } from '../../types';
 import { useStore } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/formatters';
@@ -10,12 +10,20 @@ import { AnimatedButton } from './AnimatedButton';
 
 export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: Product, layout?: 'standard' | 'compact' }) => {
   const { addToCart, settings, toggleWishlist, isInWishlist } = useStore();
+  const [isAdding, setIsAdding] = React.useState(false);
   const productUrl = product.productType === 'bundle' ? '/bundles/' + product.slug : '/product/' + product.slug;
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+  const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
-    if (product.inStock) {
-      addToCart(product, 1);
+    if (product.inStock && !isAdding) {
+      setIsAdding(true);
+      await new Promise(resolve => setTimeout(resolve, 0));
+      try {
+        addToCart(product, 1);
+      } finally {
+        // Very brief delay so the user registers the click before drawer opens
+        setTimeout(() => setIsAdding(false), 200);
+      }
     }
   };
 
@@ -70,11 +78,12 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
         {/* Bottom Right Actions - Add to Cart & View Details */}
         <div className="absolute bottom-3 right-3 flex items-center gap-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-2 group-hover:translate-y-0">
           <button 
-            className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-gray-700 hover:text-[#9C4122] shadow-sm transition-colors" 
+            className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-gray-700 hover:text-[#9C4122] shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed" 
             title="Add to Cart" 
             onClick={handleAddToCart}
+            disabled={!product.inStock || isAdding}
           >
-            <ShoppingCart className="w-4 h-4" />
+            {isAdding ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShoppingCart className="w-4 h-4" />}
           </button>
           <Link 
             href={productUrl}
@@ -133,11 +142,11 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
               </Link>
               <button 
                 onClick={needsSelection ? undefined : handleAddToCart}
-                disabled={!product.inStock}
-                className={`flex-1 h-10 flex items-center justify-center border border-[#EDE5DC] rounded-xl shadow-sm transition-transform ${product.inStock ? 'bg-white text-gray-500 hover:text-[#9C4122] hover:border-[#9C4122] hover:scale-105' : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
+                disabled={!product.inStock || isAdding}
+                className={`flex-1 h-10 flex items-center justify-center border border-[#EDE5DC] rounded-xl shadow-sm transition-transform ${product.inStock ? 'bg-white text-gray-500 hover:text-[#9C4122] hover:border-[#9C4122] hover:scale-105' : 'bg-gray-100 text-gray-400 cursor-not-allowed'} disabled:opacity-75 disabled:hover:scale-100 disabled:cursor-not-allowed`}
                 title="Add to Cart"
               >
-                <ShoppingCart className="w-4 h-4" />
+                {isAdding ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShoppingCart className="w-4 h-4" />}
               </button>
             </div>
           )}
@@ -174,11 +183,11 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
             )}
             <button 
               onClick={needsSelection ? undefined : handleAddToCart}
-              disabled={!product.inStock && !needsSelection}
-              className={`w-10 sm:w-12 shrink-0 flex items-center justify-center border border-[#EDE5DC] rounded-xl shadow-sm transition-colors ${(!product.inStock && !needsSelection) ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-500 hover:text-[#9C4122] hover:border-[#9C4122]'}`}
+              disabled={(!product.inStock && !needsSelection) || isAdding}
+              className={`w-10 sm:w-12 shrink-0 flex items-center justify-center border border-[#EDE5DC] rounded-xl shadow-sm transition-colors ${(!product.inStock && !needsSelection) ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-500 hover:text-[#9C4122] hover:border-[#9C4122]'} disabled:opacity-75 disabled:cursor-not-allowed`}
               aria-label="Quick Add"
             >
-              <ShoppingCart className="w-4 h-4" />
+              {isAdding ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShoppingCart className="w-4 h-4" />}
             </button>
           </div>
         </div>
