@@ -3,6 +3,7 @@
 import React from 'react';
 import { Product } from '../../types';
 import { AlvoraProductCard } from '../common/AlvoraProductCard';
+import { AnimatedButton } from '../common/AnimatedButton';
 import { motion } from 'framer-motion';
 
 interface Props {
@@ -36,6 +37,12 @@ export const FeaturedProductsGrid: React.FC<Props> = ({ products }) => {
               <AlvoraProductCard product={product} layout="compact" />
             </motion.div>
           ))}
+        </div>
+
+        <div className="mt-12 md:mt-16 flex justify-center">
+          <AnimatedButton href="/category/all" variant="primary" size="lg">
+            View All Products
+          </AnimatedButton>
         </div>
       </div>
     </section>
