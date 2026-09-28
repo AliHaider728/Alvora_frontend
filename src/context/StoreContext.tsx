@@ -640,7 +640,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         };
       })
     );
-  }, []);
+  }, [removeFromCart]);
 
   const clearCart = useCallback(() => {
     setCart([]);
@@ -694,12 +694,12 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   })), settings.routineDiscount);
   const routineDiscountAmount = routineDiscount.savings;
 
-  const saveRoutineDiscountSettings = async (input: RoutineDiscountSettings) => {
+  const saveRoutineDiscountSettings = useCallback(async (input: RoutineDiscountSettings) => {
     const saved = await api.updateRoutineSettings(input);
     if (!saved) return false;
     setSettings(prev => ({ ...prev, routineDiscount: saved }));
     return true;
-  };
+  }, []);
 
     const couponDiscountAmount = React.useMemo(() => {
     if (!appliedCoupon) return 0;
@@ -744,7 +744,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     await refreshProducts();
     await revalidateProductPage(normalizedProduct.slug || normalizedProduct.id);
     return normalizedProduct;
-  }, []);
+  }, [refreshProducts]);
 
   const updateProduct = useCallback(async (id: string, productData: Partial<ProductInput>) => {
     const savedProduct = await api.updateProduct(id, productData);
@@ -764,7 +764,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
     
     return normalizedProduct;
-  }, []);
+  }, [refreshProducts]);
 
   const deleteProduct = useCallback(async (id: string) => {
     const result = await api.deleteProduct(id);
@@ -773,24 +773,30 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return true;
   }, []);
 
-  const addCategory = async (categoryData: Partial<Category>) => {
+  const addCategory = useCallback(async (categoryData: Partial<Category>) => {
     const saved = await api.createCategory(categoryData);
     if (!saved) return null;
     const normalized = normalizeCategory(saved);
     setCategories(current => [...current.filter(item => item.id !== normalized.id), normalized].sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0)));
     return normalized;
-  };
+  }, []);
 
-  const updateCategory = async (id: string, categoryData: Partial<Category>) => {
+  const updateCategory = useCallback(async (id: string, categoryData: Partial<Category>) => {
     const saved = await api.updateCategory(id, categoryData);
     if (!saved) return null;
     const normalized = normalizeCategory(saved);
     setCategories(current => current.map(item => item.id === id ? normalized : item).sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0)));
     await refreshProducts();
     return normalized;
-  };
+  }, [refreshProducts]);
 
-  const deleteCategory = async (id: string, resolution: Record<string, unknown>) => {
+  const updateAppearanceSettings = useCallback((
+    newSettings: Pick<StoreSettings, 'storefrontNavigation' | 'homepageSections'>
+  ) => {
+    setSettings(prev => normalizeStoreSettings({ ...prev, ...newSettings }));
+  }, []);
+
+  const deleteCategory = useCallback(async (id: string, resolution: Record<string, unknown>) => {
     const result = await api.deleteCategoryWithResolution(id, resolution);
     if (!result) return null;
     setCategories(current => current.filter(item => item.id !== id));
@@ -798,31 +804,31 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const appearance = await api.getSettings();
     if (appearance) updateAppearanceSettings(appearance);
     return result;
-  };
+  }, [refreshProducts, updateAppearanceSettings]);
 
-  const updateOrderStatus = async (orderId: string, status: Order['status']) => {
+  const updateOrderStatus = useCallback(async (orderId: string, status: Order['status']) => {
     const result = await api.updateOrderStatus(orderId, status);
     if (!result) return null;
     const updated = normalizeOrder(result.order || result);
     setOrders(current => current.map(order => order.id === orderId ? updated : order));
     await refreshProducts();
     return { ...result, order: updated };
-  };
+  }, [refreshProducts]);
 
-  const updateOrderTracking = async (orderId: string, trackingNumber: string) => {
+  const updateOrderTracking = useCallback(async (orderId: string, trackingNumber: string) => {
     const result = await api.updateOrderTracking(orderId, trackingNumber);
     if (!result) return null;
     const updated = normalizeOrder(result);
     setOrders(current => current.map(order => order.id === orderId ? updated : order));
     return updated;
-  };
+  }, []);
 
-  const deleteOrder = async (orderId: string) => {
+  const deleteOrder = useCallback(async (orderId: string) => {
     const result = await api.deleteOrder(orderId);
     if (!result) return false;
     setOrders(current => current.filter(order => order.id !== orderId));
     return true;
-  };
+  }, []);
 
   const placeOrder = useCallback(async (orderData: Omit<Order, 'id' | 'date'>) => {
     const response = await api.createOrder({
@@ -884,30 +890,30 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     clearCart();
     return newOrder;
-  }, [appliedCoupon, clearCart]);
+  }, [appliedCoupon, clearCart, refreshProducts]);
 
-  const addCoupon = async (couponData: Omit<Coupon, 'id' | 'usedCount'>) => {
+  const addCoupon = useCallback(async (couponData: Omit<Coupon, 'id' | 'usedCount'>) => {
     const saved = await api.createCoupon(couponData);
     if (!saved) return null;
     const coupon = normalizeCoupon(saved);
     setCoupons(prev => [coupon, ...prev.filter(item => item.id !== coupon.id)]);
     return coupon;
-  };
+  }, []);
 
-  const updateCoupon = async (id: string, couponData: Partial<Coupon>) => {
+  const updateCoupon = useCallback(async (id: string, couponData: Partial<Coupon>) => {
     const saved = await api.updateCoupon(id, couponData);
     if (!saved) return null;
     const coupon = normalizeCoupon(saved);
     setCoupons(prev => prev.map(item => item.id === id ? coupon : item));
     return coupon;
-  };
+  }, []);
 
-  const deleteCoupon = async (id: string) => {
+  const deleteCoupon = useCallback(async (id: string) => {
     const deleted = await api.deleteCoupon(id);
     if (!deleted) return false;
     setCoupons(prev => prev.filter(c => c.id !== id));
     return true;
-  };
+  }, []);
 
   const updateSettings = useCallback(async (newSettings: Partial<StoreSettings>) => {
     const saved = await api.updateSettings({ ...settings, ...newSettings });
@@ -916,13 +922,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return true;
   }, [settings]);
 
-  const updateAppearanceSettings = useCallback((
-    newSettings: Pick<StoreSettings, 'storefrontNavigation' | 'homepageSections'>
-  ) => {
-    setSettings(prev => normalizeStoreSettings({ ...prev, ...newSettings }));
-  }, []);
 
-  const submitCustomerReview = async (reviewData: Omit<Review, 'id' | 'createdAt' | 'updatedAt' | 'source' | 'status' | 'approvedAt' | 'approvedBy'>) => {
+  const submitCustomerReview = useCallback(async (reviewData: Omit<Review, 'id' | 'createdAt' | 'updatedAt' | 'source' | 'status' | 'approvedAt' | 'approvedBy'>) => {
     try {
       const result = await api.submitReview(reviewData);
       if (!result) return { success: false, message: 'Failed to submit review' };
@@ -930,55 +931,55 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     } catch (e: any) {
       return { success: false, message: e.message || 'Failed to submit review' };
     }
-  };
+  }, []);
 
-  const addAdminReview = async (reviewData: Omit<Review, 'id' | 'createdAt' | 'updatedAt' | 'source' | 'status' | 'approvedAt' | 'approvedBy'>) => {
+  const addAdminReview = useCallback(async (reviewData: Omit<Review, 'id' | 'createdAt' | 'updatedAt' | 'source' | 'status' | 'approvedAt' | 'approvedBy'>) => {
     const result = await api.submitAdminReview(reviewData);
     if (!result) return null;
     const formatted = { ...result, id: result._id || result.id };
     setReviews(prev => [formatted, ...prev]);
     return formatted;
-  };
+  }, []);
 
-  const updateReview = async (id: string, data: Partial<Review>) => {
+  const updateReview = useCallback(async (id: string, data: Partial<Review>) => {
     const result = await api.updateReview(id, data);
     if (!result) return null;
     const formatted = { ...result, id: result._id || result.id };
     setReviews(prev => prev.map(r => r.id === id ? formatted : r));
     return formatted;
-  };
+  }, []);
 
-  const approveReview = async (id: string) => {
+  const approveReview = useCallback(async (id: string) => {
     const result = await api.approveReview(id);
     if (!result) return null;
     const formatted = { ...result, id: result._id || result.id };
     setReviews(prev => prev.map(r => r.id === id ? formatted : r));
     return formatted;
-  };
+  }, []);
 
-  const rejectReview = async (id: string) => {
+  const rejectReview = useCallback(async (id: string) => {
     const result = await api.rejectReview(id);
     if (!result) return null;
     const formatted = { ...result, id: result._id || result.id };
     setReviews(prev => prev.map(r => r.id === id ? formatted : r));
     return formatted;
-  };
+  }, []);
 
-  const deleteReview = async (id: string) => {
+  const deleteReview = useCallback(async (id: string) => {
     const success = await api.deleteReview(id);
     if (!success) return false;
     setReviews(prev => prev.filter(r => r.id !== id));
     return true;
-  };
+  }, []);
 
-  const refreshAdminReviews = async (params?: any) => {
+  const refreshAdminReviews = useCallback(async (params?: any) => {
     const result = await api.getAdminReviews(params);
     if (!result) return null;
     // Map _id to id
     const formattedReviews = result.reviews.map((r: any) => ({ ...r, id: r._id || r.id }));
     setReviews(formattedReviews);
     return { ...result, reviews: formattedReviews };
-  };
+  }, []);
 
   const contextValue = useMemo(() => ({
         bundles,
