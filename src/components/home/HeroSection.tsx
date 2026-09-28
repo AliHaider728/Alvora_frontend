@@ -2,32 +2,41 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, ArrowDown } from "lucide-react";
 import { motion } from "framer-motion";
 import { AnimatedButton } from "../common/AnimatedButton";
 
-import ReactDOM from "react-dom";
-
 export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref }) => {
-  if (typeof ReactDOM.preload === "function") {
-    ReactDOM.preload("/images/home-hero-mobile.jpg", { as: "image", fetchPriority: "high" });
-    ReactDOM.preload("/images/home-hero-desktop.webp", { as: "image", fetchPriority: "high" });
-  }
   return (
-    <section className="relative min-h-[100svh] w-full bg-[url('/images/home-hero-mobile.jpg')] sm:bg-[url('/images/home-hero-desktop.webp')] bg-cover bg-bottom sm:bg-center bg-scroll bg-no-repeat overflow-hidden">
+    <section className="relative h-[85vh] min-h-[600px] max-h-[900px] w-full bg-[#FAF6F2] overflow-hidden">
+      
+      {/* Background Image using Next.js Image component */}
+      <Image
+        src="/images/alvora-hero-section-background.webp"
+        alt="Alvora Skincare Collection"
+        fill
+        priority
+        quality={90}
+        sizes="100vw"
+        className="object-cover object-[80%_center] sm:object-right z-0"
+      />
+
       {/* Overlay to improve text contrast against dark parts of the image (Mobile: solid fade, Desktop: gradient from left) */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#FAF6F2]/80 via-[#FAF6F2]/20 to-transparent sm:bg-none sm:bg-gradient-to-r sm:from-[#FAF6F2]/90 sm:via-[#FAF6F2]/30 sm:to-transparent pointer-events-none transition-colors duration-300" />
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#FAF6F2]/80 via-[#FAF6F2]/20 to-transparent sm:bg-none sm:bg-gradient-to-r sm:from-[#FAF6F2]/90 sm:via-[#FAF6F2]/30 sm:to-transparent pointer-events-none transition-colors duration-300" />
+      
       {/* Subtle overlay for bottom/right icons contrast (Bug 32) */}
-      <div className="hidden sm:block absolute inset-0 bg-gradient-to-tl from-black/50 via-transparent to-transparent pointer-events-none opacity-80" />
+      <div className="hidden sm:block absolute inset-0 z-0 bg-gradient-to-tl from-black/50 via-transparent to-transparent pointer-events-none opacity-80" />
+      
       {/* Navbar contrast overlay: ensures dark header icons remain visible against the image */}
-      <div className="absolute inset-x-0 top-0 h-[180px] bg-gradient-to-b from-[#FAF6F2] via-[#FAF6F2]/80 to-transparent pointer-events-none" />
+      <div className="absolute inset-x-0 top-0 h-[180px] z-0 bg-gradient-to-b from-[#FAF6F2] via-[#FAF6F2]/80 to-transparent pointer-events-none" />
       
       {/* 
         The Header is fixed and overlays this section. 
         We add padding-top to ensure the content starts safely below the header,
         but the background itself starts from the very top of the page.
       */}
-      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-start pt-32 sm:justify-center px-5 sm:pt-24 sm:px-8 lg:px-12">
+      <div className="relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-start pt-32 sm:justify-center px-5 sm:pt-24 sm:px-8 lg:px-12">
         <div className="max-w-xl pb-16">
           {/* Eyebrow */}
           <motion.div 
@@ -122,5 +131,3 @@ export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref 
     </section>
   );
 };
-
-
