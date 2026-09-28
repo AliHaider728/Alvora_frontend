@@ -14,7 +14,7 @@ export function getCartImageSource(product: Product, variationId?: string) {
 }
 
 export function getCartImageProps(src: string, alt = '') {
-  return getImageProps({ src, alt, width: 80, height: 80, sizes: '80px', quality: 75, loading: 'eager', fetchPriority: 'high' }).props;
+  return { src, alt, width: 80, height: 80, loading: 'eager', fetchPriority: 'high' };
 }
 
 const warmed = new Map<string, HTMLImageElement>();
