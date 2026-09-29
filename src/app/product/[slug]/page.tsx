@@ -2,6 +2,7 @@ export const revalidate = 60; // Enable ISR (Incremental Static Regeneration) in
 import { ProductDetailPageClient } from "./ProductDetailPageClient";
 import { api } from "../../../services/api";
 import { getEffectiveProductAvailability } from "../../../utils/products";
+import { getCartImageProps, getCartImageSource } from "../../../utils/cartImages";
 
 import { notFound } from "next/navigation";
 
@@ -106,8 +107,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     notFound();
   }
 
+  const cartImage = getEffectiveProductAvailability(product)
+    ? getCartImageProps(getCartImageSource(product))
+    : null;
+
   return (
     <>
+      {cartImage && <link rel="preload" as="image" imageSrcSet={cartImage.srcSet} imageSizes={cartImage.sizes} fetchPriority="low" />}
       {schemaData && (
         <script
           type="application/ld+json"

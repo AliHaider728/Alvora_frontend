@@ -3,6 +3,9 @@
 import { api } from "../../../services/api";
 import { BundleDetailPageClient } from "./BundleDetailPageClient";
 import { notFound } from "next/navigation";
+import { getBundleImages } from "../../../utils/bundleImages";
+import { getCartImageProps, getThumbnailSource } from "../../../utils/cartImages";
+import { getSafeImageSrc } from "../../../utils/images";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const slug = (await params).slug;
@@ -72,11 +75,19 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     notFound();
   }
 
+  const bundleImage = getBundleImages(bundle)[0];
+  const cartImage = bundleImage
+    ? getCartImageProps(getSafeImageSrc(getThumbnailSource(bundleImage)))
+    : null;
+
   return (
-    <BundleDetailPageClient 
-      initialBundle={bundle} 
-      initialReviews={reviews}
-      relatedBundles={relatedBundles}
-    />
+    <>
+      {cartImage && <link rel="preload" as="image" imageSrcSet={cartImage.srcSet} imageSizes={cartImage.sizes} fetchPriority="low" />}
+      <BundleDetailPageClient
+        initialBundle={bundle}
+        initialReviews={reviews}
+        relatedBundles={relatedBundles}
+      />
+    </>
   );
 }
