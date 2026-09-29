@@ -358,6 +358,9 @@ export const CheckoutPageClient: React.FC = () => {
     ((typeof window !== "undefined") ? sessionStorage : null)?.removeItem('pb_checkout_request_id');
     setCompletedOrder(created);
     setCurrentStep(2);
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
     const confirmationEmailSent = Boolean(created.confirmationEmailSentAt && created.confirmationEmailAccepted !== false);
     showToast(!email.trim()
       ? 'Order confirmed successfully.'
