@@ -14,7 +14,7 @@ export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref 
   }
   
   return (
-    <section className="relative h-[70svh] min-h-[480px] sm:h-[85vh] sm:min-h-[600px] max-h-[900px] w-full bg-[url('/images/alvora-mobile-hero.webp')] sm:bg-[url('/images/alvora-desktop-hero.webp')] bg-cover bg-top sm:bg-[80%_top] bg-fixed bg-no-repeat overflow-hidden">
+    <section className="relative h-[70svh] min-h-[480px] sm:h-[85vh] sm:min-h-[600px] max-h-[900px] w-full bg-[url('/images/alvora-mobile-hero.webp')] sm:bg-[url('/images/alvora-desktop-hero.webp')] bg-cover bg-top sm:bg-[80%_top] bg-scroll sm:bg-fixed bg-no-repeat overflow-hidden">
       
       {/* Overlay to improve text contrast against dark parts of the image (Mobile: solid fade, Desktop: gradient from left) */}
       <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#FAF6F2]/80 via-[#FAF6F2]/20 to-transparent sm:bg-none sm:bg-gradient-to-r sm:from-[#FAF6F2]/90 sm:via-[#FAF6F2]/30 sm:to-transparent pointer-events-none transition-colors duration-300" />
