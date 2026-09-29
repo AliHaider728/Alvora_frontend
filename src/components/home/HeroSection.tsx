@@ -2,39 +2,37 @@
 
 import React from "react";
 import Link from "next/link";
-import { getImageProps } from "next/image";
+import Image from "next/image";
 import { ArrowRight, ArrowDown } from "lucide-react";
 import { AnimatedButton } from "../common/AnimatedButton";
 
 export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref }) => {
-  const common = { alt: 'Alvora Skincare - Healthy Skin, Naturally You', sizes: '100vw', priority: true, fill: true };
-  const {
-    props: { srcSet: desktopSrcSet, ...desktopRest },
-  } = getImageProps({
-    ...common,
-    src: '/images/alvora-desktop-hero.webp',
-  });
-  
-  const {
-    props: { srcSet: mobileSrcSet, ...mobileRest },
-  } = getImageProps({
-    ...common,
-    src: '/images/alvora-mobile-hero.webp',
-  });
-
   return (
     <section className="relative h-[85svh] min-h-[550px] sm:h-screen sm:min-h-[750px] max-h-[950px] w-full bg-transparent overflow-hidden sm:overflow-visible">
       
-      {/* Art Direction Picture - Solves double download and LCP issue.
-          Mobile: absolute scrolling. Desktop: fixed parallax behind the page. */}
-      <picture className="absolute inset-0 z-0 sm:fixed sm:inset-0 sm:w-screen sm:h-screen sm:-z-10">
-        <source media="(min-width: 640px)" srcSet={desktopSrcSet} />
-        <img
-          {...mobileRest}
-          srcSet={mobileSrcSet}
-          className="w-full h-full object-cover object-center sm:object-[right_80px] sm:scale-[1.05]"
+      {/* Mobile Background Image (Scrolls with page) */}
+      <div className="absolute inset-0 z-0 sm:hidden">
+        <Image
+          src="/images/alvora-mobile-hero.webp"
+          alt="Alvora Skincare - Healthy Skin, Naturally You"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
         />
-      </picture>
+      </div>
+
+      {/* Desktop Background Image (Fixed parallax behind the page) */}
+      <div className="hidden sm:block fixed inset-0 w-screen h-screen z-0">
+        <Image
+          src="/images/alvora-desktop-hero.webp"
+          alt="Alvora Skincare - Healthy Skin, Naturally You"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-[right_80px] scale-[1.05]"
+        />
+      </div>
 
       {/* Overlay to improve text contrast against dark parts of the image */}
       <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#FAF6F2]/80 via-[#FAF6F2]/20 to-transparent sm:bg-none sm:bg-gradient-to-r sm:from-[#FAF6F2]/90 sm:via-[#FAF6F2]/30 sm:to-transparent pointer-events-none" />
