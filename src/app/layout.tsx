@@ -15,7 +15,7 @@ const poppins = Poppins({
   style: ['normal', 'italic'],
   variable: '--font-poppins',
   display: 'swap',
-  preload: true,
+  preload: false,
 });
 
 
@@ -54,6 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${poppins.variable}`} data-scroll-behavior="smooth">
       <head>
+        <link rel="preconnect" href="https://admin.alvora.pk" crossOrigin="anonymous" />
         <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}></script>
         <script
           dangerouslySetInnerHTML={{

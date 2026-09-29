@@ -2,14 +2,16 @@ import React from 'react';
 import { SeoHead } from '../components/common/SeoHead';
 import { Product, Category, StoreSettings } from '../types';
 import { HeroSection } from '../components/home/HeroSection';
-import { CrissCrossMarquee } from '../components/home/CrissCrossMarquee';
-import { BundleSection } from '../components/home/BundleSection';
-import { ScrollRevealText } from '../components/common/ScrollRevealText';
-import { IngredientSection } from '../components/home/IngredientSection';
-import { FeaturedProductsGrid } from '../components/home/FeaturedProductsGrid';
-import { AudioReviews } from '../components/home/AudioReviews';
-import { HomeFAQ } from '../components/home/HomeFAQ';
-import { FinalCTA } from '../components/home/FinalCTA';
+import dynamic from 'next/dynamic';
+
+const CrissCrossMarquee = dynamic(() => import('../components/home/CrissCrossMarquee').then(mod => mod.CrissCrossMarquee));
+const BundleSection = dynamic(() => import('../components/home/BundleSection').then(mod => mod.BundleSection));
+const ScrollRevealText = dynamic(() => import('../components/common/ScrollRevealText').then(mod => mod.ScrollRevealText));
+const IngredientSection = dynamic(() => import('../components/home/IngredientSection').then(mod => mod.IngredientSection));
+const FeaturedProductsGrid = dynamic(() => import('../components/home/FeaturedProductsGrid').then(mod => mod.FeaturedProductsGrid));
+const AudioReviews = dynamic(() => import('../components/home/AudioReviews').then(mod => mod.AudioReviews));
+const HomeFAQ = dynamic(() => import('../components/home/HomeFAQ').then(mod => mod.HomeFAQ));
+const FinalCTA = dynamic(() => import('../components/home/FinalCTA').then(mod => mod.FinalCTA));
 
 interface Props {
   products: Product[];
@@ -35,7 +37,7 @@ export const HomePage: React.FC<Props> = ({ products, categories, settings }) =>
       <section className="bg-[#FAF6F2]">
         <ScrollRevealText text="At ALVORA, we blend clinically proven ingredients with the best of nature to support your skin's health today and tomorrow. Sustainable choices. Responsible formulas. Beautiful results for you and the world we all share." />
       </section>
-      <FeaturedProductsGrid products={featuredProducts} />
+      <FeaturedProductsGrid products={featuredProducts.slice(0, 4)} />
       <BundleSection />
       <IngredientSection />
       <AudioReviews />

@@ -417,7 +417,7 @@
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
-.alvora-marquee-track {
+.alvora-marquee-track { will-change: transform;
   animation: alvora-marquee 26s linear infinite;
 }
 
@@ -457,7 +457,7 @@
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
-  .alvora-marquee-track {
+  .alvora-marquee-track { will-change: transform;
     animation: none;
   }
 }

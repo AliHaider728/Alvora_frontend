@@ -2,22 +2,46 @@
 
 import React from "react";
 import Link from "next/link";
+import { getImageProps } from "next/image";
 import { ArrowRight, ArrowDown } from "lucide-react";
-
 import { AnimatedButton } from "../common/AnimatedButton";
-import ReactDOM from "react-dom";
 
 export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref }) => {
-  if (typeof ReactDOM.preload === "function") {
-    ReactDOM.preload("/images/alvora-mobile-hero.webp", { as: "image", fetchPriority: "high" });
-    ReactDOM.preload("/images/alvora-desktop-hero.webp", { as: "image", fetchPriority: "high" });
-  }
+  const common = { alt: 'Alvora Skincare - Healthy Skin, Naturally You', sizes: '100vw', priority: true };
+  const {
+    props: { srcSet: desktopSrcSet, ...desktopRest },
+  } = getImageProps({
+    ...common,
+    src: '/images/alvora-desktop-hero.webp',
+  });
   
+  const {
+    props: { srcSet: mobileSrcSet, ...mobileRest },
+  } = getImageProps({
+    ...common,
+    src: '/images/alvora-mobile-hero.webp',
+  });
+
   return (
-    <section className="relative h-[85svh] min-h-[550px] sm:h-screen sm:min-h-[750px] max-h-[950px] w-full bg-[#FAF6F2] sm:bg-[#FDD2C3] bg-[url('/images/alvora-mobile-hero.webp')] sm:bg-[url('/images/alvora-desktop-hero.webp')] bg-cover sm:bg-[length:auto_105%] bg-[center_center] sm:bg-[position:right_80px] bg-scroll sm:bg-fixed bg-no-repeat overflow-hidden">
+    <section className="relative h-[85svh] min-h-[550px] sm:h-screen sm:min-h-[750px] max-h-[950px] w-full bg-[#FAF6F2] sm:bg-[#FDD2C3] overflow-hidden sm:overflow-visible">
       
-      {/* Overlay to improve text contrast against dark parts of the image (Mobile: solid fade, Desktop: gradient from left) */}
-      <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#FAF6F2]/80 via-[#FAF6F2]/20 to-transparent sm:bg-none sm:bg-gradient-to-r sm:from-[#FAF6F2]/90 sm:via-[#FAF6F2]/30 sm:to-transparent pointer-events-none transition-colors duration-300" />
+      {/* Art Direction Picture - Solves double download and LCP issue.
+          Mobile: absolute scrolling. Desktop: fixed parallax behind the page. */}
+      <picture className="absolute inset-0 z-0 sm:fixed sm:inset-0 sm:w-screen sm:h-screen sm:z-[-1]">
+        <source media="(min-width: 640px)" srcSet={desktopSrcSet} />
+        <img
+          src={mobileRest.src}
+          srcSet={mobileSrcSet}
+          alt={common.alt}
+          fetchPriority="high"
+          width="100%"
+          height="100%"
+          className="w-full h-full object-cover object-center sm:object-[right_80px] sm:scale-[1.05]"
+        />
+      </picture>
+
+      {/* Overlay to improve text contrast against dark parts of the image */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#FAF6F2]/80 via-[#FAF6F2]/20 to-transparent sm:bg-none sm:bg-gradient-to-r sm:from-[#FAF6F2]/90 sm:via-[#FAF6F2]/30 sm:to-transparent pointer-events-none" />
       
       {/* Subtle overlay for bottom/right icons contrast (Bug 32) */}
       <div className="hidden sm:block absolute inset-0 z-0 bg-gradient-to-tl from-black/50 via-transparent to-transparent pointer-events-none opacity-80" />
