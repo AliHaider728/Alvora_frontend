@@ -43,7 +43,7 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-[#F5EDE4] border-t border-[#EDE5DC]" role="contentinfo">
+    <footer className="bg-[#F5EDE4] border-t border-[#EDE5DC] relative z-10" role="contentinfo">
 
       {/* ✧✧ Main Footer Grid ✧✧ */}
       <div className="mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-12 py-14 md:py-16">
