@@ -15,7 +15,7 @@ export const CrissCrossMarquee: React.FC = () => {
       <div className="absolute w-[120%] -left-[10%] rotate-[4deg] bg-[#1A1A1A] py-3 md:py-4 shadow-lg z-0">
         <div 
           className="flex w-max whitespace-nowrap alvora-marquee-track text-[#F5EDE4] font-sans text-base md:text-xl tracking-[0.2em] font-semibold uppercase"
-          style={{ animationDirection: 'reverse', animationDuration: '30s' }}
+          style={{ animationDirection: 'reverse', animationDuration: '50s' }}
         >
           <span>{line2}</span>
           <span>{line2}</span>
@@ -26,7 +26,7 @@ export const CrissCrossMarquee: React.FC = () => {
       <div className="absolute w-[120%] -left-[10%] -rotate-[4deg] bg-[#C87355] py-3 md:py-4 shadow-[0_10px_30px_rgba(0,0,0,0.15)] z-10">
         <div 
           className="flex w-max whitespace-nowrap alvora-marquee-track text-white font-sans text-base md:text-xl tracking-[0.2em] font-semibold uppercase"
-          style={{ animationDuration: '25s' }}
+          style={{ animationDuration: '40s' }}
         >
           <span>{line1}</span>
           <span>{line1}</span>
