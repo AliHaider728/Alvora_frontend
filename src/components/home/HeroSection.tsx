@@ -23,11 +23,11 @@ export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref 
   });
 
   return (
-    <section className="relative h-[85svh] min-h-[550px] sm:h-screen sm:min-h-[750px] max-h-[950px] w-full bg-[#FAF6F2] sm:bg-[#FDD2C3] overflow-hidden sm:overflow-visible">
+    <section className="relative h-[85svh] min-h-[550px] sm:h-screen sm:min-h-[750px] max-h-[950px] w-full bg-transparent overflow-hidden sm:overflow-visible">
       
       {/* Art Direction Picture - Solves double download and LCP issue.
           Mobile: absolute scrolling. Desktop: fixed parallax behind the page. */}
-      <picture className="absolute inset-0 z-0 sm:fixed sm:inset-0 sm:w-screen sm:h-screen sm:z-[-1]">
+      <picture className="absolute inset-0 z-0 sm:fixed sm:inset-0 sm:w-screen sm:h-screen sm:-z-10">
         <source media="(min-width: 640px)" srcSet={desktopSrcSet} />
         <img
           {...mobileRest}
