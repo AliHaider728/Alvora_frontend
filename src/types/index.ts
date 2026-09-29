@@ -341,6 +341,7 @@ export interface Order {
   subtotal: number;
   discount: number;
   shipping: number;
+  shippingKnown?: boolean;
   total: number;
   status: 'Pending' | 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled';
   shippingAddress: {

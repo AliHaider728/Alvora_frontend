@@ -44,7 +44,7 @@ function SearchResultsContent() {
   ];
 
   return (
-    <div className="flex-1 bg-slate-50 font-sans py-6">
+    <div className="min-h-screen flex-1 bg-slate-50 font-sans py-6">
       <SeoHead title={`Search Results for "${query}"`} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -60,8 +60,8 @@ function SearchResultsContent() {
           </p>
         </div>
 
-        {results.length > 0 && (
-          <div className="flex justify-end mb-6">
+        <div className="mb-6 flex min-h-10 justify-end">
+          {results.length > 0 && (
             <select
               value={sortBy}
               onChange={e => setSortBy(e.target.value as any)}
@@ -71,8 +71,8 @@ function SearchResultsContent() {
               <option value="price-low">Price: Low to High</option>
               <option value="price-high">Price: High to Low</option>
             </select>
-          </div>
-        )}
+          )}
+        </div>
 
         {productsLoading ? (<div className="grid grid-cols-1 items-start gap-5 sm:grid-cols-2 lg:gap-6">{[...Array(6)].map((_, i) => <SkeletonCard key={i} />)}</div>) : sortedResults.length === 0 ? (
           <div className="bg-white rounded-3xl p-12 text-center border border-slate-100 space-y-4">
@@ -81,7 +81,7 @@ function SearchResultsContent() {
             </div>
             <h3 className="font-heading font-bold text-lg text-slate-800">No Products Match Your Search</h3>
             <p className="text-xs text-slate-500 max-w-sm mx-auto">
-              Try searching for terms like "blocks", "robot", "plush", or "puzzle".
+              Try searching for skincare, serums, cleansers, or moisturizers.
             </p>
             <Link href="/category/all"
               className="inline-block px-6 py-2.5 rounded-2xl bg-[#C48B80] text-white font-heading font-bold text-xs"
@@ -104,7 +104,20 @@ function SearchResultsContent() {
 import { Suspense } from 'react';
 export default function SearchResultsPage() {
   return (
-    <Suspense fallback={<div className="min-h-[60vh] flex items-center justify-center">Loading...</div>}>
+    <Suspense fallback={
+      <div className="min-h-screen bg-slate-50 py-6" aria-label="Loading search results">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-8 h-4 w-28 rounded bg-slate-200" />
+          <div className="mb-8 h-36 rounded-3xl border border-slate-100 bg-white p-6 sm:p-8">
+            <div className="mb-4 h-7 w-3/4 max-w-sm rounded bg-slate-200" />
+            <div className="h-3 w-32 rounded bg-slate-100" />
+          </div>
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:gap-6">
+            {[0, 1, 2].map(index => <div key={index} className="h-80 rounded-2xl border border-slate-200/80 bg-white" />)}
+          </div>
+        </div>
+      </div>
+    }>
       <SearchResultsContent />
     </Suspense>
   );

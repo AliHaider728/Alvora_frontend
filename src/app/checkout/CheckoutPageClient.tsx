@@ -3,7 +3,7 @@ import { CartThumbnail } from '../../components/common/CartThumbnail';
 import { getCartImageSource } from '../../utils/cartImages';
 import { RoutineContents } from '../../components/common/RoutineContents';
 import { AnimatedButton } from "../../components/common/AnimatedButton";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Link from "next/link";
 
 import {
@@ -34,8 +34,27 @@ import { getProductDeliveryType } from '../../utils/products';
 import { trackInitiateCheckout } from "../../lib/metaPixel";
 import { trackTikTokInitiateCheckout, trackTikTokAddPaymentInfo, trackTikTokPurchase, trackTikTokPlaceAnOrder } from "../../lib/tiktokPixel";
 
-export const CheckoutPageClient: React.FC = () => {
+type OrderReceipt = Pick<Order, 'id' | 'items' | 'subtotal' | 'discount' | 'shipping' | 'shippingKnown' | 'total' | 'trackingNumber' | 'paymentMethod' | 'email' | 'confirmationEmailSentAt' | 'confirmationEmailAccepted'>;
+const receiptStorageKey = 'alvora_checkout_receipt';
+
+const toReceipt = (order: Order): OrderReceipt => ({
+  id: order.id,
+  items: order.items,
+  subtotal: order.subtotal,
+  discount: order.discount,
+  shipping: order.shipping,
+  shippingKnown: order.shippingKnown,
+  total: order.total,
+  trackingNumber: order.trackingNumber,
+  paymentMethod: order.paymentMethod,
+  email: order.email,
+  confirmationEmailSentAt: order.confirmationEmailSentAt,
+  confirmationEmailAccepted: order.confirmationEmailAccepted,
+});
+
+export const CheckoutPageClient: React.FC<{ receiptId?: string }> = ({ receiptId }) => {
   const [checkoutRequestId, setCheckoutRequestId] = useState<string>('');
+  const successHeadingRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
     const existing = sessionStorage.getItem('pb_checkout_request_id');
@@ -108,8 +127,38 @@ export const CheckoutPageClient: React.FC = () => {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   // Order result state
-  const [completedOrder, setCompletedOrder] = useState<Order | null>(null);
+  const [completedOrder, setCompletedOrder] = useState<OrderReceipt | null>(null);
+  const [receiptChecked, setReceiptChecked] = useState(!receiptId);
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+
+  useEffect(() => {
+    if (!receiptId) return;
+    try {
+      const saved = sessionStorage.getItem(receiptStorageKey);
+      const receipt = saved ? JSON.parse(saved) as OrderReceipt : null;
+      if (receipt?.id === receiptId && Array.isArray(receipt.items) &&
+          Number.isFinite(receipt.subtotal) && Number.isFinite(receipt.total)) {
+        setCompletedOrder(receipt);
+        setCurrentStep(2);
+      }
+    } catch {
+      // A missing or invalid tab receipt must never create a new order.
+    } finally {
+      setReceiptChecked(true);
+    }
+  }, [receiptId]);
+
+  useLayoutEffect(() => {
+    if (currentStep !== 2 || !completedOrder) return;
+    const previousBehavior = document.documentElement.style.scrollBehavior;
+    const previousRestoration = window.history.scrollRestoration;
+    window.history.scrollRestoration = 'manual';
+    document.documentElement.style.scrollBehavior = 'auto';
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    successHeadingRef.current?.focus({ preventScroll: true });
+    document.documentElement.style.scrollBehavior = previousBehavior;
+    return () => { window.history.scrollRestoration = previousRestoration; };
+  }, [currentStep, completedOrder?.id]);
 
   // Product overrides take priority; otherwise the store threshold applies.
   let highestOverrideFee = 0;
@@ -356,7 +405,16 @@ export const CheckoutPageClient: React.FC = () => {
     }
 
     ((typeof window !== "undefined") ? sessionStorage : null)?.removeItem('pb_checkout_request_id');
-    setCompletedOrder(created);
+    const receipt = toReceipt(created);
+    try {
+      sessionStorage.setItem(receiptStorageKey, JSON.stringify(receipt));
+      const url = new URL(window.location.href);
+      url.searchParams.set('order', receipt.id);
+      window.history.replaceState(window.history.state, '', url.pathname + url.search + url.hash);
+    } catch {
+      // The current confirmation remains available even if tab storage is blocked.
+    }
+    setCompletedOrder(receipt);
     setCurrentStep(2);
     if (typeof window !== "undefined") {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -369,6 +427,10 @@ export const CheckoutPageClient: React.FC = () => {
         : 'Order confirmed. We could not send the email, but your order was placed successfully.',
       !email.trim() || confirmationEmailSent ? 'success' : 'warning');
   };
+
+  if (!receiptChecked) {
+    return <div className="min-h-[60vh] bg-[#FAF6F2] p-6 text-center text-sm text-[#1A1A1A]/70">Loading your order receipt…</div>;
+  }
 
   if (cart.length === 0 && currentStep !== 2) {
     return (
@@ -385,15 +447,17 @@ export const CheckoutPageClient: React.FC = () => {
     );
   }
 
+  const showSuccess = currentStep === 2 && Boolean(completedOrder);
+
   return (
     <div className="min-h-screen bg-[#FAF6F2] font-sans py-5 sm:py-8">
       <SeoHead title="Secure Checkout" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <Breadcrumbs items={[{ label: 'Checkout' }]} />
+        {!showSuccess && <Breadcrumbs items={[{ label: 'Checkout' }]} />}
 
         {/* Step Progress Bar */}
-        <div className="bg-white rounded-3xl px-3 py-5 sm:p-6 border border-[#EDE5DC] shadow-sm mb-6 sm:mb-8 overflow-hidden">
+        {!showSuccess && <div className="bg-white rounded-3xl px-3 py-5 sm:p-6 border border-[#EDE5DC] shadow-sm mb-6 sm:mb-8 overflow-hidden">
           <div className="flex items-start justify-between max-w-2xl mx-auto relative">
             {/* Step 1 */}
             <div className="flex w-[72px] shrink-0 flex-col items-center gap-1 z-10 sm:w-auto">
@@ -425,23 +489,23 @@ export const CheckoutPageClient: React.FC = () => {
               <span className="text-center text-[10px] leading-tight sm:text-xs font-display font-bold text-[#1A1A1A]/90">Confirmation</span>
             </div>
           </div>
-        </div>
+        </div>}
 
         {/* STEP 2: ORDER CONFIRMATION */}
         {currentStep === 2 && completedOrder ? (
-          <div className="bg-white rounded-2xl p-6 sm:p-8 border border-[#EDE5DC] shadow-lg max-w-2xl mx-auto text-center space-y-5">
+          <div className="bg-white rounded-2xl p-4 sm:p-8 border border-[#EDE5DC] shadow-lg max-w-2xl mx-auto text-center space-y-4 sm:space-y-5">
             <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto animate-bounce">
               <PackageCheck className="w-8 h-8" />
             </div>
 
             <div>
-              <span className="text-[10px] font-display font-extrabold text-emerald-600 uppercase tracking-widest">
+              <span role="status" className="text-[11px] font-display font-extrabold text-emerald-600 uppercase tracking-wider sm:tracking-widest">
                 Order Placed Successfully!
               </span>
-              <h1 className="font-display font-black text-2xl text-[#1A1A1A] mt-1">
+              <h1 ref={successHeadingRef} tabIndex={-1} className="font-display font-black text-[clamp(1.45rem,5vw,2rem)] leading-tight text-[#1A1A1A] mt-1 outline-none">
                 Thank You for Shopping at Alvora Skincare!
               </h1>
-              <p className="text-xs text-[#1A1A1A]/70 mt-2">
+              <p className="text-sm leading-relaxed text-[#1A1A1A]/70 mt-2">
                 {!completedOrder.email
                   ? <>Your order is safely recorded. Our team will contact you before dispatch.</>
                   : completedOrder.confirmationEmailAccepted !== false && completedOrder.confirmationEmailSentAt
@@ -452,15 +516,15 @@ export const CheckoutPageClient: React.FC = () => {
 
             {/* Order Receipt Box */}
             <div className="p-4 sm:p-5 rounded-xl bg-[#FAF6F2] border border-[#EDE5DC]/80 text-left space-y-3">
-              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#EDE5DC] pb-3">
-                <div>
+              <div className="flex flex-wrap items-start justify-between gap-3 border-b border-[#EDE5DC] pb-3">
+                <div className="min-w-0">
                   <span className="text-xs text-[#1A1A1A]/40 uppercase font-bold block">Order ID</span>
-                  <span className="font-display font-black text-base text-[#9C4122]">{completedOrder.id}</span>
+                  <span className="block break-all font-display font-black text-sm text-[#9C4122] sm:text-base">{completedOrder.id}</span>
                 </div>
-                <div>
+                {completedOrder.trackingNumber?.trim() && <div>
                   <span className="text-xs text-[#1A1A1A]/40 uppercase font-bold block">Tracking Code</span>
                   <span className="font-mono font-bold text-xs text-[#1A1A1A]/90">{completedOrder.trackingNumber}</span>
-                </div>
+                </div>}
                 <div>
                   <span className="text-xs text-[#1A1A1A]/40 uppercase font-bold block">Payment Method</span>
                   <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 font-bold text-xs flex items-center gap-1">
@@ -474,18 +538,34 @@ export const CheckoutPageClient: React.FC = () => {
               <div className="space-y-2">
                 <h4 className="font-display font-bold text-xs text-[#1A1A1A]/80 uppercase">Items Ordered:</h4>
                 {completedOrder.items.map((it, idx) => (
-                  <div key={idx} className="flex items-center justify-between text-xs sm:text-sm">
-                    <span className="text-[#1A1A1A]/90 font-medium">
+                  <div key={idx} className="flex items-start justify-between gap-3 text-sm">
+                    <span className="min-w-0 break-words text-[#1A1A1A]/90 font-medium">
                       {it.quantity}x {it.name} {it.selectedVariant ? `(${it.selectedVariant})` : ''}<RoutineContents components={it.routineComponents} />
                     </span>
-                    <span className="font-bold text-[#1A1A1A]">{formatPrice(it.price * it.quantity, settings.currency)}</span>
+                    <span className="shrink-0 font-bold text-[#1A1A1A]">{formatPrice(it.price * it.quantity, settings.currency)}</span>
                   </div>
                 ))}
               </div>
 
-              <div className="pt-3 border-t border-[#EDE5DC] flex justify-between font-display font-black text-[#1A1A1A] text-lg">
+              <div className="space-y-2 border-t border-[#EDE5DC] pt-3 text-sm text-[#1A1A1A]/80">
+                <div className="flex items-start justify-between gap-3">
+                  <span>Items Subtotal</span>
+                  <span className="shrink-0 font-bold text-[#1A1A1A]">{Number.isFinite(completedOrder.subtotal) ? formatPrice(completedOrder.subtotal, settings.currency) : 'Unavailable'}</span>
+                </div>
+                {completedOrder.discount > 0 && <div className="flex items-start justify-between gap-3 text-[#9C4122]">
+                  <span>Discount</span>
+                  <span className="shrink-0 font-bold">−{formatPrice(completedOrder.discount, settings.currency)}</span>
+                </div>}
+                <div className="flex items-start justify-between gap-3">
+                  <span>Shipping Charges</span>
+                  <span className="shrink-0 font-bold text-[#1A1A1A]">{completedOrder.shippingKnown && Number.isFinite(completedOrder.shipping)
+                    ? completedOrder.shipping === 0 ? 'Free' : formatPrice(completedOrder.shipping, settings.currency)
+                    : 'Unavailable'}</span>
+                </div>
+              </div>
+              <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-3 border-t border-[#EDE5DC] pt-3 font-display font-black text-[#1A1A1A] text-base sm:text-lg">
                 <span>Total Payable on Delivery:</span>
-                <span className="text-[#9C4122]">{formatPrice(completedOrder.total, settings.currency)}</span>
+                <span className="whitespace-nowrap text-[#9C4122]">{Number.isFinite(completedOrder.total) ? formatPrice(completedOrder.total, settings.currency) : 'Unavailable'}</span>
               </div>
             </div>
 

@@ -37,7 +37,7 @@ export const Header: React.FC = () => {
   const searchRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLElement>(null);
 
-  const [headerHeight, setHeaderHeight] = useState(0);
+  const [headerHeight, setHeaderHeight] = useState<number | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -309,7 +309,7 @@ export const Header: React.FC = () => {
       </header>
 
       {/* HEADER SPACER - keeps the content below the fixed header */}
-      {!isHome && <div style={{ height: headerHeight }} aria-hidden="true" />}
+      {!isHome && <div className="h-[108px] sm:h-[110px] lg:h-[118px]" style={headerHeight === null ? undefined : { height: headerHeight }} aria-hidden="true" />}
 
       {/* MOBILE DRAWER BACKDROP */}
       <div

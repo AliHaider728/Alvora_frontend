@@ -41,6 +41,7 @@ type BackendOrder = Partial<Order> &
   MongoRecord & {
     orderId?: unknown;
     deliveryCharge?: number;
+    shippingFee?: number;
     discountAmount?: number;
   };
 
@@ -166,7 +167,8 @@ const normalizeOrder = (order: BackendOrder): Order => ({
   phone: order.phone || order.shippingAddress?.phone || '',
   items: Array.isArray(order.items) ? order.items : [],
   discount: order.discount ?? order.discountAmount ?? 0,
-  shipping: order.shipping ?? order.deliveryCharge ?? 0
+  shipping: order.shipping ?? order.deliveryCharge ?? order.shippingFee ?? 0,
+  shippingKnown: [order.shipping, order.deliveryCharge, order.shippingFee].some(value => typeof value === 'number' && Number.isFinite(value))
 });
 
 const normalizeCoupon = (coupon: any): Coupon => ({

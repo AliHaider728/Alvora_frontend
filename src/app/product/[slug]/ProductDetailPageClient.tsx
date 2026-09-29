@@ -35,6 +35,7 @@ import { formatPrice } from '../../../utils/formatters';
 import { useScrollLock } from '../../../hooks/useScrollLock';
 import { ReviewModal } from '../../../components/common/ReviewModal';
 import { ProductImage } from '../../../components/common/ProductImage';
+import { SkeletonDetail } from '../../../components/common/SkeletonCard';
 import { api, getLastApiError } from '../../../services/api';
 import {
   getEffectiveAvailableQuantity,
