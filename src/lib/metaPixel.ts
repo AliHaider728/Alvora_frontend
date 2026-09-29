@@ -1,3 +1,5 @@
+import { event as trackGAEvent } from "./gtag";
+
 export const trackMetaEvent = (
   eventName: string,
   data?: Record<string, unknown>
@@ -25,6 +27,7 @@ export const trackAddToCart = ({
   quantity?: number;
   currency?: string;
 }) => {
+  // Meta Pixel
   trackMetaEvent("AddToCart", {
     content_ids: [id],
     content_name: name,
@@ -32,6 +35,21 @@ export const trackAddToCart = ({
     value: price * quantity,
     currency,
     num_items: quantity,
+  });
+
+  // GA4
+  trackGAEvent({
+    action: "add_to_cart",
+    currency: currency,
+    value: price * quantity,
+    items: [
+      {
+        item_id: id,
+        item_name: name,
+        price: price,
+        quantity: quantity,
+      }
+    ]
   });
 };
 
@@ -84,6 +102,17 @@ export const trackInitiateCheckout = ({
     value,
     currency,
   });
+
+  trackGAEvent({
+    action: "begin_checkout",
+    currency: currency,
+    value: value,
+    items: items.map(item => ({
+      item_id: item.id,
+      quantity: item.quantity
+    }))
+  });
+
   if (tracked) {
     try {
       sessionStorage.setItem(

@@ -394,6 +394,19 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
       price: trackPrice,
       currency: "PKR",
     });
+
+    if (typeof window !== "undefined" && (window as any).gtag) {
+      (window as any).gtag("event", "view_item", {
+        currency: "PKR",
+        value: trackPrice,
+        items: [{
+          item_id: product.id,
+          item_name: product.name,
+          price: trackPrice,
+          quantity: 1
+        }]
+      });
+    }
   }, [product?.id]);
 
 

@@ -337,6 +337,24 @@ export const CheckoutPageClient: React.FC = () => {
       console.error("TikTok tracking error:", err);
     }
 
+    if (typeof window !== "undefined" && (window as any).gtag) {
+      try {
+        (window as any).gtag("event", "purchase", {
+          transaction_id: created.id,
+          value: created.total,
+          currency: "PKR",
+          items: created.items.map((item) => ({
+            item_id: item.productId,
+            item_name: item.productName,
+            price: item.price,
+            quantity: item.quantity
+          }))
+        });
+      } catch (err) {
+        console.error("GA4 tracking error:", err);
+      }
+    }
+
     ((typeof window !== "undefined") ? sessionStorage : null)?.removeItem('pb_checkout_request_id');
     setCompletedOrder(created);
     setCurrentStep(2);
