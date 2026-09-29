@@ -1,4 +1,5 @@
 "use client";
+import { fetchWithRetry } from './fetchWithRetry';
 
 // Generates a UUID for event_id deduplication (fallback to random if crypto not available)
 const generateEventId = () => {
@@ -31,7 +32,7 @@ export const trackTikTokEvent = (eventName: string, data?: Record<string, unknow
   }
 
   // Forward to internal API for server-side TikTok Events API
-  fetch('/api/tiktok-events', {
+  fetchWithRetry('/api/tiktok-events', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

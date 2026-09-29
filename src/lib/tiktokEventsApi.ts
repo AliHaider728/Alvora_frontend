@@ -1,3 +1,4 @@
+import { fetchWithRetry } from './fetchWithRetry';
 import crypto from 'crypto';
 
 const hashData = (data: string | undefined | null) => {
@@ -64,7 +65,7 @@ export const sendTikTokEventToServer = async (
   };
 
   try {
-    const response = await fetch('https://business-api.tiktok.com/open_api/v1.3/event/track/', {
+    const response = await fetchWithRetry('https://business-api.tiktok.com/open_api/v1.3/event/track/', {
       method: 'POST',
       headers: {
         'Access-Token': accessToken,

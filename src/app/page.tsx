@@ -1,3 +1,4 @@
+import { fetchWithRetry } from '../lib/fetchWithRetry';
 import React from 'react';
 import { HomePage } from './HomePage';
 import { USE_MOCK_DATA, MOCK_PRODUCTS, MOCK_CATEGORIES, MOCK_SETTINGS } from '../data/mock';
@@ -21,9 +22,9 @@ async function fetchData() {
   
   try {
     const [productsRes, categoriesRes, settingsRes] = await Promise.all([
-      fetch(`${API_URL}/products?isVisible=true`, fetchOpts),
-      fetch(`${API_URL}/categories`, fetchOpts),
-      fetch(`${API_URL}/settings`, fetchOpts)
+      fetchWithRetry(`${API_URL}/products?isVisible=true`, fetchOpts),
+      fetchWithRetry(`${API_URL}/categories`, fetchOpts),
+      fetchWithRetry(`${API_URL}/settings`, fetchOpts)
     ]);
     
     const rawProducts = productsRes.ok ? await productsRes.json() : [];
@@ -40,7 +41,7 @@ async function fetchData() {
     return { products, categories, settings };
   } catch (error) {
     console.error('Error fetching homepage data:', error);
-    return { products: [], categories: [], settings: null };
+    throw error;
   }
 }
 
@@ -48,6 +49,8 @@ export default async function Page() {
   const { products, categories, settings } = await fetchData();
   
   if (!settings && !USE_MOCK_DATA) {
+    throw new Error(`Failed to load settings`);
+
     return <div className="p-8 text-center text-red-500">Error: Unable to connect to the store backend. Please try again later.</div>;
   }
 

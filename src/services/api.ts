@@ -1,3 +1,4 @@
+import { fetchWithRetry } from '../lib/fetchWithRetry';
 // Alvora Skincare Unified Backend API Client
 
 import { MOCK_PRODUCTS } from '../data/mock/products';
@@ -71,7 +72,7 @@ async function fetchJson<T>(endpoint: string, options?: RequestInit): Promise<T 
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const res = await fetch(`${API_BASE_URL}${endpoint}`, {
+    const res = await fetchWithRetry(`${API_BASE_URL}${endpoint}`, {
       ...options,
       cache: options?.cache || 'no-store',
       credentials: 'include',
@@ -202,7 +203,7 @@ export const api = {
       const headers: Record<string, string> = {};
       if (token) headers['Authorization'] = `Bearer ${token}`;
 
-      const res = await fetch(`${API_BASE_URL}/upload/image`, {
+      const res = await fetchWithRetry(`${API_BASE_URL}/upload/image`, {
         method: 'POST',
         headers,
         body: formData
@@ -227,7 +228,7 @@ export const api = {
     const token = getAuthToken();
     const headers: Record<string, string> = {};
     if (token) headers.Authorization = `Bearer ${token}`;
-    const res = await fetch(`${API_BASE_URL}/upload/detail-content-image`, {
+    const res = await fetchWithRetry(`${API_BASE_URL}/upload/detail-content-image`, {
       method: 'POST',
       headers,
       body: formData
@@ -247,7 +248,7 @@ export const api = {
     const formData = new FormData();
     formData.append('image', file);
     const token = getAuthToken();
-    const res = await fetch(`${API_BASE_URL}/upload/category-image`, {
+    const res = await fetchWithRetry(`${API_BASE_URL}/upload/category-image`, {
       method: 'POST',
       headers: token ? { Authorization: `Bearer ${token}` } : {},
       body: formData,
@@ -266,7 +267,7 @@ export const api = {
     const formData = new FormData();
     formData.append('image', file);
     const token = getAuthToken();
-    const res = await fetch(`${API_BASE_URL}/upload/review-image`, {
+    const res = await fetchWithRetry(`${API_BASE_URL}/upload/review-image`, {
       method: 'POST',
       headers: token ? { Authorization: `Bearer ${token}` } : {},
       body: formData,
@@ -294,12 +295,12 @@ export const api = {
       return MOCK_BUNDLES.find(b => b.slug === slug) || null;
     }
     try {
-      let res = await fetch(`${API_BASE_URL}/bundles/${encodeURIComponent(slug)}`, {
+      let res = await fetchWithRetry(`${API_BASE_URL}/bundles/${encodeURIComponent(slug)}`, {
         cache: "no-store",
         headers: { "Accept": "application/json" }
       });
       if (!res.ok) {
-        const allRes = await fetch(`${API_BASE_URL}/bundles`, {
+        const allRes = await fetchWithRetry(`${API_BASE_URL}/bundles`, {
           cache: "no-store",
           headers: { "Accept": "application/json" }
         });
@@ -321,7 +322,7 @@ export const api = {
     }
     try {
       const url = options?.fetchAll ? `${API_BASE_URL}/bundles?all=true` : `${API_BASE_URL}/bundles`;
-      const res = await fetch(url, {
+      const res = await fetchWithRetry(url, {
         cache: "no-store",
         headers: { "Accept": "application/json" }
       });

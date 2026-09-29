@@ -181,6 +181,8 @@ export interface StoreContextType {
   // Data
   products: Product[];
   productsLoading: boolean;
+  apiError: string | null;
+  retryInit: () => void;
   bundles: any[];
   bundlesLoading: boolean;
   categories: Category[];
@@ -259,6 +261,12 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // LocalStorage state initialization
   const [products, setProducts] = useState<Product[]>(() => USE_MOCK_DATA ? MOCK_PRODUCTS.map(normalizeProduct) : []);
   const [productsLoading, setProductsLoading] = useState(true);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const retryInit = useCallback(() => {
+    setProductsLoading(true);
+    setApiError(null);
+    window.dispatchEvent(new Event('pb-retry-init'));
+  }, []);
 
   const [categories, setCategories] = useState<Category[]>(() => USE_MOCK_DATA ? MOCK_CATEGORIES.map(normalizeCategory) : INITIAL_CATEGORIES.map(normalizeCategory));
 
@@ -447,7 +455,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     void fetchPublicData();
     void fetchAdminData();
     window.addEventListener('pb-auth-changed', fetchAdminData);
-    return () => window.removeEventListener('pb-auth-changed', fetchAdminData);
+      window.addEventListener('pb-retry-init', fetchPublicData);
+    return () => { window.removeEventListener('pb-auth-changed', fetchAdminData); window.removeEventListener('pb-retry-init', fetchPublicData); };
   }, []);
 
   // Sync to localStorage

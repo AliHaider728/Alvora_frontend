@@ -1,3 +1,4 @@
+import { fetchWithRetry } from '../lib/fetchWithRetry';
 import { MetadataRoute } from 'next';
 import { API_BASE_URL } from '../services/api';
 import { Product, Category } from '../types';
@@ -30,9 +31,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   
   try {
     const [prodRes, bundRes, catRes] = await Promise.all([
-      fetch(`${API_BASE_URL}/products?isVisible=true`, fetchOpts).catch(() => null),
-      fetch(`${API_BASE_URL}/bundles`, fetchOpts).catch(() => null),
-      fetch(`${API_BASE_URL}/categories`, fetchOpts).catch(() => null)
+      fetchWithRetry(`${API_BASE_URL}/products?isVisible=true`, fetchOpts).catch(() => null),
+      fetchWithRetry(`${API_BASE_URL}/bundles`, fetchOpts).catch(() => null),
+      fetchWithRetry(`${API_BASE_URL}/categories`, fetchOpts).catch(() => null)
     ]);
 
     if (prodRes?.ok) {
