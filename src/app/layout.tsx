@@ -47,13 +47,26 @@ export const metadata: Metadata = {
   },
 };
 
-import GoogleAnalytics from '../components/common/GoogleAnalytics';
+import GoogleAnalyticsEvents from '../components/common/GoogleAnalyticsEvents';
+import { GA_TRACKING_ID } from '../lib/gtag';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${poppins.variable}`} data-scroll-behavior="smooth">
       <head>
-        <GoogleAnalytics />
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${GA_TRACKING_ID}', {
+                page_path: window.location.pathname,
+              });
+            `,
+          }}
+        />
       </head>
       <body
         style={{
@@ -61,6 +74,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         }}
         className="font-sans antialiased text-[#1A1A1A] selection:bg-[#F1C9BD] selection:text-[#1A1A1A]"
       >
+        <GoogleAnalyticsEvents />
         <MetaPixel />
         <TikTokPixel />
         <Providers>
