@@ -1266,11 +1266,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                           <div>
                             <div className="flex items-center gap-2">
                               <span className="font-bold text-sm text-[#1A1A1A]/90">{review.reviewerName}</span>
-                              {review.verifiedPurchase && (
-                                <span className="flex items-center text-[10px] text-[#C48B80] font-semibold">
-                                  <BadgeCheck className="w-3.5 h-3.5 mr-0.5" /> Verified Purchase
-                                </span>
-                              )}
+                              <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-green-50 text-green-700 border border-green-200 text-[10px] font-bold tracking-wide"><BadgeCheck className="w-3.5 h-3.5" />Verified</span>
                             </div>
                           </div>
                         </div>
@@ -1405,6 +1401,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
     </div>
   );
 };
+
 
 
 
