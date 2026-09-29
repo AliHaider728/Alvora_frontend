@@ -7,7 +7,7 @@ import { ArrowRight, ArrowDown } from "lucide-react";
 import { AnimatedButton } from "../common/AnimatedButton";
 
 export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref }) => {
-  const common = { alt: 'Alvora Skincare - Healthy Skin, Naturally You', sizes: '100vw', priority: true };
+  const common = { alt: 'Alvora Skincare - Healthy Skin, Naturally You', sizes: '100vw', priority: true, fill: true };
   const {
     props: { srcSet: desktopSrcSet, ...desktopRest },
   } = getImageProps({
