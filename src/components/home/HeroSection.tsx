@@ -30,12 +30,8 @@ export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref 
       <picture className="absolute inset-0 z-0 sm:fixed sm:inset-0 sm:w-screen sm:h-screen sm:z-[-1]">
         <source media="(min-width: 640px)" srcSet={desktopSrcSet} />
         <img
-          src={mobileRest.src}
+          {...mobileRest}
           srcSet={mobileSrcSet}
-          alt={common.alt}
-          fetchPriority="high"
-          width="100%"
-          height="100%"
           className="w-full h-full object-cover object-center sm:object-[right_80px] sm:scale-[1.05]"
         />
       </picture>
