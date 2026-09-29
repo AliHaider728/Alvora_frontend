@@ -4,8 +4,8 @@ import React from 'react';
 const strip1Text = "CLEAR ACNE CARE • DEEP CLEANSING • OIL CONTROL • CLEARER-LOOKING SKIN • DAILY ACNE CARE • ";
 const strip2Text = "SKIN GLOW • HYDRATION • SKIN NOURISHMENT • RADIANT-LOOKING SKIN • DAILY SKINCARE ESSENTIALS • ";
 
-const line1 = strip1Text.repeat(10);
-const line2 = strip2Text.repeat(10);
+const line1 = strip1Text.repeat(4);
+const line2 = strip2Text.repeat(4);
 
 export const CrissCrossMarquee: React.FC = () => {
   return (
