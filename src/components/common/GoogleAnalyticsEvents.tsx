@@ -11,10 +11,10 @@ function AnalyticsEvents() {
   useEffect(() => {
     if (pathname && GA_TRACKING_ID) {
       const url = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : "");
-      pageview(url);
+      pageview(url);  
     }
   }, [pathname, searchParams]);
-
+  
   return null;
 }
 
