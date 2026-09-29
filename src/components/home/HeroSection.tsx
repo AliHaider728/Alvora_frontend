@@ -30,7 +30,7 @@ export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref 
         We add padding-top to ensure the content starts safely below the header,
         but the background itself starts from the very top of the page.
       */}
-      <div className="relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-start pt-32 sm:justify-center px-5 sm:pt-24 sm:px-8 lg:px-12">
+      <div className="relative z-10 mx-auto flex w-full h-full max-w-375 flex-col justify-start pt-32 sm:justify-center px-5 sm:pt-24 sm:px-8 lg:px-12">
         <div className="max-w-xl pb-16">
           {/* Eyebrow */}
           <div 
