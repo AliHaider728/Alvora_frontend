@@ -55,8 +55,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${poppins.variable}`} data-scroll-behavior="smooth">
       <head>
         <link rel="preconnect" href="https://admin.alvora.pk" crossOrigin="anonymous" />
-        <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}></script>
-        <script
+      </head>
+      <body
+        style={{
+          background: 'var(--alvora-ivory)',
+        }}
+        className="font-sans antialiased text-[#1A1A1A] selection:bg-[#F1C9BD] selection:text-[#1A1A1A]"
+      >
+        <Script 
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`} 
+          strategy="afterInteractive" 
+        />
+        <Script
+          id="google-analytics"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
@@ -68,13 +80,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             `,
           }}
         />
-      </head>
-      <body
-        style={{
-          background: 'var(--alvora-ivory)',
-        }}
-        className="font-sans antialiased text-[#1A1A1A] selection:bg-[#F1C9BD] selection:text-[#1A1A1A]"
-      >
         <GoogleAnalyticsEvents />
         <MetaPixel />
         <TikTokPixel />
