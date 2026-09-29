@@ -26,7 +26,7 @@ export const HomePage: React.FC<Props> = ({ products, categories, settings }) =>
   const featuredProduct = visibleProducts.find(p => p.isSpotlight) || bestsellers[0];
 
   return (
-    <div className="min-h-[100dvh] bg-[#FAF6F2] font-sans flex flex-col overflow-x-hidden w-full">
+    <div className="min-h-[100dvh] font-sans flex flex-col overflow-x-hidden w-full">
       <SeoHead
         title="ALVORA | Glowing & Healthy Skin"
         description={settings.metaDescription || "Pure Ingredients. Visible Results."}
