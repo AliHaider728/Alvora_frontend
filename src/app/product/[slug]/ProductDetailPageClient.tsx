@@ -688,7 +688,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                     }}
                     aria-label={`Show ${product.name} image ${idx + 1}`}
                     aria-current={!overrideImage && activeImageIndex === idx ? 'true' : undefined}
-                    className={`relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 p-0.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C48B80] focus-visible:ring-offset-2 sm:h-20 sm:w-20 ${
+                    className={`relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C48B80] focus-visible:ring-offset-2 sm:h-20 sm:w-20 ${
                       (!overrideImage && activeImageIndex === idx) ? 'border-[#9C4122] bg-[#FAF6F2] shadow-sm' : 'border-[#EDE5DC] bg-[#FAF6F2] opacity-75 hover:opacity-100'
                     }`}
                   >
