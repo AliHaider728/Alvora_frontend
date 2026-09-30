@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Star, Plus, Minus, Info, Check, ShoppingCart, MessageSquarePlus } from 'lucide-react';
+import { Star, Plus, Minus, Info, Check, ShoppingCart, MessageSquarePlus, Loader2 } from 'lucide-react';
 import { ReviewVerificationBadge } from '../../../components/common/ReviewVerificationBadge';
 import { useStore } from '../../../context/StoreContext';
 import { formatPrice } from '../../../utils/formatters';
@@ -16,6 +16,7 @@ import { getBundleImages } from '../../../utils/bundleImages';
 import { getThumbnailSource, warmCartImage } from '../../../utils/cartImages';
 import { getSafeImageSrc } from '../../../utils/images';
 import { BundleGallery } from '../../../components/common/BundleGallery';
+import { AnimatedButton } from '../../../components/common/AnimatedButton';
 
 export function BundleDetailPageClient({ initialBundle, initialReviews, relatedBundles }: any) {
   const { addToCart, setIsCartOpen } = useStore();
@@ -145,22 +146,24 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
                 )}
               </motion.div>
 
-              <motion.button 
-                variants={staggerVariants}
-                onClick={handleAddToCart}
-                disabled={addingToCart}
-                className="w-full sm:w-auto min-w-[200px] flex items-center justify-center gap-2 px-8 py-4 bg-[#1A1A1A] hover:bg-[#333] text-white text-xs font-bold tracking-widest uppercase transition-all rounded-full disabled:opacity-80"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                {addingToCart ? (
-                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                ) : added ? (
-                  <><Check className="w-5 h-5" /> Added</>
-                ) : (
-                  <>Add Bundle to Cart</>
-                )}
-              </motion.button>
+                              <motion.div variants={staggerVariants}>
+                  <AnimatedButton
+                    type="button"
+                    onClick={handleAddToCart}
+                    disabled={addingToCart}
+                    variant="primary"
+                    size="lg"
+                    className="w-full sm:w-auto min-w-[200px]"
+                  >
+                    {addingToCart ? (
+                      <><Loader2 className="w-5 h-5 animate-spin mr-2" /> ADDING...</>
+                    ) : added ? (
+                      <><Check className="w-5 h-5 mr-2" /> ADDED</>
+                    ) : (
+                      <>ADD BUNDLE TO CART</>
+                    )}
+                  </AnimatedButton>
+                </motion.div>
 
               <motion.div variants={staggerVariants} className="mt-12 pt-10 border-t border-[#E7D9D0] grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Value Breakdown */}

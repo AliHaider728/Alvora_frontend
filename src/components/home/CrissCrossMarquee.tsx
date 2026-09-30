@@ -9,7 +9,7 @@ const line2 = strip2Text.repeat(4);
 
 export const CrissCrossMarquee: React.FC = () => {
   return (
-    <section className="relative w-full h-[180px] md:h-[220px] bg-[#FAF6F2] overflow-hidden flex items-center justify-center">
+    <section className="relative w-full h-[180px] md:h-[220px] bg-transparent overflow-hidden flex items-center justify-center">
       
       {/* Strip 2: Charcoal background, angled DOWN (bottom layer) */}
       <div className="absolute w-[120%] -left-[10%] rotate-[4deg] bg-[#1A1A1A] py-3 md:py-4 shadow-lg z-0">
