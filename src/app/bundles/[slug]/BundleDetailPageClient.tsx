@@ -3,7 +3,8 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Star, Plus, Minus, Info, BadgeCheck, Check, ShoppingCart, MessageSquarePlus } from 'lucide-react';
+import { Star, Plus, Minus, Info, Check, ShoppingCart, MessageSquarePlus } from 'lucide-react';
+import { ReviewVerificationBadge } from '../../../components/common/ReviewVerificationBadge';
 import { useStore } from '../../../context/StoreContext';
 import { formatPrice } from '../../../utils/formatters';
 import { getBundleOriginalPrice } from '../../../utils/products';
@@ -266,19 +267,15 @@ export function BundleDetailPageClient({ initialBundle, initialReviews, relatedB
           ) : (
             approvedReviews.map((review: any) => (
               <div key={review.id} className="p-4 rounded-2xl border border-[#EDE5DC] bg-white space-y-2">
-                <div className="flex items-center justify-between">
+                <div className="flex flex-wrap items-start justify-between gap-2">
                   <div className="flex items-center gap-3">
                     <div className="relative w-10 h-10 rounded-full overflow-hidden shrink-0 bg-[#F5EDE4]">
                       <Image src={review.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(review.reviewerName)}&background=random`} alt={review.reviewerName} fill sizes="40px" className="object-cover" unoptimized />
                     </div>
                     <div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-2">
                         <span className="font-bold text-sm text-[#1A1A1A]/90">{review.reviewerName}</span>
-                        {review.verifiedPurchase && (
-                          <span className="flex items-center text-[10px] text-[#C48B80] font-semibold">
-                            <BadgeCheck className="w-3.5 h-3.5 mr-0.5" /> Verified Purchase
-                          </span>
-                        )}
+                        <ReviewVerificationBadge verifiedPurchase={Boolean(review.verifiedPurchase)} />
                       </div>
                     </div>
                   </div>

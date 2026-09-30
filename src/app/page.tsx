@@ -2,6 +2,7 @@ import { fetchWithRetry } from '../lib/fetchWithRetry';
 import React from 'react';
 import { HomePage } from './HomePage';
 import { USE_MOCK_DATA, MOCK_PRODUCTS, MOCK_CATEGORIES, MOCK_SETTINGS } from '../data/mock';
+import { MOCK_BUNDLES } from '../data/mock/bundles';
 
 export const metadata = {
   title: 'ALVORA | Glowing & Healthy Skin',
@@ -14,17 +15,21 @@ const API_URL = firstApiUrl.startsWith('http') ? firstApiUrl : `https://${firstA
 
 async function fetchData() {
   if (USE_MOCK_DATA) {
-    return { products: MOCK_PRODUCTS, categories: MOCK_CATEGORIES, settings: MOCK_SETTINGS };
+    return { products: MOCK_PRODUCTS, categories: MOCK_CATEGORIES, settings: MOCK_SETTINGS, bundles: MOCK_BUNDLES };
   }
 
   // Using next: { revalidate: 60 } to cache the homepage for 60 seconds.
   const fetchOpts = { next: { revalidate: 60 } };
   
   try {
-    const [productsRes, categoriesRes, settingsRes] = await Promise.all([
+    const bundleRequest = fetchWithRetry(`${API_URL}/bundles`, fetchOpts)
+      .then(async response => response.ok ? response.json() : { bundles: [] })
+      .catch(() => ({ bundles: [] }));
+    const [productsRes, categoriesRes, settingsRes, rawBundles] = await Promise.all([
       fetchWithRetry(`${API_URL}/products?isVisible=true`, fetchOpts),
       fetchWithRetry(`${API_URL}/categories`, fetchOpts),
-      fetchWithRetry(`${API_URL}/settings`, fetchOpts)
+      fetchWithRetry(`${API_URL}/settings`, fetchOpts),
+      bundleRequest,
     ]);
     
     const rawProducts = productsRes.ok ? await productsRes.json() : [];
@@ -38,7 +43,8 @@ async function fetchData() {
     const categories = categoriesRes.ok ? await categoriesRes.json() : [];
     const settings = settingsRes.ok ? await settingsRes.json() : null;
     
-    return { products, categories, settings };
+    const bundles = Array.isArray(rawBundles) ? rawBundles : rawBundles?.bundles || [];
+    return { products, categories, settings, bundles };
   } catch (error) {
     console.error('Error fetching homepage data:', error);
     throw error;
@@ -46,7 +52,7 @@ async function fetchData() {
 }
 
 export default async function Page() {
-  const { products, categories, settings } = await fetchData();
+  const { products, categories, settings, bundles } = await fetchData();
   
   if (!settings && !USE_MOCK_DATA) {
     throw new Error(`Failed to load settings`);
@@ -55,5 +61,5 @@ export default async function Page() {
   }
 
   // Use settings directly (it will be MOCK_SETTINGS if USE_MOCK_DATA is true, else from API)
-  return <HomePage products={products} categories={categories} settings={settings!} />;
+  return <HomePage products={products} categories={categories} settings={settings!} bundles={bundles} />;
 }

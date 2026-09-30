@@ -445,9 +445,15 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           api.getProducts(),
           hasAdminSession && isSuperAdmin() ? api.getAdminCategories() : api.getCategories()
         ]);
-        if (realProducts) setProducts(realProducts.map(normalizeProduct));
+        if (realProducts) {
+          setProducts(realProducts.map(normalizeProduct));
+          setApiError(null);
+        } else {
+          setApiError('Catalog request failed');
+        }
         if (realCategories) setCategories(realCategories.map(normalizeCategory));
       } catch (err) {
+        setApiError('Catalog request failed');
         console.error('Failed to fetch public catalog data', err);
       } finally {
         setProductsLoading(false);
@@ -1000,6 +1006,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 bundlesLoading,
         products: isHydrated ? products : [],
         productsLoading,
+        apiError,
+        retryInit,
         categories: isHydrated ? categories : INITIAL_CATEGORIES,
         orders: isHydrated ? orders : INITIAL_ORDERS,
         customers: isHydrated ? customers : INITIAL_CUSTOMERS,
@@ -1051,7 +1059,7 @@ bundlesLoading,
         deleteReview,
         refreshAdminReviews
   }), [
-    bundles, bundlesLoading, products, productsLoading, categories, orders, customers, coupons, reviews, settings,
+    bundles, bundlesLoading, products, productsLoading, apiError, retryInit, categories, orders, customers, coupons, reviews, settings,
     cart, isCartOpen, isHydrated, addToCart, addRoutineToCart, removeFromCart, updateCartQuantity, clearCart,
     cartTotalItems, cartSubtotal, appliedCoupon, applyCoupon, removeCoupon, couponDiscountAmount,
     routineDiscountAmount, routineDiscount, saveRoutineDiscountSettings,

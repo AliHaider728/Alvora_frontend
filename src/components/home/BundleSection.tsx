@@ -10,8 +10,10 @@ import { Product, Bundle } from '../../types';
 import { Star, Loader2 } from 'lucide-react';
 import { AnimatedButton } from '../common/AnimatedButton';
 
-export const BundleSection: React.FC = () => {
+export const BundleSection: React.FC<{ initialBundles?: Bundle[] }> = ({ initialBundles = [] }) => {
   const { bundles, bundlesLoading, addToCart, setIsCartOpen } = useStore();
+  const catalogBundles = bundles.length ? bundles : initialBundles;
+  const catalogLoading = bundlesLoading && !catalogBundles.length;
   const shouldReduceMotion = useReducedMotion();
   const variants = shouldReduceMotion ? undefined : {
     hidden: { opacity: 0, y: 30 },
@@ -23,7 +25,7 @@ export const BundleSection: React.FC = () => {
   useEffect(() => setMounted(true), []);
 
   if (!mounted) return null;
-    if (!bundlesLoading && (!bundles || bundles.length === 0)) return null;
+    if (!catalogLoading && catalogBundles.length === 0) return null;
 
   const handleAddBundle = async (bundle: Bundle) => {
     if (loadingBundleId) return;
@@ -104,7 +106,7 @@ export const BundleSection: React.FC = () => {
 
       {/* Alternating Split Layout for Bundles */}
             {/* Alternating Split Layout for Bundles */}
-      {bundlesLoading ? (
+      {catalogLoading ? (
         <div className="flex flex-col md:flex-row w-full min-h-[500px] animate-pulse">
           <div className="w-full md:w-1/2 bg-[#E7D9D0] aspect-square md:aspect-square lg:aspect-auto" />
           <div className="w-full md:w-1/2 bg-white flex flex-col justify-center p-8 md:p-16 lg:p-24 space-y-6">
@@ -117,7 +119,7 @@ export const BundleSection: React.FC = () => {
             <div className="h-8 bg-[#E7D9D0] rounded w-32" />
           </div>
         </div>
-      ) : bundles.map((bundle, index) => {
+      ) : catalogBundles.map((bundle, index) => {
         const isReverse = index % 2 === 1;
         const bgClass = isReverse ? 'bg-[#FAF6F2]' : 'bg-white';
         const imageBgClass = isReverse ? 'bg-[#1A1A1A]' : 'bg-[#F1C9BD]';

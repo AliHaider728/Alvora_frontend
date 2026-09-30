@@ -1,6 +1,7 @@
 export const dynamic = 'force-dynamic';
 import { CategoryPageClient } from "./CategoryPageClient";
 import { api } from "../../../services/api";
+import { getCatalogPageData } from "../../../lib/getCatalogPageData";
 
 import { notFound } from "next/navigation";
 
@@ -41,5 +42,6 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     }
   }
 
-  return <CategoryPageClient />;
+  const catalog = await getCatalogPageData();
+  return <CategoryPageClient {...catalog} />;
 }

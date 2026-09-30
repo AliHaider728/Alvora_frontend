@@ -12,7 +12,6 @@ import {
   Truck,
   RotateCcw,
   Check,
-  BadgeCheck,
   Plus,
   Minus,
   MessageSquarePlus,
@@ -35,6 +34,7 @@ import { formatPrice } from '../../../utils/formatters';
 import { useScrollLock } from '../../../hooks/useScrollLock';
 import { ReviewModal } from '../../../components/common/ReviewModal';
 import { ProductImage } from '../../../components/common/ProductImage';
+import { ReviewVerificationBadge } from '../../../components/common/ReviewVerificationBadge';
 import { SkeletonDetail } from '../../../components/common/SkeletonCard';
 import { api, getLastApiError } from '../../../services/api';
 import {
@@ -1272,15 +1272,15 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                 ) : (
                   approvedReviews.map(review => (
                     <div key={review.id} className="p-4 rounded-2xl border border-[#EDE5DC] bg-white space-y-2">
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-wrap items-start justify-between gap-2">
                         <div className="flex items-center gap-3">
                           <div className="relative w-10 h-10 rounded-full overflow-hidden shrink-0 bg-[#F5EDE4]">
                                 <Image src={review.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(review.reviewerName)}&background=random`} alt={review.reviewerName} fill sizes="40px" className="object-cover" unoptimized />
                               </div>
                           <div>
-                            <div className="flex items-center gap-2">
+                            <div className="flex flex-wrap items-center gap-2">
                               <span className="font-bold text-sm text-[#1A1A1A]/90">{review.reviewerName}</span>
-                              <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-green-50 text-green-700 border border-green-200 text-[10px] font-bold tracking-wide"><BadgeCheck className="w-3.5 h-3.5" />Verified</span>
+                              <ReviewVerificationBadge verifiedPurchase={Boolean(review.verifiedPurchase)} />
                             </div>
                           </div>
                         </div>

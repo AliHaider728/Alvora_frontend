@@ -109,6 +109,13 @@ export const api = {
 
   // Products
   getProducts: (params?: { category?: string; ageGroup?: string; search?: string; isVisible?: boolean }) => {
+    if (USE_MOCK_DATA) {
+      return Promise.resolve(MOCK_PRODUCTS.filter(product =>
+        (params?.isVisible === undefined || product.isVisible === params.isVisible) &&
+        (!params?.category || product.categorySlug === params.category) &&
+        (!params?.search || product.name.toLowerCase().includes(params.search.toLowerCase()))
+      ));
+    }
     const query = new URLSearchParams(params as any).toString();
     return fetchJson<any[]>(`/products?${query}&_t=${Date.now()}`);
   },

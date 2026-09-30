@@ -24,7 +24,11 @@ const parseMultiValueParam = (value: string | null) =>
 const sameSelections = (left: string[], right: string[]) =>
   left.length === right.length && left.every((value, index) => value === right[index]);
 
-export const CategoryPageClient: React.FC = () => {
+export const CategoryPageClient: React.FC<{
+  initialProducts?: import('../../../types').Product[];
+  initialBundles?: import('../../../types').Bundle[];
+  initialCategories?: import('../../../types').Category[];
+}> = ({ initialProducts = [], initialBundles = [], initialCategories = [] }) => {
   const { slug: categorySlug } = useParams<{ slug?: string }>();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -39,7 +43,10 @@ export const CategoryPageClient: React.FC = () => {
       router.push(pathname + query, { scroll: false });
     }
   };
-  const { products, bundles, categories, productsLoading } = useStore();
+  const { products, bundles, categories, productsLoading, apiError, retryInit } = useStore();
+  const catalogProducts = productsLoading || apiError ? initialProducts : products.length ? products : initialProducts;
+  const catalogBundles = bundles.length ? bundles : initialBundles;
+  const catalogCategories = categories.length ? categories : initialCategories;
 
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   
@@ -118,12 +125,12 @@ export const CategoryPageClient: React.FC = () => {
 
   // Current active category object
   const currentCategoryObj = selectedCategories.length === 1
-    ? categories.find(c => c.slug === selectedCategories[0])
+    ? catalogCategories.find(c => c.slug === selectedCategories[0])
     : undefined;
 
   // Filter Logic
   const allItems = useMemo(() => {
-    const bundleProducts = (bundles || []).map(b => {
+    const bundleProducts = catalogBundles.map(b => {
       const displayImage = b.image || (b.products && b.products.length > 0 && (b.products[0].product?.images?.[0] || b.products[0].images?.[0] || null));
       return {
         id: b.id,
@@ -150,8 +157,8 @@ export const CategoryPageClient: React.FC = () => {
         status: 'active'
       };
     });
-    return [...products, ...(bundleProducts as any)];
-  }, [products, bundles]);
+    return [...catalogProducts, ...(bundleProducts as any)];
+  }, [catalogProducts, catalogBundles]);
 
   const filteredProducts = useMemo(() => {
     return allItems.filter(p => {
@@ -286,7 +293,7 @@ export const CategoryPageClient: React.FC = () => {
                 >
                   All Categories ({products.length})
                 </button>
-                {categories.map(cat => (
+                {catalogCategories.map(cat => (
                   <button
                     key={cat.id}
                     onClick={() => toggleCategory(cat.slug)}
@@ -420,7 +427,7 @@ export const CategoryPageClient: React.FC = () => {
             </div>
 
             {/* Product Grid */}
-            {productsLoading ? (
+            {productsLoading && !allItems.length ? (
               <div className="grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
                 {[...Array(6)].map((_, i) => (
                   <SkeletonCard key={i} />
@@ -431,15 +438,15 @@ export const CategoryPageClient: React.FC = () => {
                 <div className="w-16 h-16 rounded-full bg-[#FAF6F2] text-[#9C4122] flex items-center justify-center mx-auto">
                   <Filter className="w-8 h-8" />
                 </div>
-                <h3 className="font-display font-medium uppercase tracking-widest text-lg text-[#1A1A1A]">No Products Found</h3>
+                <h3 className="font-display font-medium uppercase tracking-widest text-lg text-[#1A1A1A]">{apiError && !allItems.length ? 'Products Temporarily Unavailable' : 'No Products Found'}</h3>
                 <p className="text-xs text-[#1A1A1A]/60 max-w-sm mx-auto">
-                  We couldn't find any products matching your current filter choices. Try broadening your price range or clearing filters!
+                  {apiError && !allItems.length ? 'We could not load the catalog. Please check your connection and try again.' : "We couldn't find any products matching your current filter choices. Try broadening your price range or clearing filters!"}
                 </p>
                 <button
-                  onClick={resetFilters}
+                  onClick={apiError && !allItems.length ? retryInit : resetFilters}
                   className="btn-interactive px-6 py-2.5 rounded-xl bg-gradient-to-br from-[#D4784F] to-[#9C4122] text-white font-display font-medium uppercase tracking-widest text-xs hover:bg-[#A86249] transition-colors"
                 >
-                  Clear All Filters
+                  {apiError && !allItems.length ? 'Try Again' : 'Clear All Filters'}
                 </button>
               </div>
             ) : (
@@ -483,7 +490,7 @@ export const CategoryPageClient: React.FC = () => {
                   >
                     All Categories
                   </button>
-                  {categories.map(cat => (
+                  {catalogCategories.map(cat => (
                     <button
                       key={cat.id}
                       onClick={() => toggleCategory(cat.slug)}

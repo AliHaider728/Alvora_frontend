@@ -1,6 +1,6 @@
 import React from 'react';
 import { SeoHead } from '../components/common/SeoHead';
-import { Product, Category, StoreSettings } from '../types';
+import { Product, Category, StoreSettings, Bundle } from '../types';
 import { HeroSection } from '../components/home/HeroSection';
 import dynamic from 'next/dynamic';
 
@@ -17,9 +17,10 @@ interface Props {
   products: Product[];
   categories: Category[];
   settings: StoreSettings;
+  bundles: Bundle[];
 }
 
-export const HomePage: React.FC<Props> = ({ products, categories, settings }) => {
+export const HomePage: React.FC<Props> = ({ products, categories, settings, bundles }) => {
   const visibleProducts = products.filter(p => p.status === 'published' && p.isVisible !== false);
   const featuredProducts = visibleProducts.filter(p => p.isFeatured);
   const bestsellers = visibleProducts.filter(p => p.isBestseller || p.isFeatured);
@@ -40,7 +41,7 @@ export const HomePage: React.FC<Props> = ({ products, categories, settings }) =>
           <ScrollRevealText text="At ALVORA, we blend clinically proven ingredients with the best of nature to support your skin's health today and tomorrow. Sustainable choices. Responsible formulas. Beautiful results for you and the world we all share." />
         </section>
         <FeaturedProductsGrid products={featuredProducts.slice(0, 4)} />
-        <BundleSection />
+        <BundleSection initialBundles={bundles} />
         <IngredientSection />
         <AudioReviews />
         <HomeFAQ />

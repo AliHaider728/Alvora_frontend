@@ -40,7 +40,7 @@ export const FeaturedProductsGrid: React.FC<Props> = ({ products }) => {
         </div>
 
         <div className="mt-12 md:mt-16 flex justify-center">
-          <AnimatedButton href="/category/all" variant="primary" size="lg">
+          <AnimatedButton href="/shop" variant="primary" size="lg">
             View All Products
           </AnimatedButton>
         </div>

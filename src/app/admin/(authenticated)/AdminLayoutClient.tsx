@@ -113,8 +113,8 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
       )}
       
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 ${sidebarWidth} bg-[#F5EDE4] text-[#1A1A1A]/70 flex flex-col justify-between p-4 border-r border-[#E7D9D0] transition-all duration-300 ease-in-out lg:translate-x-0 overflow-y-auto ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div>
+      <aside className={`fixed inset-y-0 left-0 z-50 ${sidebarWidth} bg-[#F5EDE4] text-[#1A1A1A]/70 flex flex-col p-4 border-r border-[#E7D9D0] transition-all duration-300 ease-in-out lg:translate-x-0 overflow-visible ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className="flex min-h-0 flex-1 flex-col">
           {/* Logo Header */}
           <div className="flex items-center justify-center pb-6 pt-2 px-2 border-b border-[#E7D9D0] mb-4 relative">
             <Link href="/admin" onClick={() => setMobileMenuOpen(false)} className={`block relative w-[140px] h-[40px] ${collapsed ? 'lg:hidden' : ''}`}>
@@ -137,7 +137,7 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
           </div>
 
           {/* Navigation Items */}
-          <nav className="space-y-1 relative">
+          <nav aria-label="Admin navigation" className="relative min-h-0 flex-1 space-y-1 overflow-y-auto overscroll-contain pr-1">
             {navItems.map(item => {
               const Icon = item.icon;
               const isActive = pathname === item.path || (item.path !== '/admin' && pathname.startsWith(item.path));
@@ -145,8 +145,9 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
                 <Link
                   key={item.path}
                   href={item.path}
+                  title={collapsed ? item.label : undefined}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`group relative flex items-center gap-3 ${collapsed ? 'lg:justify-center' : ''} px-3.5 py-2.5 rounded-xl text-xs font-bold transition-colors ${
+                  className={`group relative flex items-center gap-3 px-3.5 py-2.5 ${collapsed ? 'lg:justify-center lg:px-1' : ''} rounded-xl text-xs font-bold transition-colors ${
                     isActive
                       ? 'bg-gradient-to-r from-[#9C4122] to-[#B34E28] text-white shadow-md'
                       : 'text-[#1A1A1A]/70 hover:bg-white hover:text-[#1A1A1A]'
@@ -155,10 +156,6 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
                   <Icon className="w-4 h-4 shrink-0" />
                   <span className={`${collapsed ? 'lg:hidden' : ''}`}>{item.label}</span>
                   
-                  {/* Tooltip */}
-                  <div className={`hidden ${collapsed ? 'lg:group-hover:block' : 'hidden'} absolute left-full top-1/2 -translate-y-1/2 ml-3 px-2.5 py-1.5 bg-[#1A1A1A] text-white text-xs font-medium rounded-md shadow-md whitespace-nowrap z-[70] pointer-events-none before:content-[''] before:absolute before:right-full before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-transparent before:border-r-[#1A1A1A]`}>
-                    {item.label}
-                  </div>
                 </Link>
               );
             })}
@@ -166,7 +163,7 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
         </div>
 
         {/* Sidebar Footer */}
-        <div className="pt-4 border-t border-[#E7D9D0] space-y-2 relative">
+        <div className="relative shrink-0 space-y-2 border-t border-[#E7D9D0] pt-4">
           <Link
             href="/"
             target="_blank"

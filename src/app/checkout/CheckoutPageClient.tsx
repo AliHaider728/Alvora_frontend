@@ -394,7 +394,7 @@ export const CheckoutPageClient: React.FC<{ receiptId?: string }> = ({ receiptId
           currency: "PKR",
           items: created.items.map((item) => ({
             item_id: item.productId,
-            item_name: item.productName,
+            item_name: item.name,
             price: item.price,
             quantity: item.quantity
           }))
