@@ -34,9 +34,6 @@ export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref 
       {/* Overlay to improve text contrast against dark parts of the image */}
       <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#FAF6F2]/80 via-[#FAF6F2]/20 to-transparent sm:bg-none sm:bg-gradient-to-r sm:from-[#FAF6F2]/90 sm:via-[#FAF6F2]/30 sm:to-transparent pointer-events-none" />
       
-      {/* Subtle overlay for bottom/right icons contrast (Bug 32) */}
-      <div className="hidden sm:block absolute inset-0 z-0 bg-gradient-to-tl from-black/50 via-transparent to-transparent pointer-events-none opacity-80" />
-      
       {/* Navbar contrast overlay: ensures dark header icons remain visible against the image */}
       <div className="absolute inset-x-0 top-0 h-[180px] z-0 bg-gradient-to-b from-[#FAF6F2] via-[#FAF6F2]/80 to-transparent pointer-events-none" />
       
