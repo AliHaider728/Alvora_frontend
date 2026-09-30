@@ -628,3 +628,38 @@ input[type="checkbox"]:focus-visible {
 .animate-marquee-4:hover {
   animation-play-state: paused;
 }
+
+.alvora-skeleton {
+  background: linear-gradient(105deg, #f2e8e1 20%, #faf6f2 40%, #f2e8e1 60%);
+  background-size: 200% 100%;
+  animation: alvora-skeleton-shimmer 1.8s ease-in-out infinite;
+}
+
+@keyframes alvora-skeleton-shimmer {
+  from { background-position: 100% 0; }
+  to { background-position: -100% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .alvora-skeleton { animation: none; }
+}
+
+.ritual-skeleton-bubble {
+  background: radial-gradient(circle at 35% 28%, rgba(255,255,255,.9), rgba(242,211,197,.78) 45%, rgba(204,133,105,.34) 72%, rgba(255,255,255,.5));
+  border: 1px solid rgba(196,139,128,.4);
+  box-shadow: inset 0 0 45px rgba(255,255,255,.65), 0 20px 65px rgba(156,65,34,.08);
+  animation: ritual-skeleton-glow 2.8s ease-in-out infinite;
+}
+
+.ritual-skeleton-bubble .alvora-skeleton {
+  background: linear-gradient(105deg, #e5c7ba 20%, #f8e9e1 40%, #e5c7ba 60%);
+  background-size: 200% 100%;
+}
+
+@keyframes ritual-skeleton-glow {
+  50% { opacity: .7; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ritual-skeleton-bubble { animation: none; }
+}

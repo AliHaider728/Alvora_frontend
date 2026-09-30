@@ -3,12 +3,13 @@ import { SeoHead } from '../components/common/SeoHead';
 import { Product, Category, StoreSettings, Bundle } from '../types';
 import { HeroSection } from '../components/home/HeroSection';
 import dynamic from 'next/dynamic';
+import { BundleSectionSkeleton, FeaturedProductsSkeleton } from '../components/common/SkeletonCard';
 
 const CrissCrossMarquee = dynamic(() => import('../components/home/CrissCrossMarquee').then(mod => mod.CrissCrossMarquee));
-const BundleSection = dynamic(() => import('../components/home/BundleSection').then(mod => mod.BundleSection));
+const BundleSection = dynamic(() => import('../components/home/BundleSection').then(mod => mod.BundleSection), { loading: () => <BundleSectionSkeleton /> });
 const ScrollRevealText = dynamic(() => import('../components/common/ScrollRevealText').then(mod => mod.ScrollRevealText));
 const IngredientSection = dynamic(() => import('../components/home/IngredientSection').then(mod => mod.IngredientSection));
-const FeaturedProductsGrid = dynamic(() => import('../components/home/FeaturedProductsGrid').then(mod => mod.FeaturedProductsGrid));
+const FeaturedProductsGrid = dynamic(() => import('../components/home/FeaturedProductsGrid').then(mod => mod.FeaturedProductsGrid), { loading: () => <FeaturedProductsSkeleton /> });
 const AudioReviews = dynamic(() => import('../components/home/AudioReviews').then(mod => mod.AudioReviews));
 const HomeFAQ = dynamic(() => import('../components/home/HomeFAQ').then(mod => mod.HomeFAQ));
 const FinalCTA = dynamic(() => import('../components/home/FinalCTA').then(mod => mod.FinalCTA));

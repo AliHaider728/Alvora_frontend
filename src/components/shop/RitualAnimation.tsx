@@ -8,6 +8,7 @@ import { ShoppingCart, Eye } from "lucide-react";
 import { useScroll, useSpring, motion, useTransform, useMotionTemplate } from "framer-motion";
 import { useStore } from "../../context/StoreContext";
 import { Bundle, Product } from '../../types';
+import { BestSellersRitualSkeleton } from '../common/BestSellersRitualSkeleton';
 
 export function RitualAnimation({ initialProducts = [], initialBundles = [] }: { initialProducts?: Product[]; initialBundles?: Bundle[] }) {
   const ref = React.useRef<HTMLElement>(null);
@@ -174,20 +175,15 @@ export function RitualAnimation({ initialProducts = [], initialBundles = [] }: {
 
   // If no steps generated yet (loading state), attach ref to avoid hydration errors
   if (STEPS.length === 0) {
-    if (!productsLoading && apiError) {
+    if (!productsLoading) {
       return (
         <section id="ritual" ref={ref as any} className="bg-[#FAF6F2] px-6 py-20 text-center text-[#241916]">
-          <p>Best sellers are temporarily unavailable.</p>
-          <button type="button" onClick={retryInit} className="mt-4 rounded-full border border-[#9C4122] px-5 py-2 text-sm font-semibold text-[#9C4122]">Try again</button>
+          <p>{apiError ? 'Best sellers are temporarily unavailable.' : 'No best sellers are available right now.'}</p>
+          {apiError && <button type="button" onClick={retryInit} className="mt-4 rounded-full border border-[#9C4122] px-5 py-2 text-sm font-semibold text-[#9C4122]">Try again</button>}
         </section>
       );
     }
-    return (
-      <>
-        <section className="md:hidden bg-[#FAF6F2] py-20 px-6 min-h-[500px]" />
-        <section id="ritual" ref={ref as any} className="hidden md:block relative h-[100vh] bg-[#FAF6F2]" />
-      </>
-    );
+    return <BestSellersRitualSkeleton sectionRef={ref} />;
   }
 
   return (
