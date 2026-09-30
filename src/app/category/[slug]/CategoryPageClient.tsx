@@ -11,8 +11,6 @@ import { SkeletonCard } from '../../../components/common/SkeletonCard';
 import { Breadcrumbs } from '../../../components/common/Breadcrumbs';
 
 import { formatPrice } from '../../../utils/formatters';
-import { AGE_GROUPS } from '../../../data/mockData';
-import { AgeGroupCategory } from '../../../types';
 import { getProductAgeGroups, isProductVisibleOnStorefront } from '../../../utils/products';
 import { useScrollLock } from '../../../hooks/useScrollLock';
 
@@ -59,8 +57,7 @@ export const CategoryPageClient: React.FC<{
     if (categoryParam !== null) return parseMultiValueParam(categoryParam);
     return categorySlug && categorySlug !== 'all' ? [categorySlug] : [];
   });
-  const [selectedAges, setSelectedAges] = useState<string[]>(() => parseMultiValueParam(searchParams.get('age')));
-  const [priceRange, setPriceRange] = useState<number>(15000);
+    const [priceRange, setPriceRange] = useState<number>(15000);
   const [minRating, setMinRating] = useState<number>(0);
 
   // Sort state
@@ -77,10 +74,9 @@ export const CategoryPageClient: React.FC<{
     const nextAges = parseMultiValueParam(searchParams.get('age'));
 
     setSelectedCategories(current => sameSelections(current, nextCategories) ? current : nextCategories);
-    setSelectedAges(current => sameSelections(current, nextAges) ? current : nextAges);
-  }, [categorySlug, searchParams]);
+      }, [categorySlug, searchParams]);
 
-  const syncFilterParams = (categoriesToSync: string[], agesToSync: string[]) => {
+  const syncFilterParams = (categoriesToSync: string[]) => {
     const nextParams = new URLSearchParams(searchParams);
     if (categoriesToSync.length > 0) {
       nextParams.set('category', categoriesToSync.join(','));
@@ -89,12 +85,7 @@ export const CategoryPageClient: React.FC<{
     } else {
       nextParams.delete('category');
     }
-    if (agesToSync.length > 0) {
-      nextParams.set('age', agesToSync.join(','));
-    } else {
-      nextParams.delete('age');
-    }
-    setSearchParams(nextParams, { replace: true });
+        setSearchParams(nextParams, { replace: true });
   };
 
   const toggleCategory = (category: string) => {
@@ -102,25 +93,12 @@ export const CategoryPageClient: React.FC<{
       ? selectedCategories.filter(value => value !== category)
       : [...selectedCategories, category];
     setSelectedCategories(nextCategories);
-    syncFilterParams(nextCategories, selectedAges);
+    syncFilterParams(nextCategories);
   };
 
   const selectAllCategories = () => {
     setSelectedCategories([]);
-    syncFilterParams([], selectedAges);
-  };
-
-  const toggleAge = (age: string) => {
-    const nextAges = selectedAges.includes(age)
-      ? selectedAges.filter(value => value !== age)
-      : [...selectedAges, age];
-    setSelectedAges(nextAges);
-    syncFilterParams(selectedCategories, nextAges);
-  };
-
-  const selectAllAges = () => {
-    setSelectedAges([]);
-    syncFilterParams(selectedCategories, []);
+    syncFilterParams([]);
   };
 
   // Current active category object
@@ -168,11 +146,6 @@ export const CategoryPageClient: React.FC<{
       if (selectedCategories.length > 0 && !selectedCategories.some(slug => productCategorySlugs.includes(slug))) {
         return false;
       }
-      // Age group match
-      const productAgeGroups = getProductAgeGroups(p);
-      if (selectedAges.length > 0 && !selectedAges.some(age => productAgeGroups.includes(age as AgeGroupCategory))) {
-        return false;
-      }
       // Price filter
       if (p.price > priceRange) {
         return false;
@@ -183,7 +156,7 @@ export const CategoryPageClient: React.FC<{
       }
       return true;
     });
-  }, [allItems, selectedCategories, selectedAges, priceRange, minRating]);
+  }, [allItems, selectedCategories, priceRange, minRating]);
 
   // Sort Logic
   const sortedProducts = useMemo(() => {
@@ -204,8 +177,7 @@ export const CategoryPageClient: React.FC<{
 
   const resetFilters = () => {
     setSelectedCategories([]);
-    setSelectedAges([]);
-    setPriceRange(15000);
+        setPriceRange(15000);
     setMinRating(0);
     setSortBy('featured');
     const nextParams = new URLSearchParams(searchParams);
@@ -310,42 +282,7 @@ export const CategoryPageClient: React.FC<{
                 ))}
               </div>
             </div>
-
-            {/* Age Group Filter */}
-            <div className="space-y-2 pt-4 border-t border-[#EDE5DC]">
-              <h3 className="font-display font-medium uppercase tracking-widest text-xs uppercase tracking-wider text-[#1A1A1A]/60">
-                Age Recommendation
-              </h3>
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  onClick={selectAllAges}
-                  aria-pressed={selectedAges.length === 0}
-                  className={`px-2.5 py-2 rounded-full text-xs font-bold text-center transition-colors ${
-                    selectedAges.length === 0
-                      ? 'bg-gradient-to-br from-[#D4784F] to-[#9C4122] text-white'
-                      : 'bg-[#F5EDE4] text-[#241916]/80 hover:bg-slate-200'
-                  }`}
-                >
-                  All Ages
-                </button>
-                {AGE_GROUPS.map(age => (
-                  <button
-                    key={age.id}
-                    onClick={() => toggleAge(age.id)}
-                    aria-pressed={selectedAges.includes(age.id)}
-                    className={`px-2.5 py-2 rounded-full text-xs font-bold text-center transition-colors ${
-                      selectedAges.includes(age.id)
-                        ? 'bg-gradient-to-br from-[#D4784F] to-[#9C4122] text-white'
-                        : 'bg-[#F5EDE4] text-[#241916]/80 hover:bg-slate-200'
-                    }`}
-                  >
-                    {age.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Price Filter */}
+              {/* Price Filter */}
             <div className="space-y-2 pt-4 border-t border-[#EDE5DC]">
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-[10px] font-black uppercase tracking-wider text-[#1A1A1A]/60">
@@ -462,13 +399,13 @@ export const CategoryPageClient: React.FC<{
 
       {/* Mobile Filters Drawer */}
       {mobileFilterOpen && (
-        <div className="fixed inset-0 z-50 overflow-hidden lg:hidden">
+        <div className="fixed inset-0 z-[100] overflow-hidden lg:hidden">
           <div
             className="absolute inset-0 bg-slate-900/50 backdrop-blur-xs"
             onClick={() => setMobileFilterOpen(false)}
           />
           <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
-            <div className="w-screen max-w-xs bg-white shadow-2xl p-6 pb-12 overflow-y-auto space-y-6">
+            <div className="w-screen max-w-xs bg-white shadow-2xl p-6 pb-[calc(3rem+env(safe-area-inset-bottom))] overflow-y-auto space-y-6 h-[100dvh]">
               <div className="flex items-center justify-between pb-4 border-b border-[#EDE5DC]">
                 <h3 className="font-display font-medium uppercase tracking-widest text-base text-[#1A1A1A]">Filter Products</h3>
                 <button
@@ -502,32 +439,7 @@ export const CategoryPageClient: React.FC<{
                   ))}
                 </div>
               </div>
-
-              {/* Mobile Age Groups */}
-              <div className="space-y-2 pt-4 border-t border-[#EDE5DC]">
-                <h4 className="font-display font-medium uppercase tracking-widest text-xs uppercase text-[#1A1A1A]/60">Age Group</h4>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    onClick={selectAllAges}
-                    aria-pressed={selectedAges.length === 0}
-                    className={`px-2 py-2 rounded-full text-xs font-bold ${selectedAges.length === 0 ? 'bg-gradient-to-br from-[#D4784F] to-[#9C4122] text-white' : 'bg-[#F5EDE4]'}`}
-                  >
-                    All Ages
-                  </button>
-                  {AGE_GROUPS.map(age => (
-                    <button
-                      key={age.id}
-                      onClick={() => toggleAge(age.id)}
-                      aria-pressed={selectedAges.includes(age.id)}
-                      className={`px-2 py-2 rounded-full text-xs font-bold ${selectedAges.includes(age.id) ? 'bg-gradient-to-br from-[#D4784F] to-[#9C4122] text-white' : 'bg-[#F5EDE4]'}`}
-                    >
-                      {age.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Mobile Price Filter */}
+                {/* Mobile Price Filter */}
               <div className="space-y-2 pt-4 border-t border-[#EDE5DC]">
                   <div className="flex justify-between items-center mb-4">
                     <h4 className="font-display font-medium uppercase tracking-widest text-xs uppercase text-[#1A1A1A]/60">

@@ -27,6 +27,47 @@ export const AlvoraProductCardInner = React.memo(({
 }) => {
   const productUrl = product.productType === 'bundle' ? '/bundles/' + product.slug : '/product/' + product.slug;
 
+  const [activeImageIndex, setActiveImageIndex] = React.useState(0);
+  const [hasTouched, setHasTouched] = React.useState(false);
+  const touchStartX = React.useRef<number | null>(null);
+  const isSwiping = React.useRef(false);
+
+  const handleTouchStart = React.useCallback((e: React.TouchEvent) => {
+    setHasTouched(true);
+    touchStartX.current = e.touches[0].clientX;
+    isSwiping.current = false;
+  }, []);
+
+  const handleTouchMove = React.useCallback((e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const currentX = e.touches[0].clientX;
+    const diff = touchStartX.current - currentX;
+    if (Math.abs(diff) > 10) {
+      isSwiping.current = true;
+    }
+  }, []);
+
+  const handleTouchEnd = React.useCallback((e: React.TouchEvent) => {
+    if (touchStartX.current === null || !product.images[1]) return;
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchStartX.current - touchEndX;
+
+    if (Math.abs(diff) > 40) {
+      if (diff > 0) {
+        setActiveImageIndex(1); // Swipe left
+      } else {
+        setActiveImageIndex(0); // Swipe right
+      }
+    }
+    touchStartX.current = null;
+  }, [product.images]);
+
+  const handleLinkClick = React.useCallback((e: React.MouseEvent) => {
+    if (isSwiping.current) {
+      e.preventDefault();
+    }
+  }, []);
+
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     if (product.inStock) {
@@ -39,28 +80,59 @@ export const AlvoraProductCardInner = React.memo(({
   return (
     <div className="group relative bg-white rounded-2xl flex flex-col h-full border border-[#EDE5DC] hover:shadow-md transition-shadow duration-300">
       {/* Image Container */}
-      <div className="relative aspect-square bg-[#F5EDE4] overflow-hidden block rounded-t-2xl">
-        <Link href={productUrl} className="absolute inset-0 z-0" prefetch={false}>
+      <div 
+        className="relative aspect-square bg-[#F5EDE4] overflow-hidden block rounded-t-2xl"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        <Link href={productUrl} className="absolute inset-0 z-0" prefetch={false} onClick={handleLinkClick}>
           <Image
             src={getSafeImageSrc(product.images[0])}
             alt={product.name}
             fill
             priority={priority}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className={`object-cover transition-all duration-700 ease-in-out group-hover:scale-105 ${product.images[1] ? 'group-hover:opacity-0' : ''}`}
+            className={`object-cover transition-all duration-700 ease-in-out sm:group-hover:scale-105 
+              ${product.images[1] ? 'sm:group-hover:opacity-0' : ''} 
+              ${activeImageIndex === 1 ? 'opacity-0 sm:opacity-100' : 'opacity-100'}`}
           />
           {product.images[1] && (
-            <div className="hidden sm:block absolute inset-0 z-0">
-              <Image
-                src={getSafeImageSrc(product.images[1])}
-                alt={`${product.name} alternate view`}
-                fill
-                sizes="(max-width: 1024px) 50vw, 33vw"
-                className="object-cover transition-all duration-700 ease-in-out opacity-0 group-hover:opacity-100 group-hover:scale-105 absolute inset-0"
-              />
-            </div>
+            <>
+              {/* Desktop Always-Present Alternate Image */}
+              <div className="hidden sm:block absolute inset-0 z-0">
+                <Image
+                  src={getSafeImageSrc(product.images[1])}
+                  alt={`${product.name} alternate view`}
+                  fill
+                  sizes="(max-width: 1024px) 50vw, 33vw"
+                  className="object-cover transition-all duration-700 ease-in-out opacity-0 group-hover:opacity-100 group-hover:scale-105 absolute inset-0"
+                />
+              </div>
+
+              {/* Mobile Alternate Image (Loaded only after touch interaction begins) */}
+              {hasTouched && (
+                <div className={`block sm:hidden absolute inset-0 z-0 transition-opacity duration-700 ease-in-out ${activeImageIndex === 1 ? 'opacity-100' : 'opacity-0'}`}>
+                  <Image
+                    src={getSafeImageSrc(product.images[1])}
+                    alt={`${product.name} alternate view`}
+                    fill
+                    sizes="(max-width: 640px) 100vw"
+                    className="object-cover absolute inset-0"
+                  />
+                </div>
+              )}
+            </>
           )}
         </Link>
+        
+        {/* Pagination Dots for Mobile (Only if multiple images) */}
+        {product.images[1] && (
+          <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-2 z-20 sm:hidden pointer-events-none">
+            <div className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${activeImageIndex === 0 ? 'bg-[#9C4122]' : 'bg-white/60'}`} />
+            <div className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${activeImageIndex === 1 ? 'bg-[#9C4122]' : 'bg-white/60'}`} />
+          </div>
+        )}
         
         {/* Badges */}
         <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10 pointer-events-none">
