@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 import { CategoryPageClient } from "./CategoryPageClient";
 import { api } from "../../../services/api";
 import { getCatalogPageData } from "../../../lib/getCatalogPageData";

@@ -506,7 +506,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
     .map(([k, v]) => `${k}: ${v}`)
     .join(', ');
 
-  const handleAddToCart = async () => {
+  const handleAddToCart = () => {
     if (!allVariantsSelected) {
       showToast('Please select every product option before adding to cart.', 'error');
       return;
@@ -519,7 +519,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
     cartActionLocked.current = true;
     setCartActionState('adding');
 
-    await new Promise(resolve => setTimeout(resolve, 0));
+    
 
     // Derive effective price based on selected quantity
     let effectivePrice = currentPrice;
@@ -582,10 +582,10 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
     });
     showToast(`Added ${quantity} x ${product.name} to cart.`, 'success');
     setCartActionState('added');
-    resetTimerRef.current = setTimeout(() => {
+    
       cartActionLocked.current = false;
       setCartActionState('idle');
-    }, 900);
+    
   };
 
   const handleToggleWishlist = () => {
@@ -929,7 +929,7 @@ export const ProductDetailPageClient: React.FC<ProductDetailPageClientProps> = (
                                   }`}
                                 >
                                   {t.imageUrl ? (
-                                    <ProductImage src={t.imageUrl} alt={t.label} className="w-full h-full object-contain" wrapperClassName="w-full h-full" />
+                                    <ProductImage src={t.imageUrl} alt={t.label} sizes="48px" className="w-full h-full object-contain" wrapperClassName="w-full h-full" />
                                   ) : (
                                     <span className="text-[10px] font-bold text-[#1A1A1A]/40 block p-1 text-center leading-tight">No Img</span>
                                   )}

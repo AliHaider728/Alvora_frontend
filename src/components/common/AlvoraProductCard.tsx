@@ -8,22 +8,29 @@ import { formatPrice } from '../../utils/formatters';
 import { getSafeImageSrc } from '../../utils/images';
 import { AnimatedButton } from './AnimatedButton';
 
-export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: Product, layout?: 'standard' | 'compact' }) => {
-  const { addToCart, settings, toggleWishlist, isInWishlist } = useStore();
-  const [isAdding, setIsAdding] = React.useState(false);
+export const AlvoraProductCardInner = React.memo(({ 
+  product, 
+  layout = 'standard',
+  priority = false,
+  addToCart,
+  settings,
+  toggleWishlist,
+  isWishlisted 
+}: { 
+  product: Product; 
+  layout?: 'standard' | 'compact';
+  priority?: boolean;
+  addToCart: any;
+  settings: any;
+  toggleWishlist: (id: string) => void;
+  isWishlisted: boolean;
+}) => {
   const productUrl = product.productType === 'bundle' ? '/bundles/' + product.slug : '/product/' + product.slug;
 
-  const handleAddToCart = async (e: React.MouseEvent) => {
+  const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (product.inStock && !isAdding) {
-      setIsAdding(true);
-      await new Promise(resolve => setTimeout(resolve, 0));
-      try {
-        addToCart(product, 1);
-      } finally {
-        // Very brief delay so the user registers the click before drawer opens
-        setTimeout(() => setIsAdding(false), 200);
-      }
+    if (product.inStock) {
+      addToCart(product, 1);
     }
   };
 
@@ -33,22 +40,25 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
     <div className="group relative bg-white rounded-2xl flex flex-col h-full border border-[#EDE5DC] hover:shadow-md transition-shadow duration-300">
       {/* Image Container */}
       <div className="relative aspect-square bg-[#F5EDE4] overflow-hidden block rounded-t-2xl">
-        <Link href={productUrl} className="absolute inset-0 z-0">
+        <Link href={productUrl} className="absolute inset-0 z-0" prefetch={false}>
           <Image
             src={getSafeImageSrc(product.images[0])}
             alt={product.name}
             fill
-            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw"
+            priority={priority}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className={`object-cover transition-all duration-700 ease-in-out group-hover:scale-105 ${product.images[1] ? 'group-hover:opacity-0' : ''}`}
           />
           {product.images[1] && (
-            <Image
-              src={getSafeImageSrc(product.images[1])}
-              alt={`${product.name} alternate view`}
-              fill
-              sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw"
-              className="object-cover transition-all duration-700 ease-in-out opacity-0 group-hover:opacity-100 group-hover:scale-105 absolute inset-0"
-            />
+            <div className="hidden sm:block absolute inset-0 z-0">
+              <Image
+                src={getSafeImageSrc(product.images[1])}
+                alt={`${product.name} alternate view`}
+                fill
+                sizes="(max-width: 1024px) 50vw, 33vw"
+                className="object-cover transition-all duration-700 ease-in-out opacity-0 group-hover:opacity-100 group-hover:scale-105 absolute inset-0"
+              />
+            </div>
           )}
         </Link>
         
@@ -68,11 +78,11 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
 
         {/* Top Right Action - Wishlist */}
         <button 
-          className={`absolute top-3 right-3 z-10 transition-colors drop-shadow-md ${isInWishlist(product.id) ? 'text-[#9C4122]' : 'text-white hover:text-[#9C4122]'}`}
+          className={`absolute top-3 right-3 z-10 transition-colors drop-shadow-md ${isWishlisted ? 'text-[#9C4122]' : 'text-white hover:text-[#9C4122]'}`}
           aria-label="Add to Wishlist"
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleWishlist(product.id); }}
         >
-          <Heart className="w-6 h-6" strokeWidth={1.5} fill={isInWishlist(product.id) ? 'currentColor' : 'none'} />
+          <Heart className="w-6 h-6" strokeWidth={1.5} fill={isWishlisted ? 'currentColor' : 'none'} />
         </button>
 
         {/* Bottom Right Actions - Add to Cart & View Details */}
@@ -81,9 +91,9 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
             className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-gray-700 hover:text-[#9C4122] shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed" 
             title="Add to Cart" 
             onClick={handleAddToCart}
-            disabled={!product.inStock || isAdding}
+            disabled={!product.inStock}
           >
-            {isAdding ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShoppingCart className="w-4 h-4" />}
+            <ShoppingCart className="w-4 h-4" />
           </button>
           <Link 
             href={productUrl}
@@ -142,11 +152,11 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
               </Link>
               <button 
                 onClick={needsSelection ? undefined : handleAddToCart}
-                disabled={!product.inStock || isAdding}
+                disabled={!product.inStock}
                 className={`flex-1 h-10 flex items-center justify-center border border-[#EDE5DC] rounded-xl shadow-sm transition-transform ${product.inStock ? 'bg-white text-gray-500 hover:text-[#9C4122] hover:border-[#9C4122] hover:scale-105' : 'bg-gray-100 text-gray-400 cursor-not-allowed'} disabled:opacity-75 disabled:hover:scale-100 disabled:cursor-not-allowed`}
                 title="Add to Cart"
               >
-                {isAdding ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShoppingCart className="w-4 h-4" />}
+                <ShoppingCart className="w-4 h-4" />
               </button>
             </div>
           )}
@@ -183,11 +193,11 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
             )}
             <button 
               onClick={needsSelection ? undefined : handleAddToCart}
-              disabled={(!product.inStock && !needsSelection) || isAdding}
+              disabled={(!product.inStock && !needsSelection)}
               className={`w-10 sm:w-12 shrink-0 flex items-center justify-center border border-[#EDE5DC] rounded-xl shadow-sm transition-colors ${(!product.inStock && !needsSelection) ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-500 hover:text-[#9C4122] hover:border-[#9C4122]'} disabled:opacity-75 disabled:cursor-not-allowed`}
               aria-label="Quick Add"
             >
-              {isAdding ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShoppingCart className="w-4 h-4" />}
+              <ShoppingCart className="w-4 h-4" />
             </button>
           </div>
         </div>
@@ -198,4 +208,19 @@ export const AlvoraProductCard = ({ product, layout = 'standard' }: { product: P
 
 
 
+});
+
+export const AlvoraProductCard = ({ product, layout = 'standard', priority = false }: { product: import('../../types').Product, layout?: 'standard' | 'compact', priority?: boolean }) => {
+  const { addToCart, settings, toggleWishlist, isInWishlist } = useStore();
+  return (
+    <AlvoraProductCardInner 
+      product={product} 
+      layout={layout} 
+      priority={priority} 
+      addToCart={addToCart} 
+      settings={settings} 
+      toggleWishlist={toggleWishlist} 
+      isWishlisted={isInWishlist(product.id)} 
+    />
+  );
 };

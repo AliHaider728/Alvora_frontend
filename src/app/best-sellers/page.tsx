@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import BestSellersClient from './BestSellersClient';
 import { getCatalogPageData } from '../../lib/getCatalogPageData';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: 'Best Sellers',

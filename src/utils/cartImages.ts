@@ -14,7 +14,7 @@ export function getCartImageSource(product: Product, variationId?: string) {
 }
 
 export function getCartImageProps(src: string, alt = '') {
-  return getImageProps({ src, alt, width: 80, height: 80, sizes: '80px', quality: 75, loading: 'eager', fetchPriority: 'high' }).props;
+  return getImageProps({ src, alt, width: 80, height: 80, sizes: '80px', quality: 75, loading: 'eager', fetchPriority: 'low' }).props;
 }
 
 const warmed = new Map<string, HTMLImageElement>();
@@ -22,7 +22,7 @@ export function warmCartImage(src: string) {
   if (typeof window === 'undefined' || warmed.has(src)) return;
   const props = getCartImageProps(src);
   const image = new window.Image();
-  image.fetchPriority = 'high';
+  image.fetchPriority = 'low';
   image.sizes = props.sizes || '80px';
   image.srcset = props.srcSet || '';
   image.src = props.src;

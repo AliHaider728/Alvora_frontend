@@ -2,36 +2,33 @@
 
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
+import Image, { getImageProps } from "next/image";
 import { ArrowRight, ArrowDown } from "lucide-react";
 import { AnimatedButton } from "../common/AnimatedButton";
 
 export const HeroSection: React.FC<{ featuredHref?: string }> = ({ featuredHref }) => {
+  const common = { alt: "Alvora Skincare - Healthy Skin, Naturally You", fill: true, priority: true, sizes: "100vw" };
+  const { props: desktop } = getImageProps({ ...common, src: "/images/alvora-desktop-hero.webp" });
+  const { props: mobile } = getImageProps({ ...common, src: "/images/alvora-mobile-hero.webp" });
+
   return (
     <section className="relative h-[85svh] min-h-[550px] sm:h-screen sm:min-h-[750px] max-h-[950px] w-full bg-transparent overflow-hidden sm:overflow-visible">
       
-      {/* Mobile Background Image (Scrolls with page) */}
-      <div className="absolute inset-0 z-0 sm:hidden">
-        <Image
-          src="/images/alvora-mobile-hero.webp"
-          alt="Alvora Skincare - Healthy Skin, Naturally You"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center"
-        />
-      </div>
-
-      {/* Desktop Background Image (Fixed parallax behind the page) */}
-      <div className="hidden sm:block fixed inset-0 w-screen h-screen z-0">
-        <Image
-          src="/images/alvora-desktop-hero.webp"
-          alt="Alvora Skincare - Healthy Skin, Naturally You"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-[right_80px] scale-[1.05]"
-        />
+      {/* Unified Responsive Background Image */}
+      <div className="absolute inset-0 z-0 sm:fixed sm:w-screen sm:h-screen">
+        <picture>
+          <source media="(max-width: 639px)" srcSet={mobile.srcSet} />
+          <source media="(min-width: 640px)" srcSet={desktop.srcSet} />
+          <img 
+            alt={desktop.alt}
+            src={desktop.src} 
+            srcSet={desktop.srcSet}
+            sizes={desktop.sizes}
+            fetchPriority="high"
+            decoding="sync"
+            className="w-full h-full object-cover object-center sm:object-[right_80px] sm:scale-[1.05]" 
+          />
+        </picture>
       </div>
 
       {/* Overlay to improve text contrast against dark parts of the image */}

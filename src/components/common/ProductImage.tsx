@@ -12,6 +12,7 @@ interface ProductImageProps extends Omit<React.ImgHTMLAttributes<HTMLImageElemen
   height?: number;
   crop?: string;
   priority?: boolean;
+  sizes?: string;
 }
 
 export const ProductImage: React.FC<ProductImageProps> = ({
@@ -24,6 +25,7 @@ export const ProductImage: React.FC<ProductImageProps> = ({
   height,
   crop,
   priority = false,
+  sizes = "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw",
   ...props
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -41,7 +43,7 @@ export const ProductImage: React.FC<ProductImageProps> = ({
         src={safeSrc}
         alt={alt}
         fill
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        sizes={sizes}
         priority={priority}
         onLoad={() => setIsLoaded(true)}
         className={`object-cover transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'} ${className}`}
