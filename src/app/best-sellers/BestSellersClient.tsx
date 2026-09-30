@@ -1,43 +1,11 @@
 "use client";
 
 import React from 'react';
-import { useStore } from '../../context/StoreContext';
 import { RitualAnimation } from '../../components/shop/RitualAnimation';
 import { ScrollRevealText } from '../../components/common/ScrollRevealText';
-import { AlvoraProductCard } from '../../components/common/AlvoraProductCard';
 import { Bundle, Product } from '../../types';
-import { getBundleOriginalPrice } from '../../utils/products';
 
-export default function BestSellersClient() {
-  const { bundles } = useStore();
-  
-  // Filter best seller bundles
-  const bestSellerBundles = bundles.filter(b => b.isBestseller && (b.isActive || b.status === 'published'));
-  
-  // Mapper
-  const mapBundleToProduct = (b: Bundle): Product => ({
-    id: b.id,
-    productType: 'bundle',
-    bundleData: b,
-    name: b.name,
-    slug: b.slug,
-    price: b.currentPrice || 0,
-    originalPrice: getBundleOriginalPrice(b),
-    images: b.customImage ? [b.customImage] : (b.image ? [b.image] : []),
-    inStock: true,
-    category: 'Bundles',
-    categorySlug: 'bundles',
-    sku: "BUNDLE-" + b.id,
-    rating: 5,
-    reviewCount: 0,
-    tags: b.customImage ? [`bestseller_image:${b.customImage}`] : [],
-    features: [],
-    description: b.description || '',
-    safetyInfo: '',
-    specifications: {},
-    ageGroups: [],
-    brand: 'Alvora'
-  });
+export default function BestSellersClient({ initialProducts, initialBundles }: { initialProducts: Product[]; initialBundles: Bundle[] }) {
   return (
     <div className="min-h-screen bg-[#FAF6F2]">
       {/* 3D Hero Section */}
@@ -128,7 +96,7 @@ export default function BestSellersClient() {
       </section>
 
       {/* Product Animation Section */}
-      <RitualAnimation />
+      <RitualAnimation initialProducts={initialProducts} initialBundles={initialBundles} />
       
       {/* Best Sellers Text Section */}
       <section className="bg-[#FAF6F2]">

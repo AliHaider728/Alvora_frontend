@@ -63,10 +63,10 @@ async function fetchJson<T>(endpoint: string, options?: RequestInit): Promise<T 
   try {
     lastApiError = '';
     const token = getAuthToken();
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-      ...(options?.headers as Record<string, string>)
-    };
+    const headers: Record<string, string> = { ...(options?.headers as Record<string, string>) };
+    if (options?.body != null && !(options.body instanceof FormData) && !headers['Content-Type']) {
+      headers['Content-Type'] = 'application/json';
+    }
 
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;
@@ -338,7 +338,7 @@ export const api = {
     } catch (error: any) {
       console.error("getBundles error:", error);
       lastApiError = error.message;
-      return { bundles: [] };
+      return { bundles: [], error: true };
     }
   },
   createBundle: (data: any) => fetchJson<{ success: boolean, bundleId: string }>('/bundles', { method: 'POST', body: JSON.stringify(data) }),

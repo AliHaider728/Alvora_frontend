@@ -76,7 +76,7 @@ export default function AdminEditBundleClient({ bundleId }: { bundleId: string }
           : [];
       setProducts(fetchedProducts);
 
-      const allBundles = bundlesRes.bundles || [];
+      const allBundles = bundlesRes?.bundles || [];
       const bundle = allBundles.find((b: any) => b.id === bundleId);
       if (bundle) {
         setName(bundle.name || '');

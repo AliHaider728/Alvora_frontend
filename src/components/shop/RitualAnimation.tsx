@@ -7,19 +7,22 @@ import Image from "next/image";
 import { ShoppingCart, Eye } from "lucide-react";
 import { useScroll, useSpring, motion, useTransform, useMotionTemplate } from "framer-motion";
 import { useStore } from "../../context/StoreContext";
+import { Bundle, Product } from '../../types';
 
-export function RitualAnimation() {
+export function RitualAnimation({ initialProducts = [], initialBundles = [] }: { initialProducts?: Product[]; initialBundles?: Bundle[] }) {
   const ref = React.useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
-  const { products, bundles, addToCart, setIsCartOpen } = useStore();
+  const { products, productsLoading, apiError, retryInit, bundles, bundlesLoading, bundlesError, addToCart, setIsCartOpen } = useStore();
+  const catalogProducts = productsLoading || apiError ? initialProducts : products;
+  const catalogBundles = bundlesLoading || bundlesError ? initialBundles : bundles;
 
   const finalBundle = useMemo(() => {
-    return bundles.find(b => b.isBestseller && (b.isActive || b.status === 'published')) 
-        || bundles.find(b => b.status === 'published' || b.isActive)
+    return catalogBundles.find(b => b.isBestseller && (b.isActive || b.status === 'published'))
+        || catalogBundles.find(b => b.status === 'published' || b.isActive)
         || null;
-  }, [bundles]);
+  }, [catalogBundles]);
 
   const mapBundleToProduct = (b: any): any => ({
     id: b.id,
@@ -45,9 +48,9 @@ export function RitualAnimation() {
 
   const STEPS = useMemo(() => {
     // Get visible products, prioritizing bestsellers
-    let topProducts = products.filter(p => p.isBestseller && p.isVisible !== false);
+    let topProducts = catalogProducts.filter(p => p.isBestseller && p.isVisible !== false);
     if (topProducts.length < 5) {
-      const others = products.filter(p => !p.isBestseller && p.isVisible !== false);
+      const others = catalogProducts.filter(p => !p.isBestseller && p.isVisible !== false);
       topProducts = [...topProducts, ...others];
     }
     // Take exactly up to 5 products
@@ -60,7 +63,7 @@ export function RitualAnimation() {
       slug: prod.slug,
       product: prod,
     }));
-  }, [products]);
+  }, [catalogProducts]);
 
   // Framer Motion transforms to replace state-based interpolation
   const bubbleX = useTransform(smoothProgress, [0, 1/6, 2/6, 3/6, 4/6, 5/6, 1], [-18, 18, -18, 18, -18, 0, 0]);
@@ -171,6 +174,14 @@ export function RitualAnimation() {
 
   // If no steps generated yet (loading state), attach ref to avoid hydration errors
   if (STEPS.length === 0) {
+    if (!productsLoading && apiError) {
+      return (
+        <section id="ritual" ref={ref as any} className="bg-[#FAF6F2] px-6 py-20 text-center text-[#241916]">
+          <p>Best sellers are temporarily unavailable.</p>
+          <button type="button" onClick={retryInit} className="mt-4 rounded-full border border-[#9C4122] px-5 py-2 text-sm font-semibold text-[#9C4122]">Try again</button>
+        </section>
+      );
+    }
     return (
       <>
         <section className="md:hidden bg-[#FAF6F2] py-20 px-6 min-h-[500px]" />

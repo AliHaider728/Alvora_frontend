@@ -1,4 +1,4 @@
-import { MOCK_PRODUCTS } from './products';
+import { MOCK_PRODUCTS, MOCK_PRODUCT_IMAGE } from './products';
 
 export const MOCK_BUNDLES = [
   {
@@ -6,7 +6,7 @@ export const MOCK_BUNDLES = [
     name: 'Glow Starter Kit',
     slug: 'glow-starter-kit',
     description: 'Everything you need for a radiant, glowing complexion. A perfect introduction to our brightening essentials.',
-    image: '/images/products/unbranded-serum.jpg',
+    image: MOCK_PRODUCT_IMAGE,
     discountPercent: 15,
     isActive: true,
     displayOrder: 0,
@@ -19,7 +19,7 @@ export const MOCK_BUNDLES = [
     name: 'Deep Hydration Duo',
     slug: 'deep-hydration-duo',
     description: 'Quench thirsty skin with our most powerful hydrating formulas designed to lock in moisture for 24 hours.',
-    image: '/images/products/unbranded-cream.jpg',
+    image: MOCK_PRODUCT_IMAGE,
     discountPercent: 20,
     isActive: true,
     displayOrder: 1,

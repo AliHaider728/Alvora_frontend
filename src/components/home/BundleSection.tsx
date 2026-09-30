@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -11,8 +11,8 @@ import { Star, Loader2 } from 'lucide-react';
 import { AnimatedButton } from '../common/AnimatedButton';
 
 export const BundleSection: React.FC<{ initialBundles?: Bundle[] }> = ({ initialBundles = [] }) => {
-  const { bundles, bundlesLoading, addToCart, setIsCartOpen } = useStore();
-  const catalogBundles = bundles.length ? bundles : initialBundles;
+  const { bundles, bundlesLoading, bundlesError, retryInit, addToCart, setIsCartOpen } = useStore();
+  const catalogBundles = bundlesLoading || bundlesError ? initialBundles : bundles;
   const catalogLoading = bundlesLoading && !catalogBundles.length;
   const shouldReduceMotion = useReducedMotion();
   const variants = shouldReduceMotion ? undefined : {
@@ -20,12 +20,16 @@ export const BundleSection: React.FC<{ initialBundles?: Bundle[] }> = ({ initial
     visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' as const } }
   };
 
-  const [mounted, setMounted] = useState(false);
   const [loadingBundleId, setLoadingBundleId] = useState<string | null>(null);
-  useEffect(() => setMounted(true), []);
 
-  if (!mounted) return null;
-    if (!catalogLoading && catalogBundles.length === 0) return null;
+  if (!catalogLoading && catalogBundles.length === 0) {
+    return bundlesError ? (
+      <section className="bg-[#FAF6F2] px-6 py-16 text-center text-[#241916]">
+        <p>Bundles are temporarily unavailable.</p>
+        <button type="button" onClick={retryInit} className="mt-4 rounded-full border border-[#9C4122] px-5 py-2 text-sm font-semibold text-[#9C4122]">Try again</button>
+      </section>
+    ) : null;
+  }
 
   const handleAddBundle = async (bundle: Bundle) => {
     if (loadingBundleId) return;
@@ -105,7 +109,6 @@ export const BundleSection: React.FC<{ initialBundles?: Bundle[] }> = ({ initial
       </div>
 
       {/* Alternating Split Layout for Bundles */}
-            {/* Alternating Split Layout for Bundles */}
       {catalogLoading ? (
         <div className="flex flex-col md:flex-row w-full min-h-[500px] animate-pulse">
           <div className="w-full md:w-1/2 bg-[#E7D9D0] aspect-square md:aspect-square lg:aspect-auto" />

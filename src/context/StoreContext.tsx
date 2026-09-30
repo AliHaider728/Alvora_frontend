@@ -187,6 +187,7 @@ export interface StoreContextType {
   retryInit: () => void;
   bundles: any[];
   bundlesLoading: boolean;
+  bundlesError: boolean;
   categories: Category[];
   orders: Order[];
   customers: Customer[];
@@ -258,6 +259,7 @@ const StoreContext = createContext<StoreContextType | undefined>(undefined);
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [bundles, setBundles] = useState<any[]>([]);
   const [bundlesLoading, setBundlesLoading] = useState(true);
+  const [bundlesError, setBundlesError] = useState(false);
   const { showToast } = useToast();
 
   // LocalStorage state initialization
@@ -267,7 +269,10 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const retryInit = useCallback(() => {
     setProductsLoading(true);
     setApiError(null);
+    setBundlesLoading(true);
+    setBundlesError(false);
     window.dispatchEvent(new Event('pb-retry-init'));
+    window.dispatchEvent(new Event('pb-retry-bundles'));
   }, []);
 
   const [categories, setCategories] = useState<Category[]>(() => USE_MOCK_DATA ? MOCK_CATEGORIES.map(normalizeCategory) : INITIAL_CATEGORIES.map(normalizeCategory));
@@ -357,13 +362,24 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const fetchBundles = async () => {
       try {
         const res = await api.getBundles();
-        if (res && res.bundles) setBundles(res.bundles);
+        if (res?.error) {
+          setBundlesError(true);
+        } else if (Array.isArray(res?.bundles)) {
+          setBundles(res.bundles);
+          setBundlesError(false);
+        }
       } catch (err) {
+        setBundlesError(true);
         console.error('Failed to fetch bundles:', err);
       }
     };
-    setBundlesLoading(true);
-    fetchBundles().finally(() => setBundlesLoading(false));
+    const retryBundles = () => {
+      setBundlesLoading(true);
+      void fetchBundles().finally(() => setBundlesLoading(false));
+    };
+    retryBundles();
+    window.addEventListener('pb-retry-bundles', retryBundles);
+    return () => window.removeEventListener('pb-retry-bundles', retryBundles);
   }, []);
 
   const refreshProducts = useCallback(async () => {
@@ -1004,6 +1020,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const contextValue = useMemo(() => ({
         bundles,
 bundlesLoading,
+        bundlesError,
         products: isHydrated ? products : [],
         productsLoading,
         apiError,
@@ -1059,7 +1076,7 @@ bundlesLoading,
         deleteReview,
         refreshAdminReviews
   }), [
-    bundles, bundlesLoading, products, productsLoading, apiError, retryInit, categories, orders, customers, coupons, reviews, settings,
+    bundles, bundlesLoading, bundlesError, products, productsLoading, apiError, retryInit, categories, orders, customers, coupons, reviews, settings,
     cart, isCartOpen, isHydrated, addToCart, addRoutineToCart, removeFromCart, updateCartQuantity, clearCart,
     cartTotalItems, cartSubtotal, appliedCoupon, applyCoupon, removeCoupon, couponDiscountAmount,
     routineDiscountAmount, routineDiscount, saveRoutineDiscountSettings,

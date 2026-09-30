@@ -43,9 +43,9 @@ export const CategoryPageClient: React.FC<{
       router.push(pathname + query, { scroll: false });
     }
   };
-  const { products, bundles, categories, productsLoading, apiError, retryInit } = useStore();
-  const catalogProducts = productsLoading || apiError ? initialProducts : products.length ? products : initialProducts;
-  const catalogBundles = bundles.length ? bundles : initialBundles;
+  const { products, bundles, categories, productsLoading, bundlesLoading, bundlesError, apiError, retryInit } = useStore();
+  const catalogProducts = productsLoading || apiError ? initialProducts : products;
+  const catalogBundles = bundlesLoading || bundlesError ? initialBundles : bundles;
   const catalogCategories = categories.length ? categories : initialCategories;
 
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);

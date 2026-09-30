@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
       revalidatePath(path);
     }
     if (tag) {
-      revalidateTag(tag);
+      revalidateTag(tag, 'max');
     }
     return NextResponse.json({ revalidated: true, now: Date.now() });
   } catch (err) {
