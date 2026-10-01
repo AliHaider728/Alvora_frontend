@@ -326,7 +326,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   useEffect(() => {
     setIsHydrated(true);
-    let saved = null; try { saved = localStorage.getItem('alvora_settings'); } catch {}
+    let saved: string | null = null; try { saved = localStorage.getItem('alvora_settings'); } catch {}
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
