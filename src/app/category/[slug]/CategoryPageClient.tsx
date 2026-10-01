@@ -22,15 +22,6 @@ const parseMultiValueParam = (value: string | null) =>
 const sameSelections = (left: string[], right: string[]) =>
   left.length === right.length && left.every((value, index) => value === right[index]);
 
-const HARDCODED_CATEGORIES = [
-  { id: 'cat-acne', name: 'Acne & Breakouts', slug: 'acne-breakouts', description: '', itemCount: 2, products: ['Alvora Clear Acne Face Wash', 'Alvora Clear Acne Serum'] },
-  { id: 'cat-oily', name: 'Oily Skin', slug: 'oily-skin', description: '', itemCount: 4, products: ['Alvora Clear Acne Face Wash', 'Alvora Clear Acne Serum', 'Alvora Glow Beads Face Wash', 'Alvora TintShield Sunscreen SPF 60 PA++++'] },
-  { id: 'cat-dry', name: 'Dry & Dull Skin', slug: 'dry-dull-skin', description: '', itemCount: 3, products: ['Alvora Glow Beads Face Wash', 'Alvora Radiance Brightening Cream', 'Alvora TintShield Sunscreen SPF 60 PA++++'] },
-  { id: 'cat-brightening', name: 'Brightening & Glow', slug: 'brightening-glow', description: '', itemCount: 2, products: ['Alvora Glow Beads Face Wash', 'Alvora Radiance Brightening Cream'] },
-  { id: 'cat-sun', name: 'Sun Protection', slug: 'sun-protection', description: '', itemCount: 1, products: ['Alvora TintShield Sunscreen SPF 60 PA++++'] },
-  { id: 'cat-normal', name: 'Normal & Combination Skin', slug: 'normal-combination', description: '', itemCount: 3, products: ['Alvora Glow Beads Face Wash', 'Alvora Radiance Brightening Cream', 'Alvora TintShield Sunscreen SPF 60 PA++++'] }
-];
-
 export const CategoryPageClient: React.FC<{
   initialProducts?: import('../../../types').Product[];
   initialBundles?: import('../../../types').Bundle[];
@@ -53,7 +44,7 @@ export const CategoryPageClient: React.FC<{
   const { products, bundles, categories, productsLoading, bundlesLoading, bundlesError, apiError, retryInit } = useStore();
   const catalogProducts = productsLoading || apiError ? initialProducts : products;
   const catalogBundles = bundlesLoading || bundlesError ? initialBundles : bundles;
-  const catalogCategories = HARDCODED_CATEGORIES;
+  const catalogCategories = categories.length ? categories : initialCategories;
 
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   
@@ -150,15 +141,11 @@ export const CategoryPageClient: React.FC<{
   const filteredProducts = useMemo(() => {
     return allItems.filter(p => {
       if (!isProductVisibleOnStorefront(p)) return false;
-              // Category match
-        if (selectedCategories.length > 0) {
-          const validProductNames = selectedCategories.flatMap(slug => 
-            HARDCODED_CATEGORIES.find(c => c.slug === slug)?.products || []
-          );
-          if (!validProductNames.includes(p.name)) {
-            return false;
-          }
-        }
+      // Category match
+      const productCategorySlugs = p.categorySlugs?.length ? p.categorySlugs : p.categorySlug ? [p.categorySlug] : [];
+      if (selectedCategories.length > 0 && !selectedCategories.some(slug => productCategorySlugs.includes(slug))) {
+        return false;
+      }
       // Price filter
       if (p.price > priceRange) {
         return false;
