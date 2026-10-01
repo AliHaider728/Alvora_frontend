@@ -207,6 +207,8 @@ export const CategoryPageClient: React.FC<{
               src="/images/shop-banner-new.jpg" 
               alt="Skincare Collection" 
               fill 
+              sizes="(max-width: 767px) 100vw, 80vw"
+              fetchPriority="high"
               className="object-cover object-right" 
               priority 
             />

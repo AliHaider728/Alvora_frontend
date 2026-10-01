@@ -16,18 +16,18 @@ export const API_BASE_URL = firstApiUrl.startsWith('http') ? firstApiUrl : `http
 // Helper for Token Management
 export const getAuthToken = (): string | null => {
   if (typeof window === 'undefined') return null;
-  return localStorage.getItem('pb_admin_token');
+  try { return localStorage.getItem('pb_admin_token'); } catch { return null; }
 };
 
 export const setAuthToken = (token: string): void => {
   if (typeof window === 'undefined') return;
-  localStorage.setItem('pb_admin_token', token);
+  try { localStorage.setItem('pb_admin_token', token); } catch {}
   window.dispatchEvent(new Event('pb-auth-changed'));
 };
 
 export const removeAuthToken = (): void => {
   if (typeof window === 'undefined') return;
-  localStorage.removeItem('pb_admin_token');
+  try { localStorage.removeItem('pb_admin_token'); } catch {}
   window.dispatchEvent(new Event('pb-auth-changed'));
 };
 

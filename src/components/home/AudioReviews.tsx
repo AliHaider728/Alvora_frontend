@@ -59,9 +59,12 @@ export const AudioReviews: React.FC = () => {
 
   if (loading || reviews.length === 0) return null;
 
-  const minItemsToFill = 15;
+  // One complete set is taller than the visible rail. Duplicating that set
+  // once keeps the marquee seamless without rendering dozens of hidden pills.
+  const minItemsToFill = 4;
   const repeatCount = Math.ceil(minItemsToFill / Math.max(reviews.length, 1));
   const baseBlock = Array(repeatCount).fill(reviews).flat();
+  const scrollDuration = `${Math.max(1.5, baseBlock.length * 0.375)}s`;
 
   const getColumnItems = (offset: number) => {
     const rotated = [...baseBlock.slice(offset), ...baseBlock.slice(0, offset)];
@@ -162,25 +165,25 @@ export const AudioReviews: React.FC = () => {
 
         <div className="relative h-[220px] md:h-[240px] w-full overflow-hidden flex gap-4 lg:gap-8 justify-center mask-vertical-fades cursor-default px-4">
           
-          <div className={`flex-1 flex flex-col gap-6 animate-scroll-down ${((playingId && playingCol === 1) || (isHovered && !playingId)) ? "is-paused" : ""}`}>
+          <div style={{ animationDuration: scrollDuration }} className={`flex-1 flex flex-col gap-6 animate-scroll-down ${((playingId && playingCol === 1) || (isHovered && !playingId)) ? "is-paused" : ""}`}>
             {col1.map((r, i) => (
               renderPill({ r, isPlaying: playingId === r.id && playingCol === 1, uniqueKey: `c1-${r.id}-${i}`, colIndex: 1 })
             ))}
           </div>
 
-          <div className={`flex-1 hidden sm:flex flex-col gap-6 animate-scroll-up ${((playingId && playingCol === 2) || (isHovered && !playingId)) ? "is-paused" : ""}`}>
+          <div style={{ animationDuration: scrollDuration }} className={`flex-1 hidden sm:flex flex-col gap-6 animate-scroll-up ${((playingId && playingCol === 2) || (isHovered && !playingId)) ? "is-paused" : ""}`}>
             {col2.map((r, i) => (
               renderPill({ r, isPlaying: playingId === r.id && playingCol === 2, uniqueKey: `c2-${r.id}-${i}`, colIndex: 2 })
             ))}
           </div>
 
-          <div className={`flex-1 hidden md:flex flex-col gap-6 animate-scroll-down ${((playingId && playingCol === 3) || (isHovered && !playingId)) ? "is-paused" : ""}`}>
+          <div style={{ animationDuration: scrollDuration }} className={`flex-1 hidden md:flex flex-col gap-6 animate-scroll-down ${((playingId && playingCol === 3) || (isHovered && !playingId)) ? "is-paused" : ""}`}>
             {col3.map((r, i) => (
               renderPill({ r, isPlaying: playingId === r.id && playingCol === 3, uniqueKey: `c3-${r.id}-${i}`, colIndex: 3 })
             ))}
           </div>
 
-          <div className={`flex-1 hidden lg:flex flex-col gap-6 animate-scroll-up ${((playingId && playingCol === 4) || (isHovered && !playingId)) ? "is-paused" : ""}`}>
+          <div style={{ animationDuration: scrollDuration }} className={`flex-1 hidden lg:flex flex-col gap-6 animate-scroll-up ${((playingId && playingCol === 4) || (isHovered && !playingId)) ? "is-paused" : ""}`}>
             {col4.map((r, i) => (
               renderPill({ r, isPlaying: playingId === r.id && playingCol === 4, uniqueKey: `c4-${r.id}-${i}`, colIndex: 4 })
             ))}

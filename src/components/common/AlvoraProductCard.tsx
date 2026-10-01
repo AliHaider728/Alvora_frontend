@@ -92,7 +92,7 @@ export const AlvoraProductCardInner = React.memo(({
             alt={product.name}
             fill
             priority={priority}
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            sizes={layout === 'compact' ? '(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 25vw' : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'}
             className={`object-cover transition-all duration-700 ease-in-out sm:group-hover:scale-105 
               ${product.images[1] ? 'sm:group-hover:opacity-0' : ''} 
               ${activeImageIndex === 1 ? 'opacity-0 sm:opacity-100' : 'opacity-100'}`}
@@ -105,7 +105,7 @@ export const AlvoraProductCardInner = React.memo(({
                   src={getSafeImageSrc(product.images[1])}
                   alt={`${product.name} alternate view`}
                   fill
-                  sizes="(max-width: 1024px) 50vw, 33vw"
+                  sizes={layout === 'compact' ? '(max-width: 1024px) 50vw, 25vw' : '(max-width: 1024px) 50vw, 33vw'}
                   className="object-cover transition-all duration-700 ease-in-out opacity-0 group-hover:opacity-100 group-hover:scale-105 absolute inset-0"
                 />
               </div>
@@ -117,7 +117,7 @@ export const AlvoraProductCardInner = React.memo(({
                     src={getSafeImageSrc(product.images[1])}
                     alt={`${product.name} alternate view`}
                     fill
-                    sizes="(max-width: 640px) 100vw"
+                    sizes={layout === 'compact' ? '(max-width: 640px) 50vw' : '(max-width: 640px) 100vw'}
                     className="object-cover absolute inset-0"
                   />
                 </div>

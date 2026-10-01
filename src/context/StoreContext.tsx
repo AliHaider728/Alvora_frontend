@@ -326,20 +326,20 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   useEffect(() => {
     setIsHydrated(true);
-    const saved = localStorage.getItem('alvora_settings');
+    let saved = null; try { saved = localStorage.getItem('alvora_settings'); } catch {}
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
         const STALE_MARKERS = ['Gulberg', 'Lahore', 'sales@alvora.pk', '+92 300', '923001234567', '+327', 'Shafique Center, Gujranwala, Pakistan'];
         const settingsStr = JSON.stringify(parsed);
         if (STALE_MARKERS.some(m => settingsStr.includes(m))) {
-          localStorage.removeItem('alvora_settings');
+          try { localStorage.removeItem('alvora_settings'); } catch {}
         } else {
           if (parsed.freeShippingThreshold === 50) parsed.freeShippingThreshold = 5000;
           setSettings(normalizeStoreSettings(parsed));
         }
       } catch {
-        localStorage.removeItem('alvora_settings');
+        try { localStorage.removeItem('alvora_settings'); } catch {}
       }
     }
   }, []);
@@ -485,36 +485,36 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   // Sync to localStorage
   useEffect(() => {
-    (typeof window !== 'undefined' ? localStorage.setItem.bind(localStorage) : () => {})('alvora_products', JSON.stringify(products));
+    ((key, value) => { try { if (typeof window !== 'undefined') localStorage.setItem(key, value); } catch {} })('alvora_products', JSON.stringify(products));
   }, [products]);
 
   useEffect(() => {
-    (typeof window !== 'undefined' ? localStorage.setItem.bind(localStorage) : () => {})('alvora_categories', JSON.stringify(categories));
+    ((key, value) => { try { if (typeof window !== 'undefined') localStorage.setItem(key, value); } catch {} })('alvora_categories', JSON.stringify(categories));
   }, [categories]);
 
   useEffect(() => {
-    (typeof window !== 'undefined' ? localStorage.setItem.bind(localStorage) : () => {})('alvora_orders', JSON.stringify(orders));
+    ((key, value) => { try { if (typeof window !== 'undefined') localStorage.setItem(key, value); } catch {} })('alvora_orders', JSON.stringify(orders));
   }, [orders]);
 
   useEffect(() => {
-    (typeof window !== 'undefined' ? localStorage.setItem.bind(localStorage) : () => {})('alvora_customers', JSON.stringify(customers));
+    ((key, value) => { try { if (typeof window !== 'undefined') localStorage.setItem(key, value); } catch {} })('alvora_customers', JSON.stringify(customers));
   }, [customers]);
 
   useEffect(() => {
-    (typeof window !== 'undefined' ? localStorage.setItem.bind(localStorage) : () => {})('alvora_coupons', JSON.stringify(coupons));
+    ((key, value) => { try { if (typeof window !== 'undefined') localStorage.setItem(key, value); } catch {} })('alvora_coupons', JSON.stringify(coupons));
   }, [coupons]);
 
   useEffect(() => {
-    (typeof window !== 'undefined' ? localStorage.setItem.bind(localStorage) : () => {})('alvora_reviews', JSON.stringify(reviews));
+    ((key, value) => { try { if (typeof window !== 'undefined') localStorage.setItem(key, value); } catch {} })('alvora_reviews', JSON.stringify(reviews));
   }, [reviews]);
 
   useEffect(() => {
-    (typeof window !== 'undefined' ? localStorage.setItem.bind(localStorage) : () => {})('alvora_settings', JSON.stringify(settings));
+    ((key, value) => { try { if (typeof window !== 'undefined') localStorage.setItem(key, value); } catch {} })('alvora_settings', JSON.stringify(settings));
   }, [settings]);
 
   useEffect(() => {
     if (isCartHydrated) {
-      (typeof window !== 'undefined' ? localStorage.setItem.bind(localStorage) : () => {})('alvora_cart', JSON.stringify(cart));
+      ((key, value) => { try { if (typeof window !== 'undefined') localStorage.setItem(key, value); } catch {} })('alvora_cart', JSON.stringify(cart));
     }
   }, [cart, isCartHydrated]);
 
@@ -532,7 +532,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, []);
 
   useEffect(() => {
-    (typeof window !== 'undefined' ? localStorage.setItem.bind(localStorage) : () => {})('alvora_wishlist', JSON.stringify(wishlist));
+    ((key, value) => { try { if (typeof window !== 'undefined') localStorage.setItem(key, value); } catch {} })('alvora_wishlist', JSON.stringify(wishlist));
   }, [wishlist]);
 
   // Prune wishlist so it only ever reflects REAL, currently-existing products.
