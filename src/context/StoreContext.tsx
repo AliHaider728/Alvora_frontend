@@ -235,7 +235,7 @@ export interface StoreContextType {
   updateOrderStatus: (orderId: string, status: Order['status']) => Promise<any | null>;
   updateOrderTracking: (orderId: string, trackingNumber: string) => Promise<Order | null>;
   deleteOrder: (orderId: string) => Promise<boolean>;
-  placeOrder: (orderData: Omit<Order, 'id' | 'date'>) => Promise<Order | null>;
+  placeOrder: (orderData: Omit<Order, 'id' | 'date'>, onError?: (message: string) => void) => Promise<Order | null>;
 
   addCoupon: (couponData: Omit<Coupon, 'id' | 'usedCount'>) => Promise<Coupon | null>;
   updateCoupon: (id: string, couponData: Partial<Coupon>) => Promise<Coupon | null>;
@@ -866,14 +866,14 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return true;
   }, []);
 
-  const placeOrder = useCallback(async (orderData: Omit<Order, 'id' | 'date'>) => {
+  const placeOrder = useCallback(async (orderData: Omit<Order, 'id' | 'date'>, onError?: (message: string) => void) => {
     const response = await api.createOrder({
       ...orderData,
       appliedCoupon: appliedCoupon ? { code: appliedCoupon.code } : null,
       shippingFee: orderData.shipping,
       deliveryCharge: orderData.shipping,
       discountAmount: orderData.discount
-    });
+    }, onError);
     if (!response) return null;
 
     const savedOrder = response.order ? response.order : response;

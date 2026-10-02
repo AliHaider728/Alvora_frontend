@@ -59,7 +59,7 @@ const safeApiError = (status: number, backendMessage?: string) => {
   return status >= 500 ? 'Temporary service problem. Please try again.' : safeBackend || 'Request failed.';
 };
 
-async function fetchJson<T>(endpoint: string, options?: RequestInit): Promise<T | null> {
+async function fetchJson<T>(endpoint: string, options?: RequestInit, onError?: (message: string) => void): Promise<T | null> {
   try {
     lastApiError = '';
     const token = getAuthToken();
@@ -87,6 +87,7 @@ async function fetchJson<T>(endpoint: string, options?: RequestInit): Promise<T 
     return await res.json();
   } catch (err: any) {
     lastApiError = err.message || 'Request failed';
+    onError?.(lastApiError);
     console.error(`[Backend API Error] fetchJson failed for ${endpoint}:`, err);
     return null;
   }
@@ -147,7 +148,7 @@ export const api = {
 
   // Orders
   getOrders: (email?: string) => fetchJson<any[]>(`/orders${email ? `?email=${encodeURIComponent(email)}` : ''}`),
-  createOrder: (orderData: any) => fetchJson<any>('/orders', { method: 'POST', body: JSON.stringify(orderData) }),
+  createOrder: (orderData: any, onError?: (message: string) => void) => fetchJson<any>('/orders', { method: 'POST', body: JSON.stringify(orderData) }, onError),
   cancelOrder: (orderId: string) => fetchJson<any>(`/orders/${orderId}/cancel`, { method: 'POST' }),
   updateOrderStatus: (orderId: string, status: string) => fetchJson<any>(`/orders/${orderId}/status`, { method: 'PUT', body: JSON.stringify({ status }) }),
   updateOrderTracking: (orderId: string, trackingNumber: string) => fetchJson<any>(`/orders/${orderId}/tracking`, { method: 'PUT', body: JSON.stringify({ trackingNumber }) }),

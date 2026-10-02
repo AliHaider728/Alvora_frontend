@@ -57,14 +57,15 @@ export const CheckoutPageClient: React.FC<{ receiptId?: string }> = ({ receiptId
   const successHeadingRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
-    const existing = sessionStorage.getItem('pb_checkout_request_id');
+    let existing: string | null = null;
+    try { existing = sessionStorage.getItem('pb_checkout_request_id'); } catch {}
     if (existing) {
       setCheckoutRequestId(existing);
     } else {
-      const generated = typeof crypto.randomUUID === 'function'
-        ? crypto.randomUUID()
+      const generated = typeof globalThis.crypto?.randomUUID === 'function'
+        ? globalThis.crypto.randomUUID()
         : `pb_${Date.now()}_${Math.random().toString(36).slice(2)}`;
-      sessionStorage.setItem('pb_checkout_request_id', generated);
+      try { sessionStorage.setItem('pb_checkout_request_id', generated); } catch {}
       setCheckoutRequestId(generated);
     }
   }, []);
@@ -257,6 +258,7 @@ export const CheckoutPageClient: React.FC<{ receiptId?: string }> = ({ receiptId
     
     trackTikTokAddPaymentInfo();
 
+    let orderError = '';
     const created = await placeOrder({
       customerName: fullName.trim(),
       email: email.trim(),
@@ -322,11 +324,14 @@ export const CheckoutPageClient: React.FC<{ receiptId?: string }> = ({ receiptId
       paymentMethod: 'Cash on Delivery (COD)',
       trackingNumber: `PB-${Math.floor(10000000 + Math.random() * 90000000)}`,
       checkoutRequestId
-    });
+    }, error => { orderError = error; });
 
     setIsPlacingOrder(false);
     if (!created) {
-      showToast('The order could not be placed. Please recheck stock and try again.', 'error');
+      const message = /failed to fetch|networkerror|load failed|aborterror|request failed after/i.test(orderError)
+        ? 'Connection problem. Check your internet and try placing the order again.'
+        : orderError || 'The order could not be placed. Please try again.';
+      showToast(message, 'error');
       return;
     }
 
@@ -404,7 +409,7 @@ export const CheckoutPageClient: React.FC<{ receiptId?: string }> = ({ receiptId
       }
     }
 
-    ((typeof window !== "undefined") ? sessionStorage : null)?.removeItem('pb_checkout_request_id');
+    try { sessionStorage.removeItem('pb_checkout_request_id'); } catch {}
     const receipt = toReceipt(created);
     try {
       sessionStorage.setItem(receiptStorageKey, JSON.stringify(receipt));
