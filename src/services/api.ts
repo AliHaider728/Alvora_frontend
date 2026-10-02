@@ -75,7 +75,7 @@ async function fetchJson<T>(endpoint: string, options?: RequestInit, onError?: (
     const res = await fetchWithRetry(`${API_BASE_URL}${endpoint}`, {
       ...options,
       cache: options?.cache || 'no-store',
-      credentials: 'include',
+      credentials: endpoint.startsWith('/orders') && options?.method === 'POST' ? 'omit' : 'include',
       headers
     });
 
