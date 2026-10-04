@@ -29,6 +29,15 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
 
+    async rewrites() {
+    return [
+      {
+        source: '/backend-api/:path*',
+        destination: 'https://admin.alvora.pk/api/:path*',
+      },
+    ];
+  },
+
   webpack(config) {
     config.module.rules.push({
       test: /\.(mp4|webm)$/,

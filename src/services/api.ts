@@ -72,7 +72,9 @@ async function fetchJson<T>(endpoint: string, options?: RequestInit, onError?: (
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const res = await fetchWithRetry(`${API_BASE_URL}${endpoint}`, {
+    const isClient = typeof window !== "undefined";
+    const requestUrl = isClient && endpoint.startsWith("/orders") && options?.method === "POST" ? `/backend-api${endpoint}` : `${API_BASE_URL}${endpoint}`;
+    const res = await fetchWithRetry(requestUrl, {
       ...options,
       cache: options?.cache || 'no-store',
       credentials: endpoint.startsWith('/orders') && options?.method === 'POST' ? 'omit' : 'include',
