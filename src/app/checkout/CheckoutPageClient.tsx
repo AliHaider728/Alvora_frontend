@@ -505,7 +505,7 @@ export const CheckoutPageClient: React.FC<{ receiptId?: string }> = ({ receiptId
                 Thank You for Shopping at Alvora Skincare!
               </h1>
               <p className="text-sm leading-relaxed text-[#1A1A1A]/70 mt-2">
-                {!completedOrder.email ? <>Your order is safely recorded. Our team will contact you before dispatch.</> : <>We've received your order and sent a confirmation receipt to <strong>{completedOrder.email}</strong>.</>}
+                {!completedOrder.email ? <>Your order is safely recorded. Our team will contact you before dispatch.</> : <>Order confirmed. A confirmation email has been sent to <strong>{completedOrder.email}</strong>.</>}
               </p>
             </div>
 
