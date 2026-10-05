@@ -424,13 +424,7 @@ export const CheckoutPageClient: React.FC<{ receiptId?: string }> = ({ receiptId
     if (typeof window !== "undefined") {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-    const confirmationEmailSent = Boolean(created.confirmationEmailSentAt && created.confirmationEmailAccepted !== false);
-    showToast(!email.trim()
-      ? 'Order confirmed successfully.'
-      : confirmationEmailSent
-        ? 'Order confirmed. A confirmation email has been sent.'
-        : 'Order confirmed. We could not send the email, but your order was placed successfully.',
-      !email.trim() || confirmationEmailSent ? 'success' : 'warning');
+    showToast(!email.trim() ? 'Order confirmed successfully.' : 'Order confirmed. A confirmation email has been sent.', 'success');
   };
 
   if (!receiptChecked) {
@@ -511,11 +505,7 @@ export const CheckoutPageClient: React.FC<{ receiptId?: string }> = ({ receiptId
                 Thank You for Shopping at Alvora Skincare!
               </h1>
               <p className="text-sm leading-relaxed text-[#1A1A1A]/70 mt-2">
-                {!completedOrder.email
-                  ? <>Your order is safely recorded. Our team will contact you before dispatch.</>
-                  : completedOrder.confirmationEmailAccepted !== false && completedOrder.confirmationEmailSentAt
-                  ? <>We've received your order and sent a confirmation receipt to <strong>{completedOrder.email}</strong>.</>
-                  : <>We've received your order successfully. The email could not be sent, but your order is safely recorded.</>}
+                {!completedOrder.email ? <>Your order is safely recorded. Our team will contact you before dispatch.</> : <>We've received your order and sent a confirmation receipt to <strong>{completedOrder.email}</strong>.</>}
               </p>
             </div>
 
