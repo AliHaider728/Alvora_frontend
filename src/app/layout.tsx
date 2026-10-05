@@ -52,11 +52,11 @@ import { GA_TRACKING_ID } from '../lib/gtag';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${poppins.variable}`} data-scroll-behavior="smooth">
+    <html lang="en" className={`${poppins.variable}`} data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://admin.alvora.pk" crossOrigin="anonymous" />
       </head>
-      <body
+      <body suppressHydrationWarning 
         style={{
           background: 'var(--alvora-ivory)',
         }}
