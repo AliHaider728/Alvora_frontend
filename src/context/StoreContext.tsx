@@ -12,14 +12,7 @@ import {
   CartItem,
   Review
 } from '../types';
-import {
-  INITIAL_SETTINGS,
-  INITIAL_CATEGORIES,
-  INITIAL_REVIEWS,
-  INITIAL_ORDERS,
-  INITIAL_CUSTOMERS,
-  INITIAL_COUPONS
-} from '../data/mockData';
+import { INITIAL_SETTINGS, INITIAL_CATEGORIES } from '../data/mockData';
 import { USE_MOCK_DATA, MOCK_PRODUCTS, MOCK_CATEGORIES, MOCK_SETTINGS } from '../data/mock';
 import { api, getAuthToken, setAuthToken, getLastApiError, isSuperAdmin } from '../services/api';
 import { formatPrice } from '../utils/formatters';
@@ -79,14 +72,37 @@ const consolidateCartItems = (items: unknown, routineSettings?: RoutineDiscountS
   return [...result.filter(item => !legacy.includes(item)), group];
 };
 
-const readStoredCart = (): CartItem[] => {
+const readStoredCart = (routineSettings?: RoutineDiscountSettings): CartItem[] => {
   try {
-    const saved = (typeof window !== 'undefined' ? localStorage.getItem.bind(localStorage) : () => null)('alvora_cart');
-    const settings = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('alvora_settings') || '{}') : {};
-    return saved ? consolidateCartItems(JSON.parse(saved), settings.routineDiscount) : [];
+    const saved = localStorage.getItem('alvora_cart');
+    return saved ? consolidateCartItems(JSON.parse(saved), routineSettings) : [];
   } catch {
     return [];
   }
+};
+
+// Pure helper (no component state) - kept at module scope so it is not recreated on every render.
+const getBasePrice = (item: CartItem): number => {
+  let price = item.product.price;
+  if (item.product.productType === 'variable' && item.variationId) {
+     const variation = item.product.variations?.find(v => String(v.id) === String(item.variationId));
+     if (variation) price = variation.salePrice !== undefined && variation.salePrice !== null ? variation.salePrice : variation.regularPrice;
+  } else if (item.selectedVariant && item.product.variants) {
+     // Legacy
+     const selections = new Map(
+       item.selectedVariant.split(',').map(part => {
+         const separator = part.indexOf(':');
+         return separator === -1 ? ['', part.trim()] : [part.slice(0, separator).trim(), part.slice(separator + 1).trim()];
+       })
+     );
+     const variantOffset = item.product.variants.reduce((sum, group) => {
+       const optionName = selections.get(group.name);
+       const option = group.options?.find(opt => opt.name === optionName);
+       return sum + Number(option?.priceOffset || 0);
+     }, 0);
+     price += variantOffset;
+  }
+  return price;
 };
 
 const normalizeProduct = (product: Partial<Product> & MongoRecord): Product => {
@@ -256,15 +272,30 @@ export interface StoreContextType {
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
 
-export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [bundles, setBundles] = useState<any[]>([]);
-  const [bundlesLoading, setBundlesLoading] = useState(true);
+export interface StoreProviderProps {
+  children: React.ReactNode;
+  /**
+   * Optional server-fetched data (pass these from a server component such as app/layout.tsx).
+   * When provided, the HTML is rendered with real data and the first client-side fetch is skipped.
+   */
+  initialProducts?: any[];
+  initialCategories?: any[];
+  initialSettings?: any;
+  initialBundles?: any[];
+}
+
+export const StoreProvider: React.FC<StoreProviderProps> = ({ children, initialProducts, initialCategories, initialSettings, initialBundles }) => {
+  const hasInitialCatalog = Boolean(initialProducts && initialCategories);
+  const [bundles, setBundles] = useState<any[]>(() => initialBundles ?? []);
+  const [bundlesLoading, setBundlesLoading] = useState(!initialBundles);
   const [bundlesError, setBundlesError] = useState(false);
   const { showToast } = useToast();
 
   // LocalStorage state initialization
-  const [products, setProducts] = useState<Product[]>(() => USE_MOCK_DATA ? MOCK_PRODUCTS.map(normalizeProduct) : []);
-  const [productsLoading, setProductsLoading] = useState(true);
+  const [products, setProducts] = useState<Product[]>(() =>
+    USE_MOCK_DATA ? MOCK_PRODUCTS.map(normalizeProduct) : (initialProducts ? initialProducts.map(normalizeProduct) : [])
+  );
+  const [productsLoading, setProductsLoading] = useState(!hasInitialCatalog);
   const [apiError, setApiError] = useState<string | null>(null);
   const retryInit = useCallback(() => {
     setProductsLoading(true);
@@ -275,84 +306,56 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     window.dispatchEvent(new Event('pb-retry-bundles'));
   }, []);
 
-  const [categories, setCategories] = useState<Category[]>(() => USE_MOCK_DATA ? MOCK_CATEGORIES.map(normalizeCategory) : INITIAL_CATEGORIES.map(normalizeCategory));
+  const [categories, setCategories] = useState<Category[]>(() =>
+    USE_MOCK_DATA
+      ? MOCK_CATEGORIES.map(normalizeCategory)
+      : (initialCategories ? initialCategories.map(normalizeCategory) : INITIAL_CATEGORIES.map(normalizeCategory))
+  );
 
-  const [orders, setOrders] = useState<Order[]>(() => INITIAL_ORDERS.map(normalizeOrder));
+  // Admin-only data starts empty (no mock orders/customers/coupons/reviews are shipped to or shown to visitors).
+  // It is fetched only when an admin session exists.
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [coupons, setCoupons] = useState<Coupon[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
 
-  const [customers, setCustomers] = useState<Customer[]>(() => INITIAL_CUSTOMERS);
-
-  const [coupons, setCoupons] = useState<Coupon[]>(() => INITIAL_COUPONS);
-
-  const [reviews, setReviews] = useState<Review[]>(() => INITIAL_REVIEWS);
-
-  const [settings, setSettings] = useState<StoreSettings>(() => normalizeStoreSettings(INITIAL_SETTINGS));
+  const [settings, setSettings] = useState<StoreSettings>(() => normalizeStoreSettings(initialSettings ?? INITIAL_SETTINGS));
   const [isHydrated, setIsHydrated] = useState(false);
 
   
+  // One-time cleanup. Catalog, admin data and settings used to be cached in localStorage, which showed
+  // stale prices/stock on the first paint and blocked the main thread with large JSON.stringify/parse calls.
+  // Only the cart and the wishlist are persisted now.
   useEffect(() => {
-    if (typeof window !== 'undefined' && !USE_MOCK_DATA) {
-      try {
-        const p = localStorage.getItem('alvora_products');
-        if (p) setProducts(JSON.parse(p).map(normalizeProduct));
-        
-        const c = localStorage.getItem('alvora_categories');
-        if (c) setCategories(JSON.parse(c).map(normalizeCategory));
-        
-        const o = localStorage.getItem('alvora_orders');
-        if (o) setOrders(JSON.parse(o).map(normalizeOrder));
-        
-        const cu = localStorage.getItem('alvora_customers');
-        if (cu) setCustomers(JSON.parse(cu));
-        
-        const co = localStorage.getItem('alvora_coupons');
-        if (co) setCoupons(JSON.parse(co));
-        
-        const r = localStorage.getItem('alvora_reviews');
-        if (r) setReviews(JSON.parse(r));
-        
-        const w = localStorage.getItem('alvora_wishlist');
-        if (w) setWishlist(JSON.parse(w));
-      } catch (e) {
-        console.error("Hydration error:", e);
-      }
-    }
+    try {
+      ['alvora_products', 'alvora_categories', 'alvora_orders', 'alvora_customers', 'alvora_coupons', 'alvora_reviews', 'alvora_settings']
+        .forEach(key => localStorage.removeItem(key));
+    } catch {}
   }, []);
 
   useEffect(() => {
     if (USE_MOCK_DATA) {
-      console.warn('âš ï¸ [Alvora] RUNNING IN MOCK DATA MODE. Real backend API is bypassed. Set NEXT_PUBLIC_ALVORA_USE_MOCK_DATA=false to connect to backend.');
-    }
-  }, []);
-
-  useEffect(() => {
-    setIsHydrated(true);
-    let saved: string | null = null; try { saved = localStorage.getItem('alvora_settings'); } catch {}
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        const STALE_MARKERS = ['Gulberg', 'Lahore', 'sales@alvora.pk', '+92 300', '923001234567', '+327', 'Shafique Center, Gujranwala, Pakistan'];
-        const settingsStr = JSON.stringify(parsed);
-        if (STALE_MARKERS.some(m => settingsStr.includes(m))) {
-          try { localStorage.removeItem('alvora_settings'); } catch {}
-        } else {
-          if (parsed.freeShippingThreshold === 50) parsed.freeShippingThreshold = 5000;
-          setSettings(normalizeStoreSettings(parsed));
-        }
-      } catch {
-        try { localStorage.removeItem('alvora_settings'); } catch {}
-      }
+      console.warn('[Alvora] RUNNING IN MOCK DATA MODE. Real backend API is bypassed. Set NEXT_PUBLIC_ALVORA_USE_MOCK_DATA=false to connect to backend.');
     }
   }, []);
 
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [wishlist, setWishlist] = useState<string[]>([]);
   const [isCartHydrated, setIsCartHydrated] = useState(false);
 
+  // Hydrate cart + wishlist from localStorage once (client only), in a single pass.
   useEffect(() => {
-    setCart(readStoredCart());
+    setCart(readStoredCart(settings.routineDiscount));
+    try {
+      const savedWishlist = localStorage.getItem('alvora_wishlist');
+      if (savedWishlist) {
+        const parsed = JSON.parse(savedWishlist);
+        if (Array.isArray(parsed)) setWishlist(parsed.filter((id: unknown): id is string => typeof id === 'string'));
+      }
+    } catch {}
     setIsCartHydrated(true);
-  }, []);
-
-  const [wishlist, setWishlist] = useState<string[]>([]);
+    setIsHydrated(true);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -377,7 +380,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       setBundlesLoading(true);
       void fetchBundles().finally(() => setBundlesLoading(false));
     };
-    retryBundles();
+    if (!initialBundles) retryBundles();
     window.addEventListener('pb-retry-bundles', retryBundles);
     return () => window.removeEventListener('pb-retry-bundles', retryBundles);
   }, []);
@@ -394,7 +397,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return normalized;
   }, []);
 
-  // â”€â”€â”€ Settings: fetched independently, never mixed with auth-gated data â”€â”€â”€
+  // - Settings: fetched independently, never mixed with auth-gated data -
   // This MUST run on mount and NEVER be re-triggered by pb-auth-changed.
   // It is the sole authority for settings state in production.
   useEffect(() => {
@@ -408,25 +411,25 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         if (result) {
           setSettings(normalizeStoreSettings(result));
         }
-        // If API fails, keep the current canonical value • do NOT fall back to mock
+        // If API fails, keep the current canonical value - do NOT fall back to mock
       } catch {
         // Settings API temporarily unavailable; keep current state (already normalized)
       }
     };
-    void fetchSettings();
+    if (!initialSettings || USE_MOCK_DATA) void fetchSettings();
   }, []); // runs ONCE on mount only • no auth dependency
 
-  // â”€â”€â”€ Auth-gated admin data: fetched on mount + on auth change â”€â”€â”€
+  // - Auth-gated admin data: fetched on mount + on auth change -
   // Does NOT touch settings. Each domain updates only its own slice.
   useEffect(() => {
     const fetchAdminData = async () => {
       try {
         const hasAdminSession = Boolean(getAuthToken());
         if (!hasAdminSession) {
-          setOrders([]);
-          setCustomers([]);
-          setCoupons([]);
-          setReviews([]);
+          setOrders(prev => (prev.length ? [] : prev));
+          setCustomers(prev => (prev.length ? [] : prev));
+          setCoupons(prev => (prev.length ? [] : prev));
+          setReviews(prev => (prev.length ? [] : prev));
           return; // Nothing more to fetch for guests
         }
         const [
@@ -447,7 +450,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       }
     };
 
-    // â”€â”€â”€ Public data (products + categories) • always fetch â”€â”€â”€
+    // - Public data (products + categories) - always fetch -
     const fetchPublicData = async () => {
       if (USE_MOCK_DATA) {
         setProducts(MOCK_PRODUCTS.map(normalizeProduct));
@@ -476,42 +479,14 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       }
     };
 
-    void fetchPublicData();
+    if (!hasInitialCatalog || USE_MOCK_DATA) void fetchPublicData();
     void fetchAdminData();
     window.addEventListener('pb-auth-changed', fetchAdminData);
       window.addEventListener('pb-retry-init', fetchPublicData);
     return () => { window.removeEventListener('pb-auth-changed', fetchAdminData); window.removeEventListener('pb-retry-init', fetchPublicData); };
   }, []);
 
-  // Sync to localStorage
-  useEffect(() => {
-    ((key, value) => { try { if (typeof window !== 'undefined') localStorage.setItem(key, value); } catch {} })('alvora_products', JSON.stringify(products));
-  }, [products]);
-
-  useEffect(() => {
-    ((key, value) => { try { if (typeof window !== 'undefined') localStorage.setItem(key, value); } catch {} })('alvora_categories', JSON.stringify(categories));
-  }, [categories]);
-
-  useEffect(() => {
-    ((key, value) => { try { if (typeof window !== 'undefined') localStorage.setItem(key, value); } catch {} })('alvora_orders', JSON.stringify(orders));
-  }, [orders]);
-
-  useEffect(() => {
-    ((key, value) => { try { if (typeof window !== 'undefined') localStorage.setItem(key, value); } catch {} })('alvora_customers', JSON.stringify(customers));
-  }, [customers]);
-
-  useEffect(() => {
-    ((key, value) => { try { if (typeof window !== 'undefined') localStorage.setItem(key, value); } catch {} })('alvora_coupons', JSON.stringify(coupons));
-  }, [coupons]);
-
-  useEffect(() => {
-    ((key, value) => { try { if (typeof window !== 'undefined') localStorage.setItem(key, value); } catch {} })('alvora_reviews', JSON.stringify(reviews));
-  }, [reviews]);
-
-  useEffect(() => {
-    ((key, value) => { try { if (typeof window !== 'undefined') localStorage.setItem(key, value); } catch {} })('alvora_settings', JSON.stringify(settings));
-  }, [settings]);
-
+  // Persist only what must survive a reload: the cart and the wishlist.
   useEffect(() => {
     if (isCartHydrated) {
       ((key, value) => { try { if (typeof window !== 'undefined') localStorage.setItem(key, value); } catch {} })('alvora_cart', JSON.stringify(cart));
@@ -532,8 +507,9 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, []);
 
   useEffect(() => {
-    ((key, value) => { try { if (typeof window !== 'undefined') localStorage.setItem(key, value); } catch {} })('alvora_wishlist', JSON.stringify(wishlist));
-  }, [wishlist]);
+    if (!isCartHydrated) return;
+    try { localStorage.setItem('alvora_wishlist', JSON.stringify(wishlist)); } catch {}
+  }, [wishlist, isCartHydrated]);
 
   // Prune wishlist so it only ever reflects REAL, currently-existing products.
   // This clears out any stale/ghost IDs left over from old mock data or
@@ -632,28 +608,6 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     ));
   }, []);
 
-  const getBasePrice = (item: CartItem): number => {
-    let price = item.product.price;
-    if (item.product.productType === 'variable' && item.variationId) {
-       const variation = item.product.variations?.find(v => String(v.id) === String(item.variationId));
-       if (variation) price = variation.salePrice !== undefined && variation.salePrice !== null ? variation.salePrice : variation.regularPrice;
-    } else if (item.selectedVariant && item.product.variants) {
-       // Legacy
-       const selections = new Map(
-         item.selectedVariant.split(',').map(part => {
-           const separator = part.indexOf(':');
-           return separator === -1 ? ['', part.trim()] : [part.slice(0, separator).trim(), part.slice(separator + 1).trim()];
-         })
-       );
-       const variantOffset = item.product.variants.reduce((sum, group) => {
-         const optionName = selections.get(group.name);
-         const option = group.options?.find(opt => opt.name === optionName);
-         return sum + Number(option?.priceOffset || 0);
-       }, 0);
-       price += variantOffset;
-    }
-    return price;
-  };
 
   const updateCartQuantity = useCallback((productId: string, quantity: number, selectedVariant?: string, variationId?: string) => {
     if (quantity <= 0) {
@@ -683,11 +637,11 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setAppliedCoupon(null);
   }, []);
 
-  const cartTotalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
-  const cartSubtotal = cart.reduce((acc, item) => {
-    let price = item.resolvedUnitPrice !== undefined ? item.resolvedUnitPrice : getBasePrice(item);
+  const cartTotalItems = useMemo(() => cart.reduce((acc, item) => acc + item.quantity, 0), [cart]);
+  const cartSubtotal = useMemo(() => cart.reduce((acc, item) => {
+    const price = item.resolvedUnitPrice !== undefined ? item.resolvedUnitPrice : getBasePrice(item);
     return acc + price * item.quantity;
-  }, 0);
+  }, 0), [cart]);
 
   // Coupon application logic
   const applyCoupon = useCallback(async (code: string) => {
@@ -723,11 +677,11 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setAppliedCoupon(null);
   }, []);
 
-  const routineDiscount = calculateRoutineDiscount(cart.filter(item => item.isRoutine && !item.routineComponents?.length).map(item => ({
+  const routineDiscount = useMemo(() => calculateRoutineDiscount(cart.filter(item => item.isRoutine && !item.routineComponents?.length).map(item => ({
     productId: item.product.id,
     quantity: item.quantity,
     unitPrice: item.resolvedUnitPrice ?? getBasePrice(item),
-  })), settings.routineDiscount);
+  })), settings.routineDiscount), [cart, settings.routineDiscount]);
   const routineDiscountAmount = routineDiscount.savings;
 
   const saveRoutineDiscountSettings = useCallback(async (input: RoutineDiscountSettings) => {
@@ -1021,16 +975,16 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         bundles,
 bundlesLoading,
         bundlesError,
-        products: isHydrated ? products : [],
+        products,
         productsLoading,
         apiError,
         retryInit,
-        categories: isHydrated ? categories : INITIAL_CATEGORIES,
-        orders: isHydrated ? orders : INITIAL_ORDERS,
-        customers: isHydrated ? customers : INITIAL_CUSTOMERS,
-        coupons: isHydrated ? coupons : INITIAL_COUPONS,
-        reviews: isHydrated ? reviews : INITIAL_REVIEWS,
-        settings: isHydrated ? settings : normalizeStoreSettings(INITIAL_SETTINGS),
+        categories,
+        orders,
+        customers,
+        coupons,
+        reviews,
+        settings,
         cart: isHydrated ? cart : [],
         isCartOpen,
         setIsCartOpen,
@@ -1103,6 +1057,3 @@ export const useStore = () => {
   }
   return context;
 };
-
-
-
