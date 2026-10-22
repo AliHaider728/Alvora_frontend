@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Search, ShoppingBag, Heart, User, X, Menu, ChevronDown } from "lucide-react";
 
 import { Logo } from "./Logo";
@@ -23,8 +23,6 @@ export const Header: React.FC = () => {
   const { cartTotalItems, wishlist, setIsCartOpen, products, settings } = useStore();
   const { isLoggedIn, openAuthModal } = useAuth();
   const router = useRouter();
-  const pathname = usePathname();
-  const isHome = pathname === '/';
 
   const [mounted, setMounted] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -43,12 +41,16 @@ export const Header: React.FC = () => {
     setMounted(true);
   }, []);
 
-  // Measure header height
+  // Measure header height and expose it as a CSS variable (--header-h) for other sections (e.g. Hero)
   useEffect(() => {
     const header = headerRef.current;
     if (!header) return;
 
-    const updateHeight = () => setHeaderHeight(header.offsetHeight);
+    const updateHeight = () => {
+      const height = header.offsetHeight;
+      setHeaderHeight(height);
+      document.documentElement.style.setProperty("--header-h", `${height}px`);
+    };
     updateHeight();
 
     const observer = new ResizeObserver(updateHeight);
@@ -57,21 +59,36 @@ export const Header: React.FC = () => {
     return () => observer.disconnect();
   }, [searchOpen]);
 
-  // Scroll state
+  // Scroll state: throttled with requestAnimationFrame, with a small threshold so the
+  // header does not flicker on tiny scroll movements (smooth show/hide)
   useEffect(() => {
-    let lastScroll = window.scrollY;
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      setIsScrolled(currentScrollY > 8);
-      
-      if (currentScrollY <= 80) {
+    let lastY = window.scrollY;
+    let ticking = false;
+
+    const update = () => {
+      const y = window.scrollY;
+      setIsScrolled(y > 8);
+
+      if (y <= 80) {
         setIsVisible(true);
+        lastY = y;
       } else {
-        setIsVisible(currentScrollY < lastScroll);
+        const delta = y - lastY;
+        if (Math.abs(delta) >= 8) {
+          setIsVisible(delta < 0); // scrolling up = show, scrolling down = hide
+          lastY = y;
+        }
       }
-      lastScroll = currentScrollY;
+      ticking = false;
     };
-    
+
+    const handleScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        window.requestAnimationFrame(update);
+      }
+    };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -129,12 +146,12 @@ export const Header: React.FC = () => {
 
   return (
     <>
-      {/* FIXED HEADER */}
+      {/* FIXED HEADER (solid default color on every page, smooth slide in/out) */}
       <header
         ref={headerRef}
-        className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ease-in-out ${
-          isHome && !isScrolled ? "bg-transparent text-[#241916]" : "bg-alvora-ivory text-[#241916]"
-        } ${isScrolled ? "shadow-[0_4px_24px_rgba(36,25,22,0.06)]" : ""} ${isVisible ? "translate-y-0" : "-translate-y-full"}`}
+        className={`fixed inset-x-0 top-0 z-50 bg-alvora-ivory text-[#241916] will-change-transform transition-[transform,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
+          isScrolled ? "shadow-[0_4px_24px_rgba(36,25,22,0.06)]" : ""
+        } ${isVisible ? "translate-y-0" : "-translate-y-full"}`}
       >
         {/* SHIPPING BAR */}
         {!searchOpen && (
@@ -160,15 +177,15 @@ export const Header: React.FC = () => {
             {/* LEFT NAVIGATION */}
             <nav aria-label="Primary navigation" className="hidden items-center gap-7 lg:flex xl:gap-9">
               {NAV_LINKS.map((link) => (
-                  <Link
-                    key={`${link.href}-${link.label}`}
-                    href={link.href}
-                    className="relative flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-[0.15em] text-[#2A211E] transition-colors duration-200 hover:text-[#9C4122]"
-                  >
-                    {link.label}
-                    {link.hasDropdown && <ChevronDown className="h-3 w-3 opacity-60" strokeWidth={2} />}
-                  </Link>
-                ))}
+                <Link
+                  key={`${link.href}-${link.label}`}
+                  href={link.href}
+                  className="relative flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-[0.15em] text-[#2A211E] transition-colors duration-200 hover:text-[#9C4122]"
+                >
+                  {link.label}
+                  {link.hasDropdown && <ChevronDown className="h-3 w-3 opacity-60" strokeWidth={2} />}
+                </Link>
+              ))}
             </nav>
 
             {/* MOBILE MENU BUTTON */}
@@ -287,7 +304,7 @@ export const Header: React.FC = () => {
                         src={getSafeImageSrc(product.images?.[0])}
                         alt={product.name}
                         className="h-11 w-11 shrink-0 bg-alvora-cream object-cover"
-                      />   
+                      />
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-medium text-[#241916]">{product.name}</p>
                         <p className="mt-0.5 text-xs text-[#998279]">{product.category}</p>
@@ -308,8 +325,12 @@ export const Header: React.FC = () => {
         )}
       </header>
 
-      {/* HEADER SPACER - keeps the content below the fixed header */}
-      {!isHome && <div className="h-[108px] sm:h-[110px] lg:h-[118px]" style={headerHeight === null ? undefined : { height: headerHeight }} aria-hidden="true" />}
+      {/* HEADER SPACER - keeps the content (including the home hero) below the fixed header on every page */}
+      <div
+        className="h-[108px] sm:h-[110px] lg:h-[118px]"
+        style={headerHeight === null ? undefined : { height: headerHeight }}
+        aria-hidden="true"
+      />
 
       {/* MOBILE DRAWER BACKDROP */}
       <div
@@ -338,17 +359,17 @@ export const Header: React.FC = () => {
         </div>
 
         <nav className="flex-1 overflow-y-auto px-6 py-6">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={`${link.href}-${link.label}`}
-                href={link.href}
-                onClick={() => setMobileOpen(false)}
-                className="flex items-center justify-between border-b border-[#E7D9D0] py-4 text-sm font-medium uppercase tracking-widest text-[#241916]"
-              >
-                {link.label}
-                {link.hasDropdown && <ChevronDown className="h-4 w-4 opacity-50" />}
-              </Link>
-            ))}
+          {NAV_LINKS.map((link) => (
+            <Link
+              key={`${link.href}-${link.label}`}
+              href={link.href}
+              onClick={() => setMobileOpen(false)}
+              className="flex items-center justify-between border-b border-[#E7D9D0] py-4 text-sm font-medium uppercase tracking-widest text-[#241916]"
+            >
+              {link.label}
+              {link.hasDropdown && <ChevronDown className="h-4 w-4 opacity-50" />}
+            </Link>
+          ))}
 
           <Link
             href="/wishlist"
@@ -405,12 +426,3 @@ export const Header: React.FC = () => {
     </>
   );
 };
-
-
-
-
-
-
-
-
-

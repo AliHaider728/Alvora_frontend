@@ -5,8 +5,9 @@ import { USE_MOCK_DATA, MOCK_PRODUCTS, MOCK_CATEGORIES, MOCK_SETTINGS } from '..
 import { MOCK_BUNDLES } from '../data/mock/bundles';
 
 export const metadata = {
-  title: 'ALVORA | Glowing & Healthy Skin',
-  description: 'Discover premium skincare with Alvora. Shop our collection for glowing and healthy skin.',
+  title: 'ALVORA Skincare Pakistan | Face Wash, Serums, Creams & Sunscreen',
+  description:
+    'Discover ALVORA premium skincare in Pakistan, featuring face washes, acne serums, brightening creams, SPF 60 sunscreen and skincare bundles. Your glow, your ritual.',
 };
 
 const rawApiUrl = process.env.NEXT_PUBLIC_ALVORA_API_URL || 'https://alvora-backend.vercel.app/api';
