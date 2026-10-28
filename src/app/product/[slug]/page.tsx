@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
     const finalTitle = product.metaTitle || `${product.name} `;
     const finalDesc = product.metaDescription || product.shortDescription || product.description || defaultDesc;
-    const imageUrl = product.images?.[0] || '/images/hero/alvora-hero.png';
+    const imageUrl = product.images?.[0] || '/og-logo.png';
     
     return {
       title: finalTitle,

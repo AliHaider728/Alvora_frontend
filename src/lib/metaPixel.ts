@@ -2,7 +2,8 @@ import { event as trackGAEvent } from "./gtag";
 
 export const trackMetaEvent = (
   eventName: string,
-  data?: Record<string, unknown>
+  data?: Record<string, unknown>,
+  options?: { eventID?: string }
 ) => {
   if (
     typeof window === "undefined" ||
@@ -10,7 +11,11 @@ export const trackMetaEvent = (
   ) {
     return false;
   }
-  window.fbq("track", eventName, data);
+  if (options?.eventID) {
+    window.fbq("track", eventName, data, { eventID: options.eventID });
+  } else {
+    window.fbq("track", eventName, data);
+  }
   return true;
 };
 
@@ -125,5 +130,116 @@ export const trackInitiateCheckout = ({
     } catch {
       // Ignore storage errors.
     }
+  }
+};
+
+export interface MetaPurchaseItem {
+  productId: string;
+  name?: string;
+  quantity?: number;
+  price?: number;
+}
+
+export interface TrackPurchaseParams {
+  orderId: string;
+  value: number;
+  currency?: string;
+  items?: MetaPurchaseItem[];
+  eventId?: string;
+}
+
+/**
+ * Tracks a validated Meta Pixel Purchase event with deduplication & data sanitization.
+ *
+ * Rules enforced:
+ * - value must be a valid finite number > 0 (never NaN, null, undefined, 0, or negative)
+ * - value is rounded to 2 decimal places
+ * - currency defaults to PKR
+ * - deduplication per orderId prevents duplicate fires on page refresh/revisit
+ * - eventID is sent for exact deduplication with Meta Conversions API (CAPI)
+ */
+export const trackPurchase = ({
+  orderId,
+  value,
+  currency = "PKR",
+  items = [],
+  eventId,
+}: TrackPurchaseParams): boolean => {
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  // 1. Strict numeric validation
+  const numericValue = typeof value === "number" ? value : parseFloat(String(value));
+  if (!Number.isFinite(numericValue) || numericValue <= 0) {
+    console.error("[Meta Pixel] Purchase tracking aborted: invalid numeric value:", value);
+    return false;
+  }
+
+  const roundedValue = Math.round(numericValue * 100) / 100;
+  const canonicalOrderId = String(orderId || "").trim();
+  const finalEventId = eventId || (canonicalOrderId ? `purchase_${canonicalOrderId}` : undefined);
+
+  // 2. Browser deduplication guard: never fire twice for the same order in the browser session
+  if (canonicalOrderId) {
+    const storageKey = `meta_tracked_purchase_${canonicalOrderId}`;
+    try {
+      if (sessionStorage.getItem(storageKey)) {
+        console.warn(`[Meta Pixel] Purchase for order "${canonicalOrderId}" was already tracked. Skipping duplicate.`);
+        return false;
+      }
+    } catch {
+      // Storage access could be restricted in private mode; proceed safely
+    }
+  }
+
+  if (typeof window.fbq !== "function") {
+    console.warn("[Meta Pixel] window.fbq function is not available.");
+    return false;
+  }
+
+  // 3. Prepare item contents
+  const validItems = Array.isArray(items) ? items : [];
+  const contentIds = validItems.map((item) => String(item.productId)).filter(Boolean);
+  const contents = validItems.map((item) => ({
+    id: String(item.productId),
+    quantity: Math.max(1, Number(item.quantity) || 1),
+    item_price: Math.max(0, Math.round((Number(item.price) || 0) * 100) / 100),
+  }));
+  const numItems = validItems.reduce(
+    (total, item) => total + Math.max(1, Number(item.quantity) || 1),
+    0
+  );
+
+  const payload: Record<string, unknown> = {
+    content_type: "product",
+    value: roundedValue,
+    currency: (currency || "PKR").toUpperCase(),
+    num_items: numItems > 0 ? numItems : 1,
+  };
+
+  if (contentIds.length > 0) {
+    payload.content_ids = contentIds;
+  }
+  if (contents.length > 0) {
+    payload.contents = contents;
+  }
+
+  try {
+    if (finalEventId) {
+      window.fbq("track", "Purchase", payload, { eventID: finalEventId });
+    } else {
+      window.fbq("track", "Purchase", payload);
+    }
+
+    if (canonicalOrderId) {
+      try {
+        sessionStorage.setItem(`meta_tracked_purchase_${canonicalOrderId}`, String(Date.now()));
+      } catch {}
+    }
+    return true;
+  } catch (err) {
+    console.error("[Meta Pixel] Purchase tracking error:", err);
+    return false;
   }
 };

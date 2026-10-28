@@ -27,7 +27,10 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ title, description, product, c
   }
   const finalDesc = description || product?.metaDescription || product?.shortDescription || product?.description || defaultDesc;
   const currentUrl = canonicalUrl || (typeof window !== 'undefined' ? (typeof window !== 'undefined' ? window.location.href : '') : '');
-  const imageUrl = product?.images[0] || '/images/hero/alvora-hero.png';
+  const rawImageUrl = product?.images?.[0] || '/og-logo.png';
+  const imageUrl = rawImageUrl.startsWith('http')
+    ? rawImageUrl
+    : `https://alvora.pk${rawImageUrl.startsWith('/') ? '' : '/'}${rawImageUrl}`;
 
   useEffect(() => {
     // Update Document Title

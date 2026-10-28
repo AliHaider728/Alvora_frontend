@@ -31,7 +31,7 @@ import { Order } from '../../types';
 import { formatPrice } from '../../utils/formatters';
 import { validatePakistaniPhone } from '../../utils/validation';
 import { getProductDeliveryType } from '../../utils/products';
-import { trackInitiateCheckout } from "../../lib/metaPixel";
+import { trackInitiateCheckout, trackPurchase } from "../../lib/metaPixel";
 import { trackTikTokInitiateCheckout, trackTikTokAddPaymentInfo, trackTikTokPurchase, trackTikTokPlaceAnOrder } from "../../lib/tiktokPixel";
 
 type OrderReceipt = Pick<Order, 'id' | 'items' | 'subtotal' | 'discount' | 'shipping' | 'shippingKnown' | 'total' | 'trackingNumber' | 'paymentMethod' | 'email' | 'confirmationEmailSentAt' | 'confirmationEmailAccepted'>;
@@ -336,54 +336,53 @@ export const CheckoutPageClient: React.FC<{ receiptId?: string }> = ({ receiptId
     }
 
 
-    // Meta Pixel - Purchase
-    const metaEventId = `purchase_${created.id}`;
+    // Resolve canonical order ID (prioritize human-readable orderId e.g. ALV-XXX, fallback to id)
+    const canonicalOrderId = String((created as any).orderId || created.id || '').trim();
+    const metaEventId = `purchase_${canonicalOrderId}`;
 
-    if (typeof window !== "undefined" && window.fbq) {
-      try {
-        window.fbq(
-          "track",
-          "Purchase",
-          {
-            content_ids: created.items.map((item) => item.productId),
+    // Validate trusted backend order total with client-side fallback
+    const rawTotal = (created && typeof created.total === 'number' && Number.isFinite(created.total) && created.total > 0)
+      ? created.total
+      : (typeof finalTotal === 'number' && Number.isFinite(finalTotal) && finalTotal > 0 ? finalTotal : 0);
 
-            contents: created.items.map((item) => ({
-              id: item.productId,
-              quantity: item.quantity,
-              item_price: item.price,
-            })),
+    const purchaseItems = (created.items && created.items.length > 0 ? created.items : cart.map(item => ({
+      productId: item.product.id,
+      name: item.product.name,
+      quantity: item.quantity,
+      price: item.resolvedUnitPrice ?? item.product.price,
+    }))).map((item: any) => ({
+      productId: String(item.productId),
+      name: item.name || '',
+      quantity: Math.max(1, Number(item.quantity) || 1),
+      price: Math.max(0, Math.round((Number(item.price) || 0) * 100) / 100),
+    }));
 
-            content_type: "product",
+    // Meta Pixel - Purchase event with deduplication and validated dynamic price
+    trackPurchase({
+      orderId: canonicalOrderId,
+      value: rawTotal,
+      currency: "PKR",
+      items: purchaseItems,
+      eventId: metaEventId,
+    });
 
-            num_items: created.items.reduce(
-              (total, item) => total + item.quantity,
-              0
-            ),
-
-            value: created.total,
-            currency: "PKR",
-          }, { eventID: metaEventId });
-      } catch (err) {
-        console.error("Meta Pixel tracking error:", err);
-      }
-    }
     try {
       trackTikTokPlaceAnOrder({
-        items: created.items.map((item) => ({
+        items: purchaseItems.map((item) => ({
           id: item.productId,
           quantity: item.quantity,
         })),
-        value: created.total,
+        value: rawTotal,
         currency: "PKR",
         eventId: metaEventId,
       });
 
       trackTikTokPurchase({
-        items: created.items.map((item) => ({
+        items: purchaseItems.map((item) => ({
           id: item.productId,
           quantity: item.quantity,
         })),
-        value: created.total,
+        value: rawTotal,
         currency: "PKR",
         eventId: metaEventId,
       });
@@ -394,10 +393,10 @@ export const CheckoutPageClient: React.FC<{ receiptId?: string }> = ({ receiptId
     if (typeof window !== "undefined" && (window as any).gtag) {
       try {
         (window as any).gtag("event", "purchase", {
-          transaction_id: created.id,
-          value: created.total,
+          transaction_id: canonicalOrderId,
+          value: rawTotal,
           currency: "PKR",
-          items: created.items.map((item) => ({
+          items: purchaseItems.map((item) => ({
             item_id: item.productId,
             item_name: item.name,
             price: item.price,

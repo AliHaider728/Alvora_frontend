@@ -18,9 +18,6 @@ const poppins = Poppins({
   preload: false,
 });
 
-
-
-
 export const metadata: Metadata = {
   metadataBase: new URL('https://alvora.pk'),
   title: {
@@ -107,15 +104,28 @@ export const metadata: Metadata = {
       'Discover ALVORA skincare essentials, from face washes and acne serums to brightening creams, SPF 60 sunscreen and curated skincare bundles. Your glow, your ritual.',
     images: [
       {
-        url: 'https://alvora.pk/og-image.jpg',
+        url: '/og-logo.png',
         width: 1200,
         height: 630,
-        alt: 'ALVORA premium skincare products',
+        alt: 'ALVORA Logo',
       },
     ],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'ALVORA — Premium Skincare & Beauty Essentials | Pakistan',
+    description:
+      'Discover ALVORA skincare essentials, from face washes and acne serums to brightening creams, SPF 60 sunscreen and curated skincare bundles. Your glow, your ritual.',
+    images: ['/og-logo.png'],
+  },
   icons: {
-    icon: '/favicon-rounded.png',
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/favicon-rounded.png', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
   },
   other: {
     'geo.region': 'PK',
@@ -139,8 +149,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               '@type': 'BeautyBrand',
               name: 'ALVORA',
               url: 'https://alvora.pk',
-              logo: 'https://alvora.pk/alvora-logo.png',
-              image: 'https://alvora.pk/og-image.jpg',
+              logo: 'https://alvora.pk/og-logo.png',
+              image: 'https://alvora.pk/og-logo.png',
               description: 'Discover ALVORA premium skincare in Pakistan, featuring face washes, acne serums, brightening creams, SPF 60 sunscreen and skincare bundles. Your glow, your ritual.',
               sameAs: [
                 'https://www.instagram.com/alvora.pk/',

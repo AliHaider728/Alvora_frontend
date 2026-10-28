@@ -332,6 +332,7 @@ export interface RoutineComponent {
 
 export interface Order {
   id: string;
+  orderId?: string;
   date: string;
   createdAt?: string; // ISO timestamp for 24h cancellation limit
   customerName: string;

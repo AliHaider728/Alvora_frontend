@@ -1,4 +1,4 @@
-﻿export const revalidate = 60; // Enable ISR
+export const revalidate = 60; // Enable ISR
 
 import { api } from "../../../services/api";
 import { BundleDetailPageClient } from "./BundleDetailPageClient";
@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
     const finalTitle = `${bundle.name}  Bundles`;
     const finalDesc = bundle.description || defaultDesc;
-    const imageUrl = bundle.image || '/images/hero/alvora-hero.png';
+    const imageUrl = bundle.image || '/og-logo.png';
     
     return {
       title: finalTitle,

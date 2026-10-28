@@ -174,18 +174,32 @@ const normalizeCategory = (category: Partial<Category> & MongoRecord): Category 
   itemCount: Number(category.itemCount || 0)
 });
 
-const normalizeOrder = (order: BackendOrder): Order => ({
-  ...(order as Order),
-  id: String(order.id || order.orderId || order._id || ''),
-  date: order.date || order.createdAt || '',
-  customerName: order.customerName || order.shippingAddress?.fullName || '',
-  email: order.email || '',
-  phone: order.phone || order.shippingAddress?.phone || '',
-  items: Array.isArray(order.items) ? order.items : [],
-  discount: order.discount ?? order.discountAmount ?? 0,
-  shipping: order.shipping ?? order.deliveryCharge ?? order.shippingFee ?? 0,
-  shippingKnown: [order.shipping, order.deliveryCharge, order.shippingFee].some(value => typeof value === 'number' && Number.isFinite(value))
-});
+const normalizeOrder = (order: BackendOrder): Order => {
+  const parsedTotal = Number(order.total);
+  const total = Number.isFinite(parsedTotal) ? parsedTotal : 0;
+  const parsedSubtotal = Number(order.subtotal);
+  const subtotal = Number.isFinite(parsedSubtotal) ? parsedSubtotal : 0;
+  const parsedDiscount = Number(order.discount ?? order.discountAmount);
+  const discount = Number.isFinite(parsedDiscount) ? parsedDiscount : 0;
+  const parsedShipping = Number(order.shipping ?? order.deliveryCharge ?? order.shippingFee);
+  const shipping = Number.isFinite(parsedShipping) ? parsedShipping : 0;
+
+  return {
+    ...(order as Order),
+    id: String(order.id || order.orderId || order._id || ''),
+    orderId: order.orderId ? String(order.orderId) : (order.id && String(order.id).startsWith('ALV-') ? String(order.id) : undefined),
+    date: order.date || order.createdAt || '',
+    customerName: order.customerName || order.shippingAddress?.fullName || '',
+    email: order.email || '',
+    phone: order.phone || order.shippingAddress?.phone || '',
+    items: Array.isArray(order.items) ? order.items : [],
+    subtotal,
+    discount,
+    shipping,
+    total,
+    shippingKnown: [order.shipping, order.deliveryCharge, order.shippingFee].some(value => typeof value === 'number' && Number.isFinite(value))
+  };
+};
 
 const normalizeCoupon = (coupon: any): Coupon => ({
   id: String(coupon.id || coupon._id || ''), code: String(coupon.code || ''),
@@ -1056,4 +1070,4 @@ export const useStore = () => {
     throw new Error('useStore must be used within a StoreProvider');
   }
   return context;
-};
+}; 
